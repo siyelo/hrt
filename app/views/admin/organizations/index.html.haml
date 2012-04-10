@@ -1,3 +1,10 @@
+- content_for :head do
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+:javascript
+  google.load("visualization", "1", {packages: ["corechart"]});
+  var _responses = #{js_safe(@pie)};
+
 - title("Organizations")
 
 %h1.request_nav
@@ -5,6 +12,11 @@
   #search
     - form_tag admin_organizations_path, :method => :get do
       = render 'shared/search_form'
+
+#reports-summary
+  %h2
+    Response Status
+  #response_pie
 
 = render :partial => 'buttons'
 
