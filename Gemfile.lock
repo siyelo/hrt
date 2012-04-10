@@ -6,14 +6,6 @@ GIT
     email_spec (0.6.6)
       rspec
 
-GIT
-  remote: git://github.com/thoughtbot/akephalos.git
-  revision: b2f056db59844209dac4c77ca386e7ef36f8f560
-  specs:
-    akephalos (0.2.4)
-      capybara (~> 0.3.8)
-      jruby-jars
-
 GEM
   remote: http://rubygems.org/
   specs:
@@ -29,7 +21,9 @@ GEM
       activesupport (= 2.3.12)
     activesupport (2.3.12)
     acts_as_tree (0.1.1)
-    annotate (2.4.0)
+    akephalos (0.2.4)
+      capybara (~> 0.3.8)
+      jruby-jars
     ar_strip_commas (0.1.0)
     authlogic (2.1.6)
       activesupport
@@ -107,7 +101,7 @@ GEM
       responders (~> 0.4.6)
     interactive_editor (0.0.8)
       spoon (>= 0.0.1)
-    jruby-jars (1.6.3)
+    jruby-jars (1.6.7)
     json (1.5.3)
     json_pure (1.5.3)
     launchy (0.3.7)
@@ -207,8 +201,7 @@ PLATFORMS
 DEPENDENCIES
   SystemTimer
   acts_as_tree
-  akephalos!
-  annotate
+  akephalos
   ar_strip_commas
   authlogic
   awesome_print
@@ -261,7 +254,7 @@ DEPENDENCIES
   slurper
   spork (~> 0.8)
   spreadsheet
-  sqlite3-ruby
+  sqlite3
   state_machine
   taps
   timecop

@@ -31,7 +31,7 @@ describe Admin::OrganizationsController do
 
     it "should filter by empty response" do
       get :index, :filter => 'Not Started'
-      assigns(:organizations).should == @all_organizations
+      assigns(:organizations).size.should == 3
     end
 
     it "should filter by started response" do

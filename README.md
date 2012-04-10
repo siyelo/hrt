@@ -1,21 +1,31 @@
 
-= Health Resource Tracker : Rwanda On Rails
+# Health Resource Tracker
 
 This app tracks resource flows in the health sector from their many sources to the ultimate health function they serve. Information about health spending, both planned and realized, are essential for evidence-based budgeting, planning and policy-making.
 
-== Getting Started
+## Getting Started
 
-See doc/README_FOR_APP.md
+### Git config
 
-=== Contributing
+    #.git/config
 
-Write tests then write code. Have fun while improving your craft.
+    [remote "origin"]
+      fetch = +refs/heads/*:refs/remotes/origin/*
+      url = git@github.com:siyelo/hrt2.git
+
+    [remote "staging"]
+      url = git@heroku.com:hrt-staging.git
+      fetch = +refs/heads/*:refs/remotes/staging/*
+
+    [remote "production"]
+      url = git@heroku.com:resourcetracking.git
+      fetch = +refs/heads/*:refs/remotes/production/*
 
 
-=== License
+## License
 
 HRT - Health Resource Tracker
-Copyright (C) 2011 Siyelo Software
+Copyright (C) 2011 USAID
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
