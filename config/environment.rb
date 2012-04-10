@@ -1,6 +1,6 @@
 # Be sure to restart your server when you modify this file
 
-RAILS_GEM_VERSION = '2.3.12' unless defined? RAILS_GEM_VERSION
+RAILS_GEM_VERSION = '2.3.14' unless defined? RAILS_GEM_VERSION
 
 require 'thread' #fixes uninitialized constant ActiveSupport::Dependencies::Mutex (NameError) on 2.3.8
 require File.join(File.dirname(__FILE__), 'boot')
@@ -36,7 +36,7 @@ require 'version'
 # SQLite does not have a TO_CHAR() method
 # adding this workaround to support using sqlite (e.g. test environments)
 adapter_name = ActiveRecord::Base.connection.adapter_name
-if adapter_name == "SQLite" 
+if adapter_name == "SQLite"
   #unfortunately sqlite doesnt support month names
   CURRENT_LOGIN_TO_CHAR = 'STRFTIME(\'%d %m %Y\', current_login_at)'
 else
