@@ -1,0 +1,30 @@
+.organization
+  Organization:
+  = link_to friendly_name(@organization), edit_admin_organization_path(@organization)
+
+%ul
+  %li
+    Total projects:
+    = @organization.projects.count
+
+  %li
+    Total activities:
+    = @organization.activities.only_simple.count
+
+  %li
+    Location:
+    = @organization.location_name
+
+  %li
+    Total users:
+    = @organization.users.count
+
+  %li
+    Total (External) Funder References:
+    = @organization.out_flows.length
+    = link_to "View", edit_admin_organization_path(@organization)
+
+  %li
+    Total (External) Implementer References:
+    = @organization.implementer_splits.length
+    = link_to "View", edit_admin_organization_path(@organization)

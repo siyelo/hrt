@@ -1,0 +1,6 @@
+%h1.main_heading Edit Organization
+
+= error_messages_for :organization, :header_message  => nil, :message => "Oops, we couldn't save your changes."
+
+- form_for @organization, :builder => CustomFormBuilder, :url => admin_organization_path(@organization), :html => {:method => :put, :class => 'basic_form js_form'} do |f|
+  = render '/organizations/form', :f => f

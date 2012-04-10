@@ -1,0 +1,76 @@
+- activity_managers = @organization.managers
+= render '/organizations/help_sidebar'
+
+%fieldset.inputs
+  %ol
+    %li.last
+      %h2 Basics
+      %ul.section_form
+        = f.text_field :name, input_options('Name', name_hint)
+        = f.select :raw_type,
+          options_for_select(Organization::ORGANIZATION_TYPES, f.object.raw_type),
+          { :include_blank => true }, select_options("Raw Type", raw_type_hint)
+        - if current_user.sysadmin?
+          = f.text_field :implementer_type, input_options('Implementer Type', implementer_type_hint)
+          = f.text_field :funder_type, input_options('Funder Type', funder_type_hint)
+          = f.text_field :fosaid, input_options('Fosaid', fosaid_hint)
+        = f.select :currency, options_for_select(currency_options_for_select, f.object.currency), { :include_blank => true }, :label => 'Default Currency', :required => true, :hint => currency_hint, :label_html => {:class => 'indented'}, :wrapper_html => {:class => 'input-wrapper'}
+        = f.text_field :fiscal_year_start_date,
+          input_date(f.object.fiscal_year_start_date, "Start of Fiscal Year", fiscal_year_start_date_hint)
+        = f.text_field :fiscal_year_end_date,
+          input_date(f.object.fiscal_year_end_date, "End of Fiscal Year", fiscal_year_end_date_hint)
+
+    %li.last
+      %h2 Contact Details
+      %ul.section_form
+        = f.text_field :contact_name,
+          input_options('Contact Name', contact_name_hint)
+        = f.text_field :contact_position,
+          input_options('Contact Position', contact_position_hint)
+        = f.text_field :contact_phone_number,
+          input_options('Phone Number', phone_number_hint)
+        = f.text_field :contact_main_office_phone_number,
+          input_options('Office Number', contact_main_office_phone_number_hint)
+        = f.text_field :contact_office_location,
+          input_options('Office Location', office_location_hint)
+
+      %fieldset.buttons.push-12
+        %ol
+          - button_label = @organization.new_record? ? 'Create organization' : 'Update organization'
+          = f.submit button_label, :class => 'next update'
+
+- if !@organization.new_record? && current_user.sysadmin?
+  .delete_section
+    = link_to 'Delete this Organization', admin_organization_path(@organization), :confirm => 'Are you sure you want to delete this Organization?', :method => :delete, :class => 'delete_action'
+    %p
+      %strong Warning:
+      Once you delete an Organization, you will lose all data associated with it, and there is no undo.
+
+%h2 Users
+.section_form
+  - if @users && !@users.empty?
+    = render 'admin/users/users', :users => @users, :show_organization => false
+  - else
+    %p There are no users in this organization
+
+%h2 Activity Managers:
+.section_form
+  - unless activity_managers.empty?
+    = render 'admin/users/users', :users => activity_managers, :show_organization => false
+  - else
+    %p There are no Activity Managers for this organization
+
+- if current_user.sysadmin?
+  %h2 Funder For:
+  .section_form
+    - if !@organization.out_flows.empty? &&
+      = render 'organizations/funder_for', :org => @organization
+    - else
+      %p There are no projects referencing this organization as the funder
+
+  %h2 Implementer For:
+  .section_form
+    - if !@organization.implementer_splits.empty?
+      = render 'organizations/implementer_for', :org => @organization
+    - else
+      %p There are no activities referencing this organization as the implementer

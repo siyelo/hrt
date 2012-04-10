@@ -1,0 +1,22 @@
+- content_for :head do
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+:javascript
+  google.load("visualization", "1", {packages: ["corechart"]});
+  var _budget_i_values        = #{js_safe(@budget_i_values)};
+  var _spend_i_values         = #{js_safe(@spend_i_values)};
+
+
+= render 'nav'
+
+
+.full
+  .first-half
+    %h2 Implementer (Expenditure)
+    #spend_i_pie.bordered
+  .second-half
+    %h2 Implementer (Current Budget)
+    #budget_i_pie.bordered
+
+
+= render 'top_organizations_and_activities'

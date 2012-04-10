@@ -1,0 +1,26 @@
+.top_menu {
+  float: left;
+  -moz-border-radius-topleft:10px;
+  -moz-border-radius-topright:10px;
+  font-size: 160%;
+}
+
+.side_menu {
+  -moz-border-radius-topleft:5px;
+  -moz-border-radius-bottomleft:5px;
+  -moz-border-radius-bottomright:5px;
+  -moz-border-radius-topright:5px;
+  background: #ffa;
+  padding: 5px;
+}
+
+#footer {
+  text-align: center;
+  margin-top: 10px;
+}
+#footer .navigation{
+  float: none;
+}
+.doc{ -moz-border-radius:10px;
+-webkit-border-radius: 10px;
+height:500px;}

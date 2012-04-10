@@ -1,0 +1,11 @@
+%tr.js_project_row
+  %td{:colspan => 2}
+    = link_to other_cost.name.presence || 'Unnamed Other Cost', edit_response_other_cost_path(@response, other_cost), :title => other_cost.name
+    = link_to image_tag("tooltip.png"), "#", :title => other_cost.description, :class => 'tooltip'
+  %td
+    .right_justified= n2c other_cost.spend
+  %td
+    .right_justified= n2c other_cost.budget
+  %td.wrap-17
+    %ul
+      = render 'shared/outlays/approve_budget', :outlay => other_cost

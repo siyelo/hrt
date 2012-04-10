@@ -1,0 +1,35 @@
+- title("Organizations")
+%h1.main_heading
+  #search
+    - form_tag admin_organizations_path, :method => :get do
+      = render 'shared/search_form'
+  Organizations
+
+= render :partial => 'buttons'
+
+= render :partial => 'import'
+
+= render :partial => 'filter_list'
+
+.section_form.wrapped.last
+  #filter_help
+    %p
+      = search_and_filter_message(@organizations.total_entries, params[:query], params[:filter])
+
+  - unless @organizations.empty?
+    %table.standard.rounded
+      %thead
+        %tr
+          %th= sortable "name", "Organization"
+          %th Last Login By
+          %th Last Login At
+          %th= sortable 'raw_type', "Type"
+          %th= sortable 'fosaid', "FOSAID"
+          %th Location
+          %th= sortable "created_at", "Created", true
+          %th Status
+          %th
+      %tbody
+        = render :partial => 'organization', :collection => @organizations
+
+    = will_paginate @organizations

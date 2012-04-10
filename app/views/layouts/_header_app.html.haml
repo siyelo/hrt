@@ -1,0 +1,22 @@
+#header_app
+  .wrapper
+    #logo
+      - org_name = current_user.organization.name
+      - org_name = @response.organization.name if @response
+      %p
+        -
+        = "#{truncate(org_name, :length => 35)}: "
+        - # sysadmin may have no request/response
+        - if current_user.sysadmin? && current_request.nil?
+          = "[No Current Request]"
+        - elsif current_user.district_manager?
+          = "[#{current_request.name}]"
+        - else
+          = "[#{current_request.name}]"
+
+    .right
+      - country = ENV['HRT_COUNTRY'] || 'rwanda'
+      %a{:href => '/'}
+        = image_tag "#{country}-coat-of-arms-med.png"
+
+    = render :partial => '/layouts/login_nav'

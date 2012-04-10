@@ -1,0 +1,648 @@
+=normal_link()
+  color: $primary
+  background: none
+  font-size: 0.8em
+  padding-left: 10px
+  text-decoration: none
+  &:hover
+    background: none
+    color: $mid-blue
+    text-decoration: underline
+
+.currency
+  font-size: 9px
+
+.bold
+  font-weight: bold
+
+body.app
+  .wrapper
+    //min-width: 960px
+    //max-width: 1280px
+    margin: 0 auto
+    padding: 0 15px
+    position: relative
+    width: 960px
+
+  /* adding properties to the shared admin style */
+  #admin
+    margin-top: 10px
+    right: 75px
+    position: absolute
+    z-index: 10
+    span
+      padding-top: 10px !important
+    a
+      padding: 6px 10px 5px !important
+
+  #page_tips
+    .nav
+      display: none
+      padding: 10px 10px 0 10px
+      height: 16px
+      a
+        float: right
+        +normal_link
+
+  #content .wrapper
+    padding-bottom: 20px
+
+    #main
+      float: left
+      min-width: 600px
+      padding: 20px 0 0 15px
+      width: 70%
+
+      a
+        color: $primary
+        font-size: 0.8em
+        text-decoration: none
+        &:hover
+          color: $lightest-blue
+
+      > a
+        padding-left: 10px
+
+      h3
+        color: $mid-blue
+        font-size: 0.9em
+        padding: 10px 0 0 10px
+
+      .nav2 a
+        font-size: 1em
+
+      .link_like
+        color: #09c
+        cursor: pointer
+        float: left
+
+        &:hover
+          color: #069
+          text-decoration: underline
+
+    .comments
+      border-bottom: 1px dashed #ddd
+      display: block
+      margin: 20px 0 10px
+      width: 100%
+      +clearfix
+
+    .collapsed
+      margin: 0
+      width: auto
+
+    a.comments
+      border: none
+
+    #page_tips .desc, #helper, #c-help
+      +border-radius
+      border: $very-light-grey 1px solid
+      padding-bottom: 15px
+      margin-bottom: 10px
+
+    #page_tips .desc
+      span.close
+        float: right
+
+      .close
+        margin: -25px 10px 0 0
+
+    #c-help
+      margin: 20px 0
+
+
+
+    #sidebar
+      float: right
+      min-width: 200px
+      padding: 20px 15px 0 0
+      width: 25%
+
+      #helper
+        .title
+          padding-top: 10px
+          padding-bottom: 8px
+        a
+          color: $primary
+          font-size: 0.8em
+          text-decoration: none
+          text-transform: uppercase
+        p
+          padding: 10px 10px 0 10px
+
+        #terms, #examples
+          border-top: 1px dashed #ccc
+          a
+            color: $mid-blue
+            font-size: 0.9em
+            font-weight: bold
+            line-height: 1.34
+            text-decoration: underline
+          p
+            color: #999
+            font-size: 0.8em
+            line-height: 1.34
+            margin-bottom: 5px
+
+        #examples
+          padding: 0 10px
+          font-size: 0.9em
+
+  #content #map_fields_form
+    .map_fields
+      padding-left: 10px
+      margin-bottom: 20px
+    tr th
+      background: none
+      border: none
+      padding-right: 20px
+    td
+      font-size: 0.8em
+      padding: 2px 0
+
+  /* comments styles
+  #main > ul
+    border: 1px solid $lightest-blue
+    margin-bottom: 20px
+    padding: 10px
+    li
+      margin-bottom: 3px
+
+  #content .dashboard_comments
+    font-size: 0.9em
+    border: 1px solid $lightest-blue
+    link-type: none
+    padding: 0 10px 0
+    li
+      border-bottom: 1px solid $primary_lightest
+      margin-top: -1px
+      padding-bottom: 10px
+    h5
+      font: normal 14px Avenir, sans-serif
+      padding: 15px 0 5px 10px
+      text-transform: none
+      a
+        text-decoration: none
+      span
+        font-size: 1em
+    p
+      color: $light-blue - #777
+      &.main
+        color: #666
+        font-size: 12px
+        line-height: 1.4
+        padding: 0 20px 3px 10px
+      &.time
+        color: $light-blue - #333
+        font-size: 0.7em
+        font-style: italic
+        padding: 0 20px 5px 6px
+    .author
+      background: $primary_lightest
+      padding: 5px 5px 3px 10px
+      color: $light-blue - #333
+      font-size: 0.8em
+      font-style: italic
+      line-height: 1.3
+      margin: 15px 0 0
+      text-align: right
+      white-space: nowrap
+      a
+        text-decoration: none
+    img
+      border: 4px solid $primary_lighter
+      margin: 1px 1px 1px 10px
+.read_more
+  padding-bottom: 10px
+  float: right
+  font: normal 11px Arial, sans-serif
+
+/* adding styles for the Submit page */
+body#static_page_submit #content .wrapper #main
+
+  h3
+    padding-bottom: 5px
+    padding-left: 0
+
+  p
+    border: 1px solid $lightest-blue
+    color: $mid-blue
+    margin-bottom: 20px
+
+  table
+    background: $very-light-grey
+    color: $mid-blue
+    font-size: 0.8em
+    margin: 0 0 20px 0
+    width: 100%
+
+    a
+      font-size: 1em
+
+    th, td
+      border-right: 1px solid white
+      padding: 7px
+
+    tbody
+      th, td
+        border-bottom: 1px solid white
+
+      tr:hover
+        background: #f9f9f9
+
+    thead
+      border-bottom: 1px solid white
+      color: white
+      &:hover
+        background: $lightest-blue
+
+
+.link_list
+  border: 1px solid $lightest-blue
+  padding: 7px 0 12px
+  li a
+    border-bottom: 1px solid #eee
+    display: inline-block
+    font-size: 12px
+    padding: 0 0 3px 10px
+
+.dashboard_section
+  background: $filler
+  border: 1px solid $lightest-blue
+  margin-bottom: 20px
+  padding: 7px 10px 12px 10px
+  +border-bottom-radius
+  +clearfix
+  &.less_spacing
+    margin-bottom: 10px
+  &.no_spacing
+    margin-bottom: 0
+  .first-half, .second-half
+    margin: 0 !important
+  .view-all
+    a
+      padding-top: 5px
+      font-size: 12px
+      float: right
+  ul
+    margin-bottom: 0 !important
+  ul.recently_submitted
+    margin-top: 5px
+  li
+    position: relative
+    +transition(hover, 1s, ease, 0)
+    &:hover
+      a
+        color: $mid-blue
+        +transition(hover, 1s, ease, 0)
+      ul.report_actions
+        opacity: 1
+    &:last-child a
+      margin-bottom: 0
+  h3
+    padding-top: 10px !important
+    .large
+      display: block
+      font-size: 40px
+      margin-top: 5px
+      +text-shadow(#fff, 0, 1px, 0)
+    .light
+      color: $blue
+      font-size: 12px
+      +text-shadow(#fff, 0, 1px, 0)
+    .none
+      display: block
+      font-size: 12px
+      margin-top: 5px
+    &.tracked
+      float: left
+      margin-left: 2%
+      width: 23%
+      &.last
+        margin-left: 0
+
+  ul.review li:hover a
+    color: $primary
+    &:hover
+      color: $mid-blue
+  ul.report_actions
+    opacity: 0
+    position: absolute
+    top: 6px
+    right: 5px
+    +transition(hover, 0.6s, ease, 0)
+    li
+      display: inline
+      float: right
+      &.separator
+        border-left: 1px dotted #bbb
+        height: 15px
+        margin: 2px 4px 2px 5px
+        width: 1px
+    a
+      background: none
+      display: inline
+      opacity: 0.3
+      padding: 0 2px
+      &:hover
+        opacity: 0.9
+      &.regenerate
+        opacity: 0.9
+      &.sml_btn
+        background: $light-blue
+        border: 1px solid $light-blue
+        color: $mid-blue
+        display: inline-block
+        float: right
+        font-size: 9px
+        line-height: 1
+        margin-right: 5px
+        opacity: 1
+        padding: 4px 6px 2px
+        text-decoration: none
+        text-transform: uppercase
+        +border-radius
+        +linear-gradient(color-stops($light-blue + #111, $light-blue))
+        +text-shadow($lightest-blue, 0, 1px, 0)
+        &:hover
+          background: $mid-blue
+          border: 1px solid $mid-blue
+          color: #fff
+          +linear-gradient(color-stops($mid-blue, $mid-blue - #111))
+          +text-shadow(#000, 0, 1px, 0)
+
+#heading-activity
+  background: image_url("icon_reporter.png") no-repeat center left
+#heading-map
+  background: image_url("icon_map.png") no-repeat center left
+#heading-users
+  background: image_url("icon_users.png") no-repeat center left
+
+.breadcrumb
+  background: $filler
+  border: 1px solid $lightest-blue
+  border-right: none
+  float: left
+  font-size: 11px
+  margin-top: 7px
+  margin-bottom: 10px !important
+  +border-radius
+  +pie-clearfix
+
+  li
+    background: image_url("breadcrumb.png") no-repeat right center
+    display: inline-block
+    float: left
+    padding: 5px 18px 5px 10px
+
+    &:last-child
+      background: image_url("breadcrumb-last.png") no-repeat right center
+
+    a
+      text-decoration: none
+
+.bordered
+  border: 1px solid $lightest-blue
+  border-top: none
+  margin-bottom: 10px
+  +border-bottom-radius
+  +clearfix
+
+.pagination
+  font-size: 12px
+  margin-top: 20px
+  span, a
+    background: $lightest-blue
+    border: 1px solid $light-blue
+    display: inline-block
+    line-height: 1
+    padding: 6px 8px 5px
+    text-decoration: none
+    +border-radius
+    &:hover, &:focus
+      background: $light-blue
+      border: 1px solid $light-blue
+      color: white
+  .disabled
+    color: #aaa
+  .current
+    background: $mid-blue
+    border: 1px solid $mid-blue
+    color: white
+
+.half h2
+  clear: both
+
+.edit_user label
+  margin-right: 10px
+
+#import
+  display: none
+  .dashboard_section
+    background: $filler
+  p
+    font-size: 12px
+
+#import_csv
+  padding-top: 10px
+  *
+    display: inline-block
+
+  label
+    margin: 5px 0px
+
+#guide
+  h2
+    +border-radius
+    margin: 10px 0
+  h3, h5
+    font-weight: bold
+  h3, h5, h6
+    padding: 20px 0 10px 10px
+  h6
+    font-style: italic
+    text-decoration: underline
+  p
+    padding: 0 0 10px 10px
+  a
+    margin-bottom: 10px
+  em
+    font-style: italic
+  ul, ol
+    padding-left: 20px
+    margin-bottom: 10px
+    font-size: 0.8em
+    li
+      padding-bottom: 5px
+  ul li
+    list-style-type: disc
+    margin-left: 10px
+
+
+#gs_container
+  width: 100%
+  +box-shadow(#ddd, 1px, 1px, 3px)
+  font-family: sans-serif
+
+  span
+    font-size: 11px
+    margin-top: 4px
+
+  #getting_started_title
+    overflow: hidden
+    +border-top-radius
+    background-color: #64B23B
+
+    h2
+      background: none
+      border: none
+      color: #fff
+      float: left
+      padding: 5px 5px 5px 10px
+      +text-shadow(#64B23B - #222, 0, 1px, 0)
+
+    span.close
+      background: image_url("tips_close.png") no-repeat right
+      cursor: pointer
+      float: right
+      height: 16px
+      margin: -2px 0 0 10px
+      width: 17px
+
+    a
+      margin: 5px 5px 0 0
+      text-decoration: none
+      font-size: 11px
+      float: right
+      color: #FFF
+      span.hint_text
+        visibility: hidden
+        color: #D4EF74
+        margin-right: 5px
+
+    &:hover
+      span.hint_text
+        visibility: visible
+
+  .getting_started
+    background: #F9FEF6
+    border-color: #C1C1C1
+    border-right: 1px solid #C1C1C1
+    border-style: solid
+    border-width: 0 1px 1px
+    margin-bottom: 10px
+    padding: 10px
+    +border-bottom-radius
+    +pie-clearfix
+
+    .message
+      color: #555555
+      padding: 0
+      display: block
+      float: left
+      font-size: 11px
+      line-height: 14px
+      margin: 0
+    a
+      font-size: 11px
+
+// overlayed element
+.simple_overlay
+  display: none
+  background-color: #F7F7F7
+  width: 640px
+  min-height: 200px
+  padding: 35px
+  z-index: 10000
+  border: 1px solid #666
+  -moz-box-shadow: 0 0 90px 5px #000
+  -webkit-box-shadow: 0 0 90px #000
+  font-size: 12px
+
+.simple_overlay .close
+  background-image: image_url("overlay/close.png")
+  position: absolute
+  left: -18px
+  top: -15px
+  cursor: pointer
+  height: 35px
+  width: 35px
+
+.add_organization_link
+  margin-left: 10px
+
+
+.add_organization_link
+  margin-left: 10px
+
+.pointer
+  cursor: pointer
+
+.full-width-container
+  display: block
+  +clearfix
+
+  h1.main_heading
+    padding: 0
+    margin: 0
+
+
+.welcome_continue
+  color: $mid-blue
+  float: left
+  font-size: 12px
+  margin: 10px 0 20px 15%
+  width: 40%
+
+.centered
+  text-align: center
+
+.attention
+  font: bold 20px/26px Arial,sans-serif
+
+
+// Welcome wrapper
+
+#welcome_box
+  background: $filler
+  border-bottom: 1px solid #eee
+  clear: both
+  margin: -15px -15px 30px
+  padding: 5px 15px
+  width: 100%
+  +box-shadow(#eee, 0, 2px, 3px)
+
+.welcome_info
+  color: $light-blue - #111
+  font-size: 12px
+  line-height: 1.4
+  +pie-clearfix
+
+  *
+    float: left
+  p
+    color: $light-blue - #333
+    font-weight: bold
+    margin-right: 15px
+  a
+    text-decoration: none
+  span
+    margin: 0 20px 0 5px
+
+.gravatar
+  float: left
+
+#filter_help
+  p
+    font-size: 12px
+    color: #425160
+    padding-bottom: 10px
+    margin-left: 10px
+
+.app #footer
+  background: #f9f9f9
+  border-top: $primary_border4 1px solid
+  padding-top: 30px
+
+.overflow_hidden
+  overflow: hidden

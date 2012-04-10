@@ -1,0 +1,10 @@
+.full_width{:name => "comments"}
+  %a{:name => "comments"}
+  %h2 Comments
+  .section_form.last.comments_input
+    .big_gravatar
+      = image_tag current_user.gravatar(60)
+    = render 'comments/form', :comment => @comment
+  %ul.comments_list.js_comments_list
+    - comments.each do |comment|
+      = render 'comments/comment', :comment => comment

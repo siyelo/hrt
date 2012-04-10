@@ -1,0 +1,14 @@
+/ js event: .form_box, .new_form, .edit_form
+%div{:class => "form_box #{(@comment.new_record? ? 'new_form' : 'edit_form')}"}
+  / js event: .cancel_btn
+  - if request.format == "text/javascript"
+    = link_to "Close", comments_path, :class => "cancel_btn close"
+  - semantic_form_for @comment, :url => @comment.new_record? ? comments_path(:commentable_type => comment.commentable_type, :commentable_id => comment.commentable_id) : comment_path(comment) do |f|
+    = f.semantic_errors :state
+    - f.inputs do
+      - f.inputs "", :id => "basic", :class => "collapsible" do
+        = f.input :comment, :label => 'Add Comment', :input_html => {:"data-hint" => 'Type your comment here'}
+      - f.buttons do
+        / js event: .submit_btn
+        = f.commit_button :button_html => { :class => "js_submit_comment_btn small_submit_button" }
+        = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => "display: none;"

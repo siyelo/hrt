@@ -1,0 +1,119 @@
+.main_heading
+  clear: both
+  font-family: 'Avenir Black', sans-serif
+  padding: 20px 0 5px
+  +pie-clearfix
+  span
+    display: inline
+    font-size: 12px
+  .sub
+    color: $light-blue - #222
+    display: block
+    line-height: 1
+  .overlay
+    margin-left: 4px
+    opacity: 0.6
+    &:hover
+      opacity: 1
+
+  a
+    font-size: 0.8em
+    text-decoration: none
+    &.regular_link
+      font-family: Arial, sans-serif
+      font-size: 11px
+      font-weight: normal
+      text-decoration: underline
+
+body.app
+  h1
+    font: normal 20px 'Avenir Black', Arial, sans-serif
+    color: $primary_dark
+    a
+      text-decoration: none
+
+  p
+    line-height: 1.2em
+    +clearfix
+
+
+.sub_heading
+  clear: both
+  +clearfix
+  font-size: 15px !important
+
+.heading_icon
+  margin: 0 3px -3px 0
+
+#content
+  h2
+    background: #FBFBFB
+    border: 1px solid $primary_border4
+    border-top: 1px solid $primary_border
+    border-bottom: 1px solid $primary_lightest
+    clear: both
+    color: $secondary
+    font-family: 'Avenir', sans-serif
+    font-size: 16px
+    font-weight: normal
+    letter-spacing: 0.05em
+    line-height: 1
+    padding: 12px 10px 10px 18px
+    +text-shadow(#fff, 0, 1px, 0)
+    -webkit-box-shadow: rgba(0,0,0,0.02) 0 -3px 4px inset
+    -moz-box-shadow: rgba(0,0,0,0.02) 0 -3px 4px inset
+    box-shadow: rgba(0,0,0,0.02) 0 -3px 4px inset
+    &.welcome_msg
+      background: none
+      border: none
+      color: $light-blue - #111
+      display: block
+      font-size: 15px
+      margin-top: 3px
+      padding: 20px 0 5px
+      +text-shadow(#fff, 0, 1px, 0)
+    &.contextual
+      background: $primary_lightest
+      border: 1px solid $primary_border2
+
+
+.full-width
+  h2
+    background: none
+    text-transform: none
+  h3, .like_a_h3
+    color: $mid-blue
+    font-size: 0.9em
+    padding: 20px 0 10px
+    text-transform: none
+    &.ready
+      background: image_url("tick_32.png") no-repeat 5px top
+      padding: 8px 0 20px 40px
+    &.ready-sub
+      font-size: 14px
+      background: image_url("tick_32.png") no-repeat 5px top
+      padding: 8px 0 20px 40px
+    &.info
+      background: image_url("info_32.png") no-repeat 5px top
+      padding: 10px 0 10px 40px
+    &.not-ready
+      background: image_url("warning_32.png") no-repeat 5px top
+      padding: 10px 0 10px 40px
+    &.not-ready
+      font-size: 14px
+      background: image_url("warning_32.png") no-repeat 5px top
+      padding: 10px 0 10px 40px
+    &.not-ready, &.ready, &.info
+      .info
+        display: block
+        font-size: 12px
+        font-weight: normal
+        line-height: 1.4
+        padding-top: 5px
+  h4
+    font-size: 12px
+
+  .red
+    color: $red
+  .warm-red
+    color: $warm-red

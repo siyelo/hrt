@@ -1,0 +1,19 @@
+- form_tag remove_duplicate_admin_organizations_path, :method => :put do
+  .box{:"data-type" => 'duplicate'}
+    = label_tag :duplicate_organization_id, "Potential problem organization (duplicate)"
+    = select_tag :duplicate_organization_id, select_with_all_orgs_plus_user_count(@all_organizations)
+  .box{:"data-type" => 'target'}
+    = label_tag :target_organization_id, "Replacement organization"
+    = select_tag :target_organization_id, select_with_all_orgs_plus_user_count(@all_organizations)
+
+  .submit
+    // JS event: replace_organization
+    = submit_tag "Replace", :id => "replace_organization", :class => "small_submit_button"
+
+  .preview
+    #duplicate
+      %h2 Duplicate
+      .placer
+    #target
+      %h2 Replacement
+      .placer

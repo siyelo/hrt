@@ -1,0 +1,10 @@
+- title("Edit Other Cost")
+
+- if ['locations', 'purposes', 'inputs'].include? params[:mode]
+  - content_for :classification do
+    #classification.section_form.wrapped.last
+      #activity_classification
+        %div.tab1{:style => 'display: block'}
+          = render 'shared/outlays/classification', :outlay => @other_cost
+
+= render 'shared/outlays/edit', :outlay => @other_cost

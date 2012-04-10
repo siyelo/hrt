@@ -1,0 +1,34 @@
+:javascript
+  var _response_id = "#{@response.id}";
+  var _activity_id = "#{outlay.id}";
+
+- f.inputs :class => 'inputs' do
+  %li.last
+    = render 'shared/outlays/activity_basic_fields', :f => f, :outlay => outlay
+
+  %li.last= render 'shared/outlays/tab_nav', :outlay => outlay
+
+  - if ['locations', 'purposes', 'inputs'].include? params[:mode]
+    #classification.section_form.wrapped.last
+      #activity_classification
+        %div.tab1{:style => 'display: block'}
+          = render 'shared/outlays/classification', :outlay => outlay
+
+  - elsif params[:mode].nil?
+    %li.last.sub_activities
+      %ul.section_form
+        = render 'shared/outlays/implementers', :f => f, :outlay => outlay, :blank_rows => 3, :bulk_review => false
+
+  - elsif params[:mode] == 'outputs'
+    = render 'shared/outlays/outputs_targets_benefs', :f => f, :outlay => outlay
+
+  %br
+  %li.clear
+    %ul.horizontal.borderless
+      - f.buttons :class => 'buttons1' do
+        = f.commit_button "Save", :button_html => {:class => "last big_button js_submit_btn"}
+        = f.commit_button save_and_add_button_text(params[:mode], outlay), :button_html => {:class => "last big_button js_submit_btn"}
+        %li
+          = link_to "Cancel", response_projects_path(@response), :class => "js_toggle_projects_listing add_row cancel_button last"
+        %li
+          = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

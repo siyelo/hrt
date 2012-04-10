@@ -1,0 +1,400 @@
+
+///////////////////////////////////
+// BUTTONS AND BUTTON-LIKE LINKS //
+///////////////////////////////////
+
+a.target, a.add_nested, a.remove_nested
+  background: image_url("icon_link.png") no-repeat $lightest-blue 10px center
+  display: block
+  font-size: 12px
+  margin-bottom: 5px
+  padding: 10px 8px 8px 28px
+  text-decoration: none
+  +border-radius
+  +transition(hover, 1s, ease, 0)
+  &.grayed-out
+    color: #999
+  &:hover
+    background: image_url("icon_link_hover.png") no-repeat #fff 10px center
+    +box-shadow($light-blue, 0, 0, 5px)
+
+a.add_nested
+  width: 150px
+  +pie-clearfix
+
+a.remove_nested
+  width: 80px
+  +pie-clearfix
+
+.app a, button
+  &.create_new
+    background: $orange
+    border: 1px solid $orange - #222
+    color: #fff
+    display: inline-block
+    font-size: 12px
+    font-weight: bold
+    margin-bottom: 10px
+    padding: 7px 12px 5px
+    text-decoration: none
+    +border-radius
+    +box-shadow(#999, 0, 1px, 3px)
+    +linear-gradient(color-stops($orange, $orange - #222))
+    +text-shadow($orange - #444, 0, 1px, 0)
+    img
+      position: relative
+      top: 1px
+    &:hover, &:focus
+      background: $green
+      border: 1px solid $green - #222
+      color: #fff
+      +linear-gradient(color-stops($green, $green - #222))
+    &:active
+      outline: none
+      position: relative
+      top: 1px
+
+  &.create_alt
+    background: #eee
+    border: 1px solid $light-blue
+    color: $primary
+    display: inline-block
+    font-size: 12px
+    font-weight: bold
+    margin-bottom: 10px
+    min-height: 13px
+    padding: 7px 12px 5px
+    text-decoration: none
+    +border-radius(2px)
+    +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
+    +text-shadow(#fff, 0, 0, 1px)
+    img
+      position: relative
+      top: 1px
+    &:hover, &:focus
+      background: $green
+      border: 1px solid $green - #222
+      color: #fff
+      +linear-gradient(color-stops($green, $green - #222))
+      +text-shadow($green - #222, 0, 0, 1px)
+    &:active
+      outline: none
+      position: relative
+      top: 1px
+
+  &.dropdown
+    background: #eee
+    border: 1px solid $light-blue
+    color: $primary
+    display: inline-block
+    font-size: 12px
+    font-weight: bold
+    margin-bottom: 10px
+    min-height: 13px
+    padding: 7px 4px 5px 12px
+    position: relative
+    text-decoration: none
+    z-index: 20
+    +border-radius(2px)
+    +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
+    +text-shadow(#fff, 0, 1px, 0)
+    img
+      position: relative
+      top: 1px
+    &:hover, &:focus
+      background: $green
+      border: 1px solid $green - #222
+      color: #fff
+      +linear-gradient(color-stops($green, $green - #222))
+      +text-shadow($green - #222, 0, 0, 1px)
+
+    &.dropless
+      padding: 7px 12px 5px 12px
+
+    &.heading_button
+      margin: -5px 0px 0px 0px
+      font-family: sans-serif
+
+  &.create_inline
+    background: #eee
+    border: 1px solid $light-blue
+    color: $mid-blue + #444
+    display: inline-block
+    font-size: 10px
+    font-weight: bold
+    line-height: 1 !important
+    margin: 0 0 0 3px
+    padding: 2px 6px 2px
+    text-decoration: none
+    +border-radius(2px)
+    +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
+    +text-shadow(#fff, 0, 0, 1px)
+    img
+      position: relative
+      top: 2px
+    &:hover, &:focus
+      background: $green
+      border: 1px solid $green - #222
+      color: #fff
+      +linear-gradient(color-stops($green, $green - #222))
+      +text-shadow($green - #222, 0, 0, 1px)
+    &:active
+      outline: none
+      position: relative
+      top: 2px
+
+  &.welcome_hide
+    color: $mid-blue
+    display: block
+    font-size: 11px
+    font-weight: bold
+    margin-top: 20px
+    opacity: 0.3
+    text-align: right
+    text-decoration: none
+    img
+      margin: 0 0 -4px 5px
+    &:hover
+      opacity: 1
+
+  &.welcome_show
+    background: $lightest-blue
+    color: $mid-blue
+    display: none
+    font-size: 11px
+    font-weight: bold
+    margin-top: -50px
+    padding: 5px 10px
+    opacity: 0.4
+    text-decoration: none
+    +border-radius
+    &:hover, &:focus
+      opacity: 1
+
+.next, .big_button
+  +border-radius
+  border: 1px solid $green - #191919
+  background: $green
+  color: white !important
+  cursor: pointer
+  font-family: Avenir, sans-serif
+  font-size: 16px
+  padding: 10px 15px 8px 15px
+  text-decoration: none
+  +linear-gradient(color-stops($green, $green - #111))
+  +box-shadow(#999, 0, 1px, 3px)
+  +text-shadow($green - #444, 0, 1px, 0)
+  &:hover, &:focus
+    background: $mid-blue
+    border: 1px solid $green - #333
+    color: white
+    text-decoration: none
+    +box-shadow(#999, 0, 0, 5px)
+    +linear-gradient(color-stops($green, $green - #333))
+  &:active
+    background: $green - #444
+    position: relative
+    top: 1px
+    +box-shadow(#999, 0, 0, 3px)
+    +linear-gradient(color-stops($green - #333, $green - #111))
+  &.big
+    clear: both
+    color: white
+    display: inline-block
+    font-size: 18px
+    margin: 10px 0
+    padding: 13px 20px 10px 20px
+    overflow: hidden
+    &:hover
+      color: #fff
+
+.next
+  margin-top: -5px
+
+#buttons, .buttons
+  margin-bottom: 5px !important
+  padding: 5px 0px
+
+  li
+    display: inline
+    float: left
+    a
+      color: #000 !important
+      display: inline-block
+      font-size: 11px !important
+      padding: 5px 8px
+      &:hover, &.active
+        color: #fff !important
+
+    &:last-child
+      border-right: 1px dotted $light-blue
+      margin-right: 5px
+
+.simple_table a
+  display: inline-block
+  font-size: 1em
+  &.respond
+    background: $green
+    color: #fff
+    font-size: 9px
+    font-weight: bold
+    padding: 8px 10px 5px
+    text-transform: uppercase
+    &:hover, &:focus
+      background: orange
+  &.new_btn
+    background: $mid-blue
+    border-bottom: 1px solid $light-blue
+    color: white
+    font-size: 10px
+    margin-top: 10px
+    padding: 6px 12px 5px
+    text-decoration: none
+    text-transform: uppercase
+    +border-top-radius(3px)
+    &:hover
+      background: $light-blue
+      color: $dark-blue
+  &.disabled
+    display: none
+
+/* sign in pages button fix */
+body.login .buttons li:last-child
+  border: none
+
+#activities_edit, #activities_update, #activities_new, #activities_create
+  .add_nested
+    margin-top: 10px
+
+  &.sub_impl_imp_exp
+    margin-bottom: 10px
+
+/* NEW BUTTON STYLES */
+
+a, input[type=submit], button
+
+  &.create_button, &.create_new
+    background: $orange
+    border: 1px solid $orange - #222
+    color: #fff
+    display: inline-block
+    font-size: 10px
+    font-weight: bold
+    margin-bottom: 10px
+    min-height: 13px
+    padding: 5px 8px
+    text-decoration: none
+    +border-radius
+    +box-shadow(#999, 0, 1px, 3px)
+    +linear-gradient(color-stops($orange, $orange - #222))
+    +text-shadow($orange - #444, 0, 1px, 0)
+    img
+      position: relative
+      top: 1px
+    &:hover, &:focus
+      background: $green
+      border: 1px solid $green - #222
+      color: #fff
+      +linear-gradient(color-stops($green, $green - #222))
+      +text-shadow($green - #444, 0, 1px, 0)
+    &:active
+      outline: none
+      position: relative
+      top: 1px
+
+  &.add_row, &.edit_button, &.delete_button
+    background: #eee
+    border: 1px solid $light-blue
+    color: $mid-blue + #222 !important
+    display: inline-block
+    font-family: 'Avenir Black', sans-serif
+    font-size: 11px
+    font-weight: normal
+    line-height: 1 !important
+    margin: 0 0 0 3px
+    padding: 2px 3px 1.5px
+    text-decoration: none
+    +border-radius(2px)
+    +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
+    +text-shadow(#fff, 0, 0, 1px)
+    img
+      position: relative
+      top: 1px
+    &:hover, &:focus
+      border: 1px solid $light-blue - #222
+      color: $mid-blue !important
+      &.disabled
+        border: 1px solid $light-blue
+    &:active
+      outline: none
+      position: relative
+      top: 1px
+      &.disabled
+        top: 0px
+    &.disabled
+      color: $light-grey + #222 !important
+      pointer-events: none
+      cursor: default
+    &.cancel_button
+      color: $primary_light
+      font-family: Avenir, sans-serif
+      font-size: 14px !important
+      padding: 9px 15px 7px 15px
+      margin: 3px 0 0 6px
+      +border-radius
+      &:hover, &:focus
+        color: $secondary !important
+
+  &.delete_button
+    &:hover, &:focus
+      color: $red !important
+
+  &.delete_row
+    +replace-text("delete_row.png")
+    display: inline-block
+    height: 17px
+    opacity: 0.6
+    width: 17px
+    &:hover, &:focus
+      opacity: 1
+
+  &.small_submit_button
+    background: #eee
+    border: 1px solid $light-blue
+    color: $mid-blue + #222 !important
+    cursor: pointer
+    display: inline-block
+    font-size: 12px
+    font-weight: bold
+    margin-bottom: 10px
+    padding: 7px 12px
+    text-decoration: none
+    +border-radius
+    +box-shadow(#ddd, 0, 1px, 3px)
+    +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
+    +text-shadow(#fff, 0, 1px, 0)
+    img
+      position: relative
+      top: 1px
+    &:hover, &:focus
+      background: $green
+      border: 1px solid $green - #222
+      color: #fff !important
+      +linear-gradient(color-stops($green, $green - #222))
+      +text-shadow($green - #333, 0, 1px, 0)
+    &:active
+      outline: none
+      position: relative
+      top: 1px
+.delete_inline
+  display: inline-block
+  opacity: 0.2
+  position: absolute
+  right: 0
+  top: 8px
+  +replace-text("icon_close_flash.png")
+  height: 12px
+  width: 12px
+  &:hover, &:focus
+    opacity: 0.6
+
