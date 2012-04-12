@@ -308,16 +308,6 @@ Then /^column "([^"]*)" row "([^"]*)" should have text "([^"]*)"$/ do |column, r
   page.find("table tbody tr[#{row}] td[#{column}]").text.should == text
 end
 
-Then /^I drill down to Reports->Districts->"([^"]*)"->"([^"]*)"$/ do |location, activity|
-  steps %Q{
-    And I follow "Reports"
-    And I follow "Review District Expenditures and Current Budgets"
-    And I follow "#{location}"
-    And I follow "View all Activities"
-    And I follow "#{activity}"
-  }
-end
-
 Then /^I should see a District-Location-Activity report for "([^"]*)"$/ do |activity|
   steps %Q{
     Then I should see "#{activity}"

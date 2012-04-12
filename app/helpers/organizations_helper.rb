@@ -10,8 +10,9 @@ module OrganizationsHelper
   end
 
   def input_options(label = nil, hint = nil, required = true, label_class = 'indented', wrapper_class = 'input-wrapper')
-    return  :label => label, :required => required, :hint => hint,
-      :label_html => { :class => label_class }, :wrapper_html => { :class => wrapper_class }
+    return  :label => label, :hint => hint,
+            :label_html => { :class => label_class, :required => required },
+            :wrapper_html => { :class => wrapper_class }
   end
 
   def input_date(value, label = nil, hint = nil, required = true, label_class = 'indented', wrapper_class = 'input-wrapper')

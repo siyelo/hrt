@@ -52,31 +52,6 @@ Feature: Can view district reports
       And a coding_budget_district exists with activity: the activity, code: the first location
       And a coding_spend_district exists with activity: the activity, code: the first location
 
-  Scenario: reporter views district reports
-    Given I am signed in as "reporter@hrtapp.com"
-    And I go to the set request page for "Req1"
-    When I drill down to Reports->Districts->"Location X"->"Activity 1 A"
-    Then I should see a District-Location-Activity report for "Activity 1 A"
-
-  Scenario: admin views district reports for all organizations
-    Given I am signed in as a sysadmin
-    And I go to the set request page for "Req1"
-    When I drill down to Reports->Districts->"Location X"->"Activity 1 A"
-    Then I should see a District-Location-Activity report for "Activity 1 A"
-    When I drill down to Reports->Districts->"Location X"->"Activity 1 B"
-    Then I should see a District-Location-Activity report for "Activity 1 B"
-
-  # District reports are the same for all users and organizations
-  Scenario: admin views district reports for single organization
-    Given I am signed in as a sysadmin
-    And I go to the set request page for "Req1"
-    When I follow "Organizations"
-    And I follow "Org A"
-    When I drill down to Reports->Districts->"Location X"->"Activity 1 A"
-    Then I should see a District-Location-Activity report for "Activity 1 A"
-    When I drill down to Reports->Districts->"Location X"->"Activity 1 B"
-    Then I should see a District-Location-Activity report for "Activity 1 B"
-
   Scenario: user only sees district reports for current request
     Given I am signed in as "reporter@hrtapp.com"
     And I go to the set request page for "Req1"

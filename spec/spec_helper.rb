@@ -18,6 +18,7 @@ Spork.prefork do
   require 'authlogic/test_case'
   require 'database_cleaner'
   require 'email_spec'
+  require "paperclip/matchers"
 
   # Requires supporting files with custom matchers and macros, etc,
   # in ./support/ and its subdirectories.
@@ -27,6 +28,7 @@ Spork.prefork do
     config.use_transactional_fixtures = true
     config.use_instantiated_fixtures  = false
     config.fixture_path = RAILS_ROOT + '/spec/fixtures/'
+    config.include Paperclip::Shoulda::Matchers
 
     config.before :each do
       DatabaseCleaner.strategy = :truncation#, {:except => %w[currencies]}
@@ -236,5 +238,16 @@ EOS
 
   def write_csv(csv_string)
     write_temp_csv(csv_string)
+  end
+
+  def it_should_require_sysadmin_for(*actions)
+    actions.each do |action|
+      it "#{action} action should require service provider" do
+        get action, :id => 1 # so routes work for those requiring id
+        response.should redirect_to(login_url)
+        # controller.should_not_receive(:index)
+        # get action
+      end
+    end
   end
 end

@@ -21,7 +21,7 @@ class Admin::OrganizationsController < Admin::BaseController
                                           {:q => "%#{params[:query]}%"}]) if params[:query]
 
     @organizations = scope.paginate(:page => params[:page], :per_page => 200,
-                    :order => "#{sort_column_query} #{sort_direction}")
+                    :order => "#{sort_column_query} #{sort_direction}, id ASC")
     @responses = current_request.data_responses
   end
 

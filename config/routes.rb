@@ -35,6 +35,7 @@ map.root :controller => 'static_page', :action => 'index'
     admin.resources :reports,
       :member => { :generate => :get },
       :collection => { :mark_implementer_splits => :put}
+    admin.resources :documents, :as => :files
     admin.resources :currencies, :only => [:index, :new, :create, :update, :destroy]
     admin.resources :users, :except => [:show],
       :collection => {:create_from_file => :post, :download_template => :get}

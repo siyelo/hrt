@@ -58,7 +58,7 @@ module ApplicationHelper
   # nested controller of the same name
   # Eg. Dashboard | Activities | Districts
   # where Districts has a nested-controller also called 'Activities'
-  def build_admin_nav_tab(tab)
+  def build_admin_nav_tab(tab, path)
     parent = 'admin'
     active =  current_controller_with_nesting?(parent, tab)
     unless active
@@ -69,11 +69,12 @@ module ApplicationHelper
                  current_controller_with_nesting?('reports', 'countries') ||
                  current_controller_with_nesting?('countries', 'activities') ||
                  current_controller_with_nesting?('countries', 'organizations') ||
-                 current_controller_with_nesting?('admin', 'responses')
+                 current_controller_with_nesting?('admin', 'responses') ||
+                 current_controller_with_nesting?('admin', 'documents')
       end
     end
     content_tag(:li, :class => ('active' if active)) do
-      link_to tab.humanize, { :controller => "/#{parent}/#{tab}" }
+      link_to tab.humanize, path
     end
   end
 

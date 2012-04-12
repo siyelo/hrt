@@ -1,0 +1,5 @@
+%ul
+  %li{:class => (params[:controller] == 'admin/documents' ? 'active' : nil)}
+    = link_to 'Files', admin_documents_path
+  %li{:class => (params[:controller] == 'admin/reports' ? 'active' : nil)}
+    = link_to 'Dynamic Reports', admin_reports_path

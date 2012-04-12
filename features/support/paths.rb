@@ -15,6 +15,8 @@ module NavigationHelpers
 
     when /the dashboard/
       dashboard_path
+    when /admin reports/
+      admin_reports_path
 
     when /the projects page for response "(.+)" org "(.+)"/
       req = DataRequest.find_by_title($1)

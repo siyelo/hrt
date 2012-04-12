@@ -12,7 +12,9 @@ class CustomFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
-  %w[text_field select collection_select password_field text_area].each do |method_name|
+  %w[text_field select collection_select password_field text_area file_field].
+      each do |method_name|
+
     define_method(method_name) do |field_name, *args|
       if args.present? && args[0][:hint].present?
         hint = @template.content_tag(:p, args[0][:hint], :class => 'input-hints')

@@ -1,0 +1,15 @@
+= error_messages_for :document, :header_message  => nil, :message => "Oops, we couldn't save your changes."
+
+- form_for [:admin, @document], :builder => CustomFormBuilder, :html => {:class => 'basic_form js_form', :multipart => true} do |f|
+
+  %fieldset.inputs
+    %ol
+      %li.last
+        %ul.section_form
+          = f.text_field :title, input_options('Title', "Title to identify the uploaded file")
+
+          = f.file_field :document, input_options('File', nil)
+
+  %fieldset.buttons
+    %ol
+      = f.submit "Save", :class => 'next update'
