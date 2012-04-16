@@ -14,14 +14,11 @@ require File.join(File.dirname(__FILE__), '../../lib/', 'script_helper')
 include ScriptHelper
 
 WORKSPACE = ENV['WORKSPACE'] || "."
-#BACKUP_DIR = "../tmp/"
-BACKUP_DIR = "/home/shared/hrt_backups"
-LOG_FILE = "continuous_deploy.log"
-APP = ARGV[0] || 'resourcetracking'
+APP = ARGV[0] || DEFAULT_PRODUCTION_APP
 
 backed_up = migrated = false
 
-backed_up = run "#{WORKSPACE}/db/cron/db_backup.rb #{APP} #{BACKUP_DIR} >> #{BACKUP_DIR}/#{LOG_FILE}"
+backed_up = run "#{WORKSPACE}/db/cron/db_backup.rb #{APP}"
 if backed_up
   run_or_die "heroku maintenance:on --app #{APP}"
   migrated = run "heroku rake db:migrate --app #{APP}"

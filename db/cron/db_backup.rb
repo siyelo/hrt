@@ -17,7 +17,7 @@ include ScriptHelper
 
 args       = ARGV.join(' ')
 HEROKU_APP = ARGV[0] || DEFAULT_PRODUCTION_APP
-BACKUP_DIR = ARGV[1] || '.'
+BACKUP_DIR = ARGV[1] || "/home/shared/hrt_backups"
 
 date           = get_date()
 backup_db_file = "#{BACKUP_DIR}/#{HEROKU_APP}-backup.#{date}.pgbackup.db".gsub('//','/')
