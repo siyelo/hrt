@@ -171,6 +171,7 @@ ActiveRecord::Schema.define(:version => 20120413083800) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "visibility"
+    t.text     "description"
   end
 
   create_table "funding_flows", :force => true do |t|

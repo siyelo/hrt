@@ -225,6 +225,14 @@ Then /^I should see the Open or Save dialog for a "([^"]*)" file$/ do |filetype|
   page.response_headers["Content-Type"].include?(filetype).should be_true
 end
 
+Then /^I should see the image "(.+)"$/ do |image|
+  page.should have_xpath("//img[contains(@src, \"#{image}\")]")
+end
+
+Then /^I should not see the image "(.+)"$/ do |image|
+  page.should_not have_xpath("//img[contains(@src, \"#{image}\")]")
+end
+
 Then /^show me the page$/ do
   save_and_open_page
 end

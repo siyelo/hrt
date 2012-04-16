@@ -9,15 +9,18 @@ Feature: Admin can manage files
       And an admin exists with email: "admin@hrtapp.com", organization: the organization
       And I am signed in as "admin@hrtapp.com"
 
+    @run
     Scenario: Admin can manage files
       When I follow "Reports"
         And I follow "Files"
         And I follow "Create File"
         And I fill in "document_title" with "File 1"
+        And I fill in "document_description" with "description of the document"
         And I attach the file "spec/fixtures/activities.csv" to "document_document"
         And I select "public" from "document_visibility"
         And I press "Save"
         Then I should see "File was successfully uploaded."
+          And I should see the image "tooltip.png"
           And I should see "File 1"
           And I should see "Public"
 
@@ -29,10 +32,12 @@ Feature: Admin can manage files
         Then I should see "Current file: activities.csv"
         When I fill in "document_title" with "New file 1"
           And I select "reporter" from "document_visibility"
+          And I fill in "document_description" with ""
           And I press "Save"
           Then I should see "File was successfully updated."
-          Then I should see "New file 1"
-          Then I should see "Reporter"
+            And I should see "New file 1"
+            And I should see "Reporter"
+            And I should not see the image "tooltip.png"
 
       When I follow "Delete"
         Then I should see "File was successfully deleted."

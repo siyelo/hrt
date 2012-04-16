@@ -22,7 +22,10 @@
   %tbody
     - @documents.each do |document|
       %tr{:class => cycle("even", "odd")}
-        %td= link_to(document.title, document.document.url)
+        %td
+          = link_to(document.title, document.document.url)
+          - unless document.description.blank?
+            = link_to image_tag("tooltip.png"), "#", :title => document.description, :class => 'tooltip'
         %td= document.visibility.humanize
         %td= document.updated_at.strftime("%b %d, %Y")
         %td

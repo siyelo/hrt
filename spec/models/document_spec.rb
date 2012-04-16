@@ -5,6 +5,7 @@ describe Document do
     it { should allow_mass_assignment_of(:title) }
     it { should allow_mass_assignment_of(:document) }
     it { should allow_mass_assignment_of(:visibility) }
+    it { should allow_mass_assignment_of(:description) }
   end
 
   describe "Validations" do
@@ -20,5 +21,6 @@ describe Document do
       end
     end
     it { should_not allow_value("other").for(:visibility) }
+    it { should_not validate_presence_of(:description) }
   end
 end

@@ -3,7 +3,7 @@ class Document < ActiveRecord::Base
   VISIBILITY_OPTIONS = %w[sysadmins reporters public]
 
   ### Attributes
-  attr_accessible :title, :document, :visibility
+  attr_accessible :title, :document, :visibility, :description
 
   ### Attachments
   has_attached_file :document, Settings.paperclip.to_options
