@@ -12,6 +12,7 @@ class DashboardController < ApplicationController
   def index
     load_activity_manager if current_user.activity_manager? && !current_user.sysadmin?
     load_requests
+    load_documents
     warn_if_not_current_request unless current_user.district_manager?
     load_dashboard_charts unless current_user.district_manager? || current_user.sysadmin?
   end
@@ -64,5 +65,10 @@ class DashboardController < ApplicationController
     # Request loading for all types of users
     def load_requests
       @requests = DataRequest.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 5
+    end
+
+    def load_documents
+      scope = current_user.sysadmin? ? Document : Document.visible_to_reporters
+      @documents = scope.latest_first.limited
     end
 end

@@ -16,4 +16,11 @@ class Document < ActiveRecord::Base
                             :message => "must be less than 10MB"
   validates_inclusion_of :visibility, :in => VISIBILITY_OPTIONS
 
+  ### Named Scopes
+  named_scope :latest_first, {:order => "created_at DESC" }
+  named_scope :limited, {:limit => 5}
+  named_scope :visible_to_reporters, :conditions => ["visibility = ? OR visibility = ?",
+                                                     'public', 'reporters']
+  named_scope :visible_to_public, :conditions => ["visibility = ?", 'public']
+
 end

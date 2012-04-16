@@ -9,7 +9,6 @@ Feature: Admin can manage files
       And an admin exists with email: "admin@hrtapp.com", organization: the organization
       And I am signed in as "admin@hrtapp.com"
 
-    @run
     Scenario: Admin can manage files
       When I follow "Reports"
         And I follow "Files"

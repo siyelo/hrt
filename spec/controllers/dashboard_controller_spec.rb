@@ -20,6 +20,8 @@ describe DashboardController do
 
     describe "GET 'index'" do
       it "should be successful" do
+        Document.stub_chain(:visible_to_reporters, :latest_first, :limited).and_return([])
+        Document.should_receive(:visible_to_reporters).once
         get 'index'
         response.should be_success
         response.flash.now[:warning].should =~ /^You are now viewing data for the Request:.*/
@@ -54,6 +56,8 @@ describe DashboardController do
     end
 
     it "should be successful" do
+      Document.stub_chain(:latest_first, :limited).and_return([])
+      Document.should_receive(:latest_first).once
       get 'index'
       response.should be_success
     end
