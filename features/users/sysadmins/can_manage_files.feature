@@ -15,15 +15,24 @@ Feature: Admin can manage files
         And I follow "Create File"
         And I fill in "document_title" with "File 1"
         And I attach the file "spec/fixtures/activities.csv" to "document_document"
+        And I select "public" from "document_visibility"
         And I press "Save"
         Then I should see "File was successfully uploaded."
           And I should see "File 1"
+          And I should see "Public"
 
-      When I follow "Edit"
-        And I fill in "document_title" with "New file 1"
-        And I press "Save"
-        Then I should see "File was successfully updated."
-        Then I should see "New file 1"
+      When I follow "File 1"
+        Then I should see the Open or Save dialog for a "csv" file
+
+      When I go to admin files page
+      And I follow "Edit"
+        Then I should see "Current file: activities.csv"
+        When I fill in "document_title" with "New file 1"
+          And I select "reporter" from "document_visibility"
+          And I press "Save"
+          Then I should see "File was successfully updated."
+          Then I should see "New file 1"
+          Then I should see "Reporter"
 
       When I follow "Delete"
         Then I should see "File was successfully deleted."

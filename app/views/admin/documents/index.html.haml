@@ -15,13 +15,15 @@
   %thead
     %tr
       %th Title
+      %th Visibility
       %th Last modified
       %th
 
   %tbody
     - @documents.each do |document|
       %tr{:class => cycle("even", "odd")}
-        %td= document.title
+        %td= link_to(document.title, document.document.url)
+        %td= document.visibility.humanize
         %td= document.updated_at.strftime("%b %d, %Y")
         %td
           %ul.manage_bar

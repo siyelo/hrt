@@ -221,6 +221,9 @@ Then /^I should not see "([^"]*)" button/ do |name|
   find_button(name).should be_nil
 end
 
+Then /^I should see the Open or Save dialog for a "([^"]*)" file$/ do |filetype|
+  page.response_headers["Content-Type"].include?(filetype).should be_true
+end
 
 Then /^show me the page$/ do
   save_and_open_page

@@ -5,11 +5,11 @@
   %fieldset.inputs
     %ol
       %li.last
-        %ul.section_form
+        %h2 File Details
+        %ul.dashboard_section
           = f.text_field :title, input_options('Title', "Title to identify the uploaded file")
-
-          = f.file_field :document, input_options('File', nil)
-
+          = f.select :visibility, options_for_select(Document::VISIBILITY_OPTIONS, @document.visibility)
+          = f.file_field :document, input_options('File', current_document_name(@document))
   %fieldset.buttons
     %ol
       = f.submit "Save", :class => 'next update'

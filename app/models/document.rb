@@ -1,7 +1,9 @@
 class Document < ActiveRecord::Base
+  ### Constants
+  VISIBILITY_OPTIONS = %w[sysadmins reporters public]
 
   ### Attributes
-  attr_accessible :title, :document
+  attr_accessible :title, :document, :visibility
 
   ### Attachments
   has_attached_file :document, Settings.paperclip.to_options
@@ -12,4 +14,6 @@ class Document < ActiveRecord::Base
   validates_attachment_presence :document
   validates_attachment_size :document, :less_than => 10.megabytes,
                             :message => "must be less than 10MB"
+  validates_inclusion_of :visibility, :in => VISIBILITY_OPTIONS
+
 end

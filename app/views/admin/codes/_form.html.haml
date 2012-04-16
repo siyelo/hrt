@@ -15,7 +15,7 @@
       -# = f.input :nha_code, :required => false, :hint => "The corresponding NHA code"
 
 - f.buttons :class => 'wrap-80 buttons' do
-  = f.commit_button @code.new_record? ? "Create New Code" : "Update Code", :class => "last"
+  = f.commit_button @code.new_record? ? "Create New Code" : "Update Code", :button_html => {:class => 'next'}
 
 .wrap-80
   - unless @code.new_record?
