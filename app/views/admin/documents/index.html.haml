@@ -10,24 +10,7 @@
     - link_to new_admin_document_path, :class => "create_alt" do
       = image_tag "new.png"
       Create File
-
 %table.standard.rounded
-  %thead
-    %tr
-      %th Title
-      %th Last modified
-      %th
-
-  %tbody
-    - @documents.each do |document|
-      %tr{:class => cycle("even", "odd")}
-        %td= document.title
-        %td= document.updated_at.strftime("%b %d, %Y")
-        %td
-          %ul.manage_bar
-            %li= link_to "Edit", edit_admin_document_path(document)
-            %li= link_to "x", admin_document_path(document), :confirm => "Are you sure you want to delete this document?", :method => :delete, :class => "right", :title => "Delete"
-
-
+  = render 'documents', :documents => @documents, :show_manage_bar => true
 
 = will_paginate @documents

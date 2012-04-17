@@ -7,7 +7,7 @@ class Admin::DocumentsController < Admin::BaseController
 
   def index
     @documents = Document.paginate(:page => params[:page], :per_page => 10,
-                                   :order => 'title ASC')
+                                   :order => 'LOWER(title) ASC')
   end
 
   def create

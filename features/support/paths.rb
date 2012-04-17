@@ -18,6 +18,9 @@ module NavigationHelpers
     when /admin reports/
       admin_reports_path
 
+    when /admin files page/
+      admin_documents_path
+
     when /the projects page for response "(.+)" org "(.+)"/
       req = DataRequest.find_by_title($1)
       response = Organization.find_by_name($2).data_responses.find_by_data_request_id(req)
