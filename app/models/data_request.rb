@@ -1,9 +1,7 @@
 require 'validators'
 class DataRequest < ActiveRecord::Base
   ### Attributes
-  attr_accessible :organization_id, :title, :final_review,
-                  :start_date, :end_date, :due_date, :budget, :spend,
-                  :purposes, :locations, :inputs, :budget_by_quarter
+  attr_accessible :organization_id, :title, :start_date
 
   ### Associations
   belongs_to :organization
@@ -12,10 +10,7 @@ class DataRequest < ActiveRecord::Base
 
   ### Validations
   validates_presence_of :organization_id, :title
-  validates_date :due_date
   validates_date :start_date
-  validates_date :end_date
-  validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
 
   ### Callbacks
   after_create :create_data_responses
@@ -29,9 +24,8 @@ class DataRequest < ActiveRecord::Base
     title
   end
 
-  def status
-    return 'Final review' if final_review?
-    return 'In progress'
+  def end_date
+    start_date + (1.year - 1.day)
   end
 
   def previous_request

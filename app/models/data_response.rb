@@ -54,7 +54,7 @@ class DataResponse < ActiveRecord::Base
   validates_inclusion_of  :state, :in => STATES
 
   ### Named scopes
-  named_scope :ordered, :joins => :data_request, :order => 'data_requests.due_date DESC'
+  named_scope :ordered, :joins => :data_request
   named_scope :latest_first, {:order => "data_request_id DESC" }
   named_scope :submitted, :conditions => ["state = ?", 'submitted']
   named_scope :started, :conditions => ["state = ?", 'started']
