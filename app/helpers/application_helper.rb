@@ -322,4 +322,14 @@ module ApplicationHelper
       end
     end
   end
+
+  def login_form_opacity_class
+    if (params[:controller] == 'registrations' && params[:action] == 'edit' ||
+         params[:controller] == 'password_resets' && params[:action] == 'edit')
+      "login_form_opacity"
+    else
+      nil
+    end
+  end
+
 end

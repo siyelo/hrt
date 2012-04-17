@@ -52,7 +52,7 @@ describe UsersController do
     user = stub_logged_in_reporter
     user.stub_chain(:data_responses, :find).and_return(@data_response)
     get :activity_manager_workplan
-    response.should redirect_to(login_url)
+    response.should redirect_to(root_url)
     flash[:error].should == "You must be an activity manager to access that page"
   end
 end

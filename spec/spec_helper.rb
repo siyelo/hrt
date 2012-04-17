@@ -75,7 +75,7 @@ Spork.each_run do
   end
 
   shared_examples_for "a protected endpoint" do
-    it { should redirect_to(login_path) }
+    it { should redirect_to(root_url) }
     it { should set_the_flash.to("You must be logged in to access this page") }
   end
 
@@ -242,9 +242,9 @@ EOS
 
   def it_should_require_sysadmin_for(*actions)
     actions.each do |action|
-      it "#{action} action should require service provider" do
+      it "#{action} action should require sysadmin role" do
         get action, :id => 1 # so routes work for those requiring id
-        response.should redirect_to(login_url)
+        response.should redirect_to(root_url)
         # controller.should_not_receive(:index)
         # get action
       end

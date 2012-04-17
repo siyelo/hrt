@@ -74,7 +74,7 @@ describe ResponsesController do
 
         put :reject, :id => 1
 
-        response.should redirect_to(login_url)
+        response.should redirect_to(root_url)
         flash[:error].should == "You must be an administrator to access that page"
       end
     end
