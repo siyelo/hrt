@@ -15,8 +15,7 @@
       = "#{current_user.email}"
 
   - else
-    - @user_session = UserSession.new unless @user_session
-    - form_for @user_session, :url => user_session_path, :html => {:class => "login_form"} do |f|
+    - form_for UserSession.new, :url => user_session_path, :html => {:class => "login_form"} do |f|
       %ol.inputs
         %li
           = f.label :email
