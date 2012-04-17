@@ -269,7 +269,7 @@ Feature: Reporter can enter a code breakdown for each activity
         And I press "Save & Go to Overview >"
       Then I should see "Projects & Activities" within "h1"
 
-    Scenario: Reporter can follow other costs workflow for other cost
+    Scenario: Reporter can follow Overhead Costs workflow for other cost
       Given an other cost exists with name: "OC1", data_response: the data_response, project: the project
       When I follow "Projects"
         And I follow "OC1"

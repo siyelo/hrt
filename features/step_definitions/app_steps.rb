@@ -247,7 +247,7 @@ Then /^I should see tabs for comments,projects,non-project activites$/ do
   }
 end
 
-Then /^I should see tabs for comments,activities,other costs$/ do
+Then /^I should see tabs for comments,activities,Overhead Costs$/ do
   steps %Q{
     When I click element "#data_response_sub_tabs > ul:first-child li a#project_details"
     And I click element ".project .descr"
@@ -255,7 +255,7 @@ Then /^I should see tabs for comments,activities,other costs$/ do
     When I click element ".project_sub_tabs ul li a.activity_details"
     Then I should see "Activities" within the selected project sub-tab
     When I click element ".project_sub_tabs ul li:last a.activity_details"
-    Then I should see "Other Costs" within the selected project sub-tab
+    Then I should see "Overhead Costs" within the selected project sub-tab
     When I click element ".project_sub_tabs ul li a.comment_details"
     Then I should see "Comments" within the selected project sub-tab
   }

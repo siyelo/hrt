@@ -69,20 +69,20 @@
 
       %li
         %h3{:class => other_costs_class}
-          (Other Costs Entered)
+          (Overhead Costs Entered)
           - unless @response.other_costs_entered?
             - unless @response.projects_entered?
               %span.info
                 = render 'projects/no_projects_yet'
-                Then you may start adding Other Costs.
+                Then you may start adding Overhead Costs.
             - else
               %span.info
-                Other Costs help you include any financial information at the national level and/or administrative expenses.
-                = link_to "Start adding your Other Costs now.", response_projects_path(@response)
+                Overhead Costs help you include any financial information at the national level and/or administrative expenses.
+                = link_to "Start adding your Overhead Costs now.", response_projects_path(@response)
 
       %li
         %h3{:class => activities_have_splits_class}
-          All Activities and/or Other Costs have Implementers
+          All Activities and/or Overhead Costs have Implementers
           - unless activities_without_implementers.empty?
             = render 'activities_without_implementers', :activities => activities_without_implementers
 
@@ -113,14 +113,14 @@
 
       %li
         %h3{:class => ready(@response.other_costs_coded?)}
-          (Other Costs Classified)
+          (Overhead Costs Classified)
           - unless @response.other_costs_coded?
             - unless @response.uncoded_other_costs.empty?
               %span.info Click the classify link at the end of each row to classify each Other Cost. Unchecked boxes mean that coding has not been started or does not add up to the correct amount.
             - else
               %span.info
-                Start by adding a few Other Costs first (see above), then you can start classifying them.
-                = link_to "Start adding your Other Costs here.", response_projects_path(@response)
+                Start by adding a few Overhead Costs first (see above), then you can start classifying them.
+                = link_to "Start adding your Overhead Costs here.", response_projects_path(@response)
 
         - unless @response.other_costs_coded?
           - unless @response.uncoded_other_costs.empty?
