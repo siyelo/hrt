@@ -1627,6 +1627,26 @@ var jsAutoTab = function () {
   });
 }
 
+var promo_landing = {
+  run: function () {
+    $('#password_reset').click(function (e) {
+      e.preventDefault();
+       $('#new_user_session').fadeOut(function () {
+        $('#admin').removeClass('login_form_opacity')
+         $('#new_password_reset').fadeIn();
+       });
+    });
+
+    $('#sign_in').click(function (e) {
+      e.preventDefault();
+       $('#new_password_reset').fadeOut(function () {
+         $('#new_user_session').fadeIn();
+       });
+    });
+  }
+}
+
+
 // DOM LOAD
 $(function () {
 
