@@ -201,5 +201,6 @@ describe DataResponse do
         @response.total_spend.to_f.should == 200 # 50 + 50 + 100
       end
     end
+
   end
 end

@@ -17,6 +17,11 @@ class DataResponse < ActiveRecord::Base
       sum_total(other_costs.without_a_project, method, to_currency)
     end
 
+    def percentage_change
+      return 0 if total_spend == 0 || total_budget == 0
+      (total_budget / total_spend) * 100
+    end
+
     private
 
     # Sums up the total_<field> amounts for the entities in the

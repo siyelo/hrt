@@ -144,6 +144,7 @@ Feature: Admin can manage organizations
     Then I should see "Non-Reporting" within a link in the filters list
     And I should see "All" within a link in the filters list
 
+    @run
   Scenario: Sysadmin can filter organizations by type
     Given an organization exists with name: "Bilateral org", raw_type: "Bilateral"
     And an organization exists with name: "District org", raw_type: "District"

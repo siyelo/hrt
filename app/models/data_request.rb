@@ -77,13 +77,6 @@ end
 
 
 
-
-
-
-
-
-
-
 # == Schema Information
 #
 # Table name: data_requests

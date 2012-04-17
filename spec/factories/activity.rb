@@ -90,7 +90,6 @@ Factory.define :other_cost_w_spend_coding, :class => OtherCost, :parent => :_spe
   f.coding_spend_valid            { true }
   f.coding_spend_cc_valid         { true }
   f.coding_spend_district_valid   { true }
-  f.after_create { |a| Factory(:coding_spend_other_cost, :cached_amount => 40, :activity => a) }
 end
 
 Factory.define :other_cost_w_budget_coding, :class => OtherCost, :parent => :_budget_coded  do |f|
@@ -98,9 +97,6 @@ Factory.define :other_cost_w_budget_coding, :class => OtherCost, :parent => :_bu
 end
 
 Factory.define :other_cost_fully_coded, :class => OtherCost, :parent => :other_cost_w_spend_coding  do |f|
-  # Not DRY. Need to figure out how to mix two factories together
-  f.after_create { |a| Factory(:coding_budget_other_cost, :cached_amount => 50, :activity => a) }
   f.after_create { |a| Factory(:coding_budget_district, :cached_amount => 50, :activity => a) }
-  f.after_create { |a| Factory(:coding_budget_cost_categorization, :cached_amount => 50, :activity => a) }
 end
 

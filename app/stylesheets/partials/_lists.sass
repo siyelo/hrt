@@ -81,14 +81,14 @@ ul.manage_bar
     display: inline
     float: left
     margin: 0.5%
-    width: 32.25%
+    width: 32.6%
     &.first
       margin-left: 0
     &.last
       margin-right: 0
     &.welcome_info
       display: block
-      width: 99%
+      width: 100%
       li
         height: auto
         width: auto
@@ -115,17 +115,21 @@ ul.manage_bar
   .icon
     display: inline-block
     float: left
-    width: 80px
+    width: 65px
+    img
+      height: auto
+      width: 85%
 
   .title
     color: $orange
     display: inline-block
     float: left
-    font-size: 16px
+    font-size: 14px
     font-weight: bold
     letter-spacing: -0.05em
     margin-top: 10px
     text-decoration: none
+    white-space: nowrap
     width: 63%
     +text-shadow(#fff, 0, 1px, 0)
 
@@ -220,7 +224,7 @@ ul.group
       font-weight: bold
       margin-bottom: -1px
       +border-top-radius
-      +linear-gradient(color-stops($lightest-blue + #090909, white))
+      +linear-gradient(color-stops($lightest-blue + #090909, #FBFBFB))
 
     a
       border-top: 1px solid #FFF
@@ -239,10 +243,15 @@ ul.group
         font-weight: bold
         margin-bottom: -1px
         +border-top-radius
-        +linear-gradient(color-stops($lightest-blue + #090909, white))
+        +linear-gradient(color-stops($lightest-blue + #090909, #FBFBFB))
 
   &.small_tabs li a
     padding: 8px 7px 5px !important
+    
+  &.connect
+    margin-bottom: -1px !important
+    position: relative
+    z-index: 10
 
 
 // ORDERED TAB STYLES //

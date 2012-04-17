@@ -192,7 +192,7 @@ table.sum
     border: none
 
 //
-table.workplan
+table.data
   color: $primary_dark
   width: 100%
 
@@ -226,6 +226,8 @@ table.workplan
     &.desc
       font-size: 11px
       padding-left: 10px
+    &.align
+      text-align: right
 
     &.no-padding
       padding: 0
@@ -399,6 +401,11 @@ table.workplan
     font-size: 11px
     font-style: italic
     margin-left: 10px
+  tr.summary td
+    background: #fff
+    border-top: 1px solid $primary_border
+    border-bottom: none
+    font-weight: bold
 
 tr.filler th, tr.filler td
   background: $primary_lighter

@@ -152,7 +152,7 @@ body.app
       font-size: 0.8em
       padding: 2px 0
 
-  /* comments styles
+  // comments styles
   #main > ul
     border: 1px solid $lightest-blue
     margin-bottom: 20px
@@ -616,3 +616,45 @@ h1.request_nav
   border-top: none
   padding: 10px 20px
   text-align: center
+
+.numbers
+  .number_col
+    color: #444
+    display: inline
+    float: left
+    font-size: 30px
+    font-weight: bold
+    padding: 15px 3.5% 10px
+    width: 26.3%
+    span
+      color: #aaa
+      display: block
+      font-size: 11px
+      line-height: 1.6
+      &.currency
+        background: #bbb
+        color: #fff
+        display: inline-block
+        min-height: 14px
+        min-width: 16px
+        padding: 2px 3px
+        position: relative
+        text-align: center
+        top: -7px
+        +border-radius(20px)
+        +box-shadow(rgba(0, 0, 0, 0.3) 0 0 3px inset)
+        +text-shadow(#888 0 1px 0)
+
+.arrow-nav
+  display: inline-block
+  margin-right: 1px
+  position: relative
+  opacity: 0.85
+  top: 4px
+  @transition (opacity .4s)
+  &:hover, &:focus
+    opacity: 1
+  &.last
+    margin-right: 7px
+  &.disabled
+    opacity: 0.4

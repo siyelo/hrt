@@ -153,4 +153,13 @@ describe Project do
       @project1.in_flows_total_spend.to_f.should == 20
     end
   end
+
+  describe "<=>" do
+    it "sorts by name" do
+      project = Project.new(:name => "arojjy")
+      project1 = Project.new(:name => "projjy")
+
+      [project1, project].sort.should == [project, project1]
+    end
+  end
 end

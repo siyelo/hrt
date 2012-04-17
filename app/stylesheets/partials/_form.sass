@@ -1023,3 +1023,38 @@ p.input-hints
     padding: 7px
   input[type=password]
     width: 126px
+
+.reports_summary
+  padding: 0
+  .summary_col
+    background: #fdfdfd
+    border-right: 1px solid #f4f4f4
+    color: #444
+    display: inline
+    float: left
+    font-size: 30px
+    font-weight: bold
+    padding: 15px 0 10px 3%
+    width: 32.2%
+    span
+      color: #aaa
+      display: block
+      font-size: 11px
+      line-height: 1.6
+      &.currency
+        background: #bbb
+        color: #fff
+        display: inline-block
+        font-size: 11px
+        min-height: 17px
+        min-width: 22px
+        padding: 6px 3px 5px
+        position: relative
+        text-align: center
+        top: -8px
+        +border-radius(20px)
+        +box-shadow(rgba(0, 0, 0, 0.3) 0 0 3px inset)
+        +text-shadow(#888 0 1px 0)
+    &.last
+      border-right: none
+      width: 25.3%

@@ -45,7 +45,7 @@ describe OtherCost do
       @activity     = Factory(:other_cost_fully_coded,
                               :data_response => @response, :project => @project)
       @split1 = Factory(:implementer_split, :activity => @activity,
-        :organization => @organization, :budget => 50, :spend => 40)
+                        :organization => @organization, :budget => 50, :spend => 40)
 
       @activity.stub(:coding_budget_district_valid?) { true }
       @activity.stub(:coding_spend_district_valid?) { true }
@@ -85,6 +85,15 @@ describe OtherCost do
 
         oc.currency.should.eql? 'USD'
       end
+    end
+  end
+
+  describe "<=>" do
+    it "sorts by name" do
+      oc = OtherCost.new(:name => "arojjy")
+      oc1 = OtherCost.new(:name => "projjy")
+
+      [oc1, oc].sort.should == [oc, oc1]
     end
   end
 end

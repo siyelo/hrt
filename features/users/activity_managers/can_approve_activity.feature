@@ -19,7 +19,7 @@ Feature: Activity Manager can approve a code breakdown for each activity
   @javascript
   Scenario: Approve an Activity from listing
     Given I follow "reporter_org"
-    When I hover over ".js_project_row" within ".workplan"
+    When I hover over ".js_project_row" within ".data"
     And wait a few moments
     And I follow "Approve Budget"
     And wait a few moments

@@ -11,6 +11,7 @@ Rails::Initializer.run do |config|
   # tell rails to load files from all subfolders in app/models/
   #config.autoload_paths += Dir["#{RAILS_ROOT}/app/models/*"].find_all { |f| File.stat(f).directory? }
   config.autoload_paths += %W(
+                          #{RAILS_ROOT}/app/charts
                           #{RAILS_ROOT}/app/reports
                           #{RAILS_ROOT}/app/observers
                           #{RAILS_ROOT}/lib/named_scopes

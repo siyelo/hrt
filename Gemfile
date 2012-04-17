@@ -70,6 +70,6 @@ group :test do
   gem 'rb-fsevent' # inject GoFast Juice (TM) into Guard on OSX
   gem 'pg'
   gem 'shoulda', '~> 2.11'
-  gem 'spork', '~> 0.8'
+  gem 'spork', '= 0.8.5'
   gem 'timecop'
 end

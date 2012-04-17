@@ -122,6 +122,10 @@ class Project < ActiveRecord::Base
     activities.only_simple.inject([]){ |acc, a| acc.concat(a.locations) }.uniq
   end
 
+  def <=>(e)
+    self.name <=> e.name
+  end
+
   private
 
     def has_in_flows?

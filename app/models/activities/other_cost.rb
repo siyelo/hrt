@@ -37,6 +37,10 @@ class OtherCost < Activity
   def spend_classified?
     coding_spend_district_valid?
   end
+
+  def <=>(e)
+    self.name <=> e.name
+  end
 end
 
 

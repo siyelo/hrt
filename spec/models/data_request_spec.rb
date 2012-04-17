@@ -66,8 +66,6 @@ describe DataRequest do
 
     it "returns the next request" do
       next_request = Factory(:data_request, :start_date => "2012-01-01")
-
-
       data_request.next_request.should == next_request
     end
   end

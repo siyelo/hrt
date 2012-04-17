@@ -18,32 +18,14 @@ end
 begin
   @reporter ||= User.find_by_email 'reporter@hrtapp.com'
   puts "creating project"
-  @project = Factory(:project, :organization => @org)
+  @org = @reporter.organization
+  resp = @reporter.current_response
+  @project = Factory :project, :organization => @org, :data_response => resp
   puts "creating activity & coding"
-  Factory(:activity_fully_coded, :organization => @org, :project => @project)
+  Factory(:activity_fully_coded, :project => @project, :data_response => resp)
   puts "creating other costs & coding"
-  Factory(:other_cost_fully_coded, :organization => @org, :project => @project)
+  Factory(:other_cost_fully_coded, :project => @project, :data_response => resp)
   puts "=> added sample data for reporter #{@reporter.name}"
 rescue Exception => e
   puts e.message
-end
-
-##ACTIVITY MANAGER
-begin
-  puts "creating activity_manager"
-  @org = Factory(:organization, :name => "internal_activity_manager_org")
-  am = Factory(:activity_manager, :email => 'activity_manager@hrtapp.com',
-    :organization => @org,
-    :password => ENV['HRT_ACTIVITY_MGR_PASSWORD'] || 'si@yelo',
-    :password_confirmation => ENV['HRT_ACTIVITY_MGR_PASSWORD'] || 'si@yelo')
-  # assign some nice existing orgs
-  orgs = [ 'JSI', 'Tulane University', 'ICAP', 'Access Project', 'TRAC+ - HIV', 'Voxiva']
-  query = orgs.map{ |o| "name like ?"}.join(' OR ')
-  am.organizations = Organization.find(:all, :conditions => [query, *orgs.map{|o| "%#{o}%"}])
-  am.save
-rescue ActiveRecord::RecordInvalid => e
-  puts e.message
-  puts "   Do you already have an org 'internal_activity_manager_org' or user named 'activity_manager'? "
-else
-  print "=> activity_manager #{am.name} created (org: #{am.organization.name})"
 end
