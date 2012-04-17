@@ -1,7 +1,7 @@
-Feature: Reporter can manage other costs
+Feature: Reporter can manage Overhead Costs
   In order to track information
   As a reporter
-  I want to be able to manage other costs
+  I want to be able to manage Overhead Costs
 
   Background:
     Given an organization exists with name: "organization1"
@@ -14,8 +14,8 @@ Feature: Reporter can manage other costs
     And I go to the set request page for "data_request1"
     And I follow "Projects"
 
-  Scenario: Reporter can CRUD other costs
-    When I follow "Add Other Costs now"
+  Scenario: Reporter can CRUD Overhead Costs
+    When I follow "Add Overhead Costs now"
     Then I should see "New Other Cost"
     When I fill in "Name" with "other_cost1"
     And I fill in "Description" with "other_cost2 description"
@@ -38,7 +38,7 @@ Feature: Reporter can manage other costs
     And I should not see "other_cost2"
 
   Scenario: Reported can create other cost with automatically created project
-    When I follow "Add Other Costs now"
+    When I follow "Add Overhead Costs now"
     And I fill in "Name" with "other_cost1"
     And I fill in "Description" with "other_cost2 description"
     And I select "<Automatically create a project for me>" from "Project"
@@ -48,8 +48,8 @@ Feature: Reporter can manage other costs
     And I press "Save"
     Then I should see "Other Cost was successfully created"
 
-  Scenario: Reporter can create an other costs at an Org level (i.e. without a project)
-    When I follow "Add Other Costs now"
+  Scenario: Reporter can create an Overhead Costs at an Org level (i.e. without a project)
+    When I follow "Add Overhead Costs now"
     And I fill in "Name" with "other_cost1"
     And I fill in "Description" with "other_cost1"
     # self org should already be selected

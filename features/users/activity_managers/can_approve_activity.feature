@@ -40,7 +40,7 @@ Feature: Activity Manager can approve a code breakdown for each activity
     Then I should not see "Approve all Budgets" within ".js_approve_all_activities"
     And I should see "Budget Approved"
 
-  Scenario: Approve all Other Costs from listing
+  Scenario: Approve all Overhead Costs from listing
     Given an other_cost exists with name: "other_cost1", description: "oc1 description", data_response: the data_response, project: the project
     And an other_cost exists with name: "other_cost2", description: "oc2 description", data_response: the data_response, project: the project
     And I follow "reporter_org"
@@ -48,7 +48,7 @@ Feature: Activity Manager can approve a code breakdown for each activity
     Then I should not see "Approve all Budgets" within ".js_approve_all_other_costs"
     And I should see "Budget Approved"
 
-  Scenario: Approve all Other Costs with no project from listing
+  Scenario: Approve all Overhead Costs with no project from listing
     Given an other_cost exists with name: "other_cost1", description: "oc1 description", data_response: the data_response
     And an other_cost exists with name: "other_cost2", description: "oc2 description", data_response: the data_response
     And I follow "reporter_org"
