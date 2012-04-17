@@ -9,7 +9,7 @@
         %ul.dashboard_section
           = f.text_field :title, input_options('Title', "Title to identify the uploaded file")
           = f.text_area :description, input_options('Description', nil, false).merge(:rows => 10)
-          = f.select :visibility, options_for_select(Document::VISIBILITY_OPTIONS, @document.visibility)
+          = f.select :visibility, options_for_select(Document::VISIBILITY_OPTIONS, @document.visibility), input_options('Visibility')
           = f.file_field :document, input_options('File', current_document_name(@document))
   %fieldset.buttons
     %ol
