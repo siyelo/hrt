@@ -11,6 +11,6 @@
       = image_tag "new.png"
       Create File
 %table.standard.rounded
-  = render 'documents', :documents => @documents, :show_manage_bar => true
+  = render 'admin/documents/documents', :documents => @documents, :show_manage_bar => true
 
 = will_paginate @documents

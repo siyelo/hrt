@@ -56,6 +56,7 @@ Feature: Can view district reports
     Given I am signed in as "reporter@hrtapp.com"
     And I go to the set request page for "Req1"
     And I follow "Reports"
+    And I follow "Dynamic Reports"
     And I follow "Review District Expenditures and Current Budgets"
     And I follow "Location X"
     And I follow "View all Activities"

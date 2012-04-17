@@ -1,8 +1,10 @@
 %h2
   = image_tag "icon_reporter.png", :class => "heading_icon"
   Latest Files
-  .read_more
-    %a= link_to 'view all', admin_documents_path
+  .read_more.files_read_more= link_to "view all", current_user.sysadmin? ? admin_documents_path : documents_path
 .dashboard_section
-  %table.modern_table
-    = render 'admin/documents/documents', :documents => @documents, :show_manage_bar => false
+  - if @documents.present?
+    %table.modern_table
+      = render 'documents/documents', :documents => @documents
+  - else
+    %p There are no files available for download.

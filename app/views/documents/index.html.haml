@@ -1,0 +1,14 @@
+- title("Files")
+
+- content_for :sub_nav do
+  = render('shared/reports_sub_nav')
+
+%h1.main_heading Files
+
+- if @documents.present?
+  %table.standard.rounded
+    = render 'documents', :documents => @documents
+- else
+  %p.no_data There are no files available for download.
+
+= will_paginate @documents

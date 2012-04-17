@@ -77,6 +77,7 @@ map.root :controller => 'static_page', :action => 'index'
   map.resources :activities
   map.resources :organizations, :only => [:edit, :update],
     :collection => { :export => :get }
+  map.resources :documents, :as => :files
 
   # REPORTS
   map.charts 'charts/:action', :controller => 'charts' # TODO: convert to resource

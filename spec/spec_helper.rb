@@ -250,4 +250,15 @@ EOS
       end
     end
   end
+
+  def it_should_require_reporter_for(*actions)
+    actions.each do |action|
+      it "#{action} action should require reporter role" do
+        get action, :id => 1 # so routes work for those requiring id
+        response.should redirect_to(root_url)
+        # controller.should_not_receive(:index)
+        # get action
+      end
+    end
+  end
 end

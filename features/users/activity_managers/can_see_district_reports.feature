@@ -17,12 +17,14 @@ Feature: Activity Manager can see district reports
 
   Scenario: See reports overview
     When I follow "Reports"
+      And I follow "Dynamic Reports"
       And I follow "Review District Expenditures and Current Budgets"
       And I follow "Bugesera"
     Then I should see "Bugesera"
 
   Scenario: See all organizations report
     When I follow "Reports"
+      And I follow "Dynamic Reports"
       And I follow "Review District Expenditures and Current Budgets"
       And I follow "Bugesera"
       And I follow "View all Organizations"
@@ -30,6 +32,7 @@ Feature: Activity Manager can see district reports
 
   Scenario: See single organization report
     When I follow "Reports"
+      And I follow "Dynamic Reports"
       And I follow "Review District Expenditures and Current Budgets"
       And I follow "Bugesera"
       And I follow "Organization1"
@@ -37,6 +40,7 @@ Feature: Activity Manager can see district reports
 
   Scenario: See all activities report
     When I follow "Reports"
+      And I follow "Dynamic Reports"
       And I follow "Review District Expenditures and Current Budgets"
       And I follow "Bugesera"
       And I follow "View all Activities"
@@ -44,6 +48,7 @@ Feature: Activity Manager can see district reports
 
   Scenario: See single activity report
     When I follow "Reports"
+      And I follow "Dynamic Reports"
       And I follow "Review District Expenditures and Current Budgets"
       And I follow "Bugesera"
       And I follow "Activity1"

@@ -17,9 +17,10 @@ module NavigationHelpers
       dashboard_path
     when /admin reports/
       admin_reports_path
-
-    when /admin files page/
+    when /admin files/
       admin_documents_path
+    when /files/
+      documents_path
 
     when /the projects page for response "(.+)" org "(.+)"/
       req = DataRequest.find_by_title($1)
