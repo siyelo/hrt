@@ -21,9 +21,9 @@ def bundle_install
   run_or_die "bundle install"
 end
 
-def setup_sqlite
+def setup_db_config
   #run_or_die "cp #{WORKSPACE}/config/database.yml.sample.sqlite3 #{WORKSPACE}/config/database.yml"
-  run "cp #{WORKSPACE}/config/database.yml.sample.sqlite3 #{WORKSPACE}/config/database.yml"
+  run "cp #{WORKSPACE}/config/database.yml.sample.pg #{WORKSPACE}/config/database.yml"
 end
 
 def setup_specs
@@ -58,7 +58,7 @@ end
 
 # main
 bundle_install
-setup_sqlite
+setup_db_config
 specs
 cukes
 run_or_die "rake clean"

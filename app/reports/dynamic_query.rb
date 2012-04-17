@@ -78,7 +78,8 @@ class Reports::DynamicQuery
 
       in_flows = in_flows_total == 0 ? loop_act = [fake_inflow(@currency)] : activity.project.in_flows
 
-      # activity.project.in_flows.each do |in_flow|
+      in_flows = in_flows.sorted if in_flows.count > 1
+
       in_flows.each do |in_flow|
         !in_flow.send(@amount_type).nil? && in_flow.send(@amount_type) > 0
       end.each do |in_flow|
@@ -101,7 +102,7 @@ class Reports::DynamicQuery
       build_incomplete_classificiation(activity, "leaf_#{@amount_type}_inputs")
       base_row << funder_ratio(activity.send("leaf_#{@amount_type}_inputs"), in_flow_ratio, fake_input)
 
-      activity.send("leaf_#{@amount_type}_inputs").each do |input_classification|
+      activity.send("leaf_#{@amount_type}_inputs").sort{|a,b| b.percentage <=> a.percentage}.each do |input_classification|
         input_row = base_row.dup
         fake_purpose = is_fake?(activity.send("leaf_#{@amount_type}_purposes").first.code)
 
@@ -110,7 +111,7 @@ class Reports::DynamicQuery
         build_incomplete_classificiation(activity, "leaf_#{@amount_type}_purposes")
         input_row << funder_ratio(activity.send("leaf_#{@amount_type}_purposes"), in_flow_ratio, fake_purpose)
 
-        activity.send("leaf_#{@amount_type}_purposes").each do |purpose_classification|
+        activity.send("leaf_#{@amount_type}_purposes").sort{|a,b| b.percentage <=> a.percentage}.each do |purpose_classification|
           purpose_row = input_row.dup
 
           purpose_row << ( fake_purpose ? 'N/A' : purpose_classification.percentage.to_f.round_with_precision(2) )
@@ -122,7 +123,6 @@ class Reports::DynamicQuery
           add_codes_to_row(purpose_row, codes, @deepest_nesting, :short_display)
           add_codes_to_row(purpose_row, codes, @deepest_nesting, :official_name)
 
-
           purpose_row << purpose_classification.code.hssp2_stratobj_val
           purpose_row << purpose_classification.code.hssp2_stratprog_val
           purpose_row << mtef_name(purpose_classification.code)
@@ -132,7 +132,7 @@ class Reports::DynamicQuery
           build_incomplete_classificiation(activity, "coding_#{@amount_type}_district")
           purpose_row << funder_ratio(activity.send("coding_#{@amount_type}_district"), in_flow_ratio, fake_district)
 
-          activity.send("coding_#{@amount_type}_district").each do |district_classification|
+          activity.send("coding_#{@amount_type}_district").sort{|a,b| b.percentage <=> a.percentage}.each do |district_classification|
             district_row = purpose_row.dup
             district_row << ( fake_district ? 'N/A' : district_classification.percentage.to_f.round_with_precision(2) )
             district_row << district_classification.code.short_display

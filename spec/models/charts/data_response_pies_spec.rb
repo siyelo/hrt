@@ -21,8 +21,8 @@ describe Charts::DataResponsePies do
       @assignments.should have(2).items
       @assignments[0].name.should == @code1.name
       @assignments[1].name.should == @code2.name
-      @assignments[0].value.should == 60
-      @assignments[1].value.should == 40
+      @assignments[0].value.to_i.should == 60
+      @assignments[1].value.to_i.should == 40
     end
 
     it "should return leaf MTEFs only" do
@@ -37,8 +37,8 @@ describe Charts::DataResponsePies do
       @assignments.should have(2).items
       @assignments[0].name.should == @code11.name
       @assignments[1].name.should == @code2.name
-      @assignments[0].value.should == 60
-      @assignments[1].value.should == 40
+      @assignments[0].value.to_i.should == 60
+      @assignments[1].value.to_i.should == 40
     end
 
 
@@ -53,8 +53,8 @@ describe Charts::DataResponsePies do
       @assignments.should have(2).items
       @assignments[0].name.should == @code1.name
       @assignments[1].name.should == @code2.name
-      @assignments[0].value.should == 60
-      @assignments[1].value.should == 40
+      @assignments[0].value.to_i.should == 60
+      @assignments[1].value.to_i.should == 40
     end
 
     it "should return leaf MTEFs only" do
@@ -69,8 +69,8 @@ describe Charts::DataResponsePies do
       @assignments.should have(2).items
       @assignments[0].name.should == @code11.name
       @assignments[1].name.should == @code2.name
-      @assignments[0].value.should == 60
-      @assignments[1].value.should == 40
+      @assignments[0].value.to_i.should == 60
+      @assignments[1].value.to_i.should == 40
     end
 
     it "should return leaf MTEFs only even if parent split has amount(s)" do
@@ -89,8 +89,8 @@ describe Charts::DataResponsePies do
       @chart_items.size.should == 2
       @chart_items[0].name.should == @code11.name
       @chart_items[1].name.should == @code2.name
-      @chart_items[0].value.should == 60
-      @chart_items[1].value.should == 40
+      @chart_items[0].value.to_i.should == 60
+      @chart_items[1].value.to_i.should == 40
     end
   end
 end

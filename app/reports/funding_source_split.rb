@@ -121,7 +121,7 @@ class Reports::FundingSourceSplit
     def fake_in_flows(activity, project)
       in_flows_total = 0
       splits_total   = 0
-      in_flows       = project.in_flows || []
+      in_flows       = project.in_flows.sorted || []
 
       project.in_flows.each do |in_flow|
         in_flows_total += in_flow.send(@amount_type) || 0

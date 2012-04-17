@@ -16,8 +16,7 @@ class Admin::UsersController < Admin::BaseController
     if params[:query]
       scope  = scope.scoped(:conditions => ["UPPER(email) LIKE UPPER(:q) OR
         UPPER(full_name) LIKE UPPER(:q) OR
-        UPPER(organizations.name) LIKE UPPER(:q) OR
-        UPPER(#{CURRENT_LOGIN_TO_CHAR}) LIKE UPPER(:q)",
+        UPPER(organizations.name) LIKE UPPER(:q)",
         {:q => "%#{params[:query]}%"}])
     end
     @users = scope.paginate(:page => params[:page], :per_page => 100,

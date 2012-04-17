@@ -373,31 +373,22 @@ describe User do
   end
 
   describe "#change_current_response!" do
-    before :each do
-      organization    = Factory(:organization)
-      @data_request1  = Factory(:data_request, :organization => organization)
-      @user           = Factory(:reporter, :organization => organization)
-      @data_request2  = Factory(:data_request, :organization => organization)
-      @data_response1 = organization.responses.find(:first,
-                          :conditions => ["data_request_id = ?", @data_request1.id])
-      @data_response2 = organization.responses.find(:first,
-                          :conditions => ["data_request_id = ?", @data_request2.id])
+    let(:response) { mock :response }
+    let(:responses) { mock :response_list }
+    let(:org) { mock Organization }
+    let(:user) { User.new }
 
-      @user.current_response.should == @data_response1
+    it "changes current_response" do
+      responses.stub(:find_by_data_request_id).and_return response
+      org.stub(:responses).and_return responses
+      user.stub(:organization).and_return org
+      user.should_receive('current_response=').with response
+      user.should_receive('save').with false
+      user.change_current_response!(123)
     end
 
-    context "when data request id exists" do
-      it "changes current_response" do
-        @user.change_current_response!(@data_request2.id)
-        @user.current_response.should == @data_response2
-      end
-    end
-
-    context "when data request id does not exists" do
-      it "does not change current_response" do
-        @user.change_current_response!('a')
-        @user.current_response.should == @data_response1
-      end
+    it "ignores invalid ids" do
+      user.change_current_response!('a').should be_false
     end
   end
 end

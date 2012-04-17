@@ -188,6 +188,7 @@ class User < ActiveRecord::Base
   end
 
   def change_current_response!(new_request_id)
+    return false unless new_request_id.is_a?(Integer)
     response = responses.find_by_data_request_id(new_request_id)
     if response
       self.current_response = response
