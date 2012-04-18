@@ -54,10 +54,10 @@ class Reports::Beneficiaries
       rate = currency_rate(activity.currency, 'USD')
 
       if @is_budget
-        activity_amount = activity.budget          || 0
+        activity_amount = activity.total_budget    || 0
         split_amount    = implementer_split.budget || 0
       else
-        activity_amount = activity.spend           || 0
+        activity_amount = activity.total_spend      || 0
         split_amount    = implementer_split.spend  || 0
       end
 

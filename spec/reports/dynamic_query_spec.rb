@@ -24,12 +24,12 @@ describe Reports::DynamicQuery do
       @project      = Factory :project, :data_response => @response,
         :name => 'project',
         :in_flows => in_flows
+      @project.save!
       @root_code = Factory :code
       @code1          = Factory :code, :official_name => "root"
       @activity      = Factory :activity, :project => @project,
         :data_response => @response, :description => "desc"
-      @is            = Factory :implementer_split, :activity => @activity,
-        :organization => @organization, :budget => 100
+      @is            = Factory :implementer_split, :activity => @activity, :organization => @organization, :budget => 100
       @mtef = Factory :mtef_code, :short_display => "sub_prog_name"
       @nsp = Factory :nsp_code, :short_display => "Nsp_code"
       @cost_categorization = Factory :coding_budget_cost_categorization,

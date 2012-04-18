@@ -27,6 +27,7 @@ gem 'will_paginate', '~> 2.3.11'
 gem 'state_machine'
 
 group :development do
+  gem 'annotate'
   gem 'awesome_print', :require => 'ap'
   gem 'factory_girl', '1.2.4' # moving it here so not loaded by spork prefork. NB. some specs fail with 1.3.3
   gem 'google_currency', '=1.2.0' # for currency cacher
@@ -67,8 +68,8 @@ group :test do
   gem 'launchy'               # So you can do 'Then show me the page'
   gem 'pickle', '~> 0.4.4'
   gem 'rb-fsevent' # inject GoFast Juice (TM) into Guard on OSX
-  gem 'ruby-pg'
-  gem 'shoulda'
+  gem 'pg'
+  gem 'shoulda', '~> 2.11'
   gem 'spork', '~> 0.8'
   gem 'timecop'
 end

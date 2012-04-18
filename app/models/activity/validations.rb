@@ -2,10 +2,6 @@ module Activity::Validations
 
   class InvalidClassificationType < StandardError; end
 
-  def has_budget_or_spend?
-    spend.present? || budget.present?
-  end
-
   def classification_errors_by_type(type)
     errors = []
 

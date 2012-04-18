@@ -13,7 +13,7 @@ class Reports::FundingSourceSplit
       :conditions => ['data_responses.data_request_id = ? AND
                        data_responses.state = ?', request.id, 'accepted'],
       :include => [{ :activity => [{ :project => [ { :activities => [:implementer_splits, :project] } , { :in_flows => :from }] },
-        { :data_response => :organization } ]},
+        { :data_response => :organization }, :implementer_splits ]},
         { :organization => :data_responses }]
   end
 
@@ -61,7 +61,7 @@ class Reports::FundingSourceSplit
 
       in_flows = fake_in_flows(activity, project)
 
-      activity_amount = activity.send(@amount_type) || 0
+      activity_amount = activity.send(activity_total_method(@amount_type)) || 0
       split_amount    = implementer_split.send(@amount_type) || 0
       funders_total = in_flows.
         map{ |in_flow| in_flow.send(@amount_type) || 0 }.sum

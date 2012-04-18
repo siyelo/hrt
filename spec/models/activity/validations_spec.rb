@@ -1,30 +1,6 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe Activity, "Validations" do
-  describe "#has_budget_or_spend?" do
-    before :each do
-      basic_setup_project
-    end
-
-    it "will return true if the activity has a budget" do
-      @activity = Factory(:activity, :data_response => @response,
-                          :project => @project)
-      @split = Factory :implementer_split, :activity => @activity,
-        :spend => nil, :budget => 20, :organization => @organization
-      @activity.reload
-      @activity.has_budget_or_spend?.should be_true
-    end
-
-    it "will return false if the activity has a spend" do
-      @activity = Factory(:activity, :data_response => @response,
-                          :project => @project)
-      @split = Factory :implementer_split, :activity => @activity,
-        :spend => 20, :budget => nil, :organization => @organization
-      @activity.reload
-      @activity.has_budget_or_spend?.should be_true
-    end
-  end
-
   describe "#classification_errors_by_type" do
     before :each do
       basic_setup_activity

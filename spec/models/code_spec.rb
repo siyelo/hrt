@@ -139,34 +139,6 @@ describe Code do
     end
   end
 
-  describe "sum_of_assignments_for_activities" do
-    before :each do
-      Money.default_bank.add_rate(:USD, :USD, 1)
-      basic_setup_response
-      @project   = Factory(:project, :data_response => @response, :currency => "USD")
-      @activity1 = Factory.create(:activity, :data_response => @response, :project => @project)
-      @activity2 = Factory.create(:activity, :data_response => @response, :project => @project)
-      @code      = Factory.create(:code, :short_display => 'Code')
-
-      Factory.create(:coding_budget, :activity => @activity1, :code => @code,
-                     :cached_amount => 6000)
-      Factory.create(:coding_budget, :activity => @activity2, :code => @code,
-                     :cached_amount => 6000)
-    end
-
-    it "returns sum of code assignments when no activities" do
-      @code.sum_of_assignments_for_activities('CodingBudget', []).should == 0
-    end
-
-    it "returns sum of code assignments when one activities" do
-      @code.sum_of_assignments_for_activities('CodingBudget', [@activity1]).should == 6000
-    end
-
-    it "returns sum of code assignments when few activities" do
-      @code.sum_of_assignments_for_activities('CodingBudget', [@activity1, @activity2]).should == 12000
-    end
-  end
-
   describe "leaf_assignments_for_activities" do
     before :each do
       Money.default_bank.add_rate(:USD, :USD, 1)

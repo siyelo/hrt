@@ -1,6 +1,8 @@
 require 'set'
 
 class ProjectsController < BaseController
+  include DataResponse::States
+
   SORTABLE_COLUMNS = ['name']
 
   inherit_resources

@@ -310,8 +310,8 @@ EOS
       i.activities[0].implementer_splits.first.organization_name.should == 'selfimplementer1'
       i.activities[0].implementer_splits.first.spend.to_f.should == 3
       i.activities[0].implementer_splits.first.budget.to_f.should == 6
-      i.activities[0].spend.to_f.should == 3
-      i.activities[0].budget.to_f.should == 6
+      i.activities[0].total_spend.to_f.should == 3
+      i.activities[0].total_budget.to_f.should == 6
     end
 
     it "should discard several duplicate implementer rows" do
@@ -325,8 +325,8 @@ EOS
       i.activities[0].implementer_splits.first.organization_name.should == 'selfimplementer1'
       i.activities[0].implementer_splits.first.spend.to_f.should == 4
       i.activities[0].implementer_splits.first.budget.to_f.should == 8
-      i.activities[0].spend.to_f.should == 4
-      i.activities[0].budget.to_f.should == 8
+      i.activities[0].total_spend.to_f.should == 4
+      i.activities[0].total_budget.to_f.should == 8
     end
 
     it "should maintain activity cache" do
@@ -335,8 +335,8 @@ project1,project description,01/01/2010,31/12/2010,activity1,activity1 descripti
 EOS
       i = Importer.new
       i.import(@response, write_csv_with_header(csv_string))
-      i.activities[0].spend.to_f.should == 2
-      i.activities[0].budget.to_f.should == 4
+      i.activities[0].total_spend.to_f.should == 2
+      i.activities[0].total_budget.to_f.should == 4
     end
 
     context "when multiple existing implementers" do
@@ -370,8 +370,8 @@ EOS
         i.activities[0].implementer_splits[1].organization_name.should == 'implementer2'
         i.activities[0].implementer_splits[1].spend.to_f.should == 3.0
         i.activities[0].implementer_splits[1].budget.to_f.should == 6.0
-        i.activities[0].spend.to_f.should == 5
-        i.activities[0].budget.to_f.should == 10
+        i.activities[0].total_spend.to_f.should == 5
+        i.activities[0].total_budget.to_f.should == 10
       end
 
       it "should not create dummy self implementer on existing activities" do
@@ -410,8 +410,8 @@ EOS
         i.activities[0].implementer_splits[1].organization_name.should == 'implementer2'
         i.activities[0].implementer_splits[1].spend.to_f.should == 3.0
         i.activities[0].implementer_splits[1].budget.to_f.should == 6.0
-        i.activities[0].spend.to_f.should == 5
-        i.activities[0].budget.to_f.should == 10
+        i.activities[0].total_spend.to_f.should == 5
+        i.activities[0].total_budget.to_f.should == 10
       end
 
       it "should update existing activity overwriting its multiple implementers" do
@@ -447,8 +447,8 @@ EOS
         i.activities[0].implementer_splits[1].organization_name.should == 'implementer2'
         i.activities[0].implementer_splits[1].spend.to_f.should == 3.0
         i.activities[0].implementer_splits[1].budget.to_f.should == 6.0
-        i.activities[0].spend.to_f.should == 5
-        i.activities[0].budget.to_f.should == 10
+        i.activities[0].total_spend.to_f.should == 5
+        i.activities[0].total_budget.to_f.should == 10
       end
     end
 
@@ -641,8 +641,8 @@ EOS
     i.activities[0].implementer_splits.first.organization.should == nil
     i.activities[0].implementer_splits.first.spend.to_f.should == 2
     i.activities[0].implementer_splits.first.budget.to_f.should == 4
-    i.activities[0].spend.to_f.should == 2 # check the cache is up to date
-    i.activities[0].budget.to_f.should == 4
+    i.activities[0].total_spend.to_f.should == 2 # check the cache is up to date
+    i.activities[0].total_budget.to_f.should == 4
   end
 
   it "should discard several duplicate brand new implementer rows" do

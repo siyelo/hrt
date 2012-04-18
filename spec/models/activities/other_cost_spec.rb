@@ -22,8 +22,6 @@ describe OtherCost do
     it { should allow_mass_assignment_of(:name) }
     it { should allow_mass_assignment_of(:description) }
     it { should allow_mass_assignment_of(:project_id) }
-    it { should allow_mass_assignment_of(:budget) }
-    it { should allow_mass_assignment_of(:spend) }
     it { should allow_mass_assignment_of(:beneficiary_ids) }
     it { should allow_mass_assignment_of(:provider_id) }
     it { should allow_mass_assignment_of(:text_for_provider) }

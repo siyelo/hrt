@@ -20,18 +20,17 @@ class Reports::DynamicQuery
             { "leaf_#{@amount_type}_inputs".to_sym => :code },
             { "coding_#{@amount_type}_district".to_sym => :code },
             { :project => { :in_flows => :from } },
-            { :data_response => :organization }
+            { :data_response => :organization },
+            :implementer_splits, #eager load for activity.total_*
           ]},
         { :organization => :data_responses } ]
-
-
   end
 
   def csv
     FasterCSV.generate do |csv|
       csv << build_header
       @implementer_splits.each do |implementer_split|
-        amount = implementer_split.activity.send(@amount_type)
+        amount = implementer_split.activity.send(activity_total_method(@amount_type))
         build_rows(csv, implementer_split) if amount && amount > 0
       end
     end

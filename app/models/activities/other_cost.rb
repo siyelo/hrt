@@ -59,6 +59,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: activities
@@ -70,8 +71,6 @@ end
 #  provider_id                  :integer         indexed
 #  description                  :text
 #  type                         :string(255)     indexed
-#  budget                       :decimal(, )
-#  spend                        :decimal(, )
 #  text_for_provider            :text
 #  text_for_beneficiaries       :text
 #  data_response_id             :integer         indexed
