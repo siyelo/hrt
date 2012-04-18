@@ -6,7 +6,7 @@ class Document < ActiveRecord::Base
   attr_accessible :title, :document, :visibility, :description
 
   ### Attachments
-  has_attached_file :document, Settings.paperclip.to_options
+  has_attached_file :document, Settings.paperclip_document.to_options
 
   ### Validations
   validates_presence_of :title
@@ -23,4 +23,15 @@ class Document < ActiveRecord::Base
                                                      'public', 'reporters']
   named_scope :visible_to_public, :conditions => ["visibility = ?", 'public']
 
+  def private_document_url
+    if private_url?
+      document.expiring_url(3600)
+    else
+      document.url
+    end
+  end
+
+  def private_url?
+    RAILS_ENV == 'production'
+  end
 end

@@ -33,13 +33,33 @@ class Report < ActiveRecord::Base
   attr_accessor :report, :raw_csv, :temp_file_name, :zip_file_name, :unzip_file_name
 
   ### Attachments
-  has_attached_file :csv, Settings.paperclip.to_options
-  has_attached_file :formatted_csv, Settings.paperclip.to_options
+  has_attached_file :csv, Settings.paperclip_report.to_options
+  has_attached_file :formatted_csv, Settings.paperclip_report.to_options
 
   ### Validations
   validates_presence_of :key, :data_request_id
   validates_uniqueness_of :key, :scope => :data_request_id
   validates_inclusion_of :key, :in => REPORTS
+
+  def private_csv_url
+    if private_url?
+      csv.expiring_url(3600)
+    else
+      csv.url
+    end
+  end
+
+  def private_formatted_csv_url
+    if private_url?
+      formatted_csv.expiring_url(3600)
+    else
+      formatted_csv.url
+    end
+  end
+
+  def private_url?
+    RAILS_ENV == 'production'
+  end
 
   ### Class Methods
   def self.key_to_name(key)

@@ -1,54 +1,84 @@
 defaults: &defaults
   google_account_id:
+access_keys: &access_keys
+  access_key_id: <%= ENV['AMAZON_ACCESS_KEY_ID'] %>
+  secret_access_key: <%= ENV['AMAZON_SECRET_ACCESS_KEY'] %>
 
 development:
   <<: *defaults
-  paperclip:
+  paperclip_report:
     # LOCAL CONFIG:
     storage: :filesystem
-    # S3 CONFIG:
-    #storage: :s3
-    #path: "report/:attachment/:key.:extension"
-    #s3_credentials:
-      #bucket: us.assets.dev.hrtapp.com
-      #access_key_id: <%= ENV['AMAZON_ACCESS_KEY_ID'] %>
-      #secret_access_key: <%= ENV['AMAZON_SECRET_ACCESS_KEY'] %>
-    #s3_permissions: public-read
+    # # S3 CONFIG:
+    # storage: :s3
+    # path: "report/:attachment/:key.:extension"
+    # s3_credentials:
+    #   bucket: us.assets.dev.hrtapp.com
+    #   <<: *access_keys
+    # s3_permissions: authenticated-read
+  paperclip_document:
+    # LOCAL CONFIG:
+    storage: :filesystem
+    # # S3 CONFIG:
+    # storage: :s3
+    # path: "documents/:attachment/:document_file_name.:extension"
+    # s3_credentials:
+    #   bucket: us.assets.dev.hrtapp.com
+    #   <<: *access_keys
+    # s3_permissions: authenticated-read
 
 test:
   <<: *defaults
-  paperclip:
+  paperclip_report:
+    storage: :filesystem
+  paperclip_document:
     storage: :filesystem
 
 cucumber:
   <<: *defaults
-  paperclip:
+  paperclip_report:
+    storage: :filesystem
+  paperclip_document:
     storage: :filesystem
 
 profiling:
   <<: *defaults
-  paperclip:
+  paperclip_report:
+    storage: :filesystem
+  paperclip_document:
     storage: :filesystem
 
 staging:
   <<: *defaults
-  paperclip:
-    path: "report/:attachment/:key.:extension"
+  paperclip_report:
     storage: :s3
+    path: "report/:attachment/:key.:extension"
     s3_credentials:
       bucket: us.assets.staging.hrtapp.com
-      access_key_id: <%= ENV['AMAZON_ACCESS_KEY_ID'] %>
-      secret_access_key: <%= ENV['AMAZON_SECRET_ACCESS_KEY'] %>
-    s3_permissions: public-read
+      <<: *access_keys
+    s3_permissions: authenticated-read
+  paperclip_document:
+    storage: :s3
+    path: "documents/:attachment/:document_file_name.:extension"
+    s3_credentials:
+      bucket: us.assets.staging.hrtapp.com
+      <<: *access_keys
+    s3_permissions: authenticated-read
 
 production:
   <<: *defaults
   google_account_id: UA-22139528-1
-  paperclip:
-    path: "report/:attachment/:key.:extension"
+  paperclip_report:
     storage: :s3
+    path: "report/:attachment/:key.:extension"
     s3_credentials:
       bucket: us.assets.hrtapp.com
-      access_key_id: <%= ENV['AMAZON_ACCESS_KEY_ID'] %>
-      secret_access_key: <%= ENV['AMAZON_SECRET_ACCESS_KEY'] %>
-    s3_permissions: public-read
+      <<: *access_keys
+    s3_permissions: authenticated-read
+  paperclip_document:
+    storage: :s3
+    path: "documents/:attachment/:document_file_name.:extension"
+    s3_credentials:
+      bucket: us.assets.hrtapp.com
+      <<: *access_keys
+    s3_permissions: authenticated-read

@@ -14,10 +14,10 @@ class Admin::ReportsController < Admin::BaseController
   # returns the report csv, or the formatted csv
   def show
     if @report.csv.exists?
-      url = @report.csv.url
+      url = @report.private_csv_url
       if params[:formatted] == "true"
         if @report.formatted_csv.exists?
-          url = @report.formatted_csv.url
+          url = @report.private_formatted_csv_url
         else
           flash[:error] = "Formatted report does not exist."
           url = admin_reports_path
@@ -71,7 +71,7 @@ class Admin::ReportsController < Admin::BaseController
       Timeout::timeout(15) do
         @report = Report.find_or_initialize_by_key_and_data_request_id(params[:id], current_request.id)
         @report.generate_report
-        redirect_to @report.csv.url
+        redirect_to @report.private_csv_url
       end
     rescue Timeout::Error
       @report = Report.find_or_create_by_key_and_data_request_id(params[:id], current_request.id)

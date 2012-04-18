@@ -94,4 +94,44 @@ describe Report do
       %x(rm "#{report.zip_file_name}") ## removing the file it saved
     end
   end
+
+  describe "#private_csv_url" do
+    it "sets private url for production environment" do
+      report = Factory.build(:report)
+      report.stub(:private_url?).and_return(true)
+      report.csv.should_receive(:expiring_url).and_return('test_url')
+      report.csv.should_not_receive(:url)
+
+      report.private_csv_url.should == 'test_url'
+    end
+
+    it "sets public url for other than production environment" do
+      report = Factory.build(:report)
+      report.stub(:private_url?).and_return(false)
+      report.csv.should_not_receive(:expiring_url)
+      report.csv.should_receive(:url).and_return('test_url')
+
+      report.private_csv_url.should == 'test_url'
+    end
+  end
+
+  describe "#private_formatted_csv_url" do
+    it "sets private url for production environment" do
+      report = Factory.build(:report)
+      report.stub(:private_url?).and_return(true)
+      report.formatted_csv.should_receive(:expiring_url).and_return('test_url')
+      report.formatted_csv.should_not_receive(:url)
+
+      report.private_formatted_csv_url.should == 'test_url'
+    end
+
+    it "sets public url for other than production environment" do
+      report = Factory.build(:report)
+      report.stub(:private_url?).and_return(false)
+      report.formatted_csv.should_not_receive(:expiring_url)
+      report.formatted_csv.should_receive(:url).and_return('test_url')
+
+      report.private_formatted_csv_url.should == 'test_url'
+    end
+  end
 end

@@ -44,4 +44,24 @@ describe Document do
       public_documents.include?(@public_document).should be_true
     end
   end
+
+  describe "#private_document_url" do
+    it "sets private url for production environment" do
+      document = Factory.build(:document)
+      document.stub(:private_url?).and_return(true)
+      document.document.should_receive(:expiring_url)
+      document.document.should_not_receive(:url)
+
+      document.private_document_url
+    end
+
+    it "sets public url for other than production environment" do
+      document = Factory.build(:document)
+      document.stub(:private_url?).and_return(false)
+      document.document.should_receive(:url)
+      document.document.should_not_receive(:expiring_url)
+
+      document.private_document_url
+    end
+  end
 end
