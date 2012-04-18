@@ -12,7 +12,7 @@ describe StaticPageController do
     end
 
     it "loads public documents if user is not logged in" do
-      Document.should_receive(:visible_to_public).and_return([document])
+      Document.stub_chain(:visible_to_public, :latest_first).and_return([document])
 
       get :index
       assigns(:documents).should == [document]
@@ -20,7 +20,7 @@ describe StaticPageController do
     end
 
     it "does not render layout when ajax request" do
-      Document.should_receive(:visible_to_public).and_return([document])
+      Document.stub_chain(:visible_to_public, :latest_first).and_return([document])
 
       xhr :get, :index
       assigns(:documents).should == [document]
