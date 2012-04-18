@@ -31,3 +31,8 @@ production:
   pool: 5
   timeout: 5000
 
+#global
+test-in-memory:
+  adapter: sqlite3
+  database: ':memory:'
+  verbosity: quiet

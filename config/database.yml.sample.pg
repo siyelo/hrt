@@ -73,3 +73,9 @@ cucumber:
   password: hrt_test
 
 # prod config doesnt matter since we're using heroku
+
+#global
+test-in-memory:
+  adapter: sqlite3
+  database: ':memory:'
+  verbosity: quiet
