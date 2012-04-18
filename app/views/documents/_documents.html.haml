@@ -10,5 +10,5 @@
         = link_to(document.title, document.private_document_url, :class => 'title')
 
         - if document.description.present?
-          = link_to image_tag("tooltip.png"), "#", :title => document.description, :class => 'tooltip'
+          = link_to "?", "#", :title => document.description, :class => 'tooltip typo'
       %td= document.updated_at.strftime("%b %d, %Y")

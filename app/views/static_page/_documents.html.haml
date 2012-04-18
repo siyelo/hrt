@@ -1,9 +1,9 @@
-.wrapper#js_files_download
+.wrapper#js_files_download.landing-table-wrap
   - if @documents.present?
-    %table.modern_table
+    %table.landing-table
       = render 'documents/documents', :documents => @documents
 
     = will_paginate @documents, :class => "pagination js_pagination"
 
   - else
-    %p There are currently no shared files available. Please check back soon.
+    %p.landing-empty There are currently no shared files available. Please check back soon.
