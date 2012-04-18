@@ -6,8 +6,7 @@
       %p= truncate(org_name, :length => 35)
 
     .right
-      - country = ENV['HRT_COUNTRY'] || 'rwanda'
       %a{:href => '/'}
-        = image_tag "#{country}-coat-of-arms-med.png"
+        = image_tag "rwanda-coat-of-arms-med.png"
 
     = render :partial => '/layouts/login_nav'

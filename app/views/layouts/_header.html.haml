@@ -2,9 +2,8 @@
 #header
   .wrapper
     %h1
-      - country = ENV['HRT_COUNTRY'] || 'rwanda'
       %a{ :id => "logo", :href => '/'}
-        = image_tag "#{country}-coat-of-arms-med.png"
-        = country.titleize
+        = image_tag "rwanda-coat-of-arms-med.png"
+        Rwanda
 
     = render :partial => '/layouts/login_nav'
