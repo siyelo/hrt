@@ -1,0 +1,9 @@
+.wrapper#js_files_download
+  - if @documents.present?
+    %table.modern_table
+      = render 'documents/documents', :documents => @documents
+
+    = will_paginate @documents, :class => "pagination js_pagination"
+
+  - else
+    %p There are currently no shared files available. Please check back soon.

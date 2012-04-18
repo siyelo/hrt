@@ -1,18 +1,18 @@
-.wrapper.center
+.wrapper
   %h2.tagline
     Health Resource Tracker
     %span Improving lives through better health policy
-    
+
   .column3
     %p
       = image_tag "icon_chart.png", :alt => "Image of a pie-chart", :class => "left", :width => "64"
       The Health Resource Tracker tracks resource flows in the health sector from their many sources to the ultimate health function they serve. Information about health spending, both planned and realized, are essential for evidence-based budgeting, planning and policy-making.
-    
+
   .column3
     %p
       = image_tag "icon_globe.png", :alt => "Image of Planet Earth", :class => "left", :width => "64"
       This system was created under the stewardship of the Resource Tracking Steering Committee, chaired by the Ministry of Health, with extensive input from CNLS. It was implemented by Health Systems 20/20, a global project funded by USAID, aided by many development partners, especially USAID, UNAIDS and CHAI.
-  
+
   .column3.last
     %p This project is supported by:
     %h4.supporter
@@ -20,10 +20,11 @@
         = image_tag "landing_usaid.png"
       USAID
       %span From the American People
-  
+
     %h4.supporter
       %a{:href => 'http://www.hs2020.org/', :target => '_blank', :class => "left"}
         = image_tag "landing_2020.png"
       HEALTH SYSTEMS 20/20
       %span Bringing clarity to health systems
-    
+
+= render 'documents'

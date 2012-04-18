@@ -1643,6 +1643,14 @@ var promo_landing = {
          $('#new_user_session').fadeIn();
        });
     });
+
+    $('.js_pagination a').live('click', function (e) {
+      e.preventDefault();
+      var link = $(this).attr('href');
+      $.get(link, function (data) {
+        $('#js_files_download').replaceWith(data);
+      })
+    });
   }
 }
 

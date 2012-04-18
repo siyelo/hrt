@@ -10,7 +10,7 @@ Feature: Reporter can download files
       And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
       And I am signed in as "reporter@hrtapp.com"
 
-    Scenario: Reporter Admin can download files
+    Scenario: Reporter can download files
       When I follow "My file"
       Then I should see the Open or Save dialog for a "csv" file
 
