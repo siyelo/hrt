@@ -21,23 +21,23 @@ describe Admin::UsersController do
   end
 
   describe 'admin protected endpoints' do
-    it "should search by current login date" do
-      Timecop.freeze(Date.parse("2010-01-15"))
-      @user1 = Factory :user
-      login(@user1)
-      Timecop.freeze(Date.parse("2010-02-20")) # Timecop seems to be doing a -1 on the date ?!
+    let(:organization) { Factory :organization, :name => "Siyelo" }
+    let(:user1) { Factory :user, :full_name => 'Frank', :organization => organization }
 
-      @user2 = Factory :user
-      login(@user2)
-      Timecop.return
+    it "should search by user name" do
+      login user1 #need to reference it so it gets built
       login Factory(:admin)
-      # sqlite doesnt support month names
-      # so our test will have to use the SQLITE format to be safe
-      # i.e. we cant use the form '19 Feb' in the query
-      # Timecop seems to be doing a -1 on the date ?!
-      get :index, :query => '19 02', :direction => 'asc'
+      get :index, :query => 'rank', :direction => 'asc'
       response.should render_template('admin/users/index')
-      assigns(:users).should == [@user2]
+      assigns(:users).should == [user1]
+    end
+
+    it "should search by org name" do
+      login user1
+      login Factory(:admin)
+      get :index, :query => 'iyelo', :direction => 'asc'
+      response.should render_template('admin/users/index')
+      assigns(:users).should == [user1]
     end
   end
 end

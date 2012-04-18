@@ -71,8 +71,8 @@ describe Reports::DynamicQuery do
       table[0]['Actual Double Count'].should == @is.double_count?.to_s
     end
 
-    it "should adjusted total amount if there is 2 funders" do
-      @funder2 = Factory :organization, :name => "funder2"
+    it "should adjust total amount if there are 2 funders" do
+      @funder2 = Factory :organization, :name => "zz_funder"
       @project.in_flows << [Factory.build :funding_flow, :from => @funder2,
         :budget => 50]
 
@@ -211,7 +211,7 @@ describe Reports::DynamicQuery do
       table[0]['Description of Activity'].should == @activity.description
       table[0]['Targets'].should == @activity.targets.map(&:description).join(',')
       table[0]['Cost Category Split Total %'].should == "100.0"
-      table[0]['Cost Category Split %'].should == "25.0"
+      table[0]['Cost Category Split %'].should == "75.0"
       table[0]['Cost Category'].should == @cost_categorization.code.short_display
       table[0]['Purpose Split Total %'].should == '100.0'
       table[0]['Purpose Split %'].should == "100.0"
@@ -222,7 +222,7 @@ describe Reports::DynamicQuery do
       table[0]['Location Split Total %'].should == '100.0'
       table[0]['Location Split %'].should == "100.0"
       table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
-      table[0]['Total Amount ($)'].should == "25.00"
+      table[0]['Total Amount ($)'].should == "75.00"
       table[0]['Actual Double Count'].should == @is.double_count?.to_s
 
       table[1]['Financing Agent'].should == @organization.name
@@ -231,7 +231,7 @@ describe Reports::DynamicQuery do
       table[1]['Description of Activity'].should == @activity.description
       table[1]['Targets'].should == @activity.targets.map(&:description).join(',')
       table[1]['Cost Category Split Total %'].should == "100.0"
-      table[1]['Cost Category Split %'].should == "75.0"
+      table[1]['Cost Category Split %'].should == "25.0"
       table[1]['Cost Category'].should == @cost_categorization.code.short_display
       table[1]['Purpose Split Total %'].should == '100.0'
       table[1]['Purpose Split %'].should == "100.0"
@@ -242,7 +242,7 @@ describe Reports::DynamicQuery do
       table[1]['Location Split Total %'].should == '100.0'
       table[1]['Location Split %'].should == "100.0"
       table[1]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
-      table[1]['Total Amount ($)'].should == "75.00"
+      table[1]['Total Amount ($)'].should == "25.00"
       table[1]['Actual Double Count'].should == @is.double_count?.to_s
     end
 
@@ -538,7 +538,7 @@ describe Reports::DynamicQuery do
         :percentage => 70, :activity => @activity, :code => @code1
       @coding_budget_district = Factory :coding_budget_district,
         :percentage => 30, :activity => @activity, :code => @code1
-      @funder2 = Factory :organization, :name => "funder2"
+      @funder2 = Factory :organization, :name => "zz_funder2"
       @project.in_flows << [Factory.build :funding_flow, :from => @funder2,
         :budget => 50]
 
@@ -904,11 +904,12 @@ describe Reports::DynamicQuery do
         :percentage => 70, :activity => @activity, :code => @code1
       @coding_budget_district = Factory :coding_budget_district,
         :percentage => 30, :activity => @activity, :code => @code1
-      @funder2 = Factory :organization, :name => "funder2"
+      @funder2 = Factory :organization, :name => "zzfunder2"
       @project.in_flows << [Factory.build :funding_flow, :from => @funder2,
         :budget => 50]
 
       table = run_report
+
       table[0]['Financing Agent'].should == @organization.name
       table[0]['Organization'].should == @organization.name
       table[0]['Implementing Agent'].should == @is.organization.name

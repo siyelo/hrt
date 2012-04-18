@@ -169,12 +169,12 @@ describe CodeAssignment do
       CodingSpend.update_classifications(activity1, { code2.id => 5.5 }) # 5.5% of 200 == 11
       run_delayed_jobs
       code_assignments = CodeAssignment.select_for_pies.all
-      code_assignments[0].value.to_s.should == "11"
+      code_assignments[0].value.to_i.should == 11
       code_assignments[0].code_id.should == code2.id
-      code_assignments[1].value.to_s.should == "1"
+      code_assignments[1].value.to_i.should == 1
       code_assignments[1].code_id.should == code1.id
     end
-  end
+ end
 
   describe "updating amounts" do
     before :each do
