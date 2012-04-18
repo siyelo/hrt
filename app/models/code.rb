@@ -45,15 +45,6 @@ class Code < ActiveRecord::Base
     a
   end
 
-  def leaf_assignments_for_activities(type, activities)
-    code_assignments.with_type(type.to_s).with_activities(activities).
-      leaves.with_amount.cached_amount_desc
-  end
-
-  def sum_of_assignments_for_activities(coding_klass, activities)
-    code_assignments.with_type(coding_klass.to_s).with_activities(activities).sum(:cached_amount_in_usd)
-  end
-
   def name
     short_display
   end

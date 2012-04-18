@@ -146,31 +146,7 @@ describe CodeAssignment do
       cs1 = activity.coding_spend.first
       cs1.cached_amount.to_f.should == 200
       CodeAssignment.all.should == [cb1, cs1]
-      CodeAssignment.cached_amount_desc.should == [cs1, cb1]
-    end
-
-    it "select_for_pies" do
-      Money.default_bank.add_rate(:USD, :RWF, "500")
-      organization = Factory(:organization, :currency => 'USD')
-      request      = Factory(:data_request, :organization => organization)
-      response     = organization.latest_response
-      project      = Factory(:project, :data_response => response)
-      activity1    = Factory.create(:activity,
-                                    :data_response => response, :project => project)
-      split    = Factory(:implementer_split, :activity => activity1,
-                         :budget => 100, :spend => 200, :organization => organization)
-      code1        = Factory.create(:mtef_code, :short_display => 'code1')
-      code2        = Factory.create(:mtef_code, :short_display => 'code2')
-      activity1.reload
-      activity1.save #update cache
-      CodingBudget.update_classifications(activity1, { code1.id => 1})   # 1 means 1%
-      CodingSpend.update_classifications(activity1, { code2.id => 5.5 }) # 5.5% of 200 == 11
-      run_delayed_jobs
-      code_assignments = CodeAssignment.select_for_pies.all
-      code_assignments[0].value.to_i.should == 11
-      code_assignments[0].code_id.should == code2.id
-      code_assignments[1].value.to_i.should == 1
-      code_assignments[1].code_id.should == code1.id
+      CodeAssignment.sorted.should == [cs1, cb1]
     end
  end
 
@@ -181,35 +157,6 @@ describe CodeAssignment do
       split    = Factory(:implementer_split, :activity => activity,
                          :budget => 100, :spend => 200, :organization => @organization)
       @assignment = Factory(:code_assignment, :activity => activity)
-    end
-  end
-
-  describe "keeping USD cached amounts in-sync" do
-    before :each do
-      Money.default_bank.add_rate(:RWF, :USD, 0.002)
-      Money.default_bank.add_rate(:USD, :RWF, "500")
-
-      @organization = Factory(:organization, :currency => 'RWF')
-      @request      = Factory(:data_request, :organization => @organization)
-      @response     = @organization.latest_response
-      @project      = Factory(:project, :data_response => @response)
-      @activity     = Factory(:activity, :data_response => @response, :project => @project)
-
-      ###
-      @ca               = Factory.build(:code_assignment, :activity => @activity)
-      @ca.cached_amount = 123.45
-      @ca.save
-      @ca.reload
-    end
-
-    it "should update cached_amount_in_usd on creation" do
-      @ca.cached_amount_in_usd.should == 0.2469 # sqlite precision!
-    end
-
-    it "should update cached_amount_in_usd on update" do
-      @ca.cached_amount = 456.78
-      @ca.save
-      @ca.cached_amount_in_usd.should == 0.91356
     end
   end
 

@@ -197,16 +197,6 @@ module ApplicationHelper
     "http://hrtapp.tenderapp.com/discussions"
   end
 
-  def coding_progress_style(progress)
-    style = ''
-    style = "background: #ccff00" if progress < 90
-    style = "background: #ffd800" if progress < 80
-    style = "background: #ff9c00" if progress < 70
-    style = "background: #ff6c00" if progress < 50
-    style = "background: red" if progress < 30
-    style = style + "; width: #{progress}%"
-  end
-
   def form_namespace(object)
     "f#{object.object_id}"
   end

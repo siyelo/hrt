@@ -144,35 +144,6 @@ describe DataResponse do
     end
   end
 
-  describe 'Currency cache update' do
-    before :each do
-      Money.default_bank.add_rate(:RWF, :USD, 0.5)
-      Money.default_bank.add_rate(:EUR, :USD, 1.5)
-      @organization = Factory(:organization, :currency => 'RWF')
-      @request      = Factory(:data_request, :organization => @organization)
-      @response     = @organization.latest_response
-      @project      = Factory(:project, :data_response => @response,
-                              :currency => nil)
-      @activity     = Factory(:activity, :data_response => @response,
-                              :project => @project)
-      split        = Factory(:implementer_split, :activity => @activity,
-                             :budget => 1000, :spend => 2000, :organization => @organization)
-      @activity.reload
-      @activity.save
-    end
-
-    it "should update cached USD amounts on Activity and Code Assignment" do
-      @activity.budget_in_usd.should == 500
-      @activity.spend_in_usd.should == 1000
-      @organization.reload # dr.activities wont be updated otherwise
-      @organization.currency = 'EUR'
-      @organization.save
-      @activity.reload
-      @activity.budget_in_usd.should == 1500
-      @activity.spend_in_usd.should == 3000
-    end
-  end
-
   describe "#name" do
     it "returns data_response name" do
       organization = Factory(:organization)

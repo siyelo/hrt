@@ -35,13 +35,9 @@ class Project < ActiveRecord::Base
 
   ### Callbacks
   # also check lib/response_state_callbacks
+  before_validation :strip_leading_spaces
   before_validation :assign_project_to_in_flows
   before_validation :assign_project_to_activities
-  before_validation :strip_leading_spaces
-  after_save        :update_activity_amount_cache
-  after_save        :update_cached_currency_amounts,
-    :if => Proc.new { |p| p.currency_changed? }
-
 
   ### Validations
   validates_uniqueness_of :name, :scope => :data_response_id
@@ -160,17 +156,6 @@ class Project < ActiveRecord::Base
     activities.only_simple.inject([]){ |acc, a| acc.concat(a.locations) }.uniq
   end
 
-  def update_cached_currency_amounts
-    self.activities.each do |a|
-      a.code_assignments.each {|c| c.save}
-      a.save
-    end
-
-    self.in_flows.each do |in_flow|
-      in_flow.save unless in_flow.marked_for_destruction?
-    end
-  end
-
   private
 
     def has_in_flows?
@@ -185,10 +170,6 @@ class Project < ActiveRecord::Base
     def strip_leading_spaces
       self.name = self.name.strip if self.name
       self.description = self.description.strip if self.description
-    end
-
-    def update_activity_amount_cache
-      activities.each { |a| a.send(:update_cached_usd_amounts) } if currency_changed?
     end
 
     # work arround for validates_presence_of :project issue

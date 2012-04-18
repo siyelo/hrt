@@ -60,6 +60,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: activities
@@ -76,8 +77,6 @@ end
 #  data_response_id             :integer         indexed
 #  activity_id                  :integer         indexed
 #  approved                     :boolean
-#  spend_in_usd                 :decimal(, )     default(0.0)
-#  budget_in_usd                :decimal(, )     default(0.0)
 #  project_id                   :integer
 #  ServiceLevelBudget_amount    :decimal(, )     default(0.0)
 #  ServiceLevelSpend_amount     :decimal(, )     default(0.0)

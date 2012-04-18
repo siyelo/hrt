@@ -22,14 +22,6 @@ describe DataRequest do
     it { should_not allow_value('2010-12-41').for(:start_date) }
   end
 
-  describe "#end_date" do
-    it "is exactly (1 year - 1 day) from the start date" do
-      start_date = DateTime.parse('12-12-2012')
-      dr = Factory.build :data_request, :start_date => start_date
-      dr.end_date.should == start_date + (1.year - 1.day)
-    end
-  end
-
   describe "Callbacks" do
     # after_create :create_data_responses
     it "creates data_responses for each organization after data_request is created" do
@@ -52,32 +44,29 @@ describe DataRequest do
   end
 
   describe "#previous_request" do
-    let(:data_request) { Factory(:data_request, :start_date => "2011-01-01",
-                                 :end_date => "2012-01-01") }
+    let(:data_request) { Factory(:data_request, :start_date => "2011-01-01") }
 
     it "returns nil when no previous request" do
       data_request.previous_request.should be_nil
     end
 
     it "returns the previous request" do
-      previous_request = Factory(:data_request, :start_date => "2010-01-01",
-                                 :end_date => "2011-01-01")
+      previous_request = Factory(:data_request, :start_date => "2010-01-01")
 
       data_request.previous_request.should == previous_request
     end
   end
 
   describe "#next_request" do
-    let(:data_request) { Factory(:data_request, :start_date => "2011-01-01",
-                                 :end_date => "2012-01-01") }
+    let(:data_request) { Factory(:data_request, :start_date => "2011-01-01") }
 
     it "returns nil when no next request" do
       data_request.next_request.should be_nil
     end
 
     it "returns the next request" do
-      next_request = Factory(:data_request, :start_date => "2012-01-01",
-                                 :end_date => "2013-01-01")
+      next_request = Factory(:data_request, :start_date => "2012-01-01")
+
 
       data_request.next_request.should == next_request
     end

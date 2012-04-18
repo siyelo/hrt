@@ -5,8 +5,8 @@ Feature: SysAdmin can switch financial year quickly
 
   Background:
     Given an organization exists with name: "SysAdmin Organization"
-      And a data_request exists with title: "data_request1", organization: the organization, start_date: "2010-01-01", end_date: "2011-01-01"
-      And a data_request exists with title: "data_request2", organization: the organization, start_date: "2011-01-01", end_date: "2012-01-01"
+      And a data_request exists with title: "data_request1", organization: the organization, start_date: "2010-01-01"
+      And a data_request exists with title: "data_request2", organization: the organization, start_date: "2011-01-01"
       And an admin exists with email: "admin@hrtapp.com", organization: the organization
 
       And an organization exists with name: "Reporter Organization"

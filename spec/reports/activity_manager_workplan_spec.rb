@@ -33,7 +33,7 @@ describe Reports::ActivityManagerWorkplan do
       rows = Spreadsheet.open(StringIO.new(xls)).worksheet(0)
       rows.row(0).should == ["Organization Name", "Project Name", "Project Description",
         "Funding Sources", "Activity Name", "Activity Description", "Activity / Other Cost",
-        "Activity Budget (USD)", "Implementers", "Targets", "Outputs", "Beneficiaries",
+        "Activity Budget", "Currency", "Implementers", "Targets", "Outputs", "Beneficiaries",
         "Districts worked in/National focus"]
       rows[1,0].should == @organization2.try(:name)
       rows[1,1].should == @project.try(:name)
@@ -42,8 +42,9 @@ describe Reports::ActivityManagerWorkplan do
       rows[1,4].should == ApplicationController.helpers.friendly_name(@activity,50)
       rows[1,5].should == @activity.description
       rows[1,6].should == @activity.class.to_s.titleize
-      rows[1,7].should == "100.00"
-      rows[1,8].should == @activity.implementer_splits.map{|is| is.organization.name}.join(', ')
+      rows[1,7].should == 100.00
+      rows[1,8].should == "USD"
+      rows[1,9].should == @activity.implementer_splits.map{|is| is.organization.name}.join(', ')
 
       rows[2,0].should == nil
       rows[2,1].should == nil
@@ -52,8 +53,9 @@ describe Reports::ActivityManagerWorkplan do
       rows[2,4].should == ApplicationController.helpers.friendly_name(@activity2,50)
       rows[2,5].should == @activity2.description
       rows[2,6].should == @activity2.class.to_s.titleize
-      rows[2,7].should == "400.00"
-      rows[2,8].should == @activity2.implementer_splits.map{|is| is.organization.name}.join(', ')
+      rows[2,7].should == 400.00
+      rows[2,8].should == "USD"
+      rows[2,9].should == @activity2.implementer_splits.map{|is| is.organization.name}.join(', ')
 
       rows[3,0].should == @organization3.try(:name)
     end
