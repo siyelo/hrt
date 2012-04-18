@@ -13,7 +13,6 @@ class UsersController < ApplicationController
       end
     end
 
-
     redirect_back
   end
 

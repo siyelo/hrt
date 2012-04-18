@@ -188,7 +188,7 @@ class User < ActiveRecord::Base
   end
 
   def change_current_response!(new_request_id)
-    response = responses.find_by_data_request_id(new_request_id.to_i)
+    response = responses.find_by_data_request_id(new_request_id)
     if response
       self.current_response = response
       self.save(false)

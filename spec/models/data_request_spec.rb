@@ -82,4 +82,36 @@ describe DataRequest do
       org.data_responses.should be_empty
     end
   end
+
+  describe "#previous_request" do
+    let(:data_request) { Factory(:data_request, :start_date => "2011-01-01",
+                                 :end_date => "2012-01-01") }
+
+    it "returns nil when no previous request" do
+      data_request.previous_request.should be_nil
+    end
+
+    it "returns the previous request" do
+      previous_request = Factory(:data_request, :start_date => "2010-01-01",
+                                 :end_date => "2011-01-01")
+
+      data_request.previous_request.should == previous_request
+    end
+  end
+
+  describe "#next_request" do
+    let(:data_request) { Factory(:data_request, :start_date => "2011-01-01",
+                                 :end_date => "2012-01-01") }
+
+    it "returns nil when no next request" do
+      data_request.next_request.should be_nil
+    end
+
+    it "returns the next request" do
+      next_request = Factory(:data_request, :start_date => "2012-01-01",
+                                 :end_date => "2013-01-01")
+
+      data_request.next_request.should == next_request
+    end
+  end
 end

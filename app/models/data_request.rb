@@ -34,6 +34,14 @@ class DataRequest < ActiveRecord::Base
     return 'In progress'
   end
 
+  def previous_request
+    find_request(:previous)
+  end
+
+  def next_request
+    find_request(:next)
+  end
+
   private
     def create_data_responses
       Organization.reporting.all.each do |organization|
@@ -45,6 +53,13 @@ class DataRequest < ActiveRecord::Base
           dr.save!
         end
       end
+    end
+
+    def find_request(direction)
+      order = direction == :previous ? 'ASC' : 'DESC'
+      requests = DataRequest.find(:all, :order => "start_date #{order}")
+      index = requests.index(self)
+      index == 0 ? nil : requests[index - 1]
     end
 end
 

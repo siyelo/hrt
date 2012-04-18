@@ -1,9 +1,10 @@
 - title("Organizations")
-%h1.main_heading
+
+%h1.request_nav
+  = render '/shared/request_nav'
   #search
     - form_tag admin_organizations_path, :method => :get do
       = render 'shared/search_form'
-  Organizations
 
 = render :partial => 'buttons'
 

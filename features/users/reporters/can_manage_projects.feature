@@ -17,6 +17,10 @@ Feature: Reporter can manage projects
     And a project "Project6" exists with name: "Project6", data_response: data_response "data_response1"
     And I follow "Projects"
 
+  Scenario: Reporter cannot navigate fiscal years
+    Then I should not see "Previous Request"
+      And I should not see "Next Request"
+
   Scenario: Reporter can CRUD projects
     When I follow "Project"
     And I fill in "Name" with "Project1"

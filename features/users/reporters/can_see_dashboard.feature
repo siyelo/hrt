@@ -20,8 +20,3 @@ Feature: Reporter can see dashboard
         And I should see "Projects" within the main nav
         And I should see "Reports" within the main nav
         And I should see "Settings" within the main nav
-
-    Scenario: Can Switch between requests
-      Then I should see "ORG: [dr2]"
-      When I go to the set request page for "dr1"
-      Then I should see "ORG: [dr1]"

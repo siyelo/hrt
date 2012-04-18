@@ -1,4 +1,4 @@
-Feature: Admin can manage files
+Feature: SysAdmin can manage files
   In order to have well-formatted files
   As an sysadmin
   I want to be able to manage well-formatted files
@@ -9,7 +9,7 @@ Feature: Admin can manage files
       And an admin exists with email: "admin@hrtapp.com", organization: the organization
       And I am signed in as "admin@hrtapp.com"
 
-    Scenario: Admin can manage files
+    Scenario: SysAdmin can manage files
       When I follow "Reports"
         And I follow "Files"
         And I follow "Create File"
