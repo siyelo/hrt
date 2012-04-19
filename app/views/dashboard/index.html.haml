@@ -9,8 +9,6 @@
   = render 'activity_manager'
 - elsif current_user.reporter?
   = render 'reporter'
-- else
-  = render 'district_manager'
 
 = render 'documents'
 = render 'comments/short_listing', :comments => @comments
