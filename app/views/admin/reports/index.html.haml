@@ -8,28 +8,6 @@
 
 .first-half
   %h2
-    =image_tag "icon_lightning.png", :class => "heading_icon"
-    National
-  .dashboard_section
-    %ul.admin_reports
-      %li
-
-        - link_to reports_country_path, :class => "drill_down target" do
-          = "Review National Expenditures and Current Budgets [#{current_user.current_request.title}]"
-          %span.hint Interactive reports summarizing data at national level
-
-  %h2
-    =image_tag "icon_lightning.png", :class => "heading_icon"
-    Districts
-  .dashboard_section
-    %ul.admin_reports
-      %li
-        - link_to reports_districts_path, :class => "drill_down target" do
-          = "Review District Expenditures and Current Budgets [#{current_user.current_request.title}]"
-          %span.hint Interactive reports comparing districts and summarizing data at district level
-
-.second-half
-  %h2
     =image_tag "icon_reporter.png", :class => "heading_icon"
     Activities
   .dashboard_section
