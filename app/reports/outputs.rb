@@ -71,7 +71,7 @@ class Reports::Outputs
       base_row << activity_url(activity)
       base_row << n2c(activity_amount * rate)
       base_row << implementer_split.organization.try(:name)
-      base_row << implementer_split.organization.implementer_type
+      base_row << implementer_split.organization.try(:implementer_type)
 
       # fake output if none
       outputs = activity.outputs.presence || [Output.new(:description => 'n/a')]

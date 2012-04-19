@@ -72,7 +72,7 @@ class Reports::Targets
       base_row << activity_url(activity)
       base_row << n2c(activity_amount * rate)
       base_row << implementer_split.organization.try(:name)
-      base_row << implementer_split.organization.implementer_type
+      base_row << implementer_split.organization.try(:implementer_type)
 
       # fake target if none
       targets = activity.targets.presence || [Target.new(:description => 'n/a')]

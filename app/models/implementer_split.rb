@@ -54,8 +54,11 @@
     reporting_org         = activity.organization
     reporting_response    = activity.data_response
     implementing_org      = organization
-    implementing_response = organization.data_responses.
-      detect{|r| r.data_request_id = reporting_response.data_request_id }
+    # needed for old data request
+    if implementing_org
+      implementing_response = organization.data_responses.
+        detect{|r| r.data_request_id = reporting_response.data_request_id }
+    end
 
     implementing_org && implementing_org != reporting_org &&
       implementing_org.reporting? && implementing_response.accepted? &&

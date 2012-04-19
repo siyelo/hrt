@@ -101,7 +101,7 @@ class Reports::ClassificationSplit
         base_row << n2c(activity_amount)
         # TODO: remove try after implementer_splits without implementer are fixed
         base_row << implementer_split.organization.try(:name)
-        base_row << implementer_split.organization.implementer_type
+        base_row << implementer_split.organization.try(:implementer_type)
         base_row << n2c(split_amount)
 
         classifications, total_percentage = activity_or_ocost_classification(activity)
