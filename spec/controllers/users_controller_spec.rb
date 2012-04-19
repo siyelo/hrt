@@ -19,6 +19,23 @@ describe UsersController do
     end
   end
 
+  [:sysadmin, :reporter, :activity_manager].each do |user|
+    it "can switch response for #{user.to_s.humanize}" do
+      @organization  = Factory(:organization)
+      @data_request1  = Factory(:data_request, :organization => @organization)
+      @data_response1 = @organization.latest_response
+      @data_request2  = Factory(:data_request, :organization => @organization)
+      @data_response2 = @organization.latest_response
+      @user = Factory(user, :organization => @organization)
+      login @user
+      @request.env['HTTP_REFERER'] = response_projects_path(@data_response2)
+      put :set_request, :id => @data_request1.id
+      response.should redirect_to(response_projects_path(@data_response1))
+      @user.reload
+      @user.current_request.should == @data_request1
+    end
+  end
+
   it "can set the user's current response to the latest response" do
     user_org = Factory(:organization)
     data_request = Factory(:data_request, :title => "DR1")

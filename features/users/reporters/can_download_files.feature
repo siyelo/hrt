@@ -16,6 +16,5 @@ Feature: Reporter can download files
 
       When I go to the dashboard
         And I follow "view all" within ".files_read_more"
-        Then I should be on the the files page
         And I follow "My file"
       Then I should see the Open or Save dialog for a "csv" file

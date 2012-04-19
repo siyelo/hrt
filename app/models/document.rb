@@ -1,4 +1,7 @@
 class Document < ActiveRecord::Base
+
+  include PrivateUrl # gives private_url?
+
   ### Constants
   VISIBILITY_OPTIONS = %w[sysadmins reporters public]
 
@@ -29,9 +32,5 @@ class Document < ActiveRecord::Base
     else
       document.url
     end
-  end
-
-  def private_url?
-    RAILS_ENV == 'production'
   end
 end

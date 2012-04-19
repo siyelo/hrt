@@ -1,7 +1,7 @@
 %h2
   = image_tag "icon_reporter.png", :class => "heading_icon"
   Latest Files
-  .read_more.files_read_more= link_to "view all", current_user.sysadmin? ? admin_documents_path : documents_path
+  .read_more.files_read_more= link_to "view all", current_user.sysadmin? ? admin_documents_path : response_documents_path(current_or_last_response)
 .dashboard_section
   - if @documents.present?
     %table.modern_table

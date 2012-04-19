@@ -2,6 +2,7 @@ require 'iconv'
 class Report < ActiveRecord::Base
 
   include ScriptHelper
+  include PrivateUrl # gives private_url?
 
   ### Associations
   belongs_to :data_request
@@ -55,10 +56,6 @@ class Report < ActiveRecord::Base
     else
       formatted_csv.url
     end
-  end
-
-  def private_url?
-    RAILS_ENV == 'production'
   end
 
   ### Class Methods
