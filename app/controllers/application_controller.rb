@@ -71,11 +71,7 @@ class ApplicationController < ActionController::Base
     end
 
     def current_request
-      if current_user.district_manager?
-        district_manager_current_request
-      else
-        current_user.current_request
-      end
+      current_user.current_request
     end
 
     def require_user
@@ -223,16 +219,6 @@ class ApplicationController < ActionController::Base
       # @comments = resource.comments.roots.find(:all)
       # :include => {:user => :organization} does not work when using roots scope
       # Comment.send(:preload_associations, @comments, {:user => :organization})
-    end
-
-    def district_manager_current_request
-      if session[:request_id].present?
-        DataRequest.find(session[:request_id])
-      else
-        current_request = DataRequest.find(:first, :order => 'id DESC')
-        session[:request_id] ||= current_request.id
-        current_request
-      end
     end
 
     def load_klasses(field = :id) #TODO: deprecate id field - use only :mode

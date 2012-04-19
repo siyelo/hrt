@@ -13,8 +13,8 @@ class DashboardController < ApplicationController
     load_activity_manager if current_user.activity_manager? && !current_user.sysadmin?
     load_requests
     load_documents
-    warn_if_not_current_request unless current_user.district_manager?
-    load_dashboard_charts unless current_user.district_manager? || current_user.sysadmin?
+    warn_if_not_current_request
+    load_dashboard_charts unless current_user.sysadmin?
   end
 
   protected
@@ -49,13 +49,6 @@ class DashboardController < ApplicationController
         dr_ids += current_user.organization.data_responses.map{|dr| dr.id }
         @comments  = Comment.on_all(dr_ids).
           paginate :per_page => COMMENT_LIMIT, :page => params[:page]
-      elsif current_user.district_manager?
-        activity_ids = current_user.location.code_assignments.find(:all,
-          :select => "DISTINCT(code_assignments.activity_id)").map{|a| a.activity_id}
-        @comments = Comment.paginate :all,
-          :conditions => ["comments.commentable_type = 'Activity'
-                           AND comments.commentable_id IN (?)", activity_ids],
-          :per_page => COMMENT_LIMIT, :page => params[:page]
       else
         @comments = Comment.on_all(current_user.organization.data_responses.map{|r| r.id}).
           paginate :per_page => COMMENT_LIMIT, :page => params[:page]

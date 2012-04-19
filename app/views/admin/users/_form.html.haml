@@ -16,7 +16,6 @@
         %p.inline-hints
           Email of the user
 
-
   %li
     %h3 Roles
     %ul.section_form.last
@@ -26,11 +25,6 @@
     %h3 Organizations to Manage
     %ul.section_form.last
       = f.input :organizations, :label => "Assign organizations to this Activity Manager", :required => false, :as => :select, :collection => Organization.with_users, :input_html => {:class => 'multiselect'}, :wrapper_html => {:class => 'organizations', :style => 'visibility: hidden;'}, :error_class => 'input-errors'
-
-  %li.js_manage_districts
-    %h3 Districts to Manage
-    %ul.section_form.last
-      = f.input :location, :label => "District", :hint => 'Assign districts to this district manager', :as => :select, :collection => Location.find(:all, :order => 'short_display ASC', :select => 'short_display, id'), :required => false, :input_html => {:class => 'js_combobox'}, :wrapper_html => {:class => 'locations', :style => 'visibility: hidden;'}
 
   - f.buttons :class => 'buttons' do
     = f.commit_button button_label, :button_html => {:class => "next"}

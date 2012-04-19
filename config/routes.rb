@@ -17,6 +17,7 @@ map.root :controller => 'static_page', :action => 'index'
     :action => 'about'
 
   map.resources :comments
+  map.resources :reports, :only => [:index]
 
   # ALL USERS
   map.dashboard 'dashboard', :controller => 'dashboard', :action => :index
