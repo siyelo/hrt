@@ -57,47 +57,9 @@ describe Code do
 
       Code.purposes.should == [mtef, nha_code, nasa_code, nsp_code]
     end
-
-    it "orders codes by lft" do
-      # first level
-      code1    = Factory.create(:code, :short_display => 'code1')
-      code2    = Factory.create(:code, :short_display => 'code2')
-
-      # second level
-      code11    = Factory.create(:code, :short_display => 'code11')
-      code12    = Factory.create(:code, :short_display => 'code12')
-      code21    = Factory.create(:code, :short_display => 'code21')
-      code22    = Factory.create(:code, :short_display => 'code22')
-      code11.move_to_child_of(code1)
-      code12.move_to_child_of(code1)
-      code21.move_to_child_of(code2)
-      code22.move_to_child_of(code2)
-
-      Code.ordered.should == [code1, code11, code12, code2, code21, code22]
-    end
   end
 
   describe "deepest_nesting" do
-    # caching prevent this example to pass
-    #it "returns deepest nesting for 1 level" do
-      ## first level
-      #code1    = Factory.create(:code, :short_display => 'code1')
-
-      #Code.deepest_nesting.should == 1
-    #end
-
-    # caching prevent this example to pass
-    #it "returns deepest nesting for 2 levels" do
-      ## first level
-      #code1 = Factory.create(:code, :short_display => 'code1')
-
-      ## second level
-      #code11 = Factory.create(:code, :short_display => 'code11')
-      #code11.move_to_child_of(code1)
-
-      #Code.deepest_nesting.should == 2
-    #end
-
     it "returns deepest nesting for 3 level" do
       # first level
       code1 = Factory.create(:code, :short_display => 'code1')
