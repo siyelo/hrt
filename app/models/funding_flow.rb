@@ -2,11 +2,6 @@ class FundingFlow < ActiveRecord::Base
   include AutocreateHelper
   default_scope :order => "id ASC"
 
-  HUMANIZED_ATTRIBUTES = {
-    :organization_id_from => "The Funding Source 'from' organization",
-    :budget => "The Funding Source Planned Disbursements",
-    :spend => "The Funding Source Disbursements Received" }
-
   ### Attributes
   attr_accessible :organization_text, :project_id, :from, :to,
                   :self_provider_flag, :organization_id_from,
@@ -57,13 +52,8 @@ class FundingFlow < ActiveRecord::Base
     organizations.id = funding_flows.organization_id_from",
     :order => "LOWER(organizations.name) ASC"}
 
-  ### Class Methods
-
-  def self.human_attribute_name(attr)
-    HUMANIZED_ATTRIBUTES[attr.to_sym] || super
-  end
-
   ### Instance Methods
+  #
   def to_s
     "Project: #{project.name}; From: #{from.name}; To: #{to.name}"
   end
@@ -78,6 +68,8 @@ class FundingFlow < ActiveRecord::Base
     super(new_id)
   end
 
+  ### these are currently unused, but they do however add
+  #   meaning & value to the class
   def self_funded?
     from == to
   end
@@ -94,6 +86,10 @@ class FundingFlow < ActiveRecord::Base
     self.organization == self.from
   end
 
+  ### validation helpers
+
+  # potential candidate for removal if these
+  # errors can all be caught on data entry
   def has_organization_and_amounts?
     organization_id_from && (spend || 0) + (budget || 0) > 0
   end

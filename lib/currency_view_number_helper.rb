@@ -32,16 +32,6 @@ module CurrencyViewNumberHelper
                       :format => "%n %u")
   end
 
-
-  def n2cnd(value, unit = "")
-    number_to_currency(value,
-                       :separator => ".",
-                       :unit => unit,
-                       :delimiter => ",",
-                       :format => "%u %n",
-                       :precision => 0)
-  end
-
   def n2cndr(value, unit = "")
     number_to_currency(value,
                        :separator => ".",
@@ -57,15 +47,6 @@ module CurrencyViewNumberHelper
                       :unit => "<span class=\"currency\">#{unit}</span>",
                       :delimiter => ",",
                       :format => "%n %u",
-                      :precision => 0)
-  end
-
-  def n2cnds(value, unit = "")
-    number_to_currency(value,
-                      :separator => ".",
-                      :unit => "<span class=\"currency\">#{unit}</span>",
-                      :delimiter => ",",
-                      :format => "%u %n",
                       :precision => 0)
   end
 end

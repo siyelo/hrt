@@ -10,30 +10,7 @@ module CurrencyHelper
   OTHER_PRIORITIES = [:rwf] # Priority currencies
   PRIORITY_CUTOFF = 5
 
-  ### jump through hoops to include this in the ActiveScaffold controllers
-  def self.included( klass )
-    klass.extend ClassMethods
-  end
-
   module InstanceMethods
-    # Returns an array of currency id where
-    # priority < PRIORITY_CUTOFF
-    def major_currencies(hash)
-      hash.inject([]) do |array, (id, attributes)|
-        priority = attributes[:priority]
-        if priority && priority < PRIORITY_CUTOFF && Money.default_bank.get_rate(id, :USD)
-          array[priority] ||= []
-          array[priority] << id
-        end
-        array
-      end.compact.flatten
-    end
-
-    # Returns an array of all currency id
-    def all_currencies(hash)
-      hash.keys
-    end
-
     def currency_options()
       prios, all_currencies = load_currencies_in_order
       full_list = prios
@@ -48,23 +25,33 @@ module CurrencyHelper
 
     protected
 
-      def load_currencies_in_order
-        hash = Money::Currency::TABLE
-        prios = hash.inject([]) do |array, (id, attributes)|
-          priority = attributes[:priority]
-          if (priority && priority < PRIORITY_CUTOFF) || OTHER_PRIORITIES.include?(id)
-            iso_code = id.to_s.upcase
-            array << [attributes[:name] + " (#{iso_code})", iso_code]
-          end
-          array
-        end.compact.sort {|a,b| a[0] <=> b[0]}
-        all_currencies = hash.inject([]) do |array, (id, attributes)|
-          iso_code = id.to_s.upcase
-          array << [attributes[:name] + " (#{iso_code})", iso_code] if Money.default_bank.get_rate(iso_code, "USD")
-          array
-        end.compact.sort {|a,b| a[0] <=> b[0]}
-        return prios, all_currencies
+    # Returns an array of all currency id
+    def all_currencies(hash)
+      hash.keys
+    end
+
+    def load_currencies_in_order
+      hash = Money::Currency::TABLE
+      prios = hash.inject([]) do |array, (id, attributes)|
+        priority = attributes[:priority]
+      if (priority && priority < PRIORITY_CUTOFF) || OTHER_PRIORITIES.include?(id)
+        iso_code = id.to_s.upcase
+        array << [attributes[:name] + " (#{iso_code})", iso_code]
       end
+      array
+      end.compact.sort {|a,b| a[0] <=> b[0]}
+      all_currencies = hash.inject([]) do |array, (id, attributes)|
+        iso_code = id.to_s.upcase
+      array << [attributes[:name] + " (#{iso_code})", iso_code] if Money.default_bank.get_rate(iso_code, "USD")
+      array
+      end.compact.sort {|a,b| a[0] <=> b[0]}
+      return prios, all_currencies
+    end
+  end
+
+  ### jump through hoops to include this in the ActiveScaffold controllers
+  def self.included( klass )
+    klass.extend ClassMethods
   end
 
   module ClassMethods
@@ -78,5 +65,4 @@ module CurrencyHelper
   # application_helper.rb
   #   include CurrencyHelper
   include InstanceMethods
-
 end

@@ -72,15 +72,6 @@ class Project < ActiveRecord::Base
   ### Instance methods
   #
 
-  #including this as a workaround for matches_in_flow_amount?
-  def budget
-    total_budget
-  end
-
-  def spend
-    total_spend
-  end
-
   def response
     data_response
   end
@@ -120,37 +111,12 @@ class Project < ActiveRecord::Base
     clone
   end
 
-  def amount_for_provider(provider, field)
-    activities.inject(0) do |sum, a|
-      amt = a.amount_for_provider(provider, field)
-      sum += amt unless amt.nil?
-      sum = sum
-    end
-  end
-
+  # potential candidate for removal if these
+  # errors can all be caught on data entry
   def funding_sources_have_organizations_and_amounts?
     in_flows.all? { |ff| ff.has_organization_and_amounts? }
   end
 
-  def has_activities?
-    !normal_activities.empty?
-  end
-
-  def has_other_costs?
-    !activities.with_type("OtherCost").empty?
-  end
-
-  def in_flows_total(amount_method)
-    smart_sum(in_flows, amount_method)
-  end
-
-  def direct_activities_total(amount_type)
-    smart_sum(activities.roots, amount_type)
-  end
-
-  def other_costs_total(amount_type)
-    smart_sum(other_costs, amount_type)
-  end
 
   def locations
     activities.only_simple.inject([]){ |acc, a| acc.concat(a.locations) }.uniq

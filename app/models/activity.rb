@@ -3,16 +3,11 @@ require 'validators'
 class Activity < ActiveRecord::Base
   include CurrencyNumberHelper
   include Activity::Classification
-  include Activity::Validations
   include AutocreateHelper
   include BudgetSpendHelper
 
   ### Constants
   MAX_NAME_LENGTH = 64
-  HUMANIZED_ATTRIBUTES = {
-    :implementer_splits => "Implementers",
-    :budget => "Current Budget",
-    :spend => "Past Expenditure" }
   AUTOCREATE = -1
 
   ### ClassLevel Method Invocations
@@ -120,14 +115,6 @@ class Activity < ActiveRecord::Base
                                              ["activities.type = ?", type]} }
   named_scope :only_simple,          { :conditions => ["activities.type IS NULL
                                     OR activities.type IN (?)", ["OtherCost"]] }
-  named_scope :only_simple_with_request, lambda {|request| {
-                :select => 'DISTINCT activities.*',
-                :joins => 'INNER JOIN data_responses ON
-                           data_responses.id = activities.data_response_id',
-                :conditions => ['(activities.type IS NULL
-                                 OR activities.type IN (?)) AND
-                                 data_responses.data_request_id = ?',
-                                 'OtherCost', request.id]}}
   named_scope :with_request, lambda {|request| {
               :select => 'DISTINCT activities.*',
               :joins => 'INNER JOIN data_responses ON
@@ -140,26 +127,11 @@ class Activity < ActiveRecord::Base
                                     INNER JOIN organizations
                                     ON data_responses.organization_id = organizations.id" }
 
-  named_scope :canonical_with_scope, {
-    :select => 'DISTINCT activities.*',
-    :joins =>
-      "INNER JOIN data_responses
-        ON activities.data_response_id = data_responses.id
-      LEFT JOIN data_responses provider_dr
-        ON provider_dr.organization_id = activities.provider_id
-      LEFT JOIN organizations ON provider_dr.organization_id = organizations.id",
-    :conditions => ["activities.provider_id = data_responses.organization_id
-                    OR (provider_dr.id IS NULL OR organizations.users_count = 0)"]
-  }
   named_scope :manager_approved,     { :conditions => ["am_approved = ?", true] }
   named_scope :sorted,               { :order => "activities.name" }
   named_scope :sorted_by_id,               { :order => "activities.id" }
 
   ### Class Methods
-  def self.human_attribute_name(attr)
-    HUMANIZED_ATTRIBUTES[attr.to_sym] || super
-  end
-
   def self.only_simple_activities(activities)
     activities.select{|s| s.type.nil? or s.type == "OtherCost"}
   end
@@ -260,24 +232,6 @@ class Activity < ActiveRecord::Base
 
   def implementer_splits_each_have_defined_districts?(coding_type)
     !implementer_split_district_code_assignments_if_complete(coding_type).empty?
-  end
-
-  def amount_for_provider(organization, field)
-    if implementer_splits.empty?
-      return self.send(field) if self.organization == organization
-    else
-      sum = 0
-      implementer_splits.select{ |a| a.organization == organization }.each do |a|
-        if a.nil?
-          puts "had nil in subactivities in proj #{project.id}"
-        else
-          amt = a.send(field)
-          sum += amt unless amt.nil?
-        end
-      end
-      return sum
-    end
-    0
   end
 
   # FIXME performance killer ?

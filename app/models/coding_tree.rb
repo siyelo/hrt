@@ -82,11 +82,6 @@ class CodingTree
       children_sum >= (activity_amount - variance))
   end
 
-  def valid_ca?(code_assignment)
-    node = find_node_by_ca(roots, code_assignment)
-    node && node.valid_node?
-  end
-
   def root_codes
     case @coding_klass.to_s
     when 'CodingBudget', 'CodingSpend'
@@ -187,22 +182,6 @@ class CodingTree
           build_subtree(node, cached_children(code)) unless code.leaf?
         end
       end
-    end
-
-    def find_node_by_ca(nodes, code_assignment)
-      found_node = nil
-
-      nodes.each do |node|
-        if node.ca == code_assignment
-          found_node = node
-          break
-        else
-          found_node = find_node_by_ca(node.children, code_assignment)
-          break if found_node
-        end
-      end
-
-      found_node
     end
 
     def rebuild_tree!

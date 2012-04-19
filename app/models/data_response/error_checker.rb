@@ -4,10 +4,7 @@ class DataResponse < ActiveRecord::Base
   module ErrorChecker
     extend ActiveSupport::Memoizable
 
-    def empty?
-      activities.empty? && projects.empty?
-    end
-
+    # TODO: move to presenter
     def load_validation_errors
       errors.add_to_base("Projects are not yet entered.") unless projects_entered?
       errors.add_to_base("Activites are not yet entered.") unless projects_have_activities?
@@ -29,15 +26,6 @@ class DataResponse < ActiveRecord::Base
         implementer_splits_entered_and_valid? &&
         activities_coded? &&
         (projects_have_other_costs? ? other_costs_coded? : true)
-    end
-
-    def basics_done_to_h
-      {:projects_entered => projects_entered?,
-        :projects_have_activities => projects_have_activities?,
-        :projects_have_valid_funding_sources => projects_have_valid_funding_sources?,
-        :implementer_splits_entered => implementer_splits_entered_and_valid?,
-        :activities_coded  => activities_coded?,
-        :other_costs_coded => (projects_have_other_costs? ? other_costs_coded? : true)}
     end
 
     def ready_to_submit?
@@ -109,16 +97,8 @@ class DataResponse < ActiveRecord::Base
       reject_uncoded(normal_activities)
     end
 
-    def coded_activities
-      select_coded(normal_activities)
-    end
-
     def uncoded_other_costs
       reject_uncoded_locations(other_costs)
-    end
-
-    def coded_other_costs
-      select_coded(other_costs)
     end
 
     def activities_coded?
@@ -130,7 +110,6 @@ class DataResponse < ActiveRecord::Base
       other_costs_entered? && uncoded_other_costs.empty?
     end
     memoize :other_costs_coded?
-
 
     def submittable?
       started? || rejected?
@@ -145,20 +124,6 @@ class DataResponse < ActiveRecord::Base
     def reject_uncoded_locations(other_costs)
       other_costs.select{ |oc| !oc.coding_budget_district_valid? ||
         !oc.coding_spend_district_valid? }
-    end
-
-    # Find all complete Activities
-    def select_coded(activities)
-      activities.select{ |a| a.classified? }
-    end
-
-    # Find all complete Ocosts
-    def select_coded_ocosts(other_costs)
-      other_costs.select{ |a| a.classified? }
-    end
-
-    def select_failing(collection, validation_method, amount_method)
-      collection.select{|e| !self.send(validation_method, e, amount_method)}
     end
   end
 end

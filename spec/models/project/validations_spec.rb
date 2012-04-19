@@ -11,28 +11,7 @@ describe Project, "Validations" do
     @project2  = Factory(:project, :data_response => @response2)
   end
 
-  describe "#linked?" do
-    context "when not all in flows has parent project" do
-      it "returns false" do
-        @project.in_flows = [
-            Factory.build(:funding_flow, :from => @donor1, :project_from => @project1),
-            Factory.build(:funding_flow, :from => @donor2, :project_from => nil)]
-        @project.linked?.should be_false
-      end
-    end
-
-    context "when all in flows has parent project" do
-      it "returns true" do
-        @project.in_flows = [
-            Factory.build(:funding_flow, :from => @donor1, :project_from => @project1),
-            Factory.build(:funding_flow, :from => @donor2, :project_from => @project2)]
-        @project.linked?.should be_true
-      end
-    end
-  end
-
   describe "#validation_errors" do
-    context "project has no error" do
       it "returns no response errors" do
         @activity = Factory(:activity, :data_response => @response, :project => @project)
         @split    = Factory(:implementer_split, :organization => @organization,
@@ -41,7 +20,6 @@ describe Project, "Validations" do
                 :project => @project, :project_from => @project, :budget => 10, :spend => 10)
         @project.validation_errors.should == []
       end
-    end
   end
 
   describe "#matches_in_flow_amount?" do
@@ -59,8 +37,8 @@ describe Project, "Validations" do
         @project.in_flows = [Factory.build(:funding_flow, :from => @donor1, :budget => 3, :spend => 7),
                              Factory.build(:funding_flow, :from => @donor2, :budget => 7, :spend => 3)]
         @project.save!
-        @project.matches_in_flow_amount?(:budget).should be_true
-        @project.matches_in_flow_amount?(:spend).should be_true
+        @project.matches_in_flow_budget?.should be_true
+        @project.matches_in_flow_spend?.should be_true
       end
     end
 
@@ -73,8 +51,8 @@ describe Project, "Validations" do
         Factory(:funding_flow, :from => @organization,
                 :project => @project, :budget => 4, :spend => 4)
         @project.reload
-        @project.matches_in_flow_amount?(:budget).should be_false
-        @project.matches_in_flow_amount?(:spend).should be_false
+        @project.matches_in_flow_budget?.should be_false
+        @project.matches_in_flow_spend?.should be_false
       end
     end
   end

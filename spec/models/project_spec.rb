@@ -149,8 +149,8 @@ describe Project do
       @project1      = Factory(:project, :data_response => @response1, :in_flows =>
         [ Factory.build(:funding_flow, :from => @donor1, :spend => 10, :budget => 20),
           Factory.build(:funding_flow, :from => @donor2, :spend => 10, :budget => 20)])
-      @project1.in_flows_total(:budget).to_f.should == 40
-      @project1.in_flows_total(:spend).to_f.should == 20
+      @project1.in_flows_total_budget.to_f.should == 40
+      @project1.in_flows_total_spend.to_f.should == 20
     end
   end
 end

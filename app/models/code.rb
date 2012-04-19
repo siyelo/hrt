@@ -30,11 +30,13 @@ class Code < ActiveRecord::Base
   named_scope :purposes, :conditions => ["codes.type in (?)", PURPOSES]
   named_scope :ordered_by_short_display, :order => 'short_display ASC'
 
+  # is this still needed - especially given it has some complex Mtef/NHa etc logic ??!
   def self.deepest_nesting
     levels = self.roots_with_level.collect{|a| a[0]}
     levels.present? ? (levels.max + 1) : 0
   end
 
+  # can be removed if we refactor self.deepest_nesting
   def self.roots_with_level
     a = []
     self.roots.each do |root|
@@ -51,14 +53,6 @@ class Code < ActiveRecord::Base
 
   def to_s
     short_display
-  end
-
-  def to_s_prefer_official
-    official_name || short_display
-  end
-
-  def to_s_with_external_id
-    "#{short_display} (#{external_id || 'n/a'})"
   end
 
   def self.download_template
@@ -81,6 +75,8 @@ class Code < ActiveRecord::Base
   end
 
   private
+
+    # kiiillllll meeeeeeeee
     def assign_type
       self[:type] = type_string
     end
