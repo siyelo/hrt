@@ -196,8 +196,7 @@ class ApplicationController < ActionController::Base
 
     def not_latest_request_message(request)
       "You are now viewing data for the Request: \"<span class='bold'>#{request.name}</span>\".
-       All changes made will be saved for this Request.
-       Would you like to <a href='#{set_latest_request_path}'>resume editing the latest Request?</a>"
+       All changes made will be saved for this Request."
     end
 
     def warn_if_not_current_request

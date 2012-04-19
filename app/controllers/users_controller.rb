@@ -16,13 +16,6 @@ class UsersController < ApplicationController
     redirect_back
   end
 
-  # set the user's 'current response' to the one associated with the latest Request
-  def set_latest_request
-    current_user.set_current_response_to_latest!
-    flash[:notice] = request_message(current_user.current_response.request)
-    redirect_back
-  end
-
   def activity_manager_workplan
     workplan = Reports::ActivityManagerWorkplan.new(current_user.current_response, current_user.organizations)
     send_xls(workplan.to_xls,"combined_workplan.xls")

@@ -21,7 +21,6 @@ map.root :controller => 'static_page', :action => 'index'
   # ALL USERS
   map.dashboard 'dashboard', :controller => 'dashboard', :action => :index
   map.set_request 'set_request/:id', :controller => 'users', :action => :set_request
-  map.set_latest_request 'set_latest_request', :controller => 'users', :action => :set_latest_request
 
   # ADMIN
   map.namespace :admin do |admin|

@@ -1,19 +1,21 @@
 require 'spec_helper'
 
 describe DocumentsController do
-  describe "user permissions" do
-    it_should_require_reporter_for :index
-  end
-
   describe "#index" do
-    before :each do
-      login(Factory(:reporter))
+    let(:user) { Factory(:reporter) }
+
+    it "required logged in user" do
+      get :index, :response_id => 'x'
+      response.should redirect_to(root_url)
     end
 
     it "displays only reporter visible documents" do
+      login(user)
+      controller.stub(:current_user).and_return(user)
+      user.stub_chain(:data_responses, :find)
       Document.should_receive(:visible_to_reporters).and_return([])
 
-      get :index
+      get :index, :response_id => 'x'
       response.should be_success
     end
   end

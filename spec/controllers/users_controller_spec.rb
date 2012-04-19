@@ -36,24 +36,6 @@ describe UsersController do
     end
   end
 
-  it "can set the user's current response to the latest response" do
-    user_org = Factory(:organization)
-    data_request = Factory(:data_request, :title => "DR1")
-    @user = Factory(:sysadmin, :organization => user_org)
-    data_request = Factory(:data_request, :title => "DR2")
-    user_org.reload
-    oldest_data_response = user_org.responses.first
-    newest_data_response = user_org.responses.last
-    @user.current_response = user_org.responses.first
-    @user.save
-    login @user
-    request.env['HTTP_REFERER'] = "http://test.host/previous/page"
-    @user.current_response.should == oldest_data_response
-    put :set_latest_request
-    @user.reload
-    @user.current_response.should == newest_data_response
-  end
-
   it "allows Activity Manager to download the combined workplan" do
     @organization = Factory :organization, :name => "Organization"
     @user = Factory.create(:activity_manager, :organization => @organization)
