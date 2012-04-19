@@ -1,4 +1,7 @@
 require 'iconv'
+require 'lib/script_helper'
+require 'lib/private_url'
+
 class Report < ActiveRecord::Base
 
   include ScriptHelper
