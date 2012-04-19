@@ -56,7 +56,6 @@ class Reports::DynamicQuery
       row << 'Purpose Split %'
       row << 'Purpose'
       @deepest_nesting.times { |index| row << "Purpose #{index + 1} (short display)" }
-      @deepest_nesting.times { |index| row << "Purpose #{index + 1} (official name)" }
       row << 'MTEF Code'
       row << 'NSP Code'
       row << 'Location Split Total %'
@@ -125,8 +124,6 @@ class Reports::DynamicQuery
           # purpose tree
           codes = self_and_ancestors(purpose_classification.code).reverse
           add_codes_to_row(purpose_row, codes, @deepest_nesting, :short_display)
-          add_codes_to_row(purpose_row, codes, @deepest_nesting, :official_name)
-
 
           purpose_row << mtef_name(purpose_classification.code)
           purpose_row << nsp_name(purpose_classification.code)
