@@ -55,7 +55,7 @@ class Reports::DynamicQuery
       row << 'Purpose Split Total %'
       row << 'Purpose Split %'
       row << 'Purpose'
-      @deepest_nesting.times { |index| row << "Purpose #{index + 1} (short display)" }
+      @deepest_nesting.times { |index| row << "Purpose #{index + 1}" }
       row << 'MTEF Code'
       row << 'NSP Code'
       row << 'Location Split Total %'
