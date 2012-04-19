@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
   end
 
   ### Constants
-  ROLES = %w[admin reporter activity_manager district_manager]
+  ROLES = %w[admin reporter activity_manager]
   FILE_UPLOAD_COLUMNS = %w[organization_name email full_name roles password password_confirmation]
 
   ### Attributes
@@ -29,14 +29,11 @@ class User < ActiveRecord::Base
   ### Validations
   # AuthLogic handles email uniqueness validation
   validates_presence_of :full_name, :email, :organization_id
-  validates_presence_of :location_id, :message => "can't be blank", :if => Proc.new{ |model| model.roles.include?('district_manager') }
   validate :validate_inclusion_of_roles
-  validate :validate_organization
 
   ### Callbacks
   before_validation :assign_current_response_to_latest, :unless => Proc.new{|m| m.data_response_id_current.present?}
   before_save :unassign_organizations, :if => Proc.new{|m| m.roles.exclude?('activity_manager') }
-  before_save :unassign_location, :if => Proc.new{ |m| m.roles.exclude?('district_manager') }
 
   ### Delegates
   delegate :responses, :to => :organization # instead of deprecated data_response
@@ -95,10 +92,6 @@ class User < ActiveRecord::Base
 
   def reporter?
     role?('reporter') || sysadmin?
-  end
-
-  def district_manager?
-    role?('district_manager')
   end
 
   def activity_manager?
@@ -224,12 +217,6 @@ class User < ActiveRecord::Base
     def validate_inclusion_of_roles
       if roles.blank? || roles.detect{|role| ROLES.exclude?(role)}
         errors.add(:roles, "is not included in the list")
-      end
-    end
-
-    def validate_organization
-      if district_manager? && roles.length == 1 && organization.reporting?
-        errors.add(:organization_id, 'cannot assign a "reporting" organization to District Manager. Please select organization with raw type "Non-Reporting"')
       end
     end
 

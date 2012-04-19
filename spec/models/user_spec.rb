@@ -32,11 +32,6 @@ describe User do
       it { should_not validate_presence_of(:location_id)}
     end
 
-    context "validate the presence of a location id if the user is not an activity manager" do
-      subject { Factory(:district_manager) }
-      it { should validate_presence_of(:location_id)}
-    end
-
     context "existing record in db" do
       subject { Factory(:reporter, :organization => Factory(:organization) ) }
       it { should validate_uniqueness_of(:email).case_insensitive }
@@ -54,27 +49,6 @@ describe User do
       user.errors.on(:roles).should include('is not included in the list')
     end
 
-    it "allows creating District Manager in Non-Reporting organization" do
-      organization = Factory(:organization, :raw_type => 'Non-Reporting')
-      user         = Factory.build(:user, :organization => organization,
-                                   :roles => ['district_manager'])
-      user.errors.should be_blank
-    end
-
-    it "allows creating District Manager in Reporting organization when there he is not only District Manager" do
-      organization = Factory(:organization, :raw_type => 'Non-Reporting')
-      user         = Factory.build(:user, :organization => organization,
-                                   :roles => ['district_manager', 'reporter'])
-      user.errors.should be_blank
-    end
-
-    it "prevents creating user in Reporting organization when role is District Manager" do
-      organization = Factory(:organization, :raw_type => 'Bilateral')
-      user         = Factory.build(:user, :organization => organization,
-                                   :roles => ['district_manager'])
-      user.save
-      user.errors.on(:organization_id).should == 'cannot assign a "reporting" organization to District Manager. Please select organization with raw type "Non-Reporting"'
-    end
   end
 
   describe "save and invite" do
@@ -233,13 +207,6 @@ describe User do
       user.activity_manager?.should be_true
     end
 
-    it "is district_manager when has district_manager role" do
-      org  = Factory(:nonreporting_organization)
-      loc = Factory(:location)
-      user = Factory(:user, :roles => ['district_manager'], :organization => org, :location => loc)
-      user.district_manager?.should be_true
-    end
-
     it "is admin when roles_mask = 1" do
       user = Factory(:user, :roles => ['admin'])
       user.roles.should == ['admin']
@@ -280,55 +247,6 @@ describe User do
       user = Factory(:user, :roles => ['admin', 'reporter', 'activity_manager'])
       user.roles.should == ['admin', 'reporter', 'activity_manager']
       user.roles_mask.should == 7
-    end
-
-    it "is district_manager when roles_mask = 8" do
-      org  = Factory(:nonreporting_organization)
-      user = Factory.build(:user, :roles => ['district_manager'], :organization => org)
-      user.roles.should == ['district_manager']
-      user.roles_mask.should == 8
-    end
-
-    it "is admin & district_manager when roles_mask = 9" do
-      user = Factory.build(:user, :roles => ['admin', 'district_manager'])
-      user.roles.should == ['admin', 'district_manager']
-      user.roles_mask.should == 9
-    end
-
-    it "is reporter & district_manager when roles_mask = 10" do
-      user = Factory.build(:user, :roles => ['reporter', 'district_manager'])
-      user.roles.should == ['reporter', 'district_manager']
-      user.roles_mask.should == 10
-    end
-
-    it "is admin, reporter & district_manager when roles_mask = 11" do
-      user = Factory.build(:user, :roles => ['admin', 'reporter', 'district_manager'])
-      user.roles.should == ['admin', 'reporter', 'district_manager']
-      user.roles_mask.should == 11
-    end
-
-    it "is admin, reporter & district_manager when roles_mask = 12" do
-      user = Factory.build(:user, :roles => ['activity_manager', 'district_manager'])
-      user.roles.should == ['activity_manager', 'district_manager']
-      user.roles_mask.should == 12
-    end
-
-    it "is admin, activity_manager & district_manager when roles_mask = 13" do
-      user = Factory.build(:user, :roles => ['admin', 'activity_manager', 'district_manager'])
-      user.roles.should == ['admin', 'activity_manager', 'district_manager']
-      user.roles_mask.should == 13
-    end
-
-    it "is reporter, activity_manager & district_manager when roles_mask = 14" do
-      user = Factory.build(:user, :roles => ['reporter', 'activity_manager', 'district_manager'])
-      user.roles.should == ['reporter', 'activity_manager', 'district_manager']
-      user.roles_mask.should == 14
-    end
-
-    it "is admin, reporter, activity_manager & district_manager when roles_mask = 15" do
-      user = Factory.build(:user, :roles => ['admin', 'reporter', 'activity_manager', 'district_manager'])
-      user.roles.should == ['admin', 'reporter', 'activity_manager', 'district_manager']
-      user.roles_mask.should == 15
     end
   end
 
