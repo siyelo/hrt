@@ -1,5 +1,5 @@
 module Charts::CountryPies
-  extend Charts::HelperMethods
+  extend Charts::RegionalHelpers
 ####
   class << self
     ### admin/district/:id/organizations
@@ -19,7 +19,7 @@ module Charts::CountryPies
                  organizations.name",
       :order => "value DESC"
 
-      prepare_pie_values_json(records)
+      Charts::JsonHelpers.prepare_pie_values_json(records)
     end
 
     def implementers(amount_type, data_request_id)
@@ -44,11 +44,11 @@ module Charts::CountryPies
                    organizations.currency"
       records = convert_value_to_usd(records)
       records.sort! { |a,b| b.value.to_f <=> a.value.to_f}
-      prepare_pie_values_json(records)
+      Charts::JsonHelpers.prepare_pie_values_json(records)
     end
 
     def activities_pie(coding_type, data_request_id)
-      code_assignments = CodeAssignment.with_type(coding_type).find(:all,
+      code_assignments = CodeAssignment.with_type(coding_type).find :all,
         :select => "code_assignments.id,
                     code_assignments.activity_id,
                     COALESCE(activities.name, activities.description) AS name_or_descr,
@@ -66,16 +66,16 @@ module Charts::CountryPies
         :group => 'code_assignments.id,
                    code_assignments.activity_id,
                    name_or_descr',
-        :order => 'value DESC')
+        :order => 'value DESC'
 
-      prepare_pie_values_json(code_assignments)
+      Charts::JsonHelpers.prepare_pie_values_json(code_assignments)
     end
 
     def codes_for_country_pie(code_type, data_request_id, is_spent)
       codes = get_codes(code_type)
       coding_type = get_coding_type(code_type, is_spent)
 
-      code_assignments = CodeAssignment.with_type(coding_type).with_code_ids(codes).find(:all,
+      code_assignments = CodeAssignment.with_type(coding_type).with_code_ids(codes).find :all,
               :select => "code_assignments.code_id,
                 codes.short_display as name,
                 SUM(code_assignments.cached_amount_in_usd) AS value",
@@ -92,16 +92,16 @@ module Charts::CountryPies
                           data_requests.id = #{data_request_id}",
               :group => 'code_assignments.code_id,
                          codes.short_display',
-              :order => 'value DESC')
+              :order => 'value DESC'
 
-      prepare_pie_values_json(code_assignments)
+      Charts::JsonHelpers.prepare_pie_values_json(code_assignments)
     end
 
     def codes_for_activities_pie(code_type, data_request_id, activities, is_spent)
       code_klass_string = get_code_klass_string(code_type)
       coding_type       = get_coding_type(code_type, is_spent)
 
-      code_assignments = CodeAssignment.find(:all,
+      code_assignments = CodeAssignment.find :all,
         :select => "codes.id as code_id,
                     codes.parent_id as parent_id,
                     codes.short_display AS name,
@@ -122,10 +122,10 @@ module Charts::CountryPies
                     data_requests.id = data_responses.data_request_id AND
                     data_requests.id = #{data_request_id}",
         :group => "codes.short_display, codes.id, codes.parent_id",
-        :order => 'value DESC')
+        :order => 'value DESC'
 
       code_assignments = remove_parent_code_assignments(code_assignments)
-      prepare_pie_values_json(code_assignments)
+      Charts::JsonHelpers.prepare_pie_values_json(code_assignments)
     end
 
     def hssp2_strat_activities_pie(code_type, data_request_id, is_spent, activities = nil)
@@ -161,7 +161,7 @@ module Charts::CountryPies
 
       code_assignments = scope.all
       code_assignments = remove_parent_code_assignments(code_assignments)
-      build_pie_values_json(get_summed_code_assignments(code_assignments))
+      Charts::JsonHelpers.build_pie_values_json(get_summed_code_assignments(code_assignments))
     end
   end
 end

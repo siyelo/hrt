@@ -378,4 +378,3 @@ Given /^#{capture_model} state is: "([^"]*)"$/ do |name, state|
   response.state = state
   response.save!
 end
-

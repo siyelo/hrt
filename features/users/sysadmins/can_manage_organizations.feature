@@ -167,3 +167,9 @@ Feature: Admin can manage organizations
     Then I should see "Users" within "h2"
     And I should see "sysadmin@hrtapp.com"
 
+  Scenario: See pie chart
+    Then I should see "Response Status" within "#reports-summary"
+
+  @wip
+  Scenario: See Submission & Acceptance rate stats
+

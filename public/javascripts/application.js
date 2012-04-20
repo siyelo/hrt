@@ -888,6 +888,15 @@ var responses_submit = {
   }
 }
 
+var admin_organizations_index = {
+  run: function () {
+    drawPieChart('response_pie', _responses, 380, 250);
+    $("#show_pie").live("click", function() {
+      $("#reports-summary").slideToggle();
+    })
+  }
+}
+
 function drawPieChart(id, data_rows, width, height) {
   if (typeof(data_rows) === "undefined") {
     return;
@@ -1513,6 +1522,7 @@ var dashboard_index = {
     });
   }
 };
+
 
 var admin_organizations_create = admin_organizations_edit = {
   run: function () {

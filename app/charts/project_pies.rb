@@ -1,5 +1,5 @@
 module Charts::ProjectPies
-  extend Charts::HelperMethods
+  extend Charts::Helpers
 
   VIRTUAL_TYPES = [:budget_stratprog_coding, :spend_stratprog_coding,
    :budget_stratobj_coding, :spend_stratobj_coding]

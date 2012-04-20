@@ -1,5 +1,5 @@
 module Charts::DataResponsePies
-  extend Charts::HelperMethods
+  extend Charts::Helpers
 
   VIRTUAL_TYPES = [:budget_stratprog_coding, :spend_stratprog_coding,
    :budget_stratobj_coding, :spend_stratobj_coding]
@@ -28,5 +28,20 @@ module Charts::DataResponsePies
         codes.reject{|ca| parent_ids.include?(ca.code_id.to_i)}
       end
     end
+
+    #pie chart displaying the status of the data responses
+    def data_response_status_pie
+      data_responses = DataResponse.find :all,
+        :select => 'data_responses.state, count(*) count', :group => "data_responses.state"
+      @pie = build_pie_chart(data_responses)
+    end
+
+    private
+
+      def build_pie_chart(data_responses)
+        response_statuses = data_responses.map { |dr| [dr.state, dr.count.to_i] }
+        Charts::JsonHelpers.build_pie_values_json(response_statuses)
+      end
   end
 end
+
