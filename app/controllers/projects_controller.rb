@@ -124,7 +124,7 @@ class ProjectsController < BaseController
   end
 
   def export_workplan
-    filename = "#{@response.organization.name.split.join('_').downcase.underscore}_workplan.xls"
+    filename = "#{@response.organization.name.split.join('_').gsub(/\W+/, '').downcase.underscore}_workplan.xls"
     send_xls(Reports::ActivityManagerWorkplan.new(@response).to_xls, filename)
   end
 
