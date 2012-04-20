@@ -59,7 +59,7 @@ class Admin::UsersController < Admin::BaseController
     begin
       if params[:file].present?
         doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
-        if doc.headers.to_set == User::FILE_UPLOAD_COLUMNS.to_set
+        if doc.headers.to_set == User::Upload::COLUMNS.to_set
           saved, errors = User.create_from_file(doc)
           flash[:notice] = "Created #{saved} of #{saved + errors} users successfully"
         else
