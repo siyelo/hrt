@@ -1,4 +1,4 @@
-# This file is auto-generated from the current state of the database. Instead of editing this file, 
+# This file is auto-generated from the current state of the database. Instead of editing this file,
 # please use the migrations feature of Active Record to incrementally modify your database, and
 # then regenerate this schema definition.
 #
@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120413083800) do
+ActiveRecord::Schema.define(:version => 20120417154544) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -120,11 +120,7 @@ ActiveRecord::Schema.define(:version => 20120413083800) do
     t.string   "title"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.date     "due_date"
     t.date     "start_date"
-    t.date     "end_date"
-    t.boolean  "final_review",      :default => false
-    t.boolean  "budget_by_quarter", :default => false
   end
 
   create_table "data_responses", :force => true do |t|
@@ -308,5 +304,8 @@ ActiveRecord::Schema.define(:version => 20120413083800) do
     t.datetime "current_login_at"
     t.datetime "last_login_at"
   end
+
+  add_index "users", ["email"], :name => "index_users_on_email"
+  add_index "users", ["perishable_token"], :name => "index_users_on_perishable_token"
 
 end

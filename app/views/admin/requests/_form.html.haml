@@ -4,11 +4,11 @@
       %h2 Enter data request information
       %ul.section_form
         = f.text_field :title, :label => 'Title', :hint => 'Descriptive name of the data request'
-        = f.select :organization_id, options_for_select(funding_organizations_select, f.object.organization_id),  {:include_blank => true}, :value => f.object.organization_id, :label => 'Organization', :hint => 'Which organization is requesting data?'
-        = f.text_field :due_date, :value => formatted_date(f.object.due_date), :label => 'Due date', :class => 'date_picker', :hint => 'Due when users have to enter their data?'
+        = f.hidden_field :organization_id, :value => current_user.organization.id
+        %li
+          %label Organization
+          = current_user.organization
         = f.text_field :start_date, :value => formatted_date(f.object.start_date), :label => 'Start date', :class => 'date_picker', :hint => 'What is the start date of period for which data is requested?'
-        = f.text_field :end_date, :value => formatted_date(f.object.end_date), :label => 'End date', :class => 'date_picker', :hint => 'What is the end date of period for which data is requested?'
-        = f.check_box :final_review, :label => 'Final Review?', :hint => 'What is the end date of period for which data is requested?'
 
       %fieldset.buttons.push-12
         %ol
