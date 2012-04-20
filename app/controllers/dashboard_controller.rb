@@ -1,6 +1,5 @@
 class DashboardController < ApplicationController
   COMMENT_LIMIT = 25
-  include PrepareCharts
 
   ### Filters
   before_filter :require_user
@@ -14,7 +13,6 @@ class DashboardController < ApplicationController
     load_requests
     load_documents
     warn_if_not_current_request
-    load_dashboard_charts unless current_user.sysadmin?
   end
 
   protected

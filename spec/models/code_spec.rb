@@ -1,10 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Code do
-
-  describe "Validations" do
-  end
-
   describe "Attributes" do
     it { should allow_mass_assignment_of(:short_display) }
     it { should allow_mass_assignment_of(:long_display) }
@@ -136,67 +132,6 @@ describe Code do
     it "returns to_s_with_external_id when external_id is not blank" do
       code = Factory.create(:code, :external_id => 'external_id', :short_display => 'short_display')
       code.to_s_with_external_id.should == 'short_display (external_id)'
-    end
-  end
-
-  describe "leaf_assignments_for_activities" do
-    before :each do
-      Money.default_bank.add_rate(:USD, :USD, 1)
-      @organization = Factory(:organization, :currency => "USD")
-      @request      = Factory(:data_request, :organization => @organization)
-      @response     = @organization.latest_response
-      @project      = Factory(:project, :data_response => @response)
-      @activity1    = Factory(:activity, :data_response => @response,
-                              :project => @project)
-      @activity2    = Factory(:activity, :data_response => @response,
-                              :project => @project)
-      @code1        = Factory(:code, :short_display => 'code1')
-      @code11       = Factory(:code, :short_display => 'code11',
-                              :parent => @code1)
-      @code12       = Factory(:code, :short_display => 'code12',
-                              :parent => @code1)
-    end
-
-    it "returns empty array when no activities" do
-      @code1.leaf_assignments_for_activities(CodingBudget, []).should == []
-    end
-
-    it "returns empty array when no leaf" do
-      @code1.stub(:leaf?) { false }
-
-      @a1ca1  = Factory.create(:coding_budget, :activity => @activity2,
-                               :code => @code11, :cached_amount => 5,
-                               :sum_of_children => 5)
-      @a1ca11 = Factory.create(:coding_budget, :activity => @activity1,
-                               :code => @code11, :cached_amount => 2)
-
-      @code1.leaf_assignments_for_activities(CodingBudget,
-        [@activity1, @activity2]).should == []
-    end
-
-    it "returns only leaves with sum_of_children 0" do
-      a1ca1  = Factory.create(:coding_budget, :activity => @activity2,
-                              :code => @code11, :cached_amount => 5,
-                              :sum_of_children => 5)
-      a1ca11 = Factory.create(:coding_budget, :activity => @activity1,
-                              :code => @code11, :cached_amount => 2)
-
-      a1ca12 = Factory.create(:coding_budget, :activity => @activity2,
-                              :code => @code11, :cached_amount => 2,
-                              :sum_of_children => 5)
-
-      @code11.leaf_assignments_for_activities(CodingBudget,
-        [@activity1, @activity2]).should == [a1ca11]
-    end
-
-    it "orders code assignments by cached_amount desc" do
-      a2ca11 = Factory.create(:coding_budget, :activity => @activity1,
-                              :code => @code11, :cached_amount => 2)
-      a2ca12 = Factory.create(:coding_budget, :activity => @activity2,
-                              :code => @code11, :cached_amount => 3)
-
-      @code11.leaf_assignments_for_activities(CodingBudget,
-        [@activity1, @activity2]).should == [a2ca12, a2ca11]
     end
   end
 end

@@ -54,7 +54,6 @@ class Organization < ActiveRecord::Base
    :if => Proc.new { |model| model.fiscal_year_start_date.present? }
 
   ### Callbacks
-  after_save :update_cached_currency_amounts
   after_create :create_data_responses
   before_destroy :check_no_requests
   before_destroy :check_no_funder_references
@@ -256,18 +255,6 @@ class Organization < ActiveRecord::Base
     end
 
   private
-    def update_cached_currency_amounts
-      if currency_changed?
-        dr_activities.each do |a|
-          a.code_assignments.each {|c| c.save}
-          a.save
-        end
-
-        self.projects.each do |project|
-          project.update_cached_currency_amounts
-        end
-      end
-    end
 
     def validates_date_range
       errors.add(:base, "The end date must be exactly one year after the start date") unless (fiscal_year_start_date + (1.year - 1.day)).eql? fiscal_year_end_date

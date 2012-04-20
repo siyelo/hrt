@@ -1,7 +1,7 @@
 # concerned with the aggregation of projects and
 # non-project other costs for a response
 #
-class DataResponse
+class DataResponse < ActiveRecord::Base
   module Totaller
     def total_budget(to_currency = self.currency)
       sum_total(projects, :total_budget, to_currency) +

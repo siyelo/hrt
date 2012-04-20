@@ -80,9 +80,6 @@ map.root :controller => 'static_page', :action => 'index'
   map.resources :organizations, :only => [:edit, :update],
     :collection => { :export => :get }
 
-  # REPORTS
-  map.charts 'charts/:action', :controller => 'charts' # TODO: convert to resource
-
   map.namespace :reports do |reports|
     reports.resources :districts, :only => [:index, :show],
       :member => {:classifications => :get} do |districts|

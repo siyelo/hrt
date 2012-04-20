@@ -56,7 +56,8 @@ class Reports::ActivityManagerWorkplan
       row << "Activity Name"
       row << "Activity Description"
       row << "Activity / Other Cost"
-      row << "Activity Budget (USD)"
+      row << "Activity Budget"
+      row << "Currency"
       row << "Implementers"
       row << "Targets"
       row << "Outputs"
@@ -80,7 +81,8 @@ class Reports::ActivityManagerWorkplan
       row << nice_activity_name(activity, 50)
       row << sanitize_encoding(activity.description)
       row << activity.class.to_s.titleize
-      row << n2c(activity.budget_in_usd, "", "")
+      row << activity.total_budget
+      row << activity.currency
       row << sanitize_encoding(activity.implementer_splits.map{|is| is.organization.name}.join(', '))
       row << sanitize_encoding(activity.targets.map{ |e| e.description }.join(', '))
       row << sanitize_encoding(activity.beneficiaries.map{ |e| e.short_display }.join(', '))

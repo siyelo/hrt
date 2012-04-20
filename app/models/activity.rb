@@ -93,7 +93,6 @@ class Activity < ActiveRecord::Base
   ### Callbacks
   before_validation :strip_input_fields
   before_save       :auto_create_project
-  before_save       :update_cached_usd_amounts
   after_destroy     :restart_response_if_all_activities_removed
   before_update     :update_all_classified_amount_caches
 
@@ -302,7 +301,6 @@ class Activity < ActiveRecord::Base
     valid
   end
 
-
   protected
 
     # intercept the classifications and process using the bulk classification update API
@@ -398,6 +396,9 @@ class Activity < ActiveRecord::Base
     end
 end
 
+# == Schema Information
+#
+# Table name: activities
 #
 #  id                           :integer         not null, primary key
 #  name                         :string(255)
@@ -411,8 +412,6 @@ end
 #  data_response_id             :integer         indexed
 #  activity_id                  :integer         indexed
 #  approved                     :boolean
-#  spend_in_usd                 :decimal(, )     default(0.0)
-#  budget_in_usd                :decimal(, )     default(0.0)
 #  project_id                   :integer
 #  ServiceLevelBudget_amount    :decimal(, )     default(0.0)
 #  ServiceLevelSpend_amount     :decimal(, )     default(0.0)

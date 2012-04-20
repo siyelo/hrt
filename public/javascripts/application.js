@@ -594,8 +594,6 @@ var admin_responses_show = {
 var reports_index = {
   run: function () {
     ajaxifyResources('comments');
-    drawPieChart('code_spent', _code_spent_values, 450, 300);
-    drawPieChart('code_budget', _code_budget_values, 450, 300);
   }
 };
 
@@ -1506,10 +1504,6 @@ var admin_users_new = admin_users_create = admin_users_edit = admin_users_update
 var dashboard_index = {
   run: function () {
     $('.dropdown_trigger').click(function (e) {e.preventDefault()});
-    if (typeof(_code_spent_values) !== 'undefined' || typeof(_code_budget_values) !== 'undefined') {
-      drawPieChart('code_spent', _code_spent_values, 450, 300);
-      drawPieChart('code_budget', _code_budget_values, 450, 300);
-    }
 
     $('.dropdown_menu').hover(function (e){
       e.preventDefault();

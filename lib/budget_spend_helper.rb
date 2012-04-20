@@ -21,12 +21,4 @@ module BudgetSpendHelper
     end.sum{ |e| e.send(method) }
     s || 0
   end
-
-  private
-
-    def update_cached_usd_amounts
-      rate = currency_rate(self.currency, :USD)
-      self.spend_in_usd  = total_spend  * rate
-      self.budget_in_usd = total_budget  * rate
-    end
 end

@@ -112,65 +112,6 @@ describe FundingFlow do
     end
   end
 
-  describe "Callbacks" do
-    describe "#set_total_amounts" do
-      before :each do
-        @organization = Factory(:organization, :currency => 'USD')
-        @request      = Factory(:data_request, :organization => @organization)
-        @response     = @organization.latest_response
-        @project      = Factory(:project, :data_response => @response)
-        @organization.reload # reload in_flows
-        @project.reload      # reload in_flows
-      end
-
-      describe "keeping Money amounts in-sync" do
-        before :each do
-          Money.default_bank.add_rate(:RWF, :USD, 0.002)
-          @project.in_flows = [Factory.build(:funding_flow, :from => @organization, :spend => 123.45,
-                                :budget => 123.45)]
-          @project.save!
-          @funding_flow = @project.in_flows.first
-        end
-
-        it "should update spend in USD after project currency change" do
-          @p = @funding_flow.project
-          @p.currency = 'RWF'; @p.save
-          @funding_flow.reload
-          @funding_flow.spend_in_usd.to_f.should == 0.2469
-        end
-
-        it "should update spend in USD after organization currency change" do
-          @organization.currency = "RWF"; @organization.save!
-          @funding_flow.reload
-          @funding_flow.spend_in_usd.to_f.should == 0.2469
-        end
-      end
-    end
-
-    describe "#update_cached_usd_amounts" do
-      before :all do
-        Money.default_bank.add_rate(:RWF, :USD, 0.1)
-      end
-
-      context "GOR FY" do
-        it "sets budget_in_usd and spend_in_usd amounts" do
-          @organization  = Factory(:organization, :currency => 'RWF',
-                                  :fiscal_year_start_date => "2010-07-01",
-                                  :fiscal_year_end_date => "2011-06-30")
-          @request       = Factory(:data_request, :organization => @organization)
-          @response      = @organization.latest_response
-          @project       = Factory(:project, :data_response => @response)
-          in_flow        = @project.in_flows.first
-          in_flow.budget = 123
-          in_flow.spend  = 456
-          in_flow.save!
-          in_flow.budget_in_usd.should == 12.3
-          in_flow.spend_in_usd.should == 45.6
-        end
-      end
-    end
-  end
-
   describe "more validations" do
     before :each do
       basic_setup_project

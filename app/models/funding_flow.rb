@@ -1,5 +1,4 @@
 class FundingFlow < ActiveRecord::Base
-  include BudgetSpendHelper
   include AutocreateHelper
   default_scope :order => "id ASC"
 
@@ -44,9 +43,6 @@ class FundingFlow < ActiveRecord::Base
   validates_uniqueness_of :organization_id_from, :scope => :project_id,
     :unless => Proc.new { |m| m.new_record? }
 
-  ### Callbacks
-  before_save :update_cached_usd_amounts
-
   ### Delegates
   delegate :organization, :to => :project  #allowing nil as a workaround for nested object creation via project
   delegate :data_response, :to => :project
@@ -74,15 +70,6 @@ class FundingFlow < ActiveRecord::Base
 
   def name
     self.to_s
-  end
-
-  #temporary workaround until _in_usd is removed
-  def total_budget
-    budget || 0
-  end
-
-  def total_spend
-    spend || 0
   end
 
   def organization_id_from=(id_or_name)
@@ -118,6 +105,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: funding_flows
@@ -142,7 +130,5 @@ end
 #  budget_q4            :decimal(, )
 #  budget_q4_prev       :decimal(, )
 #  project_from_id      :integer
-#  budget_in_usd        :decimal(, )     default(0.0)
-#  spend_in_usd         :decimal(, )     default(0.0)
 #
 

@@ -5,9 +5,7 @@ class CodeAssignment < ActiveRecord::Base
 
   ### Attributes
   attr_accessible :activity, :code, :percentage,
-                  :sum_of_children, :cached_amount, :cached_amount_in_usd
-                  #FIXME!!: deprecate :sum_of_children, :cached_amount, :cached_amount_in_usd
-                  # we only use percentage API now...
+                  :sum_of_children, :cached_amount
 
   ### Associations
   belongs_to :activity
@@ -18,9 +16,6 @@ class CodeAssignment < ActiveRecord::Base
   validates_inclusion_of :percentage, :in => 0..100,
     :if => Proc.new { |model| model.percentage.present? },
     :message => "must be between 0 and 100"
-
-  ### Callbacks
-  before_save :update_cached_amount_in_usd
 
   ### Delegates
   delegate :data_response, :to => :activity
@@ -45,14 +40,8 @@ class CodeAssignment < ActiveRecord::Base
   named_scope :with_types,
               lambda { |types| { :conditions =>
                 ["code_assignments.type IN (?)", types]} }
-  named_scope :cached_amount_desc, {
+  named_scope :sorted, {
               :order => "code_assignments.cached_amount DESC" }
-  named_scope :select_for_pies,
-              :select => "code_assignments.code_id,
-                          SUM(code_assignments.cached_amount_in_usd) AS value",
-              :include => :code,
-              :group => 'code_assignments.code_id',
-              :order => 'value DESC'
   named_scope :with_request,
               lambda { |request_id| {
                 :joins =>
@@ -65,33 +54,10 @@ class CodeAssignment < ActiveRecord::Base
                     data_responses.data_request_id = #{request_id}",
               }}
   named_scope :leaves, :conditions => ["code_assignments.sum_of_children = 0"]
-  named_scope :with_amount, :conditions => ["cached_amount_in_usd > 0"]
 
 
 
   ### Class Methods
-
-  # TODO: spec
-  def self.sums_by_code_id(code_ids, coding_type, activities)
-    CodeAssignment.with_code_ids(code_ids).with_type(coding_type).with_activities(activities).find(:all,
-      :select => 'code_assignments.code_id, code_assignments.activity_id, SUM(code_assignments.cached_amount_in_usd) AS value',
-      :group => 'code_assignments.code_id, code_assignments.activity_id',
-      :order => 'value DESC'
-    ).group_by{|ca| ca.code_id}
-  end
-
-  # TODO: spec
-  def self.ratios_by_activity_id(code_id, activity_ids, district_type, activity_value)
-    CodeAssignment.with_code_id(code_id).with_type(district_type).with_activities(activity_ids).find(:all,
-      :joins => :activity,
-      :select => "code_assignments.activity_id,
-                  activities.#{activity_value},
-                  (CAST(SUM(code_assignments.cached_amount) AS REAL) / CAST(activities.#{activity_value} AS REAL)) AS ratio",
-      :group => "code_assignments.activity_id,
-                 activities.#{activity_value}",
-      :conditions => "activities.#{activity_value} > 0"
-    ).group_by{|ca| ca.activity_id}
-  end
 
   # TODO: needs to be moved to a service
   # particularly because its trying to be responsible
@@ -150,19 +116,6 @@ class CodeAssignment < ActiveRecord::Base
     amount.present? ? write_attribute(:percentage, amount.to_f.round_with_precision(2)) : write_attribute(:percentage, nil)
   end
 
-  # NOTE: in this method we use amounts in USD
-  # because those amounts are in the GOR FY
-  def proportion_of_activity
-    activity_amount_in_usd = budget? ?
-      (activity.try(:budget_in_usd) || 0) : (activity.try(:spend_in_usd) || 0)
-
-    if activity_amount_in_usd > 0 && cached_amount_in_usd > 0
-      cached_amount_in_usd / activity_amount_in_usd
-    else
-      percentage ? percentage / 100 : 0
-    end
-  end
-
   # Checks if it's a budget code assignment
   def budget?
     ['CodingBudget',
@@ -170,15 +123,8 @@ class CodeAssignment < ActiveRecord::Base
      'CodingBudgetDistrict',
      'HsspBudget'].include?(type.to_s)
   end
-
-  private
-
-    # currency is derived from the parent activity/project/DR
-    def update_cached_amount_in_usd
-      self.cached_amount_in_usd = (cached_amount || 0) * currency_rate(currency, :USD)
-    end
-
 end
+
 
 
 
@@ -192,15 +138,14 @@ end
 #
 # Table name: code_assignments
 #
-#  id                   :integer         not null, primary key
-#  activity_id          :integer         indexed => [code_id, type]
-#  code_id              :integer         indexed => [activity_id, type], indexed
-#  type                 :string(255)     indexed => [activity_id, code_id]
-#  percentage           :decimal(, )
-#  cached_amount        :decimal(, )     default(0.0)
-#  sum_of_children      :decimal(, )     default(0.0)
-#  created_at           :datetime
-#  updated_at           :datetime
-#  cached_amount_in_usd :decimal(, )     default(0.0)
+#  id              :integer         not null, primary key
+#  activity_id     :integer         indexed => [code_id, type]
+#  code_id         :integer         indexed => [activity_id, type], indexed
+#  type            :string(255)     indexed => [activity_id, code_id]
+#  percentage      :decimal(, )
+#  cached_amount   :decimal(, )     default(0.0)
+#  sum_of_children :decimal(, )     default(0.0)
+#  created_at      :datetime
+#  updated_at      :datetime
 #
 
