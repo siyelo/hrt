@@ -24,6 +24,8 @@ class DataResponse < ActiveRecord::Base
   ### Validations
   validates_presence_of   :data_request_id, :organization_id
   validates_uniqueness_of :data_request_id, :scope => :organization_id
+  validates_inclusion_of  :state, :in => STATES
+
 
   ### Named scopes
   named_scope :latest_first, {:order => "data_request_id DESC" }
