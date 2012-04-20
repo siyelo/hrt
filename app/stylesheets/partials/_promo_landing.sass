@@ -55,6 +55,8 @@ body.landing
     img
       margin: 2px 7px 0 10px
       width: 100px
+  .tipsy-inner
+    +box-shadow(rgba(0, 0, 0, 0.3) 0 0 5px)
 
 #guide
   h2
@@ -107,9 +109,16 @@ body.landing
       color: rgba(255, 255, 255, 0.8)
       font-size: 11px
       +border-radius(1px)
+      &:hover, &:focus
+        border: none
+        background: rgba(0, 0, 0, 0.2)
     .current
       background: rgba(255, 255, 255, 0.5)
       color: #222
+    .current, .disabled
+      &:hover, &:focus
+        background: rgba(255, 255, 255, 0.5)
+      
 .landing-table 
   width: 100%
   td, a, th
@@ -117,13 +126,11 @@ body.landing
     font-size: 11px
     text-decoration: none
   th
-    background: rgba(0, 0, 0, 0.05)
+    background: rgba(0, 0, 0, 0.1)
     color: rgba(255, 255, 255, 0.6)
     padding: 10px 15px
   td
     background: rgba(255, 255, 255, 0.03)
     border-bottom: rgba(0, 0, 0, 0.1) 1px solid
     padding: 7px 15px
-  .tipsy-inner
-    +box-shadow(#000 0 0 5px)
   
