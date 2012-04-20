@@ -14,7 +14,7 @@ class Reports::Targets
       :conditions => ['data_responses.data_request_id = ? AND
                        data_responses.state = ?', request.id, 'accepted'],
       :include => [{ :activity => [{ :project => { :in_flows => :from } },
-        { :data_response => :organization }, :targets ]},
+        { :data_response => :organization }, :targets, :implementer_splits ]},
         { :organization => :data_responses }]
   end
 
@@ -55,10 +55,10 @@ class Reports::Targets
       split_amount = 0
 
       if @is_budget
-        activity_amount = activity.budget          || 0
+        activity_amount = activity.total_budget          || 0
         split_amount    = implementer_split.budget || 0
       else
-        activity_amount = activity.spend           || 0
+        activity_amount = activity.total_spend           || 0
         split_amount    = implementer_split.spend  || 0
       end
 

@@ -132,8 +132,6 @@ describe CodeAssignment do
       code     = Factory.create(:mtef_code, :short_display => 'code1')
       activity.reload
       activity.save # get new cached implementer split total
-      activity.budget.should == 100
-      activity.spend.should == 200
       # at time of writing you must call one of the 'bulk' update APIs for classifications to have their cached amounts
       # and sum of children recalculated
       # i.e. you can't create individuals (below) since there are not yet any callbacks to keep each coding's cached_amount up to date

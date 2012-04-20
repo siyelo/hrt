@@ -27,9 +27,13 @@ class Reports::ClassificationSplit
       :order => "implementer_splits.id ASC",
       :conditions => ['data_responses.data_request_id = ? AND
                        data_responses.state = ?', request.id, 'accepted'],
-      :include => [{ :activity => [{ @classification_association => :code },
-        { :project => { :in_flows => :from } },
-        { :data_response => :organization }]},
+      :include => [
+        { :activity => [
+          { @classification_association => :code },
+          { :project => { :in_flows => :from } },
+          { :data_response => :organization },
+          :implementer_splits #eager load for total_budget/spend lookups
+        ]},
         { :organization => :data_responses }]
   end
 
@@ -76,10 +80,10 @@ class Reports::ClassificationSplit
       activity = implementer_split.activity
       base_row = []
       if @is_budget
-        activity_amount = activity.budget          || 0
+        activity_amount = activity.total_budget          || 0
         split_amount    = implementer_split.budget || 0
       else
-        activity_amount = activity.spend           || 0
+        activity_amount = activity.total_spend           || 0
         split_amount    = implementer_split.spend  || 0
       end
 

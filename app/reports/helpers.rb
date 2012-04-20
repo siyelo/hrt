@@ -36,4 +36,8 @@ module Reports::Helpers
   def activity_url(activity)
     "https://resourcetracking.heroku.com/responses/#{activity.data_response.id}/activities/#{activity.id}/edit"
   end
+
+  def activity_total_method(amount_type)
+    'total_' + amount_type.to_s.downcase
+  end
 end

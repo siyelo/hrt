@@ -26,6 +26,8 @@ class Project < ActiveRecord::Base
            :conditions => [ 'organization_id_from = #{organization.id}' ]
   has_many :comments, :as => :commentable, :dependent => :destroy
 
+  has_many :implementer_splits, :through => :activities
+
   # Nested attributes
   accepts_nested_attributes_for :in_flows, :allow_destroy => true,
     :reject_if => Proc.new { |attrs| attrs['organization_id_from'].blank? }
@@ -42,7 +44,6 @@ class Project < ActiveRecord::Base
 
 
   ### Validations
-  # also see validations in BudgetSpendHelper
   validates_uniqueness_of :name, :scope => :data_response_id
   validates_presence_of :name, :data_response_id
   validates_inclusion_of :currency,
@@ -60,7 +61,7 @@ class Project < ActiveRecord::Base
   validate :validate_funder_uniqueness
 
   ### Attributes
-  attr_accessible :name, :description, :spend, :user_id,:data_response_id,
+  attr_accessible :name, :description, :user_id,:data_response_id,
                   :start_date, :end_date, :currency, :data_response, :activities,
                   :activities_attributes, :in_flows_attributes, :am_approved,
                   :am_approved_date, :in_flows
@@ -74,6 +75,16 @@ class Project < ActiveRecord::Base
 
   ### Instance methods
   #
+
+  #including this as a workaround for matches_in_flow_amount?
+  def budget
+    total_budget
+  end
+
+  def spend
+    total_spend
+  end
+
   def response
     data_response
   end
@@ -81,16 +92,6 @@ class Project < ActiveRecord::Base
   # view helper ??!
   def organization_name
     organization.name
-  end
-
-  # TODO: spec
-  def budget
-    activities.only_simple.map{ |a| a.budget || 0 }.sum
-  end
-
-  # TODO: spec
-  def spend
-    activities.only_simple.map{ |a| a.spend || 0 }.sum
   end
 
   # Returns DR.currency if no project currency specified
@@ -143,30 +144,8 @@ class Project < ActiveRecord::Base
     !activities.with_type("OtherCost").empty?
   end
 
-  # calculates the activity totals for budget/spent
-  # FIXME - unclear if this returns ALL NORMAL ACTIVITIES + OTHER COSTS + SUB ACTIVITIES???!
-  def subtotals(type)
-    activities.select{|a| a.send(type).present?}.sum(&type)
-  end
-
   def in_flows_total(amount_method)
     smart_sum(in_flows, amount_method)
-  end
-
-  def activities_budget_total
-    activities.roots.reject{|fs| fs.budget.nil?}.sum(&:budget)
-  end
-
-  def other_costs_budget_total
-    other_costs.reject{|fs| fs.budget.nil?}.sum(&:budget)
-  end
-
-  def activities_spend_total
-    activities.roots.reject{|fs| fs.spend.nil?}.sum(&:spend)
-  end
-
-  def other_costs_spend_total
-    other_costs.reject{|fs| fs.spend.nil?}.sum(&:spend)
   end
 
   def direct_activities_total(amount_type)

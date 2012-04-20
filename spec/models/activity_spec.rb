@@ -31,8 +31,6 @@ describe Activity do
     it { should allow_mass_assignment_of(:name) }
     it { should allow_mass_assignment_of(:description) }
     it { should allow_mass_assignment_of(:project_id) }
-    it { should allow_mass_assignment_of(:budget) }
-    it { should allow_mass_assignment_of(:spend) }
     it { should allow_mass_assignment_of(:beneficiary_ids) }
     it { should allow_mass_assignment_of(:provider_id) }#FIXME: remove
     it { should allow_mass_assignment_of(:text_for_provider) } #FIXME: remove
@@ -97,13 +95,10 @@ describe Activity do
         @activity.implementer_splits[0].spend.to_f.should == 10
         @activity.implementer_splits[0].budget.to_f.should == 20
         @activity.reload
-        @activity.spend.to_f.should == 10
-        @activity.budget.to_f.should == 20
+        @activity.total_spend.to_f.should == 10
+        @activity.total_budget.to_f.should == 20
       end
 
-      it "should not call activity cache update more than once" do
-        pending #tricky to count the number of method calls on the callback
-      end
     end
 
     context "when two implementer_splits" do
@@ -157,13 +152,10 @@ describe Activity do
         @activity.implementer_splits[1].spend.to_f.should == 20
         @activity.implementer_splits[1].budget.to_f.should == 40
         @activity.reload
-        @activity.spend.to_f.should == 30
-        @activity.budget.to_f.should == 60
+        @activity.total_spend.to_f.should == 30
+        @activity.total_budget.to_f.should == 60
       end
 
-      it "should not call activity cache update more than once" do
-        pending #tricky to count the number of method calls on the callback
-      end
     end
   end
 
@@ -186,18 +178,18 @@ describe Activity do
       @activity.reload; @activity.save;
     end
 
-    it "activity.budget should be the total of sub activities(1)" do
-      @activity.budget.to_f.should == 25
+    it "activity.total_budget should be the total of sub activities(1)" do
+      @activity.total_budget.to_f.should == 25
     end
 
-    it "activity.spend should be the total of sub activities(1)" do
-      @activity.spend.to_f.should == 10
+    it "activity.total_spend should be the total of sub activities(1)" do
+      @activity.total_spend.to_f.should == 10
     end
 
     it "refreshes the amount if the amount of the sub-activity changes" do
       @split.spend = 13; @split.budget = 29; @split.save!; @activity.reload; @activity.save;
-      @activity.spend.to_f.should == 13
-      @activity.budget.to_f.should == 29
+      @activity.total_spend.to_f.should == 13
+      @activity.total_budget.to_f.should == 29
     end
 
     describe "works with more than one sub activity" do
@@ -207,18 +199,18 @@ describe Activity do
         @activity.reload; @activity.save;
       end
 
-      it "activity.budget should be the total of sub activities(2)" do
-        @activity.budget.to_f.should == 150
+      it "activity.total_budget should be the total of sub activities(2)" do
+        @activity.total_budget.to_f.should == 150
       end
 
-      it "activity.spend should be the total of sub activities(2)" do
-        @activity.spend.to_f.should == 110
+      it "activity.total_spend should be the total of sub activities(2)" do
+        @activity.total_spend.to_f.should == 110
       end
 
       it "refreshes the amount if the amount of the sub-activity changes" do
         @split.spend = 20; @split.budget = 35; @split.save!; @activity.reload; @activity.save;
-        @activity.spend.to_f.should == 120
-        @activity.budget.to_f.should == 160
+        @activity.total_spend.to_f.should == 120
+        @activity.total_budget.to_f.should == 160
       end
     end
 
@@ -322,7 +314,7 @@ describe Activity do
 
     context "normal activity" do
       it "should returns full amount for org1 when it is implementer" do
-        @activity.amount_for_provider(@activity.provider, :budget).should == @activity.budget
+        @activity.amount_for_provider(@activity.provider, :budget).should == @activity.total_budget
       end
 
       it "should returns 0 when given org is not implementer" do

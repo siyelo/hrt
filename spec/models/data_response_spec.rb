@@ -206,8 +206,8 @@ describe DataResponse do
         @activity.reload; @activity.save;
         @oc1.reload; @oc1.save;
         @oc2.reload; @oc2.save;
-        @response.budget.to_f.should == 600
-        @response.spend.to_f.should == 300
+        @response.total_budget.to_f.should == 600
+        @response.total_spend.to_f.should == 300
       end
     end
 
@@ -228,8 +228,8 @@ describe DataResponse do
         @activity1.reload; @activity1.save;
         @other_cost1.reload; @other_cost1.save;
         @other_cost2.reload; @other_cost2.save;
-        @response.budget.to_f.should == 400 # 100 + 100 + 200
-        @response.spend.to_f.should == 200 # 50 + 50 + 100
+        @response.total_budget.to_f.should == 400 # RWF200 + RWF200 + USD200
+        @response.total_spend.to_f.should == 200 # 50 + 50 + 100
       end
     end
   end

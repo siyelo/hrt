@@ -50,7 +50,7 @@
     - if current_user.sysadmin?
       %li.js_dropdown_menu#state
         - link_to '#', :class => 'js_dropdown_trigger dropdown' do
-          = "Status: #{state_to_name(@response.state)}"
+          = "Status: #{controller.state_to_name(@response.state)}"
           = image_tag "icon_dropdown.png"
 
         %ul.menu_items{:style => 'display: none'}
@@ -101,9 +101,9 @@
         %td{:colspan => 2}
         %td.total TOTAL
         %td.wrap-12
-          .right_justified= n2cs(@response.spend, @response.currency)
+          .right_justified= n2cs(@response.total_spend, @response.currency)
         %td.wrap-12
-          .right_justified= n2cs(@response.budget, @response.currency)
+          .right_justified= n2cs(@response.total_budget, @response.currency)
         %td
 
   = will_paginate @projects

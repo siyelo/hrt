@@ -3,9 +3,9 @@
     = link_to activity.name.presence || 'Unnamed Activity', edit_response_activity_path(@response, activity), :title => activity.name
     = link_to image_tag("tooltip.png"), "#", :title => activity.description, :class => 'tooltip'
   %td
-    .right_justified= n2c activity.spend
+    .right_justified= n2c activity.total_spend
   %td
-    .right_justified= n2c activity.budget
+    .right_justified= n2c activity.total_budget
   %td.wrap-17
     %ul
       = render 'shared/outlays/approve_budget', :outlay => activity

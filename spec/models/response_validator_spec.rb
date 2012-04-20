@@ -1,5 +1,18 @@
 require File.dirname(__FILE__) + '/../spec_helper'
-require File.dirname(__FILE__) + '/../helpers/response_validation_helper'
+
+shared_examples_for "coded Activities checker" do
+  it "should find no uncoded Activities" do
+    @response.uncoded_activities.should be_empty
+    @response.activities_coded?.should == true
+  end
+end
+
+shared_examples_for "coded OtherCosts checker" do
+  it "should find no uncoded Other Costs" do
+    @response.uncoded_other_costs.should be_empty
+    @response.other_costs_coded?.should == true
+  end
+end
 
 describe DataResponse do #validations
   before :each do
@@ -20,11 +33,6 @@ describe DataResponse do #validations
       #@osa        = Factory(:sub_activity, :data_response => @response, :activity => @other_cost, :budget => 40, :spend => 40)
     end
 
-    it "succeeds if activity has spend and budget" do
-      @response.activity_amounts_entered?.should be_true
-    end
-    it_should_behave_like "activity spend checker"
-    it_should_behave_like "activity budget checker"
     #it_should_behave_like "coded Activities checker" TODO: enable when we get factories working
     it_should_behave_like "coded OtherCosts checker"
   end
@@ -69,7 +77,6 @@ describe DataResponse do #validations
         :activity => @activity, :budget => 10, :spend => 20)
       @response.stub(:uncoded_activities) { [] }
       @response.projects_entered?.should be_true
-      @response.activity_amounts_entered?.should be_true
       @response.activities_coded?.should be_true
       @response.other_costs_coded?.should be_true
       @response.projects_have_activities?.should be_true

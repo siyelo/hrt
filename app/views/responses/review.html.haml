@@ -55,7 +55,7 @@
               - @response.projects_with_invalid_funding_sources.each do |project|
                 %li= link_to friendly_name(project, 100), edit_response_project_path(@response, project)
       %li
-        %h3{:class => ready(@response.projects_have_activities? && @response.activities_have_budget_or_spend?)}
+        %h3{:class => ready(@response.projects_have_activities?)}
           Activities Entered
           - unless @response.projects_have_activities?
             - if !@response.projects_entered?

@@ -1,21 +1,18 @@
 # This module is included in Activity, Project and FundingFlow models
+require 'currency_number_helper'
+
 module BudgetSpendHelper
   include CurrencyNumberHelper
 
-  def spend?
-    !spend.nil? and spend > 0
+  # the sum of all implementer split amounts
+  # we dont apply a currency conversion because currency is assumed
+  # to be uniform in the including module
+  def total_spend
+    implementer_splits.inject(0){ |sum, is| sum + (is.spend || 0) }
   end
 
-  def budget?
-    !budget.nil? and budget > 0
-  end
-
-  def spend_entered?
-    spend.present?
-  end
-
-  def budget_entered?
-    budget.present?
+  def total_budget
+    implementer_splits.inject(0){ |sum, is| sum + (is.budget || 0) }
   end
 
   def smart_sum(collection, method)
@@ -29,7 +26,7 @@ module BudgetSpendHelper
 
     def update_cached_usd_amounts
       rate = currency_rate(self.currency, :USD)
-      self.spend_in_usd  = (spend || 0)  * rate
-      self.budget_in_usd = (budget || 0) * rate
+      self.spend_in_usd  = total_spend  * rate
+      self.budget_in_usd = total_budget  * rate
     end
 end

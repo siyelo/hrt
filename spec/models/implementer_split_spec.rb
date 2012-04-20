@@ -52,23 +52,7 @@ describe ImplementerSplit do
 
     describe "implementer uniqueness" do
       # A known rails issue ? http://stackoverflow.com/questions/5482777/rails-3-uniqueness-validation-for-nested-fields-for
-      it "should fail when trying to create two sub-activities with the same provider via Activity nested attribute API" do
-        pending
-        basic_setup_implementer_split
-        attributes = {"name"=>"dsf", "start_date"=>"2010-08-02",
-          "project_id"=>"#{@project.id}",
-          "implementer_splits_attributes"=>
-            {"0"=> {"spend"=>"2",
-              "activity_id"=>"#{@activity.id}",
-              "organization_mask"=>"#{@organization.id}", "budget"=>"4"},
-            "1"=> {"spend"=>"3",
-              "activity_id"=>"#{@activity.id}",
-              "organization_mask"=>"#{@organization.id}", "budget"=>"6"}
-            }, "description"=>"adfasdf", "end_date"=>"2010-08-04"}
-        @activity.reload
-        @activity.update_attributes(attributes).should be_false
-        @activity.implementer_splits[1].errors.on(:organization_id).should == "must be unique"
-      end
+      #   it "should fail when trying to create two sub-activities with the same provider via Activity nested attribute API" do
 
       it "should fail when trying to create two sub-activities with the same provider via Activity nested attribute API" do
         basic_setup_implementer_split
@@ -162,8 +146,7 @@ describe ImplementerSplit do
 
   describe "#budget= and #spend=" do
     before :each do
-      basic_setup_activity
-      @split = Factory.build(:implementer_split, :activity => @activity)
+      @split = ImplementerSplit.new
     end
 
     it "allows nil value" do
@@ -182,27 +165,6 @@ describe ImplementerSplit do
       @split.budget = @split.spend = 10.12245
       @split.budget.to_f.should == 10.12
       @split.spend.to_f.should == 10.12
-    end
-  end
-
-  describe "saving sub activity updates the activity" do
-    before :each do
-      basic_setup_activity
-    end
-
-    it "should update the spend field on the parent activity" do
-      @split = Factory.build :implementer_split, :activity => @activity,
-        :spend => 74, :organization => @organization
-      @split.save; @activity.reload; @activity.save
-      @activity.spend.to_f.should == 74
-    end
-
-    it "should update the budget field on the parent activity" do
-      @split = Factory.build :implementer_split, :activity => @activity,
-        :budget => 74, :organization => @organization
-      @split.save; @activity.reload;
-      @activity.save # this updates the cache
-      @activity.budget.to_f.should == 74
     end
   end
 

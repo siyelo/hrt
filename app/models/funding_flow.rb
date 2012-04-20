@@ -76,6 +76,15 @@ class FundingFlow < ActiveRecord::Base
     self.to_s
   end
 
+  #temporary workaround until _in_usd is removed
+  def total_budget
+    budget || 0
+  end
+
+  def total_spend
+    spend || 0
+  end
+
   def organization_id_from=(id_or_name)
     self.organization_id_from_will_change! # trigger saving of this model
     new_id = self.assign_or_create_organization(id_or_name)

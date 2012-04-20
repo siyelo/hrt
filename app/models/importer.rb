@@ -227,9 +227,6 @@ class Importer
           is.mark_for_destruction
         end
         a.implementer_splits.compact! # remove any nils
-        # we're not saving the activity yet, but we want to make sure the cached totals
-        # from implementer_splits are up to date
-        a.update_implementer_cache
       end
     end
 

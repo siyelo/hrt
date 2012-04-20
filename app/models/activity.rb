@@ -15,16 +15,16 @@ class Activity < ActiveRecord::Base
     :spend => "Past Expenditure" }
   AUTOCREATE = -1
 
-  ### Class-Level Method Invocations
+  ### ClassLevel Method Invocations
   strip_commas_from_all_numbers
 
   ### Attribute Accessor
-  attr_accessor :csv_project_name, :csv_provider, :csv_beneficiaries, :csv_targets
+  attr_accessor :csv_project_name, :csv_provider, :csv_beneficiaries,
+    :csv_targets
 
   ### Attribute Protection
   attr_accessible :text_for_provider, :text_for_beneficiaries, :project_id,
-    :name, :description,
-    :approved, :am_approved, :budget, :spend,
+    :name, :description, :approved, :am_approved,
     :beneficiary_ids, :provider_id, :implementer_splits_attributes,
     :organization_ids, :csv_project_name,
     :csv_provider, :csv_beneficiaries, :csv_targets, :targets_attributes,
@@ -92,7 +92,6 @@ class Activity < ActiveRecord::Base
 
   ### Callbacks
   before_validation :strip_input_fields
-  before_save       :update_implementer_cache
   before_save       :auto_create_project
   before_save       :update_cached_usd_amounts
   after_destroy     :restart_response_if_all_activities_removed
@@ -196,24 +195,6 @@ class Activity < ActiveRecord::Base
     super(params)
   end
 
-  # This method calculates the totals of the sub-activities budget/spend
-  # This is done because an activities budget/spend is the total of
-  # their implementer_splits budget/spend
-  def implementer_splits_totals(method)
-    implementer_splits.reject { |sa| sa.marked_for_destruction? }.
-      map { |sa| sa.send(method) }.compact.sum || 0
-  end
-
-  #preventing user from writing
-  def budget=(amount)
-    raise Hrt::FieldDeprecated
-  end
-
-  #preventing user from writing
-  def spend=(amount)
-    raise Hrt::FieldDeprecated
-  end
-
   def am_approved?(user = nil)
     user && user.sysadmin? ? false : read_attribute(:am_approved)
   end
@@ -242,17 +223,16 @@ class Activity < ActiveRecord::Base
   end
   handle_asynchronously :update_classified_amount_cache
 
+  #TODO  it should not be the responsibility of the activity to do this
+  #  call it from the update classification API instead.
+  #
   # Updates classified amount caches if budget or spend have been changed
   def update_all_classified_amount_caches
-    if budget_changed?
-      [CodingBudget, CodingBudgetDistrict, CodingBudgetCostCategorization].each do |type|
-        update_classified_amount_cache(type)
-      end
+    [CodingBudget, CodingBudgetDistrict, CodingBudgetCostCategorization].each do |type|
+      update_classified_amount_cache(type)
     end
-    if spend_changed?
-      [CodingSpend, CodingSpendDistrict, CodingSpendCostCategorization].each do |type|
-        update_classified_amount_cache(type)
-      end
+    [CodingSpend, CodingSpendDistrict, CodingSpendCostCategorization].each do |type|
+      update_classified_amount_cache(type)
     end
   end
 
@@ -261,7 +241,7 @@ class Activity < ActiveRecord::Base
     %w[organizations beneficiaries].each do |assoc|
       clone.send("#{assoc}=", self.send(assoc))
     end
-    # has-many's
+    # hasmany's
     %w[code_assignments implementer_splits targets].each do |assoc|
       clone.send("#{assoc}=", self.send(assoc).collect { |obj| obj.clone })
     end
@@ -271,9 +251,9 @@ class Activity < ActiveRecord::Base
   def classification_amount(classification_type)
     case classification_type.to_s
     when 'CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization'
-      budget
+      total_budget
     when 'CodingSpend', 'CodingSpendDistrict', 'CodingSpendCostCategorization'
-      spend
+      total_spend
     else
       raise "Invalid coding_klass #{classification_type}".to_yaml
     end
@@ -311,13 +291,6 @@ class Activity < ActiveRecord::Base
     smart_sum(implementer_splits, amount_method)
   end
 
-  #saves the subactivities totals into the buget/spend fields
-  def update_implementer_cache
-    [:budget, :spend].each do |method|
-      write_attribute(method, implementer_splits_totals(method))
-    end
-  end
-
   def implementer_splits_valid?
     valid = true
     self.implementer_splits.each do |is|
@@ -328,6 +301,7 @@ class Activity < ActiveRecord::Base
     end
     valid
   end
+
 
   protected
 
@@ -348,6 +322,8 @@ class Activity < ActiveRecord::Base
     end
 
   private
+
+    #TODO  it should not be the responsibility of the activity to do this
     def set_classified_amount_cache(type)
       coding_tree = CodingTree.new(self, type)
       coding_tree.set_cached_amounts!
@@ -422,16 +398,6 @@ class Activity < ActiveRecord::Base
     end
 end
 
-
-
-
-
-
-
-
-# == Schema Information
-#
-# Table name: activities
 #
 #  id                           :integer         not null, primary key
 #  name                         :string(255)
@@ -440,8 +406,6 @@ end
 #  provider_id                  :integer         indexed
 #  description                  :text
 #  type                         :string(255)     indexed
-#  budget                       :decimal(, )
-#  spend                        :decimal(, )
 #  text_for_provider            :text
 #  text_for_beneficiaries       :text
 #  data_response_id             :integer         indexed

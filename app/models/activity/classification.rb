@@ -26,14 +26,14 @@ module Activity::Classification
   module InstanceMethods
 
     def spend_classified?
-      spend.blank? || spend.to_i == 0 ||
+      total_spend.to_i == 0 ||
       coding_spend_valid? &&
       coding_spend_district_valid? &&
       coding_spend_cc_valid?
     end
 
     def budget_classified?
-      budget.blank? || budget.to_i == 0 ||
+      total_budget.to_i == 0 ||
       coding_budget_valid? &&
       coding_budget_district_valid? &&
       coding_budget_cc_valid?

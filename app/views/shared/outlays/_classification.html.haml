@@ -24,7 +24,7 @@
       %span Current Budget%
       = link_to image_tag("tooltip.png"), "#", :title => heading_hint, :class => 'tooltip right'
 
-  %ul.activity_tree{:activity_budget => outlay.budget, :activity_spend => outlay.spend, :activity_currency => outlay.currency}
+  %ul.activity_tree{:activity_budget => outlay.total_budget, :activity_spend => outlay.total_spend, :activity_currency => outlay.currency}
     - @budget_coding_tree.root_codes.each do |code|
       = render 'shared/outlays/code_row', :code => code, :margin => 0, :outlay => outlay
 

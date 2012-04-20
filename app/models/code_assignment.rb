@@ -93,6 +93,10 @@ class CodeAssignment < ActiveRecord::Base
     ).group_by{|ca| ca.activity_id}
   end
 
+  # TODO: needs to be moved to a service
+  # particularly because its trying to be responsible
+  # for updating the activity's _valid? cache fields with
+  # update_classified_amount_cache()
   def self.update_classifications(activity, classifications)
     present_ids = []
     assignments = self.with_activity(activity.id)
