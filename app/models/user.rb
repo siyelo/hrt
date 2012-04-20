@@ -1,4 +1,7 @@
 class User < ActiveRecord::Base
+  include User::Upload
+  include User::Roles
+  include User::ResponseSession
 
   acts_as_authentic do |c|
     c.validates_length_of_password_field_options = {:minimum => 6,
@@ -9,10 +12,6 @@ class User < ActiveRecord::Base
       :if => :require_password?}
   end
 
-  ### Constants
-  ROLES = %w[admin reporter activity_manager]
-  FILE_UPLOAD_COLUMNS = %w[organization_name email full_name roles password password_confirmation]
-
   ### Attributes
   attr_accessible :full_name, :email, :organization_id, :organization,
                   :password, :password_confirmation, :roles, :tips_shown,
@@ -22,54 +21,14 @@ class User < ActiveRecord::Base
   has_many :comments, :dependent => :destroy
   has_many :data_responses, :through => :organization
   belongs_to :organization, :counter_cache => true
-  belongs_to :current_response, :class_name => "DataResponse", :foreign_key => :data_response_id_current
   has_and_belongs_to_many :organizations, :join_table => "organizations_managers" # for activity managers
   belongs_to :location
 
   ### Validations
   # AuthLogic handles email uniqueness validation
   validates_presence_of :full_name, :email, :organization_id
-  validate :validate_inclusion_of_roles
 
-  ### Callbacks
-  before_validation :assign_current_response_to_latest, :unless => Proc.new{|m| m.data_response_id_current.present?}
-  before_save :unassign_organizations, :if => Proc.new{|m| m.roles.exclude?('activity_manager') }
-
-  ### Delegates
-  delegate :responses, :to => :organization # instead of deprecated data_response
-  delegate :latest_response, :to => :organization # find the last response in the org
-
-  # assign organization association so that counter cache is updated
-  def organization_id=(organization_id)
-    self.organization = Organization.find_by_id(organization_id) if organization_id.present?
-  end
-
-  ### Class Methods
-
-  #authlogic authentication
-  def self.find_by_login_or_email(login)
-     #find_by_login(login) || find_by_email(login)
-     find_by_email(login)
-  end
-
-  def self.download_template
-    FasterCSV.generate do |csv|
-      csv << User::FILE_UPLOAD_COLUMNS
-    end
-  end
-
-  def self.create_from_file(doc)
-    saved, errors = 0, 0
-    doc.each do |row|
-      attributes = row.to_hash
-      organization = Organization.find_by_name(attributes.delete('organization_name'))
-      attributes.merge!(:organization_id => organization.id) if organization
-      user = User.new(attributes)
-      user.save ? (saved += 1) : (errors += 1)
-    end
-    return saved, errors
-  end
-
+<<<<<<< HEAD
   ### Instance Methods
 
   def deliver_password_reset_instructions!
@@ -98,13 +57,19 @@ class User < ActiveRecord::Base
     role?('activity_manager') || sysadmin?
   end
 
+=======
+>>>>>>> [fixes #28344273] split large user model into different concerns
   def to_s
     name
   end
 
-  # name() will give you their email if their full name isn't set
   def name
     full_name.present? ? full_name : email
+  end
+
+  # assign organization association so that counter cache is updated
+  def organization_id=(organization_id)
+    self.organization = Organization.find_by_id(organization_id) if organization_id.present?
   end
 
   def generate_token
@@ -115,6 +80,11 @@ class User < ActiveRecord::Base
     self.active = true
     self.invite_token = nil
     self.save
+  end
+
+  def deliver_password_reset_instructions!
+    reset_perishable_token!
+    Notifier.deliver_password_reset_instructions(self)
   end
 
   def only_password_errors?
@@ -139,6 +109,7 @@ class User < ActiveRecord::Base
     "http://gravatar.com/avatar/#{Digest::MD5.hexdigest(email.downcase)}.png?s=#{size}&d=mm"
   end
 
+<<<<<<< HEAD
   def current_request
     @current_request ||= self.current_response.nil? ? nil : self.current_response.request
   end
@@ -160,6 +131,8 @@ class User < ActiveRecord::Base
     end
   end
 
+=======
+>>>>>>> [fixes #28344273] split large user model into different concerns
   # authlogic only updates last_login after youve signed in the 2nd time
   # if the user has only signed in once, return the current login date
   def last_signin_at
@@ -167,30 +140,6 @@ class User < ActiveRecord::Base
   end
 
   private
-
-    def assign_current_response_to_latest
-      if organization.present? && organization.data_responses.present?
-        self.current_response = organization.latest_response
-      end
-    end
-
-    def role?(role)
-      roles.include?(role.to_s)
-    end
-
-    def unassign_organizations
-      self.organizations = []
-    end
-
-    def unassign_location
-      self.location_id = nil
-    end
-
-    def validate_inclusion_of_roles
-      if roles.blank? || roles.detect{|role| ROLES.exclude?(role)}
-        errors.add(:roles, "is not included in the list")
-      end
-    end
 
     # allow user to be created without a password
     # allow user to be updated without a password
