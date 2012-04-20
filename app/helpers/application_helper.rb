@@ -249,4 +249,8 @@ module ApplicationHelper
     end
   end
 
+# returns a javascript friendly definition of a ruby variable, even if the var is nil
+  def js_safe(var)
+    var.nil? ? "undefined" : var
+  end
 end
