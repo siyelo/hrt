@@ -1,6 +1,6 @@
 module Activity::Classification
-  def self.included(base)
-    base.send(:include, InstanceMethods)
+  def self.included(klass)
+    klass.send(:include, InstanceMethods)
   end
 
   module InstanceMethods

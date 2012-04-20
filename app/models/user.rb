@@ -28,7 +28,6 @@ class User < ActiveRecord::Base
   # AuthLogic handles email uniqueness validation
   validates_presence_of :full_name, :email, :organization_id
 
-<<<<<<< HEAD
   ### Instance Methods
 
   def deliver_password_reset_instructions!
@@ -36,29 +35,6 @@ class User < ActiveRecord::Base
     Notifier.deliver_password_reset_instructions(self)
   end
 
-  def roles=(roles)
-    new_roles = roles.collect {|r| r.to_s} # allows symbols to be passed in
-    self.roles_mask = (new_roles & ROLES).map { |r| 2**ROLES.index(r) }.sum
-  end
-
-  def roles
-    @roles || ROLES.reject { |r| ((roles_mask || 0) & 2**ROLES.index(r)).zero? }
-  end
-
-  def sysadmin?
-    role?('admin')
-  end
-
-  def reporter?
-    role?('reporter') || sysadmin?
-  end
-
-  def activity_manager?
-    role?('activity_manager') || sysadmin?
-  end
-
-=======
->>>>>>> [fixes #28344273] split large user model into different concerns
   def to_s
     name
   end
@@ -109,30 +85,6 @@ class User < ActiveRecord::Base
     "http://gravatar.com/avatar/#{Digest::MD5.hexdigest(email.downcase)}.png?s=#{size}&d=mm"
   end
 
-<<<<<<< HEAD
-  def current_request
-    @current_request ||= self.current_response.nil? ? nil : self.current_response.request
-  end
-
-  def current_response_is_latest?
-    self.current_response == self.latest_response
-  end
-
-  def set_current_response_to_latest!
-    assign_current_response_to_latest
-    self.save(false)
-  end
-
-  def change_current_response!(new_request_id)
-    response = responses.find_by_data_request_id(new_request_id)
-    if response
-      self.current_response = response
-      self.save(false)
-    end
-  end
-
-=======
->>>>>>> [fixes #28344273] split large user model into different concerns
   # authlogic only updates last_login after youve signed in the 2nd time
   # if the user has only signed in once, return the current login date
   def last_signin_at
@@ -148,8 +100,6 @@ class User < ActiveRecord::Base
       self.active? && (!self.password.blank? || self.crypted_password.nil?)
     end
 end
-
-
 
 
 # == Schema Information

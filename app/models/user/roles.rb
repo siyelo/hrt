@@ -1,12 +1,21 @@
-class User < ActiveRecord::Base
-  validate :validate_inclusion_of_roles
-
-  before_save :unassign_organizations, :if => Proc.new{|m| m.roles.exclude?('activity_manager') }
+module User::Roles
 
   ### Constants
   ROLES = %w[admin reporter activity_manager]
 
-  module Roles
+  def self.included(klass)
+    klass.send(:include, InstanceMethods)
+
+    klass.class_eval do
+      ### Validations
+      validate :validate_inclusion_of_roles
+
+      ### Callbacks
+      before_save :unassign_organizations, :if => Proc.new{|m| m.roles.exclude?('activity_manager') }
+    end
+  end
+
+  module InstanceMethods
     def roles=(roles)
       new_roles = roles.collect {|r| r.to_s} # allows symbols to be passed in
       self.roles_mask = (new_roles & ROLES).map { |r| 2**ROLES.index(r) }.sum

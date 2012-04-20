@@ -1,18 +1,22 @@
-# Logic around the nasty response session management
-# extracted from User into this module to allow for a more objective
-# evaluation of this behaviour
-#
-class User < ActiveRecord::Base
+module User::ResponseSession
 
-  belongs_to :current_response, :class_name => "DataResponse", :foreign_key => :data_response_id_current
+  def self.included(klass)
+    klass.send(:include, InstanceMethods)
 
-  before_validation :assign_current_response_to_latest, :unless => Proc.new{|m| m.data_response_id_current.present?}
+    klass.class_eval do
+      ### Associations
+      belongs_to :current_response, :class_name => "DataResponse", :foreign_key => :data_response_id_current
 
-  ### Delegates
-  delegate :responses, :to => :organization # instead of deprecated data_response
-  delegate :latest_response, :to => :organization # find the last response in the org
+      ### Callbacks
+      before_validation :assign_current_response_to_latest, :unless => Proc.new{|m| m.data_response_id_current.present?}
 
-  module ResponseSession
+      ### Delegates
+      delegate :responses, :to => :organization # instead of deprecated data_response
+      delegate :latest_response, :to => :organization # find the last response in the org
+    end
+  end
+
+  module InstanceMethods
 
     def current_request
       @current_request ||= self.current_response.nil? ? nil : self.current_response.request
