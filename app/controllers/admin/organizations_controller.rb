@@ -14,7 +14,7 @@ class Admin::OrganizationsController < Admin::BaseController
   before_filter :load_users, :only => [:edit, :update]
 
   def index
-    @pie = Charts::DataResponsePies::data_response_status_pie
+    @pie = Charts::DataResponsePies::data_response_status_pie(current_user.current_request)
     scope = scope_organizations(params[:filter])
     scope = scope.scoped(:conditions => ["UPPER(organizations.name) LIKE UPPER(:q) OR
                                           UPPER(organizations.raw_type) LIKE UPPER(:q) OR
@@ -174,9 +174,11 @@ class Admin::OrganizationsController < Admin::BaseController
         Organization.reporting
       when 'All'
         Organization.sorted
+      when 'Not Yet Started'
+        Organization.reporting.responses_by_states(current_request, [name_to_state(filter)])
       else
         if allowed_filter?(filter)
-          Organization.reporting.responses_by_states(current_request, [name_to_state(filter)])
+          Organization.responses_by_states(current_request, [name_to_state(filter)])
         else
           Organization.reporting
         end

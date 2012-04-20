@@ -30,6 +30,7 @@ describe Admin::OrganizationsController do
     end
 
     it "should filter by empty response" do
+      Factory(:organization, :raw_type => 'Dispensary') #non-reporting
       get :index, :filter => 'Not Started'
       assigns(:organizations).size.should == 3
     end

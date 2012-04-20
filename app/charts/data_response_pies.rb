@@ -30,9 +30,11 @@ module Charts::DataResponsePies
     end
 
     #pie chart displaying the status of the data responses
-    def data_response_status_pie
+    def data_response_status_pie(data_request)
       data_responses = DataResponse.find :all,
-        :select => 'data_responses.state, count(*) count', :group => "data_responses.state"
+        :select => 'data_responses.state, count(*) count',
+        :conditions => ["data_responses.data_request_id = ?", data_request.id],
+        :group => "data_responses.state"
       @pie = build_pie_chart(data_responses)
     end
 
