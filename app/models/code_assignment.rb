@@ -53,9 +53,6 @@ class CodeAssignment < ActiveRecord::Base
                     ON data_responses.data_request_id = data_requests.id AND
                     data_responses.data_request_id = #{request_id}",
               }}
-  named_scope :leaves, :conditions => ["code_assignments.sum_of_children = 0"]
-
-
 
   ### Class Methods
 
@@ -99,18 +96,6 @@ class CodeAssignment < ActiveRecord::Base
   end
 
   ### Instance Methods
-
-  def aggregate_amount
-    cached_amount
-  end
-
-  def amount_not_in_children
-    sum_of_children.nil? ? cached_amount : cached_amount - sum_of_children
-  end
-
-  def has_amount_not_in_children?
-    cached_amount - sum_of_children > 0 ? true : false
-  end
 
   def percentage=(amount)
     amount.present? ? write_attribute(:percentage, amount.to_f.round_with_precision(2)) : write_attribute(:percentage, nil)

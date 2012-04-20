@@ -1,19 +1,5 @@
 class Nsp < Code
   include NamedScopes::Roots # overrides 'roots' method from awesome_nested_set
-
-  # NOTE: this method overrides the 'leaves' method from awesome_nested_set
-  # and it returns all Nsp codes which children are not Nsp codes
-  def self.leaves
-    find(:all, :include => :children).select{|c| !c.children.map(&:type).include?(self.to_s)}
-  end
-
-  # NOTE: original 'self_and_ancestors' method from awesome_nested_set does
-  # not filters codes by 'Nsp' type, but this method returns the wanted parents
-  def self_and_nsp_ancestors
-    nested_set_scope.scoped :conditions => [
-      "type = ? AND codes.lft <= ? AND codes.rgt >= ?", self.class.to_s, left, right
-    ]
-  end
 end
 
 

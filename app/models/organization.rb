@@ -2,6 +2,7 @@ require 'validators'
 
 class Organization < ActiveRecord::Base
   include ActsAsDateChecker
+  include Organization::Merger
 
   ### Constants
   FILE_UPLOAD_COLUMNS = %w[name raw_type fosaid currency]
@@ -80,31 +81,6 @@ class Organization < ActiveRecord::Base
     find(:all, :joins => :users, :order => 'organizations.name ASC').uniq
   end
 
-  def self.merge_organizations!(target, duplicate)
-    duplicate.responses.each do |response|
-      target_response = target.responses.find(:first,
-        :conditions => ["data_request_id = ?", response.data_request_id])
-      target_response.projects << response.projects
-      ### move Funder references of Duplicate to Target
-      target_response.projects.each do |project|
-        project.in_flows.each do |in_flow|
-          if in_flow.from == duplicate
-            in_flow.from = target
-            in_flow.save(false)
-          end
-        end
-      end
-      target_response.activities << response.activities
-    end
-
-    duplicate.move_funder_references!(target)
-    duplicate.move_implementer_references!(target)
-    target.users << duplicate.users
-    Organization.reset_counters(target.id,:users)
-    target.reload
-    duplicate.reload.destroy # reload other organization so that it does not remove the previously assigned data_responses
-  end
-
   def self.download_template(organizations = [])
     FasterCSV.generate do |csv|
       csv << Organization::FILE_UPLOAD_COLUMNS
@@ -127,26 +103,6 @@ class Organization < ActiveRecord::Base
     return saved, errors
   end
 
-  def self.unstarted_responses(request)
-    responses_by_states(request, ['unstarted'])
-  end
-
-  def self.started_responses(request)
-    responses_by_states(request, ['started'])
-  end
-
-  def self.submitted_responses(request)
-    responses_by_states(request, ['submitted'])
-  end
-
-  def self.rejected_responses(request)
-    responses_by_states(request, ['rejected'])
-  end
-
-  def self.accepted_responses(request)
-    responses_by_states(request, ['accepted'])
-  end
-
   ### Instance Methods
 
   # Convenience until we deprecate the "data_" prefixes
@@ -158,18 +114,12 @@ class Organization < ActiveRecord::Base
     name
   end
 
+  # TODO -move to presenter
   def user_emails(limit = 3)
     self.users.find(:all, :limit => limit).map{|u| u.email}
   end
 
-  # TODO: write spec
-  def short_name
-    #TODO remove district name in (), capitalized, and as below
-    n = name.gsub("| "+ location_name, "") if location
-    n ||= name
-    tidy_name(n)
-  end
-
+  # TODO -move to presenter
   def display_name(length = 100)
     n = self.name || "Unnamed organization"
     n.first(length)
@@ -178,14 +128,6 @@ class Organization < ActiveRecord::Base
   # returns the last response that was created.
   def latest_response
     self.responses.latest_first.first
-  end
-
-  def response_for(request)
-    self.responses.find_by_data_request_id(request)
-  end
-
-  def response_status(request)
-    response_for(request).status
   end
 
   def reporting?
@@ -207,31 +149,7 @@ class Organization < ActiveRecord::Base
     end
   end
 
-  # Merge helper
-  def move_funder_references!(target_org)
-    self.out_flows.each do |referencing_flow|
-      referencing_flow.from = target_org
-      referencing_flow.save(false)
-    end
-  end
-
-  # Merge helper
-  def move_implementer_references!(target_org)
-    self.implementer_splits.each do |referencing_split|
-      referencing_split.organization = target_org
-      referencing_split.save(false)
-    end
-  end
-
   protected
-
-    def tidy_name(n)
-      n = n.gsub("Health Center", "HC")
-      n = n.gsub("District Hospital", "DH")
-      n = n.gsub("Health Post", "HP")
-      n = n.gsub("Dispensary", "Disp")
-      n
-    end
 
     def check_no_requests
       unless data_requests.count == 0
@@ -273,7 +191,6 @@ class Organization < ActiveRecord::Base
         end
       end
     end
-
 end
 
 

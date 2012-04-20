@@ -157,54 +157,6 @@ describe Organization do
     end
   end
 
-  describe "Responses" do
-    before :each do
-      @organization1 = Factory(:organization)
-      @organization2 = Factory(:organization)
-      @request       = Factory(:data_request, :organization => @organization1)
-      @response1    = @organization1.latest_response
-      @response2    = @organization2.latest_response
-    end
-
-    it "returns unstarted responses" do
-      responses = Organization.unstarted_responses(@request)
-      responses.should include(@organization1)
-      responses.should include(@organization2)
-    end
-
-    it "returns started responses" do
-      @response1.state = 'started'
-      @response1.save!
-      responses = Organization.started_responses(@request)
-      responses.should include(@organization1)
-      responses.should_not include(@organization2)
-    end
-
-    it "returns submitted responses" do
-      @response1.state = 'submitted'
-      @response1.save!
-      responses = Organization.submitted_responses(@request)
-      responses.should include(@organization1)
-      responses.should_not include(@organization2)
-    end
-
-    it "returns rejected responses" do
-      @response1.state = 'rejected'
-      @response1.save!
-      responses = Organization.rejected_responses(@request)
-      responses.should include(@organization1)
-      responses.should_not include(@organization2)
-    end
-
-    it "returns accepted responses" do
-      @response1.state = 'accepted'
-      @response1.save!
-      responses = Organization.accepted_responses(@request)
-      responses.should include(@organization1)
-      responses.should_not include(@organization2)
-    end
-  end
-
   describe "Callbacks" do
     context "when there is a data_request in the system" do
       # after_create :create_data_responses

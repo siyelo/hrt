@@ -110,28 +110,4 @@ describe Code do
       code.to_s.should == 'short_display'
     end
   end
-
-  describe "to_s_prefer_official" do
-    it "returns official_name when it's present" do
-      code = Factory.create(:code, :official_name => 'official_name')
-      code.to_s_prefer_official.should == 'official_name'
-    end
-
-    it "returns short_display when official_name is not present" do
-      code = Factory.create(:code, :official_name => nil, :short_display => 'short_display')
-      code.to_s_prefer_official.should == 'short_display'
-    end
-  end
-
-  describe "to_s_with_external_id" do
-    it "returns to_s_with_external_id when external_id is blank" do
-      code = Factory.create(:code, :external_id => nil, :short_display => 'short_display')
-      code.to_s_with_external_id.should == 'short_display (n/a)'
-    end
-
-    it "returns to_s_with_external_id when external_id is not blank" do
-      code = Factory.create(:code, :external_id => 'external_id', :short_display => 'short_display')
-      code.to_s_with_external_id.should == 'short_display (external_id)'
-    end
-  end
 end

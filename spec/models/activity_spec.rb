@@ -268,32 +268,6 @@ describe Activity do
     end
   end
 
-  #FIXME: remove
-  describe "#amount_for_provider" do
-    before :each do
-      basic_setup_activity
-    end
-
-    context "normal activity" do
-      it "should returns full amount for org1 when it is implementer" do
-        @activity.amount_for_provider(@activity.provider, :budget).should == @activity.total_budget
-      end
-
-      it "should returns 0 when given org is not implementer" do
-        @activity.amount_for_provider(Factory(:organization), :budget).should == 0
-      end
-    end
-
-    context "sub activities" do
-      it "looks for amount in sub-activity" do
-        @split = Factory(:implementer_split, :activity => @activity,
-          :budget => 10, :organization => @organization)
-        @activity.implementer_splits.reload
-        @activity.amount_for_provider(@split.organization, :budget).should == 10
-      end
-    end
-  end
-
   describe "purposes" do
     it "should return only those codes designated as Purpose codes" do
       basic_setup_activity

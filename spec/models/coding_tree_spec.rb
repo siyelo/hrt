@@ -313,28 +313,6 @@ describe CodingTree do
     end
   end
 
-  describe "code assignment" do
-    it "all code assignments are valid when coding tree is valid" do
-      ca1   = Factory(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 100, :sum_of_children => 100)
-      ca11  = Factory(:coding_budget, :activity => @activity, :code => @code11, :cached_amount => 100, :sum_of_children => 100)
-      ca111 = Factory(:coding_budget, :activity => @activity, :code => @code111, :cached_amount => 100)
-      ct    = CodingTree.new(@activity, CodingBudget)
-      ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
-      ct.valid_ca?(ca1).should == true
-      ct.valid_ca?(ca11).should == true
-      ct.valid_ca?(ca111).should == true
-    end
-
-    it "detects invalid node when coding tree is not valid" do
-      ca1  = Factory(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 100, :sum_of_children => 101)
-      ca11 = Factory(:coding_budget, :activity => @activity, :code => @code11, :cached_amount => 101)
-      ct   = CodingTree.new(@activity, CodingBudget)
-      ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
-      ct.valid_ca?(ca1).should == false
-      ct.valid_ca?(ca11).should == true
-    end
-  end
-
   # NOTE: these specs are done with stubing, but they need to be changed
   # to check for real objects once we remove codes seeds from test db
   describe "root_codes" do

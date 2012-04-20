@@ -98,28 +98,13 @@ class User < ActiveRecord::Base
     role?('activity_manager') || sysadmin?
   end
 
-  # TODO: spec or remove
   def to_s
-    name_or_email
-  end
-
-  # TODO: spec or remove
-  # Law of Demeter methods
-  def organization_status
-    return "No Organization" if organization.nil?
-    current_dr = current_response
-    current_dr ||= organization.data_responses.first
-    return "No Data Response" if current_dr.nil?
-    current_dr.status
+    name
   end
 
   # name() will give you their email if their full name isn't set
   def name
     full_name.present? ? full_name : email
-  end
-
-  def name_or_email
-    name || email
   end
 
   def generate_token
@@ -158,15 +143,6 @@ class User < ActiveRecord::Base
     @current_request ||= self.current_response.nil? ? nil : self.current_response.request
   end
 
-  def current_request_name
-    @current_request_name ||= self.current_request.name
-  end
-
-  # deprecated - use current_response instead
-  def current_data_response
-    self.current_response
-  end
-
   def current_response_is_latest?
     self.current_response == self.latest_response
   end
@@ -174,10 +150,6 @@ class User < ActiveRecord::Base
   def set_current_response_to_latest!
     assign_current_response_to_latest
     self.save(false)
-  end
-
-  def current_organization
-    @current_organization ||= self.current_response.organization
   end
 
   def change_current_response!(new_request_id)

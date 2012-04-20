@@ -170,10 +170,6 @@ class Report < ActiveRecord::Base
       File.delete self.zip_file_name if self.zip_file_name
     end
 
-    def simple_activities_for_request
-      Activity.only_simple_with_request(self.data_request)
-    end
-
     def create_report
       run_report
       create_tmp_csv

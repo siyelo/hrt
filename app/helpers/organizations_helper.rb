@@ -3,12 +3,6 @@ module OrganizationsHelper
     organization.data_responses.detect { |dr| dr.data_request == data_request }
   end
 
-  def organization_activity_managers(organization)
-    User.all.select do |u|
-      u.roles.include?('activity_manager') && u.organizations.include?(organization)
-    end
-  end
-
   def input_options(label = nil, hint = nil, required = true, label_class = 'indented', wrapper_class = 'input-wrapper')
     return  :label => label, :hint => hint,
             :label_html => { :class => label_class, :required => required },
