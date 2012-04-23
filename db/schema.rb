@@ -67,6 +67,7 @@ ActiveRecord::Schema.define(:version => 20120423084709) do
     t.datetime "updated_at"
   end
 
+  add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
   add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|
