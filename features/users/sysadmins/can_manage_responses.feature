@@ -17,7 +17,7 @@ Feature: Admin can manage data responses
 
     Scenario Outline: SysAdmin cannot reject or approve unsubmitted response
       Given the data_response state is: "<state>"
-      When I follow "Organizations"
+      When I follow "Responses"
         And I follow "<name>"
         And I follow "UNDP"
       Then I should see "Status: <name>" within "#state"
@@ -33,7 +33,7 @@ Feature: Admin can manage data responses
 
     Scenario: SysAdmin can approve submitted response
       Given the data_response state is: "submitted"
-      When I follow "Organizations"
+      When I follow "Responses"
         And I follow "Submitted"
         And I follow "UNDP"
       Then I should see "Status: Submitted" within "#state"
@@ -49,7 +49,7 @@ Feature: Admin can manage data responses
 
     Scenario: SysAdmin can reject submitted response
       Given the data_response state is: "submitted"
-      When I follow "Organizations"
+      When I follow "Responses"
         And I follow "Submitted"
         And I follow "UNDP"
       Then I should see "Status: Submitted" within "#state"

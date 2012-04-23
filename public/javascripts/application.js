@@ -886,7 +886,7 @@ var responses_submit = {
   }
 }
 
-var admin_organizations_index = {
+var admin_responses_index = {
   run: function () {
     drawPieChart('response_pie', _responses, 380, 250);
     $("#show_pie").live("click", function() {

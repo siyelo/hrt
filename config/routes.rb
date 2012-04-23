@@ -1,6 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
-# ROOT
-map.root :controller => 'static_page', :action => 'index'
+  # ROOT
+  map.root :controller => 'static_page', :action => 'index'
 
   # LOGIN/LOGOUT
   map.resource  :user_session
@@ -26,8 +26,7 @@ map.root :controller => 'static_page', :action => 'index'
   # ADMIN
   map.namespace :admin do |admin|
     admin.resources :requests
-    admin.resources :responses,
-      :collection => {:empty => :get, :in_progress => :get, :submitted => :get}
+    admin.resources :responses, :only => [:index]
     admin.resources :organizations,
       :collection => {:duplicate => :get, :remove_duplicate  => :put,
                       :download_template => :get, :create_from_file => :post}

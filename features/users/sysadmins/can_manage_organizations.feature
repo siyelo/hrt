@@ -107,32 +107,6 @@ Feature: Admin can manage organizations
     And I should see "org1" within "table"
     And I should not see "org2" within "table"
 
-  Scenario: admin can see available filters
-    Then I should see "Reporting" within a link in the filters list
-    And I should see "Not Yet Started" within a link in the filters list
-    And I should see "Started" within a link in the filters list
-    And I should see "Submitted" within a link in the filters list
-    And I should see "Rejected" within a link in the filters list
-    And I should see "Accepted" within a link in the filters list
-    And I should see "Non-Reporting" within a link in the filters list
-    And I should see "All" within a link in the filters list
-
-  Scenario: An admin can filter organizations by response status
-    Given the latest response for "org2" is submitted
-    Then I follow "Submitted"
-    Then I should not see "org1" within "table"
-    And I should see "org2" within "table"
-
-  Scenario: An admin sees only reporting orgs by default
-    Given an organization exists with name: "some clinic", raw_type: "Clinic/Cabinet Medical"
-    And I follow "Organizations"
-    Then I should not see "some clinic"
-
-  Scenario: An admin can view non-reporting orgs
-    Given an organization exists with name: "some clinic", raw_type: "Clinic/Cabinet Medical"
-    When I follow "Non-Reporting"
-    Then I should see "some clinic"
-
   Scenario: An admin can sort by created at
     When I follow "Created" within the table heading
     Then I should see "org2" within a link in the 1st row of the table
@@ -152,7 +126,6 @@ Feature: Admin can manage organizations
     And I should see "FOSAID" within the table heading
     And I should see "Location" within the table heading
     And I should see "Created" within the table heading
-    And I should see "Status" within the table heading
     And I should see "org2" within a link in the 2nd row of the table
     And I should see "Some Reporter" within a link in the 2nd row of the table
     And I should see "12 Dec '11 08:31" within the 2nd row of the table
@@ -160,16 +133,9 @@ Feature: Admin can manage organizations
     And I should see "222" within the 2nd row of the table
     And I should see "All" within the 2nd row of the table
     And I should see "01 Jun '11" within the 2nd row of the table
-    And I should see "Not Yet Started" within the 2nd row of the table
 
   Scenario: An admin can see an organization's users
     When I follow "Edit" within a link in the 1st row of the table
     Then I should see "Users" within "h2"
     And I should see "sysadmin@hrtapp.com"
-
-  Scenario: See pie chart
-    Then I should see "Response Status" within "#reports-summary"
-
-  @wip
-  Scenario: See Submission & Acceptance rate stats
 

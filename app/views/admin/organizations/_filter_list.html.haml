@@ -1,6 +1,0 @@
-.section_overlap
-  %ul.section_nav
-    - ["Reporting", "Not Yet Started", "Started", "Submitted", "Rejected", "Accepted", "Non-Reporting", "All"].each do |filter|
-      - css_class = "selected" if params[:filter] == filter || (filter == 'Reporting' && params[:filter].blank?)
-      %li{:class => css_class}
-        = link_to filter, {:sort => params[:sort], :direction => params[:direction], :query => params[:query], :filter => filter}
