@@ -1,14 +1,15 @@
-- if current_user.sysadmin?
-  - if current_request.previous_request.present?
-    - link_to set_request_path(current_request.previous_request.id), :title => "Previous Request" do
+- if  current_request.present?
+  - if current_user.sysadmin?
+    - if current_request.previous_request.present?
+      - link_to set_request_path(current_request.previous_request.id), :title => "Previous Request" do
+        %span ◄
+    - else
       %span ◄
-  - else
-    %span ◄
 
-  - if current_request.next_request.present?
-    - link_to set_request_path(current_request.next_request.id), :title => "Next Request" do
+    - if current_request.next_request.present?
+      - link_to set_request_path(current_request.next_request.id), :title => "Next Request" do
+        %span ►
+    - else
       %span ►
-  - else
-    %span ►
 
-= current_request.name
+  = current_request.name

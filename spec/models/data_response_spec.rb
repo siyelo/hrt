@@ -1,7 +1,5 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-include DelayedJobSpecHelper
-
 describe DataResponse do
   describe "Associations" do
     it { should belong_to(:organization) }

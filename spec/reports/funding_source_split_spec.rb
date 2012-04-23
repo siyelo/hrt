@@ -1,7 +1,5 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-include DelayedJobSpecHelper
-
 describe Reports::FundingSourceSplit do
   def run_report(amount_type)
     report = Reports::FundingSourceSplit.new(@request, amount_type)

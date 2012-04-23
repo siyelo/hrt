@@ -1,7 +1,5 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-include DelayedJobSpecHelper
-
 describe CodeAssignment do
   describe "Validations" do
     subject { basic_setup_activity; Factory(:code_assignment, :activity => @activity) }
@@ -139,7 +137,6 @@ describe CodeAssignment do
       #  ca2      = Factory.create(:coding_spend,  :activity => activity, :code => code, :percentage => '100', :cached_amount => nil)
       CodingBudget.update_classifications(activity, { code.id => 100 })   # 100 means 100%
       CodingSpend.update_classifications(activity, { code.id => 100 })
-      run_delayed_jobs
       activity.reload
       cb1 = activity.coding_budget.first
       cb1.cached_amount.to_f.should == 100

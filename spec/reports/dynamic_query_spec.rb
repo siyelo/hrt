@@ -1,7 +1,5 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-include DelayedJobSpecHelper
-
 describe Reports::DynamicQuery do
   def run_report
     report = Reports::DynamicQuery.new(@request, :budget)
@@ -43,7 +41,6 @@ describe Reports::DynamicQuery do
       @mtef.move_to_child_of(@root_code)
       @nsp.move_to_child_of(@mtef)
       @code1.move_to_child_of(@nsp)
-      run_delayed_jobs
       @activity.reload;@activity.save
     end
 
@@ -182,7 +179,6 @@ describe Reports::DynamicQuery do
       #creating dummy tree
       @mtef.move_to_child_of(@root_code)
       @code1.move_to_child_of(@mtef)
-      run_delayed_jobs
       @activity.reload;@activity.save
     end
 
@@ -820,7 +816,6 @@ describe Reports::DynamicQuery do
       #creating dummy tree
       @mtef.move_to_child_of(@root_code)
       @code1.move_to_child_of(@mtef)
-      run_delayed_jobs
       @activity.reload;@activity.save
     end
 
@@ -1068,7 +1063,6 @@ describe Reports::DynamicQuery do
       #creating dummy tree
       @mtef.move_to_child_of(@root_code)
       @code1.move_to_child_of(@mtef)
-      run_delayed_jobs
       @activity.reload;@activity.save
     end
 
@@ -1282,7 +1276,6 @@ describe Reports::DynamicQuery do
         :activity => @activity, :code => @code1
       @coding_budget_district = Factory :coding_budget_district,
         :percentage => 100, :activity => @activity, :code => @code1
-      run_delayed_jobs
       @activity.reload;@activity.save
 
       table = run_report
@@ -1316,7 +1309,6 @@ describe Reports::DynamicQuery do
         :activity => @other_cost, :code => @code1
       @coding_budget_district = Factory :coding_budget_district,
         :percentage => 100, :activity => @other_cost, :code => @code1
-      run_delayed_jobs
       @other_cost.reload;@other_cost.save
       table = run_report
       table[0]['Funding Source'].should == "N/A"
@@ -1366,7 +1358,6 @@ describe Reports::DynamicQuery do
       @mtef.move_to_child_of(@root_code)
       @nsp.move_to_child_of(@mtef)
       @code1.move_to_child_of(@nsp)
-      run_delayed_jobs
       @activity.reload;@activity.save
     end
 
@@ -1582,7 +1573,6 @@ describe Reports::DynamicQuery do
         @mtef.move_to_child_of(@root_code)
         @nsp.move_to_child_of(@mtef)
         @code1.move_to_child_of(@nsp)
-        run_delayed_jobs
         @activity.reload;@activity.save
       end
 
@@ -1641,7 +1631,6 @@ describe Reports::DynamicQuery do
       @mtef.move_to_child_of(@root_code)
       @nsp.move_to_child_of(@mtef)
       @code1.move_to_child_of(@nsp)
-      run_delayed_jobs
       @activity.reload;@activity.save
     end
 

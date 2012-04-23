@@ -15,7 +15,7 @@ class Admin::RequestsController < Admin::BaseController
   def create
     @request = DataRequest.new(params[:data_request])
     if @request.save
-      flash[:notice] = "Request was successfully created"
+      flash[:notice] = "Please wait a few moments for the request and the associated responses to be created."
       redirect_to admin_requests_url
     else
       render :action => :new
@@ -34,8 +34,8 @@ class Admin::RequestsController < Admin::BaseController
 
   def destroy
     data_request = DataRequest.find(params[:id])
-    data_request.destroy
-    flash[:notice] = "Request was successfully deleted."
+    data_request.destroy_and_clean_response_references
+    flash[:notice] = "Please wait a few moments for the request and the associated responses to be deleted."
     redirect_to admin_requests_url
   end
 end

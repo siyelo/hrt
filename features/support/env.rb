@@ -39,7 +39,6 @@ Spork.prefork do
   # pages, more or less in the same way your application would behave in the
   # default production environment. It's not recommended to do this for all
   # of your scenarios, as this makes it hard to discover errors in your application.
-
 end
 
 Spork.each_run do

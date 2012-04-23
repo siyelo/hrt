@@ -1,6 +1,5 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-include DelayedJobSpecHelper
 
 describe Activity, "Classification" do
   before :each do
@@ -30,7 +29,6 @@ describe Activity, "Classification" do
         @activity.send(valid_method).should be_false #sanity
         params = {@code.id.to_s => 100}
         klass.update_classifications(@activity, params)
-        run_delayed_jobs
         @activity.reload
         @activity.send(valid_method).should be_true
         @activity.send(all_valid_method).should be_true
@@ -40,7 +38,6 @@ describe Activity, "Classification" do
         @activity.send(valid_method).should be_false #sanity
         params = {@code.id.to_s => 99}
         klass.update_classifications(@activity, params)
-        run_delayed_jobs
         @activity.reload
         @activity.send(valid_method).should be_false
         @activity.send(all_valid_method).should be_false

@@ -1,7 +1,5 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-include DelayedJobSpecHelper
-
 describe Reports::ClassificationSplit do
   def run_report(classification_type)
     report = Reports::ClassificationSplit.new(@request, :budget, classification_type.to_sym)
@@ -62,10 +60,7 @@ describe Reports::ClassificationSplit do
             raise "Invalid type #{classification_type}".to_yaml
           end
 
-          run_delayed_jobs
-
           @response1.state = 'accepted'; @response1.save!
-
         end
 
         it "generates proper report" do

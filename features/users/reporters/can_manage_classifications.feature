@@ -146,9 +146,7 @@ Feature: Reporter can enter a code breakdown for each activity
       And I fill in "activity[classifications][coding_spend][1]" with "100"
       And I press "Save"
       Then I should see "Activity was successfully updated."
-      And I should see "We are still busy processing changes to the classification tree."
-      When I run delayed jobs
-        And I refresh the page
+      When I refresh the page
       Then I should see "This Activity has not been fully classified"
       Then the "spend_purposes" checkbox should be checked
         And the "budget_purposes" checkbox should be checked
@@ -168,9 +166,7 @@ Feature: Reporter can enter a code breakdown for each activity
       And I fill in "other_cost[classifications][coding_spend_district][5]" with "100"
       And I press "Save"
       Then I should see "Other Cost was successfully updated."
-      And I should see "We are still busy processing changes to the classification tree."
-      When I run delayed jobs
-        And I refresh the page
+      When I refresh the page
       Then I should see "This Other Cost has been fully classified"
       Then the "spend_locations" checkbox should be checked
         And the "budget_locations" checkbox should be checked
@@ -226,8 +222,7 @@ Feature: Reporter can enter a code breakdown for each activity
       And I press "Save"
       Then I should see "Activity was successfully updated."
         And I should not see "Purposes by Current Budget are not classified and Purposes by Past Expenditure are not classified"
-      When I run delayed jobs
-        And I refresh the page
+      When I refresh the page
       Then the "activity[classifications][coding_budget_cost_categorization][3]" field should contain "100"
         And the "activity[classifications][coding_spend_cost_categorization][3]" field should contain "100"
 
@@ -252,8 +247,7 @@ Feature: Reporter can enter a code breakdown for each activity
       And I fill in "activity[classifications][coding_spend_cost_categorization][3]" with "100"
       And I press "Save"
       Then I should see "Activity was successfully updated."
-      When I run delayed jobs
-        And I refresh the page
+      When I refresh the page
       Then the "spend_inputs" checkbox should be checked
         And the "budget_inputs" checkbox should be checked
 

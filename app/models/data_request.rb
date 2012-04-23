@@ -36,18 +36,36 @@ class DataRequest < ActiveRecord::Base
     find_request(:next)
   end
 
+  def destroy_and_clean_response_references
+    response_ids = self.data_responses.all.map(&:id)
+    users = User.find(:all,
+              :conditions => ['data_response_id_current IN (?)', response_ids])
+
+    transaction do
+      users.each do |user|
+        user.data_response_id_current = nil
+        user.save
+      end
+      self.destroy
+    end
+  end
+  handle_asynchronously :destroy_and_clean_response_references
+
   private
     def create_data_responses
-      Organization.reporting.all.each do |organization|
-        dr = organization.data_responses.find(:first,
-          :conditions => {:data_request_id => self.id})
-        unless dr
-          dr = organization.data_responses.new
-          dr.data_request = self
-          dr.save!
+      transaction do
+        Organization.reporting.all.each do |organization|
+          dr = organization.data_responses.find(:first,
+            :conditions => {:data_request_id => self.id})
+          unless dr
+            dr = organization.data_responses.new
+            dr.data_request = self
+            dr.save!
+          end
         end
       end
     end
+    handle_asynchronously :create_data_responses
 
     def find_request(direction)
       order = direction == :previous ? 'ASC' : 'DESC'

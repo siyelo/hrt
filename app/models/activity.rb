@@ -182,7 +182,7 @@ class Activity < ActiveRecord::Base
     organization.name
   end
 
-  # synchronously update classification tree cached amounts
+  # asynchronously update classification tree cached amounts
   def update_classified_amount_cache(type)
     # disable update_all_classified_amount_caches
     # callback to be run again on save !!

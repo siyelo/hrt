@@ -18,7 +18,7 @@ Feature: Admin can manage data requests
        And I fill in "data_request_title" with "My data response title"
        And I fill in "data_request_start_date" with "2010-01-01"
        And I press "Create request"
-      Then I should see "Request was successfully created"
+      Then I should see "Please wait a few moments for the request and the associated responses to be created."
        And I should see "coolorg"
 
       When I follow "Edit"
@@ -30,7 +30,7 @@ Feature: Admin can manage data requests
        And I should see "My new data response title"
 
       When I follow "Delete"
-      Then I should see "Request was successfully deleted."
+      Then I should see "Please wait a few moments for the request and the associated responses to be deleted."
        And I should not see "My data response title"
 
     Scenario Outline: See errors when creating data request
@@ -43,7 +43,7 @@ Feature: Admin can manage data requests
 
       Examples:
         | organization | title | start_date | message                              |
-        | org1         | title | 2010-01-01 | Request was successfully created     |
+        | org1         | title | 2010-01-01 | Please wait a few moments for the request and the associated responses to be created     |
         | org1         |       | 2010-01-01 | Title can't be blank         |
         | org1         | title |            | Start date can't be blank         |
         | org1         | title | 123        | Start date is not a valid date    |

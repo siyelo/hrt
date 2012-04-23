@@ -1,7 +1,5 @@
 require 'spec_helper'
 
-include DelayedJobSpecHelper
-
 describe Admin::ReportsController do
   before :each do
     login_as_admin
@@ -68,7 +66,6 @@ describe Admin::ReportsController do
         response.should be_redirect
         flash[:notice].should == "We are generating your report and will send you email (at #{@admin.email}) when it is ready."
 
-        run_delayed_jobs
         unread_emails_for(@admin.email).size.should == 1
         open_email(@admin.email).body.should include('We have generated "Activity Overview Report" report for you')
       end

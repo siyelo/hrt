@@ -1,7 +1,5 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-include DelayedJobSpecHelper
-
 describe ImplementerSplit do
   describe "Associations:" do
     it { should belong_to :activity }
@@ -282,8 +280,6 @@ describe ImplementerSplit do
 
       double_count_marker = ImplementerSplit.mark_double_counting(rows.to_csv)
 
-      run_delayed_jobs
-
       splits = ImplementerSplit.all
       splits[0].double_count.should be_true
       splits[1].double_count.should be_true
@@ -299,8 +295,6 @@ describe ImplementerSplit do
 
       double_count_marker = ImplementerSplit.mark_double_counting(rows.to_csv)
 
-      run_delayed_jobs
-
       splits = ImplementerSplit.all
       splits[0].double_count.should be_nil
       splits[1].double_count.should be_nil
@@ -315,8 +309,6 @@ describe ImplementerSplit do
       rows.each{ |row| row['Actual Double-Count?'] = '' }
 
       double_count_marker = ImplementerSplit.mark_double_counting(rows.to_csv)
-
-      run_delayed_jobs
 
       splits = ImplementerSplit.all
       splits[0].double_count.should be_nil

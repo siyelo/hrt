@@ -1,7 +1,5 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-include DelayedJobSpecHelper
-
 describe Reports::Targets do
   def run_report(request, amount_type)
     report = Reports::Targets.new(request, amount_type)

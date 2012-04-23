@@ -1,7 +1,5 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-include DelayedJobSpecHelper
-
 describe Importer do
   before :each do
     basic_setup_implementer_split
@@ -783,7 +781,6 @@ EOS
     @response.projects.count.should == 1
     i = Importer.new
     i.import_and_save(@response, File.open(write_csv_with_header(csv_string)).read)
-    run_delayed_jobs
     @response.projects.count.should == 2
   end
 end
