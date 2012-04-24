@@ -160,16 +160,17 @@ describe Organization do
   describe "Callbacks" do
     context "when there is a data_request in the system" do
       # after_create :create_data_responses
-      it "creates data_responses for each data_request after organization is created" do
+      it "creates data_responses for each data_request" do
         org_requester = Factory(:organization)
         data_request1 = Factory(:data_request, :organization => org_requester)
-        data_request2 = Factory(:data_request, :organization => org_requester)
 
         organization = Factory(:organization)
 
         data_requests = organization.data_responses.map(&:data_request)
         data_requests.should include(data_request1)
-        data_requests.should include(data_request2)
+
+        data_requests2 = org_requester.data_responses.map(&:data_request)
+        data_requests2.should include(data_request1)
       end
 
       it "does not create data_responses for Non-Reporting organizations" do
@@ -178,26 +179,6 @@ describe Organization do
 
         organization = Factory(:organization, :raw_type => 'Non-Reporting')
         organization.data_responses.should be_empty
-      end
-    end
-
-    context "when there is no a data_request in the system" do
-      # after_create :create_data_responses
-      it "creates data_responses for each data_request after organization is created" do
-        org_requester = Factory(:organization)
-        data_request1 = Factory(:data_request, :organization => org_requester)
-        data_request2 = Factory(:data_request, :organization => org_requester)
-
-        data_requests = org_requester.data_responses.map(&:data_request)
-        data_requests.should include(data_request1)
-        data_requests.should include(data_request2)
-      end
-
-      it "does not create data_responses for Non-Reporting organizations" do
-        org_requester = Factory(:organization, :raw_type => 'Non-Reporting')
-        Factory(:data_request, :organization => org_requester)
-
-        org_requester.data_responses.should be_empty
       end
     end
   end

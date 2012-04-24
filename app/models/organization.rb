@@ -179,7 +179,7 @@ class Organization < ActiveRecord::Base
     end
 
     def create_data_responses
-      if raw_type != 'Non-Reporting'
+      unless NON_REPORTING_TYPES.include?(raw_type)
         DataRequest.all.each do |data_request|
           dr = self.data_responses.find(:first,
                     :conditions => {:data_request_id => data_request.id})
