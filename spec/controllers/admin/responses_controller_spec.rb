@@ -63,16 +63,6 @@ describe Admin::ResponsesController do
       assigns(:organizations).should == [@organization]
     end
 
-    it "should filter by reporting" do
-      get :index, :filter => 'Reporting'
-      assigns(:organizations).should == @all_organizations
-    end
-
-    it "should filter by non-reporting" do
-      get :index, :filter => 'Non-Reporting'
-      assigns(:organizations).should == []
-    end
-
     it "should display all organizations" do
       organization1 = Factory.build(:organization, :raw_type => '')
       organization1.save(false)

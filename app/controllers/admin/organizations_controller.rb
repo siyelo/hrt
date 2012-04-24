@@ -14,7 +14,7 @@ class Admin::OrganizationsController < Admin::BaseController
 
   def index
     @pie = Charts::DataResponsePies::data_response_status_pie(current_user.current_request)
-    scope = Organization.scoped({})
+    scope = scope_organizations(params[:filter])
     scope = scope.scoped(:conditions => ["UPPER(organizations.name) LIKE UPPER(:q) OR
                                           UPPER(organizations.raw_type) LIKE UPPER(:q) OR
                                           UPPER(organizations.fosaid) LIKE UPPER(:q)",
@@ -162,5 +162,19 @@ class Admin::OrganizationsController < Admin::BaseController
     def sort_direction
       direction = sort_column == "created_at" ? "desc" : "asc"
       %w[asc desc].include?(params[:direction]) ? params[:direction] : direction
+    end
+
+    # show reporting orgs by default.
+    def scope_organizations(filter)
+      case filter
+      when 'Non-Reporting'
+        Organization.nonreporting
+      when 'Reporting'
+        Organization.reporting
+      when 'All'
+        Organization.sorted
+      else
+        Organization.reporting
+      end
     end
 end

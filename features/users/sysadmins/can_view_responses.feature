@@ -33,13 +33,11 @@ Feature: Admin can view responses
     And I should not see "org2" within "table"
 
   Scenario: admin can see available filters
-    Then I should see "Reporting" within a link in the filters list
-    And I should see "Not Yet Started" within a link in the filters list
+    Then I should see "Not Yet Started" within a link in the filters list
     And I should see "Started" within a link in the filters list
     And I should see "Submitted" within a link in the filters list
     And I should see "Rejected" within a link in the filters list
     And I should see "Accepted" within a link in the filters list
-    And I should see "Non-Reporting" within a link in the filters list
     And I should see "All" within a link in the filters list
 
   Scenario: Sysadmin can filter organizations by response status
@@ -52,11 +50,6 @@ Feature: Admin can view responses
     Given an organization exists with name: "some clinic", raw_type: "Clinic/Cabinet Medical"
     And I follow "Responses"
     Then I should not see "some clinic"
-
-  Scenario: Sysadmin can view non-reporting orgs
-    Given an organization exists with name: "some clinic", raw_type: "Clinic/Cabinet Medical"
-    When I follow "Non-Reporting"
-    Then I should see "some clinic"
 
   Scenario: See pie chart
     Then I should see "Response Status" within "#reports-summary"

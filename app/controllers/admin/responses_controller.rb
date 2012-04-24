@@ -2,8 +2,8 @@ class Admin::ResponsesController < Admin::BaseController
   include DataResponse::States
 
   SORTABLE_COLUMNS  = ['name']
-  AVAILABLE_FILTERS = ["Reporting", "Not Yet Started", "Started", "Submitted",
-    "Rejected", "Accepted", "Non-Reporting"]
+  AVAILABLE_FILTERS = ["Not Yet Started", "Started", "Submitted",
+                       "Rejected", "Accepted"]
 
   helper_method :sort_column, :sort_direction
 
@@ -31,19 +31,15 @@ class Admin::ResponsesController < Admin::BaseController
     # show reporting orgs by default.
     def scope_organizations(filter)
       case filter
-      when 'Non-Reporting'
-        Organization.nonreporting
-      when 'Reporting'
-        Organization.reporting
       when 'All'
-        Organization.sorted
+        Organization.reporting.sorted
       when 'Not Yet Started'
-        Organization.reporting.responses_by_states(current_request, [name_to_state(filter)])
+        Organization.reporting.sorted.responses_by_states(current_request, [name_to_state(filter)])
       else
         if allowed_filter?(filter)
-          Organization.responses_by_states(current_request, [name_to_state(filter)])
+          Organization.sorted.responses_by_states(current_request, [name_to_state(filter)])
         else
-          Organization.reporting
+          Organization.reporting.sorted
         end
       end
     end

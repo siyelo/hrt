@@ -139,3 +139,23 @@ Feature: Admin can manage organizations
     Then I should see "Users" within "h2"
     And I should see "sysadmin@hrtapp.com"
 
+  Scenario: admin can see available filters
+    Then I should see "Reporting" within a link in the filters list
+    Then I should see "Non-Reporting" within a link in the filters list
+    And I should see "All" within a link in the filters list
+
+  Scenario: Sysadmin can filter organizations by type
+    Given an organization exists with name: "Bilateral org", raw_type: "Bilateral"
+    And an organization exists with name: "District org", raw_type: "District"
+    And I follow "Organizations"
+    Then I should see "Bilateral org"
+      And I should not see "District org"
+    When I follow "Non-Reporting" within ".section_nav"
+    Then I should see "District org"
+      And I should not see "Bilateral org"
+    When I follow "All" within ".section_nav"
+    Then I should see "District org"
+      And I should see "Bilateral org"
+    When I follow "Reporting" within ".section_nav"
+    Then I should see "Bilateral org"
+      And I should not see "District org"

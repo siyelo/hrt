@@ -8,9 +8,14 @@
 
 = render :partial => 'buttons'
 
+= render 'filters'
+
 = render :partial => 'import'
 
 .section_form.wrapped.last
+  #filter_help
+    %p= search_and_filter_message(@organizations.total_entries, params[:query], params[:filter])
+
   - unless @organizations.empty?
     %table.standard.rounded
       %thead
