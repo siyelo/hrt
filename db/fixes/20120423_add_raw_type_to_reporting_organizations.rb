@@ -45,3 +45,9 @@ if organization
   organization.raw_type = 'Bilateral'
   organization.save(false)
 end
+
+organization = Organization.find_by_name("Kibogora HD District Hospital | Nyamasheke")
+if organization
+  organization.raw_type = 'National Hospital'
+  organization.save(false)
+end
