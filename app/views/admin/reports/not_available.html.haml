@@ -1,0 +1,11 @@
+- title 'Admin Reports'
+
+- content_for :sub_nav do
+  = render('admin/shared/reports_sub_nav')
+
+%h1.request_nav
+  = render '/shared/request_nav'
+
+.reports_not_available
+  %h3= "Reports for this request are disabled."
+  %p= "Please see #{link_to 'static reports', admin_documents_path} for #{@request.title} data."
