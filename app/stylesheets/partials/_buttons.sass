@@ -27,32 +27,6 @@ a.remove_nested
   +pie-clearfix
 
 .app a, button, input
-  &.create_new
-    background: $orange
-    border: 1px solid $orange - #222
-    color: #fff
-    display: inline-block
-    font-size: 12px
-    font-weight: bold
-    margin-bottom: 10px
-    padding: 7px 12px 5px
-    text-decoration: none
-    +border-radius
-    +box-shadow(#999, 0, 1px, 3px)
-    +linear-gradient(color-stops($orange, $orange - #222))
-    +text-shadow($orange - #444, 0, 1px, 0)
-    img
-      position: relative
-      top: 1px
-    &:hover, &:focus
-      background: $green
-      border: 1px solid $green - #222
-      color: #fff
-      +linear-gradient(color-stops($green, $green - #222))
-    &:active
-      outline: none
-      position: relative
-      top: 1px
 
   &.create_alt
     background: #eee
@@ -273,7 +247,7 @@ body.login .buttons li:last-child
 
 a, input[type=submit], button
 
-  &.create_button, &.create_new
+  &.create_button
     background: $orange
     border: 1px solid $orange - #222
     color: #fff

@@ -14,7 +14,7 @@
 
   = link_to friendly_name(project, 50), "#"
 
-.main.dashboard_section{:style => (project.valid? && params[:format] != 'js' ? 'display: none;' : nil)}
+.main.section_base{:style => (project.valid? && params[:format] != 'js' ? 'display: none;' : nil)}
 
   - if all_ok
     %p Saved OK

@@ -1,6 +1,6 @@
 #delayed_import.simple_overlay
   %h3.title_bar Upload a large file for processing
-  .dashboard_section
+  .section_base
     %p As the System Administrator, you can upload large files here.  Beware! Any projects, activities or implementer splits uploaded here will bypass the normal validation checks - please ensure that there are no problems with the data in the file before uploading it.
     %br
     - form_tag(import_and_save_response_projects_path(@response, url_params), :multipart => true) do

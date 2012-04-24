@@ -1,6 +1,6 @@
 - semantic_form_for comment, :url => comments_path(:commentable_type => parent.commentable_type, :commentable_id => parent.commentable_id) do |f|
   %h2 Replying
-  .dashboard_section
+  .section_base
     .big_gravatar
       = image_tag current_user.gravatar(60)
     = f.semantic_errors :state

@@ -6,7 +6,7 @@
     %ol
       %li.last
         %h2 File Details
-        %ul.dashboard_section
+        %ul.section_base
           = f.text_field :title, input_options('Title', "Title to identify the uploaded file")
           = f.text_area :description, input_options('Description', nil, false).merge(:rows => 10)
           = f.select :visibility, options_for_select(Document::VISIBILITY_OPTIONS.map{|o| [o.humanize, o]}, @document.visibility), input_options('Visibility')
