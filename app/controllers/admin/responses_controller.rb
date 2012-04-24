@@ -8,7 +8,7 @@ class Admin::ResponsesController < Admin::BaseController
   helper_method :sort_column, :sort_direction
 
   def index
-    @pie = Charts::DataResponsePies::data_response_status_pie(current_user.current_request)
+    @pie = Charts::DataResponse::data_response_status(current_user.current_request)
     scope = scope_organizations(params[:filter])
     scope = scope.scoped(
       :conditions => ["UPPER(organizations.name) LIKE UPPER(:q)",
@@ -33,11 +33,9 @@ class Admin::ResponsesController < Admin::BaseController
       case filter
       when 'All'
         Organization.reporting.sorted
-      when 'Not Yet Started'
-        Organization.reporting.sorted.responses_by_states(current_request, [name_to_state(filter)])
       else
         if allowed_filter?(filter)
-          Organization.sorted.responses_by_states(current_request, [name_to_state(filter)])
+          Organization.reporting.sorted.responses_by_states(current_request, [name_to_state(filter)])
         else
           Organization.reporting.sorted
         end

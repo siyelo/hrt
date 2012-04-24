@@ -14,13 +14,8 @@
       = render 'shared/search_form'
 
 #reports-summary
-  %h2
-    Response Status
-  #response_pie
-
-%ul.horizontal
-  %li
-    = link_to 'Response Status', '#', :id => "show_pie", :class => "create_alt"
+  %h2 Response Status
+  #response_chart
 
 = render 'filters'
 

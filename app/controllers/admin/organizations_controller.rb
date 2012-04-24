@@ -13,7 +13,6 @@ class Admin::OrganizationsController < Admin::BaseController
   before_filter :load_users, :only => [:edit, :update]
 
   def index
-    @pie = Charts::DataResponsePies::data_response_status_pie(current_user.current_request)
     scope = scope_organizations(params[:filter])
     scope = scope.scoped(:conditions => ["UPPER(organizations.name) LIKE UPPER(:q) OR
                                           UPPER(organizations.raw_type) LIKE UPPER(:q) OR

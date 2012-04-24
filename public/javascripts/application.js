@@ -888,12 +888,26 @@ var responses_submit = {
 
 var admin_responses_index = {
   run: function () {
-    drawPieChart('response_pie', _responses, 380, 250);
-    $("#show_pie").live("click", function() {
-      $("#reports-summary").slideToggle();
-    })
+    drawBarChart('response_chart', _responses, 900, 150);
   }
-}
+};
+
+function drawBarChart(id, rawData, width, height) {
+  var data = google.visualization.arrayToDataTable(rawData);
+
+  var formatter = new google.visualization.NumberFormat({fractionDigits: 1, suffix: '%'});
+  for (var i = 0; i < rawData[0].length; i++) {
+    formatter.format(data, i);
+  }
+
+  var chart = new google.visualization.BarChart(document.getElementById(id));
+  chart.draw(data, {width: width, isStacked: true,
+    height: height, chartArea: {width: 800, height: 80},
+    backgroundColor: '#FBFBFB',
+    hAxis: {format:"#'%"},
+    legend: 'top'
+  });
+};
 
 function drawPieChart(id, data_rows, width, height) {
   if (typeof(data_rows) === "undefined") {
