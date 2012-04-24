@@ -67,8 +67,8 @@ class Organization < ActiveRecord::Base
   named_scope :without_users, :conditions => 'users_count = 0'
   named_scope :ordered, :order => 'lower(name) ASC, created_at DESC'
   named_scope :with_type, lambda { |type| {:conditions => ["organizations.raw_type = ?", type]} }
-  named_scope :reporting, :conditions => ['raw_type not in (?)', NON_REPORTING_TYPES]
-  named_scope :nonreporting, :conditions => ['raw_type in (?)', NON_REPORTING_TYPES]
+  named_scope :reporting, :conditions => ['raw_type NOT IN (?) AND raw_type IS NOT NULL', NON_REPORTING_TYPES]
+  named_scope :nonreporting, :conditions => ['raw_type IN (?) OR raw_type IS NULL', NON_REPORTING_TYPES]
   named_scope :responses_by_states, lambda { |request, states|
     { :joins => {:data_responses => :data_request },
       :conditions => ["data_requests.id = ? AND
@@ -135,7 +135,7 @@ class Organization < ActiveRecord::Base
   end
 
   def nonreporting?
-    NON_REPORTING_TYPES.include?(raw_type)
+    NON_REPORTING_TYPES.include?(raw_type) || raw_type.nil?
   end
 
   def currency

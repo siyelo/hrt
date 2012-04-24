@@ -148,12 +148,16 @@ describe Organization do
         'Dispensary', 'District', 'District Hospital', 'Health Center',
         'Health Post', 'Non-Reporting', 'Other ministries',
         'Prison Clinic']
+
       non_reporting_types.each do |type|
         Factory(:organization, :raw_type => type)
       end
 
+      org_with_nil_raw_type = Factory.build(:organization, :raw_type => nil)
+      org_with_nil_raw_type.save(false)
+
       Organization.reporting.should == [@org1]
-      Organization.nonreporting.count.should == non_reporting_types.count
+      Organization.nonreporting.count.should == non_reporting_types.count + 1
     end
   end
 
@@ -472,6 +476,11 @@ describe Organization do
   describe "#nonreporting?" do
     it "is nonreporting when raw_type is 'Non-Reporting'" do
       organization = Factory.build(:organization, :raw_type => 'Non-Reporting')
+      organization.nonreporting?.should be_true
+    end
+
+    it "is nonreporting when raw_type is nil" do
+      organization = Factory.build(:organization, :raw_type => nil)
       organization.nonreporting?.should be_true
     end
   end
