@@ -81,19 +81,9 @@ ActionController::Routing::Routes.draw do |map|
     :collection => { :export => :get }
 
   map.namespace :reports do |reports|
-    reports.resources :districts, :only => [:index, :show],
-      :member => {:classifications => :get} do |districts|
-      districts.resources :activities, :only => [:index, :show],
-        :controller => "districts/activities"
-      districts.resources :organizations, :only => [:index, :show],
-        :controller => "districts/organizations"
-    end
-    reports.resource :country,
-      :member => {:classifications => :get} do |country|
-      country.resources :activities, :only => [:index, :show],
-        :controller => "countries/activities"
-      country.resources :organizations, :only => [:index, :show],
-        :controller => "countries/organizations"
+    reports.resources :responses, :only => [] do |response|
+      response.resources :projects, :only => [],
+        :member => {:overview => :get}
     end
   end
 end

@@ -14,6 +14,14 @@
 %h1.request_nav.main_heading
   = render '/shared/request_nav'
 
+
+%ul.breadcrumb
+  %li
+    = link_to "Overview", reports_path
+    >
+
+%h2= @report.project.name
+
 .reports_summary.dashboard_section.section_form
   %p.summary_col
     %span Total Expenditure
@@ -29,7 +37,7 @@
     = @report.percentage_change
 
 %ul.group.connect#tabs-container
-  %li= link_to "Projects", "#", :class => "active"
+  %li= link_to "Activities", "#", :class => "active"
   %li= link_to "Locations", "#"
   %li= link_to "Inputs", "#"
 
@@ -53,11 +61,11 @@
         %th.align Budget
 
     %tbody
-      - @report.projects_and_other_costs.each do |p|
+      - @report.activities_and_other_costs.each do |activity|
         %tr
-          %td= link_to p.name, overview_reports_response_project_path(current_response, p)
-          %td.align= number_to_currency p.total_spend, :unit => ""
-          %td.align= number_to_currency p.total_budget, :unit => ""
+          %td= link_to activity.name, overview_reports_response_project_path(current_response, activity)
+          %td.align= number_to_currency activity.total_spend, :unit => ""
+          %td.align= number_to_currency activity.total_budget, :unit => ""
       %tr.summary
         %td
           Total
@@ -67,3 +75,4 @@
         %td.align
           %span.currency= @report.currency
           = number_to_currency @report.total_budget, :unit => ""
+

@@ -1,17 +1,14 @@
-- nav_title = current_request.name
-- nav_title = name if defined?(name) && !name.blank?
-
-- if  current_request.present?
+- if current_request.present?
   - if current_request.previous_request.present?
     - link_to set_request_path(current_request.previous_request.id), :title => "Previous Request", :class => 'arrow-nav' do
-      = image_tag"arrow-nav-left.png"
+      = image_tag("arrow-nav-left.png")
   - else
-    %a.arrow-nav.disabled= image_tag"arrow-nav-left.png"
+    %a.arrow-nav.disabled= image_tag("arrow-nav-left.png")
 
   - if current_request.next_request.present?
     - link_to set_request_path(current_request.next_request.id), :title => "Next Request", :class => 'arrow-nav last' do
-      = image_tag"arrow-nav-right.png"
+      = image_tag("arrow-nav-right.png")
   - else
-    %a.arrow-nav.last.disabled= image_tag"arrow-nav-right.png"
+    %a.arrow-nav.last.disabled= image_tag("arrow-nav-right.png")
 
-  = nav_title
+  = current_request.name

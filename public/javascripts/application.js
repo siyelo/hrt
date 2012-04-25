@@ -598,6 +598,13 @@ var reports_index = {
   }
 };
 
+var reports_projects_overview = {
+  run: function () {
+    drawPieChart('code_spent', _expenditure_summary, 450, 300);
+    drawPieChart('code_budget', _budget_summary, 450, 300);
+  }
+};
+
 var responses_review = {
   run: function () {
     build_data_response_review_screen();

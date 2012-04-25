@@ -1,3 +1,4 @@
+require 'json'
 require File.dirname(__FILE__) + '/../spec_helper_lite'
 
 $: << File.join(APP_ROOT, "app/charts")
