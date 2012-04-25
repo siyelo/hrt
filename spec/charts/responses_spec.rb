@@ -15,4 +15,5 @@ describe Charts::Responses::State do
   it "formats values as integers" do
     Charts::Responses::State.value_format.should == :to_i
   end
+
 end

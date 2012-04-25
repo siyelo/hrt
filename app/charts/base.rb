@@ -42,7 +42,7 @@ module Charts
       return empty_google_pie if @data.empty?
       {
         :names => pie_legend,
-        :values => @data.sort_by { |k,v| v }.reverse
+        :values => pie_sort
       }.to_json
     end
 
@@ -50,9 +50,25 @@ module Charts
     # amounts are translated into relative percentage
     def google_bar
       [
-        [bar_legend].concat(@data.keys),
-        [''].concat(@data.values.map { |v| (v * 100.0 / total).round_with_precision(2) })
+        [bar_legend].concat(bar_sort.map{ |e| e[0] }),
+        [''].concat(bar_sort.map{ |e| (e[1] * 100.0 / total).round_with_precision(2) })
       ].to_json
+    end
+
+    def pie_sort
+      self.sort_by_values_desc
+    end
+
+    def bar_sort
+      self.sort_by_name
+    end
+
+    def sort_by_values_desc
+      @data.sort_by{ |k,v| v }.reverse
+    end
+
+    def sort_by_name
+      @data.sort_by { |k,v| k }
     end
 
     protected
