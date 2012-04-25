@@ -3,7 +3,9 @@
 - content_for :sub_nav do
   = render('shared/reports_sub_nav')
 
-%h1.main_heading Files
+%h1.main_heading
+  Files
+  = image_tag "alertwarning_icon.png", :title => "Files downloaded from this website are not for distribution.", :class => 'tooltip'
 
 - if @documents.present?
   %table.standard.rounded
