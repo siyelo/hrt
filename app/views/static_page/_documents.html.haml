@@ -1,4 +1,5 @@
 .wrapper#js_files_download.landing-table-wrap
+  %h3 Latest Health Resource Tracker Files
   - if @documents.present?
     %table.landing-table
       = render 'documents/documents', :documents => @documents
