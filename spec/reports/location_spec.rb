@@ -43,7 +43,6 @@ describe Reports::Location do
     report.currency.should == 'USD'
   end
 
-
   context "#total_spend" do
     it "should give total location spend" do
       report.stub(:method_from_class).with("DerpSpend").and_return :spend
