@@ -1,4 +1,6 @@
 class DataResponse < ActiveRecord::Base
+  STATES = ['unstarted', 'started', 'submitted', 'rejected', 'accepted']
+
   include CurrencyNumberHelper
   include DataResponse::States
   include DataResponse::Totaller
@@ -40,8 +42,8 @@ class DataResponse < ActiveRecord::Base
     :contact_main_office_phone_number, :contact_office_location,
     :to => :organization
 
-  FILE_UPLOAD_COLUMNS = %w[project_name project_description activity_name activity_description
-                           amount_in_dollars districts functions inputs]
+  ### Callbacks
+  before_validation_on_create :set_state
 
   ### Instance Methods
 
@@ -52,6 +54,11 @@ class DataResponse < ActiveRecord::Base
   def name
     data_request.try(:title) # some responses does not have data_requst (bug was on staging)
   end
+
+  private
+    def set_state
+      self.state = 'unstarted'
+    end
 end
 
 

@@ -496,7 +496,7 @@ describe Organization do
     it "should allow deletion if they have not created any requests" do
       basic_setup_implementer_split
       the_old_switcheroo
-      @response.submit!
+      @response.state = 'submitted'; @response.save!
       @organization.latest_response.status.should == "Submitted"
       result = @organization.destroy
       @organization.errors.on(:base).should == nil
@@ -507,7 +507,7 @@ describe Organization do
       basic_setup_implementer_split
       oc = Factory(:other_cost_fully_coded, :data_response => @response) #non-project OC!
       the_old_switcheroo
-      @response.submit!
+      @response.state = 'submitted'; @response.save!
       @organization.latest_response.status.should == "Submitted"
       result = @organization.destroy
       @organization.errors.on(:base).should == nil

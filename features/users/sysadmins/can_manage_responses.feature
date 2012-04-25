@@ -15,49 +15,48 @@ Feature: Admin can manage data responses
       And I am signed in as "sysadmin@hrtapp.com"
 
 
-    Scenario Outline: SysAdmin cannot reject or approve unsubmitted response
-      Given the data_response state is: "<state>"
+    Scenario: SysAdmin can see status change dropdown
+      Given the data_response state is: "started"
       When I follow "Responses"
-        And I follow "<name>"
+        And I follow "Started"
         And I follow "UNDP"
-      Then I should see "Status: <name>" within "#state"
-        And I should not see "Accept!" within "#state ul"
-        And I should not see "Reject!" within "#state ul"
+      Then I should see "Status: Started" within "#state"
+        And I should see "Restart" within "#state ul"
+        And I should see "Accept" within "#state ul"
+        And I should see "Reject" within "#state ul"
 
-      Examples:
-        | state     | name            |
-        | unstarted | Not Yet Started |
-        | started   | Started         |
-        | accepted  | Accepted        |
-
-
-    Scenario: SysAdmin can approve submitted response
+    Scenario: SysAdmin can restart response
       Given the data_response state is: "submitted"
       When I follow "Responses"
         And I follow "Submitted"
         And I follow "UNDP"
       Then I should see "Status: Submitted" within "#state"
-        When I follow "Accept!" within "#state"
+        When I follow "Restart" within "#state"
+      Then I should see "Response was successfully restarted"
+        And I should see "Status: Started" within "#state"
+      When "reporter1@hrtapp.com" open the email with subject "Your FY2010-11 Expenditures and FY2011-12 Budget response is Restarted"
+      Then I should see "Your submission has been restarted. Please correct any issues and re-submit." in the email body
+
+    Scenario: SysAdmin can approve response
+      Given the data_response state is: "submitted"
+      When I follow "Responses"
+        And I follow "Submitted"
+        And I follow "UNDP"
+      Then I should see "Status: Submitted" within "#state"
+        When I follow "Accept" within "#state"
       Then I should see "Response was successfully accepted"
         And I should see "Status: Accepted" within "#state"
-        And I should see "Already Accepted"
       When "reporter1@hrtapp.com" open the email with subject "Your FY2010-11 Expenditures and FY2011-12 Budget response is Accepted"
       Then I should see "Your submission has been reviewed and accepted." in the email body
-      When "reporter2@hrtapp.com" open the email with subject "Your FY2010-11 Expenditures and FY2011-12 Budget response is Accepted"
-      Then I should see "Your submission has been reviewed and accepted." in the email body
 
-
-    Scenario: SysAdmin can reject submitted response
+    Scenario: SysAdmin can reject response
       Given the data_response state is: "submitted"
       When I follow "Responses"
         And I follow "Submitted"
         And I follow "UNDP"
       Then I should see "Status: Submitted" within "#state"
-        When I follow "Reject!" within "#state"
+        When I follow "Reject" within "#state"
       Then I should see "Response was successfully rejected"
         And I should see "Status: Rejected" within "#state"
-        And I should see "Already Rejected"
       When "reporter1@hrtapp.com" open the email with subject "Your FY2010-11 Expenditures and FY2011-12 Budget response is Rejected"
-      Then I should see "We have reviewed your submission and noted some issues that you need to correct" in the email body
-      When "reporter2@hrtapp.com" open the email with subject "Your FY2010-11 Expenditures and FY2011-12 Budget response is Rejected"
       Then I should see "We have reviewed your submission and noted some issues that you need to correct" in the email body

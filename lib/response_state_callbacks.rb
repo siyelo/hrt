@@ -10,15 +10,18 @@ module ResponseStateCallbacks
   private
 
     def start_response_if_unstarted
-      response.start! if response.unstarted?
+      if response.unstarted?
+        response.state = 'started'
+        response.save!
+      end
     end
 
     def unstart_response_if_no_data
       response.reload # reload for projects_count to update
       if !response.unstarted? && response.projects.empty? &&
-        response.other_costs.without_a_project.empty? &&
-        response.unstart!
+          response.other_costs.without_a_project.empty?
+        response.state = 'unstarted'
+        response.save!
       end
-
     end
 end

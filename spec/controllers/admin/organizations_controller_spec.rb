@@ -38,7 +38,7 @@ describe Admin::OrganizationsController do
         other_org    = Factory(:organization)
         @data_request.organization = other_org #the old switcheroo
         @data_request.save
-        @data_response.submit!
+        @data_response.state = 'submitted'; @data_response.save!
         @organization.stub!(:to_label).and_return('org label')
         @organization.stub!(:destroy).and_return(true)
       end

@@ -46,6 +46,13 @@ class Notifier < ActionMailer::Base
     sent_on       Time.now
   end
 
+  def response_restarted_notification(response)
+    subject       "Your #{response.title} response is Restarted"
+    from          FROM
+    recipients    response.organization.users.map{ |u| u.email }
+    sent_on       Time.now
+  end
+
   def report_download_notification(user, report)
     report_name = Report.key_to_name(report.key)
     subject       "Download link for #{report_name} report"

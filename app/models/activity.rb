@@ -329,7 +329,10 @@ class Activity < ActiveRecord::Base
 
     def restart_response_if_all_activities_removed
       # use .length since .empty? uses counter cache that isnt updated yet.
-      response.restart! if self.response.activities.length == 0
+      if self.response.activities.length == 0
+        response.state = 'started'
+        response.save!
+      end
     end
 
     def validate_implementers_uniqueness
