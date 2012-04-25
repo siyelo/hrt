@@ -1,8 +1,8 @@
+require 'app/reports/base'
 require 'app/charts/projects'
-require 'active_support/core_ext/float'
 
 module Reports
-  class Organization
+  class Organization < Reports::Base
     attr_reader :response
 
     def initialize(response)
@@ -22,18 +22,16 @@ module Reports
         sort{ |a, b| a.name.downcase <=> b.name.downcase }
     end
 
+    def collection
+      projects_and_other_costs
+    end
+
     def total_spend
       @response.total_spend
     end
 
     def total_budget
       @response.total_budget
-    end
-
-    def percentage_change
-      return 0 if total_spend == 0 || total_budget == 0
-      change = ((total_budget.to_f / total_spend.to_f) * 100) - 100
-      change.round_with_precision(1)
     end
 
     def expenditure_pie

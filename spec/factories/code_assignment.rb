@@ -1,7 +1,8 @@
 Factory.define :code_assignment, :class => CodeAssignment do |f|
   f.code                 { Factory.create :code }
   f.cached_amount        { 1000 }
-  f.sum_of_children      { 0 }
+  f.percentage           { 100 }
+  f.sum_of_children      { 0 } # db default value - used in specs
 end
 
 Factory.define :coding_budget, :class => CodingBudget, :parent => :code_assignment do |f|
@@ -59,3 +60,4 @@ end
 Factory.define :spend_input, :class => CodingSpendCostCategorization, :parent => :code_assignment do |f|
   f.code            { Factory.create :cost_category_code }
 end
+

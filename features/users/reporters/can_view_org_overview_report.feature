@@ -14,16 +14,13 @@ Feature: Reporter can see project overview report
     When an implementer_split exists with organization: the organization, activity: the activity, spend: 100, budget: 200
     And an implementer_split exists with organization: the organization, activity: the other cost, spend: 10, budget: 20
     When I follow "Reports"
-    And I follow "project1"
-    Then I should see "Overview" within ".breadcrumb"
-    And I should see "project1" within "h2"
+    And I should see "project1"
     Then I should see "Total Expenditure" within ".reports_summary"
     And I should see "110.00" within ".reports_summary"
     Then I should see "Total Budget" within ".reports_summary"
     And I should see "220.00" within ".reports_summary"
     Then I should see "Change" within ".reports_summary"
     And I should see "100.0" within ".reports_summary"
-    And I should see "Activities" within "#tabs-container"
     And I should see "Locations" within "#tabs-container"
     And I should see "Inputs" within "#tabs-container"
     And I should see "USD" within ".summary"

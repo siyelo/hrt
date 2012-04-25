@@ -596,8 +596,24 @@ var reports_index  = {
   run: function () {
     drawPieChart('code_spent', _expenditure_summary, 450, 300);
     drawPieChart('code_budget', _budget_summary, 450, 300);
+    $('.locations').click(function(e) {
+      loadTab();
+    });
   }
 };
+
+jQuery.ajaxSetup({
+  'beforeSend': function(xhr) {xhr.setRequestHeader("Accept", "text/javascript")}
+})
+
+function loadTab() {
+  $.get('/reports/locations', function(data) {
+    $('#charts_tables').html(data);
+      drawPieChart('code_spent', _expenditure_summary, 450, 300);
+      drawPieChart('code_budget', _budget_summary, 450, 300);
+  });
+
+}
 
 var reports_projects_show = {
   run: function () {

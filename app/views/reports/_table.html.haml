@@ -1,0 +1,22 @@
+%table.data
+  %thead
+    %tr.head
+      %th Name
+      %th.align Expenditure
+      %th.align Budget
+
+  %tbody
+    - @report.collection.each do |e|
+      %tr
+        %td= e.name
+        %td.align= number_to_currency e.total_spend, :unit => ""
+        %td.align= number_to_currency e.total_budget, :unit => ""
+    %tr.summary
+      %td
+        Total
+      %td.align
+        %span.currency= @report.currency
+        = number_to_currency @report.total_spend, :unit => ""
+      %td.align
+        %span.currency= @report.currency
+        = number_to_currency @report.total_budget, :unit => ""

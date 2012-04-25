@@ -1,0 +1,17 @@
+:javascript
+  google.load("visualization", "1", {packages:["corechart"]});
+  var _expenditure_summary   = #{js_safe(@report.expenditure_pie)};
+  var _budget_summary  = #{js_safe(@report.budget_pie)};
+
+.dashboard_section.section_form.first
+  .full
+    .first-half
+      %h2= "Expenditure Summary"
+      #code_spent.bordered
+
+    .second-half
+      %h2= "Budget Summary"
+      #code_budget.bordered
+
+  %br
+  = render 'reports/table'

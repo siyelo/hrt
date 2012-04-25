@@ -21,6 +21,7 @@ class Organization < ActiveRecord::Base
     :contact_main_office_phone_number, :contact_office_location, :location_id,
     :implementer_type, :funder_type
 
+
   ### Associations
   belongs_to :location
   has_many :users

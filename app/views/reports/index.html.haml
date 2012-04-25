@@ -14,7 +14,7 @@
 %h1.request_nav.main_heading
   = render '/shared/request_nav', :name => @report.name
 
-.reports_summary.section_base.section_form
+.reports_summary.dashboard_section.section_form
   %p.summary_col
     %span Total Expenditure
     %span.currency= @report.currency
@@ -41,5 +41,5 @@
       %h2= "Budget Summary"
       #code_budget.bordered
 
-    %br
-    = render 'reports/table'
+  %br
+  = render 'reports/table'
