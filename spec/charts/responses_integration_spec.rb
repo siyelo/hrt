@@ -23,7 +23,7 @@ describe Charts::Responses::State do
 
   it "sorts bar chart by state" do
     chart = Charts::Responses::State.new([])
-    DataResponse::States::STATES.should_receive(:index).exactly(3).times.and_return 1
+    DataResponse::STATES.should_receive(:index).exactly(3).times.and_return 1
     chart.sort_by_state
   end
 

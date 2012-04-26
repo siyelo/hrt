@@ -63,7 +63,7 @@
     %tbody
       - @report.activities_and_other_costs.each do |activity|
         %tr
-          %td= link_to activity.name, overview_reports_response_project_path(current_response, activity)
+          %td= activity.name
           %td.align= number_to_currency activity.total_spend, :unit => ""
           %td.align= number_to_currency activity.total_budget, :unit => ""
       %tr.summary

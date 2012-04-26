@@ -34,7 +34,7 @@ module Charts
 
       # sort in same order as the STATES are defined.
       def sort_by_state
-        @data.sort_by{ |e| DataResponse::States::STATES.index e[0].downcase }
+        @data.sort_by{ |e| DataResponse::STATES.index e[0].downcase }
       end
 
       protected

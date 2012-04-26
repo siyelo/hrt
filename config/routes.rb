@@ -84,6 +84,8 @@ ActionController::Routing::Routes.draw do |map|
     reports.resources :responses, :only => [] do |response|
       response.resources :projects, :only => [],
         :member => {:overview => :get}
+      response.resources :organizations, :only => [],
+        :member => {:overview => :get}
     end
   end
 end

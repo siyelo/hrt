@@ -1,9 +1,9 @@
 %ul
-  %li{:class => (['reports', 'reports/projects'].include?(params[:controller]) ? 'active' : nil)}
-    = link_to 'Overview', reports_path
+  %li{:class => (['reports/organizations', 'reports/projects'].include?(params[:controller]) ? 'active' : nil)}
+    = link_to 'Overview', overview_reports_response_organization_path(current_or_last_response, current_response.organization)
   %li{:class => (params[:controller] == 'documents' ? 'active' : nil)}
     = link_to 'Files', response_documents_path(current_or_last_response)
-  - if current_user.sysadmin? && is_admin_controller
+  - if current_user.sysadmin?
     %li{:class => (params[:controller] == 'admin/reports' ? 'active' : nil)}
       = link_to 'Dynamic', response_reports_path(current_or_last_response)
 

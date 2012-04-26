@@ -23,8 +23,6 @@ describe Reports::Organization do
     response.stub(:other_costs).and_return othercosts
     unsorted = projects + othercosts
     sorted = [othercost, project, project1, othercost1]
-    unsorted.should_receive(:sort).and_return sorted
-    report.response.projects.should_receive(:+).with(report.response.other_costs).and_return(unsorted)
     report.projects_and_other_costs.should == sorted
   end
 
