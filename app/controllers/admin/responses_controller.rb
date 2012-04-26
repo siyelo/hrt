@@ -9,7 +9,7 @@ class Admin::ResponsesController < Admin::BaseController
   helper_method :sort_column, :sort_direction
 
   def index
-    @pie = Charts::Responses::State.new(current_user.current_request).google_bar
+    @pie = Charts::Responses::State.new(current_request).google_bar
     scope = scope_responses(params[:filter])
     scope = scope.scoped(:joins => :organization,
                          :conditions => ["UPPER(organizations.name) LIKE UPPER(:q)",

@@ -16,6 +16,7 @@ class UserSessionsController < ApplicationController
 
   def destroy
     self.send(:current_user_session).destroy
+    session[:response_id] = nil
     flash[:notice] = "Successfully signed out."
     redirect_to root_url
   end

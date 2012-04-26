@@ -7,6 +7,7 @@ module ControllerStubs
     user.stub(:activity_manager?).and_return(false)
     user.stub(:reporter?).and_return(true)
     user.stub(:current_response_is_latest?).and_return(true)
+    user.stub(:role?).with('reporter').and_return(true)
 
     controller.stub!(:current_user).and_return(user)
 
@@ -21,6 +22,7 @@ module ControllerStubs
     user.stub(:activity_manager?).and_return(false)
     user.stub(:reporter?).and_return(false)
     user.stub(:current_response_is_latest?).and_return(true)
+    user.stub(:role?).with('reporter').and_return(false)
 
     controller.stub!(:current_user).and_return(user)
 
@@ -35,6 +37,7 @@ module ControllerStubs
     user.stub(:activity_manager?).and_return(true)
     user.stub(:reporter?).and_return(false)
     user.stub(:current_response_is_latest?).and_return(true)
+    user.stub(:role?).with('reporter').and_return(false)
 
     controller.stub!(:current_user).and_return(user)
 

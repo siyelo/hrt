@@ -8,7 +8,7 @@
       %td= n2crs(project.budget, project.currency)
       %td= n2crs(project.in_flows_total_budget, project.currency)
       %td= n2crs(((project.budget || 0) - project.in_flows_total_budget), project.currency)
-      %td= link_to "Edit", edit_response_project_path(@response, project)
+      %td= link_to "Edit", edit_project_path(project)
 
 %tr
   %th{:colspan => 5}
@@ -20,4 +20,4 @@
       %td= n2crs(project.spend, project.currency)
       %td= n2crs(project.in_flows_total_spend, project.currency)
       %td= n2crs((project.spend - project.in_flows_total_spend), project.currency)
-      %td= link_to "Edit", edit_response_project_path(@response, project)
+      %td= link_to "Edit", edit_project_path(project)

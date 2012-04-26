@@ -10,13 +10,13 @@
         %span.desc Your Organization's preferences and contact settings
 
     %li
-      - link_to  response_projects_path(current_or_last_response) do
+      - link_to projects_path do
         %span.icon= image_tag "icon_welcome5.png", :alt => "Enter Your Projects & Activities", :height => "70"
         %span.title 2. Enter Your Projects & Activities
         %span.desc Define the health projects and activities your organization does
 
     %li.last
-      - link_to submit_response_path(current_or_last_response) do
+      - link_to submit_response_path(current_response) do
         %span.icon= image_tag "icon_welcome3.png", :alt => "Submit Response", :height => "70"
         %span.title 3. Submit Response
         %span.desc Submit your data for the requested period

@@ -6,7 +6,7 @@ Feature: Admin can manage data requests
   Background:
     Given an organization exists with name: "org1", name: "coolorg"
     And a data_request exists with organization: the organization
-    And an admin exists with email: "admin@hrtapp.com", organization: the organization
+    And an sysadmin exists with email: "admin@hrtapp.com", organization: the organization
     And I am signed in as "admin@hrtapp.com"
 
     Scenario: Admin can CRUD data requests

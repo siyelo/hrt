@@ -37,15 +37,7 @@ class DataRequest < ActiveRecord::Base
   end
 
   def destroy_and_clean_response_references
-    response_ids = self.data_responses.all.map(&:id)
-    users = User.find(:all,
-                      :conditions => ['data_response_id_current IN (?)', response_ids])
-
     transaction do
-      users.each do |user|
-        user.data_response_id_current = nil
-        user.save
-      end
       self.destroy
     end
   end

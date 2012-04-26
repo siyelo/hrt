@@ -17,7 +17,7 @@
     - @requests.each do |request|
       %tr
         %td= request.organization.try(:name)
-        %td= link_to request.title, set_request_path(request.id)
+        %td= request.title
         %td= formatted_date(request.start_date)
         %td.action
           %ul.manage_bar

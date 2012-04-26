@@ -5,7 +5,7 @@ describe DocumentsController do
     let(:user) { Factory(:reporter) }
 
     it "required logged in user" do
-      get :index, :response_id => 'x'
+      get :index
       response.should redirect_to(root_url)
     end
 
@@ -15,7 +15,7 @@ describe DocumentsController do
       user.stub_chain(:data_responses, :find)
       Document.should_receive(:visible_to_reporters).and_return([])
 
-      get :index, :response_id => 'x'
+      get :index
       response.should be_success
     end
   end

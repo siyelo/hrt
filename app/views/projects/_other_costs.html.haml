@@ -12,4 +12,4 @@
   %tr.none
     %td{:colspan => 100}
       No Overhead Costs found.
-      = link_to "Add Overhead Costs now.", new_response_other_cost_path(response, :project_id => project.id), :class => 'js_toggle_other_cost_form'
+      = link_to "Add Overhead Costs now.", new_other_cost_path(:project_id => project.id), :class => 'js_toggle_other_cost_form'

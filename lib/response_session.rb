@@ -1,0 +1,59 @@
+module ResponseSession
+
+  def self.included(klass)
+    klass.send(:include, InstanceMethods)
+    klass.class_eval do
+      before_filter :set_response
+    end
+  end
+
+  module InstanceMethods
+    def current_request
+      current_response.data_request if current_response
+    end
+
+    def current_response
+      @response
+    end
+
+    private
+      def set_response
+        @response = detect_response
+        session[:response_id] = @response.id if @response
+      end
+
+      def detect_response
+        return nil unless current_user
+
+        resp_id = params[:response_id].presence || session[:response_id].presence
+        resp = find_response(resp_id) if resp_id.present?
+        resp ||= last_response
+        resp = last_response if switch_to_last_response?(resp, last_response)
+
+        resp
+      end
+
+      def last_response
+        @last_response ||= current_user.organization.
+          data_responses.latest_first.first
+      end
+
+      def find_response(response_id)
+        if current_user.sysadmin?
+          DataResponse.find_by_id(response_id)
+        elsif current_user.activity_manager?
+          # scope by the organizations the AM has access to
+          DataResponse.find_by_id(response_id, :conditions => ["organization_id in (?)",
+           [current_user.organization.id] + current_user.organizations.map{|o| o.id}])
+        else
+          current_user.data_responses.find_by_id(response_id)
+        end
+      end
+
+      # TODO: add other report controllers
+      def switch_to_last_response?(current_response, last_response)
+        current_user.role?('reporter') && current_response != last_response &&
+          !['reports', 'reports/projects'].include?(params[:controller])
+      end
+  end
+end

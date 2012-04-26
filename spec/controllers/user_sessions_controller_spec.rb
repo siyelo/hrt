@@ -20,6 +20,20 @@ describe UserSessionsController do
     it { should redirect_to(dashboard_path) }
   end
 
+  context "logout" do
+    before :each do
+      data_request = Factory :data_request
+      organization = Factory :organization
+      user         = Factory :reporter, :organization => organization
+      login(user)
+    end
+
+    it "can logout" do
+      delete :destroy
+      session[:response_id].should be_nil
+    end
+  end
+
   context "not logged in" do
     it "redirects the user to root path when requesting logout" do
       delete :destroy

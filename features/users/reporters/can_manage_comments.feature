@@ -33,7 +33,7 @@ Feature: Reporter can see comments
 
     Scenario: Reporter can see only comments from his organization
       Given a organization exists with name: "USAID"
-        And a reporter exists with email: "reporter2@hrtapp.com", organization: the organization, current_response: the data_response
+        And a reporter exists with email: "reporter2@hrtapp.com", organization: the organization
         And a data_response should exist with data_request: the data_request, organization: the organization
         And a project exists with name: "Other Project", data_response: the data_response
         And a comment exists with comment: "comment2", commentable: the project, user: the reporter

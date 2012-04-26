@@ -257,36 +257,4 @@ describe User do
       user.organizations.should be_empty
     end
   end
-
-  it "returns the current request" do
-    @request  = Factory(:data_request)
-    @org      = Factory(:organization)
-    Factory :user, :organization => @org
-    @response = @org.latest_response
-    @user = Factory(:reporter, :current_response => @response, :organization => @org)
-    @user.current_request.should == @response.request
-  end
-
-  describe "#change_current_response!" do
-    let(:response) { mock :response }
-    let(:responses) { mock :response_list }
-    let(:org) { mock Organization }
-    let(:user) { User.new }
-    before :each do
-      org.stub(:responses).and_return responses
-      user.stub(:organization).and_return org
-    end
-    it "changes current_response" do
-      responses.stub(:find_by_data_request_id).and_return response
-      user.should_receive('current_response=').with response
-      user.should_receive('save').with false
-      user.change_current_response!(123)
-    end
-
-    it "ignores invalid ids" do
-      responses.stub(:find_by_data_request_id).and_return nil
-      user.should_not_receive('current_response=')
-      user.change_current_response!('a').should be_false
-    end
-  end
 end

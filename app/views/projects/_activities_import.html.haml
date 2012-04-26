@@ -7,7 +7,7 @@
     %br
     %p Please note that the file import currently supports files with around 50 rows - if you are having problems with the file upload, please try upload individual projects/activities in separate files.  If you encounter a timeout error, please post a problem at <a href='https://hrtapp.tenderapp.com/kb'>TenderApp</a> and the support team will assist you.
     %br
-    - form_tag(import_response_projects_path(@response, url_params), :multipart => true) do
+    - form_tag(import_projects_path(url_params), :multipart => true) do
 
       .upbox
         = label_tag :file, "File"
@@ -15,8 +15,8 @@
       = submit_tag "Import", :class => 'small_submit_button'
 
       - if can_export
-        = link_to "Export", export_response_projects_path(@response, url_params), :class => "create_alt right"
-      = link_to "Get Template", download_template_response_projects_path(@response), :class => "create_alt right"
+        = link_to "Export", export_projects_path(url_params), :class => "create_alt right"
+      = link_to "Get Template", download_template_projects_path, :class => "create_alt right"
 
 - # The bulk import is used to asynchronously import large files -
 - # it has been removed from the UI to prevent misuse and should be

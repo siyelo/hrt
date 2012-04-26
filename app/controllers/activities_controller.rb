@@ -4,7 +4,6 @@ class ActivitiesController < BaseController
   inherit_resources
   belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
   helper_method :sort_column, :sort_direction
-  before_filter :load_response
   before_filter :confirm_activity_type, :only => [:edit]
   before_filter :require_admin, :only => [:sysadmin_approve]
   before_filter :prevent_browser_cache, :only => [:edit, :update] # firefox misbehaving
@@ -106,7 +105,7 @@ class ActivitiesController < BaseController
     @activity = Activity.find params[:id]
     if check_activity_manager_permissions(@activity.organization)
       destroy! do |success, failure|
-        success.html { redirect_to response_projects_url(@response) }
+        success.html { redirect_to projects_url }
       end
     else
       render :action => :edit
@@ -118,7 +117,7 @@ class ActivitiesController < BaseController
     def success_flash(action)
       flash[:notice] = "Activity was successfully #{action}."
       if params[:activity][:project_id] == Activity::AUTOCREATE.to_s
-        flash[:notice] += "  <a href=#{edit_response_project_path(@response, @activity.project)}>Click here</a>
+        flash[:notice] += "  <a href=#{edit_project_path(@activity.project)}>Click here</a>
                            to enter the funding sources for the automatically created project."
       end
     end
@@ -133,7 +132,7 @@ class ActivitiesController < BaseController
 
     def confirm_activity_type
       @activity = Activity.find(params[:id])
-      return redirect_to edit_response_other_cost_path(@response, @activity) if @activity.class.eql? OtherCost
+      return redirect_to edit_other_cost_path(@activity) if @activity.class.eql? OtherCost
     end
 
     def prepare_classifications(activity)

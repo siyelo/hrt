@@ -3,7 +3,6 @@ class OtherCostsController < BaseController
 
   inherit_resources
   helper_method :sort_column, :sort_direction
-  before_filter :load_response
   before_filter :confirm_activity_type, :only => [:edit]
   belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
 
@@ -60,7 +59,7 @@ class OtherCostsController < BaseController
       destroy! do |success, failure|
         success.html do
           flash[:notice] = 'Other Cost was successfully destroyed'
-          redirect_to response_projects_url(@response)
+          redirect_to projects_url
         end
       end
     else
@@ -73,7 +72,7 @@ class OtherCostsController < BaseController
     def success_flash(action)
       flash[:notice] = "Other Cost was successfully #{action}."
       if params[:other_cost][:project_id] == Activity::AUTOCREATE
-        flash[:notice] += "  <a href=#{edit_response_project_path(@response, @other_cost.project)}>Click here</a>
+        flash[:notice] += "  <a href=#{edit_project_path(@other_cost.project)}>Click here</a>
                            to enter the funding sources for the automatically created project."
       end
     end
@@ -88,7 +87,7 @@ class OtherCostsController < BaseController
 
     def confirm_activity_type
       @other_cost = OtherCost.find(params[:id])
-      return redirect_to edit_response_activity_path(@response, @other_cost) if @other_cost.class.eql? Activity
+      return redirect_to edit_activity_path(@other_cost) if @other_cost.class.eql? Activity
     end
 
     def prepare_classifications(other_cost)

@@ -92,6 +92,18 @@ describe Organization do
 
       Organization.ordered.should == [org2, org1]
     end
+
+    # integration test
+    it "finds all reporting orgs" do
+      user = Factory :user
+      Organization.reporting.should == [user.organization]
+    end
+
+    # integration test
+    it "finds all nonreporting orgs" do
+      organization = Factory(:organization)
+      Organization.nonreporting.should == [organization]
+    end
   end
 
   describe 'reporting/non-reporting' do
@@ -104,12 +116,6 @@ describe Organization do
       org = Organization.new
       org.stub(:users_count).and_return 1
       org.reporting?.should == true
-    end
-
-    # integration test
-    it "finds all reporting orgs" do
-      user = Factory :user
-      Organization.reporting.should == [user.organization]
     end
   end
 

@@ -13,15 +13,12 @@ ActionController::Routing::Routes.draw do |map|
     :member => {:disable_tips => :put}
 
   # STATIC PAGES
-  map.about_page 'about', :controller => 'static_page',
-    :action => 'about'
+  map.about_page 'about', :controller => 'static_page', :action => 'about'
 
   map.resources :comments
-  map.resources :reports, :only => [:index]
 
   # ALL USERS
   map.dashboard 'dashboard', :controller => 'dashboard', :action => :index
-  map.set_request 'set_request/:id', :controller => 'users', :action => :set_request
 
   # ADMIN
   map.namespace :admin do |admin|
@@ -46,45 +43,33 @@ ActionController::Routing::Routes.draw do |map|
   map.activity_manager_workplan 'activity_manager/workplan', :controller => 'users', :action => :activity_manager_workplan
 
   # REPORTER USER: DATA ENTRY
-  map.resources :responses,
-    :except => [:index, :new, :create, :edit, :update, :destroy],  # yeah, ridicuI know.
-    :member => {:review => :get, :submit => :put,
-                :restart => :put, :send_data_response => :put,
-                :approve_all_budgets => :put,
-                :reject => :put, :accept => :put} do |response|
-    response.resources :projects, :except => [:show],
-      :collection => {:download_template => :get,
-                      :export_workplan => :get,
-                      :export => :get,
-                      :import => :post,
-                      :import_and_save => :post}
-    response.resources :activities, :except => [:index, :show],
-      :member => {:sysadmin_approve => :put, :activity_manager_approve => :put},
-      :collection => {:template => :get,
-                      :export => :get}
-    response.resources :other_costs, :except => [:index, :show],
-      :collection => {:create_from_file => :post, :download_template => :get}
-    response.resources :districts, :only => [:index, :show] do |district|
-      district.resources :activities, :only => [:index, :show],
-        :controller => "districts/activities"
-      district.resources :organizations, :only => [:index, :show],
-        :controller => "districts/organizations"
-    end
+  map.resources :responses, :only => [],
+    :member => {:review => :get, :submit => :put, :restart => :put,
+                :reject => :put, :accept => :put,
+                :send_data_response => :put, :approve_all_budgets => :put}
 
-    response.resources :reports, :only => [:index, :show]
+  map.resources :projects, :except => [:show],
+    :collection => {:download_template => :get,
+                    :export_workplan => :get,
+                    :export => :get,
+                    :import => :post,
+                    :import_and_save => :post}
 
-    response.resources :documents, :as => :files
-  end
+  map.resources :activities, :except => [:index, :show],
+    :member => {:sysadmin_approve => :put, :activity_manager_approve => :put},
+    :collection => {:template => :get, :export => :get}
 
-  map.resources :activities
-  map.resources :organizations, :only => [:edit, :update],
+  map.resources :other_costs, :except => [:index, :show],
+    :collection => {:create_from_file => :post, :download_template => :get}
+
+  map.resource :organization, :only => [:edit, :update],
     :collection => { :export => :get }
 
+
+  map.resources :documents, :as => :files
+
+  map.resources :reports, :only => [:index]
   map.namespace :reports do |reports|
-    reports.resources :responses, :only => [],
-        :member => {:overview => :get} do |response|
-      response.resources :projects, :only => [],
-        :member => {:overview => :get}
-    end
+    reports.resources :projects, :only => [:show]
   end
 end

@@ -13,7 +13,7 @@ class OrganizationsController < BaseController
   def update
     if @organization.update_attributes(params[:organization])
       flash[:notice] = "Settings were successfully updated."
-      redirect_to dashboard_url
+      redirect_to edit_organization_path
     else
       flash.now[:error] = "Oops, we couldn't save your changes."
       render :action => :edit
@@ -34,7 +34,7 @@ class OrganizationsController < BaseController
 
   private
     def load_organization
-      @organization = current_user.sysadmin? ? Organization.find(params[:id]) : current_user.organization
+      @organization = @response.organization
     end
 
     def load_users

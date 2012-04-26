@@ -19,7 +19,7 @@
     - unless @recent_responses.empty?
       %ul.recently_submitted
         - @recent_responses.each do |r|
-          %li= link_to r.organization.name, response_projects_path(r)
+          %li= link_to r.organization.name, projects_path(:response_id => r.id)
     - else
       %span.none No responses submitted recently
 
@@ -41,7 +41,7 @@
       - @organizations.each do |organization|
         - response = organization.data_responses.detect { |dr| dr.data_request_id == current_request.id }
         %tr
-          %td.title= link_to organization.name, response_projects_path(response)
+          %td.title= link_to organization.name, projects_path(:response_id => response.id)
           %td
             %ul
               %li
@@ -53,6 +53,6 @@
               - organization.user_emails(2).each do |email|
                 %li= mail_to email
 
-          %td.center= link_to "#{response.activities.manager_approved.count}/#{response.activities.count}", response_projects_path(response)
-          %td.center= link_to response.status, response_projects_path(response)
-          %td.center= link_to "Download Workplan", export_workplan_response_projects_path(response), :class => 'download_workplan'
+          %td.center= link_to "#{response.activities.manager_approved.count}/#{response.activities.count}", projects_path(:response_id => response.id)
+          %td.center= link_to response.status, projects_path(:response_id => response.id)
+          %td.center= link_to "Download Workplan", export_workplan_projects_path(:response_id => response.id), :class => 'download_workplan'

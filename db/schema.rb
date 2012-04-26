@@ -278,19 +278,15 @@ ActiveRecord::Schema.define(:version => 20120427174355) do
     t.datetime "updated_at"
     t.integer  "roles_mask"
     t.integer  "organization_id"
-    t.integer  "data_response_id_current"
     t.text     "text_for_organization"
     t.string   "full_name"
-    t.string   "perishable_token",         :default => "",    :null => false
-    t.boolean  "tips_shown",               :default => true
+    t.string   "perishable_token",      :default => "",    :null => false
+    t.boolean  "tips_shown",            :default => true
     t.string   "invite_token"
-    t.boolean  "active",                   :default => false
+    t.boolean  "active",                :default => false
     t.integer  "location_id"
     t.datetime "current_login_at"
     t.datetime "last_login_at"
   end
-
-  add_index "users", ["email"], :name => "index_users_on_email"
-  add_index "users", ["perishable_token"], :name => "index_users_on_perishable_token"
 
 end

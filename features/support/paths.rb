@@ -57,20 +57,6 @@ module NavigationHelpers
       activity = Activity.find_by_name($1)
       edit_response_project_path(activity.response, activity.project)
 
-    when /the admin review data response page for organization "(.+)", request "(.+)"/
-      response = get_data_response($2, $1)
-      admin_response_path(response)
-
-    when /the set request page for "(.+)"/
-      request = DataRequest.find_by_title($1)
-      set_request_path(request.id)
-
-    # Add more mappings here.
-    # Here is an example that pulls values out of the Regexp:
-    #
-    #   when /^(.*)'s profile page$/i
-    #     user_profile_path(User.find_by_login($1))
-
     else
       raise "Can't find mapping from \"#{page_name}\" to a path.\n" +
         "Now, go and add a mapping in #{__FILE__}"

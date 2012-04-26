@@ -5,7 +5,7 @@ class Admin::ReportsController < Admin::BaseController
   before_filter :find_report, :only => [:show, :edit, :update]
 
   def index
-    @request    = current_user.current_request
+    @request    = current_request
 
     # Data collected for the first request (id 8) is not valid due to changes
     # in the data structure of the application.  Therefore dynamic reports have

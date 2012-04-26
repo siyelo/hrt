@@ -133,14 +133,14 @@ class CommentsController < BaseController
     def commentable_resource(comment)
       if comment.commentable_type == "Activity"
         if comment.commentable.is_a?(OtherCost)
-          edit_response_other_cost_url(comment.commentable.data_response, comment.commentable)
+          edit_other_cost_url(comment.commentable)
         else
-          edit_response_activity_url(comment.commentable.data_response, comment.commentable)
+          edit_activity_url(comment.commentable)
         end
       elsif comment.commentable_type == "Project"
-        edit_response_project_url(comment.commentable.data_response, comment.commentable)
+        edit_project_url(comment.commentable)
       elsif comment.commentable_type == "DataResponse"
-        response_projects_url(comment.commentable)
+        projects_url
       else
         comments_url
       end

@@ -27,7 +27,7 @@ class ResponsesController < BaseController
     @response.save!
     flash[:notice] = "Response was successfully rejected"
     Notifier.deliver_response_rejected_notification(@response)
-    redirect_to response_projects_path(@response)
+    redirect_to projects_path
   end
 
   def accept
@@ -35,7 +35,7 @@ class ResponsesController < BaseController
     @response.save!
     Notifier.deliver_response_accepted_notification(@response)
     flash[:notice] = "Response was successfully accepted"
-    redirect_to response_projects_path(@response)
+    redirect_to projects_path
   end
 
   def restart
@@ -43,7 +43,7 @@ class ResponsesController < BaseController
     @response.save!
     Notifier.deliver_response_restarted_notification(@response)
     flash[:notice] = "Response was successfully restarted"
-    redirect_to response_projects_path(@response)
+    redirect_to projects_path
   end
 
   def approve_all_budgets
@@ -59,6 +59,12 @@ class ResponsesController < BaseController
     end
 
     Activity.approve_all_budgets(ids.map(&:id), current_user.id)
-    redirect_to response_projects_path(current_or_last_response)
+    redirect_to projects_path
   end
+
+  private
+    # use this if your controller expects :id instead of :response_id
+    def load_response_from_id
+      find_response(params[:id])
+    end
 end

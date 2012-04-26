@@ -1,5 +1,5 @@
 - klass = outlay.class
-- form_path = klass == Activity ? response_activity_path(@response, outlay, :mode => params[:mode]) : response_other_cost_path(@response, outlay, :mode => params[:mode])
+- form_path = klass == Activity ? activity_path(outlay, :mode => params[:mode]) : other_cost_path(outlay, :mode => params[:mode])
 
 - content_for :sub_nav do
   = render :partial => 'shared/sub_nav_projects'

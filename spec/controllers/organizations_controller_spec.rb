@@ -3,12 +3,12 @@ require 'spec_helper'
 shared_examples_for 'an organization controller' do
   it "should allow admin to edit settings of reporting organization" do
     o = Factory :organization
-    get :edit, :id => o.id
+    get :edit
     response.should be_success
   end
   it "should allow admin to edit settings of nonreporting org" do
     o = Factory :organization, :raw_type => 'Communal FOSA'
-    get :edit, :id => o.id
+    get :edit
     response.should be_success
   end
 end
@@ -16,12 +16,15 @@ end
 describe OrganizationsController do
   context "as a reporter" do
     before :each do
-      login(Factory(:reporter))
+      data_request  = Factory(:data_request)
+      organization  = Factory(:organization)
+      reporter       = Factory(:reporter, :organization => organization)
+      login(reporter)
     end
 
     it "redirects to dashboard_path" do
       put :update, :id => :current
-      response.should redirect_to(dashboard_path)
+      response.should redirect_to(edit_organization_path)
     end
 
     it "downloads csv template" do
@@ -37,7 +40,10 @@ describe OrganizationsController do
 
   context "as a sysadmin" do
     before :each do
-      login(Factory(:admin))
+      data_request  = Factory(:data_request)
+      organization  = Factory(:organization)
+      sysadmin      = Factory(:sysadmin, :organization => organization)
+      login(Factory(:sysadmin))
     end
 
     it_should_behave_like 'an organization controller'

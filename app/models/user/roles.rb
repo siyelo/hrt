@@ -37,14 +37,14 @@ module User::Roles
       role?('activity_manager') || sysadmin?
     end
 
+    def role?(role)
+      roles.include?(role.to_s)
+    end
+
     private
 
     def unassign_organizations
       self.organizations = []
-    end
-
-    def role?(role)
-      roles.include?(role.to_s)
     end
 
     def validate_inclusion_of_roles

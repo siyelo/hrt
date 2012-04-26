@@ -3,13 +3,13 @@ module DashboardHelper
     commentable = comment.commentable
     case comment.commentable_type
     when "Project"
-      edit_response_project_path(commentable.data_response, commentable.id)
+      edit_project_path(commentable, :response_id => commentable.data_response.id)
     when "Activity"
-      edit_response_activity_path(commentable.data_response, commentable)
+      edit_activity_path(commentable, :response_id => commentable.data_response.id)
     when "OtherCost"
-      edit_response_other_cost_path(commentable.data_response, commentable)
+      edit_other_cost_path(commentable, :response_id => commentable.data_response.id)
     when "DataResponse"
-      response_projects_path(commentable)
+      projects_path(commentable, :response_id => commentable.id)
     end
   end
 

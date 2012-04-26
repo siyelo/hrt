@@ -8,7 +8,6 @@ describe DataResponse do
     it { should have_many(:other_costs).dependent(:destroy) }
     it { should have_many(:projects).dependent(:destroy) }
     it { should have_many(:implementer_splits) } # delegate destroy to project -> activity
-    it { should have_many(:users_currently_completing) }
     it { should have_many(:comments).dependent(:destroy) }
   end
 

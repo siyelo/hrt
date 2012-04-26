@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe Reports::ResponsesController do
+describe ReportsController do
   context "as a visitor" do
     describe "it should be protected" do
-      before :each do get :overview, :id => 1 end
+      before :each do get :index end
       it { should redirect_to(root_url) }
       it { should set_the_flash.to("You must be logged in to access this page") }
     end
@@ -17,13 +17,13 @@ describe Reports::ResponsesController do
     end
 
     it "should render index" do
-      get :overview, :id => @reporter.current_response.id
+      get :index
       response.should be_success
-      assigns[:response].should == @reporter.current_response
+      assigns[:response].should == @reporter.data_responses.first
     end
 
     it "should initialize an org report presenter" do
-      get :overview, :id => @reporter.current_response.id
+      get :index
       assigns[:report].should_not be_nil
     end
   end

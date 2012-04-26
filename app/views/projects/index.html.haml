@@ -9,7 +9,10 @@
 #projects_listing
   %h1.request_nav
     = render 'search'
-    = render '/shared/request_nav'
+    - if current_user.sysadmin?
+      = render '/shared/request_nav'
+    - else
+      = current_request.name
 
   = render 'getting_started'
 
@@ -27,9 +30,9 @@
         = image_tag "icon_dropdown.png"
 
       %ul.menu_items{:style => 'display: none'}
-        %li= link_to 'Project', new_response_project_path(@response), :class => 'js_toggle_project_form js_address'
-        %li= link_to 'Activity', new_response_activity_path(@response), :class => 'js_toggle_activity_form js_address'
-        %li= link_to 'Other Cost', new_response_other_cost_path(@response), :class => 'js_toggle_other_cost_form js_address'
+        %li= link_to 'Project', new_project_path, :class => 'js_toggle_project_form js_address'
+        %li= link_to 'Activity', new_activity_path, :class => 'js_toggle_activity_form js_address'
+        %li= link_to 'Other Cost', new_other_cost_path, :class => 'js_toggle_other_cost_form js_address'
 
     %li.js_dropdown_menu
       - link_to '#', :class => 'js_dropdown_trigger dropdown' do
@@ -38,10 +41,10 @@
 
       %ul.menu_items{:style => 'display: none'}
         %li= link_to 'Import', '#', :id => "import_export"
-        %li= link_to 'Export', export_response_projects_path(@response)
+        %li= link_to 'Export', export_projects_path
 
     %li
-      - link_to export_workplan_response_projects_path(@response), :class => 'dropdown dropless' do
+      - link_to export_workplan_projects_path, :class => 'dropdown dropless' do
         Download Workplan
 
       %ul.menu_items{:style => 'display: none'}
@@ -64,7 +67,7 @@
   - if params[:query]
     %p
       = "Projects with names containing #{params[:query]}"
-      = link_to "(Back to complete project listing)", response_projects_path(@response)
+      = link_to "(Back to complete project listing)", projects_path
 
   %table.data
     %thead

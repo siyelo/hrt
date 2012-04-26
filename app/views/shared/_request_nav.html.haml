@@ -1,12 +1,12 @@
 - if current_request.present?
   - if current_request.previous_request.present?
-    - link_to set_request_path(current_request.previous_request.id), :title => "Previous Request", :class => 'arrow-nav' do
+    - link_to switch_response_path(current_request.previous_request), :title => "Previous Request", :class => 'arrow-nav' do
       = image_tag("arrow-nav-left.png")
   - else
     %a.arrow-nav.disabled= image_tag("arrow-nav-left.png")
 
   - if current_request.next_request.present?
-    - link_to set_request_path(current_request.next_request.id), :title => "Next Request", :class => 'arrow-nav last' do
+    - link_to switch_response_path(current_request.next_request), :title => "Next Request", :class => 'arrow-nav last' do
       = image_tag("arrow-nav-right.png")
   - else
     %a.arrow-nav.last.disabled= image_tag("arrow-nav-right.png")

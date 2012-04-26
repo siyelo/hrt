@@ -129,18 +129,6 @@ module ApplicationHelper
       map{ |o| [o.display_name(100), o.id] }
   end
 
-  def current_response
-    current_user.current_response
-  end
-
-  def last_response
-    current_user.organization.data_responses.last
-  end
-
-  def current_or_last_response
-    @response || current_response || last_response
-  end
-
   # simply returns the year of the given date
   # intended for 'fuzzy' FY's (e.g. "2010/2011")
   def rough_fiscal_year(date, i = 0)
@@ -190,11 +178,9 @@ module ApplicationHelper
       sum{|rca| rca.percentage.to_f}
   end
 
-  def edit_activity_or_ocost_path(outlay, opts = nil)
-    response = outlay.data_response
+  def edit_activity_or_ocost_path(outlay, opts = {})
     outlay.class == Activity ?
-      edit_response_activity_path(response, outlay, opts) :
-      edit_response_other_cost_path(response, outlay, opts)
+      edit_activity_path(outlay, opts) : edit_other_cost_path(outlay, opts)
   end
 
   # other costs do not show Purposes/Inputs/Outputs tabs
@@ -243,8 +229,13 @@ module ApplicationHelper
     end
   end
 
-# returns a javascript friendly definition of a ruby variable, even if the var is nil
+  # returns a javascript friendly definition of a ruby variable, even if the var is nil
   def js_safe(var)
     var.nil? ? "undefined" : var
+  end
+
+  def switch_response_path(request)
+    response_id = @response.organization.responses.find_by_data_request_id(request.id).id
+    url_for({:response_id => response_id})
   end
 end

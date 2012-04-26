@@ -7,7 +7,6 @@ Feature: Reporter can manage Overhead Costs
   Given a basic reporter setup
     And a project exists with name: "project1", data_response: the data_response
     And I am signed in as "reporter@hrtapp.com"
-    And I go to the set request page for "data_request1"
     And I follow "Projects"
 
   Scenario: Reporter can CRUD Overhead Costs

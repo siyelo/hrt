@@ -159,25 +159,23 @@ describe Admin::OrganizationsController do
     end
 
     context "merge ok" do
-      let(:dupe) { mock :org, :id => 1 }
-      let(:target) { mock :org, :id => 2 }
+      let(:dupe) { Factory(:organization) }
+      let(:target) { Factory(:organization) }
 
       before :each do
-        Organization.should_receive(:find).with("1").and_return dupe
-        Organization.should_receive(:find).with("2").and_return target
         Organization.should_receive(:merge_organizations!).with(target, dupe).and_return true
       end
 
       it "redirects to the duplicate_admin_organizations_path" do
-        put :remove_duplicate, :duplicate_organization_id => 1,
-          :target_organization_id => 2
+        put :remove_duplicate, :duplicate_organization_id => dupe.id,
+          :target_organization_id => target.id
         response.should redirect_to(duplicate_admin_organizations_path)
         flash[:notice].should == "Organizations successfully merged."
       end
 
       it "responds OK (json)" do
-        put :remove_duplicate, :format => 'js', :duplicate_organization_id => 1,
-          :target_organization_id => 2
+        put :remove_duplicate, :format => 'js', :duplicate_organization_id => dupe.id,
+          :target_organization_id => target.id
         response.body.should == '{"message":"Organizations successfully merged."}'
         response.should_not be_redirect
         response.status.should == "200 OK"

@@ -6,9 +6,7 @@ class ProjectsController < BaseController
   SORTABLE_COLUMNS = ['name']
 
   inherit_resources
-  belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
   helper_method :sort_column, :sort_direction
-  before_filter :load_response
   before_filter :strip_commas_from_in_flows, :only => [:create, :update]
   before_filter :prevent_browser_cache, :only => [:index, :edit, :update] # firefox misbehaving
   before_filter :require_admin, :only => [:import_and_save]
@@ -38,8 +36,10 @@ class ProjectsController < BaseController
     @project = Project.new(params[:project].merge(:data_response => @response))
     if check_activity_manager_permissions(@project.organization) && @project.save
       respond_to do |format|
-        format.html {flash[:notice] = "Project successfully created";
-              redirect_to response_projects_path(@response) }
+        format.html do
+          flash[:notice] = "Project successfully created";
+          redirect_to projects_path
+        end
         format.js   { js_redirect('success') }
       end
     else
@@ -57,7 +57,7 @@ class ProjectsController < BaseController
       respond_to do |format|
         format.html {
           flash[:notice] = "Project successfully updated";
-          redirect_to edit_response_project_url(@response, @project)
+          redirect_to edit_project_url(@project)
         }
         format.js {js_redirect('success')}
       end
@@ -85,12 +85,12 @@ class ProjectsController < BaseController
         @activities = @i.activities
       else
         flash[:error] = 'Please select a file to upload'
-        redirect_to response_projects_url(@response)
+        redirect_to projects_url
       end
     rescue FasterCSV::MalformedCSVError
       flash[:error] = "There was a problem with your file. Did you use the template provided and save the file as either XLS or CSV?
                        Please post a problem at <a href='https://hrtapp.tenderapp.com/kb'>TenderApp</a> if you can't figure out what's wrong."
-      redirect_to response_projects_url(@response)
+      redirect_to projects_url
     end
   end
 
@@ -104,11 +104,11 @@ class ProjectsController < BaseController
       else
         flash[:error] = 'Please select a file to upload'
       end
-      redirect_to response_projects_url(@response)
+      redirect_to projects_url
     rescue FasterCSV::MalformedCSVError
       flash[:error] = "There was a problem with your file. Did you use the template provided and save the file as either XLS or CSV?
                        Please post a problem at <a href='https://hrtapp.tenderapp.com/kb'>TenderApp</a> if you can't figure out what's wrong."
-      redirect_to response_projects_url(@response)
+      redirect_to projects_url
     end
   end
 

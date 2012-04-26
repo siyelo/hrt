@@ -33,7 +33,7 @@ class BaseController < ApplicationController
       elsif params[:commit] == "Save & Add Targets >"
         return redirect_to edit_activity_or_ocost_path(outlay, :mode => 'outputs')
       elsif params[:commit] == "Save & Go to Overview >"
-        return redirect_to response_projects_path(outlay.response)
+        return redirect_to projects_path
       else
         return redirect_to edit_activity_or_ocost_path(outlay, :mode => params[:mode])
       end

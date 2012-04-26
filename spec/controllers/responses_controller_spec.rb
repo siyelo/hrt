@@ -18,7 +18,8 @@ describe ResponsesController do
       @data_response.stub(:ready_to_submit?).and_return(true)
       @data_response.stub_chain(:projects, :find).and_return([])
 
-      user.stub_chain(:data_responses, :find).and_return(@data_response)
+      user.stub_chain(:data_responses, :find_by_id).and_return(@data_response)
+      user.stub_chain(:organization, :data_responses, :latest_first, :first).and_return(@data_response)
       current_user = controller.stub!(:current_user).and_return(user)
     end
 

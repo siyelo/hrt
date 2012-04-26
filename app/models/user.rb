@@ -1,7 +1,6 @@
 class User < ActiveRecord::Base
   include User::Upload
   include User::Roles
-  include User::ResponseSession
 
   acts_as_authentic do |c|
     c.validates_length_of_password_field_options = {:minimum => 6,
@@ -28,7 +27,12 @@ class User < ActiveRecord::Base
   # AuthLogic handles email uniqueness validation
   validates_presence_of :full_name, :email, :organization_id
 
+  ### Callbacks
   after_create :create_organization_responses
+
+  ### Delegates
+  delegate :responses, :to => :organization # instead of deprecated data_response
+  delegate :latest_response, :to => :organization # find the last response in the org
 
   ### Instance Methods
 

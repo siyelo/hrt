@@ -1,5 +1,5 @@
 %ul
   %li{:class => (params[:controller] == 'projects' && params[:action] == 'index' ? 'active' : nil)}
-    = link_to 'Overview', response_projects_path(current_or_last_response)
+    = link_to 'Overview', projects_path
   %li{:class => (params[:controller] == 'responses' && params[:action] == 'review' ? 'active' : nil)}
-    = link_to 'Review & Submit', review_response_path(current_or_last_response)
+    = link_to 'Review & Submit', review_response_path(current_response)

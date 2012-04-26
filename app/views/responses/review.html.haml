@@ -53,7 +53,7 @@
             %span.info The Projects below are missing Funding Sources or have Funding Sources without an organization or budget/spend
             %ul.push
               - @response.projects_with_invalid_funding_sources.each do |project|
-                %li= link_to friendly_name(project, 100), edit_response_project_path(@response, project)
+                %li= link_to friendly_name(project, 100), edit_project_path(project)
       %li
         %h3{:class => ready(@response.projects_have_activities?)}
           Activities Entered
@@ -65,7 +65,7 @@
             - else
               %span.info
                 You have project(s), but not all have activities yet.
-                = link_to "Start by adding your activities here.", response_projects_path(@response)
+                = link_to "Start by adding your activities here.", projects_path
 
       %li
         %h3{:class => other_costs_class}
@@ -78,7 +78,7 @@
             - else
               %span.info
                 Overhead Costs help you include any financial information at the national level and/or administrative expenses.
-                = link_to "Start adding your Overhead Costs now.", response_projects_path(@response)
+                = link_to "Start adding your Overhead Costs now.", projects_path
 
       %li
         %h3{:class => activities_have_splits_class}
@@ -106,7 +106,7 @@
             - else
               %span.info
                 Start by adding a few Activities first (see above), then you can start classifying them.
-                = link_to "Start adding your Activities here.", response_projects_path(@response)
+                = link_to "Start adding your Activities here.", projects_path
         - unless @response.activities_coded?
           - unless @response.uncoded_activities.empty?
             = render 'uncoded_table', :activities => @response.uncoded_activities
@@ -120,7 +120,7 @@
             - else
               %span.info
                 Start by adding a few Overhead Costs first (see above), then you can start classifying them.
-                = link_to "Start adding your Overhead Costs here.", response_projects_path(@response)
+                = link_to "Start adding your Overhead Costs here.", projects_path
 
         - unless @response.other_costs_coded?
           - unless @response.uncoded_other_costs.empty?

@@ -13,13 +13,13 @@ describe ApplicationHelper do
     end
 
     it "should link to the activity if there is nothing uncoded" do
-      helper.link_to_unclassified(@activity).should == edit_response_activity_path(@response, @activity)
+      helper.link_to_unclassified(@activity).should == edit_activity_path(@activity)
     end
 
     it "should link to the locations if locations is uncoded" do
       @activity.stub(:coding_spend_district_valid?) { false }
       @activity.stub(:coding_budget_district_valid?) { false }
-      helper.link_to_unclassified(@activity).should == edit_response_activity_path(@response, @activity, :mode => 'locations')
+      helper.link_to_unclassified(@activity).should == edit_activity_path(@activity, :mode => 'locations')
     end
 
     it "should link to the locations if locations and purposes are uncoded" do
@@ -27,7 +27,7 @@ describe ApplicationHelper do
       @activity.stub(:coding_budget_district_valid?) { false }
       @activity.stub(:coding_spend_valid?) { false }
       @activity.stub(:coding_spend_district_valid?) { false }
-      helper.link_to_unclassified(@activity).should == edit_response_activity_path(@response, @activity, :mode => 'locations')
+      helper.link_to_unclassified(@activity).should == edit_activity_path(@activity, :mode => 'locations')
     end
   end
 

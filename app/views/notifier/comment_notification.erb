@@ -8,9 +8,9 @@ Hello,
 To view/respond to it, please visit the url below.
 
 <% if @comment.commentable.is_a?(DataResponse) %>
-  <%= response_projects_url(@comment.commentable) %>
+  <%= projects_url %>
 <% else %>
-  <%= response_activity_url(@comment.commentable.data_response, @comment.commentable) %>
+  <%= activity_url(@comment.commentable) %>
 <% end %>
 
 

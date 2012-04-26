@@ -7,6 +7,6 @@
     %table.modern_table
       = render 'documents/documents', :documents => @documents
 
-    .files_read_more= link_to "view all", current_user.sysadmin? ? admin_documents_path : response_documents_path(current_or_last_response)
+    .files_read_more= link_to "view all", current_user.sysadmin? ? admin_documents_path : documents_path
   - else
     %p There are no files available for download.

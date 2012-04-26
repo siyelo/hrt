@@ -591,14 +591,14 @@ var admin_responses_show = {
   }
 };
 
-var reports_responses_overview  = {
+var reports_index  = {
   run: function () {
     drawPieChart('code_spent', _expenditure_summary, 450, 300);
     drawPieChart('code_budget', _budget_summary, 450, 300);
   }
 };
 
-var reports_projects_overview = {
+var reports_projects_show = {
   run: function () {
     drawPieChart('code_spent', _expenditure_summary, 450, 300);
     drawPieChart('code_budget', _budget_summary, 450, 300);
@@ -1341,10 +1341,9 @@ var approveAsAdmin = function() {
 
 var approveActivity = function (element, approval_type, success_text) {
    var activity_id = element.attr('activity-id');
-   var response_id = element.attr('response-id');
 
    element.parent('li').find(".ajax-loader").show();
-   var url = "/responses/" + response_id + "/activities/" + activity_id + "/" + approval_type
+   var url = "/activities/" + activity_id + "/" + approval_type
    $.post(url, {approve: true, "_method": "put"}, function (data) {
      element.parent('li').find(".ajax-loader").hide();
      if (data.status == 'success') {

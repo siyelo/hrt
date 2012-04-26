@@ -18,9 +18,6 @@ class DataResponse < ActiveRecord::Base
            :conditions => [ "activities.type IS NULL"]
   has_many :other_costs, :dependent => :destroy
   has_many :implementer_splits, :through => :activities
-  has_many :users_currently_completing,
-           :class_name => "User",
-           :foreign_key => :data_response_id_current
   has_many :comments, :as => :commentable, :dependent => :destroy
 
   ### Validations

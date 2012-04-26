@@ -9,6 +9,7 @@ class DashboardController < ApplicationController
 
   # Load the dashboard with any special conditions detected by user type
   def index
+    setup_current_organization_response
     load_activity_manager if current_user.activity_manager? && !current_user.sysadmin?
     load_requests
     load_documents
@@ -60,5 +61,12 @@ class DashboardController < ApplicationController
     def load_documents
       scope = current_user.sysadmin? ? Document : Document.visible_to_reporters
       @documents = scope.latest_first.limited
+    end
+
+    def setup_current_organization_response
+      if current_request
+        @response = current_user.organization.data_responses.
+          find_by_data_request_id(current_request.id)
+      end
     end
 end
