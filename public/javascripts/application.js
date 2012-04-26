@@ -591,7 +591,7 @@ var admin_responses_show = {
   }
 };
 
-var reports_organizations_overview  = {
+var reports_responses_overview  = {
   run: function () {
     drawPieChart('code_spent', _expenditure_summary, 450, 300);
     drawPieChart('code_budget', _budget_summary, 450, 300);

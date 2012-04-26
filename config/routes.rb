@@ -81,10 +81,9 @@ ActionController::Routing::Routes.draw do |map|
     :collection => { :export => :get }
 
   map.namespace :reports do |reports|
-    reports.resources :responses, :only => [] do |response|
+    reports.resources :responses, :only => [],
+        :member => {:overview => :get} do |response|
       response.resources :projects, :only => [],
-        :member => {:overview => :get}
-      response.resources :organizations, :only => [],
         :member => {:overview => :get}
     end
   end
