@@ -16,14 +16,6 @@ module ResponseSession
       @response
     end
 
-    def previous_response
-      response_for_request(current_request.previous_request)
-    end
-
-    def next_response
-      response_for_request(current_request.next_request)
-    end
-
     private
       def set_response
         @response = detect_response
@@ -63,10 +55,13 @@ module ResponseSession
         current_user.role?('reporter') && current_response != last_response &&
           !['reports', 'reports/projects'].include?(params[:controller])
       end
+<<<<<<< HEAD
 
       def response_for_request(request)
         return nil if request.nil?
         current_response.organization.responses.find_by_data_request_id(request.id)
       end
+=======
+>>>>>>> a957fc2... [fixes #28662409] New routes without response id
   end
 end
