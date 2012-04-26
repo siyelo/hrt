@@ -97,12 +97,6 @@ table.standard
   .wrap_30
     min-width: 30%
 
-// fixes background arrow overlapping in "Created" column
-#admin_organizations_index
-  table.standard
-    td, th
-      min-width: 75px
-
 // Pretty Table with clickable rows
 table.clickable
 
@@ -125,71 +119,6 @@ table.rounded
     +border-top-left-radius
   th:last-child
     +border-top-right-radius
-
-
-table.sum
-  width: 100%
-
-  td:first-child, th:first-child
-    width: 60%
-
-  tbody tr:last-child td
-    border: none
-    padding-bottom: 20px
-
-  h1 a
-    color: $mid-blue
-    font-family: Avenir, sans-serif
-    font-size: 16px
-    font-weight: normal !important
-    line-height: 1
-
-  thead tr
-    background: $mid-blue - #111
-
-  thead th
-    a
-      background: $mid-blue - #111
-      color: $lightest-blue
-      display: block
-      font-size: 11px
-      font-weight: bold
-      padding: 10px 12px 7px 12px
-      text-decoration: none
-      text-transform: uppercase
-      &:hover, &:focus, &:active
-        color: #FFF
-        //background: image_url("icon_arrow_up.gif") no-repeat right center $mid-blue - #222
-      &.asc
-        background: image_url("icon_arrow_up.gif") no-repeat right center $mid-blue - #222
-      &.desc
-        background: image_url("icon_arrow_down.gif") no-repeat right center $mid-blue - #222
-
-    &:first-child a
-      +border-top-left-radius
-    &:last-child a
-      +border-top-right-radius
-
-  tbody td:first-child
-    a
-      font-weight: bold
-      line-height: 1.4
-      text-decoration: none
-
-  tr.head td
-    background: $lightest-blue
-    font-weight: bold
-    padding: 2px 12px 0px 12px
-  tr.sub-head td
-    padding: 15px 12px 4px 12px
-  tr td
-    border-bottom: 1px solid $lightest-blue
-    color: $mid-blue
-    font-size: 12px
-    padding: 5px 12px 4px
-
-  tr.none td
-    border: none
 
 //
 table.data
@@ -303,7 +232,6 @@ table.data
         display: none
 
   .name
-
     font: normal 13px/1.4 Avenir, Arial, sans-serif
     padding-top: 14px
     vertical-align: top
@@ -313,19 +241,6 @@ table.data
       &:hover, &:focus
         color: $primary
         text-decoration: underline
-
-  .nested_name
-    line-height: 1
-    font-size: 11px
-    vertical-align: top
-    span
-      display: block
-      font-size: 12px
-      font-weight: bold
-      margin-left: 10px
-      padding-top: 2px
-    &.wrap_30
-      width: 30%
 
   tbody
     tr td
@@ -341,8 +256,6 @@ table.data
           color: $primary_dark
           font-weight: bold
 
-  .row_cancel
-    margin-bottom: 0 !important
   input[type=text]
     padding: 4px 2px !important
     width: 80px
@@ -354,27 +267,6 @@ table.data
     &.string
       text-align: left
 
-  .new_activity, .new_project, .new_funder, .new_implementer
-    background: $primary_lighter
-    .inline-errors
-      clear: both
-      margin-left: 0
-      padding-left: 0
-      width: auto
-    .inputs, .buttons
-      float: left
-    ol
-      +pie-clearfix
-    li
-      border: none
-      display: inline
-      float: left
-      margin: 0
-      padding: 0 10px 0 0
-    input[type=text]
-      width: 250px !important
-    textarea
-      width: 400px
   .nested
     width: 98%
     td
@@ -384,10 +276,6 @@ table.data
       border: none
     tr:hover td
       background: $primary_lighter
-  .classification_destroy
-    opacity: 0.6
-    &:hover, &:focus
-      opacity: 1
   a.add_row
     margin-left: 0
   a.create_button
@@ -396,16 +284,6 @@ table.data
   .add_purpose_form
     td
       background: $primary_lighter
-  .context
-    color: $primary
-    font-size: 11px
-    font-style: italic
-    margin-left: 10px
-  tr.summary td
-    background: #fff
-    border-top: 1px solid $primary_border
-    border-bottom: none
-    font-weight: bold
 
 tr.filler th, tr.filler td
   background: $primary_lighter
@@ -414,65 +292,175 @@ tr.filler th, tr.filler td
 tr.filler2 th, tr.filler2 td
   background: $primary_lightest
   font-weight: bold
-
-tr.filler_warning th, tr.filler_warning td
-  background: #FFECE9
-  font-weight: bold
-
-tr.activity_subheading
-  color: #888
-  background: $primary_lighter
-  font-weight: normal
-  text-transform: uppercase
-  td
-    padding: 3px 10px
-    font-size: 10px
-
-.nested
-  font-size: 11px
+  
+  
+// default layout for a simple table
+.modern_table
+  font-size: 12px
+  margin-top: 10px
   width: 100%
-  +border-radius
-  +box-shadow(#ddd, 0, 0, 4px)
-  th
-    background: $primary_lightest
-    border-bottom: 1px solid $primary_border3
-    color: $primary
-    padding: 7px
-    +text-shadow(#fff, 0, 1px)
-    &:first-child
-      +border-top-left-radius
-    &:last-child
-      +border-top-right-radius
-  tbody
-    border: 1px solid $primary_border3
+
   td
-    background: #fff
-    border-bottom: 1px solid $primary_border3
-    color: $primary_dark
-    padding: 5px 7px
-
-    li
-      padding: 0px !important
-    &.implementer
-      font-weight: bold
-      width: 55%
-    &.amount
-      width: 20%
-    &.action
-      text-align: right
-      width: 5%
-
-  tr:last-child td
     &:first-child
-      +border-bottom-left-radius
+      padding-left: 7px
     &:last-child
-      +border-bottom-right-radius
+      padding-right: 5px
 
-  input[type="text"]
-    background: $primary_lightest
-    padding: 2px !important
+  th
+    border-bottom: 1px solid $light-blue
+    color: $blue
+    font-weight: bold
+    padding-bottom: 5px
+    +linear-gradient(color-stops($filler, $primary_lightest))
+  tbody td
+    border-bottom: 1px solid $lightest-blue
+    padding: 5px 0
+    &.title
+      color: $mid-blue
+      font-weight: bold
+
+  a
+    background: none
+    display: inline-block
+    font-size: 11px
+    padding: 0
+    text-decoration: none
+    +border-radius
+    &.title
+      color: $primary
+      font-size: 12px
+      font-weight: bold
+    &.respond
+      background: green
+      color: #fff
+      float: right
+      font-size: 9px
+      font-weight: bold
+      padding: 7px 10px 4px
+      text-transform: uppercase
+      &:hover, &:focus
+        background: orange
+
+// Simple table
+
+.simple_table
+  +pie-clearfix
+  // a hack, but the padding interferes with .third
+  &.push
+    margin: 0 0 15px 40px
+  &.review
+    td.first
+      font-weight: bold
+    td.activity
+      padding-left: 40px
+      font-size: 12px
+
+  hr
+    background: none
+    border: none
+    border-top: 1px dashed $light-blue
+    margin-top: 20px
+  // 2-col summary tables in each Response/Project/Activity
+  .summary
+    font-size: 12px
+    tr td:first-child
+      font-weight: bold
+      text-align: right
+      width: 45%
+  .activities .summary td
+    font-size: 12px
+    thead tr th
+      font-size: 11px
+  h3
+    color: $mid-blue
+    font-size: 0.9em
+    padding: 20px 10px 10px 0
+    text-transform: none
+  table
+    background: $very-light-grey
+    color: $mid-blue
+    width: 100%
+    a
+      display: inline-block
+      font-size: 1em
+    .third
+      width: 31%
+    th, td
+      border-right: 1px solid white
+      padding: 7px
+    tbody
+      font-size: 12px
+      th, td
+        border-bottom: 1px solid white
+      tr:hover
+        background: #f9f9f9
+    thead
+      background: $mid-blue
+      color: white
+      font-size: 11px
+      &:hover
+        background: $mid-blue
+      th
+        border-bottom: 1px solid white
+      tr:hover
+        background: $mid-blue
+  .name
+    font-weight: bold
+  .descr, .descr_full
+    padding-right: 40px
+  #activity_classification
+    padding: 0
+    h4
+      margin-bottom: 5px
+    ul
+      padding-left: 20px
+  li
+    padding-top: 5px
+  .active
+    background: $light-blue
+    color: $dark-blue
+    &:hover
+      background: $light-blue
+  // activity description
+  .activity
+    &.entry_header
+      .descr_full
+        display: none
+      .descr
+        display: block
+      &.active
+        .descr_full
+          display: block
+        .descr
+          display: none
+  .t_right
+    float: right
+    margin-right: 0
     text-align: right
-    width: 75% !important
+
+  .activities, .dashboard_comments
+    tbody
+      font-size: 1.2em
+  .dashboard_comments
+    border: none !important
+    padding: 0 !important
+  .activities .actions
+    ul
+      +horizontal-list
+      background: $lightest-blue
+      margin-bottom: 5px
+      +pie-clearfix
+      li:last-child
+        float: right
+        margin-right: 5px
+      li
+        margin-bottom: 0
+      label
+        display: inline
+      a
+        display: inline-block
+        padding: 4px
+
 
 // Inputs table
 
@@ -481,7 +469,6 @@ tr.activity_subheading
 
   tr
     position: relative
-
     &.total
       td
         background: none
@@ -497,15 +484,11 @@ tr.activity_subheading
     padding: 6px
     +linear-gradient(color-stops($primary_lightest + #050505, $primary_lightest))
     +text-shadow(#fff, 0, 1px, 0)
-    -webkit-box-shadow: rgba(0,0,0,0.06) 1px 1px 4px inset
-    -moz-box-shadow: rgba(0,0,0,0.06) 1px 1px 4px inset
-    box-shadow: rgba(0,0,0,0.06) 1px 1px 4px inset
+    +box-shadow(rgba(0,0,0,0.06) 1px 1px 4px inset)
     &:last-child
       background: none
       border: none
-      -webkit-box-shadow: none
-      -moz-box-shadow: none
-      box-shadow: none
+      +box-shadow(none)
     &:first-child
       border-left: 1px solid $primary_border3
 

@@ -1,7 +1,7 @@
 - f.inputs :class => 'wrap-80 inputs' do
   %li.last
     %h3 Code details
-    %ul.dashboard_section
+    %ul.section_base
       = f.input :type_string, :collection => ['ActivityCostCategory', 'Beneficiary', 'Code', 'CostCategory', 'Location', 'Mtef', 'Nasa', 'Nha', 'Nsp', 'OtherCostCode', 'OtherCostType'], :as => :select, :label => 'Type', :required => false, :hint => "Type of code"
       = f.input :parent, :collection => Code.all, :as => :select, :required => false, :hint => "The code this one falls underneath"
       = f.input :short_display, :required => false, :hint => "Short text detailing the code"

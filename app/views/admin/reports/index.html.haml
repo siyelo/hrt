@@ -9,7 +9,7 @@
 %h1 Dynamic Reports
 
 .first-half
-  .dashboard_section
+  .section_base
     %ul.admin_reports
       %li= render 'report_row', :key => 'activity_overview'
       %li= render 'report_row', :key => 'budget_implementer_purpose'
@@ -33,7 +33,7 @@
   %h2
     =image_tag "icon_reporter.png", :class => "heading_icon"
     Mark Double Counting
-  .dashboard_section
+  .section_base
     %ul.admin_reports
       - form_tag mark_implementer_splits_admin_reports_path, :method => :put, :multipart => true do
         = file_field_tag :file

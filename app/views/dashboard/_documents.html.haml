@@ -2,7 +2,7 @@
   = image_tag "icon_reporter.png", :class => "heading_icon"
   Latest Health Resource Tracker Files
   = image_tag "alertwarning_icon.png", :title => "Files downloaded from this website are not for distribution.", :class => 'tooltip'
-.dashboard_section
+.section_base
   - if @documents.present?
     %table.modern_table
       = render 'documents/documents', :documents => @documents
