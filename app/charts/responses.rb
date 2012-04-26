@@ -28,6 +28,15 @@ module Charts
         super responses_for_request(request_id)
       end
 
+      def bar_sort
+        self.sort_by_state
+      end
+
+      # sort in same order as the STATES are defined.
+      def sort_by_state
+        @data.sort_by{ |e| DataResponse::States::STATES.index e[0].downcase }
+      end
+
       protected
 
       # All data response states for given request for reporting organizations
