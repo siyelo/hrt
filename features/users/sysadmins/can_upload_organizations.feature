@@ -4,9 +4,7 @@ Feature: Admin can manage organizations
   I want to be able to upload organizations
 
   Background:
-     Given an organization exists with name: "org1", raw_type: "Donor", fosaid: "111"
-     And a data_request exists with title: "Req1", organization: the organization
-     And an admin exists with email: "sysadmin@hrtapp.com", organization: the organization
+     Given an admin exists with email: "sysadmin@hrtapp.com"
      And I am signed in as "sysadmin@hrtapp.com"
      And I follow "Organizations"
 
@@ -16,6 +14,7 @@ Feature: Admin can manage organizations
     And I attach the file "spec/fixtures/organizations.csv" to "File"
     And I press "Upload and Import"
     Then I should see "Created 4 of 4 organizations successfully"
+    And I follow "All"
     And I should see "csv_org1"
     And I should see "csv_org2"
     And I should see "csv_org3"

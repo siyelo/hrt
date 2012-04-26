@@ -4,10 +4,8 @@ Feature: Reporter can download files
   I want to be able to download files
 
   Background:
-    Given an organization exists with name: "organization1"
-      And a data_request exists with title: "data_request1", organization: the organization
+    Given a basic reporter setup
       And a document exists with title: "My file", visibility: "reporters"
-      And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
       And I am signed in as "reporter@hrtapp.com"
 
     Scenario: Reporter can download files

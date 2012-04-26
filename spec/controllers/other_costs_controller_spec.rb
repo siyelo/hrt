@@ -93,8 +93,8 @@ describe OtherCostsController do
   describe "Permissions" do
     context "Activity Manager" do
       before :each do
+        @data_request = Factory :data_request
         @organization = Factory :organization
-        @data_request = Factory :data_request, :organization => @organization
         @user = Factory :activity_manager, :organization => @organization
         @data_response = @organization.latest_response
         @project = Factory(:project, :data_response => @data_response)
@@ -137,8 +137,10 @@ describe OtherCostsController do
 
     context "Reporter and Activity Manager" do
       before :each do
+        @data_request = Factory :data_request
         @organization = Factory :organization
-        @data_request = Factory :data_request, :organization => @organization
+        @user = Factory :user, :roles => ['reporter', 'activity_manager'],
+          :organization => @organization
         @data_response = @organization.latest_response
         @project = Factory(:project, :data_response => @data_response)
         @other_cost = Factory :other_cost, :project => @project,
@@ -146,8 +148,6 @@ describe OtherCostsController do
       end
 
       it "allows the editing of the organization the reporter is in" do
-        @user = Factory :user, :roles => ['reporter', 'activity_manager'],
-          :organization => @organization
         login @user
 
         request.env["HTTP_REFERER"] = edit_response_other_cost_url(@data_response, @other_cost)
@@ -176,8 +176,8 @@ describe OtherCostsController do
 
     context "who are sysadmins and activity managers" do
       before :each do
+        @data_request = Factory :data_request
         @organization = Factory :organization
-        @data_request = Factory :data_request, :organization => @organization
         @user = Factory :user, :roles => ['admin', 'activity_manager'],
           :organization => @organization
         @data_response = @organization.latest_response

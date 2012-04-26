@@ -11,10 +11,7 @@ describe Reports::DynamicQuery do
 
   context "simple reports" do
     before :each do
-      @organization = Factory :organization, :name => "organization",
-        :implementer_type => "Implementer"
-      @request       = Factory :data_request, :organization => @organization
-      @response      = @organization.latest_response
+      basic_setup_response
       @response.state = 'accepted'
       @response.save
       in_flows       = [Factory.build :funding_flow, :from => @organization,
@@ -157,10 +154,7 @@ describe Reports::DynamicQuery do
 
   context "complex reports" do
     before :each do
-      @organization = Factory :organization, :name => "organization",
-        :implementer_type => "Implementer"
-      @request       = Factory :data_request, :organization => @organization
-      @response      = @organization.latest_response
+      basic_setup_response
       @response.state = 'accepted'
       @response.save
       in_flows       = [Factory.build :funding_flow, :from => @organization,
@@ -794,10 +788,7 @@ describe Reports::DynamicQuery do
 
   context "incomplete codings" do
     before :each do
-      @organization = Factory :organization, :name => "organization",
-        :implementer_type => "Implementer"
-      @request       = Factory :data_request, :organization => @organization
-      @response      = @organization.latest_response
+      basic_setup_response
       @response.state = 'accepted'
       @response.save
       in_flows       = [Factory.build :funding_flow, :from => @organization,
@@ -1046,10 +1037,7 @@ describe Reports::DynamicQuery do
 
   context "other costs without a project" do
     before :each do
-      @organization = Factory :organization, :name => "organization",
-        :implementer_type => "Implementer"
-      @request       = Factory :data_request, :organization => @organization
-      @response      = @organization.latest_response
+      basic_setup_response
       @response.state = 'accepted'
       @response.save
       @root_code = Factory :code
@@ -1242,11 +1230,10 @@ describe Reports::DynamicQuery do
 
   context "currency conversion" do
     before :each do
+      basic_setup_response
       @currency = Factory(:currency, :conversion => 'RWF_TO_USD', :rate => 0.5)
-      @organization = Factory :organization, :name => "organization",
-        :implementer_type => "Implementer", :currency => 'RWF'
-      @request       = Factory :data_request, :organization => @organization
-      @response      = @organization.latest_response
+      @organization.currency = 'RWF'
+      @organization.save!
       @response.state = 'accepted'
       @response.save
       in_flows       = [Factory.build :funding_flow, :from => @organization,
@@ -1334,10 +1321,7 @@ describe Reports::DynamicQuery do
 
   context "Incomplete classifications" do
     before :each do
-      @organization = Factory :organization, :name => "organization",
-        :implementer_type => "Implementer"
-      @request       = Factory :data_request, :organization => @organization
-      @response      = @organization.latest_response
+      basic_setup_response
       @response.state = 'accepted'
       @response.save
       in_flows       = [Factory.build :funding_flow, :from => @organization,
@@ -1543,10 +1527,7 @@ describe Reports::DynamicQuery do
 
     context "simple reports" do
       before :each do
-        @organization = Factory :organization, :name => "organization",
-          :implementer_type => "Implementer"
-        @request       = Factory :data_request, :organization => @organization
-        @response      = @organization.latest_response
+        basic_setup_response
         @response.state = 'accepted'
         @response.save
         in_flows       = [Factory.build :funding_flow, :from => @organization,
@@ -1601,10 +1582,7 @@ describe Reports::DynamicQuery do
 
   context "organization has funders without amounts" do
     before :each do
-      @organization = Factory :organization, :name => "organization",
-        :implementer_type => "Implementer"
-      @request       = Factory :data_request, :organization => @organization
-      @response      = @organization.latest_response
+      basic_setup_response
       @response.state = 'accepted'
       @response.save
       in_flows       = [Factory.build :funding_flow, :from => @organization,
@@ -1660,7 +1638,5 @@ describe Reports::DynamicQuery do
       table = run_report
       @activity.project.in_flows.size.should == 1
     end
-
   end
-
 end

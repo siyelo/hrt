@@ -15,10 +15,6 @@ class Organization < ActiveRecord::Base
     'Non-Reporting', 'Other ministries', 'Parastatal', 'Prison Clinic',
     'RBC institutions']
 
-  NON_REPORTING_TYPES = ['Clinic/Cabinet Medical', 'Communal FOSA',
-    'Dispensary', 'District', 'District Hospital', 'Health Center',
-    'Health Post', 'Non-Reporting', 'Other ministries', 'Prison Clinic']
-
   ### Attributes
   attr_accessible :name, :raw_type, :fosaid, :currency, :fiscal_year_end_date,
     :fiscal_year_start_date, :contact_name, :contact_position, :contact_phone_number,
@@ -27,15 +23,15 @@ class Organization < ActiveRecord::Base
 
   ### Associations
   belongs_to :location
-  has_many :users # people in this organization
+  has_many :users
   has_and_belongs_to_many :managers, :join_table => "organizations_managers",
     :class_name => "User" # activity managers
-  has_many :data_requests
+  has_many :data_requests # never cascade destroy this!
   has_many :data_responses, :dependent => :destroy
   has_many :dr_activities, :through => :data_responses, :source => :activities
 
   has_many :out_flows, :class_name => "FundingFlow",
-             :foreign_key => "organization_id_from"
+    :foreign_key => "organization_id_from"
   has_many :donor_for, :through => :out_flows, :source => :project
 
   has_many :implementer_splits # this is NOT project.activity.implementer_splits
@@ -50,13 +46,11 @@ class Organization < ActiveRecord::Base
   validates_inclusion_of :currency, :in => Money::Currency::TABLE.map{|k, v| "#{k.to_s.upcase}"}
   validates_date :fiscal_year_start_date, :fiscal_year_end_date, :allow_blank => true
   validates_presence_of :fiscal_year_start_date,
-   :if => Proc.new { |model| model.fiscal_year_end_date.present? }
+    :if => Proc.new { |model| model.fiscal_year_end_date.present? }
   validate :validates_date_range,
-   :if => Proc.new { |model| model.fiscal_year_start_date.present? }
+    :if => Proc.new { |model| model.fiscal_year_start_date.present? }
 
   ### Callbacks
-  after_create :create_data_responses
-  before_destroy :check_no_requests
   before_destroy :check_no_funder_references
   before_destroy :check_no_implementer_references
 
@@ -64,43 +58,40 @@ class Organization < ActiveRecord::Base
   delegate :name, :to => :location, :prefix => true, :allow_nil => true # gives you location_name - oh lordy!
 
   ### Named scopes
-  named_scope :without_users, :conditions => 'users_count = 0'
   named_scope :ordered, :order => 'lower(name) ASC, created_at DESC'
   named_scope :with_type, lambda { |type| {:conditions => ["organizations.raw_type = ?", type]} }
-  named_scope :reporting, :conditions => ['raw_type NOT IN (?) AND raw_type IS NOT NULL', NON_REPORTING_TYPES]
-  named_scope :nonreporting, :conditions => ['raw_type IN (?) OR raw_type IS NULL', NON_REPORTING_TYPES]
-  named_scope :responses_by_states, lambda { |request, states|
-    { :joins => {:data_responses => :data_request },
-      :conditions => ["data_requests.id = ? AND
-                       data_responses.state IN (?)", request.id, states]} }
   named_scope :sorted, { :order => "LOWER(organizations.name) ASC" }
+  named_scope :reporting, :conditions => ['users_count > 0']
+  named_scope :nonreporting, :conditions => ['users_count = 0']
 
   ### Class Methods
 
-  def self.with_users
-    find(:all, :joins => :users, :order => 'organizations.name ASC').uniq
-  end
+  class << self
+    def with_users
+      find(:all, :joins => :users, :order => 'organizations.name ASC').uniq
+    end
 
-  def self.download_template(organizations = [])
-    FasterCSV.generate do |csv|
-      csv << Organization::FILE_UPLOAD_COLUMNS
-      if organizations
-        organizations.each do |org|
-          row = [org.name, org.raw_type, org.fosaid, org.currency]
-          csv << row
+    def download_template(organizations = [])
+      FasterCSV.generate do |csv|
+        csv << Organization::FILE_UPLOAD_COLUMNS
+        if organizations
+          organizations.each do |org|
+            row = [org.name, org.raw_type, org.fosaid, org.currency]
+            csv << row
+          end
         end
       end
     end
-  end
 
-  def self.create_from_file(doc)
-    saved, errors = 0, 0
-    doc.each do |row|
-      attributes = row.to_hash
-      organization = Organization.new(attributes)
-      organization.save ? (saved += 1) : (errors += 1)
+    def create_from_file(doc)
+      saved, errors = 0, 0
+      doc.each do |row|
+        attributes = row.to_hash
+        organization = Organization.new(attributes)
+        organization.save ? (saved += 1) : (errors += 1)
+      end
+      return saved, errors
     end
-    return saved, errors
   end
 
   ### Instance Methods
@@ -131,11 +122,11 @@ class Organization < ActiveRecord::Base
   end
 
   def reporting?
-    !nonreporting?
+    users_count > 0
   end
 
   def nonreporting?
-    NON_REPORTING_TYPES.include?(raw_type) || raw_type.nil?
+    !reporting?
   end
 
   def currency
@@ -149,48 +140,44 @@ class Organization < ActiveRecord::Base
     end
   end
 
+  # Create an empty response for each request, unless one already exists
+  # Used on User create (org becomes 'reporting' when a user is added)
+  # and on new Request creation
+  def create_data_responses!
+    DataRequest.all.each do |data_request|
+      dr = self.responses.find(:first,
+                               :conditions => {:data_request_id => data_request.id})
+      unless dr
+        dr = self.responses.new
+        dr.data_request = data_request
+        dr.save!
+        self.responses.reload
+      end
+    end
+  end
+
   protected
 
-    def check_no_requests
-      unless data_requests.count == 0
-        errors.add_to_base "Cannot delete organization with Requests"
-        return false
-      end
+  def check_no_funder_references
+    unless out_flows.reject{ |f| f.self_funded? }.empty?
+      errors.add_to_base "Cannot delete organization with (external) Funder references"
+      return false
     end
+  end
 
-    def check_no_funder_references
-      unless out_flows.empty?
-        errors.add_to_base "Cannot delete organization with (external) Funder references"
-        return false
-      end
+  def check_no_implementer_references
+    unless implementer_splits.reject{ |s| s.self_implemented? }.empty?
+      errors.add_to_base "Cannot delete organization with (external) Implementer references"
+      return false
     end
-
-    def check_no_implementer_references
-      unless implementer_splits.empty?
-        errors.add_to_base "Cannot delete organization with (external) Implementer references"
-        return false
-      end
-    end
+  end
 
   private
 
-    def validates_date_range
-      errors.add(:base, "The end date must be exactly one year after the start date") unless (fiscal_year_start_date + (1.year - 1.day)).eql? fiscal_year_end_date
-    end
+  def validates_date_range
+    errors.add(:base, "The end date must be exactly one year after the start date") unless (fiscal_year_start_date + (1.year - 1.day)).eql? fiscal_year_end_date
+  end
 
-    def create_data_responses
-      unless NON_REPORTING_TYPES.include?(raw_type)
-        DataRequest.all.each do |data_request|
-          dr = self.data_responses.find(:first,
-                    :conditions => {:data_request_id => data_request.id})
-          unless dr
-            dr = self.data_responses.new
-            dr.data_request = data_request
-            dr.save!
-          end
-        end
-      end
-    end
 end
 
 

@@ -144,19 +144,17 @@ Feature: Admin can manage organizations
     Then I should see "Non-Reporting" within a link in the filters list
     And I should see "All" within a link in the filters list
 
-    @run
   Scenario: Sysadmin can filter organizations by type
-    Given an organization exists with name: "Bilateral org", raw_type: "Bilateral"
-    And an organization exists with name: "District org", raw_type: "District"
+    Given an organization exists with name: "No user org"
     And I follow "Organizations"
-    Then I should see "Bilateral org"
-      And I should not see "District org"
+    Then I should see "org2"
+      And I should not see "No user org"
     When I follow "Non-Reporting" within ".section_nav"
-    Then I should see "District org"
-      And I should not see "Bilateral org"
+    Then I should see "No user org"
+      And I should not see "org2"
     When I follow "All" within ".section_nav"
-    Then I should see "District org"
-      And I should see "Bilateral org"
+    Then I should see "org2"
+      And I should see "No user org"
     When I follow "Reporting" within ".section_nav"
-    Then I should see "Bilateral org"
-      And I should not see "District org"
+    Then I should see "org2"
+      And I should not see "No user org"

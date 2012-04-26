@@ -10,7 +10,6 @@ class ProjectsController < BaseController
   helper_method :sort_column, :sort_direction
   before_filter :load_response
   before_filter :strip_commas_from_in_flows, :only => [:create, :update]
-  before_filter :warn_if_not_current_request, :only => [:index, :new, :edit]
   before_filter :prevent_browser_cache, :only => [:index, :edit, :update] # firefox misbehaving
   before_filter :require_admin, :only => [:import_and_save]
 

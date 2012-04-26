@@ -4,12 +4,9 @@ Feature: Admin can manage users
   I want to be able to manage users
 
   Background:
-    Given an organization exists with name: "MoH"
-    Given a data_request exists with title: "Req1", organization: the organization
     Given an organization exists with name: "organization1"
     And an admin exists with email: "sysadmin@hrtapp.com", organization: the organization
     And I am signed in as "sysadmin@hrtapp.com"
-
 
   Scenario: Admin can CRUD users
     When I follow "Users"
@@ -37,9 +34,7 @@ Feature: Admin can manage users
 
   Scenario: Admin can see last login
     Given now is "01-01-2011 21:30:00 +0000"
-      And an organization exists with name: "reporting_org"
-      And a data_response should exist with data_request: the data_request, organization: the organization
-      And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
+    Given a basic reporter setup with org "org2"
     When I follow "Sign Out"
       And I am signed in as "reporter@hrtapp.com"
       And I follow "Sign Out"
@@ -76,7 +71,6 @@ Feature: Admin can manage users
     And I attach the file "spec/fixtures/invalid.csv" to "File"
     And I press "Upload and Import"
     Then I should see "Wrong fields mapping. Please download the CSV template"
-
     When I follow "Download template"
     Then I should see "organization_name,email,full_name,roles,password,password_confirmation"
 
@@ -140,7 +134,7 @@ Feature: Admin can manage users
     And an user exists with organization: the organization
     When I follow "Users"
     And I follow "Create User"
-    And I select "organization1" from "Organization"
+    And I select "organization2" from "Organization"
     And I fill in "Email" with "pink.panter1@hrtapp.com"
     And I fill in "Full name" with "Pink Panter"
     And I select "Activity manager" from "Assign roles to this user"

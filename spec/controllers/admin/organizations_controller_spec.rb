@@ -5,42 +5,48 @@ describe Admin::OrganizationsController do
     login_as_admin
   end
 
-  describe "index" do
+  describe "#index" do
     before :each do
-      @request1 = Factory(:data_request)
-      @admin.set_current_response_to_latest!
-      @organization = Factory(:organization)
-      @data_response = @organization.responses.find_by_data_request_id(@request1.id)
-      @all_organizations = [@admin.organization, @request1.organization, @organization]
+      # login as admin creates 1 NR and 1 Reporting org
+      request1 = Factory(:data_request) # +1 NR
+      organization = Factory(:organization)
+      Factory :user, :organization => organization #+1 R
+      Factory :organization # +1 NR
     end
 
-    it "should display all organizations" do
-      organization1 = Factory.build(:organization, :raw_type => '')
-      organization1.save(false)
-
+    it "displays reporting organization by default" do
       get :index
-      assigns(:organizations).size.should == @all_organizations.size + 1
+      assigns(:organizations).size.should == 2
+    end
+
+    it "ignores bad filters " do
+      get :index, :filter => 'blargh'
+      assigns(:organizations).size.should == 2
+    end
+
+    it "filters by non-reporting" do
+      get :index, :filter => "Non-Reporting"
+      assigns(:organizations).size.should == 3
+    end
+
+    it "filters by all" do
+      get :index, :filter => "All"
+      assigns(:organizations).size.should == 5
     end
   end
 
-  describe "show organization" do
-    it "finds organization" do
-      @organization = Factory(:organization)
-      get :show, :id => @organization.id
-      assigns(:organization).should_not be_nil
-    end
+  it "#show(s)" do
+    organization = Factory(:organization)
+    get :show, :id => organization.id
+    assigns(:organization).should == organization
   end
 
-  describe "destroy organization" do
+  describe "#destroy" do
     context "when organization has data, but no external references" do
       before :each do
         basic_setup_implementer_split_for_controller
-        other_org    = Factory(:organization)
-        @data_request.organization = other_org #the old switcheroo
-        @data_request.save
-        @data_response.state = 'submitted'; @data_response.save!
-        @organization.stub!(:to_label).and_return('org label')
         @organization.stub!(:destroy).and_return(true)
+        Organization.stub(:find).and_return @organization
       end
 
       it "sets flash notice" do
@@ -68,9 +74,9 @@ describe Admin::OrganizationsController do
 
     context "when organization has references" do
       before :each do
-        basic_setup_implementer_split_for_controller #will have a data_request
-        @organization.stub!(:to_label).and_return('org label')
-        @organization.stub!(:destroy).and_return(true)
+        basic_setup_implementer_split_for_controller # will have a data_request
+        @organization.stub!(:destroy).and_return(false)
+        Organization.stub(:find).and_return @organization
       end
 
       it "sets flash notice" do
@@ -101,7 +107,7 @@ describe Admin::OrganizationsController do
     end
   end
 
-  describe "duplicate organization" do
+  describe "#duplicate" do
     before :each do
       @organization = Factory(:organization)
       organizations = [@organization]
@@ -121,97 +127,57 @@ describe Admin::OrganizationsController do
     end
   end
 
-  describe "remove duplicate organization" do
-    context "duplicate_organization_id and target_organization_id are blank" do
+  describe "#remove_duplicate" do
+    context "when ids are blank" do
       it "redirects to the duplicate_admin_organizations_path" do
         put :remove_duplicate
         response.should redirect_to(duplicate_admin_organizations_path)
-      end
-
-      it "sets flash error" do
-        put :remove_duplicate
         flash[:error].should == "Duplicate or target organizations not selected."
       end
 
       it "returns proper json" do
         put :remove_duplicate, :format => 'js'
         response.body.should == '{"message":"Duplicate or target organizations not selected."}'
-      end
-
-      it "does not redirect" do
-        put :remove_duplicate, :format => 'js'
         response.should_not be_redirect
-      end
-
-      it "responds with status :partial_content (json)" do
-        put :remove_duplicate, :format => 'js'
         response.status.should == "206 Partial Content"
       end
     end
 
-    context "duplicate_organization_id and target_organization_id have same value" do
+    context "ids are the same " do
       it "redirects to the duplicate_admin_organizations_path" do
         put :remove_duplicate, :duplicate_organization_id => 1, :target_organization_id => 1
         response.should redirect_to(duplicate_admin_organizations_path)
-      end
-
-      it "sets flash error" do
-        put :remove_duplicate, :duplicate_organization_id => 1, :target_organization_id => 1
         flash[:error].should == "Same organizations for duplicate and target selected."
       end
 
       it "returns proper json" do
         put :remove_duplicate, :format => 'js', :duplicate_organization_id => 1, :target_organization_id => 1
         response.body.should == '{"message":"Same organizations for duplicate and target selected."}'
-      end
-
-      it "does not redirect" do
-        put :remove_duplicate, :format => 'js', :duplicate_organization_id => 1, :target_organization_id => 1
         response.should_not be_redirect
-      end
-
-      it "responds with status :partial_content (json)" do
-        put :remove_duplicate, :format => 'js', :duplicate_organization_id => 1, :target_organization_id => 1
         response.status.should == "206 Partial Content"
       end
     end
 
-    context "duplicate organization has users" do
+    context "merge ok" do
+      let(:dupe) { mock :org, :id => 1 }
+      let(:target) { mock :org, :id => 2 }
+
       before :each do
-        @org1 = Factory(:organization, :name => 'org1')
-        @org2 = Factory(:organization)
-        Factory(:reporter, :organization => @org1)
+        Organization.should_receive(:find).with("1").and_return dupe
+        Organization.should_receive(:find).with("2").and_return target
+        Organization.should_receive(:merge_organizations!).with(target, dupe).and_return true
       end
 
       it "redirects to the duplicate_admin_organizations_path" do
-        put :remove_duplicate, :duplicate_organization_id => @org1.id, :target_organization_id => @org2.id
+        put :remove_duplicate, :duplicate_organization_id => 1,
+          :target_organization_id => 2
         response.should redirect_to(duplicate_admin_organizations_path)
         flash[:notice].should == "Organizations successfully merged."
       end
 
       it "responds OK (json)" do
-        put :remove_duplicate, :format => 'js', :duplicate_organization_id => @org1, :target_organization_id => @org2
-        response.body.should == '{"message":"Organizations successfully merged."}'
-        response.should_not be_redirect
-        response.status.should == "200 OK"
-      end
-    end
-
-    context "merge organizations" do
-      before :each do
-        @org1 = Factory(:organization, :name => 'org1')
-        @org2 = Factory(:organization)
-        Organization.stub!(:"merge_organizations!").with(@org2, @org1).and_return(true)
-      end
-
-      it "redirects to the duplicate_admin_organizations_path" do
-        put :remove_duplicate, :duplicate_organization_id => @org1.id, :target_organization_id => @org2.id
-        response.should redirect_to(duplicate_admin_organizations_path)
-        flash[:notice].should == "Organizations successfully merged."
-      end
-
-      it "responds OK (json)" do
-        put :remove_duplicate, :format => 'js', :duplicate_organization_id => @org1, :target_organization_id => @org2
+        put :remove_duplicate, :format => 'js', :duplicate_organization_id => 1,
+          :target_organization_id => 2
         response.body.should == '{"message":"Organizations successfully merged."}'
         response.should_not be_redirect
         response.status.should == "200 OK"

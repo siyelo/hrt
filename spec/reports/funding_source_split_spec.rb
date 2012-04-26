@@ -4,26 +4,23 @@ describe Reports::FundingSourceSplit do
   def run_report(amount_type)
     report = Reports::FundingSourceSplit.new(@request, amount_type)
     csv = report.csv
-
     #File.open('debug.csv', 'w') { |f| f.puts report.csv }
-
     table = []
     FasterCSV.parse(csv, :headers => true) { |row| table << row }
-
     return table
   end
-
 
   [:budget, :spend].each do |amount_type|
     context "#{amount_type}" do
       before :each do
+        @request       = Factory :data_request
         @donor1        = Factory(:organization, :name => "donor1",
-         :funder_type => "donor")
+                                 :funder_type => "donor")
         @donor2        = Factory(:organization, :name => "donor2",
-         :funder_type => "government")
+                                 :funder_type => "government")
         @organization1 = Factory(:organization, :name => "organization1",
-         :implementer_type => "implementer")
-        @request       = Factory(:data_request, :organization => @organization1)
+                                 :implementer_type => "implementer")
+        Factory :user, :organization => @organization1
         @response1     = @organization1.latest_response
         in_flow1       = Factory.build(:funding_flow, :from => @donor1,
                                        amount_type => 60)
@@ -35,16 +32,16 @@ describe Reports::FundingSourceSplit do
                                  :in_flows => in_flows)
         impl_splits   = []
         organization2 = Factory(:organization, :name => 'organization2',
-         :implementer_type => 'distributor')
+                                :implementer_type => 'distributor')
         impl_splits << Factory(:implementer_split,
-          :organization => @organization1, amount_type => 50)
+                               :organization => @organization1, amount_type => 50)
         impl_splits << Factory(:implementer_split,
-          :organization => organization2, amount_type => 50)
+                               :organization => organization2, amount_type => 50)
 
         @activity1 = Factory(:activity, :project => @project1,
-                            :name => 'activity1',
-                            :data_response => @response1,
-                            :implementer_splits => impl_splits)
+                             :name => 'activity1',
+                             :data_response => @response1,
+                             :implementer_splits => impl_splits)
 
         @response1.state = 'accepted'; @response1.save!
       end

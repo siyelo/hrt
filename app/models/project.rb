@@ -132,11 +132,6 @@ class Project < ActiveRecord::Base
       errors.add_to_base "Project must have at least one Funding Source."
     end
 
-    def implementer_in_flows?(organization, flows)
-      flows.map(&:project).reject{|f| f.nil?}.map(&:activities).flatten.
-        map(&:provider).include?(organization)
-    end
-
     def strip_leading_spaces
       self.name = self.name.strip if self.name
       self.description = self.description.strip if self.description

@@ -12,18 +12,6 @@ Feature: Admin can view responses
     And I am signed in as "sysadmin@hrtapp.com"
     And I follow "Responses"
 
-  Scenario Outline: Sysadmin can sort resopnses
-    When I follow "<column_name>"
-    Then column "<column>" row "1" should have text "<text1>"
-    And column "<column>" row "2" should have text "<text2>"
-    When I follow "<column_name>"
-    Then column "<column>" row "1" should have text "<text2>"
-    And column "<column>" row "2" should have text "<text1>"
-
-    Examples:
-      | column_name  | column | text1 | text2 |
-      | Organization | 1      | org2  | org1  |
-
   Scenario: Sysadmin can search responses
     Then I should see "org1"
     And I should see "org2"

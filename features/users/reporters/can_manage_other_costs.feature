@@ -4,11 +4,7 @@ Feature: Reporter can manage Overhead Costs
   I want to be able to manage Overhead Costs
 
   Background:
-    Given an organization exists with name: "organization1"
-    And a data_request exists with title: "data_request1"
-    And an organization "my_organization" exists with name: "organization2"
-    Then data_response should exist with data_request: the data_request, organization: the organization
-    And a reporter exists with email: "reporter@hrtapp.com", organization: organization "my_organization"
+  Given a basic reporter setup
     And a project exists with name: "project1", data_response: the data_response
     And I am signed in as "reporter@hrtapp.com"
     And I go to the set request page for "data_request1"

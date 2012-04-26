@@ -186,29 +186,6 @@ class ApplicationController < ActionController::Base
       super
     end
 
-    def request_message(request)
-      "You are now viewing your data for the Request: \"<span class='bold'>#{request.name}</span>\""
-    end
-
-    def not_latest_request_message(request)
-      "You are now viewing data for the Request: \"<span class='bold'>#{request.name}</span>\".
-       All changes made will be saved for this Request."
-    end
-
-    def warn_if_not_current_request
-      unless current_user.current_response_is_latest?
-        if current_user.current_request
-          flash.now[:warning] = not_latest_request_message(current_user.current_request)
-        else
-          if current_user.sysadmin?
-            flash.now[:warning] = "You do not have a current Request set. Please create/assign a Request."
-          else
-            raise Hrt::CurrentRequestNotSet
-          end
-        end
-      end
-    end
-
     def load_comment_resources(resource)
       @comment = Comment.new
       @comment.commentable = resource

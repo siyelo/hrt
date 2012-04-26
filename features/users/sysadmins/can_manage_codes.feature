@@ -5,7 +5,6 @@ Feature: Admin can manage codes
 
   Background:
     Given an organization exists with name: "organization1"
-      And a data_request exists with title: "data_request1", organization: the organization
       And an admin exists with email: "admin@hrtapp.com", organization: the organization
       And I am signed in as "admin@hrtapp.com"
 

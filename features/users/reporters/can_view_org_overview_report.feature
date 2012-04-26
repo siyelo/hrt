@@ -4,10 +4,7 @@ Feature: Reporter can see project overview report
   I want to be able to see an overview report
 
   Background:
-    Given an organization exists with name: "Organization1", currency: "RWF"
-      And a data_request exists with title: "dr1", organization: the organization
-      And a data_response should exist with data_request: the data_request, organization: the organization
-      And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
+    Given a basic reporter setup
       And a project exists with data_response: the data_response, name: "project1"
       And a classified_activity exists with data_response: the data_response, project: the project
       And an other_cost_fully_coded exists with name: "some cost", data_response: the data_response, project: the project
@@ -29,6 +26,6 @@ Feature: Reporter can see project overview report
     And I should see "Activities" within "#tabs-container"
     And I should see "Locations" within "#tabs-container"
     And I should see "Inputs" within "#tabs-container"
-    And I should see "RWF" within ".summary"
+    And I should see "USD" within ".summary"
     And I should see "some cost" within "table"
 

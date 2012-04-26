@@ -4,12 +4,7 @@ Feature: Reporter can see dashboard
   I want to be able to see a dashboard for relevant activities
 
   Background:
-    Given an organization exists with name: "WHO"
-      And a data_request exists with title: "dr1", organization: the organization
-      And a data_request exists with title: "dr2", organization: the organization
-      And an organization exists with name: "ORG"
-      And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
-      And a data_response should exist with data_request: the data_request, organization: the organization
+    Given a basic reporter setup
       And I am signed in as "reporter@hrtapp.com"
 
     Scenario: "See data requests"

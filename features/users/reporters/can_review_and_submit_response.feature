@@ -4,13 +4,10 @@ Feature: Reporter can Review & Submit response
   I want to be able to Review & Submit response
 
   Scenario: Reporter can Review & Submit response when it's ready
-    Given an organization exists
-      And a data_request exists with organization: the organization
-      And data_response should exist with data_request: the data_request, organization: the organization
+    Given a basic reporter setup
       And a project exists with data_response: the data_response
       And a classified_activity exists with data_response: the data_response, project: the project
       And an implementer_split exists with organization: the organization, activity: the activity, budget: 10, spend: 10
-      And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
       And I am signed in as "reporter@hrtapp.com"
     When I follow "Projects & Activities"
       And I follow "Review & Submit"
@@ -20,11 +17,8 @@ Feature: Reporter can Review & Submit response
 
 
   Scenario: Reporter cannot Submit response when it's not ready
-    Given an organization exists
-      And a data_request exists with organization: the organization
-      And data_response should exist with data_request: the data_request, organization: the organization
+    Given a basic reporter setup
       And a project exists with data_response: the data_response
-      And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
       And I am signed in as "reporter@hrtapp.com"
     When I follow "Projects & Activities"
       And I follow "Review & Submit"

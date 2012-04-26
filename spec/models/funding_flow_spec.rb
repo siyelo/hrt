@@ -30,6 +30,7 @@ describe FundingFlow do
     before :each do
       @donor        = Factory(:organization)
       @organization = Factory(:organization)
+      Factory :user, :organization => @organization
       @request      = Factory(:data_request, :organization => @organization)
       @response     = @organization.latest_response
       @project      = Factory(:project, :data_response => @response)
@@ -157,12 +158,12 @@ describe FundingFlow do
 
   describe "#name" do
     it "returns from and to organizations in the name" do
+      @request      = Factory :data_request
       @organization = Factory(:organization, :name => 'Organization 2')
+      Factory :user, :organization => @organization
       @other_org    = Factory(:organization, :name => 'ORG2')
-      @request      = Factory(:data_request, :organization => @organization)
       @response     = @organization.latest_response
       @project      = Factory(:project, :data_response => @response)
-      @project.save!
 
       from = Factory(:organization, :name => 'Organization 1')
       funding_flow = Factory(:funding_flow, :project => @project, :from => from)

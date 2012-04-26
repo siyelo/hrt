@@ -34,20 +34,17 @@ describe DataResponse do
 
   describe "#name" do
     it "returns data_response name" do
-      organization = Factory(:organization)
-      request      = Factory(:data_request, :organization => organization,
-                             :title => 'Data Request 1')
+      request      = Factory(:data_request, :title => 'Data Request 1')
+      organization = Factory :organization
+      Factory :user, :organization => organization
       response     = organization.latest_response
-
       response.name.should == 'Data Request 1'
     end
   end
 
   describe "#budget & #spend" do
     before :each do
-      @organization = Factory(:organization, :currency => 'USD')
-      request      = Factory(:data_request, :organization => @organization)
-      @response    = @organization.latest_response
+      basic_setup_response
     end
 
     context "same currency" do
@@ -91,6 +88,38 @@ describe DataResponse do
         @response.total_spend.to_f.should == 200 # 50 + 50 + 100
       end
     end
+  end
+  describe "by_state" do
+    before :each do
+      user = Factory :user
+      @response_org = user.organization
+      @request1     = Factory(:data_request, :organization => @response_org)
+      @response1    = @response_org.latest_response
+      @request2     = Factory(:data_request, :organization => @response_org)
+      @response2    = @response_org.latest_response
+    end
 
+    it "returns responses by states" do
+      DataResponse.with_request(@request1).with_state('started').should be_empty
+      DataResponse.with_request(@request2).with_state('started').should be_empty
+      DataResponse.with_request(@request1).with_state('rejected').should be_empty
+      DataResponse.with_request(@request2).with_state('rejected').should be_empty
+
+      @response1.state = 'started'
+      @response1.save
+
+      DataResponse.with_request(@request1).with_state('started').should == [@response1]
+      DataResponse.with_request(@request2).with_state('started').should be_empty
+      DataResponse.with_request(@request1).with_state('rejected').should be_empty
+      DataResponse.with_request(@request2).with_state('rejected').should be_empty
+
+      @response2.state = 'rejected'
+      @response2.save
+
+      DataResponse.with_request(@request1).with_state('started').should == [@response1]
+      DataResponse.with_request(@request2).with_state('started').should be_empty
+      DataResponse.with_request(@request1).with_state('rejected').should be_empty
+      DataResponse.with_request(@request2).with_state('rejected').should == [@response2]
+    end
   end
 end

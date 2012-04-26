@@ -17,7 +17,6 @@ describe User do
     it { should have_many :comments }
     it { should have_many :data_responses }
     it { should belong_to :organization }
-    it { should belong_to :current_response }
     it { should have_and_belong_to_many :organizations }
     it { should belong_to :location }
   end
@@ -48,7 +47,13 @@ describe User do
       user.save
       user.errors.on(:roles).should include('is not included in the list')
     end
+  end
 
+  it "notifies organization it needs to create responses" do
+    u = Factory.build :reporter
+    org = u.organization
+    u.should_receive(:create_organization_responses).once
+    u.run_callbacks(:after_create)
   end
 
   describe "save and invite" do
@@ -69,35 +74,11 @@ describe User do
     end
   end
 
-  describe "Callbacks" do
-    before :each do
-      @organization = Factory(:organization)
-      @request1 = Factory(:data_request)
-      @dr1 = @organization.latest_response
-      @request2 = Factory(:data_request)
-      @dr2 = @organization.reload.latest_response
-    end
-
-    it "assigns current_response to last data_response from the organization" do
-      user = Factory.build(:user, :organization => @organization, :current_response => nil)
-      user.save
-      user.current_response.should == @dr2
-    end
-
-    it "does not assign current_response if it already exists" do
-      @request3 = Factory(:data_request)
-      @dr3 = @organization.latest_response
-      user = Factory.build(:user, :organization => @organization, :current_response => @dr3)
-      user.save
-      user.current_response.should_not == @dr2
-    end
-  end
-
   describe "password validations" do
     before :each do
       @user = User.new(:email => 'blah@blah.com', :full_name => 'blah',
-        :password => "", :password_confirmation => "", :organization => Factory(:organization),
-        :roles => ['reporter'])
+                       :password => "", :password_confirmation => "", :organization => Factory(:organization),
+                       :roles => ['reporter'])
     end
 
     # this is fine provided you send an invitation too!!
@@ -158,8 +139,8 @@ describe User do
   describe "passwords using save & invite API" do
     before :each do
       @user = User.new(:email => 'blah@blah.com', :full_name => 'blah',
-        :password => "", :password_confirmation => "", :organization => Factory(:organization),
-        :roles => ['reporter'])
+                       :password => "", :password_confirmation => "", :organization => Factory(:organization),
+                       :roles => ['reporter'])
       @user.save_and_invite(Factory :admin)
     end
 
@@ -277,17 +258,13 @@ describe User do
     end
   end
 
-  describe "current response/request" do
-    before :each do
-      @org      = Factory(:organization)
-      @request  = Factory(:data_request)
-      @response = @org.latest_response
-      @user = Factory(:reporter, :current_response => @response, :organization => @org)
-    end
-
-    it "returns the associated request" do
-      @user.current_request.should == @response.request
-    end
+  it "returns the current request" do
+    @request  = Factory(:data_request)
+    @org      = Factory(:organization)
+    Factory :user, :organization => @org
+    @response = @org.latest_response
+    @user = Factory(:reporter, :current_response => @response, :organization => @org)
+    @user.current_request.should == @response.request
   end
 
   describe "#change_current_response!" do

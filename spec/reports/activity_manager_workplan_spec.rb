@@ -4,12 +4,14 @@ describe Reports::ActivityManagerWorkplan do
   describe "export projects and activities to xls" do
     it "should return xls with blank cells for repeated project & activity" do
       @organization  = Factory(:organization, :name => 'org1')
+      @user          = Factory.create(:activity_manager, :organization => @organization)
       @organization2 = Factory(:organization, :name => 'org2')
+      Factory :user, :organization => @organization2
       @organization3 = Factory(:organization, :name => 'org3')
+      Factory :user, :organization => @organization3
       @request       = Factory(:data_request, :organization => @organization)
       @response      = @organization.latest_response
       @response2     = @organization2.latest_response
-      @user          = Factory.create(:activity_manager, :organization => @organization)
       @user.organizations << @organization2
       @user.organizations << @organization3
       @project       = Factory(:project, :data_response => @response2)

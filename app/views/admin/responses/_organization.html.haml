@@ -1,9 +1,0 @@
-- response = organization_response(organization, current_user.current_request)
-- response_link = link_to organization.name, response_projects_path(response) if response
-%tr
-  %td.title= response_link || organization.name
-  %td
-    = organization.contact_name
-    %br
-    = organization.contact_phone_number
-  %td= response.nil? ? "n/a" : response.status

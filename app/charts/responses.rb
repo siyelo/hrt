@@ -44,11 +44,8 @@ module Charts
       def responses_for_request(request_id)
         DataResponse.find :all,
           :select => 'data_responses.state, COUNT(*) AS count',
-          :joins => :organization,
-          :conditions => ["data_responses.data_request_id = ? AND
-                        organizations.raw_type NOT IN (?)",
-                        request_id, Organization::NON_REPORTING_TYPES],
-                        :group => "data_responses.state"
+          :conditions => ["data_responses.data_request_id = ?", request_id],
+          :group => "data_responses.state"
       end
 
       def bar_legend

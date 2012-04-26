@@ -4,12 +4,8 @@ describe Reports::Outputs do
   def run_report(request, amount_type)
     report = Reports::Outputs.new(request, amount_type)
     csv = report.csv
-
-    #File.open('debug.csv', 'w') { |f| f.puts report.csv }
-
     table = []
     FasterCSV.parse(csv, :headers => true) { |row| table << row }
-
     return table
   end
 
@@ -17,11 +13,12 @@ describe Reports::Outputs do
   [:budget, :spend].each do |amount_type|
     context "#{amount_type}" do
       before :each do
+        @request       = Factory :data_request
         @donor1        = Factory(:organization, :name => "donor1")
         @donor2        = Factory(:organization, :name => "donor2")
         @organization1 = Factory(:organization, :name => "organization1",
                                  :implementer_type => "Implementer")
-        @request       = Factory(:data_request, :organization => @organization1)
+        Factory :user, :organization => @organization1
         @response1     = @organization1.latest_response
         in_flow1       = Factory.build(:funding_flow, :from => @donor1,
                                        amount_type => 60)
@@ -34,14 +31,14 @@ describe Reports::Outputs do
         impl_splits   = []
         organization2 = Factory(:organization, :name => 'organization2')
         impl_splits << Factory(:implementer_split,
-          :organization => @organization1, amount_type => 50)
+                               :organization => @organization1, amount_type => 50)
         impl_splits << Factory(:implementer_split,
-          :organization => organization2, amount_type => 50)
+                               :organization => organization2, amount_type => 50)
 
         @activity1 = Factory(:activity, :project => @project1,
-                            :name => 'activity1',
-                            :data_response => @response1,
-                            :implementer_splits => impl_splits)
+                             :name => 'activity1',
+                             :data_response => @response1,
+                             :implementer_splits => impl_splits)
 
         Factory(:output, :activity => @activity1, :description => 'output1')
         Factory(:output, :activity => @activity1, :description => 'output2')

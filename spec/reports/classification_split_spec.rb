@@ -11,10 +11,11 @@ describe Reports::ClassificationSplit do
   end
 
   before :each do
+    @request       = Factory :data_request
     @donor1        = Factory(:organization, :name => "donor1")
     @organization1 = Factory(:organization, :name => "organization1",
       :implementer_type => "Implementer")
-    @request       = Factory(:data_request, :organization => @organization1)
+    Factory :user, :organization => @organization1
     @response1     = @organization1.latest_response
     in_flows       = [Factory.build(:funding_flow, :from => @donor1,
                                     :budget => 50)]
