@@ -18,7 +18,7 @@
     %h3== Beneficiaries
     %ul.section_form.last
       = f.input :beneficiaries, :label => false, :as => :check_boxes, :wrapper_html => { :class => 'borderless beneficiaries_boxes' }
-      = f.input :text_for_beneficiaries, :label => 'Other Beneficiaries' , :input_html => { :rows => 2 }, :as => :text, :required => false, :wrapper_html => { :class => 'other_beneficiaries' }
+      = f.input :other_beneficiaries, :label => 'Other Beneficiaries' , :input_html => { :rows => 2 }, :as => :text, :required => false, :wrapper_html => { :class => 'other_beneficiaries' }
 
   .column2.last
     - hint = 'Indicate whether the activity is planned to be implemented in any of these Government Of Rwanda Fiscal Quarters'

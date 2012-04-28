@@ -12,8 +12,6 @@ load 'db/seed_files/cost_categories.rb'
 
 load 'db/seed_files/other_cost_codes.rb'
 
-load 'db/seed_files/districts.rb'
-
 load 'db/seed_files/beneficiaries.rb'
 
 puts "...seeding DONE\n\n"

@@ -42,7 +42,7 @@ Feature: Reporter can manage activities
 
     @javascript
     Scenario: An admin can approve classified activity
-      Given an activity exists with name: "activity1", description: "a1 description", data_response: the data_response, project: the project, coding_budget_valid: true, coding_budget_cc_valid: true, coding_budget_district_valid: true, coding_spend_valid: true, coding_spend_cc_valid: true, coding_spend_district_valid: true
+      Given an activity exists with name: "activity1", description: "a1 description", data_response: the data_response, project: the project
       When I follow "Responses"
         And I follow "organization2: data_request1"
         And I follow "activity1"

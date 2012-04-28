@@ -10,7 +10,6 @@ class BaseController < ApplicationController
       # if you cant find an existing project with given params
       # then set it to -1 (i.e. Create a project for me)
       @activity.project_id = Activity::AUTOCREATE unless @activity.project
-      @activity.provider = current_user.organization
     end
 
     # other_cost/new endpoint

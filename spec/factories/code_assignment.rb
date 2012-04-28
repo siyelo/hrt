@@ -1,7 +1,7 @@
 Factory.define :code_assignment, :class => CodeAssignment do |f|
   f.code                 { Factory.create :code }
   f.cached_amount        { 1000 }
-  f.sum_of_children      { 0 } # db default value - used in specs
+  f.sum_of_children      { 0 }
 end
 
 Factory.define :coding_budget, :class => CodingBudget, :parent => :code_assignment do |f|

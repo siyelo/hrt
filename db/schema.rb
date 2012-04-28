@@ -9,32 +9,22 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120427174355) do
+ActiveRecord::Schema.define(:version => 20120428164058) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "provider_id"
     t.text     "description"
     t.string   "type"
-    t.text     "text_for_provider"
-    t.text     "text_for_beneficiaries"
+    t.text     "other_beneficiaries"
     t.integer  "data_response_id"
     t.integer  "activity_id"
     t.boolean  "approved"
     t.integer  "project_id"
-    t.decimal  "ServiceLevelBudget_amount",    :default => 0.0
-    t.decimal  "ServiceLevelSpend_amount",     :default => 0.0
     t.boolean  "am_approved"
     t.integer  "user_id"
     t.date     "am_approved_date"
-    t.boolean  "coding_budget_valid",          :default => false
-    t.boolean  "coding_budget_cc_valid",       :default => false
-    t.boolean  "coding_budget_district_valid", :default => false
-    t.boolean  "coding_spend_valid",           :default => false
-    t.boolean  "coding_spend_cc_valid",        :default => false
-    t.boolean  "coding_spend_district_valid",  :default => false
     t.boolean  "planned_for_gor_q1"
     t.boolean  "planned_for_gor_q2"
     t.boolean  "planned_for_gor_q3"
@@ -43,17 +33,11 @@ ActiveRecord::Schema.define(:version => 20120427174355) do
 
   add_index "activities", ["activity_id"], :name => "index_activities_on_activity_id"
   add_index "activities", ["data_response_id"], :name => "index_activities_on_data_response_id"
-  add_index "activities", ["provider_id"], :name => "index_activities_on_provider_id"
   add_index "activities", ["type"], :name => "index_activities_on_type"
 
   create_table "activities_beneficiaries", :id => false, :force => true do |t|
     t.integer "activity_id"
     t.integer "beneficiary_id"
-  end
-
-  create_table "activities_organizations", :id => false, :force => true do |t|
-    t.integer "activity_id"
-    t.integer "organization_id"
   end
 
   create_table "code_assignments", :force => true do |t|
@@ -144,14 +128,6 @@ ActiveRecord::Schema.define(:version => 20120427174355) do
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
-
-  create_table "districts", :force => true do |t|
-    t.string   "name"
-    t.integer  "population"
-    t.integer  "old_location_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "documents", :force => true do |t|
     t.string   "title"

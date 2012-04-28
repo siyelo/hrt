@@ -6,7 +6,7 @@ Feature: Reporter can see org overview report
   Background:
     Given a basic reporter setup
       And a project exists with data_response: the data_response
-      And a classified_activity exists with data_response: the data_response, project: the project
+      And a activity_fully_coded exists with data_response: the data_response, project: the project
       And an other_cost_fully_coded exists with name: "some cost", data_response: the data_response
      When I am signed in as "reporter@hrtapp.com"
 

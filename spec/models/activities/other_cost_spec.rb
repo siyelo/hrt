@@ -2,13 +2,10 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe OtherCost do
   describe "Associations" do
-    it { should belong_to :provider }
     it { should belong_to :data_response }
     it { should belong_to :project }
-    it { should have_and_belong_to_many :organizations }
     it { should have_and_belong_to_many :beneficiaries }
     it { should have_many :implementer_splits }
-    it { should have_many :codes }
     it { should have_many :code_assignments }
     it { should have_many :coding_budget }
     it { should have_many :coding_budget_cost_categorization }
@@ -23,9 +20,6 @@ describe OtherCost do
     it { should allow_mass_assignment_of(:description) }
     it { should allow_mass_assignment_of(:project_id) }
     it { should allow_mass_assignment_of(:beneficiary_ids) }
-    it { should allow_mass_assignment_of(:provider_id) }
-    it { should allow_mass_assignment_of(:text_for_provider) }
-    it { should allow_mass_assignment_of(:text_for_beneficiaries) }
     it { should allow_mass_assignment_of(:approved) }
     it { should allow_mass_assignment_of(:organization_ids) }
   end

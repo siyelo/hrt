@@ -105,8 +105,7 @@ class CodeAssignment < ActiveRecord::Base
   def budget?
     ['CodingBudget',
      'CodingBudgetCostCategorization',
-     'CodingBudgetDistrict',
-     'HsspBudget'].include?(type.to_s)
+     'CodingBudgetDistrict'].include?(type.to_s)
   end
 end
 

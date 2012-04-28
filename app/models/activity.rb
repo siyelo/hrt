@@ -13,33 +13,20 @@ class Activity < ActiveRecord::Base
   ### ClassLevel Method Invocations
   strip_commas_from_all_numbers
 
-  ### Attribute Accessor
-  attr_accessor :csv_project_name, :csv_provider, :csv_beneficiaries,
-    :csv_targets
-
   ### Attribute Protection
-  attr_accessible :text_for_provider, :text_for_beneficiaries, :project_id,
-    :name, :description, :approved, :am_approved,
-    :beneficiary_ids, :provider_id, :implementer_splits_attributes,
-    :organization_ids, :csv_project_name,
-    :csv_provider, :csv_beneficiaries, :csv_targets, :targets_attributes,
-    :outputs_attributes, :am_approved_date, :user_id, :data_response_id,
-    :planned_for_gor_q1, :planned_for_gor_q2, :planned_for_gor_q3,
-    :planned_for_gor_q4
+  attr_accessible :project_id, :name, :description, :approved, :am_approved,
+    :beneficiary_ids, :other_beneficiaries, :implementer_splits_attributes,
+    :organization_ids, :targets_attributes, :outputs_attributes,
+    :am_approved_date, :user_id, :data_response_id, :planned_for_gor_q1,
+    :planned_for_gor_q2, :planned_for_gor_q3, :planned_for_gor_q4
 
   ### Associations
-  belongs_to :provider, :foreign_key => :provider_id,
-    :class_name => "Organization" # FIXME: deprecate plox k thx
   belongs_to :data_response
-  belongs_to :response, :foreign_key => :data_response_id,
-    :class_name => "DataResponse" #convenience.
   belongs_to :project
   belongs_to :user
-  has_and_belongs_to_many :organizations # organizations targeted by this activity / aided
   has_and_belongs_to_many :beneficiaries # codes representing who benefits from this activity
   has_many :implementer_splits, :dependent => :delete_all
   has_many :implementers, :through => :implementer_splits, :source => :organization
-  has_many :codes, :through => :code_assignments
   has_many :purposes, :through => :code_assignments,
     :conditions => ["codes.type in (?)", Code::PURPOSES], :source => :code
   has_many :code_assignments, :dependent => :destroy
@@ -50,16 +37,8 @@ class Activity < ActiveRecord::Base
   has_many :coding_spend, :dependent => :destroy
   has_many :coding_spend_cost_categorization, :dependent => :destroy
   has_many :coding_spend_district, :dependent => :destroy
-  has_many :budget_purposes, :dependent => :destroy,
-    :class_name => 'CodingBudget'
-  has_many :budget_inputs, :dependent => :destroy,
-    :class_name => 'CodingBudgetCostCategorization'
   has_many :budget_locations, :dependent => :destroy,
     :class_name => 'CodingBudgetDistrict'
-  has_many :spend_purposes, :dependent => :destroy,
-    :class_name => 'CodingSpend'
-  has_many :spend_inputs, :dependent => :destroy,
-    :class_name => 'CodingSpendCostCategorization'
   has_many :spend_locations, :dependent => :destroy,
     :class_name => 'CodingSpendDistrict'
   has_many :targets, :dependent => :destroy
@@ -120,13 +99,11 @@ class Activity < ActiveRecord::Base
               :joins => 'INNER JOIN data_responses ON
                          data_responses.id = activities.data_response_id',
               :conditions => ['data_responses.data_request_id = ?', request.id]}}
-  named_scope :with_a_project,       { :conditions => "project_id IS NOT NULL" }
   named_scope :without_a_project,    { :conditions => "project_id IS NULL" }
   named_scope :with_organization,    { :joins => "INNER JOIN data_responses
                                     ON data_responses.id = activities.data_response_id
                                     INNER JOIN organizations
                                     ON data_responses.organization_id = organizations.id" }
-
   named_scope :manager_approved,     { :conditions => ["am_approved = ?", true] }
   named_scope :sorted,               { :order => "activities.name" }
   named_scope :sorted_by_id,               { :order => "activities.id" }
@@ -147,6 +124,11 @@ class Activity < ActiveRecord::Base
 
   ### Instance Methods
 
+  # shortcut alias
+  def response
+    self.data_response
+  end
+
   def update_attributes(params)
     update_classifications_from_params(params)
     super(params)
@@ -160,6 +142,7 @@ class Activity < ActiveRecord::Base
     name
   end
 
+  # TODO move to presenter
   def human_name
     "Activity"
   end
@@ -195,7 +178,7 @@ class Activity < ActiveRecord::Base
 
   def deep_clone
     clone = self.clone
-    %w[organizations beneficiaries].each do |assoc|
+    %w[beneficiaries].each do |assoc|
       clone.send("#{assoc}=", self.send(assoc))
     end
     # hasmany's
@@ -220,7 +203,6 @@ class Activity < ActiveRecord::Base
     !implementer_split_district_code_assignments_if_complete(coding_type).empty?
   end
 
-  # FIXME performance killer ?
   def locations
     code_assignments.with_types(['CodingBudgetDistrict', 'CodingSpendDistrict']).
       find(:all, :include => :code).map{|ca| ca.code }.uniq
@@ -241,6 +223,30 @@ class Activity < ActiveRecord::Base
     valid
   end
 
+  def coding_spend_valid?
+    CodingTree.new(self, CodingSpend).valid?
+  end
+
+  def coding_budget_valid?
+    CodingTree.new(self, CodingBudget).valid?
+  end
+
+  def coding_spend_cc_valid?
+    CodingTree.new(self, CodingSpendCostCategorization).valid?
+  end
+
+  def coding_budget_cc_valid?
+    CodingTree.new(self, CodingBudgetCostCategorization).valid?
+  end
+
+  def coding_spend_district_valid?
+    CodingTree.new(self, CodingSpendDistrict).valid?
+  end
+
+  def coding_budget_district_valid?
+    CodingTree.new(self, CodingBudgetDistrict).valid?
+  end
+
   protected
 
     # intercept the classifications and process using the bulk classification update API
@@ -259,13 +265,13 @@ class Activity < ActiveRecord::Base
       end
     end
 
+
   private
 
     #TODO  it should not be the responsibility of the activity to do this
     def set_classified_amount_cache(type)
       coding_tree = CodingTree.new(self, type)
       coding_tree.set_cached_amounts!
-      self.send("#{get_valid_attribute_name(type)}=".to_sym, coding_tree.valid?)
     end
 
     def approved_activity_cannot_be_changed
@@ -339,37 +345,32 @@ class Activity < ActiveRecord::Base
     end
 end
 
+
+
+
+
+
 # == Schema Information
 #
 # Table name: activities
 #
-#  id                           :integer         not null, primary key
-#  name                         :string(255)
-#  created_at                   :datetime
-#  updated_at                   :datetime
-#  provider_id                  :integer         indexed
-#  description                  :text
-#  type                         :string(255)     indexed
-#  text_for_provider            :text
-#  text_for_beneficiaries       :text
-#  data_response_id             :integer         indexed
-#  activity_id                  :integer         indexed
-#  approved                     :boolean
-#  project_id                   :integer
-#  ServiceLevelBudget_amount    :decimal(, )     default(0.0)
-#  ServiceLevelSpend_amount     :decimal(, )     default(0.0)
-#  am_approved                  :boolean
-#  user_id                      :integer
-#  am_approved_date             :date
-#  coding_budget_valid          :boolean         default(FALSE)
-#  coding_budget_cc_valid       :boolean         default(FALSE)
-#  coding_budget_district_valid :boolean         default(FALSE)
-#  coding_spend_valid           :boolean         default(FALSE)
-#  coding_spend_cc_valid        :boolean         default(FALSE)
-#  coding_spend_district_valid  :boolean         default(FALSE)
-#  planned_for_gor_q1           :boolean
-#  planned_for_gor_q2           :boolean
-#  planned_for_gor_q3           :boolean
-#  planned_for_gor_q4           :boolean
+#  id                  :integer         not null, primary key
+#  name                :string(255)
+#  created_at          :datetime
+#  updated_at          :datetime
+#  description         :text
+#  type                :string(255)     indexed
+#  other_beneficiaries :text
+#  data_response_id    :integer         indexed
+#  activity_id         :integer         indexed
+#  approved            :boolean
+#  project_id          :integer
+#  am_approved         :boolean
+#  user_id             :integer
+#  am_approved_date    :date
+#  planned_for_gor_q1  :boolean
+#  planned_for_gor_q2  :boolean
+#  planned_for_gor_q3  :boolean
+#  planned_for_gor_q4  :boolean
 #
 

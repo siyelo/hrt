@@ -64,19 +64,16 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: data_requests
 #
-#  id                :integer         not null, primary key
-#  organization_id   :integer
-#  title             :string(255)
-#  created_at        :datetime
-#  updated_at        :datetime
-#  due_date          :date
-#  start_date        :date
-#  end_date          :date
-#  final_review      :boolean         default(FALSE)
-#  budget_by_quarter :boolean         default(FALSE)
+#  id              :integer         not null, primary key
+#  organization_id :integer
+#  title           :string(255)
+#  created_at      :datetime
+#  updated_at      :datetime
+#  start_date      :date
 #
 

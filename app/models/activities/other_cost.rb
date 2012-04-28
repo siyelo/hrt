@@ -65,37 +65,32 @@ end
 
 
 
+
+
+
+
+
 # == Schema Information
 #
 # Table name: activities
 #
-#  id                           :integer         not null, primary key
-#  name                         :string(255)
-#  created_at                   :datetime
-#  updated_at                   :datetime
-#  provider_id                  :integer         indexed
-#  description                  :text
-#  type                         :string(255)     indexed
-#  text_for_provider            :text
-#  text_for_beneficiaries       :text
-#  data_response_id             :integer         indexed
-#  activity_id                  :integer         indexed
-#  approved                     :boolean
-#  project_id                   :integer
-#  ServiceLevelBudget_amount    :decimal(, )     default(0.0)
-#  ServiceLevelSpend_amount     :decimal(, )     default(0.0)
-#  am_approved                  :boolean
-#  user_id                      :integer
-#  am_approved_date             :date
-#  coding_budget_valid          :boolean         default(FALSE)
-#  coding_budget_cc_valid       :boolean         default(FALSE)
-#  coding_budget_district_valid :boolean         default(FALSE)
-#  coding_spend_valid           :boolean         default(FALSE)
-#  coding_spend_cc_valid        :boolean         default(FALSE)
-#  coding_spend_district_valid  :boolean         default(FALSE)
-#  planned_for_gor_q1           :boolean
-#  planned_for_gor_q2           :boolean
-#  planned_for_gor_q3           :boolean
-#  planned_for_gor_q4           :boolean
+#  id                  :integer         not null, primary key
+#  name                :string(255)
+#  created_at          :datetime
+#  updated_at          :datetime
+#  description         :text
+#  type                :string(255)     indexed
+#  other_beneficiaries :text
+#  data_response_id    :integer         indexed
+#  activity_id         :integer         indexed
+#  approved            :boolean
+#  project_id          :integer
+#  am_approved         :boolean
+#  user_id             :integer
+#  am_approved_date    :date
+#  planned_for_gor_q1  :boolean
+#  planned_for_gor_q2  :boolean
+#  planned_for_gor_q3  :boolean
+#  planned_for_gor_q4  :boolean
 #
 

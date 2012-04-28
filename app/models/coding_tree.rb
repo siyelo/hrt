@@ -90,8 +90,6 @@ class CodingTree
       CostCategory.roots
     when 'CodingBudgetDistrict', 'CodingSpendDistrict'
       Location.national_level + Location.without_national_level.sorted.all
-    when 'HsspBudget', 'HsspSpend'
-      @activity.class.to_s == "OtherCost" ? [] : HsspStratObj.all + HsspStratProg.all
     else
       raise "Invalid coding_klass #{@coding_klass.to_s}".to_yaml
     end
@@ -127,7 +125,7 @@ class CodingTree
             cached_amount = ca.percentage * max / 100
             bucket = self.codings_sum(children, activity, max)
             sum_of_children = bucket[:amount]
-          else
+          else #TODO: remove - only percentages are used now
             bucket = self.codings_sum(children, activity, max)
             cached_amount = bucket[:amount]
             sum_of_children = bucket[:amount]
@@ -196,8 +194,6 @@ class CodingTree
         CostCategory.all
       when 'CodingBudgetDistrict', 'CodingSpendDistrict'
         Location.all
-      when 'HsspBudget', 'HsspSpend'
-        @activity.class.to_s == "OtherCost" ? [] : HsspStratObj.all + HsspStratProg.all
       else
         raise "Invalid coding_klass #{@coding_klass.to_s}".to_yaml
       end

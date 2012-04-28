@@ -21,11 +21,9 @@
     :if => lambda { |is| (!((is.budget || 0) > 0)) && (!((is.spend || 0) > 0)) }
 
   ### Delegates
-  delegate :name, :to => :organization, :prefix => true, :allow_nil => true # gives you organization_name
+  delegate :name, :to => :organization, :prefix => true, :allow_nil => true # organization_name
 
   ### Named Scopes
-  named_scope :implemented_by_health_centers, { :joins => [:organization],
-    :conditions => ["organizations.raw_type = ?", "Health Center"]}
   named_scope :sorted, { :joins => "LEFT OUTER JOIN organizations ON
     organizations.id = implementer_splits.organization_id",
     :order => "LOWER(organizations.name) ASC"}

@@ -2,14 +2,11 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Activity do
   describe "Associations" do
-    it { should belong_to :provider } #FIXME: no longer needed
     it { should belong_to :data_response }
     it { should belong_to :project }
-    it { should have_and_belong_to_many :organizations }
     it { should have_and_belong_to_many :beneficiaries }
     it { should have_many(:implementer_splits).dependent(:delete_all) }
     it { should have_many(:implementers) }
-    it { should have_many(:codes) }
     it { should have_many(:purposes) }
     it { should have_many(:code_assignments).dependent(:destroy) }
     it { should have_many(:comments).dependent(:destroy) }
@@ -32,16 +29,11 @@ describe Activity do
     it { should allow_mass_assignment_of(:description) }
     it { should allow_mass_assignment_of(:project_id) }
     it { should allow_mass_assignment_of(:beneficiary_ids) }
-    it { should allow_mass_assignment_of(:provider_id) }#FIXME: remove
-    it { should allow_mass_assignment_of(:text_for_provider) } #FIXME: remove
-    it { should allow_mass_assignment_of(:text_for_beneficiaries) }
+    it { should allow_mass_assignment_of(:other_beneficiaries) }
     it { should allow_mass_assignment_of(:approved) }
     it { should allow_mass_assignment_of(:implementer_splits_attributes) }
     it { should allow_mass_assignment_of(:implementer_splits_attributes) }
     it { should allow_mass_assignment_of(:organization_ids) }
-    it { should allow_mass_assignment_of(:csv_project_name) }
-    it { should allow_mass_assignment_of(:csv_provider) } #FIXME: remove
-    it { should allow_mass_assignment_of(:csv_beneficiaries) }
     it { should allow_mass_assignment_of(:targets_attributes) }
     it { should allow_mass_assignment_of(:outputs_attributes) }
     it { should allow_mass_assignment_of(:am_approved_date) }
@@ -222,21 +214,6 @@ describe Activity do
     end
   end
 
-  #FIXME: remove
-  describe "can show who we provided money to (providers)" do
-    context "on a single project" do
-      it "should have at least 1 provider" do
-        basic_setup_project
-        our_org   = Factory(:organization)
-        other_org = Factory(:organization)
-        flow      = Factory(:funding_flow, :from => our_org, :project => @project)
-        activity  = Factory(:activity, :data_response => @response, :project => @project,
-                      :provider => other_org )
-        activity.provider.should == other_org # duh
-      end
-    end
-  end
-
   describe "deep cloning" do
     before :each do
       basic_setup_activity
@@ -250,13 +227,6 @@ describe Activity do
       @clone.code_assignments[0].code.should == @ca.code
       @clone.code_assignments[0].activity.should_not == @activity
       @clone.code_assignments[0].activity.should == @clone
-    end
-
-    it "should clone organizations" do
-      @orgs = [Factory(:organization)]
-      @activity.organizations << @orgs
-      save_and_deep_clone
-      @clone.organizations.should == @orgs
     end
 
     it "should clone beneficiaries" do

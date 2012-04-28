@@ -346,22 +346,6 @@ describe CodingTree do
         ct.root_codes.should == @fake_codes
       end
 
-      it "returns codes for simple activity and 'HsspBudget' type" do
-        HsspStratObj.stub(:all).and_return(@fake_codes)
-        HsspStratProg.stub(:all).and_return(@fake_codes)
-
-        ct = CodingTree.new(@activity, HsspBudget)
-        ct.root_codes.should == @fake_codes.concat(@fake_codes)
-      end
-
-      it "returns codes for other cost activity and 'HsspBudget' type" do
-        HsspStratObj.stub(:all).and_return(@fake_codes)
-        HsspStratProg.stub(:all).and_return(@fake_codes)
-
-        ct = CodingTree.new(@activity, HsspBudget)
-        ct.root_codes.should == @fake_codes.concat(@fake_codes)
-      end
-
       it "returns codes for simple activity and 'CodingSpend' type" do
         Code.stub_chain(:purposes, :roots).and_return(@fake_codes)
 
@@ -381,22 +365,6 @@ describe CodingTree do
 
         ct = CodingTree.new(@activity, CodingSpendDistrict)
         ct.root_codes.should == @fake_codes
-      end
-
-      it "returns codes for simple activity and 'HsspSpend' type" do
-        HsspStratObj.stub(:all).and_return(@fake_codes)
-        HsspStratProg.stub(:all).and_return(@fake_codes)
-
-        ct       = CodingTree.new(@activity, HsspSpend)
-        ct.root_codes.should == @fake_codes.concat(@fake_codes)
-      end
-
-      it "returns codes for other cost activity and 'HsspSpend' type" do
-        HsspStratObj.stub(:all).and_return(@fake_codes)
-        HsspStratProg.stub(:all).and_return(@fake_codes)
-
-        ct = CodingTree.new(@activity, HsspSpend)
-        ct.root_codes.should == @fake_codes.concat(@fake_codes)
       end
     end
 

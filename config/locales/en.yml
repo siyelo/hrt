@@ -31,9 +31,6 @@ en:
       full_messages:
         format: "%{attribute} %{message}"
 
-    attributes:
-      sub_activity:
-        provider_id: "Implementer"
       funding_flow:
         spend: "Disbursements Received"
         budget: "Planned Disbursements"

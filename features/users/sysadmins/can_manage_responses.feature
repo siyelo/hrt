@@ -10,7 +10,7 @@ Feature: Admin can manage data responses
       And a reporter exists with email: "reporter2@hrtapp.com", organization: the organization
       And a data_response should exist with data_request: the data_request, organization: the organization
       And a project exists with data_response: the data_response
-      And a classified_activity exists with project: the project, data_response: the data_response
+      And a activity_fully_coded exists with project: the project, data_response: the data_response
       And a sysadmin exists with email: "sysadmin@hrtapp.com", organization: the organization
       And I am signed in as "sysadmin@hrtapp.com"
 

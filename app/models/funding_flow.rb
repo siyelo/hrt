@@ -98,6 +98,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: funding_flows
@@ -108,18 +109,10 @@ end
 #  created_at           :datetime
 #  updated_at           :datetime
 #  budget               :decimal(, )
-#  spend_q1             :decimal(, )
-#  spend_q2             :decimal(, )
-#  spend_q3             :decimal(, )
-#  spend_q4             :decimal(, )
 #  organization_text    :text
 #  self_provider_flag   :integer         default(0), indexed
 #  spend                :decimal(, )
 #  spend_q4_prev        :decimal(, )
-#  budget_q1            :decimal(, )
-#  budget_q2            :decimal(, )
-#  budget_q3            :decimal(, )
-#  budget_q4            :decimal(, )
 #  budget_q4_prev       :decimal(, )
 #  project_from_id      :integer
 #
