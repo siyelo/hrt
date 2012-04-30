@@ -3,7 +3,7 @@
   %li.last
     %h3 User details
     %ul.section_form
-      = f.input :organization_id, :label => "Organization", :as => :select, :collection => Organization.reporting.ordered, :hint => "The organization this user is associated with"
+      = f.input :organization_id, :label => "Organization", :as => :select, :collection => Organization.ordered, :hint => "The organization this user is associated with"
       %li
         = f.label :full_name, "Full name"
         = f.text_field :full_name
