@@ -22,7 +22,7 @@
 
 %h2= @report.project.name
 
-.reports_summary.dashboard_section.section_form
+.reports_summary.section_base.section_form
   %p.summary_col
     %span Total Expenditure
     %span.currency= @report.currency
@@ -41,7 +41,7 @@
   %li= link_to "Locations", "#"
   %li= link_to "Inputs", "#"
 
-.dashboard_section.section_form.first
+.section_base.section_form.first
 
   .full
     .first-half

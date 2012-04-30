@@ -6,36 +6,41 @@
 %h1.request_nav
   = render '/shared/request_nav'
 
-%h1 Dynamic Reports
+%h2 Dynamic Reports
+.section_base
+  %table.data
+    %thead
+      %tr.head
+        %th Report
+        %th Expenditure
+        %th Budget
+        
+    %tbody
+      = render 'report_row', :key => 'activity_overview'
+      = render 'report_row', :key => 'budget_implementer_purpose'
+      = render 'report_row', :key => 'spend_implementer_purpose'
+      = render 'report_row', :key => 'budget_implementer_input'
+      = render 'report_row', :key => 'spend_implementer_input'
+      = render 'report_row', :key => 'budget_implementer_location'
+      = render 'report_row', :key => 'spend_implementer_location'
+      = render 'report_row', :key => 'budget_implementer_funding_source'
+      = render 'report_row', :key => 'spend_implementer_funding_source'
+      = render 'report_row', :key => 'budget_implementer_target'
+      = render 'report_row', :key => 'spend_implementer_target'
+      = render 'report_row', :key => 'budget_implementer_output'
+      = render 'report_row', :key => 'spend_implementer_output'
+      = render 'report_row', :key => 'budget_implementer_beneficiary'
+      = render 'report_row', :key => 'spend_implementer_beneficiary'
+      = render 'report_row', :key => 'budget_dynamic_query'
+      = render 'report_row', :key => 'spend_dynamic_query'
+      = render 'report_row', :key => 'funding_source_query'
 
-.first-half
-  .section_base
-    %ul.admin_reports
-      %li= render 'report_row', :key => 'activity_overview'
-      %li= render 'report_row', :key => 'budget_implementer_purpose'
-      %li= render 'report_row', :key => 'spend_implementer_purpose'
-      %li= render 'report_row', :key => 'budget_implementer_input'
-      %li= render 'report_row', :key => 'spend_implementer_input'
-      %li= render 'report_row', :key => 'budget_implementer_location'
-      %li= render 'report_row', :key => 'spend_implementer_location'
-      %li= render 'report_row', :key => 'budget_implementer_funding_source'
-      %li= render 'report_row', :key => 'spend_implementer_funding_source'
-      %li= render 'report_row', :key => 'budget_implementer_target'
-      %li= render 'report_row', :key => 'spend_implementer_target'
-      %li= render 'report_row', :key => 'budget_implementer_output'
-      %li= render 'report_row', :key => 'spend_implementer_output'
-      %li= render 'report_row', :key => 'budget_implementer_beneficiary'
-      %li= render 'report_row', :key => 'spend_implementer_beneficiary'
-      %li= render 'report_row', :key => 'budget_dynamic_query'
-      %li= render 'report_row', :key => 'spend_dynamic_query'
-      %li= render 'report_row', :key => 'funding_source_query'
-
-  %h2
-    =image_tag "icon_reporter.png", :class => "heading_icon"
-    Mark Double Counting
-  .section_base
-    %ul.admin_reports
-      - form_tag mark_implementer_splits_admin_reports_path, :method => :put, :multipart => true do
-        = file_field_tag :file
-        = submit_tag :upload, :value => "Upload"
-        %span.hint Mark duplicates in Activity Overview Report and upload the CSV file
+%h2
+  =image_tag "icon_reporter.png", :class => "heading_icon"
+  Mark Double Counting
+.section_base
+  %ul.admin_reports
+    - form_tag mark_implementer_splits_admin_reports_path, :method => :put, :multipart => true do
+      = file_field_tag :file
+      = submit_tag :upload, :value => "Upload"
+      %span.hint Mark duplicates in Activity Overview Report and upload the CSV file
