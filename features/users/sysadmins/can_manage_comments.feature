@@ -4,15 +4,13 @@ Feature: Admin can see comments
   I want to be able to see comments that admins have made
 
   Background:
-    Given an organization exists with name: "GoR"
-    And a data_request exists with title: "Req1", organization: the organization
-    And an organization exists with name: "UNDP"
+  Given a basic reporter setup
     And a admin exists with email: "sysadmin@hrtapp.com", organization: the organization
-    And a data_response should exist with data_request: the data_request, organization: the organization
     And a project exists with name: "TB Treatment Project", data_response: the data_response
     And a comment exists with comment: "comment1", commentable: the project
     And an activity exists with name: "TB Drugs procurement", data_response: the data_response, project: the project
     And an organization exists with name: "USAID"
+    And a reporter exists with email: "reporter2@hrtapp.com", organization: the organization
     And a data_response should exist with data_request: the data_request, organization: the organization
     And a project exists with name: "Other Project", data_response: the data_response
     And a comment exists with comment: "comment2", commentable: the project

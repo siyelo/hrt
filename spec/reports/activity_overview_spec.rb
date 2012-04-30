@@ -14,10 +14,11 @@ describe Reports::ActivityOverview do
   end
 
   before :each do
+    @request       = Factory :data_request
     @donor1        = Factory(:organization, :name => "donor1", :funder_type => "donor")
     @organization1 = Factory(:organization, :name => "organization1",
      :implementer_type => "implementer")
-    @request       = Factory(:data_request, :organization => @organization1)
+    Factory :user, :organization => @organization1
     @response1     = @organization1.latest_response
   end
 
@@ -72,6 +73,7 @@ describe Reports::ActivityOverview do
       # not only project, but we need to see if
       # to flow of money is entered
       @organization2 = Factory(:organization, :name => "organization2")
+      Factory :user, :organization => @organization2
       @response2     = @organization2.latest_response
       in_flow        = Factory.build(:funding_flow, :from => @organization1,
                                      :budget => 100, :spend => 50)
@@ -135,6 +137,7 @@ describe Reports::ActivityOverview do
       # not only project, but we need to see if
       # to flow of money is entered
       @organization2 = Factory(:organization, :name => "organization2")
+      Factory :user, :organization => @organization2
       @response2     = @organization2.latest_response
       in_flow        = Factory.build(:funding_flow, :from => @organization1,
                                      :budget => 100, :spend => 50)

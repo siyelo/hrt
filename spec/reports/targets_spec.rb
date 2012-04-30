@@ -21,7 +21,8 @@ describe Reports::Targets do
         @donor2        = Factory(:organization, :name => "donor2")
         @organization1 = Factory(:organization, :name => "organization1",
                                  :implementer_type => "Implementer")
-        @request       = Factory(:data_request, :organization => @organization1)
+        @request       = Factory :data_request
+        Factory :user, :organization => @organization1
         @response1     = @organization1.latest_response
         in_flow1       = Factory.build(:funding_flow, :from => @donor1,
                                        amount_type => 60)

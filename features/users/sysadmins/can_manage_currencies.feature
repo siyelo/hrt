@@ -4,11 +4,8 @@ Feature: Admin can manage currencies
   I want to be able to manage currencies
 
   Background:
-    Given an organization exists with name: "MoH"
-    Given a data_request exists with title: "Req1", organization: the organization
-    Given an organization exists with name: "organization1"
     Given now is "12-12-2011 08:31:00 +0000"
-    And an admin exists with email: "sysadmin@hrtapp.com", organization: the organization
+    And an admin exists with email: "sysadmin@hrtapp.com"
     And I am signed in as "sysadmin@hrtapp.com"
     And I follow "Currencies"
 

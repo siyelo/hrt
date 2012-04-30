@@ -11,10 +11,10 @@ describe Reports::FundingSource do
 
   context "simple report" do
     before :each do
-      basic_setup_funding_flow
+      @request = Factory :data_request
       @donor = Factory(:organization)
       @organization = Factory(:organization)
-      @request      = Factory(:data_request, :organization => @organization)
+      Factory :user, :organization => @organization
       @response     = @organization.latest_response
       @project      = Factory(:project, :data_response => @response)
       @project.in_flows = [Factory(:funding_flow, :project => @project,
@@ -35,6 +35,7 @@ describe Reports::FundingSource do
       before :each do
         @donor1 = Factory(:organization, :name => "dony")
         @organization1 = Factory(:organization, :name => "orgy")
+        Factory :user, :organization => @organization1
         @response1     = @organization1.latest_response
         @response1.state = 'accepted'; @response1.save
         @project1      = Factory(:project, :data_response => @response1, :name => "CoolProject")

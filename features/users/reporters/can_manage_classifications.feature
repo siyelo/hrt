@@ -19,13 +19,10 @@ Feature: Reporter can enter a code breakdown for each activity
   #         \ code222
 
     # level 1
+    Given a basic reporter setup
     Given a mtef_code "mtef1" exists with id: 1, short_display: "mtef1"
       And a mtef_code "mtef2" exists with id: 2, short_display: "mtef2"
       And a cost_category_code exists with id: 3, short_display: "cost_category1"
-      And an organization exists with name: "organization1"
-      And a data_request exists with title: "data_request1"
-      And a data_response should exist with data_request: the data_request, organization: the organization
-      And a reporter exists with email: "reporter@hrtapp.com", organization: the organization, current_response: the data_response
       And a project exists with name: "Project", data_response: the data_response
       And I am signed in as "reporter@hrtapp.com"
       And I go to the set request page for "data_request1"

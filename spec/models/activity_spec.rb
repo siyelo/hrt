@@ -159,16 +159,15 @@ describe Activity do
     end
   end
 
-  describe "organization_name" do
     it "returns organization name" do
       @organization = Factory(:organization, :name => "Organization1")
+      user = Factory :user, :organization => @organization
       @request      = Factory(:data_request, :organization => @organization)
       @response     = @organization.latest_response
       @project      = Factory(:project, :data_response => @response)
       @activity     = Factory(:activity, :data_response => @response, :project => @project)
       @activity.organization_name.should == "Organization1"
     end
-  end
 
   describe "gets budget and spend from sub activities" do
     before :each do
@@ -305,8 +304,9 @@ describe Activity do
 
   describe "approve all budgets" do
     it "approves all budgets for activities" do
-      @organization = Factory(:organization)
-      @request      = Factory(:data_request, :organization => @organization)
+      @request      = Factory :data_request
+      @organization = Factory :organization
+      user = Factory :user, :organization => @organization
       @response     = @organization.latest_response
       @project      = Factory(:project, :data_response => @response)
       @activity     = Factory(:activity, :data_response => @response,

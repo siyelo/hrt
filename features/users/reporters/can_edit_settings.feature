@@ -4,10 +4,7 @@ Feature: Reporter can manage data response
   I want to be able to manage data response
 
   Background:
-    Given an organization exists with name: "org1"
-    And a data_request exists with organization: the organization
-    And a data_response should exist with data_request: the data_request, organization: the organization
-    And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
+    Given a basic reporter setup
     And I am signed in as "reporter@hrtapp.com"
     And I follow "Settings"
 

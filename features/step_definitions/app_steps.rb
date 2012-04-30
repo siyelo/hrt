@@ -1,3 +1,19 @@
+Given 'a basic reporter setup' do
+  steps %Q{
+    Given a basic reporter setup with org "organization1"
+  }
+end
+
+Given /^a basic reporter setup with org "([^"]*)"$/ do |org|
+  steps %Q{
+    Given an organization exists with name: "#{org}"
+    And a data_request exists with title: "data_request1"
+    And an organization "my_organization" exists with name: "organization2"
+    And a reporter exists with email: "reporter@hrtapp.com", organization: organization "my_organization"
+    Then data_response should exist with data_request: the data_request, organization: the organization
+  }
+end
+
 Given /^a project$/ do
   @project = Factory(:project)
 end

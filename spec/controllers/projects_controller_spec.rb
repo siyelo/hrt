@@ -203,15 +203,15 @@ describe ProjectsController do
 
     context "Reporter and Activity Manager" do
       before :each do
+        @data_request = Factory :data_request
         @organization = Factory :organization
-        @data_request = Factory :data_request, :organization => @organization
+        @user = Factory :user, :roles => ['reporter', 'activity_manager'],
+          :organization => @organization
         @data_response = @organization.latest_response
         @project = Factory(:project, :data_response => @data_response)
       end
 
       it "allows the editing of the organization the reporter is in" do
-        @user = Factory :user, :roles => ['reporter', 'activity_manager'],
-          :organization => @organization
         login @user
 
         request.env["HTTP_REFERER"] = edit_response_project_url(@data_response, @project)
@@ -226,9 +226,9 @@ describe ProjectsController do
 
       it "should not allow the editing of organization the reporter is not in" do
         @organization2 = Factory :organization
-        @user = Factory :user, :roles => ['reporter', 'activity_manager'],
-          :organization => @organization2
+        @user.organization = @organization2
         @user.organizations << @organization
+        @user.save!
         login @user
         session[:return_to] = edit_response_project_url(@data_response, @project)
         put :update, :id => @project.id, :response_id => @data_response.id,

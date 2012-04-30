@@ -1,0 +1,7 @@
+- organization = response.organization
+- title = organization.name + ': ' + response.title.split[0..1].join(' ')
+
+%tr
+  %td.title= link_to title, response_projects_path(response) if response
+  %td= link_to organization.name, edit_admin_organization_path(organization)
+  %td= response.status

@@ -5,9 +5,6 @@ class UsersController < ApplicationController
   # set the user's 'current response' based on the given Request id
   def set_request
     current_user.change_current_response!(params[:id])
-    if current_user.current_response_is_latest?
-      flash[:notice] = request_message(current_user.current_response.request)
-    end
     redirect_back
   end
 

@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe ActivitiesController do
-
   describe "Routing shortcuts for Activities (activities/1) should map" do
     it "response_activities_path(1) to /responses/1/activities" do
       response_activities_path(1).should == '/responses/1/activities'
@@ -26,10 +25,7 @@ describe ActivitiesController do
 
   describe "Requesting Activity endpoints as visitor" do
     before :each do
-      @organization  = Factory(:organization)
-      @data_request  = Factory(:data_request, :organization => @organization)
-      @data_response = @organization.latest_response
-      @project       = Factory(:project, :data_response => @data_response)
+      basic_setup_project_for_controller
     end
     controller_name :activities
 
@@ -64,7 +60,7 @@ describe ActivitiesController do
         before do
           params = { :name => 'title', :description =>  'descr'}
           @activity = Factory(:activity, params.merge(:data_response => @data_response,
-            :project => @project) )
+                                                      :project => @project) )
           @activity.stub!(:save).and_return(true)
           post :create, :activity =>  params, :response_id => @data_response.id
         end
@@ -75,7 +71,7 @@ describe ActivitiesController do
         before do
           params = { :name => 'title', :description =>  'descr'}
           @activity = Factory(:activity, params.merge(:data_response => @data_response,
-            :project => @project) )
+                                                      :project => @project) )
           @activity.stub!(:save).and_return(true)
           put :update, { :id => @activity.id, :response_id => @data_response.id }.merge(params)
         end
@@ -96,14 +92,8 @@ describe ActivitiesController do
     controller_name :activities
 
     before :each do
-      @organization  = Factory(:organization)
-      @data_request  = Factory(:data_request, :organization => @organization)
-      @data_response = @organization.latest_response
-      @project = Factory(:project, :data_response => @data_response)
-      @user = Factory(:reporter, :organization => @organization)
+      basic_setup_implementer_split_for_controller
       login @user
-      @activity = Factory(:activity, :data_response => @data_response, :project => @project)
-      @user_activities.stub!(:find).and_return(@activity)
     end
 
     it "Requesting /activities/1/sysadmin_approve using POST requires admin to approve an activity" do
@@ -125,13 +115,8 @@ describe ActivitiesController do
   describe "Permissions" do
     context "Activity Manager" do
       before :each do
-        @organization = Factory :organization
-        @data_request = Factory :data_request, :organization => @organization
-        @user = Factory :activity_manager, :organization => @organization
-        @data_response = @organization.latest_response
-        @project = Factory(:project, :data_response => @data_response)
-        @activity = Factory :activity, :project => @project,
-          :data_response => @data_response, :am_approved => false
+        basic_setup_implementer_split_for_controller
+        @user.roles = ['activity_manager']
         login @user
       end
 
@@ -141,8 +126,8 @@ describe ActivitiesController do
         post :create, :response_id => @data_response.id,
           :activity => {:project_id => '-1', :name => "new activity", :description => "description",
             "implementer_splits_attributes"=>
-              {"0"=> {"spend"=>"2", "data_response_id"=>"#{@data_response.id}",
-                "organization_mask"=>"#{@organization.id}", "budget"=>"4"}}}
+        {"0"=> {"spend"=>"2", "data_response_id"=>"#{@data_response.id}",
+          "organization_mask"=>"#{@organization.id}", "budget"=>"4"}}}
 
         flash[:error].should == "You do not have permission to edit this resource"
         response.should render_template("new")
@@ -169,17 +154,11 @@ describe ActivitiesController do
 
     context "Reporter and Activity Manager" do
       before :each do
-        @organization = Factory :organization
-        @data_request = Factory :data_request, :organization => @organization
-        @data_response = @organization.latest_response
-        @project = Factory(:project, :data_response => @data_response)
-        @activity = Factory :activity, :project => @project,
-          :data_response => @data_response, :am_approved => false
+        basic_setup_implementer_split_for_controller
       end
 
       it "allows the activity editing in the organization the reporter is in" do
-        @user = Factory :user, :roles => ['reporter', 'activity_manager'],
-          :organization => @organization
+        @user.roles = ['reporter', 'activity_manager']
         login @user
 
         request.env["HTTP_REFERER"] = edit_response_activity_url(@data_response, @activity)
@@ -194,10 +173,10 @@ describe ActivitiesController do
 
       it "should not allow the editing of organization the reporter is not in" do
         @organization2 = Factory :organization
-        @user = Factory :user, :roles => ['reporter', 'activity_manager'],
+        @user2 = Factory :user, :roles => ['reporter', 'activity_manager'],
           :organization => @organization2
-        @user.organizations << @organization
-        login @user
+        @user2.organizations << @organization
+        login @user2
         session[:return_to] = edit_response_activity_url(@data_response, @activity)
         put :update, :id => @activity.id, :response_id => @data_response.id,
           :activity => {:description => "thedesc", :project_id => @project.id}
@@ -208,8 +187,8 @@ describe ActivitiesController do
 
     context "Sysadmins and Activity Managers" do
       before :each do
+        @data_request = Factory :data_request
         @organization = Factory :organization
-        @data_request = Factory :data_request, :organization => @organization
         @user = Factory :user, :roles => ['admin', 'activity_manager'],
           :organization => @organization
         @data_response = @organization.latest_response
@@ -225,8 +204,8 @@ describe ActivitiesController do
         post :create, :response_id => @data_response.id,
           :activity => {:project_id => '-1', :name => "new activity", :description => "description",
             "implementer_splits_attributes"=>
-              {"0"=> {"updated_at" => Time.now, "spend"=>"2", "data_response_id"=>"#{@data_response.id}",
-                "organization_mask"=>"#{@organization.id}", "budget"=>"4"}}}
+        {"0"=> {"updated_at" => Time.now, "spend"=>"2", "data_response_id"=>"#{@data_response.id}",
+          "organization_mask"=>"#{@organization.id}", "budget"=>"4"}}}
 
         flash[:error].should_not == "You do not have permission to edit this activity"
         flash[:notice].should match("Activity was successfully created.")
@@ -247,8 +226,8 @@ describe ActivitiesController do
 
   describe "Update / Create" do
     before :each do
+      @data_request = Factory :data_request
       @organization = Factory(:organization)
-      @data_request = Factory(:data_request, :organization => @organization)
       @user = Factory(:reporter, :organization => @organization)
       @data_response = @organization.latest_response
       @project = Factory(:project, :data_response => @data_response)
@@ -261,7 +240,7 @@ describe ActivitiesController do
     it "should allow a project to be created automatically on update" do
       #if the project_id is -1 then the controller should create a new project with name, start date and end date equal to that of the activity
       put :update, :id => @activity.id, :response_id => @data_response.id,
-          :activity => {:project_id => '-1', :name => @activity.name}
+        :activity => {:project_id => '-1', :name => @activity.name}
       @activity.reload
       @activity.project.name.should == @activity.name
       @activity.project.in_flows.count.should == 1
@@ -275,8 +254,8 @@ describe ActivitiesController do
       post :create, :response_id => @data_response.id,
         :activity => {:project_id => '-1', :name => "new activity", :description => "description",
           "implementer_splits_attributes"=>
-            {"0"=> {"updated_at" => Time.now, "spend"=>"2", "data_response_id"=>"#{@data_response.id}",
-              "organization_mask"=>"#{@organization.id}", "budget"=>"4"}}}
+      {"0"=> {"updated_at" => Time.now, "spend"=>"2", "data_response_id"=>"#{@data_response.id}",
+        "organization_mask"=>"#{@organization.id}", "budget"=>"4"}}}
       response.should be_redirect
       @new_activity = Activity.find_by_name('new activity')
       @new_activity.project.name.should == @new_activity.name
@@ -284,14 +263,14 @@ describe ActivitiesController do
 
     it "should assign the activity to an existing project if a project exists with the same name as the activity" do
       put :update, :id => @activity.id, :response_id => @data_response.id,
-          :activity => {:name => @project.name, :project_id => '-1'}
+        :activity => {:name => @project.name, :project_id => '-1'}
       @activity.reload
       @activity.project.name.should == @project.name
     end
 
     it "should allow a reporter to update an activity if it's not am approved" do
       put :update, :id => @activity.id, :response_id => @data_response.id,
-          :activity => {:description => "thedesc", :project_id => @project.id}
+        :activity => {:description => "thedesc", :project_id => @project.id}
       @activity.reload
       @activity.description.should == "thedesc"
     end
@@ -349,8 +328,8 @@ describe ActivitiesController do
 
   describe "pagination" do
     before :each do
-      @organization = Factory(:organization)
-      @data_request = Factory(:data_request, :organization => @organization)
+      @data_request = Factory :data_request
+      @organization = Factory :organization
       @user = Factory(:reporter, :organization => @organization)
       @data_response = @organization.latest_response
       @project = Factory(:project, :data_response => @data_response)
@@ -362,7 +341,7 @@ describe ActivitiesController do
 
     it "should paginate implementer splits" do
       @split = Factory(:implementer_split, :activity => @activity,
-        :organization => @organization)
+                       :organization => @organization)
       @activity.reload
       get :edit, :id => @activity.id, :response_id => @data_response.id
       assigns(:split_errors).should be_nil
@@ -372,13 +351,12 @@ describe ActivitiesController do
 
     it "should not paginate implementer splits when there are errors" do
       post :update, :id => @activity.id, :response_id => @data_response.id,
-           :activity => {:project_id => @project.id, :name => "new activity", :description => "description",
-           "implementer_splits_attributes"=>
-            {"0"=> {"updated_at" => Time.now, "spend"=>"",
-              "organization_mask"=>"#{@organization.id}", "budget"=>""}}}
+        :activity => {:project_id => @project.id, :name => "new activity", :description => "description",
+          "implementer_splits_attributes"=>
+      {"0"=> {"updated_at" => Time.now, "spend"=>"",
+        "organization_mask"=>"#{@organization.id}", "budget"=>""}}}
       assigns(:split_errors).size.should == 1
       assigns(:splits).should be_nil
     end
   end
-
 end

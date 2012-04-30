@@ -28,6 +28,8 @@ class User < ActiveRecord::Base
   # AuthLogic handles email uniqueness validation
   validates_presence_of :full_name, :email, :organization_id
 
+  after_create :create_organization_responses
+
   ### Instance Methods
 
   def deliver_password_reset_instructions!
@@ -98,6 +100,10 @@ class User < ActiveRecord::Base
     # but dont allow them to go active with an empty password
     def require_password?
       self.active? && (!self.password.blank? || self.crypted_password.nil?)
+    end
+
+    def create_organization_responses
+      organization.create_data_responses!
     end
 end
 

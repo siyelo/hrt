@@ -39,6 +39,7 @@ describe OtherCost do
   describe "classified?" do
     before :each do
       @organization = Factory(:organization)
+      user = Factory :user, :organization => @organization
       @request      = Factory(:data_request, :organization => @organization)
       @response     = @organization.latest_response
       @project      = Factory(:project, :data_response => @response)
@@ -69,16 +70,18 @@ describe OtherCost do
 
     describe "currency" do
       it "returns data response currency if other cost without a project" do
+        request      = Factory :data_request
         organization = Factory(:organization, :currency => 'EUR')
-        request      = Factory(:data_request, :organization => organization)
+        Factory :user, :organization => organization
         response     = organization.latest_response
         oc = Factory(:other_cost, :project => nil, :data_response => response)
         oc.currency.should.eql? 'EUR'
       end
 
       it "returns project currency if other cost has a project" do
+        request      = Factory :data_request
         organization = Factory(:organization)
-        request      = Factory(:data_request, :organization => organization)
+        Factory :user, :organization => organization
         response     = organization.latest_response
         project      = Factory(:project, :data_response => response, :currency => 'USD')
         oc = Factory(:other_cost, :data_response => response, :project => project)

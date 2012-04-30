@@ -23,8 +23,9 @@ describe Comment do
 
   describe "Named scopes" do
     it "returns all comment in the last 6 monts" do
-      organization = Factory(:organization)
-      request      = Factory(:data_request, :organization => organization)
+      request      = Factory :data_request
+      organization = Factory :organization
+      Factory :user, :organization => organization
       response     = organization.latest_response
       project      = Factory(:project, :data_response => response)
       activity     = Factory(:activity, :data_response => response, :project => project)

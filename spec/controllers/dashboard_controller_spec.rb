@@ -24,7 +24,6 @@ describe DashboardController do
         Document.should_receive(:visible_to_reporters).once
         get 'index'
         response.should be_success
-        response.flash.now[:warning].should =~ /^You are now viewing data for the Request:.*/
       end
     end
   end
@@ -42,7 +41,6 @@ describe DashboardController do
       it "should be successful" do
         get 'index'
         response.should be_success
-        response.flash.now[:warning].should =~ /^You are now viewing data for the Request:.*/
       end
     end
   end

@@ -50,6 +50,10 @@
     write_attribute(:spend, NumberHelper.is_number?(amount) ? amount.to_f.round_with_precision(2) : amount)
   end
 
+  def self_implemented?
+    activity.organization == organization
+  end
+
   def possible_double_count?
     reporting_org         = activity.organization
     reporting_response    = activity.data_response

@@ -1,8 +1,6 @@
 require 'set'
 
 class Admin::OrganizationsController < Admin::BaseController
-  include DataResponse::States
-
   SORTABLE_COLUMNS  = ['name', 'raw_type', 'fosaid', 'created_at']
 
   ### Inherited Resources

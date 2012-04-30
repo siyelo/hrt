@@ -89,7 +89,7 @@ Spork.each_run do
 
   def proj_funded_by(proj, funder, budget = 50, spend = 50)
     Factory(:funding_flow, :from => funder, :project => proj,
-             :budget => budget, :spend => spend)
+            :budget => budget, :spend => spend)
     proj.reload
     proj
   end
@@ -105,9 +105,9 @@ Spork.each_run do
     #User.class_eval{ def current_response_is_latest?; true; end }
     # does not work in this version of RSpec
     # User.any_instance.stubs(:current_response_is_latest?).returns(true)
-    organization = Factory(:organization)
-    @data_request = Factory(:data_request, :organization => organization) # we need a request in the system first
-    @admin = Factory(:admin, :organization => organization)
+    @data_request = Factory :data_request
+    @admin_org = Factory :organization
+    @admin = Factory(:admin, :organization => @admin_org)
     login @admin
   end
 
@@ -119,38 +119,45 @@ Spork.each_run do
 
   #controller specs don't like you setting @request, @response
   def basic_setup_response_for_controller
-    @organization = Factory(:organization)
-    request      = Factory(:data_request, :organization => @organization)
+    request      = Factory :data_request
+    @organization = Factory :organization
+    @user = Factory :user, :organization => @organization
     @data_request = request
     @data_response     = @organization.latest_response
   end
 
   def basic_setup_project
-    @organization = Factory(:organization)
-    @other_org    = Factory(:organization)
-    @request      = Factory(:data_request, :organization => @organization)
-    @response     = @organization.latest_response
-    @project      = Project.new(:data_response => @response,
-                      :name => "non_factory_project_name_#{rand(100_000_000)}",
-                      :description => "proj descr",
-                      :start_date => "2010-01-01",
-                      :end_date => "2011-01-01",
-                      :in_flows_attributes => [:organization_id_from => @other_org.id,
-                          :budget => 10, :spend => 20])
+    basic_setup_project_for_controller
+    @request = @data_request
+    @response = @data_response
+  end
+
+  def basic_setup_project_for_controller
+    basic_setup_response_for_controller
+    @other_org = Factory(:organization)
+    @project = Project.new(:data_response => @data_response,
+                           :name => "non_factory_project_name_#{rand(100_000_000)}",
+                           :description => "proj descr",
+                           :start_date => "2010-01-01",
+                           :end_date => "2011-01-01",
+                           :in_flows_attributes => [:organization_id_from => @other_org.id,
+                             :budget => 10, :spend => 20])
     @project.save!
   end
 
   def basic_setup_activity
-    @organization = Factory(:organization)
-    @request      = Factory(:data_request, :organization => @organization)
+    @user         = Factory(:user)
+    @organization = @user.organization
+    @request      = Factory :data_request
     @response     = @organization.latest_response
     @project      = Factory(:project, :data_response => @response)
     @activity     = Factory(:activity, :data_response => @response, :project => @project)
   end
 
   def basic_setup_other_cost
-    @organization = Factory(:organization)
-    @request      = Factory(:data_request, :organization => @organization)
+    @user         = Factory(:user)
+    @organization = @user.organization
+    @request      = Factory :data_request
     @response     = @organization.latest_response
     @project      = Factory(:project, :data_response => @response)
     @other_cost   = Factory(:other_cost, :data_response => @response, :project => @project)
@@ -163,36 +170,26 @@ Spork.each_run do
   end
 
   def basic_setup_implementer_split_for_controller
-    @organization = Factory(:organization)
-    @data_request      = Factory(:data_request, :organization => @organization)
-    @data_response     = @organization.latest_response
+    @user         = Factory(:user)
+    @organization = @user.organization
+    @data_request = Factory :data_request
+    @data_response = @organization.latest_response
     @project      = Factory(:project, :data_response => @data_response)
     @activity     = Factory(:activity, :data_response => @data_response, :project => @project)
     @split = Factory(:implementer_split, :activity => @activity,
-      :organization => @organization)
+                     :organization => @organization)
     @activity.save #recalculate implementer split total on activity
   end
 
   def basic_setup_funding_flow
-    @donor = Factory(:organization)
-    @organization = Factory(:organization)
-    @request      = Factory(:data_request, :organization => @organization)
+    @donor        = Factory(:organization)
+    @user         = Factory :user
+    @organization = @user.organization
+    @request      = Factory :data_request
     @response     = @organization.latest_response
     @project      = Factory(:project, :data_response => @response)
     @funding_flow = Factory(:funding_flow, :project => @project,
                             :from => @donor)
-  end
-
-  def setup_activity_in_fiscal_year(fy_start, fy_end, attributes, currency = 'USD')
-    @organization = Factory(:organization,
-                            :fiscal_year_start_date => fy_start,
-                            :fiscal_year_end_date => fy_end,
-                            :currency => currency)
-    @request      = Factory(:data_request, :organization => @organization)
-    @response     = @organization.latest_response
-    @project      = Factory(:project, :data_response => @response)
-    @activity     = Factory(:activity, {:data_response => @response,
-                                        :project => @project}.merge(attributes))
   end
 
   def write_temp_xls(rows)
@@ -212,8 +209,8 @@ Spork.each_run do
 
   def write_xls_with_header(rows)
     row = ['Project Name','Project Description','Project Start Date',
-           'Project End Date','Activity Name','Activity Description',
-           'Id','Implementer','Past Expenditure','Current Budget']
+      'Project End Date','Activity Name','Activity Description',
+      'Id','Implementer','Past Expenditure','Current Budget']
     rows.insert(0,row)
     write_temp_xls(rows)
   end
@@ -231,7 +228,7 @@ Spork.each_run do
   def write_csv_with_header(csv_string)
     header = <<-EOS
 Project Name,Project Description,Project Start Date,Project End Date,Activity Name,Activity Description,Id,Implementer,Past Expenditure,Current Budget
-EOS
+    EOS
     write_csv(header + csv_string)
   end
 

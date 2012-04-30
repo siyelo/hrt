@@ -28,11 +28,14 @@ class DataResponse < ActiveRecord::Base
   validates_uniqueness_of :data_request_id, :scope => :organization_id
   validates_inclusion_of  :state, :in => STATES
 
-
   ### Named scopes
   named_scope :latest_first, {:order => "data_request_id DESC" }
   named_scope :submitted, :conditions => ["state = ?", 'submitted']
   named_scope :started, :conditions => ["state = ?", 'started']
+  named_scope :with_request, lambda { |request| {
+    :conditions => ["data_request_id = ?", request.id] } }
+  named_scope :with_state, lambda { |state| {
+    :conditions => ["state = ?", state] } }
 
   ### Delegates
   delegate :name, :to => :data_request

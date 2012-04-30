@@ -3,15 +3,8 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe Reports::ProjectsExport do
   describe "export projects and activities to xls" do
     it "should return xls with blank cells for repeated project & activity" do
-      @organization  = Factory(:organization, :name => 'org1')
-      @organization2 = Factory(:organization, :name => 'org2')
-      @request       = Factory(:data_request, :organization => @organization)
-      @response      = @organization.latest_response
-      @project       = Factory(:project, :data_response => @response)
-      @activity      = Factory(:activity, :data_response => @response,
-                               :project => @project)
-      split = Factory(:implementer_split, :activity => @activity,
-        :organization => @organization)
+      basic_setup_implementer_split
+      split = @split
       split2 = Factory(:implementer_split, :activity => @activity,
         :organization => @organization)
 

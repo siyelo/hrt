@@ -39,8 +39,9 @@ describe Report do
       nsp_code           = Factory(:nsp_code)
       cost_category_code = Factory(:cost_category_code)
       location           = Factory(:location)
+      @request           = Factory :data_request
       @organization      = Factory(:organization)
-      @request           = Factory(:data_request, :organization => @organization)
+      Factory :user, :organization => @organization
       @response          = @organization.latest_response
       @project           = Factory(:project, :data_response => @response)
       @activity          = Factory(:activity, :data_response => @response,

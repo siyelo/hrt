@@ -159,8 +159,9 @@ describe CodeAssignment do
 
   describe "#self.update_classifications" do
     before :each do
-      @organization = Factory(:organization)
-      @request      = Factory(:data_request, :organization => @organization)
+      @request      = Factory :data_request
+      @organization = Factory :organization
+      user = Factory :user, :organization => @organization
       @response     = @organization.latest_response
       @project      = Factory(:project, :data_response => @response)
       @activity     = Factory(:activity, :data_response => @response, :project => @project)

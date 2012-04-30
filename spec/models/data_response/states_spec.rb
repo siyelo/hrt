@@ -63,8 +63,9 @@ describe DataResponse::States do
 
   describe "State machine" do
     before :each do
+      request      = Factory :data_request
       organization = Factory(:organization)
-      request      = Factory(:data_request, :organization => organization)
+      Factory :user, :organization => organization
       @response    = organization.latest_response
     end
 

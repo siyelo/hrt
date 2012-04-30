@@ -66,8 +66,6 @@ class FundingFlow < ActiveRecord::Base
     super(new_id)
   end
 
-  ### these are currently unused, but they do however add
-  #   meaning & value to the class
   def self_funded?
     from == to
   end

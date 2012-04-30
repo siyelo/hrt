@@ -1,49 +1,43 @@
+require 'app/charts/responses'
+
 class Admin::ResponsesController < Admin::BaseController
   include DataResponse::States
 
-  SORTABLE_COLUMNS  = ['name']
   AVAILABLE_FILTERS = ["Not Yet Started", "Started", "Submitted",
-                       "Rejected", "Accepted"]
+    "Rejected", "Accepted"]
 
   helper_method :sort_column, :sort_direction
 
   def index
     @pie = Charts::Responses::State.new(current_user.current_request).google_bar
-    scope = scope_organizations(params[:filter])
-    scope = scope.scoped(
-      :conditions => ["UPPER(organizations.name) LIKE UPPER(:q)",
-                      {:q => "%#{params[:query]}%"}]) if params[:query]
+    scope = scope_responses(params[:filter])
+    scope = scope.scoped(:joins => :organization,
+                         :conditions => ["UPPER(organizations.name) LIKE UPPER(:q)",
+                           {:q => "%#{params[:query]}%"}]) if params[:query]
 
-    @organizations = scope.paginate(:page => params[:page], :per_page => 100,
-      :include => :data_responses,
-      :order => "UPPER(organizations.#{sort_column}) #{sort_direction}, id ASC")
+    @responses = scope.paginate(:page => params[:page], :per_page => 100,
+                                :joins => :organization,
+                                :include => :organization,
+                                :order => "UPPER(organizations.name), id ASC")
   end
 
   private
-    def sort_column
-      SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "name"
-    end
 
-    def sort_direction
-      direction = sort_column == "created_at" ? "desc" : "asc"
-      %w[asc desc].include?(params[:direction]) ? params[:direction] : direction
-    end
-
-    # show reporting orgs by default.
-    def scope_organizations(filter)
-      case filter
-      when 'All'
-        Organization.reporting.sorted
+  # show reporting orgs by default.
+  def scope_responses(filter)
+    case filter
+    when 'All'
+      DataResponse.with_request(current_request)
+    else
+      if allowed_filter?(filter)
+        DataResponse.with_request(current_request).with_state([name_to_state(filter)])
       else
-        if allowed_filter?(filter)
-          Organization.reporting.sorted.responses_by_states(current_request, [name_to_state(filter)])
-        else
-          Organization.reporting.sorted
-        end
+        DataResponse.with_request current_request
       end
     end
+  end
 
-    def allowed_filter?(filter)
-      AVAILABLE_FILTERS.include?(filter)
-    end
+  def allowed_filter?(filter)
+    AVAILABLE_FILTERS.include?(filter)
+  end
 end

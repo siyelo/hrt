@@ -4,7 +4,9 @@ describe Project, "Validations" do
   before :each do
     basic_setup_project
     @donor1    = Factory :organization
+    Factory :user, :organization => @donor1
     @donor2    = Factory :organization
+    Factory :user, :organization => @donor2
     @response1 = @donor1.latest_response
     @response2 = @donor2.latest_response
     @project1  = Factory(:project, :data_response => @response1)

@@ -12,7 +12,6 @@ class DashboardController < ApplicationController
     load_activity_manager if current_user.activity_manager? && !current_user.sysadmin?
     load_requests
     load_documents
-    warn_if_not_current_request
   end
 
   protected

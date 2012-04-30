@@ -52,10 +52,7 @@ describe Project do
     end
 
     it "should have at least one funder" do
-      @organization = Factory(:organization)
-      @other_org    = Factory(:organization)
-      @request      = Factory(:data_request, :organization => @organization)
-      @response     = @organization.latest_response
+      basic_setup_response
       @project = Factory.build(:project, :data_response => @response, :in_flows => [])
       @project.save.should be_false
       @project.errors.on(:base).should == "Project must have at least one Funding Source."
@@ -142,8 +139,10 @@ describe Project do
   describe "#in_flows_total" do
     it "should return sum of spends/budgets" do
       basic_setup_project
-      @donor1 = Factory :organization
+      @donor1 = Factory :organization;
+      Factory :user, :organization => @donor1
       @donor2 = Factory :organization
+      Factory :user, :organization => @donor2
       @response1     = @donor1.latest_response
       @response2     = @donor2.latest_response
       @project1      = Factory(:project, :data_response => @response1, :in_flows =>

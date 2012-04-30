@@ -4,22 +4,10 @@ Feature: Reporter can manage projects
   I want to be able to manage my projects
 
   Background:
-    Given an organization "organization3" exists with name: "organization3"
-    And a data_request "data_request1" exists with title: "data_request1"
-    And a data_request "data_request2" exists with title: "data_request2"
-    And an organization "organization2" exists with name: "organization2"
-    Then data_response "data_response" should exist with data_request: data_request "data_request1", organization: organization "organization2"
-    And data_response "data_response1" should exist with data_request: data_request "data_request2", organization: organization "organization3"
-    And a reporter exists with email: "reporter@hrtapp.com", organization: organization "organization2"
+    Given a basic reporter setup
     And I am signed in as "reporter@hrtapp.com"
     And I go to the set request page for "data_request1"
-    And a project "Project5" exists with name: "Project5", data_response: data_response "data_response"
-    And a project "Project6" exists with name: "Project6", data_response: data_response "data_response1"
     And I follow "Projects"
-
-  Scenario: Reporter cannot navigate fiscal years
-    Then I should not see "Previous Request"
-      And I should not see "Next Request"
 
   Scenario: Reporter can CRUD projects
     When I follow "Project"
@@ -28,7 +16,7 @@ Feature: Reporter can manage projects
     And I fill in "project[start_date]" with "2011-01-01"
     And I fill in "project[end_date]" with "2011-12-01"
     And I select "Euro (EUR)" from "Currency override"
-    And I select "organization3" from "project_in_flows_attributes_0_organization_id_from"
+    And I select "organization1" from "project_in_flows_attributes_0_organization_id_from"
     And I fill in "project_in_flows_attributes_0_spend" with "10"
     And I fill in "project_in_flows_attributes_0_budget" with "20"
     And I press "Create Project"
@@ -50,7 +38,7 @@ Feature: Reporter can manage projects
     And I fill in "Description" with "Project1 description"
     And I fill in "project[start_date]" with "2011-01-01"
     And I fill in "project[end_date]" with "2011-12-01"
-    And I select "organization2" from "project_in_flows_attributes_0_organization_id_from"
+    And I select "organization1" from "project_in_flows_attributes_0_organization_id_from"
     And I fill in "project_in_flows_attributes_0_spend" with "11"
     And I fill in "project_in_flows_attributes_0_budget" with "12"
     And I press "Create Project"
@@ -82,7 +70,7 @@ Feature: Reporter can manage projects
     Then I should see "Comment body"
 
   Scenario: A reporter can create comments for a project
-    Given a project exists with name: "project1", data_response: data_response "data_response"
+    Given a project exists with name: "project1", data_response: the data_response
     When I follow "Projects"
     And I follow "project1"
     And I press "Create Comment"

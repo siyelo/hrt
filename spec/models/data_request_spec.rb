@@ -24,9 +24,11 @@ describe DataRequest do
 
   describe "Callbacks" do
     # after_create :create_data_responses
-    it "creates data_responses for each organization after data_request is created" do
+    it "creates data_responses for each reporting organization after data_request is created" do
       org1 = Factory(:organization)
+      Factory :user, :organization => org1
       org2 = Factory(:organization)
+      Factory :user, :organization => org2
       data_request = Factory.create(:data_request, :organization => org1)
       data_request.data_responses.count.should == 2
       organizations = data_request.data_responses.map(&:organization)
@@ -70,16 +72,13 @@ describe DataRequest do
     end
   end
 
-  describe "destroy_and_clean_response_references" do
-    it "destroys the data request and removes all references to the current response" do
-      organization = Factory(:organization)
-      data_request = Factory(:data_request, :organization => organization)
-      user = Factory(:user, :organization => organization)
-
-      user.reload.current_response.should_not be_nil
-      data_request.destroy_and_clean_response_references
-      user.reload.current_response.should be_nil
-      DataRequest.count.should == 0
-    end
+  it "destroys the data request and removes all references to the current response" do
+    organization = Factory(:organization)
+    data_request = Factory(:data_request, :organization => organization)
+    user = Factory(:user, :organization => organization)
+    user.reload.current_response.should_not be_nil
+    data_request.destroy_and_clean_response_references
+    user.reload.current_response.should be_nil
+    DataRequest.count.should == 0
   end
 end

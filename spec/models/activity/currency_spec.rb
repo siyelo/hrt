@@ -17,6 +17,7 @@ describe Activity, "Currency" do
   describe "currency convenience lookups on DR/Project" do
     before :each do
       @organization = Factory(:organization, :currency => 'RWF')
+      user = Factory :user, :organization => @organization
       @data_request = Factory(:data_request, :organization => @organization)
       @dr           = @organization.latest_response
       @project      = Factory(:project, :data_response => @dr)

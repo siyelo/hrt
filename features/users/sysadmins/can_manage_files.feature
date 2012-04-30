@@ -4,9 +4,7 @@ Feature: SysAdmin can manage files
   I want to be able to manage well-formatted files
 
   Background:
-    Given an organization exists with name: "organization1"
-      And a data_request exists with title: "data_request1", organization: the organization
-      And an admin exists with email: "admin@hrtapp.com", organization: the organization
+      And an admin exists with email: "admin@hrtapp.com"
       And I am signed in as "admin@hrtapp.com"
 
     Scenario: SysAdmin can manage files

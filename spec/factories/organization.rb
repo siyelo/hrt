@@ -12,19 +12,5 @@ Factory.define :organization, :class => Organization do |f|
 end
 
 Factory.define :nonreporting_organization, :class => Organization, :parent => :organization do |f|
-  f.raw_type                         { "Non-Reporting" }
+  f.users { nil }
 end
-
-Factory.define :reporting_organization, :class => Organization, :parent => :organization do |f|
-  f.raw_type                         { "Bilateral" }
-end
-
-Factory.define :provider, :class => Organization, :parent => :organization do |f|
-end
-
-Factory.define :donor, :class => Organization, :parent => :organization do |f|
-end
-
-Factory.define :ngo, :class => Organization, :parent => :organization do |f|
-end
-
