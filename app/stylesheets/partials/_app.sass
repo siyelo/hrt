@@ -14,6 +14,14 @@
 
 .bold
   font-weight: bold
+  
+.main
+  float: left
+  width: 64%
+  
+.sidebar
+  float: right
+  width: 34%
 
 body.app
   /* adding properties to the shared admin style */
@@ -38,40 +46,7 @@ body.app
 
   #content .wrapper
     padding-bottom: 20px
-
-    #main
-      float: left
-      min-width: 600px
-      padding: 20px 0 0 15px
-      width: 70%
-
-      a
-        color: $primary
-        font-size: 0.8em
-        text-decoration: none
-        &:hover
-          color: $lightest-blue
-
-      > a
-        padding-left: 10px
-
-      h3
-        color: $mid-blue
-        font-size: 0.9em
-        padding: 10px 0 0 10px
-
-      .nav2 a
-        font-size: 1em
-
-      .link_like
-        color: #09c
-        cursor: pointer
-        float: left
-
-        &:hover
-          color: #069
-          text-decoration: underline
-
+    
     .comments
       border-bottom: 1px dashed #ddd
       display: block
@@ -102,44 +77,6 @@ body.app
     #c-help
       margin: 20px 0
 
-
-
-    #sidebar
-      float: right
-      min-width: 200px
-      padding: 20px 15px 0 0
-      width: 25%
-
-      #helper
-        .title
-          padding-top: 10px
-          padding-bottom: 8px
-        a
-          color: $primary
-          font-size: 0.8em
-          text-decoration: none
-          text-transform: uppercase
-        p
-          padding: 10px 10px 0 10px
-
-        #terms, #examples
-          border-top: 1px dashed #ccc
-          a
-            color: $mid-blue
-            font-size: 0.9em
-            font-weight: bold
-            line-height: 1.34
-            text-decoration: underline
-          p
-            color: #999
-            font-size: 0.8em
-            line-height: 1.34
-            margin-bottom: 5px
-
-        #examples
-          padding: 0 10px
-          font-size: 0.9em
-
   #content #map_fields_form
     .map_fields
       padding-left: 10px
@@ -151,106 +88,14 @@ body.app
     td
       font-size: 0.8em
       padding: 2px 0
-
-  // comments styles
-  #main > ul
-    border: 1px solid $lightest-blue
-    margin-bottom: 20px
-    padding: 10px
-    li
-      margin-bottom: 3px
-
-  #content .dashboard_comments
-    font-size: 0.9em
-    border: 1px solid $lightest-blue
-    link-type: none
-    padding: 0 10px 0
-    li
-      border-bottom: 1px solid $primary_lightest
-      margin-top: -1px
-      padding-bottom: 10px
-    h5
-      font: normal 14px Avenir, sans-serif
-      padding: 15px 0 5px 10px
-      text-transform: none
-      a
-        text-decoration: none
-      span
-        font-size: 1em
-    p
-      color: $light-blue - #777
-      &.main
-        color: #666
-        font-size: 12px
-        line-height: 1.4
-        padding: 0 20px 3px 10px
-      &.time
-        color: $light-blue - #333
-        font-size: 0.7em
-        font-style: italic
-        padding: 0 20px 5px 6px
-    .author
-      background: $primary_lightest
-      padding: 5px 5px 3px 10px
-      color: $light-blue - #333
-      font-size: 0.8em
-      font-style: italic
-      line-height: 1.3
-      margin: 15px 0 0
-      text-align: right
-      white-space: nowrap
-      a
-        text-decoration: none
-    img
-      border: 4px solid $primary_lighter
-      margin: 1px 1px 1px 10px
+      
 .read_more
   padding-bottom: 10px
   float: right
   font: normal 11px Arial, sans-serif
-.files_read_more
-  padding-top: 10px
+.view-all
+  padding: 10px 18px
   font: normal 11px Arial, sans-serif
-
-/* adding styles for the Submit page */
-body#static_page_submit #content .wrapper #main
-
-  h3
-    padding-bottom: 5px
-    padding-left: 0
-
-  p
-    border: 1px solid $lightest-blue
-    color: $mid-blue
-    margin-bottom: 20px
-
-  table
-    background: $very-light-grey
-    color: $mid-blue
-    font-size: 0.8em
-    margin: 0 0 20px 0
-    width: 100%
-
-    a
-      font-size: 1em
-
-    th, td
-      border-right: 1px solid white
-      padding: 7px
-
-    tbody
-      th, td
-        border-bottom: 1px solid white
-
-      tr:hover
-        background: #f9f9f9
-
-    thead
-      border-bottom: 1px solid white
-      color: white
-      &:hover
-        background: $lightest-blue
-
 
 .link_list
   border: 1px solid $lightest-blue
@@ -272,13 +117,10 @@ body#static_page_submit #content .wrapper #main
     margin-bottom: 10px
   &.no_spacing
     margin-bottom: 0
+  &.wide
+    padding: 0
   .first-half, .second-half
     margin: 0 !important
-  .view-all
-    a
-      padding-top: 5px
-      font-size: 12px
-      float: right
 
   p
     color: #666666
@@ -386,27 +228,30 @@ body#static_page_submit #content .wrapper #main
   +border-bottom-radius
   +clearfix
 
-.pagination
+.app .pagination
   font-size: 12px
   margin-top: 20px
   span, a
-    background: $lightest-blue
-    border: 1px solid $light-blue
+    background: $primary_lightest
+    border: 1px solid $primary_light
+    color: $primary
     display: inline-block
     line-height: 1
     padding: 6px 8px 5px
     text-decoration: none
-    +border-radius
+    +border-radius(2px)
     &:hover, &:focus
-      background: $light-blue
-      border: 1px solid $light-blue
-      color: white
+      background: $primary
+      border: 1px solid $primary - #111
+      color: #fff
   .disabled
     color: #aaa
+    &:hover, &:focus
+      background: $primary_lightest
   .current
-    background: $mid-blue
-    border: 1px solid $mid-blue
-    color: white
+    background: $primary
+    border: 1px solid $primary - #111
+    color: #fff
 
 .half h2
   clear: both
@@ -616,14 +461,25 @@ h1.request_nav
   border-left: 1px solid $primary_border3
   border-right: 1px solid $primary_border3
   color: #fff
-  padding: 10px 18px
+
   h1, a
     color: #fff
-    
+    +text-shadow(#fff 0 1px 0)
+  a
+    background: image_url("breadcrumb.png") no-repeat right center
+    display: inline-block
+    padding: 6px 18px 5px
+    text-decoration: none
+  h1
+    padding: 10px 18px 5px
+
   .breadcrumb
-    margin: 10px 0 5px
-    font-size: 12px
-    color: #666666
+    background: rgba(0, 0, 0, 0.01)
+    border-bottom: 1px solid $primary_border4
+    color: #888
+    font-size: 9px
+    text-transform: uppercase
+    +pie-clearfix
 
 #response_chart
   background: #FBFBFB

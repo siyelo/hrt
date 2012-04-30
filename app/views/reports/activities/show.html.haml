@@ -18,10 +18,9 @@
   %ul.breadcrumb
     %li
       = link_to "Overview", reports_path
-      >
       - if @report.activity.project
         = link_to @report.activity.project.name, reports_project_path(@report.activity.project)
-        >
+        
   %h1= @report.activity.name
 
 .reports_summary.section_form.top

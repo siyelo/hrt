@@ -1,12 +1,11 @@
 %h2
-  = image_tag "icon_reporter.png", :class => "heading_icon"
-  Latest Health Resource Tracker Files
+  Latest HRT Files
   = image_tag "alertwarning_icon.png", :title => "Files downloaded from this website are not for distribution.", :class => 'tooltip'
-.section_base
+.section_base.wide
   - if @documents.present?
-    %table.modern_table
+    %table.data.slim
       = render 'documents/documents', :documents => @documents
 
-    .files_read_more= link_to "view all", current_user.sysadmin? ? admin_documents_path : documents_path
+    .view-all= link_to "view all", current_user.sysadmin? ? admin_documents_path : documents_path
   - else
     %p There are no files available for download.

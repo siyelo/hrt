@@ -12,7 +12,58 @@
   = render 'activity_manager'
 - elsif current_user.reporter?
   = render 'reporter'
-
-= render 'documents'
-= render 'comments/short_listing', :comments => @comments
-= will_paginate @comments
+.full
+  .main#admin-summary
+    %h2 Summary
+    .section_base
+      .full
+        %h3 Current Request
+        %h4 FY 12 Expenditures + FY 13 Budget
+        = link_to image_tag("arrow-small.png"), "#", :class => "arrow"
+      %ul
+        %li.half
+          %h3 Accepted
+          %h4 41%
+          = link_to image_tag("arrow-small.png"), "#", :class => "arrow"
+        %li.half
+          %h3 Not Yet Submitted
+          %h4 20%
+          = link_to image_tag("arrow-small.png"), "#", :class => "arrow"
+        %li.half
+          %h3 Submitted
+          %h4 39%
+          = link_to image_tag("arrow-small.png"), "#", :class => "arrow"
+        %li.half
+          %h3 New Comments
+          %h4 14
+          = link_to image_tag("arrow-small.png"), "#", :class => "arrow"
+        
+  .sidebar#admin-submission
+    %h2 Latest Submissions
+    .section_base.wide
+      %table.data.slim
+        %tbody
+          %tr
+            %td
+              = link_to "CHAI", "#"
+              .hint 07 Aug 2012
+          %tr
+            %td
+              = link_to "ABT", "#"
+              .hint 04 Aug 2012
+          %tr
+            %td
+              = link_to "EGRAF", "#"
+              .hint 01 Aug 2012
+          %tr
+            %td
+              = link_to "Children's Health Org", "#"
+              .hint 01 Aug 2012
+    
+%br
+.full
+  .main
+    = render 'comments/short_listing', :comments => @comments
+    = will_paginate @comments
+  .sidebar
+    = render 'documents'

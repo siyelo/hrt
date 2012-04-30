@@ -111,6 +111,7 @@ table.data
   width: 100%
 
   th
+    background: $primary_dark
     color: $primary_lighter
     font-size: 11px
     font-weight: bold
@@ -190,11 +191,7 @@ table.data
       top: 4px
       &:hover
         opacity: 0.7
-
-  .head th
-    background: $primary_dark
-    &.no-bg
-      background: none
+        
   .tabs
     li
       display: inline-block
@@ -274,6 +271,7 @@ table.data
   .add_purpose_form
     td
       background: $primary_lighter
+
   .regenerate
     display: none
     float: left
@@ -287,6 +285,10 @@ table.data
     border-top: 1px solid $primary_light
     font-size: 12px
     font-weight: bold
+      
+  &.slim
+    td, th
+      padding: 7px 9px 7px 18px
 
 tr.filler th, tr.filler td
   background: $primary_lighter

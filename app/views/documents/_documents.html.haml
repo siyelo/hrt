@@ -1,7 +1,7 @@
-%thead
-  %tr
-    %th Title
-    %th.manage Last modified
+/ %thead
+/   %tr
+/     %th Title
+/     %th.manage Last modified
 
 %tbody
   - documents.each do |document|
@@ -10,5 +10,6 @@
         = link_to(document.title, document.private_document_url, :class => 'title')
 
         - if document.description.present?
-          = link_to "?", "#", :title => document.description, :class => 'tooltip typo'
-      %td= document.updated_at.strftime("%b %d, %Y")
+          = link_to "?", "#", :title => document.description, :class => 'tooltip typo right'
+
+        .hint= document.updated_at.strftime("%b %d, %Y")
