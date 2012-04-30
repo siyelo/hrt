@@ -2,28 +2,28 @@ require File.dirname(__FILE__) + '/../spec_helper_lite'
 
 $: << File.join(APP_ROOT, "app/reports")
 
-require 'app/reports/location'
+require 'app/reports/input'
 
 class DerpSpend; end
 class DerpBudget; end
 
-describe Reports::Location do
-  let(:location) { mock :location, :name => 'L0'}
-  let(:location1) { mock :location, :name => 'L1' }
-  let(:ssplit) { mock :coding_spend_district, :code => location, :cached_amount => 25,
-                 :name => location.name, :class => DerpSpend }
-  let(:ssplit1) { mock :coding_spend_district, :code => location1, :cached_amount => 20,
-                  :name => location1.name , :class => DerpSpend }
-  let(:bsplit) { mock :coding_budget_district, :code => location, :cached_amount => 10,
-                 :name => location.name , :class => DerpBudget }
-  let(:bsplit1) { mock :coding_budget_district, :code => location1, :cached_amount => 5,
-                  :name => location1.name , :class => DerpBudget }
-  let(:activity) { mock :activity, :name => 'act', :coding_spend_district => [ssplit, ssplit1],
-                   :coding_budget_district => [bsplit, bsplit1] }
+describe Reports::Input do
+  let(:input) { mock :input, :name => 'L0'}
+  let(:input1) { mock :input, :name => 'L1' }
+  let(:ssplit) { mock :leaf_spend_inputs, :code => input, :cached_amount => 25,
+                 :name => input.name, :class => DerpSpend }
+  let(:ssplit1) { mock :leaf_spend_inputs, :code => input1, :cached_amount => 20,
+                  :name => input1.name , :class => DerpSpend }
+  let(:bsplit) { mock :leaf_budget_inputs, :code => input, :cached_amount => 10,
+                 :name => input.name , :class => DerpBudget }
+  let(:bsplit1) { mock :leaf_budget_inputs, :code => input1, :cached_amount => 5,
+                  :name => input1.name , :class => DerpBudget }
+  let(:activity) { mock :activity, :name => 'act', :leaf_spend_inputs => [ssplit, ssplit1],
+                   :leaf_budget_inputs => [bsplit, bsplit1] }
   let(:response) { mock :response, :activities => [activity], :name => 'FY14 Exp', :currency => 'USD' }
-  let(:report) { Reports::Location.new(response) }
-  let(:locations) { [ LocationSplit.new(location.name, 25.0, 10.0),
-                      LocationSplit.new(location.name, 20.0, 5.0) ] }
+  let(:report) { Reports::Input.new(response) }
+  let(:inputs) { [ InputSplit.new(input.name, 25.0, 10.0),
+                      InputSplit.new(input.name, 20.0, 5.0) ] }
 
   it "initializes data from given response" do
     report.response.should == response
@@ -37,47 +37,47 @@ describe Reports::Location do
     report.currency.should == 'USD'
   end
 
-  it "should give total location spend" do
+  it "should give total input spend" do
     report.stub(:method_from_class).with("DerpSpend").and_return :spend
     report.stub(:method_from_class).with("DerpBudget").and_return :budget
     report.total_spend.should == 45
   end
 
-  it "should give total location budget" do
+  it "should give total input budget" do
     report.stub(:method_from_class).with("DerpSpend").and_return :spend
     report.stub(:method_from_class).with("DerpBudget").and_return :budget
     report.total_budget.should == 15
   end
 
   #table data
-  it 'returns all locations current Org (/response)' do
+  it 'returns all inputs current Org (/response)' do
     report.stub(:method_from_class).with("DerpSpend").and_return :spend
     report.stub(:method_from_class).with("DerpBudget").and_return :budget
-    report.should_receive(:create_location_splits).once.and_return locations
-    report.locations.should == locations
+    report.should_receive(:create_input_splits).once.and_return inputs
+    report.inputs.should == inputs
   end
 
   it "sorts table alphabetically" do
     report.stub(:method_from_class).with("DerpSpend").and_return :spend
     report.stub(:method_from_class).with("DerpBudget").and_return :budget
-    sorted_locations = {:some_sorted_hash => 'yeah!'}
-    locations.should_receive(:sort).and_return sorted_locations
-    report.should_receive(:create_location_splits).once.and_return locations
-    report.locations.should == sorted_locations
+    sorted_inputs = {:some_sorted_hash => 'yeah!'}
+    inputs.should_receive(:sort).and_return sorted_inputs
+    report.should_receive(:create_input_splits).once.and_return inputs
+    report.inputs.should == sorted_inputs
   end
   # pie data
 
   it "should have expenditure pie" do
-    Charts::Locations::Spend.stub(:new).and_return(mock(:pie, :google_pie => ""))
-    Charts::Locations::Spend.should_receive(:new).once.with(locations)
-    report.should_receive(:locations).once.and_return locations
+    Charts::Inputs::Spend.stub(:new).and_return(mock(:pie, :google_pie => ""))
+    Charts::Inputs::Spend.should_receive(:new).once.with(inputs)
+    report.should_receive(:inputs).once.and_return inputs
     pie = report.expenditure_pie
   end
 
   it "should have budget pie" do
-    Charts::Locations::Budget.stub(:new).and_return(mock(:pie, :google_pie => ""))
-    Charts::Locations::Budget.should_receive(:new).once.with(locations)
-    report.should_receive(:locations).once.and_return locations
+    Charts::Inputs::Budget.stub(:new).and_return(mock(:pie, :google_pie => ""))
+    Charts::Inputs::Budget.should_receive(:new).once.with(inputs)
+    report.should_receive(:inputs).once.and_return inputs
     report.budget_pie
   end
 

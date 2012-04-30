@@ -596,8 +596,10 @@ var reports_index  = {
   run: function () {
     drawPieChart('code_spent', _expenditure_summary, 450, 300);
     drawPieChart('code_budget', _budget_summary, 450, 300);
-    $('.locations').click(function(e) {
-      loadTab();
+    $('.nav-tab').click(function(e) {
+      loadTab($(this).attr('id'));
+      $('#tabs-container a').removeClass('active')
+      $(this).addClass('active');
     });
   }
 };
@@ -606,13 +608,13 @@ jQuery.ajaxSetup({
   'beforeSend': function(xhr) {xhr.setRequestHeader("Accept", "text/javascript")}
 })
 
-function loadTab() {
-  $.get('/reports/locations', function(data) {
+/** this function loads the interactive reports tabs */
+function loadTab(tab) {
+  $.get('/reports/' + tab, function(data) {
     $('#charts_tables').html(data);
       drawPieChart('code_spent', _expenditure_summary, 450, 300);
       drawPieChart('code_budget', _budget_summary, 450, 300);
   });
-
 }
 
 var reports_projects_show = {

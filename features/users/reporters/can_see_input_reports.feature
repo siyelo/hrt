@@ -4,7 +4,7 @@ Feature: Reporter can see location report
   I want to be able to see a location report
 
   Background:
-    Given a location exists with short_display: "Some Loc"
+    Given a input exists with short_display: "some input"
       And an organization exists with name: "Organization1", currency: "RWF"
       And a data_request exists with title: "dr1", organization: the organization
       And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
@@ -16,10 +16,10 @@ Feature: Reporter can see location report
      @javascript
   Scenario: See locations overview
     When an implementer_split exists with organization: the organization, activity: the activity, spend: 120, budget: 220
-    And a location_split exists with activity: "Act1", location: "Some Loc", spend_percentage: 100, budget_percentage: 100
+    And a input_split exists with activity: "Act1", input: "Some Input", spend_percentage: 100, budget_percentage: 100
     When I follow "Reports"
-    And I follow "Locations"
-    And I should see "Some Loc"
+    And I follow "Inputs"
+    And I should see "Some Input"
     And I should see "120" within "table"
     And I should see "220" within "table"
 

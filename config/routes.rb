@@ -71,6 +71,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :reports, :only => [:index]
   map.namespace :reports do |reports|
     reports.resources :locations, :only => [:index]
+    reports.resources :inputs, :only => [:index]
     reports.resources :responses, :only => [],
     reports.resources :projects, :only => [:show]
   end
