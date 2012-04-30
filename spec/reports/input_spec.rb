@@ -37,16 +37,38 @@ describe Reports::Input do
     report.currency.should == 'USD'
   end
 
-  it "should give total input spend" do
-    report.stub(:method_from_class).with("DerpSpend").and_return :spend
-    report.stub(:method_from_class).with("DerpBudget").and_return :budget
-    report.total_spend.should == 45
+  context "#total_spend" do
+    it "should give total input spend" do
+      report.stub(:method_from_class).with("DerpSpend").and_return :spend
+      report.stub(:method_from_class).with("DerpBudget").and_return :budget
+      report.total_spend.should == 45
+    end
+
+    it "works if a split has a value of nil" do
+      inputs_with_nil = [ InputSplit.new(input.name, 25.0, 10.0),
+                          InputSplit.new(input.name, nil, 5.0) ]
+      report.stub(:inputs).and_return(inputs_with_nil)
+      report.stub(:method_from_class).with("DerpSpend").and_return :spend
+      report.stub(:method_from_class).with("DerpBudget").and_return :budget
+      report.total_spend.should == 25
+    end
   end
 
-  it "should give total input budget" do
-    report.stub(:method_from_class).with("DerpSpend").and_return :spend
-    report.stub(:method_from_class).with("DerpBudget").and_return :budget
-    report.total_budget.should == 15
+  context "#total_budget" do
+    it "should give total input budget" do
+      report.stub(:method_from_class).with("DerpSpend").and_return :spend
+      report.stub(:method_from_class).with("DerpBudget").and_return :budget
+      report.total_budget.should == 15
+    end
+
+    it "works if a split has a value of nil" do
+      inputs_with_nil = [ InputSplit.new(input.name, 25.0, 10.0),
+                          InputSplit.new(input.name, 20.0, nil) ]
+      report.stub(:inputs).and_return(inputs_with_nil)
+      report.stub(:method_from_class).with("DerpSpend").and_return :spend
+      report.stub(:method_from_class).with("DerpBudget").and_return :budget
+      report.total_budget.should == 10
+    end
   end
 
   #table data

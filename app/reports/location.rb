@@ -19,11 +19,11 @@ module Reports
     end
 
     def total_spend
-      locations.inject(0){ |sum, e| sum + e.total_spend }
+      locations.inject(0){ |sum, e| sum + ( e.total_spend || 0 ) }
     end
 
     def total_budget
-      locations.inject(0){ |sum, e| sum + e.total_budget }
+      locations.inject(0){ |sum, e| sum + ( e.total_budget || 0 ) }
     end
 
     def expenditure_pie

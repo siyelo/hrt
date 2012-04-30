@@ -27,11 +27,11 @@ module Reports
     end
 
     def total_spend
-      inputs.inject(0){ |sum, e| sum + e.total_spend }
+      inputs.inject(0){ |sum, e| sum + ( e.total_spend || 0 ) }
     end
 
     def total_budget
-      inputs.inject(0){ |sum, e| sum + e.total_budget }
+      inputs.inject(0){ |sum, e| sum + ( e.total_budget || 0 ) }
     end
 
     def expenditure_pie
