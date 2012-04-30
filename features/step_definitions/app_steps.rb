@@ -409,4 +409,3 @@ When /^a input_split exists with activity: "([^"]*)", input: "([^"]*)", spend_pe
      :activity => activity, :percentage => budget_pc,
      :cached_amount => activity.total_budget * (budget_pc.to_f/100)
 end
-

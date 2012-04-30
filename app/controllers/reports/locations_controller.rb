@@ -5,7 +5,6 @@ class Reports::LocationsController < ApplicationController
     @report = Reports::Location.new(@current_response)
 
     respond_to do |format|
-      format.html
       format.js {
         render :layout => false }
     end

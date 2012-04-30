@@ -5,7 +5,6 @@ class Reports::InputsController < ApplicationController
     @report = Reports::Input.new(@current_response)
 
     respond_to do |format|
-      format.html
       format.js {
         render :layout => false }
     end

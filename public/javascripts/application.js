@@ -597,6 +597,10 @@ var reports_index  = {
     drawPieChart('code_spent', _expenditure_summary, 450, 300);
     drawPieChart('code_budget', _budget_summary, 450, 300);
     $('.nav-tab').click(function(e) {
+      $("#code_spent").hide();
+      $("#code_budget").hide();
+      $("#report-data").hide();
+      $('.ajax-loader').show();
       loadTab($(this).attr('id'));
       $('#tabs-container a').removeClass('active')
       $(this).addClass('active');
@@ -1369,12 +1373,8 @@ var approveActivity = function (element, approval_type, success_text) {
 
    element.parent('li').find(".ajax-loader").show();
    var url = "/activities/" + activity_id + "/" + approval_type
-<<<<<<< HEAD
    $.post(url, {approve: true, "_method": "put",
        authenticity_token: rails_authenticity_token}, function (data) {
-=======
-   $.post(url, {approve: true, "_method": "put"}, function (data) {
->>>>>>> a957fc2... [fixes #28662409] New routes without response id
      element.parent('li').find(".ajax-loader").hide();
      if (data.status == 'success') {
        element.parent('li').html('<span>' + success_text + '</span>');

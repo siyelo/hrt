@@ -8,7 +8,7 @@
   %tbody
     - @report.collection.each do |e|
       %tr
-        %td= e.name
+        %td= link_to e.name, resource_link(e)
         %td.align= number_to_currency e.total_spend, :unit => ""
         %td.align= number_to_currency e.total_budget, :unit => ""
     %tr.summary
