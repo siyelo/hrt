@@ -8,7 +8,6 @@ Feature: Reporter can Review & Submit response
       And a project exists with data_response: the data_response
       And a activity_fully_coded exists with data_response: the data_response, project: the project
       And an implementer_split exists with organization: the organization, activity: the activity, budget: 1000, spend: 1000
-      And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
       And I am signed in as "reporter@hrtapp.com"
     When I follow "Projects & Activities"
       And I follow "Review & Submit"

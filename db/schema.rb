@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120428164058) do
+ActiveRecord::Schema.define(:version => 20120502134946) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -51,6 +51,7 @@ ActiveRecord::Schema.define(:version => 20120428164058) do
     t.datetime "updated_at"
   end
 
+  add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
   add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|
@@ -220,10 +221,6 @@ ActiveRecord::Schema.define(:version => 20120428164058) do
     t.string   "csv_content_type"
     t.integer  "csv_file_size"
     t.datetime "csv_updated_at"
-    t.string   "formatted_csv_file_name"
-    t.string   "formatted_csv_content_type"
-    t.integer  "formatted_csv_file_size"
-    t.datetime "formatted_csv_updated_at"
     t.integer  "data_request_id"
   end
 

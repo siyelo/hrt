@@ -48,27 +48,16 @@ describe Admin::ReportsController do
   end
 
   describe "#generate" do
-    context "without timeout" do
-      it "generates report without delay" do
-        get :generate, :id => 'activity_overview'
-        flash[:notice].should be_blank
-        response.should be_redirect
-      end
-    end
+    it "generates report without delay" do
+      report = Factory(:report, :key => 'activity_overview', :data_request => @data_request)
+      Report.stub(:find_or_initialize_by_key_and_data_request_id).and_return(report)
 
-    context "with timeout" do
-      it "generates report without delay" do
-        report = Factory(:report, :key => 'activity_overview', :data_request => @data_request)
-        Report.stub(:find_or_initialize_by_key_and_data_request_id).and_return(report)
-        report.should_receive(:generate_report).and_raise(Timeout::Error.new)
+      get :generate, :id => 'activity_overview'
+      response.should be_redirect
+      flash[:notice].should == "We are generating your report and will send you email (at #{@admin.email}) when it is ready."
 
-        get :generate, :id => 'activity_overview'
-        response.should be_redirect
-        flash[:notice].should == "We are generating your report and will send you email (at #{@admin.email}) when it is ready."
-
-        unread_emails_for(@admin.email).size.should == 1
-        open_email(@admin.email).body.should include('We have generated "Activity Overview Report" report for you')
-      end
+      unread_emails_for(@admin.email).size.should == 1
+      open_email(@admin.email).body.should include('We have generated the report for you')
     end
   end
 end

@@ -54,11 +54,10 @@ class Notifier < ActionMailer::Base
   end
 
   def report_download_notification(user, report)
-    report_name = Report.key_to_name(report.key)
-    subject       "Download link for #{report_name} report"
+    subject       "Download link for your report"
     from          FROM
     recipients    user.email
     sent_on       Time.now
-    body          :report => report, :report_name => report_name
+    body          :report => report
  end
 end

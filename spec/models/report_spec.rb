@@ -5,7 +5,6 @@ describe Report do
     it { should allow_mass_assignment_of(:key) }
     it { should allow_mass_assignment_of(:data_request_id) }
     it { should allow_mass_assignment_of(:csv) }
-    it { should allow_mass_assignment_of(:formatted_csv) }
   end
 
   describe "Associations" do
@@ -28,7 +27,7 @@ describe Report do
       @request      = Factory(:data_request)
       report        = Report.new(:key => 'activity_overview',
                                  :data_request_id => @request.id)
-      report.should_receive(:save_attached_files).twice.and_return(true)
+      report.should_receive(:save_attached_files).once.and_return(true)
       report.save.should == true
     end
   end
@@ -116,23 +115,4 @@ describe Report do
     end
   end
 
-  describe "#private_formatted_csv_url" do
-    it "sets private url for production environment" do
-      report = Factory.build(:report)
-      report.stub(:private_url?).and_return(true)
-      report.formatted_csv.should_receive(:expiring_url).and_return('test_url')
-      report.formatted_csv.should_not_receive(:url)
-
-      report.private_formatted_csv_url.should == 'test_url'
-    end
-
-    it "sets public url for other than production environment" do
-      report = Factory.build(:report)
-      report.stub(:private_url?).and_return(false)
-      report.formatted_csv.should_not_receive(:expiring_url)
-      report.formatted_csv.should_receive(:url).and_return('test_url')
-
-      report.private_formatted_csv_url.should == 'test_url'
-    end
-  end
 end

@@ -33,12 +33,11 @@ class Report < ActiveRecord::Base
   ]
 
   ### Attributes
-  attr_accessible :key, :csv, :formatted_csv, :data_request_id
+  attr_accessible :key, :csv, :data_request_id
   attr_accessor :report, :raw_csv, :temp_file_name, :zip_file_name, :unzip_file_name
 
   ### Attachments
   has_attached_file :csv, Settings.paperclip_report.to_options
-  has_attached_file :formatted_csv, Settings.paperclip_report.to_options
 
   ### Validations
   validates_presence_of :key, :data_request_id
@@ -50,40 +49,6 @@ class Report < ActiveRecord::Base
       csv.expiring_url(3600)
     else
       csv.url
-    end
-  end
-
-  def private_formatted_csv_url
-    if private_url?
-      formatted_csv.expiring_url(3600)
-    else
-      formatted_csv.url
-    end
-  end
-
-  ### Class Methods
-  def self.key_to_name(key)
-    case key
-    when 'activity_overview': 'Activity Overview Report'
-    when 'budget_implementer_purpose': 'Budget Implementer Purpose'
-    when 'spend_implementer_purpose': 'Expenditure Implementer Purpose'
-    when 'budget_implementer_input': 'Budget Implementer Input'
-    when 'spend_implementer_input': 'Expenditure Implementer Input'
-    when 'budget_implementer_location': 'Budget Implementer Location'
-    when 'spend_implementer_location': 'Expenditure Implementer Location'
-    when 'budget_implementer_funding_source': 'Budget Implementer Funding Source'
-    when 'spend_implementer_funding_source': 'Expenditure Implementer Funding Source'
-    when 'budget_implementer_target': 'Budget Implementer Target'
-    when 'spend_implementer_target': 'Expenditure Implementer Target'
-    when 'budget_implementer_output': 'Budget Implementer Output'
-    when 'spend_implementer_output': 'Expenditure Implementer Output'
-    when 'budget_implementer_beneficiary': 'Budget Implementer Beneficiary'
-    when 'spend_implementer_beneficiary': 'Expenditure Implementer Beneficiary'
-    when 'budget_dynamic_query': 'Budget Dynamic Query'
-    when 'spend_dynamic_query': 'Spend Dynamic Query'
-    when 'funding_source_query': 'Funding Source Query'
-    else
-      raise "Invalid report key #{key}".to_yaml
     end
   end
 
@@ -195,10 +160,6 @@ end
 #  csv_content_type           :string(255)
 #  csv_file_size              :integer
 #  csv_updated_at             :datetime
-#  formatted_csv_file_name    :string(255)
-#  formatted_csv_content_type :string(255)
-#  formatted_csv_file_size    :integer
-#  formatted_csv_updated_at   :datetime
 #  data_request_id            :integer
 #
 

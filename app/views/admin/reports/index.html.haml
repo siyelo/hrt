@@ -12,28 +12,20 @@
     %thead
       %tr.head
         %th Report
-        %th Expenditure
-        %th Budget
-        
+        %th= "#{current_fy(current_response)} Expenditures"
+        %th= "#{next_fy(current_response)} Budgets"
+
     %tbody
-      = render 'report_row', :key => 'activity_overview'
-      = render 'report_row', :key => 'budget_implementer_purpose'
-      = render 'report_row', :key => 'spend_implementer_purpose'
-      = render 'report_row', :key => 'budget_implementer_input'
-      = render 'report_row', :key => 'spend_implementer_input'
-      = render 'report_row', :key => 'budget_implementer_location'
-      = render 'report_row', :key => 'spend_implementer_location'
-      = render 'report_row', :key => 'budget_implementer_funding_source'
-      = render 'report_row', :key => 'spend_implementer_funding_source'
-      = render 'report_row', :key => 'budget_implementer_target'
-      = render 'report_row', :key => 'spend_implementer_target'
-      = render 'report_row', :key => 'budget_implementer_output'
-      = render 'report_row', :key => 'spend_implementer_output'
-      = render 'report_row', :key => 'budget_implementer_beneficiary'
-      = render 'report_row', :key => 'spend_implementer_beneficiary'
-      = render 'report_row', :key => 'budget_dynamic_query'
-      = render 'report_row', :key => 'spend_dynamic_query'
-      = render 'report_row', :key => 'funding_source_query'
+      = render 'single_report_row', :title => 'Activity Overview', :key => 'activity_overview'
+      = render 'double_report_row', :title => 'Implementer Purpose', :budget_key => 'budget_implementer_purpose', :spend_key => 'spend_implementer_purpose'
+      = render 'double_report_row', :title => 'Implementer Input', :budget_key => 'budget_implementer_input', :spend_key => 'spend_implementer_input'
+      = render 'double_report_row', :title => 'Implementer Location', :budget_key => 'budget_implementer_location', :spend_key => 'spend_implementer_location'
+      = render 'double_report_row', :title => 'Implementer Funding Source', :budget_key => 'budget_implementer_funding_source', :spend_key => 'spend_implementer_funding_source'
+      = render 'double_report_row', :title => 'Implementer Output', :budget_key => 'budget_implementer_output', :spend_key => 'spend_implementer_output'
+
+      = render 'double_report_row', :title => 'Implementer Beneficiary', :budget_key => 'budget_implementer_beneficiary', :spend_key => 'spend_implementer_beneficiary'
+      = render 'double_report_row', :title => 'Dynamic Query', :budget_key => 'budget_dynamic_query', :spend_key => 'spend_dynamic_query'
+      = render 'single_report_row', :title => 'Funding Source Query', :key => 'funding_source_query'
 
 %h2
   =image_tag "icon_reporter.png", :class => "heading_icon"
