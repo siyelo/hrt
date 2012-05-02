@@ -121,6 +121,7 @@ class Reports::ClassificationSplit
           row << total_percentage
           row << n2c(percentage * split_amount / 100, "", "")
           row << implementer_split.possible_double_count?
+          # don't use double_count?, we need to display if the value is nil
           row << implementer_split.double_count
 
           unless classification.new_record? # not a dummy

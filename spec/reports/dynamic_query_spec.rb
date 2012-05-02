@@ -62,7 +62,7 @@ describe Reports::DynamicQuery do
       table[0]['Location Split %'].should == "100.0"
       table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[0]['Total Amount ($)'].should == "100.00"
-      table[0]['Actual Double Count'].should == @is.double_count?.to_s
+      table[0]['Actual Double Count'].should == @is.double_count
     end
 
     it "should adjust total amount if there are 2 funders" do
@@ -87,7 +87,7 @@ describe Reports::DynamicQuery do
       table[0]['Location Split %'].should == "100.0"
       table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[0]['Total Amount ($)'].should == "66.67"
-      table[0]['Actual Double Count'].should == @is.double_count?.to_s
+      table[0]['Actual Double Count'].should == @is.double_count
 
       table[1]['Funding Source'].should == @funder2.name
       table[1]['Data Source'].should == @organization.name
@@ -105,7 +105,7 @@ describe Reports::DynamicQuery do
       table[1]['Location Split %'].should == "100.0"
       table[1]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[1]['Total Amount ($)'].should == "33.33"
-      table[1]['Actual Double Count'].should == @is.double_count?.to_s
+      table[1]['Actual Double Count'].should == @is.double_count
     end
 
     it "should adjusted total amount if there is 2 organizations and 2 implementers splits" do
@@ -130,7 +130,7 @@ describe Reports::DynamicQuery do
       table[0]['Location Split %'].should == "100.0"
       table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[0]['Total Amount ($)'].should == "100.00"
-      table[0]['Actual Double Count'].should == @is.double_count?.to_s
+      table[0]['Actual Double Count'].should == @is.double_count
 
       table[1]['Funding Source'].should == @organization.name
       table[1]['Data Source'].should == @organization.name
@@ -148,7 +148,7 @@ describe Reports::DynamicQuery do
       table[1]['Location Split %'].should == "100.0"
       table[1]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[1]['Total Amount ($)'].should == "100.00"
-      table[1]['Actual Double Count'].should == @is.double_count?.to_s
+      table[1]['Actual Double Count'].should == @is.double_count
     end
   end
 
@@ -202,7 +202,7 @@ describe Reports::DynamicQuery do
       table[0]['Location Split %'].should == "100.0"
       table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[0]['Total Amount ($)'].should == "75.00"
-      table[0]['Actual Double Count'].should == @is.double_count?.to_s
+      table[0]['Actual Double Count'].should == @is.double_count
 
       table[1]['Funding Source'].should == @organization.name
       table[1]['Data Source'].should == @organization.name
@@ -220,7 +220,7 @@ describe Reports::DynamicQuery do
       table[1]['Location Split %'].should == "100.0"
       table[1]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[1]['Total Amount ($)'].should == "25.00"
-      table[1]['Actual Double Count'].should == @is.double_count?.to_s
+      table[1]['Actual Double Count'].should == @is.double_count
     end
 
     it "should adjust the total amounts as per codings (2 coding budget splits)" do
@@ -249,7 +249,7 @@ describe Reports::DynamicQuery do
       table[0]['Location Split %'].should == "100.0"
       table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[0]['Total Amount ($)'].should == "80.00"
-      table[0]['Actual Double Count'].should == @is.double_count?.to_s
+      table[0]['Actual Double Count'].should == @is.double_count
 
       table[1]['Funding Source'].should == @organization.name
       table[1]['Data Source'].should == @organization.name
@@ -267,7 +267,7 @@ describe Reports::DynamicQuery do
       table[1]['Location Split %'].should == "100.0"
       table[1]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[1]['Total Amount ($)'].should == "20.00"
-      table[1]['Actual Double Count'].should == @is.double_count?.to_s
+      table[1]['Actual Double Count'].should == @is.double_count
     end
 
     it "should adjust the total amounts as per codings (2 location budget splits)" do
@@ -296,7 +296,7 @@ describe Reports::DynamicQuery do
       table[0]['Location Split %'].should == "70.0"
       table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[0]['Total Amount ($)'].should == "70.00"
-      table[0]['Actual Double Count'].should == @is.double_count?.to_s
+      table[0]['Actual Double Count'].should == @is.double_count
 
       table[1]['Funding Source'].should == @organization.name
       table[1]['Data Source'].should == @organization.name
@@ -314,7 +314,7 @@ describe Reports::DynamicQuery do
       table[1]['Location Split %'].should == "30.0"
       table[1]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[1]['Total Amount ($)'].should == "30.00"
-      table[1]['Actual Double Count'].should == @is.double_count?.to_s
+      table[1]['Actual Double Count'].should == @is.double_count
     end
 
     it "should adjust the total amounts as per codings (2 of each budget splits)" do
@@ -348,7 +348,7 @@ describe Reports::DynamicQuery do
       table[0]['Location Split %'].should == "70.0"
       table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[0]['Total Amount ($)'].should == "50.40"
-      table[0]['Actual Double Count'].should == @is.double_count?.to_s
+      table[0]['Actual Double Count'].should == @is.double_count
 
       table[1]['Funding Source'].should == @organization.name
       table[1]['Data Source'].should == @organization.name
@@ -366,7 +366,7 @@ describe Reports::DynamicQuery do
       table[1]['Location Split %'].should == "30.0"
       table[1]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[1]['Total Amount ($)'].should == "21.60"
-      table[1]['Actual Double Count'].should == @is.double_count?.to_s
+      table[1]['Actual Double Count'].should == @is.double_count
 
       table[2]['Funding Source'].should == @organization.name
       table[2]['Data Source'].should == @organization.name
@@ -384,7 +384,7 @@ describe Reports::DynamicQuery do
       table[2]['Location Split %'].should == "70.0"
       table[2]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[2]['Total Amount ($)'].should == "12.60"
-      table[2]['Actual Double Count'].should == @is.double_count?.to_s
+      table[2]['Actual Double Count'].should == @is.double_count
 
       table[3]['Funding Source'].should == @organization.name
       table[3]['Data Source'].should == @organization.name
@@ -402,7 +402,7 @@ describe Reports::DynamicQuery do
       table[3]['Location Split %'].should == "30.0"
       table[3]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[3]['Total Amount ($)'].should == "5.40"
-      table[3]['Actual Double Count'].should == @is.double_count?.to_s
+      table[3]['Actual Double Count'].should == @is.double_count
 
       table[4]['Funding Source'].should == @organization.name
       table[4]['Data Source'].should == @organization.name
@@ -420,7 +420,7 @@ describe Reports::DynamicQuery do
       table[4]['Location Split %'].should == "70.0"
       table[4]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[4]['Total Amount ($)'].should == "5.60"
-      table[4]['Actual Double Count'].should == @is.double_count?.to_s
+      table[4]['Actual Double Count'].should == @is.double_count
 
       table[5]['Funding Source'].should == @organization.name
       table[5]['Data Source'].should == @organization.name
@@ -438,7 +438,7 @@ describe Reports::DynamicQuery do
       table[5]['Location Split %'].should == "30.0"
       table[5]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[5]['Total Amount ($)'].should == "2.40"
-      table[5]['Actual Double Count'].should == @is.double_count?.to_s
+      table[5]['Actual Double Count'].should == @is.double_count
 
       table[6]['Funding Source'].should == @organization.name
       table[6]['Data Source'].should == @organization.name
@@ -456,7 +456,7 @@ describe Reports::DynamicQuery do
       table[6]['Location Split %'].should == "70.0"
       table[6]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[6]['Total Amount ($)'].should == "1.40"
-      table[6]['Actual Double Count'].should == @is.double_count?.to_s
+      table[6]['Actual Double Count'].should == @is.double_count
 
       table[7]['Funding Source'].should == @organization.name
       table[7]['Data Source'].should == @organization.name
@@ -474,7 +474,7 @@ describe Reports::DynamicQuery do
       table[7]['Location Split %'].should == "30.0"
       table[7]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[7]['Total Amount ($)'].should == "0.60"
-      table[7]['Actual Double Count'].should == @is.double_count?.to_s
+      table[7]['Actual Double Count'].should == @is.double_count
     end
 
     it "should adjust the total amounts as per codings (2 of each budget splits and 2 funders)" do
@@ -512,7 +512,7 @@ describe Reports::DynamicQuery do
       table[0]['Location Split %'].should == "70.0"
       table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[0]['Total Amount ($)'].should == "33.60"
-      table[0]['Actual Double Count'].should == @is.double_count?.to_s
+      table[0]['Actual Double Count'].should == @is.double_count
 
       table[1]['Funding Source'].should == @organization.name
       table[1]['Data Source'].should == @organization.name
@@ -530,7 +530,7 @@ describe Reports::DynamicQuery do
       table[1]['Location Split %'].should == "30.0"
       table[1]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[1]['Total Amount ($)'].should == "14.40"
-      table[1]['Actual Double Count'].should == @is.double_count?.to_s
+      table[1]['Actual Double Count'].should == @is.double_count
 
       table[2]['Funding Source'].should == @organization.name
       table[2]['Data Source'].should == @organization.name
@@ -548,7 +548,7 @@ describe Reports::DynamicQuery do
       table[2]['Location Split %'].should == "70.0"
       table[2]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[2]['Total Amount ($)'].should == "8.40"
-      table[2]['Actual Double Count'].should == @is.double_count?.to_s
+      table[2]['Actual Double Count'].should == @is.double_count
 
       table[3]['Funding Source'].should == @organization.name
       table[3]['Data Source'].should == @organization.name
@@ -566,7 +566,7 @@ describe Reports::DynamicQuery do
       table[3]['Location Split %'].should == "30.0"
       table[3]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[3]['Total Amount ($)'].should == "3.60"
-      table[3]['Actual Double Count'].should == @is.double_count?.to_s
+      table[3]['Actual Double Count'].should == @is.double_count
 
       table[4]['Funding Source'].should == @organization.name
       table[4]['Data Source'].should == @organization.name
@@ -584,7 +584,7 @@ describe Reports::DynamicQuery do
       table[4]['Location Split %'].should == "70.0"
       table[4]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[4]['Total Amount ($)'].should == "3.73"
-      table[4]['Actual Double Count'].should == @is.double_count?.to_s
+      table[4]['Actual Double Count'].should == @is.double_count
 
       table[5]['Funding Source'].should == @organization.name
       table[5]['Data Source'].should == @organization.name
@@ -602,7 +602,7 @@ describe Reports::DynamicQuery do
       table[5]['Location Split %'].should == "30.0"
       table[5]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[5]['Total Amount ($)'].should == "1.60"
-      table[5]['Actual Double Count'].should == @is.double_count?.to_s
+      table[5]['Actual Double Count'].should == @is.double_count
 
       table[6]['Funding Source'].should == @organization.name
       table[6]['Data Source'].should == @organization.name
@@ -620,7 +620,7 @@ describe Reports::DynamicQuery do
       table[6]['Location Split %'].should == "70.0"
       table[6]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[6]['Total Amount ($)'].should == "0.93"
-      table[6]['Actual Double Count'].should == @is.double_count?.to_s
+      table[6]['Actual Double Count'].should == @is.double_count
 
       table[7]['Funding Source'].should == @organization.name
       table[7]['Data Source'].should == @organization.name
@@ -638,7 +638,7 @@ describe Reports::DynamicQuery do
       table[7]['Location Split %'].should == "30.0"
       table[7]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[7]['Total Amount ($)'].should == "0.40"
-      table[7]['Actual Double Count'].should == @is.double_count?.to_s
+      table[7]['Actual Double Count'].should == @is.double_count
 
       table[8]['Funding Source'].should == @funder2.name
       table[8]['Data Source'].should == @organization.name
@@ -656,7 +656,7 @@ describe Reports::DynamicQuery do
       table[8]['Location Split %'].should == "70.0"
       table[8]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[8]['Total Amount ($)'].should == "16.80"
-      table[8]['Actual Double Count'].should == @is.double_count?.to_s
+      table[8]['Actual Double Count'].should == @is.double_count
 
       table[9]['Funding Source'].should == @funder2.name
       table[9]['Data Source'].should == @organization.name
@@ -674,7 +674,7 @@ describe Reports::DynamicQuery do
       table[9]['Location Split %'].should == "30.0"
       table[9]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[9]['Total Amount ($)'].should == "7.20"
-      table[9]['Actual Double Count'].should == @is.double_count?.to_s
+      table[9]['Actual Double Count'].should == @is.double_count
 
       table[10]['Funding Source'].should == @funder2.name
       table[10]['Data Source'].should == @organization.name
@@ -692,7 +692,7 @@ describe Reports::DynamicQuery do
       table[10]['Location Split %'].should == "70.0"
       table[10]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[10]['Total Amount ($)'].should == "4.20"
-      table[10]['Actual Double Count'].should == @is.double_count?.to_s
+      table[10]['Actual Double Count'].should == @is.double_count
 
       table[11]['Funding Source'].should == @funder2.name
       table[11]['Data Source'].should == @organization.name
@@ -710,7 +710,7 @@ describe Reports::DynamicQuery do
       table[11]['Location Split %'].should == "30.0"
       table[11]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[11]['Total Amount ($)'].should == "1.80"
-      table[11]['Actual Double Count'].should == @is.double_count?.to_s
+      table[11]['Actual Double Count'].should == @is.double_count
 
       table[12]['Funding Source'].should == @funder2.name
       table[12]['Data Source'].should == @organization.name
@@ -728,7 +728,7 @@ describe Reports::DynamicQuery do
       table[12]['Location Split %'].should == "70.0"
       table[12]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[12]['Total Amount ($)'].should == "1.87"
-      table[12]['Actual Double Count'].should == @is.double_count?.to_s
+      table[12]['Actual Double Count'].should == @is.double_count
 
       table[13]['Funding Source'].should == @funder2.name
       table[13]['Data Source'].should == @organization.name
@@ -746,7 +746,7 @@ describe Reports::DynamicQuery do
       table[13]['Location Split %'].should == "30.0"
       table[13]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[13]['Total Amount ($)'].should == "0.80"
-      table[13]['Actual Double Count'].should == @is.double_count?.to_s
+      table[13]['Actual Double Count'].should == @is.double_count
 
       table[14]['Funding Source'].should == @funder2.name
       table[14]['Data Source'].should == @organization.name
@@ -764,7 +764,7 @@ describe Reports::DynamicQuery do
       table[14]['Location Split %'].should == "70.0"
       table[14]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[14]['Total Amount ($)'].should == "0.47"
-      table[14]['Actual Double Count'].should == @is.double_count?.to_s
+      table[14]['Actual Double Count'].should == @is.double_count
 
       table[15]['Funding Source'].should == @funder2.name
       table[15]['Data Source'].should == @organization.name
@@ -782,7 +782,7 @@ describe Reports::DynamicQuery do
       table[15]['Location Split %'].should == "30.0"
       table[15]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[15]['Total Amount ($)'].should == "0.20"
-      table[15]['Actual Double Count'].should == @is.double_count?.to_s
+      table[15]['Actual Double Count'].should == @is.double_count
     end
   end
 
@@ -841,7 +841,7 @@ describe Reports::DynamicQuery do
       table[0]['Location Split %'].should == "70.0"
       table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[0]['Total Amount ($)'].should == "37.33"
-      table[0]['Actual Double Count'].should == @is.double_count?.to_s
+      table[0]['Actual Double Count'].should == @is.double_count
 
       table[1]['Funding Source'].should == @organization.name
       table[1]['Data Source'].should == @organization.name
@@ -859,7 +859,7 @@ describe Reports::DynamicQuery do
       table[1]['Location Split %'].should == "30.0"
       table[1]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[1]['Total Amount ($)'].should == "16.00"
-      table[1]['Actual Double Count'].should == @is.double_count?.to_s
+      table[1]['Actual Double Count'].should == @is.double_count
 
       table[2]['Funding Source'].should == @organization.name
       table[2]['Data Source'].should == @organization.name
@@ -877,7 +877,7 @@ describe Reports::DynamicQuery do
       table[2]['Location Split %'].should == "70.0"
       table[2]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[2]['Total Amount ($)'].should == "9.33"
-      table[2]['Actual Double Count'].should == @is.double_count?.to_s
+      table[2]['Actual Double Count'].should == @is.double_count
 
       table[3]['Funding Source'].should == @organization.name
       table[3]['Data Source'].should == @organization.name
@@ -895,7 +895,7 @@ describe Reports::DynamicQuery do
       table[3]['Location Split %'].should == "30.0"
       table[3]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[3]['Total Amount ($)'].should == "4.00"
-      table[3]['Actual Double Count'].should == @is.double_count?.to_s
+      table[3]['Actual Double Count'].should == @is.double_count
 
       table[4]['Funding Source'].should == @funder2.name
       table[4]['Data Source'].should == @organization.name
@@ -913,7 +913,7 @@ describe Reports::DynamicQuery do
       table[4]['Location Split %'].should == "70.0"
       table[4]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[4]['Total Amount ($)'].should == "18.67"
-      table[4]['Actual Double Count'].should == @is.double_count?.to_s
+      table[4]['Actual Double Count'].should == @is.double_count
 
       table[5]['Funding Source'].should == @funder2.name
       table[5]['Data Source'].should == @organization.name
@@ -931,7 +931,7 @@ describe Reports::DynamicQuery do
       table[5]['Location Split %'].should == "30.0"
       table[5]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[5]['Total Amount ($)'].should == "8.00"
-      table[5]['Actual Double Count'].should == @is.double_count?.to_s
+      table[5]['Actual Double Count'].should == @is.double_count
 
       table[6]['Funding Source'].should == @funder2.name
       table[6]['Data Source'].should == @organization.name
@@ -949,7 +949,7 @@ describe Reports::DynamicQuery do
       table[6]['Location Split %'].should == "70.0"
       table[6]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[6]['Total Amount ($)'].should == "4.67"
-      table[6]['Actual Double Count'].should == @is.double_count?.to_s
+      table[6]['Actual Double Count'].should == @is.double_count
 
       table[7]['Funding Source'].should == @funder2.name
       table[7]['Data Source'].should == @organization.name
@@ -967,7 +967,7 @@ describe Reports::DynamicQuery do
       table[7]['Location Split %'].should == "30.0"
       table[7]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[7]['Total Amount ($)'].should == "2.00"
-      table[7]['Actual Double Count'].should == @is.double_count?.to_s
+      table[7]['Actual Double Count'].should == @is.double_count
 
       @activity.coding_budget_cost_categorization.size.should == 0
     end
@@ -996,7 +996,7 @@ describe Reports::DynamicQuery do
       table[0]['Location Split %'].should == '100.0'
       table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[0]['Total Amount ($)'].should == "100.00"
-      table[0]['Actual Double Count'].should == @is.double_count?.to_s
+      table[0]['Actual Double Count'].should == @is.double_count
 
       @activity.coding_budget.size.should == 0
       @activity.coding_budget_cost_categorization.size.should == 1
@@ -1027,7 +1027,7 @@ describe Reports::DynamicQuery do
       table[0]['Location Split %'].should == 'N/A'
       table[0]['Name of District'].should == 'N/A'
       table[0]['Total Amount ($)'].should == "100.00"
-      table[0]['Actual Double Count'].should == @is.double_count?.to_s
+      table[0]['Actual Double Count'].should == @is.double_count
 
       @activity.coding_budget.size.should == 1
       @activity.coding_budget_cost_categorization.size.should == 1
@@ -1094,7 +1094,7 @@ describe Reports::DynamicQuery do
       table[0]['Location Split %'].should == "70.0"
       table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[0]['Total Amount ($)'].should == "50.40"
-      table[0]['Actual Double Count'].should == @is.double_count?.to_s
+      table[0]['Actual Double Count'].should == @is.double_count
 
       table[1]['Funding Source'].should == 'N/A'
       table[1]['Data Source'].should == @organization.name
@@ -1112,7 +1112,7 @@ describe Reports::DynamicQuery do
       table[1]['Location Split %'].should == "30.0"
       table[1]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[1]['Total Amount ($)'].should == "21.60"
-      table[1]['Actual Double Count'].should == @is.double_count?.to_s
+      table[1]['Actual Double Count'].should == @is.double_count
 
       table[2]['Funding Source'].should == 'N/A'
       table[2]['Data Source'].should == @organization.name
@@ -1130,7 +1130,7 @@ describe Reports::DynamicQuery do
       table[2]['Location Split %'].should == "70.0"
       table[2]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[2]['Total Amount ($)'].should == "12.60"
-      table[2]['Actual Double Count'].should == @is.double_count?.to_s
+      table[2]['Actual Double Count'].should == @is.double_count
 
       table[3]['Funding Source'].should == 'N/A'
       table[3]['Data Source'].should == @organization.name
@@ -1148,7 +1148,7 @@ describe Reports::DynamicQuery do
       table[3]['Location Split %'].should == "30.0"
       table[3]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[3]['Total Amount ($)'].should == "5.40"
-      table[3]['Actual Double Count'].should == @is.double_count?.to_s
+      table[3]['Actual Double Count'].should == @is.double_count
 
       table[4]['Funding Source'].should == 'N/A'
       table[4]['Data Source'].should == @organization.name
@@ -1166,7 +1166,7 @@ describe Reports::DynamicQuery do
       table[4]['Location Split %'].should == "70.0"
       table[4]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[4]['Total Amount ($)'].should == "5.60"
-      table[4]['Actual Double Count'].should == @is.double_count?.to_s
+      table[4]['Actual Double Count'].should == @is.double_count
 
       table[5]['Funding Source'].should == 'N/A'
       table[5]['Data Source'].should == @organization.name
@@ -1184,7 +1184,7 @@ describe Reports::DynamicQuery do
       table[5]['Location Split %'].should == "30.0"
       table[5]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[5]['Total Amount ($)'].should == "2.40"
-      table[5]['Actual Double Count'].should == @is.double_count?.to_s
+      table[5]['Actual Double Count'].should == @is.double_count
 
       table[6]['Funding Source'].should == 'N/A'
       table[6]['Data Source'].should == @organization.name
@@ -1202,7 +1202,7 @@ describe Reports::DynamicQuery do
       table[6]['Location Split %'].should == "70.0"
       table[6]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[6]['Total Amount ($)'].should == "1.40"
-      table[6]['Actual Double Count'].should == @is.double_count?.to_s
+      table[6]['Actual Double Count'].should == @is.double_count
 
       table[7]['Funding Source'].should == 'N/A'
       table[7]['Data Source'].should == @organization.name
@@ -1220,7 +1220,7 @@ describe Reports::DynamicQuery do
       table[7]['Location Split %'].should == "30.0"
       table[7]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[7]['Total Amount ($)'].should == "0.60"
-      table[7]['Actual Double Count'].should == @is.double_count?.to_s
+      table[7]['Actual Double Count'].should == @is.double_count
 
       sum = 0
       (0..7).each { |i| sum += table[i]['Total Amount ($)'].to_f}
@@ -1282,7 +1282,7 @@ describe Reports::DynamicQuery do
       table[0]['Location Split %'].should == "100.0"
       table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[0]['Total Amount ($)'].should == "50.00"
-      table[0]['Actual Double Count'].should == @is.double_count?.to_s
+      table[0]['Actual Double Count'].should == @is.double_count
     end
 
     it "should correctly create the currency for a fake project for an activity/othercost" do
@@ -1314,7 +1314,7 @@ describe Reports::DynamicQuery do
       table[0]['Location Split %'].should == "100.0"
       table[0]['Name of District'].should == @other_cost.locations.map(&:short_display).join(",")
       table[0]['Total Amount ($)'].should == "50.00"
-      table[0]['Actual Double Count'].should == @is.double_count?.to_s
+      table[0]['Actual Double Count'].should == @is.double_count
 
     end
   end
@@ -1370,7 +1370,7 @@ describe Reports::DynamicQuery do
       table[0]['Location Split %'].should == "100.0"
       table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[0]['Total Amount ($)'].should == "90.00"
-      table[0]['Actual Double Count'].should == @is.double_count?.to_s
+      table[0]['Actual Double Count'].should == @is.double_count
 
       table[1]['Funding Source'].should == @organization.name
       table[1]['Data Source'].should == @organization.name
@@ -1388,7 +1388,7 @@ describe Reports::DynamicQuery do
       table[1]['Location Split %'].should == "100.0"
       table[1]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[1]['Total Amount ($)'].should == "10.00"
-      table[1]['Actual Double Count'].should == @is.double_count?.to_s
+      table[1]['Actual Double Count'].should == @is.double_count
     end
 
     it "should create a inputs row with the outstanding amount (should make 2 rows)" do
@@ -1416,7 +1416,7 @@ describe Reports::DynamicQuery do
       table[0]['Location Split %'].should == "100.0"
       table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[0]['Total Amount ($)'].should == "80.00"
-      table[0]['Actual Double Count'].should == @is.double_count?.to_s
+      table[0]['Actual Double Count'].should == @is.double_count
 
       table[1]['Funding Source'].should == @organization.name
       table[1]['Data Source'].should == @organization.name
@@ -1434,7 +1434,7 @@ describe Reports::DynamicQuery do
       table[1]['Location Split %'].should == "100.0"
       table[1]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[1]['Total Amount ($)'].should == "20.00"
-      table[1]['Actual Double Count'].should == @is.double_count?.to_s
+      table[1]['Actual Double Count'].should == @is.double_count
     end
 
     it "should create a districts row with the outstanding amount (should make 2 rows)" do
@@ -1462,7 +1462,7 @@ describe Reports::DynamicQuery do
       table[0]['Location Split %'].should == "85.0"
       table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[0]['Total Amount ($)'].should == "85.00"
-      table[0]['Actual Double Count'].should == @is.double_count?.to_s
+      table[0]['Actual Double Count'].should == @is.double_count
 
       table[1]['Funding Source'].should == @organization.name
       table[1]['Data Source'].should == @organization.name
@@ -1480,7 +1480,7 @@ describe Reports::DynamicQuery do
       table[1]['Location Split %'].should == "15.0"
       table[1]['Name of District'].should == "Not Classified"
       table[1]['Total Amount ($)'].should == "15.00"
-      table[1]['Actual Double Count'].should == @is.double_count?.to_s
+      table[1]['Actual Double Count'].should == @is.double_count
     end
 
     context "within allowed leeway" do
@@ -1509,7 +1509,7 @@ describe Reports::DynamicQuery do
         table[0]['Location Split %'].should == "100.0"
         table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
         table[0]['Total Amount ($)'].should == "99.50"
-        table[0]['Actual Double Count'].should == @is.double_count?.to_s
+        table[0]['Actual Double Count'].should == @is.double_count
 
         table[1].should be_nil
       end
@@ -1575,7 +1575,7 @@ describe Reports::DynamicQuery do
         table[0]['Location Split %'].should == "100.0"
         table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
         table[0]['Total Amount ($)'].should == "100.00"
-        table[0]['Actual Double Count'].should == @is.double_count?.to_s
+        table[0]['Actual Double Count'].should == @is.double_count
       end
     end
   end
@@ -1630,7 +1630,7 @@ describe Reports::DynamicQuery do
       table[0]['Location Split %'].should == "100.0"
       table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[0]['Total Amount ($)'].should == "100.00"
-      table[0]['Actual Double Count'].should == @is.double_count?.to_s
+      table[0]['Actual Double Count'].should == @is.double_count
     end
 
     it "should NOT ADD OR REMOVE INFLOWS!!!" do
