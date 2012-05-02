@@ -1,7 +1,6 @@
 - organization = response.organization
-- title = organization.name + ': ' + response.title.split[0..1].join(' ')
 
 %tr
-  %td.title= link_to title, projects_path(:response_id => response.id) if response
+  %td.title= link_to response_title(response), projects_path(:response_id => response.id) if response
   %td= link_to organization.name, edit_admin_organization_path(organization)
   %td= response.status

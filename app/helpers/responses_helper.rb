@@ -18,6 +18,10 @@ module ResponsesHelper
       @response.invalid_implementer_splits.empty?)
   end
 
+  def response_title(response)
+    "#{response.organization.name}: #{response.title}"
+  end
+
   def flag
     @response.submitted? ? "go" : "stop"
   end
