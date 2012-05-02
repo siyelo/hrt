@@ -31,15 +31,20 @@
 %ul.group.connect#tabs-container
   = render :partial => 'reports/tabs'
 
-.dashboard_section.section_form.first
-  .full
-    .first-half
-      %h2= "Expenditure Summary"
-      #code_spent.bordered
+#charts_tables
+  .dashboard_section.section_form.first
+    .full
+      .first-half
+        %h2= "Expenditure Summary"
+        = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => "display: none;"
+        #code_spent.bordered
 
-    .second-half
-      %h2= "Budget Summary"
-      #code_budget.bordered
+      .second-half
+        %h2= "Budget Summary"
+        = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => "display: none;"
+        #code_budget.bordered
 
     %br
-    = render 'reports/table'
+    = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => "display: none;"
+    #report-data
+      = render 'reports/table'
