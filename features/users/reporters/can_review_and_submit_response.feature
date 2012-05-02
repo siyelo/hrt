@@ -16,7 +16,6 @@ Feature: Reporter can Review & Submit response
     Then I should see "Successfully submitted. We will review your data and get back to you with any questions. Thank you."
       And I should not see "Submit" within ".submit"
 
-
   Scenario: Reporter cannot Submit response when it's not ready
     Given a basic reporter setup
       And a project exists with data_response: the data_response

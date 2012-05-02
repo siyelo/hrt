@@ -19,7 +19,7 @@ Feature: Reporter can manage activities
         And the "Description" field should contain "activity2 description"
       When I follow "Delete this Activity"
       Then I should see "Activity was successfully destroyed"
-@run
+
     Scenario: An admin can edit activity
       When I follow "Responses"
         And I follow "organization2: data_request1"
