@@ -296,7 +296,8 @@ var showResource = function (element) {
 var destroyResource = function (element) {
   var rowId = getRowId(element);
   var resources = getResources(element);
-  $.post(element.attr('href').replace('/delete', '') + '.js', {'_method': 'delete'}, function (data) {
+  $.post(element.attr('href').replace('/delete', '') + '.js', {'_method': 'delete',
+       authenticity_token: rails_authenticity_token}, function (data) {
     removeRow(resources, rowId);
   });
 };
@@ -858,7 +859,8 @@ var showSubtotalIcons = function(){
 
 var update_use_budget_codings_for_spend = function (e, activity_id, checked) {
   if (!checked || checked && confirm('All your expenditure codings will be deleted and replaced with copies of your budget codings, adjusted for the difference between your budget and spend. Your expenditure codings will also automatically update if you change your budget codings. Are you sure?')) {
-    $.post( "/activities/" + activity_id + "/use_budget_codings_for_spend", { checked: checked, "_method": "put" });
+    $.post( "/activities/" + activity_id + "/use_budget_codings_for_spend", { checked: checked, "_method": "put",
+       authenticity_token: rails_authenticity_token });
   } else {
     e.preventDefault();
   }
@@ -948,7 +950,8 @@ var admin_currencies_index = {
       element = $(this);
       var input_rate = element.val();
       var url = "/admin/currencies/" + element.attr('id');
-      $.post(url, { "rate" : input_rate, "_method" : "put" }, function(data){
+      $.post(url, { "rate" : input_rate, "_method" : "put",
+       authenticity_token: rails_authenticity_token }, function(data){
         var data = $.parseJSON(data);
         if (data.status == 'success'){
           element.parent('td').children('span').show();
@@ -1344,7 +1347,8 @@ var approveActivity = function (element, approval_type, success_text) {
 
    element.parent('li').find(".ajax-loader").show();
    var url = "/activities/" + activity_id + "/" + approval_type
-   $.post(url, {approve: true, "_method": "put"}, function (data) {
+   $.post(url, {approve: true, "_method": "put",
+       authenticity_token: rails_authenticity_token}, function (data) {
      element.parent('li').find(".ajax-loader").hide();
      if (data.status == 'success') {
        element.parent('li').html('<span>' + success_text + '</span>');
@@ -1403,7 +1407,8 @@ var activity_form = function () {
   $('.add_organization_link').live('click', function(e) {
     e.preventDefault();
     var name = $('.organization_name').val();
-    $.post("/organizations.js", { "name" : name }, function(data){
+    $.post("/organizations.js", { "name" : name,
+       authenticity_token: rails_authenticity_token }, function(data){
       var data = $.parseJSON(data);
       $('.js_implementer_container').show();
       $('.add_organization').hide();
@@ -1687,7 +1692,8 @@ $(function () {
   $('.js_tips_hide').click(function (e) {
     e.preventDefault();
     $('.js_tips_container').fadeOut();
-    $.post('/profile/disable_tips', { "_method": "put" });
+    $.post('/profile/disable_tips', { "_method": "put",
+       authenticity_token: rails_authenticity_token });
   });
 });
 
