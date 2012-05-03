@@ -16,11 +16,11 @@ describe Reports::Organization do
     report.class.should == Reports::Organization
   end
 
-  it 'returns all projects and other costs for current Org (/response), sorted by name' do
+  it 'returns all projects and non-project other costs for current Org (/response), sorted by name' do
     othercost = mock :othercost, :name => 'aa_othercost', :total_spend => "5", :total_budget => "10"
     othercost1 = mock :othercost, :name => 'zz_othercost', :total_spend => "5", :total_budget => "10"
     othercosts = [othercost, othercost1]
-    response.stub(:other_costs).and_return othercosts
+    response.stub_chain(:other_costs, :without_project).and_return othercosts
     unsorted = projects + othercosts
     sorted = [othercost, project, project1, othercost1]
     report.projects_and_other_costs.should == sorted
