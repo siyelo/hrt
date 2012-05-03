@@ -7,6 +7,9 @@ class OtherCost < Activity
   ### Delegates
   delegate :currency, :to => :data_response, :allow_nil => true
 
+  ### Named Scopes
+  named_scope :without_project, { :conditions => "activities.project_id IS NULL" }
+
   ### Callbacks
   # also check lib/response_state_callbacks
 

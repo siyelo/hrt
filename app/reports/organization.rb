@@ -18,7 +18,7 @@ module Reports
     end
 
     def projects_and_other_costs
-      (@response.projects + @response.other_costs).
+      (@response.projects + @response.other_costs.without_project).
         sort{ |a, b| a.name.downcase <=> b.name.downcase }
     end
 

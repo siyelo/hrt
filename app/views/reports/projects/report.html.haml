@@ -11,12 +11,15 @@
 - content_for :sub_nav do
   = render('shared/reports_sub_nav')
 
+%h1.request_nav.main_heading
+  = render '/shared/request_nav', :name => @report.name, :disable => true
+
 %ul.breadcrumb
   %li
     = link_to "Overview", reports_path
     >
 
-%h2= @report.project.name
+%h1.request_nav.main_heading= @report.project.name
 
 .reports_summary.section_base.section_form
   %p.summary_col

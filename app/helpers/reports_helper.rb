@@ -5,7 +5,11 @@ module ReportsHelper
     case params[:controller]
 
     when "reports"
-      link_to element.name, reports_project_path(element.id)
+      if element.is_a?(Project)
+        link_to element.name, reports_project_path(element)
+      else
+        link_to element.name, reports_activity_path(element)
+      end
     when "reports/inputs"
       element.name
     when "reports/locations"

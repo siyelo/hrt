@@ -1,11 +1,13 @@
+- disable = false unless defined?(disable)
+
 - if current_response.present?
-  - if previous_response.present?
+  - if previous_response.present? && !disable
     - link_to url_for({:response_id => previous_response.id}), :title => "Previous Request", :class => 'arrow-nav' do
       = image_tag("arrow-nav-left.png")
   - else
     %a.arrow-nav.disabled= image_tag("arrow-nav-left.png")
 
-  - if next_response.present?
+  - if next_response.present? && !disable
     - link_to url_for({:response_id => next_response.id}), :title => "Next Request", :class => 'arrow-nav last' do
       = image_tag("arrow-nav-right.png")
   - else

@@ -11,6 +11,9 @@
 - content_for :sub_nav do
   = render('shared/reports_sub_nav')
 
+%h1.request_nav.main_heading
+  = render '/shared/request_nav', :name => @report.name, :disable => true
+
 %ul.breadcrumb
   %li
     = link_to "Overview", reports_path
@@ -19,7 +22,7 @@
       = link_to @report.activity.project.name, reports_project_path(@report.activity.project)
       >
 
-%h2= @report.activity.name
+%h1.main_heading= @report.activity.name
 
 .reports_summary.section_base.section_form
   %p.summary_col
@@ -38,7 +41,8 @@
 %ul.group.connect#tabs-container
   %li= link_to "Implementers", "#", :class => "active"
   %li= link_to "Locations", "#"
-  %li= link_to "Inputs", "#"
+  - unless @report.activity.is_a?(OtherCost)
+    %li= link_to "Inputs", "#"
 
 .section_base.section_form.first
 
