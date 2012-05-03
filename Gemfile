@@ -28,7 +28,6 @@ gem 'will_paginate', '~> 2.3.11'
 group :development do
   gem 'annotate'
   gem 'awesome_print', :require => 'ap'
-  gem 'factory_girl', '1.2.4' # moving it here so not loaded by spork prefork. NB. some specs fail with 1.3.3
   gem 'google_currency', '=1.2.0' # for currency cacher
   gem 'heroku', '>= 2.1.2'
   gem 'hirb'
@@ -54,6 +53,7 @@ group :test do
   gem 'capybara', '0.3.9'     # latest capy fails with "undefined method `fillable_field' for HTML:Module"
   gem 'selenium-webdriver', '~>0.2.2'
   gem 'akephalos', :require => false
+  gem 'factory_girl', '1.2.4' # moving it here so not loaded by spork prefork. NB. some specs fail with 1.3.3
   gem 'cucumber'
   gem 'cucumber-rails', '0.3.2'
   gem 'database_cleaner'

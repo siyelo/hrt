@@ -18,12 +18,12 @@ class Organization < ActiveRecord::Base
   ### Attributes
   attr_accessible :name, :raw_type, :fosaid, :currency, :fiscal_year_end_date,
     :fiscal_year_start_date, :contact_name, :contact_position, :contact_phone_number,
-    :contact_main_office_phone_number, :contact_office_location, :location_id,
+    :contact_main_office_phone_number, :contact_office_location,
     :implementer_type, :funder_type
 
+
   ### Associations
-  belongs_to :location
-  has_many :users
+  has_many :users # people in this organization
   has_and_belongs_to_many :managers, :join_table => "organizations_managers",
     :class_name => "User" # activity managers
   has_many :data_requests # never cascade destroy this!

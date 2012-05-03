@@ -37,21 +37,6 @@ describe CodeAssignment do
   end
 
   describe "named scopes" do
-    it "with_code_id" do
-      basic_setup_project
-      activity = Factory(:activity, :data_response => @response, :project => @project)
-      split    = Factory(:implementer_split, :activity => activity,
-                         :budget => 100, :spend => 200, :organization => @organization)
-
-      code1    = Factory.create(:code, :short_display => 'code1')
-      code2    = Factory.create(:code, :short_display => 'code2')
-
-      ca1      = Factory.create(:coding_budget, :activity => activity, :code => code1)
-      ca2      = Factory.create(:coding_budget, :activity => activity, :code => code2)
-
-      CodeAssignment.with_code_id(code1.id).should == [ca1]
-    end
-
     it "with_code_ids" do
       basic_setup_project
       activity = Factory.create(:activity, :data_response => @response, :project => @project)

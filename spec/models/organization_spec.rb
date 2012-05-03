@@ -3,7 +3,6 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe Organization do
   describe "Attributes" do
     it { should allow_mass_assignment_of(:name) }
-    it { should allow_mass_assignment_of(:location_id) }
     it { should allow_mass_assignment_of(:raw_type) }
     it { should allow_mass_assignment_of(:implementer_type) }
     it { should allow_mass_assignment_of(:funder_type) }
@@ -20,7 +19,6 @@ describe Organization do
 
   describe "Associations" do
     it { should have_many(:activities) }
-    it { should belong_to(:location) }
     it { should have_many(:users) }
     it { should have_many(:data_requests) }
     it { should have_many(:data_responses).dependent(:destroy) }

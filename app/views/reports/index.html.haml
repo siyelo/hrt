@@ -12,9 +12,9 @@
   = render('shared/reports_sub_nav')
 
 %h1.request_nav.main_heading
-  = render '/shared/request_nav'
+  = render '/shared/request_nav', :name => @report.name
 
-.reports_summary.section_base.section_form
+.reports_summary.dashboard_section.section_form
   %p.summary_col
     %span Total Expenditure
     %span.currency= @report.currency
@@ -31,20 +31,15 @@
 %ul.group.connect#tabs-container
   = render :partial => 'reports/tabs'
 
-#charts_tables
-  .dashboard_section.section_form.first
-    .full
-      .first-half
-        %h2= "Expenditure Summary"
-        = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => "display: none;"
-        #code_spent.bordered
+.dashboard_section.section_form.first
+  .full
+    .first-half
+      %h2= "Expenditure Summary"
+      #code_spent.bordered
 
-      .second-half
-        %h2= "Budget Summary"
-        = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => "display: none;"
-        #code_budget.bordered
+    .second-half
+      %h2= "Budget Summary"
+      #code_budget.bordered
 
-    %br
-    = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => "display: none;"
-    #report-data
-      = render 'reports/table'
+  %br
+  = render 'reports/table'

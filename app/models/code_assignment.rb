@@ -1,3 +1,5 @@
+require 'app/models/codes/location' #annoying but required because it keeps using app/reports/location
+
 class CodeAssignment < ActiveRecord::Base
   include CurrencyNumberHelper
 
@@ -20,8 +22,10 @@ class CodeAssignment < ActiveRecord::Base
   ### Delegates
   delegate :data_response, :to => :activity
   delegate :currency, :to => :activity, :allow_nil => true
+  delegate :name, :to => :code, :allow_nil => true
 
   ### Named scopes
+
   named_scope :with_code_id,
               lambda { |code_id| { :conditions =>
                 ["code_assignments.code_id = ?", code_id]} }

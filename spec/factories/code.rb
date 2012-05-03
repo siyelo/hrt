@@ -30,6 +30,7 @@ end
 Factory.define :other_cost_code, :class => OtherCostCode, :parent => :code do |f|
 end
 
+require 'app/models/codes/location'
 Factory.define :location, :class => Location, :parent => :code do |f|
 end
 

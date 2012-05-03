@@ -10,7 +10,7 @@ Feature: Admin can manage organizations
     And an admin exists with email: "sysadmin@hrtapp.com", organization: the organization
     And a location exists with short_display: "All"
     Given now is "01-06-2011 21:30:00 +0000"
-    And an organization exists with name: "org2", raw_type: "Ngo", fosaid: "222", location: the location
+    And an organization exists with name: "org2", raw_type: "Ngo", fosaid: "222"
     And a reporter exists with email: "org2_user@hrtapp.com", organization: the organization
     Given now is "12-12-2011 08:30:00 +0000"
     And I am signed in as "sysadmin@hrtapp.com"
@@ -124,14 +124,12 @@ Feature: Admin can manage organizations
     And I should see "Last Login At" within the table heading
     And I should see "Type" within the table heading
     And I should see "FOSAID" within the table heading
-    And I should see "Location" within the table heading
     And I should see "Created" within the table heading
     And I should see "org2" within a link in the 2nd row of the table
     And I should see "Some Reporter" within a link in the 2nd row of the table
     And I should see "12 Dec '11 08:31" within the 2nd row of the table
     And I should see "Ngo" within the 2nd row of the table
     And I should see "222" within the 2nd row of the table
-    And I should see "All" within the 2nd row of the table
     And I should see "01 Jun '11" within the 2nd row of the table
 
   Scenario: An admin can see an organization's users
