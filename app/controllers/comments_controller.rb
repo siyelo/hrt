@@ -10,11 +10,6 @@ class CommentsController < BaseController
     @comment = Comment.new
     @comment.commentable = find_commentable
     load_data_response(@comment)
-
-    respond_to do |format|
-      format.html
-      format.js { render :partial => "form", :locals => {:comment => @comment} }
-    end
   end
 
   def show
@@ -23,7 +18,6 @@ class CommentsController < BaseController
 
     respond_to do |format|
       format.html
-      format.js { render :partial => 'row', :locals => {:comment => @comment} }
       format.json { render :json => @comment}
     end
   end
@@ -31,11 +25,6 @@ class CommentsController < BaseController
   def edit
     @comment = find_comment
     load_data_response(@comment)
-
-    respond_to do |format|
-      format.html
-      format.js { render :partial => "form", :locals => {:comment => @comment } }
-    end
   end
 
   def create
@@ -47,10 +36,8 @@ class CommentsController < BaseController
       respond_to do |format|
         format.html do
           flash[:notice] = "Comment was successfully created."
-          #redirect_to commentable_resource(@comment)
           redirect_to :back
         end
-        format.js { render :partial => "row", :locals => {:comment => @comment} }
         format.json { render :json => {:html => render_to_string(
           {:partial => 'comment.html.haml', :locals => {:comment => @comment}})}}
       end
@@ -58,19 +45,15 @@ class CommentsController < BaseController
       respond_to do |format|
         format.html do
           flash[:error] = "You cannot create blank comment."
-          #redirect_to commentable_resource(@comment)
           redirect_to :back
         end
-        format.js   { render :partial => "form", :locals => {:comment => @comment},
-                             :status => :partial_content } # :partial_content => 206
         format.json do
           if @comment.parent_id?
-            # nested form
             html = render_to_string({:partial => 'reply_form.html.haml',
-                                     :locals => {:comment => @comment, :parent => @comment.parent}})
+              :locals => {:comment => @comment, :parent => @comment.parent}})
           else
             html = render_to_string({:partial => 'form.html.haml',
-                                     :locals => {:comment => @comment}})
+              :locals => {:comment => @comment}})
           end
 
           render :json => {:html => html}, :status => :partial_content # :partial_content => 206
@@ -89,13 +72,11 @@ class CommentsController < BaseController
           flash[:notice] = "Comment was successfully updated."
           redirect_to commentable_resource(@comment)
         end
-        format.js { render :partial => "row", :locals => {:comment => @comment } }
         format.json { render :nothing => true }
       end
     else
       respond_to do |format|
         format.html { render :action => "edit" }
-        format.js { render :partial => "form", :locals => {:comment => @comment}, :status => :partial_content } # :partial_content => 206
         format.json { render :nothing => true }
       end
     end
@@ -105,14 +86,8 @@ class CommentsController < BaseController
     @comment = find_comment
     @comment.destroy
 
-    respond_to do |format|
-      format.html do
-        flash[:notice] = "Comment was successfully deleted."
-        redirect_to comments_url
-      end
-      format.js { render :nothing => true }
-    end
-
+    flash[:notice] = "Comment was successfully deleted."
+    redirect_to comments_url
   end
 
   protected

@@ -1,4 +1,4 @@
-// Pretty Table (with clickable rows)
+// Pretty Table
 // IMPORTANT: if thead doesn't contain links then add class "static"!!!
 
 table.standard
@@ -96,21 +96,6 @@ table.standard
 
   .wrap_30
     min-width: 30%
-
-// Pretty Table with clickable rows
-table.clickable
-
-  tbody tr
-
-    &:hover
-      background: $lightest-blue
-      +linear-gradient(color-stops($lightest-blue + #090909, $lightest-blue))
-      color: $dark-blue
-      td
-        border-bottom: 1px solid $light_blue
-
-  td:hover
-    cursor: pointer
 
 // Pretty Table with rounded thead
 // use it when there is no additional heading (for ex. h2)
