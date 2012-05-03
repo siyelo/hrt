@@ -22,11 +22,12 @@
 
     #import_csv
       -form_tag create_from_file_admin_users_path, :multipart => true do
-        = label_tag :file, "File"
-        = file_field_tag :file
+        .upbox
+          = label_tag :file, "File"
+          = file_field_tag :file
         = submit_tag "Upload and Import", :class => 'small_submit_button'
 
-      = link_to "Download template", download_template_admin_users_path
+      = link_to "Download template", download_template_admin_users_path, :class => "create_alt right"
 
 - if params[:query]
   %p

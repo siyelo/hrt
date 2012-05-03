@@ -600,13 +600,14 @@ h3.form_heading
     width: 100%
 
 .upbox
-  background: $light-blue
-  border: 1px solid $light-blue - #111
+  background: $primary_light
+  border: 1px solid $primary_light - #111
   float: left
+  font-size: 12px
   margin-right: 5px
   padding: 5px 5px 4px
   width: 280px
-  +border-radius
+  +border-radius(3px)
   label
     display: inline !important
 
@@ -892,7 +893,7 @@ li.input-wrapper
 .input-errors
   background: $red
   clear: both
-  color: #fff
+  color: #fff !important
   font-size: 11px
   opacity: 0.75
   padding: 4px 5px 3px
