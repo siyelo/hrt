@@ -233,9 +233,4 @@ module ApplicationHelper
   def js_safe(var)
     var.nil? ? "undefined" : var
   end
-
-  def switch_response_path(request)
-    response_id = @response.organization.responses.find_by_data_request_id(request.id).id
-    url_for({:response_id => response_id})
-  end
 end

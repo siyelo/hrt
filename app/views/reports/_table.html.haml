@@ -8,15 +8,22 @@
   %tbody
     - @report.collection.each do |e|
       %tr
-        %td= link_to e.name, resource_link(e)
+        %td= resource_link(e)
         %td.align= number_to_currency e.total_spend, :unit => ""
         %td.align= number_to_currency e.total_budget, :unit => ""
+
+    - if unclassified_other_costs?
+      %tr
+        %td Not classified
+        %td.align= number_to_currency unclassified_other_costs_spend, :unit => ""
+        %td.align= number_to_currency unclassified_other_costs_budget, :unit => ""
+
     %tr.summary
       %td
         Total
       %td.align
         %span.currency= @report.currency
-        = number_to_currency @report.total_spend, :unit => ""
+        = number_to_currency @response.total_spend, :unit => ""
       %td.align
         %span.currency= @report.currency
-        = number_to_currency @report.total_budget, :unit => ""
+        = number_to_currency @response.total_budget, :unit => ""
