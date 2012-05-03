@@ -73,5 +73,6 @@ ActionController::Routing::Routes.draw do |map|
     reports.resources :locations, :only => [:index]
     reports.resources :inputs, :only => [:index]
     reports.resources :projects, :only => [:show]
+    reports.resources :activities, :only => [:show]
   end
 end

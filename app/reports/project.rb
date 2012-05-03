@@ -6,7 +6,7 @@ module Reports
     attr_reader :project
 
     def initialize(project)
-      @project  = project
+      @project = project
     end
 
     def name

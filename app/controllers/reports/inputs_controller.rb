@@ -1,4 +1,4 @@
-class Reports::InputsController < ApplicationController
+class Reports::InputsController < BaseController
 
   def index
     @current_response = current_response

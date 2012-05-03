@@ -14,6 +14,13 @@ var reports_projects_show = {
   }
 };
 
+var reports_activities_show = {
+  run: function () {
+    HrtCharts.drawPieChart('code_spent', _expenditure_summary, 450, 300);
+    HrtCharts.drawPieChart('code_budget', _budget_summary, 450, 300);
+  }
+};
+
 var admin_responses_index = {
   run: function () {
     HrtCharts.drawBarChart('response_chart', _responses, 900, 150);

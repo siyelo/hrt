@@ -1,5 +1,5 @@
 %ul
-  %li{:class => (['reports', 'reports/projects'].include?(params[:controller]) ? 'active' : nil)}
+  %li{:class => (['reports', 'reports/projects', 'reports/activities'].include?(params[:controller]) ? 'active' : nil)}
     = link_to 'Overview', reports_path
   %li{:class => (params[:controller] == 'documents' ? 'active' : nil)}
     = link_to 'Files', documents_path
