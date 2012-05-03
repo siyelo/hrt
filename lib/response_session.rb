@@ -3,7 +3,7 @@ module ResponseSession
   def self.included(klass)
     klass.send(:include, InstanceMethods)
     klass.class_eval do
-      before_filter :set_response
+      before_filter :set_current_response
     end
   end
 
@@ -25,9 +25,13 @@ module ResponseSession
     end
 
     private
-      def set_response
-        @response = detect_response
-        session[:response_id] = @response.id if @response
+      def set_current_response
+        set_response(detect_response)
+      end
+
+      def set_response(response)
+        @response = response
+        session[:response_id] = response.id if response
       end
 
       def detect_response
