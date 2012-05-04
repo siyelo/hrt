@@ -3,7 +3,4 @@
     = link_to 'Overview', reports_path
   %li{:class => (params[:controller] == 'documents' ? 'active' : nil)}
     = link_to 'Files', documents_path
-  - if current_user.sysadmin?
-    %li{:class => (params[:controller] == 'admin/reports' ? 'active' : nil)}
-      = link_to 'Dynamic', reports_path
 
