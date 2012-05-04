@@ -123,14 +123,19 @@ input[type="text"], input[type="password"], textarea, select
     .inline-errors
       background: $red
       border: 1px solid $red - #111
+      clear: both
       color: #fff
+      display: block
+      float: left
       font-size: 11px
+      margin-left: 18%
       opacity: 0.8
-      padding: 3px 5px 2px
-      position: absolute
+      padding: 3px 5px 3px
+      //position: absolute
       text-align: center
-      top: 45px
-      z-index: 10
+      //top: 45px
+      width: auto
+      //z-index: 10
       +border-bottom-radius(3px)
       +box-shadow(#ccc, 0, 0, 3px)
 
@@ -722,7 +727,7 @@ td.error, tr.error td
   background: #FFDDDD !important
 
 li.error
-  background: #FFF !important
+  background: transparent !important
 
 // New form styles
 .condensed_fields
