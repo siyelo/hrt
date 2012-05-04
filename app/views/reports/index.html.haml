@@ -29,7 +29,7 @@
 #charts_tables
   .projects_tab{:"data-loaded" => 'true'}
     = render '/reports/shared/report_data'
-  .inputs_tab{:"data-loaded" => 'false', :"data-url" => locations_reports_path, :style => 'display: none;'}
+  .locations_tab{:"data-loaded" => 'false', :"data-url" => locations_reports_path, :style => 'display: none;'}
     = image_tag "ajax-loader.gif", :class => "ajax-loader"
-  .locations_tab{:"data-loaded" => 'false', :"data-url" => inputs_reports_path, :style => 'display: none;'}
+  .inputs_tab{:"data-loaded" => 'false', :"data-url" => inputs_reports_path, :style => 'display: none;'}
     = image_tag "ajax-loader.gif", :class => "ajax-loader"
