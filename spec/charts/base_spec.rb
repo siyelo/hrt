@@ -33,6 +33,11 @@ describe Charts::Base do
     Charts::Base.value_format.should == :to_f
   end
 
+  it "doesnt include zero elements" do
+    e = mock :object, :name => "E1", :amount => 0
+    Charts::Base.new([e]).data.should == {}
+  end
+
   it "builds empty chart from empty collection" do
     Charts::Base.new([]).data.should == {}
   end
