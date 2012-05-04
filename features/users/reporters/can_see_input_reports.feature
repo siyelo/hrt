@@ -13,7 +13,7 @@ Feature: Reporter can see location report
       And an activity exists with name: "Act1", data_response: the data_response, project: the project
      When I am signed in as "reporter@hrtapp.com"
 
-  @javascript @run
+  @javascript
   Scenario: See locations overview
     When an implementer_split exists with organization: the organization, activity: the activity, spend: 120, budget: 220
     And a input_split exists with activity: "Act1", input: "Some Input", spend_percentage: 100, budget_percentage: 100
