@@ -1,4 +1,4 @@
-# This file is auto-generated from the current state of the database. Instead of editing this file,
+# This file is auto-generated from the current state of the database. Instead of editing this file, 
 # please use the migrations feature of Active Record to incrementally modify your database, and
 # then regenerate this schema definition.
 #
@@ -9,7 +9,8 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120502134946) do
+ActiveRecord::Schema.define(:version => 20120504082025) do
+
   create_table "activities", :force => true do |t|
     t.string   "name"
     t.datetime "created_at"
@@ -50,6 +51,7 @@ ActiveRecord::Schema.define(:version => 20120502134946) do
     t.datetime "updated_at"
   end
 
+  add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
   add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|
@@ -86,10 +88,11 @@ ActiveRecord::Schema.define(:version => 20120502134946) do
   add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
 
   create_table "currencies", :force => true do |t|
-    t.string   "conversion"
     t.float    "rate"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "from"
+    t.string   "to"
   end
 
   create_table "data_requests", :force => true do |t|

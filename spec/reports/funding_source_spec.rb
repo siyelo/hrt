@@ -44,7 +44,7 @@ describe Reports::FundingSource do
       end
 
       it "should properly convert currencies" do
-        @currency = Factory(:currency, :conversion => 'RWF_TO_USD', :rate => 0.5)
+        @currency = Factory(:currency, :from => 'RWF', :to => 'USD', :rate => 0.5)
         @project1.currency = "RWF"; @project1.save
 
         table = run_report

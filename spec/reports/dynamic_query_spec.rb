@@ -1231,7 +1231,7 @@ describe Reports::DynamicQuery do
   context "currency conversion" do
     before :each do
       basic_setup_response
-      @currency = Factory(:currency, :conversion => 'RWF_TO_USD', :rate => 0.5)
+      @currency = Factory(:currency, :from => 'RWF', :to => 'USD', :rate => 0.5)
       @organization.currency = 'RWF'
       @organization.save!
       @response.state = 'accepted'

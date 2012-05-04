@@ -33,12 +33,6 @@ var admin_organizations_duplicate = {
   }
 };
 
-var admin_currencies_index = {
-  run: function () {
-    HrtCurrencies.init();
-  }
-};
-
 var projects_index = {
   run: function () {
     HrtProjects.init()

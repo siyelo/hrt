@@ -31,7 +31,7 @@ ActionController::Routing::Routes.draw do |map|
       :member => { :generate => :get },
       :collection => { :mark_implementer_splits => :put}
     admin.resources :documents, :as => :files
-    admin.resources :currencies, :only => [:index, :new, :create, :update, :destroy]
+    admin.resources :currencies, :except => [:show]
     admin.resources :users, :except => [:show],
       :collection => {:create_from_file => :post, :download_template => :get}
     admin.resources :codes,

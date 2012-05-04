@@ -25,16 +25,18 @@ namespace :db do
     puts Organization.all.select{|o| o.users.count > 0}.map{|o| o.users.first.email}
     puts "------------------------------------------------------------------"
   end
-  
+
   desc "Populates the database with currencies."
   task :load_currencies => :environment do
     require 'yaml'
     file = YAML.load_file "#{RAILS_ROOT}/db/seed_files/currencies.yml"
     puts "\nImporting currencies to the database\n"
-    file.each { |currency| 
-                Currency.create(:conversion => currency[0], 
-                                 :rate => currency[1])
-    }
+    file.each do |currency|
+      splits = currency[0].split('_TO_')
+      from   = splits.first
+      to     = splits.last
+      Currency.create(:from => from, :to => to, :rate => currency[1])
+    end
     puts "\nFinished importing currencies to the database\n"
   end
 end

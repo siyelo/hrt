@@ -1,32 +1,39 @@
 class Currency < ActiveRecord::Base
 
   ### Attributes
-  attr_accessor :to, :from
+  attr_accessible :to, :from, :rate
 
   ### Validations
-  validates_uniqueness_of :conversion
+  validates_uniqueness_of :to, :scope => :from
+  validates_uniqueness_of :from, :scope => :to
+  validates_presence_of :from
+  validates_presence_of :to
   validates_numericality_of :rate
 
   ### Callbacks
   after_save :reload_currencies
 
+  ### Named scopes
+  named_scope :sorted, {:order => 'updated_at DESC'}
+
+  def conversion
+    "#{from}_TO_#{to}"
+  end
+
   ### Class Methods
-  def self.currencies_to_yaml
+  def self.currency_rates
     currencies = {}
-    Currency.all(:select => 'conversion, rate').each do |currency|
+    Currency.all.each do |currency|
       currencies[currency.conversion] = currency.rate
     end
-    currencies.to_yaml
+    currencies
   end
 
   private
 
-    def reload_currencies
-      @cur = Currency.all
-      currency_config     = Currency.currencies_to_yaml
-      Money.default_bank.import_rates(:yaml, currency_config)
-    end
-
+  def reload_currencies
+    Money.default_bank.import_rates(:yaml, Currency.currency_rates.to_yaml)
+  end
 end
 
 
@@ -35,7 +42,8 @@ end
 # Table name: currencies
 #
 #  id         :integer         not null, primary key
-#  conversion :string(255)
+#  from       :string(255)
+#  to         :string(255)
 #  rate       :float
 #  created_at :datetime
 #  updated_at :datetime
