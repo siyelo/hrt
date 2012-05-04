@@ -1,0 +1,4 @@
+%li= link_to "Implementers", "#", :class => "active nav-tab", :"data-tab" => 'implementers_tab', :"data-report" => 'implementers'
+%li= link_to "Locations", '#', :class => "nav-tab", :"data-tab" => 'locations_tab', :"data-report" => 'locations'
+- unless @report.activity.is_a?(OtherCost)
+  %li= link_to "Inputs", '#', :class => "nav-tab", :"data-tab" => 'inputs_tab', :"data-report" => 'inputs'

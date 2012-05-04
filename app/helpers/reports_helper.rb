@@ -19,14 +19,15 @@ module ReportsHelper
         name
       end
     when "reports/projects"
-      link_to name, reports_activity_path(element)
-    when "reports/activities"
-      if element.is_a? Activity
+      case params[:action]
+      when 'show'
         link_to name, reports_activity_path(element)
-      else
+      when 'inputs'
+        name
+      when 'locations'
         name
       end
-    else
+    when "reports/activities"
       name
     end
   end

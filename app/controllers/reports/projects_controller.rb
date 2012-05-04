@@ -3,7 +3,6 @@ class Reports::ProjectsController < BaseController
   def show
     @project = current_response.projects.find(params[:id])
     @report  = Reports::Project.new(@project)
-    render 'report'
   end
 
   def locations

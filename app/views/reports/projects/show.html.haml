@@ -36,12 +36,8 @@
 
 #charts_tables
   .activities_tab{:"data-loaded" => 'true'}
-    :javascript
-      google.load("visualization", "1", {packages:["corechart"]});
-      var _expenditure_summary   = #{js_safe(@report.expenditure_pie)};
-      var _budget_summary  = #{js_safe(@report.budget_pie)};
-
     = render '/reports/shared/report_data'
   .locations_tab{:"data-loaded" => 'false', :"data-url" => locations_reports_project_path(@report.project), :style => 'display: none;'}
     = image_tag "ajax-loader.gif", :class => "ajax-loader"
   .inputs_tab{:"data-loaded" => 'false', :"data-url" => inputs_reports_project_path(@report.project), :style => 'display: none;'}
+    = image_tag "ajax-loader.gif", :class => "ajax-loader"
