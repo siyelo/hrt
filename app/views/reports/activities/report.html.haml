@@ -14,7 +14,6 @@
 %h1.request_nav
   = render '/shared/request_nav', :name => @report.name, :disable => true
 
-
 .crumb_heading
   %ul.breadcrumb
     %li
@@ -23,7 +22,6 @@
       - if @report.activity.project
         = link_to @report.activity.project.name, reports_project_path(@report.activity.project)
         >
-
   %h1= @report.activity.name
 
 .reports_summary.section_base.section_form.bordered
