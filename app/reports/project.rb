@@ -21,6 +21,10 @@ module Reports
       project.activities.sorted
     end
 
+    def collection
+      activities_and_other_costs
+    end
+
     def total_spend
       project.total_spend
     end

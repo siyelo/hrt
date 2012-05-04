@@ -21,6 +21,12 @@ module ReportsHelper
     when "reports/projects"
       link_to name, reports_activity_path(element)
     when "reports/activities"
+      if element.is_a? Activity
+        link_to name, reports_activity_path(element)
+      else
+        name
+      end
+    else
       name
     end
   end
@@ -31,10 +37,10 @@ module ReportsHelper
   end
 
   def unclassified_other_costs_spend
-    ( @response.total_spend || 0 ) - ( @report.total_spend || 0)
+    ( current_response.total_spend || 0 ) - ( @report.total_spend || 0)
   end
 
   def unclassified_other_costs_budget
-    ( @response.total_budget || 0 ) - ( @report.total_budget || 0)
+    ( current_response.total_budget || 0 ) - ( @report.total_budget || 0)
   end
 end

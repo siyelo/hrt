@@ -1,18 +1,13 @@
 - content_for :head do
   <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
-  :javascript
-    google.load("visualization", "1", {packages:["corechart"]});
-    var _expenditure_summary   = #{js_safe(@report.expenditure_pie)};
-    var _budget_summary  = #{js_safe(@report.budget_pie)};
-
 - title 'Reports'
 
 - content_for :sub_nav do
   = render('shared/reports_sub_nav')
 
 %h1.request_nav
-  = render '/shared/request_nav', :name => @report.name, :disable => true
+  = render '/shared/request_nav'
 
 .crumb_heading
   %ul.breadcrumb
@@ -22,7 +17,7 @@
 
   %h1= @report.project.name
 
-.reports_summary.section_base.section_form.bordered
+.reports_summary.section_base.section_form.single
   %p.summary_col
     %span Total Expenditure
     %span.currency= @report.currency
@@ -37,42 +32,16 @@
     = @report.percentage_change
 
 %ul.group.connect#tabs-container
-  %li= link_to "Activities", "#", :class => "active"
-  %li= link_to "Locations", "#"
-  %li= link_to "Inputs", "#"
+  = render '/reports/shared/project_tabs'
 
-.section_base.section_form.first
+#charts_tables
+  .activities_tab{:"data-loaded" => 'true'}
+    :javascript
+      google.load("visualization", "1", {packages:["corechart"]});
+      var _expenditure_summary   = #{js_safe(@report.expenditure_pie)};
+      var _budget_summary  = #{js_safe(@report.budget_pie)};
 
-  .full
-    .first-half
-      %h2= "Expenditure Summary"
-      .code_spent.bordered
-
-    .second-half
-      %h2= "Budget Summary"
-      .code_budget.bordered
-
-  %br
-  %table.data
-    %thead
-      %tr.head
-        %th Name
-        %th.align Expenditure
-        %th.align Budget
-
-    %tbody
-      - @report.activities_and_other_costs.each do |activity|
-        %tr
-          %td= resource_link(activity)
-          %td.align= number_to_currency activity.total_spend, :unit => ""
-          %td.align= number_to_currency activity.total_budget, :unit => ""
-      %tr.summary
-        %td
-          Total
-        %td.align
-          %span.currency= @report.currency
-          = number_to_currency @report.total_spend, :unit => ""
-        %td.align
-          %span.currency= @report.currency
-          = number_to_currency @report.total_budget, :unit => ""
-
+    = render '/reports/shared/report_data'
+  .locations_tab{:"data-loaded" => 'false', :"data-url" => locations_reports_project_path(@report.project), :style => 'display: none;'}
+    = image_tag "ajax-loader.gif", :class => "ajax-loader"
+  .inputs_tab{:"data-loaded" => 'false', :"data-url" => inputs_reports_project_path(@report.project), :style => 'display: none;'}
