@@ -603,12 +603,28 @@ p.no_data
   line-height: 1.4
 
 h1.request_nav
-  margin: 10px 0 20px
+  font: normal 16px "Avenir", Arial, sans-serif !important
+  margin: 20px 0 10px
 
   span
     display: inline-block
     background: #EEE
     padding: 0 5px
+    
+.crumb_heading
+  background: $primary_lightest
+  border-top: 1px solid $primary_border
+  border-left: 1px solid $primary_border3
+  border-right: 1px solid $primary_border3
+  color: #fff
+  padding: 10px 18px
+  h1, a
+    color: #fff
+    
+  .breadcrumb
+    margin: 10px 0 5px
+    font-size: 12px
+    color: #666666
 
 #response_chart
   background: #FBFBFB
@@ -659,7 +675,4 @@ h1.request_nav
   &.disabled
     opacity: 0.4
 
-.breadcrumb
-  margin: 10px 0 20px
-  font-size: 12px
-  color: #666666
+

@@ -6,10 +6,10 @@
 - content_for :sub_nav do
   = render('shared/reports_sub_nav')
 
-%h1.request_nav.main_heading
+%h1.request_nav
   = render '/shared/request_nav'
 
-.reports_summary.section_base.section_form
+.reports_summary.section_base.section_form.single
   %p.summary_col
     %span Total Expenditure
     %span.currency= @report.currency

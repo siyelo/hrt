@@ -11,20 +11,22 @@
 - content_for :sub_nav do
   = render('shared/reports_sub_nav')
 
-%h1.request_nav.main_heading
+%h1.request_nav
   = render '/shared/request_nav', :name => @report.name, :disable => true
 
-%ul.breadcrumb
-  %li
-    = link_to "Overview", reports_path
-    >
-    - if @report.activity.project
-      = link_to @report.activity.project.name, reports_project_path(@report.activity.project)
+
+.crumb_heading
+  %ul.breadcrumb
+    %li
+      = link_to "Overview", reports_path
       >
+      - if @report.activity.project
+        = link_to @report.activity.project.name, reports_project_path(@report.activity.project)
+        >
+  
+  %h2= @report.activity.name
 
-%h1.main_heading= @report.activity.name
-
-.reports_summary.section_base.section_form
+.reports_summary.section_base.section_form.bordered
   %p.summary_col
     %span Total Expenditure
     %span.currency= @report.currency

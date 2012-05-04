@@ -795,6 +795,9 @@ a.tooltip
     padding-top: 15px
   &.last
     border-bottom: 1px solid $primary_border
+  &.bordered
+    border-top: 1px solid $primary_border
+    border-bottom: 1px solid $primary_border
   &.single
     padding-top: 15px
     border-top: 1px solid $primary_border
@@ -957,10 +960,11 @@ p.input-hints
     width: 126px
 
 .reports_summary
+  margin-bottom: 20px
   padding: 0
   .summary_col
     background: #fdfdfd
-    border-right: 1px solid #f4f4f4
+    border-right: 1px solid $primary_border4
     color: #444
     display: inline
     float: left
