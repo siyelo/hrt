@@ -2,22 +2,24 @@ module ReportsHelper
 
   # this will be expanded upon
   def resource_link(element)
-    name = element.name || "no name"
+    name = element.name.presence || "no name"
 
     case params[:controller]
-
     when "reports"
-      if element.is_a?(Project)
-        link_to name, reports_project_path(element)
-      else
-        link_to name, reports_activity_path(element)
+      case params[:action]
+      when 'index'
+        if element.is_a?(Project)
+          link_to name, reports_project_path(element)
+        else
+          link_to name, reports_activity_path(element)
+        end
+      when 'inputs'
+        name
+      when 'locations'
+        name
       end
     when "reports/projects"
       link_to name, reports_activity_path(element)
-    when "reports/inputs"
-      name
-    when "reports/locations"
-      name
     end
   end
 
