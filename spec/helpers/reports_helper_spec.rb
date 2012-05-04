@@ -14,10 +14,22 @@ describe ReportsHelper do
       helper.resource_link(other_cost).should == link_to(other_cost.name, reports_activity_path(other_cost))
     end
 
+    it "links to the activity when on the projects overview page" do
+      params[:controller] = "reports/projects"
+      a = Factory.build(:activity, :id => '1', :name => 'a1')
+      helper.resource_link(a).should == link_to(a.name, reports_activity_path(a))
+    end
+
     it "displays the name of the input" do
       params[:controller] = "reports/inputs"
       input = mock(:input, :id => '1', :name => 'blar')
       helper.resource_link(input).should == "blar"
+    end
+
+    it "displays 'no name' if the element doesnt respond to name" do
+      params[:controller] = "reports/inputs"
+      input = mock(:input, :id => '1', :name => nil)
+      helper.resource_link(input).should == "no name"
     end
 
     it "displays the name of the location" do

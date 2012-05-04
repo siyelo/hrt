@@ -20,6 +20,11 @@ describe Charts::Base do
     Charts::Base.name_format.should == :capitalize
   end
 
+  it "defaults name to 'no name' if its nil" do
+    e = mock :object, :name => nil, :amount => 10
+    Charts::Base.new([e]).data["No name"].should == 10
+  end
+
   it "defines :amount as value_method for collection though subclasses usually override" do
     Charts::Base.value_method.should == :amount
   end
