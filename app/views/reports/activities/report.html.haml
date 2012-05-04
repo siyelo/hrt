@@ -23,7 +23,7 @@
       - if @report.activity.project
         = link_to @report.activity.project.name, reports_project_path(@report.activity.project)
         >
-  
+
   %h2= @report.activity.name
 
 .reports_summary.section_base.section_form.bordered
@@ -51,11 +51,11 @@
   .full
     .first-half
       %h2= "Expenditure Summary"
-      #code_spent.bordered
+      .code_spent.bordered
 
     .second-half
       %h2= "Budget Summary"
-      #code_budget.bordered
+      .code_budget.bordered
 
   %br
   %table.data
