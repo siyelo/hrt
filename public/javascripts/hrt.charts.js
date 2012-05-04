@@ -17,7 +17,7 @@ HrtCharts.drawBarChart = function (id, rawData, width, height) {
   });
 };
 
-HrtCharts.drawPieChart = function (id, data_rows, width, height) {
+HrtCharts.drawPieChart = function (element, data_rows, width, height) {
   if (typeof(data_rows) === "undefined") {
     return;
   }
@@ -31,6 +31,6 @@ HrtCharts.drawPieChart = function (id, data_rows, width, height) {
     data.setValue(i, 0, value[0]);
     data.setValue(i, 1, value[1]);
   };
-  var chart = new google.visualization.PieChart(document.getElementById(id));
+  var chart = new google.visualization.PieChart(element);
   chart.draw(data, {width: width, height: height, chartArea: {width: 360, height: 220}});
 };

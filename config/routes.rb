@@ -68,10 +68,9 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :documents, :as => :files
 
-  map.resources :reports, :only => [:index]
+  map.resources :reports, :only => [:index],
+      :collection => {:inputs => :get, :locations => :get}
   map.namespace :reports do |reports|
-    reports.resources :locations, :only => [:index]
-    reports.resources :inputs, :only => [:index]
     reports.resources :projects, :only => [:show]
     reports.resources :activities, :only => [:show]
   end

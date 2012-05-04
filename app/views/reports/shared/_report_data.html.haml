@@ -7,16 +7,13 @@
   .full
     .first-half
       %h2= "Expenditure Summary"
-      = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => "display: none;"
-      #code_spent.bordered
+      .code_spent.bordered
 
     .second-half
       %h2= "Budget Summary"
-      = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => "display: none;"
-      #code_budget.bordered
+      .code_budget.bordered
 
   %br
-  = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => "display: none;"
   #report-data
     = render 'reports/shared/table'
 

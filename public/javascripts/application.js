@@ -1,8 +1,8 @@
 // Page scopes
 var reports_index = {
   run: function () {
-    HrtCharts.drawPieChart('code_spent', _expenditure_summary, 450, 300);
-    HrtCharts.drawPieChart('code_budget', _budget_summary, 450, 300);
+    HrtCharts.drawPieChart($('.projects_tab .code_spent')[0], _expenditure_summary, 450, 300);
+    HrtCharts.drawPieChart($('.projects_tab .code_budget')[0], _budget_summary, 450, 300);
     HrtReports.tabInit();
   }
 };
@@ -75,13 +75,6 @@ var promo_landing = {
     HrtLandingPage.init()
   }
 };
-
-
-// jQuery config
-jQuery.ajaxSetup({
-  'beforeSend': function(xhr) {xhr.setRequestHeader("Accept", "text/javascript")}
-})
-
 
 // DOM LOAD
 $(function () {

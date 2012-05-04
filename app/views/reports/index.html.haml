@@ -1,1 +1,40 @@
-= render '/reports/shared/report_data'
+- content_for :head do
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+- title 'Reports'
+
+- content_for :sub_nav do
+  = render('shared/reports_sub_nav')
+
+%h1.request_nav
+  = render '/shared/request_nav'
+
+.reports_summary.section_base.section_form.single
+  %p.summary_col
+    %span Total Expenditure
+    %span.currency= @report.currency
+    = number_to_currency @report.total_spend, :unit => ""
+  %p.summary_col
+    %span Total Budget
+    %span.currency= @report.currency
+    = number_to_currency @report.total_budget, :unit => ""
+  %p.summary_col.last
+    %span Change
+    %span.currency %
+    = @report.percentage_change
+
+%ul.group.connect#tabs-container
+  = render :partial => 'reports/shared/tabs'
+
+#charts_tables
+  .projects_tab{:"data-loaded" => 'true'}
+    :javascript
+      google.load("visualization", "1", {packages:["corechart"]});
+      var _expenditure_summary   = #{js_safe(@report.expenditure_pie)};
+      var _budget_summary  = #{js_safe(@report.budget_pie)};
+
+    = render '/reports/shared/report_data'
+  .inputs_tab{:"data-loaded" => 'false', :style => 'display: none;'}
+    = image_tag "ajax-loader.gif", :class => "ajax-loader"
+  .locations_tab{:"data-loaded" => 'false', :style => 'display: none;'}
+    = image_tag "ajax-loader.gif", :class => "ajax-loader"

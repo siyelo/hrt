@@ -3,24 +3,26 @@ var HrtReports = {};
 HrtReports.tabInit = function () {
   $('.nav-tab').click(function (e) {
     e.preventDefault();
-    $("#code_spent").hide();
-    $("#code_budget").hide();
-    $("#report-data").hide();
-    $('.ajax-loader').show();
-    HrtReports.loadTab($(this).attr('id'));
+    var element = $(this);
+    var tabName = element.data('tab');
+    var report  = element.data('report');
+    var tab     = $('#charts_tables .' + tabName);
+
+    $('#charts_tables > div').hide();
+    tab.show();
     $('#tabs-container a').removeClass('active')
-    $(this).addClass('active');
+    element.addClass('active');
+    if (!tab.data('loaded')) {
+      HrtReports.loadTab(tabName, report);
+    }
   });
 };
 
-HrtReports.loadTab = function (tab) {
-  $.get('/reports/' + tab, function(data) {
-    $("#code_spent").hide();
-    $("#code_budget").hide();
-    $("#report-data").hide();
-    $('.ajax-loader').show();
-    $('#charts_tables').html(data);
-      HrtCharts.drawPieChart('code_spent', _expenditure_summary, 450, 300);
-      HrtCharts.drawPieChart('code_budget', _budget_summary, 450, 300);
+HrtReports.loadTab = function (tabName, report) {
+  var tab = $('#charts_tables .' + tabName);
+  tab.load('/reports/' + report, function() {
+    HrtCharts.drawPieChart($('.' + tabName + ' .code_spent')[0], _expenditure_summary, 450, 300);
+    HrtCharts.drawPieChart($('.' + tabName + ' .code_budget')[0], _budget_summary, 450, 300);
+    tab.data('loaded', true);
   });
 };
