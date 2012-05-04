@@ -72,6 +72,7 @@ ActionController::Routing::Routes.draw do |map|
       :collection => {:inputs => :get, :locations => :get}
   map.namespace :reports do |reports|
     reports.resources :projects, :only => [:show]
-    reports.resources :activities, :only => [:show]
+    reports.resources :activities, :only => [:show],
+      :member => {:inputs => :get, :locations => :get}
   end
 end

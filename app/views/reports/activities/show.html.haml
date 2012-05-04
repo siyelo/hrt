@@ -39,43 +39,16 @@
     = @report.percentage_change
 
 %ul.group.connect#tabs-container
-  %li= link_to "Implementers", "#", :class => "active"
-  %li= link_to "Locations", "#"
+  %li= link_to "Implementers", "#", :class => "active nav-tab", :"data-tab" => 'implementers_tab', :"data-report" => 'implementers'
+  %li= link_to "Locations", '#', :class => "nav-tab", :"data-tab" => 'locations_tab', :"data-report" => 'locations'
   - unless @report.activity.is_a?(OtherCost)
-    %li= link_to "Inputs", "#"
+    %li= link_to "Inputs", '#', :class => "nav-tab", :"data-tab" => 'inputs_tab', :"data-report" => 'inputs'
 
-.section_base.section_form.first
 
-  .full
-    .first-half
-      %h2= "Expenditure Summary"
-      .code_spent.bordered
-
-    .second-half
-      %h2= "Budget Summary"
-      .code_budget.bordered
-
-  %br
-  %table.data
-    %thead
-      %tr.head
-        %th Name
-        %th.align Expenditure
-        %th.align Budget
-
-    %tbody
-      - @report.implementer_splits.each do |implementer_split|
-        %tr
-          %td= implementer_split.organization.name
-          %td.align= number_to_currency implementer_split.spend, :unit => ""
-          %td.align= number_to_currency implementer_split.budget, :unit => ""
-      %tr.summary
-        %td
-          Total
-        %td.align
-          %span.currency= @report.currency
-          = number_to_currency @report.total_spend, :unit => ""
-        %td.align
-          %span.currency= @report.currency
-          = number_to_currency @report.total_budget, :unit => ""
-
+#charts_tables
+  .implementers_tab{:"data-loaded" => 'true'}
+    = render '/reports/shared/report_data'
+  .locations_tab{:"data-loaded" => 'false', :"data-url" => locations_reports_activity_path(@report.activity), :style => 'display: none;'}
+    = image_tag "ajax-loader.gif", :class => "ajax-loader"
+  .inputs_tab{:"data-loaded" => 'false', :"data-url" => inputs_reports_activity_path(@report.activity), :style => 'display: none;'}
+    = image_tag "ajax-loader.gif", :class => "ajax-loader"

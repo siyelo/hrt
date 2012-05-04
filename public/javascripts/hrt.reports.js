@@ -20,7 +20,7 @@ HrtReports.tabInit = function () {
 
 HrtReports.loadTab = function (tabName, report) {
   var tab = $('#charts_tables .' + tabName);
-  tab.load('/reports/' + report, function() {
+  tab.load(tab.data('url'), function() {
     HrtCharts.drawPieChart($('.' + tabName + ' .code_spent')[0], _expenditure_summary, 450, 300);
     HrtCharts.drawPieChart($('.' + tabName + ' .code_budget')[0], _budget_summary, 450, 300);
     tab.data('loaded', true);

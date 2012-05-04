@@ -20,6 +20,8 @@ module ReportsHelper
       end
     when "reports/projects"
       link_to name, reports_activity_path(element)
+    when "reports/activities"
+      name
     end
   end
 

@@ -18,6 +18,7 @@ var reports_activities_show = {
   run: function () {
     HrtCharts.drawPieChart($('.code_spent')[0], _expenditure_summary, 450, 300);
     HrtCharts.drawPieChart($('.code_budget')[0], _budget_summary, 450, 300);
+    HrtReports.tabInit();
   }
 };
 

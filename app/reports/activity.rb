@@ -13,6 +13,10 @@ module Reports
       activity.name
     end
 
+    def collection
+      implementer_splits
+    end
+
     def currency
       activity.currency
     end
