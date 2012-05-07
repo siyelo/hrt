@@ -25,20 +25,43 @@ describe Reports::ProjectLocations do
   let(:activity) { mock :activity, :name => 'act',
                    :coding_spend_district => [ssplit, ssplit1],
                    :coding_budget_district => [bsplit, bsplit1] }
-  let(:activity1) { mock :activity, :name => 'activity1', :total_spend => "5", :total_budget => "10" }
-  let(:activities) { [activity, activity1] }
-  let(:project) { mock :project, :activities => activities,
-    :total_spend => 10, :total_budget => 20, :name => 'Project1', :currency => 'USD' }
+  let(:project) { mock :project, :name => 'Project1', :activities => [activity], :currency => 'USD' }
   let(:report) { Reports::ProjectLocations.new(project) }
   let(:locations) { [ LocationSplit.new(location.name, 25.0, 10.0),
                       LocationSplit.new(location.name, 20.0, 5.0) ] }
 
-  it "should give total org spend" do
-    report.total_spend.should == 10
+  context "#total_spend" do
+    it "should give total location spend" do
+      report.stub(:method_from_class).with("DerpSpend").and_return :spend
+      report.stub(:method_from_class).with("DerpBudget").and_return :budget
+      report.total_spend.should == 45
+    end
+
+    it "works if a split has a value of nil" do
+      locations_with_nil = [ LocationSplit.new(location.name, 25.0, 10.0),
+                             LocationSplit.new(location.name, nil, 5.0) ]
+      report.stub(:locations).and_return(locations_with_nil)
+      report.stub(:method_from_class).with("DerpSpend").and_return :spend
+      report.stub(:method_from_class).with("DerpBudget").and_return :budget
+      report.total_spend.should == 25
+    end
   end
 
-  it "should give total org budget" do
-    report.total_budget.should == 20
+  context "#total_budget" do
+    it "should give total location budget" do
+      report.stub(:method_from_class).with("DerpSpend").and_return :spend
+      report.stub(:method_from_class).with("DerpBudget").and_return :budget
+      report.total_budget.should == 15
+    end
+
+    it "works if a split has a value of nil" do
+      locations_with_nil = [ LocationSplit.new(location.name, 25.0, 10.0),
+                          LocationSplit.new(location.name, 20.0, nil) ]
+      report.stub(:locations).and_return(locations_with_nil)
+      report.stub(:method_from_class).with("DerpSpend").and_return :spend
+      report.stub(:method_from_class).with("DerpBudget").and_return :budget
+      report.total_budget.should == 10
+    end
   end
 
   it "should have a name" do
@@ -50,15 +73,15 @@ describe Reports::ProjectLocations do
   end
 
   it "should have expenditure pie" do
-    Charts::ProjectLocations::Spend.stub(:new).and_return(mock(:pie, :google_pie => ""))
-    Charts::ProjectLocations::Spend.should_receive(:new).once.with(locations)
+    Charts::Locations::Spend.stub(:new).and_return(mock(:pie, :google_pie => ""))
+    Charts::Locations::Spend.should_receive(:new).once.with(locations)
     report.should_receive(:locations).once.and_return locations
     pie = report.expenditure_pie
   end
 
   it "should have budget pie" do
-    Charts::ProjectLocations::Budget.stub(:new).and_return(mock(:pie, :google_pie => ""))
-    Charts::ProjectLocations::Budget.should_receive(:new).once.with(locations)
+    Charts::Locations::Budget.stub(:new).and_return(mock(:pie, :google_pie => ""))
+    Charts::Locations::Budget.should_receive(:new).once.with(locations)
     report.should_receive(:locations).once.and_return locations
     report.budget_pie
   end
@@ -83,29 +106,33 @@ describe Reports::ProjectLocations do
 
   describe "#percentage_change" do
     it "calculates the % spent last year against this years budget" do
+      report.stub(:total_spend).and_return 10
+      report.stub(:total_budget).and_return 20
       report.percentage_change.should == 100
     end
 
     it "calculates the % spent as negative" do
-      project.stub(:total_budget).and_return 5
+      report.stub(:total_spend).and_return 10
+      report.stub(:total_budget).and_return 5
       report.percentage_change.should == -50
     end
 
     it "should round to 1 decimal" do
-      project.stub(:total_spend).and_return 9.11
-      project.stub(:total_budget).and_return 11.23
+      report.stub(:total_spend).and_return 9.11
+      report.stub(:total_budget).and_return 11.23
       report.percentage_change.should == 23.3 #23.27 rounded up
     end
 
     it "calculates correctly if spend is 0 (returns 0)" do
-      project.should_receive(:total_spend).once.and_return(0)
+      report.stub(:total_spend).and_return 0
+      report.stub(:total_budget).and_return 5
       report.percentage_change.should == 0
     end
 
     it "calculates correctly if budget is 0 (returns 0)" do
-      project.should_receive(:total_budget).once.and_return(0)
+      report.stub(:total_spend).and_return 10
+      report.stub(:total_budget).and_return 0
       report.percentage_change.should == 0
     end
   end
-
 end

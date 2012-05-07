@@ -40,39 +40,18 @@ module Reports
     # which is easier than dealing with hashes or individual
     # CodingBudgetDistrict / CodingSpendDistrict objects
     def create_location_splits
-      mapped_data = map_data(budget_and_spend_codings)
+      mapped_data = map_data(codings)
       mapped_data.inject([]){ |splits, e|  splits << LocationSplit.new(e[0], e[1][:spend], e[1][:budget])}
     end
 
-    # Combines collection of CodingBudgetDistrict and CodingSpendDistrict objects
-    # into a single hash, keyed by Location (Code) name
-    # E.g.
-    #   { "Location1" => {:spend => 10, :budget => 10} }
-    #
-    def map_data(collection)
-      collection.inject({}) do |result,e|
-        result[e.name] ||= {}
-        result[e.name][method_from_class(e.class.to_s)] ||= 0
-        result[e.name][method_from_class(e.class.to_s)] += e.cached_amount.to_f
-        result
-      end
-    end
-
     # All CodingBudgetDistrict and CodingSpendDistrict objects for given response
-    def budget_and_spend_codings
+    def codings
       (retrieve_codings(@response.activities, :budget) +
        retrieve_codings(@response.activities, :spend)).flatten
     end
 
     def retrieve_codings(activities, method)
       activities.map { |a| a.send("coding_#{method}_district") }
-    end
-
-    def method_from_class(klass_string)
-      case klass_string
-      when "CodingSpendDistrict" then :spend
-      when "CodingBudgetDistrict" then :budget
-      end
     end
   end
 end

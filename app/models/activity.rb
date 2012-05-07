@@ -106,7 +106,6 @@ class Activity < ActiveRecord::Base
                                     ON data_responses.organization_id = organizations.id" }
   named_scope :manager_approved,     { :conditions => ["am_approved = ?", true] }
   named_scope :sorted,               { :order => "activities.name" }
-  named_scope :sorted_by_id,               { :order => "activities.id" }
 
   ### Class Methods
   def self.only_simple_activities(activities)

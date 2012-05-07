@@ -52,7 +52,7 @@ describe Reports::OrganizationLocations do
 
     it "works if a split has a value of nil" do
       locations_with_nil = [ LocationSplit.new(location.name, 25.0, 10.0),
-                          LocationSplit.new(location.name, nil, 5.0) ]
+                             LocationSplit.new(location.name, nil, 5.0) ]
       report.stub(:locations).and_return(locations_with_nil)
       report.stub(:method_from_class).with("DerpSpend").and_return :spend
       report.stub(:method_from_class).with("DerpBudget").and_return :budget

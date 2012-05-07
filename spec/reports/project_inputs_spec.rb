@@ -92,15 +92,15 @@ describe Reports::ProjectInputs do
   # pie data
 
   it "should have expenditure pie" do
-    Charts::ProjectInputs::Spend.stub(:new).and_return(mock(:pie, :google_pie => ""))
-    Charts::ProjectInputs::Spend.should_receive(:new).once.with(inputs)
+    Charts::Inputs::Spend.stub(:new).and_return(mock(:pie, :google_pie => ""))
+    Charts::Inputs::Spend.should_receive(:new).once.with(inputs)
     report.should_receive(:inputs).once.and_return inputs
     pie = report.expenditure_pie
   end
 
   it "should have budget pie" do
-    Charts::ProjectInputs::Budget.stub(:new).and_return(mock(:pie, :google_pie => ""))
-    Charts::ProjectInputs::Budget.should_receive(:new).once.with(inputs)
+    Charts::Inputs::Budget.stub(:new).and_return(mock(:pie, :google_pie => ""))
+    Charts::Inputs::Budget.should_receive(:new).once.with(inputs)
     report.should_receive(:inputs).once.and_return inputs
     report.budget_pie
   end

@@ -10,20 +10,26 @@ class DerpBudget; end
 describe Reports::OrganizationInputs do
   let(:input) { mock :input, :name => 'L0'}
   let(:input1) { mock :input, :name => 'L1' }
-  let(:ssplit) { mock :leaf_spend_inputs, :code => input, :cached_amount => 25,
-                 :name => input.name, :class => DerpSpend }
-  let(:ssplit1) { mock :leaf_spend_inputs, :code => input1, :cached_amount => 20,
-                  :name => input1.name , :class => DerpSpend }
-  let(:bsplit) { mock :leaf_budget_inputs, :code => input, :cached_amount => 10,
-                 :name => input.name , :class => DerpBudget }
-  let(:bsplit1) { mock :leaf_budget_inputs, :code => input1, :cached_amount => 5,
-                  :name => input1.name , :class => DerpBudget }
-  let(:activity) { mock :activity, :name => 'act', :leaf_spend_inputs => [ssplit, ssplit1],
+  let(:ssplit) { mock :leaf_spend_inputs, :code => input,
+                 :cached_amount => 25, :name => input.name,
+                 :class => DerpSpend }
+  let(:ssplit1) { mock :leaf_spend_inputs, :code => input1,
+                  :cached_amount => 20, :name => input1.name,
+                  :class => DerpSpend }
+  let(:bsplit) { mock :leaf_budget_inputs, :code => input,
+                 :cached_amount => 10, :name => input.name,
+                 :class => DerpBudget }
+  let(:bsplit1) { mock :leaf_budget_inputs, :code => input1,
+                  :cached_amount => 5, :name => input1.name,
+                  :class => DerpBudget }
+  let(:activity) { mock :activity, :name => 'act',
+                   :leaf_spend_inputs => [ssplit, ssplit1],
                    :leaf_budget_inputs => [bsplit, bsplit1] }
-  let(:response) { mock :response, :activities => [activity], :name => 'FY14 Exp', :currency => 'USD' }
+  let(:response) { mock :response, :activities => [activity],
+                   :name => 'FY14 Exp', :currency => 'USD' }
   let(:report) { Reports::OrganizationInputs.new(response) }
   let(:inputs) { [ InputSplit.new(input.name, 25.0, 10.0),
-                      InputSplit.new(input.name, 20.0, 5.0) ] }
+                   InputSplit.new(input.name, 20.0, 5.0) ] }
 
   it "initializes data from given response" do
     report.response.should == response
