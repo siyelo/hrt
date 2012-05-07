@@ -26,10 +26,12 @@ ActionController::Routing::Routes.draw do |map|
     admin.resources :responses, :only => [:index]
     admin.resources :organizations,
       :collection => {:duplicate => :get, :remove_duplicate  => :put,
-                      :download_template => :get, :create_from_file => :post}
-    admin.resources :reports, :only => [:index, :show],
-      :member => { :generate => :get },
-      :collection => { :mark_implementer_splits => :put}
+        :download_template => :get, :create_from_file => :post}
+    admin.namespace :reports do |reports|
+      reports.resources :detailed, :only => [:index, :show],
+        :member => { :generate => :get },
+        :collection => { :mark_implementer_splits => :put}
+    end
     admin.resources :documents, :as => :files
     admin.resources :currencies, :except => [:show]
     admin.resources :users, :except => [:show],
@@ -45,15 +47,15 @@ ActionController::Routing::Routes.draw do |map|
   # REPORTER USER: DATA ENTRY
   map.resources :responses, :only => [],
     :member => {:review => :get, :submit => :put, :restart => :put,
-                :reject => :put, :accept => :put,
-                :send_data_response => :put, :approve_all_budgets => :put}
+      :reject => :put, :accept => :put,
+      :send_data_response => :put, :approve_all_budgets => :put}
 
   map.resources :projects, :except => [:show],
     :collection => {:download_template => :get,
-                    :export_workplan => :get,
-                    :export => :get,
-                    :import => :post,
-                    :import_and_save => :post}
+      :export_workplan => :get,
+      :export => :get,
+      :import => :post,
+      :import_and_save => :post}
 
   map.resources :activities, :except => [:index, :show],
     :member => {:sysadmin_approve => :put, :activity_manager_approve => :put},
@@ -69,7 +71,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :documents, :as => :files
 
   map.resources :reports, :only => [:index],
-      :collection => {:inputs => :get, :locations => :get}
+    :collection => {:inputs => :get, :locations => :get}
   map.namespace :reports do |reports|
     reports.resources :activities, :only => [:show],
       :member => {:inputs => :get, :locations => :get}

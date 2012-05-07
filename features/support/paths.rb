@@ -16,9 +16,6 @@ module NavigationHelpers
     when /the dashboard/
       dashboard_path
 
-    when /admin reports/
-      admin_reports_path
-
     when /admin files/
       admin_documents_path
 

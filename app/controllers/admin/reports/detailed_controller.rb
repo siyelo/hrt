@@ -1,4 +1,4 @@
-class Admin::ReportsController < Admin::BaseController
+class Admin::Reports::DetailedController < Admin::BaseController
   include ReportsControllerHelpers
 
   ### Filters
@@ -22,7 +22,7 @@ class Admin::ReportsController < Admin::BaseController
     if @report.csv.exists?
       url = @report.private_csv_url
     else
-      url = admin_reports_path
+      url = admin_reports_detailed_index_path
       flash[:error] = "Report is not generated yet."
     end
 
@@ -48,7 +48,7 @@ class Admin::ReportsController < Admin::BaseController
       flash[:error] = 'Please select a file to upload'
     end
 
-    redirect_to admin_reports_url
+    redirect_to admin_reports_detailed_index_url
   end
 
   def generate
@@ -59,8 +59,8 @@ class Admin::ReportsController < Admin::BaseController
 
     @report = Report.find_or_create_by_key_and_data_request_id(params[:id], current_request.id)
     @report.generate_report_for_download(current_user)
-    flash[:notice] = "We are generating your report and will send you email (at #{current_user.email}) when it is ready."
-    redirect_to admin_reports_path
+    flash[:notice] = "We are generating your report and will send you an email (at #{current_user.email}) when it is ready."
+    redirect_to admin_reports_detailed_index_path
   end
 
   protected

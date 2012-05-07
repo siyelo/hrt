@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Admin::ReportsController do
+describe Admin::Reports::DetailedController do
   before :each do
     login_as_admin
   end
@@ -54,7 +54,7 @@ describe Admin::ReportsController do
 
       get :generate, :id => 'activity_overview'
       response.should be_redirect
-      flash[:notice].should == "We are generating your report and will send you email (at #{@admin.email}) when it is ready."
+      flash[:notice].should == "We are generating your report and will send you an email (at #{@admin.email}) when it is ready."
 
       unread_emails_for(@admin.email).size.should == 1
       open_email(@admin.email).body.should include('We have generated the report for you')
