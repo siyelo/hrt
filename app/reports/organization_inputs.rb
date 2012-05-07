@@ -1,21 +1,21 @@
 require 'app/reports/base'
-require 'app/charts/project_inputs'
+require 'app/charts/inputs'
 require 'app/models/input_split'
 
 module Reports
-  class ProjectInput < Reports::Base
-    attr_reader :project
+  class OrganizationInputs < Reports::Base
+    attr_reader :response
 
-    def initialize(project)
-      @project = project
+    def initialize(response)
+      @response = response
     end
 
     def name
-      @project.name
+      @response.name
     end
 
     def currency
-      @project.currency
+      @response.currency
     end
 
     def inputs
@@ -35,11 +35,11 @@ module Reports
     end
 
     def expenditure_pie
-      Charts::ProjectInputs::Spend.new(inputs).google_pie
+      Charts::Inputs::Spend.new(inputs).google_pie
     end
 
     def budget_pie
-      Charts::ProjectInputs::Budget.new(inputs).google_pie
+      Charts::Inputs::Budget.new(inputs).google_pie
     end
 
     private
@@ -66,10 +66,10 @@ module Reports
       end
     end
 
-    # All CodingBudgetDistrict and CodingSpendDistrict objects for given project
+    # All CodingBudgetDistrict and CodingSpendDistrict objects for given response
     def budget_and_spend_codings
-      (retrieve_codings(@project.activities, :budget) +
-       retrieve_codings(@project.activities, :spend)).flatten
+      (retrieve_codings(@response.activities, :budget) +
+       retrieve_codings(@response.activities, :spend)).flatten
     end
 
     def retrieve_codings(activities, method)
@@ -77,7 +77,10 @@ module Reports
     end
 
     def method_from_class(klass_string)
-      klass_string.match("Spend") ? :spend : :budget
+      case klass_string
+      when "CodingSpendCostCategorization" then :spend
+      when "CodingBudgetCostCategorization" then :budget
+      end
     end
   end
 end

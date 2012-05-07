@@ -6,12 +6,12 @@ class Reports::ActivitiesController < BaseController
   end
 
   def locations
-    @report = Reports::ActivityLocation.new(@activity)
+    @report = Reports::ActivityLocations.new(@activity)
     render :partial => '/reports/shared/report_data', :layout => false
   end
 
   def inputs
-    @report = Reports::ActivityInput.new(@activity)
+    @report = Reports::ActivityInputs.new(@activity)
     render :partial => '/reports/shared/report_data', :layout => false
   end
 

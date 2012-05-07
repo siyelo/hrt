@@ -3,11 +3,11 @@ require 'app/charts/locations'
 require 'app/models/location_split'
 
 module Reports
-  class Location < Reports::Base
-    attr_reader :response
+  class ActivityLocations < Reports::Base
+    attr_reader :activity
 
-    def initialize(response)
-      @response = response
+    def initialize(activity)
+      @activity = activity
     end
 
     def locations
@@ -16,6 +16,10 @@ module Reports
 
     def collection
       locations
+    end
+
+    def currency
+      activity.currency
     end
 
     def total_spend
@@ -58,10 +62,10 @@ module Reports
       end
     end
 
-    # All CodingBudgetDistrict and CodingSpendDistrict objects for given response
+    # All CodingBudgetDistrict and CodingSpendDistrict objects for given activity
     def budget_and_spend_codings
-      (retrieve_codings(@response.activities, :budget) +
-       retrieve_codings(@response.activities, :spend)).flatten
+      (retrieve_codings([activity], :budget) +
+       retrieve_codings([activity], :spend)).flatten
     end
 
     def retrieve_codings(activities, method)

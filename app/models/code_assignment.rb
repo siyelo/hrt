@@ -1,5 +1,3 @@
-require 'app/models/codes/location' #annoying but required because it keeps using app/reports/location
-
 class CodeAssignment < ActiveRecord::Base
   include CurrencyNumberHelper
 

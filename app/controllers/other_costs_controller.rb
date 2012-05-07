@@ -4,7 +4,6 @@ class OtherCostsController < BaseController
   inherit_resources
   helper_method :sort_column, :sort_direction
   before_filter :confirm_activity_type, :only => [:edit]
-  belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
 
   def new
     self.load_other_cost_new

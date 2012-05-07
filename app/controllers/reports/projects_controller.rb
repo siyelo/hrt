@@ -13,7 +13,7 @@ class Reports::ProjectsController < BaseController
 
   def inputs
     @project = current_response.projects.find(params[:id])
-    @report = Reports::ProjectInput.new(@project)
+    @report = Reports::ProjectInputs.new(@project)
     render :partial => '/reports/shared/report_data', :layout => false
   end
 end

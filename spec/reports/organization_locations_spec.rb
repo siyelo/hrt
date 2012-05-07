@@ -2,12 +2,12 @@ require File.dirname(__FILE__) + '/../spec_helper_lite'
 
 $: << File.join(APP_ROOT, "app/reports")
 
-require 'app/reports/location'
+require 'app/reports/organization_locations'
 
 class DerpSpend; end
 class DerpBudget; end
 
-describe Reports::Location do
+describe Reports::OrganizationLocations do
   let(:location) { mock :location, :name => 'L0'}
   let(:location1) { mock :location, :name => 'L1' }
   let(:ssplit) { mock :coding_spend_district, :code => location,
@@ -27,7 +27,7 @@ describe Reports::Location do
                    :coding_budget_district => [bsplit, bsplit1] }
   let(:response) { mock :response, :activities => [activity],
                    :name => 'FY14 Exp', :currency => 'USD' }
-  let(:report) { Reports::Location.new(response) }
+  let(:report) { Reports::OrganizationLocations.new(response) }
   let(:locations) { [ LocationSplit.new(location.name, 25.0, 10.0),
                       LocationSplit.new(location.name, 20.0, 5.0) ] }
 

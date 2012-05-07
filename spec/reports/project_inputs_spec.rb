@@ -2,12 +2,12 @@ require File.dirname(__FILE__) + '/../spec_helper_lite'
 
 $: << File.join(APP_ROOT, "app/reports")
 
-require 'app/reports/project_input'
+require 'app/reports/project_inputs'
 
 class DerpSpend; end
 class DerpBudget; end
 
-describe Reports::ProjectInput do
+describe Reports::ProjectInputs do
   let(:input) { mock :input, :name => 'L0'}
   let(:input1) { mock :input, :name => 'L1' }
   let(:ssplit) { mock :leaf_spend_inputs, :code => input, :cached_amount => 25,
@@ -23,7 +23,7 @@ describe Reports::ProjectInput do
 
   let(:project) { mock :project, :activities => [activity],
     :total_spend => 10, :total_budget => 20, :name => 'Project1', :currency => 'USD' }
-  let(:report) { Reports::ProjectInput.new(project) }
+  let(:report) { Reports::ProjectInputs.new(project) }
   let(:inputs) { [ InputSplit.new(input.name, 25.0, 10.0),
                    InputSplit.new(input.name, 20.0, 5.0) ] }
 
