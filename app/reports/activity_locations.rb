@@ -1,8 +1,8 @@
-require 'app/charts/locations'
+require 'app/reports/organization_locations'
 require 'app/models/location_split'
 
 module Reports
-  class ActivityLocation < Reports::OrganizationLocations
+  class ActivityLocations < Reports::OrganizationLocations
     attr_reader :activity
 
     def initialize(activity)
@@ -14,7 +14,7 @@ module Reports
     end
 
     def currency
-      activity.currency
+      activity.data_response.currency
     end
 
     private

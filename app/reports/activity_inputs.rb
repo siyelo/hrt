@@ -3,7 +3,7 @@ require 'app/charts/inputs'
 require 'app/models/input_split'
 
 module Reports
-  class ActivityInput < Reports::OrganizationInputs
+  class ActivityInputs < Reports::OrganizationInputs
     attr_reader :activity
 
     def initialize(activity)
@@ -15,7 +15,7 @@ module Reports
     end
 
     def currency
-      activity.currency
+      activity.data_response.currency
     end
 
     private
