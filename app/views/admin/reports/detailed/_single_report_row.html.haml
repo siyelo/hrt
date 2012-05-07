@@ -1,0 +1,10 @@
+- rep = @report_map[key]
+
+- if rep
+  %tr
+    %td= title
+    %td{:colspan => '2'}
+      = link_to "Export combined (Expenditures and Budgets)", admin_reports_detailed_path(rep), :title => 'CSV (Comma Separated Value) report', :class => "sml_btn"
+      .regenerate= link_to image_tag("icon_regenerate.png"), generate_admin_reports_detailed_path(key), :title => 'Regenerate report'
+      .hint= "(updated #{distance_of_time_in_words_to_now(rep.csv_updated_at)} ago)" if rep.csv_updated_at
+
