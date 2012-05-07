@@ -24,7 +24,7 @@
         >
   %h1= @report.activity.name
 
-.reports_summary.section_base.section_form.bordered
+.reports_summary.section_form.top
   %p.summary_col
     %span Total Expenditure
     %span.currency= @report.currency
@@ -38,8 +38,9 @@
     %span.currency %
     = @report.percentage_change
 
-%ul.group.connect#tabs-container
-  = render '/reports/shared/activity_tabs'
+.section_overlap
+  %ul.section_nav#tabs-container
+    = render '/reports/shared/activity_tabs'
 
 
 #charts_tables

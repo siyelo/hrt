@@ -9,7 +9,7 @@
 %h1.request_nav
   = render '/shared/request_nav'
 
-.reports_summary.section_base.section_form.single
+.reports_summary.section_form.top
   %p.summary_col
     %span Total Expenditure
     %span.currency= @report.currency
@@ -23,8 +23,9 @@
     %span.currency %
     = @report.percentage_change
 
-%ul.group.connect#tabs-container
-  = render :partial => 'reports/shared/tabs'
+.section_overlap
+  %ul.section_nav#tabs-container
+    = render :partial => 'reports/shared/tabs'
 
 #charts_tables
   .projects_tab{:"data-loaded" => 'true'}
