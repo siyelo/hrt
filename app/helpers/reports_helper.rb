@@ -5,6 +5,8 @@ module ReportsHelper
     name = element.name.presence || "no name"
 
     case params[:controller]
+    when "admin/reports"
+      name
     when "reports"
       case params[:action]
       when 'index'

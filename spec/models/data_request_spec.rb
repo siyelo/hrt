@@ -22,6 +22,11 @@ describe DataRequest do
     it { should_not allow_value('2010-12-41').for(:start_date) }
   end
 
+  describe "AliasAttributes" do
+    dr = Factory.build(:data_request, :title => "blar")
+    dr.name.should == "blar"
+  end
+
   describe "Callbacks" do
     # after_create :create_data_responses
     it "creates data_responses for each reporting organization after data_request is created" do

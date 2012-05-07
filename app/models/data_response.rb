@@ -37,7 +37,7 @@ class DataResponse < ActiveRecord::Base
     :conditions => ["state = ?", state] } }
 
   ### Delegates
-  delegate :name, :to => :data_request
+  delegate :name, :to => :organization
   delegate :title, :to => :data_request
   delegate :currency, :fiscal_year_start_date, :fiscal_year_end_date,
     :contact_name, :contact_position, :contact_phone_number,
@@ -51,10 +51,6 @@ class DataResponse < ActiveRecord::Base
 
   def request
     self.data_request
-  end
-
-  def name
-    data_request.try(:title) # some responses does not have data_requst (bug was on staging)
   end
 
   private

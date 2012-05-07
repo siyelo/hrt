@@ -5,7 +5,7 @@ describe DashboardController do
     describe "it should be protected" do
       before :each do get :index end
       it { should redirect_to(root_url) }
-      it { should set_the_flash.to("You must be logged in to access this page") }
+      it { should set_the_flash.to("You must be logged in to access that page") }
     end
   end
 

@@ -8,7 +8,7 @@
 
       - if current_user.sysadmin? && is_admin_controller
         = build_admin_nav_tab('responses', admin_responses_path)
-        = build_admin_nav_tab('reports', admin_documents_path)
+        = build_admin_nav_tab('reports', admin_reports_path)
         = build_admin_nav_tab('organizations', admin_organizations_path)
         = build_admin_nav_tab('users', admin_users_path)
         = build_admin_nav_tab('currencies', admin_currencies_path)
