@@ -14,6 +14,9 @@ Feature: Admin can view reports
     And I follow "Dynamic"
     And I should see "data_request1" within "h1"
     Then I should see "Dynamic Reports" within "h2"
+    And I should see "Generate combined (Expenditures and Budgets)" within ".data"
+    When I follow "Generate combined (Expenditures and Budgets)"
+    Then I should see "Export combined (Expenditures and Budgets)"
 
   Scenario: See reports -> files
     When I follow "Reports"
