@@ -1,69 +1,56 @@
 class OtherCostsController < BaseController
   SORTABLE_COLUMNS = ['description', 'past expenditure', 'current budget']
 
-  inherit_resources
   helper_method :sort_column, :sort_direction
   before_filter :confirm_activity_type, :only => [:edit]
+  before_filter :prevent_activity_manager, :only => [:create, :update, :destroy]
 
   def new
     self.load_other_cost_new
   end
 
   def edit
-    warn_if_not_classified(resource)
-    prepare_classifications(resource)
-    load_comment_resources(resource)
-    paginate_splits(resource)
-    edit!
+    @other_cost = @response.other_costs.find(params[:id])
+    warn_if_not_classified(@other_cost)
+    prepare_classifications(@other_cost)
+    load_comment_resources(@other_cost)
+    paginate_splits(@other_cost)
   end
 
   def create
     @other_cost = @response.other_costs.new(params[:other_cost])
-    if check_activity_manager_permissions(@other_cost.organization) && @other_cost.save
-      respond_to do |format|
-        format.html { success_flash("created"); html_redirect }
-      end
+    if @other_cost.save
+      success_flash("created")
+      html_redirect
     else
-      respond_to do |format|
-        format.html { paginate_splits(resource); render :action => 'new' }
-      end
+      paginate_splits(@other_cost)
+      render :action => 'new'
     end
   end
 
   def update
-    @other_cost = OtherCost.find(params[:id])
-    if check_activity_manager_permissions(@other_cost.organization) &&
-      !@other_cost.am_approved?(current_user) &&
-      @other_cost.update_attributes(params[:other_cost])
-     respond_to do |format|
-       format.html { success_flash("updated"); html_redirect }
-     end
+    @other_cost = @response.other_costs.find(params[:id])
+    if !@other_cost.am_approved?(current_user) &&
+        @other_cost.update_attributes(params[:other_cost])
+      success_flash("updated")
+      html_redirect
     else
-     respond_to do |format|
-       format.html { flash[:error] = ("Other Cost was already approved by #{@other_cost.user.try(:full_name)} " +
-                                      "(#{@other_cost.user.try(:email)}) " +
-                                      "on #{@other_cost.am_approved_date}") if @other_cost.am_approved?(current_user)
-                     prepare_classifications(resource)
-                     load_comment_resources(resource)
-                     paginate_splits(resource)
-                     render :action => 'edit'
-                   }
-     end
+      if @other_cost.am_approved?(current_user)
+        flash[:error] = ("Other Cost was already approved by #{@other_cost.user.try(:full_name)}
+                         (#{@other_cost.user.try(:email)}) on #{@other_cost.am_approved_date}")
+      end
+      prepare_classifications(@other_cost)
+      load_comment_resources(@other_cost)
+      paginate_splits(@other_cost)
+      render :action => 'edit'
     end
   end
 
   def destroy
-    @other_cost = OtherCost.find params[:id]
-    if check_activity_manager_permissions(@other_cost.organization)
-      destroy! do |success, failure|
-        success.html do
-          flash[:notice] = 'Other Cost was successfully destroyed'
-          redirect_to projects_url
-        end
-      end
-    else
-      render :action => :edit
-    end
+    @other_cost = @response.other_costs.find(params[:id])
+    @other_cost.destroy
+    flash[:notice] = 'Other Cost was successfully destroyed'
+    redirect_to projects_url
   end
 
   private

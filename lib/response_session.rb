@@ -4,6 +4,7 @@ module ResponseSession
     klass.send(:include, InstanceMethods)
     klass.class_eval do
       before_filter :set_current_response
+      before_filter :set_url_options
     end
   end
 
@@ -27,6 +28,14 @@ module ResponseSession
     private
       def set_current_response
         set_response(detect_response)
+      end
+
+      def set_url_options
+        if current_user && current_response &&
+            (current_user.sysadmin? || current_user.activity_manager?) &&
+            (!params[:controller].include?('admin') || !params[:controller] == 'dashboard')
+          @url_options = { :response_id => current_response.id }
+        end
       end
 
       def set_response(response)
@@ -64,8 +73,10 @@ module ResponseSession
 
       # TODO: add other report controllers
       def switch_to_last_response?(current_response, last_response)
-        current_user.role?('reporter') && current_response != last_response &&
-          !['reports', 'reports/projects'].include?(params[:controller])
+        current_user.role?('reporter') &&
+          !current_user.activity_manager? &&
+          current_response != last_response &&
+          !['reports', 'reports/projects', 'reports/activities'].include?(params[:controller])
       end
 
       def response_for_request(request)

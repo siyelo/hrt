@@ -104,34 +104,31 @@ describe OtherCostsController do
       end
 
       it "disallows an activity manager to create an other_cost" do
-        @other_cost.delete
-        request.env["HTTP_REFERER"] = new_other_cost_path(@data_response)
-        post :create, :response_id => @data_response.id,
-          :other_cost => {:project_id => '-1', :name => "new other_cost", :description => "description",
-            "implementer_splits_attributes"=>
-              {"0"=> {"updated_at" => Time.now, "spend"=>"2", "data_response_id"=>"#{@data_response.id}",
-                "organization_mask"=>"#{@organization.id}", "budget"=>"4"}}}
+        request.env["HTTP_REFERER"] = new_other_cost_path(:response_id => @data_response.id)
 
+        controller.should_not_receive(:create)
+        post :create, :response_id => @data_response.id
         flash[:error].should == "You do not have permission to edit this resource"
-        response.should render_template("new")
+        response.should redirect_to(new_other_cost_path(:response_id => @data_response.id))
       end
 
       it "disallows an activity manager to update an other_cost" do
-        request.env["HTTP_REFERER"] = edit_other_cost_path(@other_cost)
-        put :update, :id => @other_cost.id, :response_id => @data_response.id,
-          :other_cost => {:description => "thedesc", :project_id => @project.id}
+        request.env["HTTP_REFERER"] = edit_other_cost_path(@other_cost,
+                                       :response_id => @other_cost.response.id )
 
+        controller.should_not_receive(:update)
+        put :update, :id => @other_cost.id, :response_id => @data_response.id
         flash[:error].should == "You do not have permission to edit this resource"
-        response.should render_template("edit")
-        @other_cost.description.should_not == "thedesc"
+        response.should redirect_to(edit_other_cost_path(@other_cost, :response_id => @data_response.id))
       end
 
 
       it "disallows an activity manager to destroy an other_cost" do
-        request.env["HTTP_REFERER"] = edit_other_cost_url(@data_response, @other_cost)
-        @other_cost = Factory(:other_cost, :data_response => @data_response, :project => @project)
+        request.env["HTTP_REFERER"] = edit_other_cost_url(@other_cost, :response_id => @data_response.id)
+        controller.should_not_receive(:destroy)
         delete :destroy, :id => @other_cost.id, :response_id => @data_response.id
         flash[:error].should == "You do not have permission to edit this resource"
+        response.should redirect_to(edit_other_cost_path(@other_cost, :response_id => @data_response.id))
       end
     end
 
@@ -161,16 +158,18 @@ describe OtherCostsController do
       end
 
       it "disallows the editing of organization the reporter is not in" do
+        request.env['HTTP_REFERER'] = edit_other_cost_path(@other_cost,
+                                        :response_id => @other_cost.response.id)
         @organization2 = Factory :organization
         @user = Factory :user, :roles => ['reporter', 'activity_manager'],
           :organization => @organization2
         @user.organizations << @organization
         login @user
-        session[:return_to] = edit_other_cost_url(@data_response, @other_cost)
-        put :update, :id => @other_cost.id, :response_id => @data_response.id,
-          :other_cost => {:description => "thedesc", :project_id => @project.id}
 
-        @other_cost.description.should_not == "thedesc"
+        controller.should_not_receive(:update)
+        put :update, :id => @other_cost.id, :response_id => @other_cost.data_response.id
+        flash[:error].should == "You do not have permission to edit this resource"
+        response.should redirect_to(edit_other_cost_path(@other_cost, :response_id => @data_response.id))
       end
     end
 

@@ -21,6 +21,7 @@ GEM
       activesupport (= 2.3.14)
     activesupport (2.3.14)
     acts_as_tree (0.2.0)
+    addressable (2.2.8)
     akephalos (0.2.4)
       capybara (~> 0.3.8)
       jruby-jars
@@ -207,6 +208,7 @@ PLATFORMS
 DEPENDENCIES
   SystemTimer
   acts_as_tree
+  addressable
   akephalos
   annotate
   ar_strip_commas

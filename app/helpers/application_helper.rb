@@ -233,4 +233,29 @@ module ApplicationHelper
   def js_safe(var)
     var.nil? ? "undefined" : var
   end
+
+  # Overrides url_for to inject response_id in the URL
+  def url_for(options={})
+    options = case options
+    when String
+      require 'addressable/uri'
+      uri = Addressable::URI.new
+      uri.query_values = @url_options
+
+      if @url_options.present? && !options.include?('response_id')
+        options = options + (options.index('?').nil? ? '?' : '&') + uri.query
+      end
+      options
+    when Hash
+      if @url_options.present? && !options.include?(:response_id)
+        options = options.reverse_merge(@url_options)
+      end
+      options
+    else
+      options
+    end
+
+    super
+  end
+
 end

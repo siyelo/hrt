@@ -17,7 +17,6 @@ module UserAuthentication
       store_location
       flash[:error] = "You must be logged in to access this page"
       redirect_to root_url
-      return false
     end
   end
 
@@ -26,7 +25,6 @@ module UserAuthentication
       store_location
       flash[:error] = "You must be an administrator to access that page"
       redirect_to root_url
-      return false
     end
   end
 
@@ -35,7 +33,6 @@ module UserAuthentication
       store_location
       flash[:error] = "You must be an activity manager to access that page"
       redirect_to root_url
-      return false
     end
   end
 
@@ -43,7 +40,15 @@ module UserAuthentication
     if current_user
       flash[:error] = "You must be logged out to access requested page"
       redirect_to root_path
-      return false
+    end
+  end
+
+  def prevent_activity_manager
+    if current_user.activity_manager? &&
+      !(current_user.sysadmin? || (current_user.reporter? &&
+          current_user.organization.data_responses.include?(current_response)))
+      flash[:error] = "You do not have permission to edit this resource"
+      redirect_to :back
     end
   end
 

@@ -1,18 +1,16 @@
 class ReportsController < BaseController
 
   def index
-    @report = Reports::Organization.new(@response)
+    @report = Reports::Organization.new(current_response)
   end
 
   def locations
-    @current_response = current_response
-    @report = Reports::OrganizationLocations.new(@current_response)
+    @report = Reports::OrganizationLocations.new(current_response)
     render :partial => '/reports/shared/report_data', :layout => false
   end
 
   def inputs
-    @current_response = current_response
-    @report = Reports::OrganizationInputs.new(@current_response)
+    @report = Reports::OrganizationInputs.new(current_response)
     render :partial => '/reports/shared/report_data', :layout => false
   end
 end

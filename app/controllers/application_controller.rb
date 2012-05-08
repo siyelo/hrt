@@ -12,20 +12,13 @@ class ApplicationController < ActionController::Base
   include ApplicationHelper
   include SslRequirement
   include Exporter
-  include ActivityManagerPermissions
   include UserAuthentication
   include ResponseSession
 
-  class AccessDenied < StandardError; end
-  rescue_from AccessDenied do |exception|
-    flash[:error] = "You are not authorized to do that"
+  rescue_from ActionController::MethodNotAllowed do
+    flash[:error] = "I'm sorry, that page is not available"
     redirect_to root_url
   end
-
-  # rescue_from ActionController::MethodNotAllowed do
-  #   flash[:error] = "I'm sorry, that page is not available"
-  #   redirect_to root_url
-  # end
 
   protected
     # Require SSL for all actions in all controllers

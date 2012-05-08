@@ -24,6 +24,7 @@ gem 'SystemTimer', :require => 'system_timer', :platforms => :ruby_18
 gem 'validates_timeliness', '~> 2.3'
 gem 'version'
 gem 'will_paginate', '~> 2.3.11'
+gem 'addressable'
 
 group :development do
   gem 'annotate'

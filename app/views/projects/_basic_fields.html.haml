@@ -1,5 +1,6 @@
 - project_id = f.object.id
 %ul.condensed_fields
+  = f.hidden_field :data_response_id, :value => current_response.id
   %li#project_name_input.string.required
     .name
       = f.label :name, "Name"

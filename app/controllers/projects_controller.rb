@@ -5,11 +5,15 @@ class ProjectsController < BaseController
 
   SORTABLE_COLUMNS = ['name']
 
-  inherit_resources
   helper_method :sort_column, :sort_direction
   before_filter :strip_commas_from_in_flows, :only => [:create, :update]
   before_filter :prevent_browser_cache, :only => [:index, :edit, :update] # firefox misbehaving
   before_filter :require_admin, :only => [:import_and_save]
+  before_filter :prevent_activity_manager, :only => [:create, :update, :destroy]
+
+  def new
+    @project = @response.projects.new
+  end
 
   def index
     scope = @response.projects.scoped({})
@@ -28,13 +32,13 @@ class ProjectsController < BaseController
   end
 
   def edit
-    load_comment_resources(resource)
-    edit!
+    @project = @response.projects.find(params[:id])
+    load_comment_resources(@project)
   end
 
   def create
     @project = Project.new(params[:project].merge(:data_response => @response))
-    if check_activity_manager_permissions(@project.organization) && @project.save
+    if @project.save
       respond_to do |format|
         format.html do
           flash[:notice] = "Project successfully created";
@@ -51,9 +55,8 @@ class ProjectsController < BaseController
   end
 
   def update
-    @project = Project.find(params[:id])
-    if check_activity_manager_permissions(@project.organization) &&
-      @project.update_attributes(params[:project])
+    @project = @response.projects.find(params[:id])
+    if @project.update_attributes(params[:project])
       respond_to do |format|
         format.html {
           flash[:notice] = "Project successfully updated";
@@ -63,17 +66,17 @@ class ProjectsController < BaseController
       end
     else
       respond_to do |format|
-        format.html {load_comment_resources(resource); render :action => 'edit'}
+        format.html {load_comment_resources(@project); render :action => 'edit'}
         format.js {js_redirect('failed')}
       end
     end
   end
 
   def destroy
-    @project = Project.find(params[:id])
-    if check_activity_manager_permissions(@project.organization)
-      destroy!
-    end
+    @project = @response.projects.find(params[:id])
+    @project.destroy
+    flash[:notice] = "Project was successfully destroyed"
+    redirect_to projects_url
   end
 
   def import

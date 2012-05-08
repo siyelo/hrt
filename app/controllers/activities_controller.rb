@@ -1,10 +1,10 @@
 class ActivitiesController < BaseController
   SORTABLE_COLUMNS = ['projects.name', 'description', 'spend', 'budget']
 
-  inherit_resources
   helper_method :sort_column, :sort_direction
   before_filter :confirm_activity_type, :only => [:edit]
   before_filter :require_admin, :only => [:sysadmin_approve]
+  before_filter :prevent_activity_manager, :only => [:create, :update, :destroy]
   before_filter :prevent_browser_cache, :only => [:edit, :update] # firefox misbehaving
 
   def new
@@ -12,46 +12,39 @@ class ActivitiesController < BaseController
   end
 
   def edit
-    warn_if_not_classified(resource)
-    prepare_classifications(resource)
-    load_comment_resources(resource)
-    load_validation_errors(resource) if on_implementers_page?
-    paginate_splits(resource)
-    edit!
+    @activity = @response.activities.find(params[:id])
+    warn_if_not_classified(@activity)
+    prepare_classifications(@activity)
+    load_comment_resources(@activity)
+    load_validation_errors(@activity) if on_implementers_page?
+    paginate_splits(@activity)
   end
 
   def create
     @activity = @response.activities.new(params[:activity])
-    if check_activity_manager_permissions(@activity.organization) && @activity.save
-      respond_to do |format|
-        format.html { success_flash("created"); html_redirect }
-      end
+    if @activity.save
+      success_flash("created")
+      html_redirect
     else
-      respond_to do |format|
-        format.html { paginate_splits(resource); render :action => 'new' }
-      end
+      paginate_splits(@activity)
+      render :action => 'new'
     end
   end
 
   def update
-    @activity = Activity.find(params[:id])
-    if check_activity_manager_permissions(@activity.organization)&&
-      !@activity.am_approved?(current_user) &&
-      @activity.update_attributes(params[:activity])
-      respond_to do |format|
-        format.html { success_flash("updated"); html_redirect }
-      end
+    @activity = @response.activities.find(params[:id])
+    if !@activity.am_approved?(current_user) &&
+        @activity.update_attributes(params[:activity])
+        success_flash("updated")
+        html_redirect
     else
-      respond_to do |format|
-        format.html { flash[:error] = ("Activity was already approved by #{@activity.user.try(:full_name)} " +
-                                      "(#{@activity.user.try(:email)}) on " +
-                                      "#{@activity.am_approved_date}") if @activity.am_approved?(current_user)
-                      prepare_classifications(resource)
-                      load_comment_resources(resource)
-                      paginate_splits(resource)
-                      render :action => 'edit'
-                    }
+      if @activity.am_approved?(current_user)
+        flash[:error] = ("Activity was already approved by #{@activity.user.try(:full_name)} (#{@activity.user.try(:email)}) on #{@activity.am_approved_date}")
       end
+      prepare_classifications(@activity)
+      load_comment_resources(@activity)
+      paginate_splits(@activity)
+      render :action => 'edit'
     end
   end
 
@@ -90,25 +83,11 @@ class ActivitiesController < BaseController
     end
   end
 
-  def template
-    template = Activity.download_header
-    send_csv(template, 'activities_template.csv')
-  end
-
-  def export
-    template = Activity.download_template(@response)
-    send_csv(template, 'activities.csv')
-  end
-
   def destroy
-    @activity = Activity.find params[:id]
-    if check_activity_manager_permissions(@activity.organization)
-      destroy! do |success, failure|
-        success.html { redirect_to projects_url }
-      end
-    else
-      render :action => :edit
-    end
+    activity = @response.activities.find(params[:id])
+    activity.destroy
+    flash[:notice] = 'Activity was successfully destroyed'
+    redirect_to projects_url
   end
 
   private

@@ -65,16 +65,6 @@ describe ActivitiesController do
       post :sysadmin_approve, :id => @activity.id
       flash[:error].should == "You must be an administrator to access that page"
     end
-
-    it "downloads csv template" do
-      data_response = mock_model(DataResponse)
-      DataResponse.stub(:find).and_return(data_response)
-      Activity.should_receive(:download_header).and_return('csv')
-      get :template
-      response.should be_success
-      response.header["Content-Type"].should == "text/csv; charset=iso-8859-1; header=present"
-      response.header["Content-Disposition"].should == "attachment; filename=activities_template.csv"
-    end
   end
 
   describe "Permissions" do
@@ -83,34 +73,30 @@ describe ActivitiesController do
         basic_setup_implementer_split_for_controller
         @user.roles = ['activity_manager']
         login @user
+        @activity = Factory(:activity, :data_response => @data_response, :project => @project)
+        request.env['HTTP_REFERER'] = edit_activity_path(@activity,
+                                        :response_id => @activity.response.id)
       end
 
       it "disallows creation of an activity" do
-        @activity.delete
-        post :create,
-          :activity => {:project_id => '-1', :name => "new activity",
-                        :description => "description",
-                        "implementer_splits_attributes"=>
-        {"0"=> {"spend"=>"2", "data_response_id"=>"#{@data_response.id}",
-          "organization_mask"=>"#{@organization.id}", "budget"=>"4"}}}
-
+        controller.should_not_receive(:create)
+        post :create
         flash[:error].should == "You do not have permission to edit this resource"
-        response.should render_template("new")
+        response.should redirect_to(edit_activity_path(@activity))
       end
 
       it "disallows updating of an activity" do
-        put :update, :id => @activity.id,
-          :activity => {:description => "thedesc", :project_id => @project.id}
-
+        controller.should_not_receive(:create)
+        put :update, :id => @activity.id
         flash[:error].should == "You do not have permission to edit this resource"
-        response.should render_template("edit")
-        @activity.description.should_not == "thedesc"
+        response.should redirect_to(edit_activity_path(@activity))
       end
 
       it "disallows destroying of an activity" do
-        @activity = Factory(:activity, :data_response => @data_response, :project => @project)
+        controller.should_not_receive(:create)
         delete :destroy, :id => @activity.id
         flash[:error].should == "You do not have permission to edit this resource"
+        response.should redirect_to(edit_activity_path(@activity))
       end
     end
 
@@ -133,16 +119,18 @@ describe ActivitiesController do
       end
 
       it "should not allow the editing of organization the reporter is not in" do
-        @organization2 = Factory :organization
+        request.env['HTTP_REFERER'] = edit_activity_path(@activity,
+                                        :response_id => @activity.response.id)
+        @organization2 = Factory :organization, :name => "organization2"
         @user2 = Factory :user, :roles => ['reporter', 'activity_manager'],
           :organization => @organization2
         @user2.organizations << @organization
         login @user2
-        session[:return_to] = edit_activity_url(@activity)
-        put :update, :id => @activity.id,
-          :activity => {:description => "thedesc", :project_id => @project.id}
 
-        @activity.reload.description.should_not == "thedesc"
+        controller.should_not_receive(:update)
+        put :update, :id => @activity.id, :response_id => @activity.data_response.id
+        flash[:error].should == "You do not have permission to edit this resource"
+        response.should redirect_to(edit_activity_path(@activity, :response_id => @data_response.id))
       end
     end
 
@@ -213,10 +201,12 @@ describe ActivitiesController do
     it "should allow a project to be created automatically on create" do
       #if the project_id is -1 then the controller should create a new project with name, start date and end date equal to that of the activity
       post :create,
-        :activity => {:project_id => '-1', :name => "new activity", :description => "description",
+        :activity => {:project_id => '-1', :name => "new activity",
+          :description => "description", "data_response_id"=>"#{@data_response.id}",
           "implementer_splits_attributes"=>
-      {"0"=> {"updated_at" => Time.now, "spend"=>"2", "data_response_id"=>"#{@data_response.id}",
-        "organization_mask"=>"#{@organization.id}", "budget"=>"4"}}}
+          {"0"=> {"updated_at" => Time.now, "spend"=>"2",
+                  "data_response_id" => "#{@data_response.id}",
+          "organization_mask"=>"#{@organization.id}", "budget"=>"4"}}}
       response.should be_redirect
       @new_activity = Activity.find_by_name('new activity')
       @new_activity.project.name.should == @new_activity.name

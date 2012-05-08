@@ -148,29 +148,28 @@ describe ProjectsController do
         @data_response = @organization.latest_response
         @project = Factory(:project, :data_response => @data_response)
         login @user
+        request.env['HTTP_REFERER'] = projects_url
       end
 
       it "disallows an activity manager to create an project" do
-        post :create,
-          :project => {:name => "new project", :description => "description"}
-
+        controller.should_not_receive(:create)
+        post :create
         flash[:error].should == "You do not have permission to edit this resource"
-        response.should render_template("new")
+        response.should redirect_to(projects_url)
       end
 
       it "disallows an activity manager to update an project" do
-        put :update, :id => @project.id,
-          :project => {:description => "thedesc", :project_id => @project.id}
-
+        controller.should_not_receive(:update)
+        put :update, :id => @project.id
         flash[:error].should == "You do not have permission to edit this resource"
-        response.should render_template("edit")
-        @project.description.should_not == "thedesc"
+        response.should redirect_to(projects_url)
       end
 
-
       it "allows an activity manager to destroy an project" do
+        controller.should_not_receive(:destroy)
         delete :destroy, :id => @project.id
         flash[:error].should == "You do not have permission to edit this resource"
+        response.should redirect_to(projects_url)
       end
     end
 
@@ -197,16 +196,16 @@ describe ProjectsController do
       end
 
       it "should not allow the editing of organization the reporter is not in" do
+        request.env['HTTP_REFERER'] = projects_url
         @organization2 = Factory :organization
         @user.organization = @organization2
         @user.organizations << @organization
         @user.save!
         login @user
         session[:return_to] = edit_project_url(@project)
-        put :update, :id => @project.id,
-          :project => {:description => "thedesc", :project_id => @project.id}
-
-        @project.description.should_not == "thedesc"
+        controller.should_not_receive(:update)
+        put :update, :id => @project.id, :response_id => @data_response.id
+        response.should redirect_to(projects_url)
       end
     end
 
