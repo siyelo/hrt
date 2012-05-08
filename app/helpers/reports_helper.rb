@@ -31,17 +31,4 @@ module ReportsHelper
       name
     end
   end
-
-  def unclassified_other_costs?
-    unclassified_other_costs_spend != 0 ||
-      unclassified_other_costs_budget != 0
-  end
-
-  def unclassified_other_costs_spend
-    ( current_response.total_spend || 0 ) - ( @report.total_spend || 0)
-  end
-
-  def unclassified_other_costs_budget
-    ( current_response.total_budget || 0 ) - ( @report.total_budget || 0)
-  end
 end

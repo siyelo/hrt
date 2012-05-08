@@ -10,19 +10,27 @@ class DerpBudget; end
 describe Reports::ProjectInputs do
   let(:input) { mock :input, :name => 'L0'}
   let(:input1) { mock :input, :name => 'L1' }
-  let(:ssplit) { mock :leaf_spend_inputs, :code => input, :cached_amount => 25,
-                 :name => input.name, :class => DerpSpend }
-  let(:ssplit1) { mock :leaf_spend_inputs, :code => input1, :cached_amount => 20,
-                  :name => input1.name , :class => DerpSpend }
-  let(:bsplit) { mock :leaf_budget_inputs, :code => input, :cached_amount => 10,
-                 :name => input.name , :class => DerpBudget }
-  let(:bsplit1) { mock :leaf_budget_inputs, :code => input1, :cached_amount => 5,
-                  :name => input1.name , :class => DerpBudget }
-  let(:activity) { mock :activity, :name => 'act', :leaf_spend_inputs => [ssplit, ssplit1],
-                   :leaf_budget_inputs => [bsplit, bsplit1] }
-
-  let(:project) { mock :project, :activities => [activity],
-    :total_spend => 10, :total_budget => 20, :name => 'Project1', :currency => 'USD' }
+  let(:ssplit) { mock :leaf_spend_inputs, :code => input,
+                 :cached_amount => 25, :name => input.name,
+                 :class => DerpSpend }
+  let(:ssplit1) { mock :leaf_spend_inputs, :code => input1,
+                  :cached_amount => 20, :name => input1.name,
+                  :class => DerpSpend }
+  let(:bsplit) { mock :leaf_budget_inputs, :code => input,
+                 :cached_amount => 10, :name => input.name,
+                 :class => DerpBudget }
+  let(:bsplit1) { mock :leaf_budget_inputs, :code => input1,
+                  :cached_amount => 5, :name => input1.name,
+                  :class => DerpBudget }
+  let(:activity) { mock :activity, :name => 'act',
+                   :coding_spend_district => [ssplit, ssplit1],
+                   :coding_budget_district => [bsplit, bsplit1],
+                   :total_spend => 45, :total_budget => 15 }
+  let(:other_cost) { mock :activity, :name => 'act',
+                     :total_spend => 25, :total_budget => 5}
+  let(:project) { mock :project, :name => 'Project1',
+                  :activities => [activity, other_cost], :currency => 'USD',
+                  :total_spend => 110, :total_budget => 100}
   let(:report) { Reports::ProjectInputs.new(project) }
   let(:inputs) { [ InputSplit.new(input.name, 25.0, 10.0),
                    InputSplit.new(input.name, 20.0, 5.0) ] }
@@ -39,37 +47,68 @@ describe Reports::ProjectInputs do
     report.currency.should == 'USD'
   end
 
-  context "#total_spend" do
-    it "should give total input spend" do
-      report.stub(:method_from_class).with("DerpSpend").and_return :spend
-      report.stub(:method_from_class).with("DerpBudget").and_return :budget
-      report.total_spend.should == 45
+  describe "unclassified inputs" do
+    it "handles othercosts/activities that do not have their inputs classified" do
+      project.activities.should include other_cost
     end
 
-    it "works if a split has a value of nil" do
+    it "creates a input split if for  inputs classified" do
+      report.stub(:inputs).and_return inputs
+      report.inputs.size.should == 2
+    end
+
+    describe "#collections" do
+      it "returns inputs if the inputs totals equal the projects" do
+        inputs =   [ InputSplit.new(input.name, 65.0, 60.0),
+                     InputSplit.new(input.name, 45.0, 40.0) ]
+        report.stub(:inputs).and_return inputs
+        report.collection.should == inputs
+        report.collection.size.should == 2 #sanity
+      end
+
+      it "returns the the inputs with an extra split added if the inputs totals are not equal to the projects" do
+        inputs =   [ InputSplit.new(input.name, 65.0, 60.0),
+                     InputSplit.new(input.name, 35.0, 20.0) ]
+        report.stub(:inputs).and_return inputs
+        report.collection.should == inputs
+        report.collection.size.should == 3 #sanity
+        report.collection.last.total_spend.should == 10
+        report.collection.last.total_budget.should == 20
+      end
+    end
+  end
+
+  describe "input_totals with nil values" do
+    before :each do
       inputs_with_nil = [ InputSplit.new(input.name, 25.0, 10.0),
                           InputSplit.new(input.name, nil, 5.0) ]
       report.stub(:inputs).and_return(inputs_with_nil)
       report.stub(:method_from_class).with("DerpSpend").and_return :spend
       report.stub(:method_from_class).with("DerpBudget").and_return :budget
-      report.total_spend.should == 25
+    end
+
+    describe "#input_spend" do
+      it "works if a split has a value of nil" do
+        report.inputs_spend.should == 25
+      end
+    end
+
+    describe "#inputs_budget" do
+      it "works if a split has a value of nil" do
+        report.inputs_spend.should == 25
+      end
+    end
+  end
+
+  describe "#total_spend" do
+    it "returns the projects total spend as the total spend" do
+      report.total_spend.should == project.total_spend
     end
   end
 
   context "#total_budget" do
-    it "should give total input budget" do
-      report.stub(:method_from_class).with("DerpSpend").and_return :spend
-      report.stub(:method_from_class).with("DerpBudget").and_return :budget
-      report.total_budget.should == 15
-    end
-
-    it "works if a split has a value of nil" do
-      inputs_with_nil = [ InputSplit.new(input.name, 25.0, 10.0),
-                          InputSplit.new(input.name, 20.0, nil) ]
-      report.stub(:inputs).and_return(inputs_with_nil)
-      report.stub(:method_from_class).with("DerpSpend").and_return :spend
-      report.stub(:method_from_class).with("DerpBudget").and_return :budget
-      report.total_budget.should == 10
+    it "returns the projects total spend as the total spend" do
+      report.total_spend.should == project.total_spend
     end
   end
 

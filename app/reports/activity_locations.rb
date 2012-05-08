@@ -17,6 +17,14 @@ module Reports
       activity.data_response.currency
     end
 
+    def total_spend
+      @total_spend ||= activity.total_spend.to_f
+    end
+
+    def total_budget
+      @total_budget ||= activity.total_budget.to_f
+    end
+
     private
 
     # Report data is built as a collection of LocationSplit objects

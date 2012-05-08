@@ -24,7 +24,8 @@ describe Reports::ActivityLocations do
                   :class => DerpBudget }
   let(:activity) { mock :activity, :name => 'act',
                    :coding_spend_district => [ssplit, ssplit1],
-                   :coding_budget_district => [bsplit, bsplit1] }
+                   :coding_budget_district => [bsplit, bsplit1],
+                   :total_spend => 45, :total_budget => 15 }
   let(:response) { mock :response, :activities => [activity],
                    :name => 'FY14 Exp', :currency => 'USD' }
   let(:report) { Reports::ActivityLocations.new(activity) }
@@ -45,37 +46,64 @@ describe Reports::ActivityLocations do
     report.currency.should == 'USD'
   end
 
-  context "#total_spend" do
-    it "should give total location spend" do
-      report.stub(:method_from_class).with("DerpSpend").and_return :spend
-      report.stub(:method_from_class).with("DerpBudget").and_return :budget
-      report.total_spend.should == 45
+  describe "unclassified locations" do
+    it "creates a location split if for locations classified" do
+      report.stub(:locations).and_return locations
+      report.locations.size.should == 2
     end
 
-    it "works if a split has a value of nil" do
+    describe "#collections" do
+      it "returns locations if the locations totals equal the projects" do
+        locations =   [ LocationSplit.new(location.name, 30.0, 5.0),
+                        LocationSplit.new(location.name, 15.0, 10.0) ]
+        report.stub(:locations).and_return locations
+        report.collection.should == locations
+        report.collection.size.should == 2 #sanity
+      end
+
+      it "returns the the locations with an extra split added if the locations totals are not equal to the projects" do
+        locations =   [ LocationSplit.new(location.name, 20.0, 5.0),
+                        LocationSplit.new(location.name, 15.0, 5.0) ]
+        report.stub(:locations).and_return locations
+        report.collection.should == locations
+        report.collection.size.should == 3 #sanity
+        report.collection.last.total_spend.should == 10
+        report.collection.last.total_budget.should == 5
+      end
+    end
+  end
+
+  describe "location_totals with nil values" do
+    before :each do
       locations_with_nil = [ LocationSplit.new(location.name, 25.0, 10.0),
                              LocationSplit.new(location.name, nil, 5.0) ]
       report.stub(:locations).and_return(locations_with_nil)
       report.stub(:method_from_class).with("DerpSpend").and_return :spend
       report.stub(:method_from_class).with("DerpBudget").and_return :budget
-      report.total_spend.should == 25
+    end
+
+    describe "#location_spend" do
+      it "works if a split has a value of nil" do
+        report.locations_spend.should == 25
+      end
+    end
+
+    describe "#locations_budget" do
+      it "works if a split has a value of nil" do
+        report.locations_spend.should == 25
+      end
+    end
+  end
+
+  describe "#total_spend" do
+    it "returns the projects total spend as the total spend" do
+      report.total_spend.should == activity.total_spend
     end
   end
 
   context "#total_budget" do
-    it "should give total location budget" do
-      report.stub(:method_from_class).with("DerpSpend").and_return :spend
-      report.stub(:method_from_class).with("DerpBudget").and_return :budget
-      report.total_budget.should == 15
-    end
-
-    it "works if a split has a value of nil" do
-      locations_with_nil = [ LocationSplit.new(location.name, 25.0, 10.0),
-                          LocationSplit.new(location.name, 20.0, nil) ]
-      report.stub(:locations).and_return(locations_with_nil)
-      report.stub(:method_from_class).with("DerpSpend").and_return :spend
-      report.stub(:method_from_class).with("DerpBudget").and_return :budget
-      report.total_budget.should == 10
+    it "returns the projects total spend as the total spend" do
+      report.total_spend.should == activity.total_spend
     end
   end
 
@@ -100,14 +128,14 @@ describe Reports::ActivityLocations do
   it "should have expenditure pie" do
     Charts::Locations::Spend.stub(:new).and_return(mock(:pie, :google_pie => ""))
     Charts::Locations::Spend.should_receive(:new).once.with(locations)
-    report.should_receive(:locations).once.and_return locations
+    report.stub(:locations).once.and_return locations
     pie = report.expenditure_pie
   end
 
   it "should have budget pie" do
     Charts::Locations::Budget.stub(:new).and_return(mock(:pie, :google_pie => ""))
     Charts::Locations::Budget.should_receive(:new).once.with(locations)
-    report.should_receive(:locations).once.and_return locations
+    report.stub(:locations).once.and_return locations
     report.budget_pie
   end
 

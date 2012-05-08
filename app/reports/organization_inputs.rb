@@ -15,15 +15,7 @@ module Reports
     end
 
     def collection
-      inputs
-    end
-
-    def total_spend
-      inputs.inject(0){ |sum, e| sum + ( e.total_spend || 0 ) }
-    end
-
-    def total_budget
-      inputs.inject(0){ |sum, e| sum + ( e.total_budget || 0 ) }
+      inputs_with_unclassified
     end
 
     def expenditure_pie
@@ -34,7 +26,39 @@ module Reports
       Charts::Inputs::Budget.new(inputs).google_pie
     end
 
+    def total_spend
+      @total_send ||= response.total_spend.to_f
+    end
+
+    def total_budget
+      @total_budget ||= response.total_budget.to_f
+    end
+
+    def inputs_budget
+      inputs.inject(0){ |sum, e| sum + ( e.total_budget || 0 ) }
+    end
+
+    def inputs_spend
+      inputs.inject(0){ |sum, e| sum + ( e.total_spend || 0 ) }
+    end
+
     private
+
+    ###
+    # This adds an input split equal to the unclassified amount
+    # this allows it to be seen in the pie chart
+    def inputs_with_unclassified
+      if totals_equals_inputs?
+        inputs
+      else
+        inputs << InputSplit.new("Not Classified",
+                                 remaining_spend, remaining_budget)
+      end
+    end
+
+    def totals_equals_inputs?
+      total_budget == inputs_budget && total_spend == inputs_spend
+    end
 
     # Report data is built as a collection of LocationSplit objects
     # which is easier than dealing with hashes or individual
@@ -52,6 +76,14 @@ module Reports
 
     def retrieve_codings(activities, method)
       activities.map { |a| a.send("leaf_#{method}_inputs") }
+    end
+
+    def remaining_spend
+      total_spend - inputs_spend
+    end
+
+    def remaining_budget
+      total_budget - inputs_budget
     end
   end
 end

@@ -11,11 +11,19 @@ module Reports
     end
 
     def name
-      @project.name
+      project.name
     end
 
     def currency
-      @project.currency
+      project.currency
+    end
+
+    def total_spend
+      @total_spend ||= project.total_spend.to_f
+    end
+
+    def total_budget
+      @total_budget ||= project.total_budget.to_f
     end
 
     private
