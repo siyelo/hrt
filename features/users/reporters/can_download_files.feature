@@ -13,6 +13,6 @@ Feature: Reporter can download files
       Then I should see the Open or Save dialog for a "csv" file
 
       When I go to the dashboard
-        And I follow "view all" within ".files_read_more"
+        And I follow "view all" within ".view-all"
         And I follow "My file"
       Then I should see the Open or Save dialog for a "csv" file

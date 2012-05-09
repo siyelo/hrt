@@ -37,6 +37,13 @@ class Comment < ActiveRecord::Base
   }
 
   named_scope :limit, lambda { |limit| {:limit => limit} }
+
+  def self.paginate_for_responses(data_responses, page)
+    Comment.on_all(data_responses.map{|r| r.id}).
+      paginate :per_page => 25, :page => page,
+               :order => 'created_at DESC',
+               :include => [:user, :commentable]
+  end
 end
 
 

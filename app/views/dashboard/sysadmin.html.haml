@@ -1,0 +1,46 @@
+- title("Dashboard")
+
+%h1.request_nav
+  = render '/shared/request_nav'
+
+.full
+  .main#admin-summary
+    %h2 Summary
+    .section_base
+      .full
+        %h3 Current Request
+        %h4= current_request.name
+        -# = link_to image_tag("arrow-small.png"), "#", :class => "arrow"
+      %ul
+        %li.half
+          %h3 Accepted
+          %h4= @dashboard.accepted_percent
+          = link_to image_tag("arrow-small.png"), admin_responses_path(:filter => 'Accepted'), :class => "arrow"
+        %li.half
+          %h3 Not Yet Started
+          %h4= @dashboard.not_yet_started_percent
+          = link_to image_tag("arrow-small.png"), admin_responses_path(:filter => 'Not Yet Started'), :class => "arrow"
+        %li.half
+          %h3 Pending Approval
+          %h4= @dashboard.pending_approval
+          = link_to image_tag("arrow-small.png"), admin_responses_path(:filter => 'Submitted'), :class => "arrow"
+        %li.half
+          %h3 Reporting Organizations
+          %h4= @dashboard.reporting_organizations_count
+          = link_to image_tag("arrow-small.png"), admin_organizations_path(:filter => 'Reporting'), :class => "arrow"
+
+  .sidebar#admin-submission
+    %h2 Latest Submissions
+    .section_base.wide
+      %table.data.slim
+        %tbody
+          - if @dashboard.submitted_responses.present?
+            - @dashboard.submitted_responses.each do |response|
+              %tr
+                %td
+                  = link_to response.organization.name, projects_path(:response_id => response.id)
+                  .hint= format_date(response.updated_at)
+          - else
+            %p No responses have been submitted yet.
+
+= render 'comments_and_documents'

@@ -33,7 +33,7 @@ module ResponseSession
       def set_url_options
         if current_user && current_response &&
             (current_user.sysadmin? || current_user.activity_manager?) &&
-            (!params[:controller].include?('admin') || !params[:controller] == 'dashboard')
+            !(params[:controller].include?('admin') || params[:controller] == 'dashboard')
           @url_options = { :response_id => current_response.id }
         end
       end

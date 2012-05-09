@@ -2,9 +2,9 @@
   Latest HRT Files
   = image_tag "alertwarning_icon.png", :title => "Files downloaded from this website are not for distribution.", :class => 'tooltip'
 .section_base.wide
-  - if @documents.present?
+  - if @dashboard.documents.present?
     %table.data.slim
-      = render 'documents/documents', :documents => @documents
+      = render 'documents/documents', :documents => @dashboard.documents
 
     .view-all= link_to "view all", current_user.sysadmin? ? admin_documents_path : documents_path
   - else

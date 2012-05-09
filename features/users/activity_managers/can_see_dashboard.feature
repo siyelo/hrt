@@ -1,12 +1,20 @@
 Feature: Activity Manager can see dashboard
-  In order to
-  As an Activity Manager
-  I want to be able to see a dashboard for relevant activities
+  In order to see an overview of the data
+  As a Activity Manager
+  I want to be able to see a dashboard
 
-  Scenario: See dashboard
+  Background:
     Given an organization exists
       And a data_request exists with title: "dr1", organization: the organization
-    Given an organization exists
+      And an organization exists
       And an activity_manager exists with email: "activity_manager@hrtapp.com", organization: the organization
       And I am signed in as "activity_manager@hrtapp.com"
-    Then I should see "Organizations I Manage"
+
+  Scenario: See dashboard
+    Then I should see "Dashboard"
+      And I should see "Organizations I Manage"
+      And I should see "Total Organizations 0"
+      And I should see "Approved Activities 0"
+      And I should see "Pending Activities 0"
+      And I should see "There are no comments posted in the last 6 months."
+      And I should see "There are no files available for download."

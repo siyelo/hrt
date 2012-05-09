@@ -1,11 +1,21 @@
-Feature: District Manager can see dashboard
-  In order to
-  As an District Manager
-  I want to be able to see a dashboard for relevant activities
+Feature: Sysadmin can see dashboard
+  In order to see an overview of the data
+  As an Sysadmin
+  I want to be able to see a dashboard
 
-  Scenario: See dashboard
+  Background:
     Given an organization exists
       And a data_request exists with title: "dr1", organization: the organization
       And an sysadmin exists with email: "sysadmin@hrtapp.com", organization: the organization
-    When I am signed in as "sysadmin@hrtapp.com"
+      And I am signed in as "sysadmin@hrtapp.com"
+
+  Scenario: See dashboard
     Then I should see "Dashboard"
+      And I should see "Current Request dr1"
+      And I should see "Not Yet Started 100.00%"
+      And I should see "Accepted 0.00%"
+      And I should see "Pending Approval 0"
+      And I should see "Reporting Organizations 1"
+      And I should see "No responses have been submitted yet."
+      And I should see "There are no comments posted in the last 6 months."
+      And I should see "There are no files available for download."

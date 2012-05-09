@@ -1,3 +1,8 @@
+- title("Dashboard")
+
+%h1.request_nav
+  = current_request.name
+
 #welcome_box.section_form.bordered
   %h2.welcome_msg
     Here are few simple steps to help you get started
@@ -30,3 +35,5 @@
       %li
         = link_to "Contact Us", contact_link, :target => "_blank"
         %span Start a discussion with the support team.
+
+= render 'comments_and_documents'

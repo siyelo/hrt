@@ -32,4 +32,14 @@ module DashboardHelper
       "(no title)"
     end
   end
+
+  def render_dashboard
+    if current_user.sysadmin?
+      render 'sysadmin'
+    elsif current_user.activity_manager?
+      render 'activity_manager'
+    elsif current_user.reporter?
+      render 'reporter'
+    end
+  end
 end

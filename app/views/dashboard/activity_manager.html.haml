@@ -1,24 +1,29 @@
+- title("Dashboard")
+
+%h1.request_nav
+  = current_request.name
+
 %h2
   Organizations I Manage
 .section_base
   %h3.tracked
     %br
     %span.light Total Organizations
-    %span.large= @organizations.count
+    %span.large= @dashboard.organizations_count
   %h3.tracked
     %br
     %span.light Approved Activities
-    %span.large= @approved_activities
+    %span.large= @dashboard.approved_count
   %h3.tracked
     %br
     %span.light Pending Activities
-    %span.large= @pending_activities
+    %span.large= @dashboard.pending_count
   %h3.tracked.last
     %br
     %span.light Recently Submitted
-    - unless @recent_responses.empty?
+    - unless @dashboard.recent_responses.empty?
       %ul.recently_submitted
-        - @recent_responses.each do |r|
+        - @dashboard.recent_responses.each do |r|
           %li= link_to r.organization.name, projects_path(:response_id => r.id)
     - else
       %span.none No responses submitted recently
@@ -38,7 +43,7 @@
         %th.am_status.center Status
         %th.am_download.center Actions
     %tbody
-      - @organizations.each do |organization|
+      - @dashboard.organizations.each do |organization|
         - response = organization.data_responses.detect { |dr| dr.data_request_id == current_request.id }
         %tr
           %td.title= link_to organization.name, projects_path(:response_id => response.id)
@@ -56,3 +61,6 @@
           %td.center= link_to "#{response.activities.manager_approved.count}/#{response.activities.count}", projects_path(:response_id => response.id)
           %td.center= link_to response.status, projects_path(:response_id => response.id)
           %td.center= link_to "Download Workplan", export_workplan_projects_path(:response_id => response.id), :class => 'download_workplan'
+
+= render 'comments_and_documents'
+
