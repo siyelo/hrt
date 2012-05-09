@@ -88,6 +88,7 @@ describe DataResponse do
       end
     end
   end
+
   describe "by_state" do
     before :each do
       user = Factory :user
@@ -119,6 +120,30 @@ describe DataResponse do
       DataResponse.with_request(@request2).with_state('started').should be_empty
       DataResponse.with_request(@request1).with_state('rejected').should be_empty
       DataResponse.with_request(@request2).with_state('rejected').should == [@response2]
+    end
+  end
+
+  describe "Callbacks" do
+    before :each do
+      basic_setup_activity
+    end
+
+    it "sysadmin unapproves response if it's rejected" do
+      @activity.approved = true
+      @activity.save!
+
+      @response.reject!
+      @response.reload.state.should == 'rejected'
+      @activity.reload.approved.should be_false
+    end
+
+    it "activity manager unapproves response if it's rejected" do
+      @activity.am_approved = true
+      @activity.save!
+
+      @response.reject!
+      @response.reload.state.should == 'rejected'
+      @activity.reload.am_approved.should be_false
     end
   end
 end

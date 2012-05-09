@@ -35,29 +35,25 @@ describe Admin::ResponsesController do
     end
 
     it "should filter by started response" do
-      @latest_response.state = 'started'
-      @latest_response.save!
+      @latest_response.start!
       get :index, :filter => 'Started'
       assigns(:responses).size.should == 1
     end
 
     it "should filter by rejected response" do
-      @latest_response.state = 'rejected'
-      @latest_response.save!
+      @latest_response.reject!
       get :index, :filter => 'Rejected'
       assigns(:responses).size.should == 1
     end
 
     it "should filter by submitted response" do
-      @latest_response.state = 'submitted'
-      @latest_response.save!
+      @latest_response.submit!
       get :index, :filter => 'Submitted'
       assigns(:responses).size.should == 1
     end
 
     it "should filter by complete response" do
-      @latest_response.state = 'accepted'
-      @latest_response.save!
+      @latest_response.accept!
       get :index, :filter => 'Accepted'
       assigns(:responses).size.should == 1
     end

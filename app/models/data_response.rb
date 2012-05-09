@@ -27,10 +27,11 @@ class DataResponse < ActiveRecord::Base
 
   ### Named scopes
   named_scope :latest_first, {:order => "data_request_id DESC" }
-  named_scope :submitted, :conditions => ["state = ?", 'submitted']
-  named_scope :started, :conditions => ["state = ?", 'started']
   named_scope :unstarted, :conditions => ["state = ?", 'unstarted']
-  named_scope :accepted, :conditions => ["state = ?", 'accepted']
+  named_scope :started,   :conditions => ["state = ?", 'started']
+  named_scope :submitted, :conditions => ["state = ?", 'submitted']
+  named_scope :accepted,  :conditions => ["state = ?", 'accepted']
+  named_scope :rejected,  :conditions => ["state = ?", 'rejected']
   named_scope :with_request, lambda { |request| {
     :conditions => ["data_request_id = ?", request.id] } }
   named_scope :with_state, lambda { |state| {

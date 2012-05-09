@@ -408,7 +408,7 @@ describe Organization do
   describe "#destroy" do
     it "should allow deletion if they have not created any requests" do
       basic_setup_implementer_split
-      @response.state = 'submitted'; @response.save!
+      @response.submit!
       @organization.latest_response.status.should == "Submitted"
       result = @organization.destroy
       @organization.errors.on(:base).should == nil
@@ -418,7 +418,7 @@ describe Organization do
     it "should allow deletion if they have non-project costs. FIXME: see #19381309" do
       basic_setup_implementer_split
       oc = Factory(:other_cost_fully_coded, :data_response => @response) # non-project OC
-      @response.state = 'submitted'; @response.save!
+      @response.submit!
       @organization.latest_response.status.should == "Submitted"
       result = @organization.destroy
       @organization.errors.on(:base).should == nil

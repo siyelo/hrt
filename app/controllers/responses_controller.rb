@@ -12,8 +12,7 @@ class ResponsesController < BaseController
   def submit
     @projects = @response.projects.find(:all, :include => :normal_activities)
     if @response.ready_to_submit?
-      @response.state = 'submitted'
-      @response.save!
+      @response.submit!
       flash[:notice] = "Successfully submitted. We will review your data and get back to you with any questions. Thank you."
       redirect_to review_response_url(@response)
     else
@@ -23,24 +22,21 @@ class ResponsesController < BaseController
   end
 
   def reject
-    @response.state = 'rejected'
-    @response.save!
+    @response.reject!
     flash[:notice] = "Response was successfully rejected"
     Notifier.deliver_response_rejected_notification(@response)
     redirect_to projects_path
   end
 
   def accept
-    @response.state = 'accepted'
-    @response.save!
+    @response.accept!
     Notifier.deliver_response_accepted_notification(@response)
     flash[:notice] = "Response was successfully accepted"
     redirect_to projects_path
   end
 
   def restart
-    @response.state = 'started'
-    @response.save!
+    @response.restart!
     Notifier.deliver_response_restarted_notification(@response)
     flash[:notice] = "Response was successfully restarted"
     redirect_to projects_path

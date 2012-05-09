@@ -25,8 +25,7 @@ describe ResponsesController do
 
     it "can submit a response" do
       @data_response.stub(:state).and_return('started')
-      @data_response.should_receive(:state=).with('submitted')
-      @data_response.should_receive(:save!).and_return(true)
+      @data_response.should_receive(:submit!).and_return(true)
 
       put :submit, :id => 1
 
