@@ -1,46 +1,15 @@
-require 'app/reports/organization_locations'
-require 'app/charts/locations'
-require 'app/models/location_split'
+require 'app/reports/classification_base'
 
 module Reports
-  class ProjectLocations < Reports::OrganizationLocations
-    attr_reader :project
-
+  class ProjectLocations < Reports::ClassificationBase
     def initialize(project)
-      @project = project
+      @resource = project
     end
 
-    def name
-      project.name
-    end
+    protected
 
-    def currency
-      project.currency
-    end
-
-    def total_spend
-      @total_spend ||= project.total_spend.to_f
-    end
-
-    def total_budget
-      @total_budget ||= project.total_budget.to_f
-    end
-
-    private
-
-    # Report data is built as a collection of LocationSplit objects
-    # which is easier than dealing with hashes or individual
-    # CodingBudgetDistrict / CodingSpendDistrict objects
-    def create_location_splits
-      mapped_data = map_data(codings)
-      mapped_data.inject([]) do |splits, e|
-        splits << LocationSplit.new(e[0], e[1][:spend], e[1][:budget])
-      end
-    end
-
-    def codings
-      (retrieve_codings(@project.activities, :budget) +
-       retrieve_codings(@project.activities, :spend)).flatten
+    def splits(type)
+      "coding_#{type}_district"
     end
   end
 end

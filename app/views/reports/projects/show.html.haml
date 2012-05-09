@@ -14,22 +14,10 @@
   %ul.breadcrumb
     %li
       = link_to "Overview", reports_path
+      >
+  %h1= @report.name
 
-  %h1= @report.project.name
-
-.reports_summary.section_form.top
-  %p.summary_col
-    %span Total Expenditure
-    %span.currency= @report.currency
-    = number_to_currency @report.total_spend, :unit => ""
-  %p.summary_col
-    %span Total Budget
-    %span.currency= @report.currency
-    = number_to_currency @report.total_budget, :unit => ""
-  %p.summary_col.last
-    %span Change
-    %span.currency %
-    = @report.percentage_change
+= render 'reports/shared/summary'
 
 .section_overlap
   %ul.section_nav#tabs-container
@@ -38,7 +26,7 @@
 #charts_tables
   .activities_tab{:"data-loaded" => 'true'}
     = render '/reports/shared/report_data'
-  .locations_tab{:"data-loaded" => 'false', :"data-url" => locations_reports_project_path(@report.project), :style => 'display: none;'}
+  .locations_tab{:"data-loaded" => 'false', :"data-url" => locations_reports_project_path(@report.resource), :style => 'display: none;'}
     = image_tag "ajax-loader.gif", :class => "ajax-loader"
-  .inputs_tab{:"data-loaded" => 'false', :"data-url" => inputs_reports_project_path(@report.project), :style => 'display: none;'}
+  .inputs_tab{:"data-loaded" => 'false', :"data-url" => inputs_reports_project_path(@report.resource), :style => 'display: none;'}
     = image_tag "ajax-loader.gif", :class => "ajax-loader"

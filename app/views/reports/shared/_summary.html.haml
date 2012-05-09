@@ -1,0 +1,13 @@
+.reports_summary.section_form.top
+  %p.summary_col
+    %span Total Expenditure
+    %span.currency= @report.currency
+    = number_to_currency @report.total_spend, :unit => ""
+  %p.summary_col
+    %span Total Budget
+    %span.currency= @report.currency
+    = number_to_currency @report.total_budget, :unit => ""
+  %p.summary_col.last
+    %span Change
+    %span.currency %
+    = @report.percentage_change

@@ -23,7 +23,7 @@ describe Reports::Organization do
     response.stub_chain(:other_costs, :without_project).and_return othercosts
     unsorted = projects + othercosts
     sorted = [othercost, project, project1, othercost1]
-    report.projects_and_other_costs.should == sorted
+    report.collection.should == sorted
   end
 
   it "should give total org spend" do
@@ -43,16 +43,16 @@ describe Reports::Organization do
   end
 
   it "should have expenditure pie" do
-    Charts::Projects::Spend.stub(:new).and_return(mock(:pie, :google_pie => ""))
-    Charts::Projects::Spend.should_receive(:new).once.with(projects)
-    report.should_receive(:projects_and_other_costs).once.and_return projects # avoid sorted scope
+    Charts::Spend.stub(:new).and_return(mock(:pie, :google_pie => ""))
+    Charts::Spend.should_receive(:new).once.with(projects)
+    report.should_receive(:collection).once.and_return projects # avoid sorted scope
     pie = report.expenditure_pie
   end
 
   it "should have budget pie" do
-    Charts::Projects::Budget.stub(:new).and_return(mock(:pie, :google_pie => ""))
-    Charts::Projects::Budget.should_receive(:new).once.with(projects)
-    report.should_receive(:projects_and_other_costs).once.and_return projects # avoid sorted scope
+    Charts::Budget.stub(:new).and_return(mock(:pie, :google_pie => ""))
+    Charts::Budget.should_receive(:new).once.with(projects)
+    report.should_receive(:collection).once.and_return projects # avoid sorted scope
     report.budget_pie
   end
 

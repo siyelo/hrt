@@ -1,47 +1,19 @@
-require 'app/reports/organization_inputs'
-require 'app/charts/inputs'
-require 'app/models/input_split'
+require 'app/reports/classification_base'
 
 module Reports
-  class ActivityInputs < Reports::OrganizationInputs
-    attr_reader :activity
-
+  class ActivityInputs < Reports::ClassificationBase
     def initialize(activity)
-      @activity = activity
+      @resource = activity
     end
 
-    def name
-      activity.name
+    protected
+
+    def activities
+      [@resource]
     end
 
-    def currency
-      activity.data_response.currency
-    end
-
-    def total_spend
-      @total_spend ||= activity.total_spend.to_f
-    end
-
-    def total_budget
-      @total_budget ||= activity.total_budget.to_f
-    end
-
-    private
-
-    # Report data is built as a collection of LocationSplit objects
-    # which is easier than dealing with hashes or individual
-    # CodingBudgetDistrict / CodingSpendDistrict objects
-    def create_input_splits
-      mapped_data = map_data(codings)
-      mapped_data.inject([]) do |splits, e|
-        splits << InputSplit.new(e[0], e[1][:spend], e[1][:budget])
-      end
-    end
-
-    # All leaf_spend_inputs and leaf_budget_inputs objects for given activity
-    def codings
-      (retrieve_codings([activity], :budget) +
-       retrieve_codings([activity], :spend)).flatten
+    def splits(type)
+      "leaf_#{type}_inputs"
     end
   end
 end

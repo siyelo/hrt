@@ -2,12 +2,30 @@ require 'active_support/core_ext/float'
 
 module Reports
   class Base
+    attr_accessor :resource
+
     def name
-      @response.name
+      @resource.name
     end
 
     def currency
-      @response.currency
+      @resource.currency
+    end
+
+    def total_spend
+      @total_spend ||= @resource.total_spend
+    end
+
+    def total_budget
+      @total_budget ||= @resource.total_budget
+    end
+
+    def expenditure_pie
+      Charts::Spend.new(collection).google_pie
+    end
+
+    def budget_pie
+      Charts::Budget.new(collection).google_pie
     end
 
     def percentage_change
@@ -27,7 +45,7 @@ module Reports
       collection.inject({}) do |result,e|
         result[e.name] ||= {}
         result[e.name][method_from_class(e.class.to_s)] ||= 0
-        result[e.name][method_from_class(e.class.to_s)] += e.cached_amount.to_f
+        result[e.name][method_from_class(e.class.to_s)] += e.cached_amount || 0
         result
       end
     end

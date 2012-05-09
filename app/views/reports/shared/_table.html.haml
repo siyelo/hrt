@@ -9,15 +9,15 @@
     - @report.collection.each do |e|
       %tr
         %td= resource_link(e)
-        %td.align= number_to_currency e.total_spend, :unit => ""
-        %td.align= number_to_currency e.total_budget, :unit => ""
+        %td.align= n2c(e.total_spend, "", ",")
+        %td.align= n2c(e.total_budget, "", ",")
 
     %tr.summary
       %td
         Total
       %td.align
         %span.currency= @report.currency
-        = number_to_currency @report.total_spend, :unit => ""
+        = n2c(@report.total_spend, "", ",")
       %td.align
         %span.currency= @report.currency
-        = number_to_currency @report.total_budget, :unit => ""
+        = n2c(@report.total_budget, "", ",")
