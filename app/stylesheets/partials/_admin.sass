@@ -310,6 +310,7 @@ body.app #content .tabs
     width: 94%
     h4
       font-size: 20px
+      +transition(all, 0.5s)
   .half
     margin-bottom: 0
     width: 50%
@@ -318,8 +319,14 @@ body.app #content .tabs
       display: block
       padding: 10px 6%
       text-decoration: none
+      +transition(all, 0.5s)
       &:hover, &:focus
-        background: #fff image_url("arrow-small.png") no-repeat 94% center
+        background: $primary_lightest image_url("arrow-small.png") no-repeat 94% center
+        +box-shadow(rgba(0, 0, 0, 0.05) 0, 0, 3px, inset)
+        h4
+          color: $primary - #333
+          +text-shadow(#fff, 0, 1px, 0)
+          +transition(all, 0.5s)
   ul
     +pie-clearfix
   li
