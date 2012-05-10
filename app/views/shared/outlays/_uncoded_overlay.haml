@@ -15,28 +15,27 @@
         %span.info
           Unchecked boxes mean that classification has not been started, or does not add up to 100%.
 
-  .simple_table.push
-    %table
-      %thead
-        %tr
-          %th
-          %th Locations
-          - unless is_other_cost
-            %th Purposes
-            %th Inputs
-      %tbody
-        %tr
-          %td Past Expenditure
-          %td
-            = check_box_tag "spend_locations", "", outlay.coding_spend_district_valid?
-          - unless is_other_cost
-            %td=check_box_tag "spend_purposes", "", outlay.coding_spend_valid?
-            %td= check_box_tag "spend_inputs", "", outlay.coding_spend_cc_valid?
+  %table.standard.push
+    %thead
+      %tr
+        %th
+        %th Locations
+        - unless is_other_cost
+          %th Purposes
+          %th Inputs
+    %tbody
+      %tr
+        %td Past Expenditure
+        %td
+          = check_box_tag "spend_locations", "", outlay.coding_spend_district_valid?
+        - unless is_other_cost
+          %td=check_box_tag "spend_purposes", "", outlay.coding_spend_valid?
+          %td= check_box_tag "spend_inputs", "", outlay.coding_spend_cc_valid?
 
-        %tr
-          %td Current Budget
-          %td
-            = check_box_tag "budget_locations", "", outlay.coding_budget_district_valid?
-          - unless is_other_cost
-            %td= check_box_tag "budget_purposes", "", outlay.coding_budget_valid?
-            %td= check_box_tag "budget_inputs", "", outlay.coding_budget_cc_valid?
+      %tr
+        %td Current Budget
+        %td
+          = check_box_tag "budget_locations", "", outlay.coding_budget_district_valid?
+        - unless is_other_cost
+          %td= check_box_tag "budget_purposes", "", outlay.coding_budget_valid?
+          %td= check_box_tag "budget_inputs", "", outlay.coding_budget_cc_valid?
