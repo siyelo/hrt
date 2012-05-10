@@ -1,11 +1,11 @@
 %h2
   Latest HRT Files
   = image_tag "alertwarning_icon.png", :title => "Files downloaded from this website are not for distribution.", :class => 'tooltip'
+  .read_more.comments_read_more= link_to "view all", current_user.sysadmin? ? admin_documents_path : documents_path
 .section_base.wide
   - if @dashboard.documents.present?
     %table.data.slim
       = render 'documents/documents', :documents => @dashboard.documents
 
-    .view-all= link_to "view all", current_user.sysadmin? ? admin_documents_path : documents_path
   - else
     %p There are no files available for download.
