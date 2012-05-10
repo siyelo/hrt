@@ -36,10 +36,21 @@ describe Admin::ReportsController do
       assigns[:report].should_not be_nil
     end
 
-    it "should render index with a Reporter report" do
-      pending
-      get :index
-      assigns[:report].should_not be_nil
+    it "downloads xls district report" do
+      location = mock_model(Location)
+      location.stub(:short_display).and_return('district1')
+      Location.stub(:find).and_return(location)
+      get :district_workplan, :id => 1
+      response.should be_success
+      response.header["Content-Type"].should == "application/excel"
+      response.header["Content-Disposition"].should ==
+        "attachment; filename=district1_district_workplan.xls"
+    end
+
+    it "downloads xls district report" do
+      Location.stub(:find).and_return(nil)
+      get :district_workplan, :id => 1
+      response.should redirect_to(locations_admin_reports_path)
     end
   end
 end

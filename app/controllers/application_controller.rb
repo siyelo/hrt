@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
 
   include ApplicationHelper
   include SslRequirement
-  include Exporter
+  include FileSender
   include UserAuthentication
   include ResponseSession
 
