@@ -1,7 +1,6 @@
 class DataResponse < ActiveRecord::Base
   STATES = ['unstarted', 'started', 'submitted', 'rejected', 'accepted']
 
-  include CurrencyNumberHelper
   include DataResponse::States
   include DataResponse::Totaller
   include DataResponse::ErrorChecker

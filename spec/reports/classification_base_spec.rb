@@ -6,10 +6,21 @@ require 'app/reports/organization_locations'
 
 describe Reports::ClassificationBase do
   let(:response) { mock :response,
-                   :total_spend => 45.0, :total_budget => 15.0}
+                        :total_spend => 45.0, :total_budget => 15.0}
   let(:report) { Reports::OrganizationLocations.new(response) }
   let(:rows) { [ Reports::Row.new("L1", 20.0, 5.0),
-                 Reports::Row.new("L2", 25.0, 10.0) ] }
+    Reports::Row.new("L2", 25.0, 10.0) ] }
+
+  describe "rounding" do
+    let(:rows) { [ Reports::Row.new("L1", 45.009, 15.001)] }
+
+    it "rounds row(classification amounts) before comparing with totals" do
+      report.should_receive(:rows).twice.and_return rows
+      report.should_receive(:total_spend).and_return 45.01
+      report.should_receive(:total_budget).and_return 15.0
+      report.totals_equals_rows?.should be_true
+    end
+  end
 
   describe "#percentage_change" do
     it "calculates the % spent last year against this years budget" do

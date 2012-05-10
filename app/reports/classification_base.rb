@@ -8,14 +8,18 @@ module Reports
       @collection ||= rounded(rows_with_unclassified)
     end
 
+    def totals_equals_rows?
+      total_budget == rows_budget && total_spend == rows_spend
+    end
+
     protected
 
     def rows_budget
-      rows.inject(0){ |sum, e| sum + ( e.total_budget || 0 ) }
+      rows.inject(0){ |sum, e| sum + ( e.total_budget.round(2) || 0 ) }
     end
 
     def rows_spend
-      rows.inject(0){ |sum, e| sum + ( e.total_spend || 0 ) }
+      rows.inject(0){ |sum, e| sum + ( e.total_spend.round(2) || 0 ) }
     end
 
     def rows
@@ -41,10 +45,6 @@ module Reports
       end
     end
 
-    def totals_equals_rows?
-      total_budget == rows_budget && total_spend == rows_spend
-    end
-
     # Report data is built as a collection of Row objects
     # which is easier than dealing with hashes or individual
     # CodingBudgetDistrict / CodingSpendDistrict objects
@@ -66,10 +66,6 @@ module Reports
     def codings
       ( activities.map { |a| a.send(splits(:spend)) } +
         activities.map { |a| a.send(splits(:budget)) }).flatten
-    end
-
-    def retrieve_codings(activities, method)
-      activities.map { |a| a.send("leaf_#{method}_inputs") }
     end
 
     def remaining_spend

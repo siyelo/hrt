@@ -2,6 +2,9 @@
 #
 # (At time of writing is used as a pseudo-aggregate of CodingBudgetDistrict & Spend equivalents
 #
+require 'action_view/helpers/number_helper'
+require 'bigdecimal'
+
 module Reports
   class Row
     include ActionView::Helpers::NumberHelper

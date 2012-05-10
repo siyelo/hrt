@@ -3,6 +3,8 @@
 #
 class DataResponse < ActiveRecord::Base
   module Totaller
+    include CurrencyNumberHelper
+
     def total_budget(to_currency = self.currency)
       sum_total(projects, :total_budget, to_currency) +
         non_project_costs(:total_budget, to_currency)
