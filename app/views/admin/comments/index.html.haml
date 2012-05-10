@@ -9,7 +9,7 @@
       %th Comment
       %th Comment on
       %th Created at
-      %th
+      %th.wrap-10
 
   %tbody
     - @comments.each do |comment|
@@ -17,8 +17,8 @@
         %td= comment.comment
         %td= comment.commentable.try(:name) if comment.commentable.respond_to?(:name)
         %td= comment.created_at
-        %td
-          = link_to "Edit", edit_admin_comment_path(comment)
-          = link_to "Delete", admin_comment_path(comment), :method => :delete, :confirm => "Are you sure you want to delete this comment?", :title => 'Delete'
+        %td.wrap-10
+          = link_to "Edit", edit_admin_comment_path(comment), :class => "create_inline"
+          = link_to "Delete", admin_comment_path(comment), :method => :delete, :confirm => "Are you sure you want to delete this comment?", :title => 'Delete', :class => "create_inline"
 
 = will_paginate @comments
