@@ -5,23 +5,28 @@ describe DataResponse::States do
 
   describe "#state_to_name" do
     it "returns 'Not Yet Started' when state is 'unstarted'" do
-      dr.state_to_name('unstarted').should == 'Not Yet Started'
+      dr.state = 'unstarted'
+      dr.state_to_name.should == 'Not Yet Started'
     end
 
     it "returns 'Started' when state is 'started'" do
-      dr.state_to_name('started').should == 'Started'
+      dr.state = 'started'
+      dr.state_to_name.should == 'Started'
     end
 
     it "returns 'Submitted' when state is 'submitted'" do
-      dr.state_to_name('submitted').should == 'Submitted'
+      dr.state = 'submitted'
+      dr.state_to_name.should == 'Submitted'
     end
 
     it "returns 'Rejected' when state is 'rejected'" do
-      dr.state_to_name('rejected').should == 'Rejected'
+      dr.state = 'rejected'
+      dr.state_to_name.should == 'Rejected'
     end
 
     it "returns 'Accepted' when state is 'accepted'" do
-      dr.state_to_name('accepted').should == 'Accepted'
+      dr.state = 'accepted'
+      dr.state_to_name.should == 'Accepted'
     end
   end
 

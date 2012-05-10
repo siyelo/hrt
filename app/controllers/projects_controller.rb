@@ -1,8 +1,6 @@
 require 'set'
 
 class ProjectsController < BaseController
-  include DataResponse::States
-
   SORTABLE_COLUMNS = ['name']
 
   helper_method :sort_column, :sort_direction

@@ -18,7 +18,7 @@ Feature: Reporter can see comments
 
     Scenario: Access comments page from dashboard and manage them
       Given I follow "Home"
-      When I follow "view all" within ".comments_read_more"
+      When I follow "view all" within ".dashboard_comments"
       Then I should be on the comments page
         And I should see "project1"
         And I should see "comment1"

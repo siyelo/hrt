@@ -1,7 +1,7 @@
 module DataResponse::States
 
   def status
-    state_to_name(state)
+    state_to_name
   end
 
   DataResponse::STATES.each do |state_name|
@@ -39,7 +39,7 @@ module DataResponse::States
     self.save!
   end
 
-  def state_to_name(state)
+  def state_to_name
     case state
     when 'unstarted' : 'Not Yet Started'
     when 'started'   : 'Started'

@@ -5,6 +5,7 @@ class Dashboard::Reporter
     @reporter         = reporter
     @current_response = current_response
     @params           = params
+    @report           = Reports::Organization.new(current_response)
   end
 
   def template

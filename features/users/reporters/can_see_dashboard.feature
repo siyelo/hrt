@@ -13,5 +13,8 @@ Feature: Reporter can see dashboard
       And I should see "Projects" within the main nav
       And I should see "Reports" within the main nav
       And I should see "Settings" within the main nav
+      And I should see "Total Expenditure USD 0.00"
+      And I should see "Total Budget USD 0.00"
+      And I should see "Response Status Not Yet Started"
       And I should see "There are no comments posted in the last 6 months."
       And I should see "There are no files available for download."

@@ -53,7 +53,7 @@
     - if current_user.sysadmin?
       %li.js_dropdown_menu#state
         - link_to '#', :class => 'js_dropdown_trigger dropdown' do
-          = "Status: #{controller.state_to_name(@response.state)}"
+          = "Status: #{current_response.state_to_name}"
           = image_tag "icon_dropdown.png"
 
         %ul.menu_items{:style => 'display: none'}

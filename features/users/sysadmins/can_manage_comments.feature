@@ -26,7 +26,7 @@ Feature: Admin can see comments
     Scenario: Access comments page from dashboard and manage them
       Given I am signed in as "sysadmin@hrtapp.com"
       When I follow "Home"
-        And I follow "view all" within ".comments_read_more"
+        And I follow "view all" within ".dashboard_comments"
       Then I should be on the admin comments page
         And I should see "TB Treatment Project"
         And I should see "comment1"

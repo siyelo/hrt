@@ -3,39 +3,6 @@
 %h1.request_nav
   = current_request.name
 
-#welcome_box.section_form.bordered
-  %h2.welcome_msg
-    Here are few simple steps to help you get started
-
-  %ul.welcome_steps
-    %li.first
-      - link_to edit_organization_path(:current) do
-        %span.icon= image_tag "icon_welcome1.png", :alt => "Setup Your Organization", :height => "66"
-        %span.title 1. Basic Settings
-        %span.desc Your Organization's preferences and contact settings
-
-    %li
-      - link_to projects_path do
-        %span.icon= image_tag "icon_welcome5.png", :alt => "Enter Your Projects & Activities", :height => "70"
-        %span.title 2. Enter Your Projects & Activities
-        %span.desc Define the health projects and activities your organization does
-
-    %li.last
-      - link_to submit_response_path(current_response) do
-        %span.icon= image_tag "icon_welcome3.png", :alt => "Submit Response", :height => "70"
-        %span.title 3. Submit Response
-        %span.desc Submit your data for the requested period
-
-  .welcome_info
-    %p Have questions?
-    %ul
-      %li
-        = link_to "Help Center", help_link, :target => "_blank"
-        %span Our knowledge base and FAQ's
-      %li
-        = link_to "Contact Us", contact_link, :target => "_blank"
-        %span Start a discussion with the support team.
-        
 .full
   .main#admin-summary
     %h2 Summary
@@ -46,36 +13,50 @@
         -# = link_to image_tag("arrow-small.png"), "#", :class => "arrow"
       %ul
         %li.half
-          - link_to "#", :class => "arrow" do
-            %h3 Accepted
-            %h4 50
-          
+          - link_to reports_path, :class => "arrow" do
+            %h3 Total Expenditure
+            %h4
+              %span.currency= current_response.currency
+              = number_to_currency(current_response.total_spend, :unit => '')
+
         %li.half
-          - link_to "#", :class => "arrow" do
-            %h3 Not Yet Started
-            %h4 50
-          
+          - link_to reports_path, :class => "arrow" do
+            %h3 Total Budget
+            %h4
+              %span.currency= current_response.currency
+              = number_to_currency(current_response.total_budget, :unit => '')
+
         %li.half
-          - link_to "#", :class => "arrow" do
-            %h3 Pending Approval
-            %h4 50
-          
+          - link_to projects_path, :class => "arrow" do
+            %h3 Response Status
+            %h4= current_response.status
+
         %li.half
-          - link_to "#", :class => "arrow" do
-            %h3 Reporting Organizations
-            %h4 50
-          
+          - link_to review_response_path(current_response), :class => "arrow" do
+            %h3 Status Updated On
+            %h4= format_date(current_response.updated_at)
+
 
   .sidebar#admin-submission
-    %h2 Latest Updates
+    %h2 Getting Started
     .section_base.wide
-      %table.data.slim
-        %tbody
-          %tr
-            %td
-              = link_to "#", "Projects path"
-              .hint May 10 2012
-        //- else
-        //    %p No responses have been submitted yet.
+      %ul.welcome_steps
+        %li.first
+          - link_to edit_organization_path do
+            %span.icon= image_tag "icon_welcome1.png", :alt => "Setup Your Organization", :height => "66"
+            %span.title 1. Basic Settings
+            %span.desc Your Organization's preferences and contact settings
+
+        %li
+          - link_to projects_path do
+            %span.icon= image_tag "icon_welcome5.png", :alt => "Enter Projects & Activities", :height => "70"
+            %span.title 2. Enter Projects & Activities
+            %span.desc Define the health projects and activities your organization does
+
+        %li.last
+          - link_to submit_response_path(current_response) do
+            %span.icon= image_tag "icon_welcome3.png", :alt => "Submit Response", :height => "70"
+            %span.title 3. Submit Response
+            %span.desc Submit your data for the requested period
 
 = render 'comments_and_documents'
