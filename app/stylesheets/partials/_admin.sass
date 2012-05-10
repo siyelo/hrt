@@ -291,11 +291,13 @@ body.app #content .tabs
 // ADMIN DASHBOARD STYLES
 
 #admin-summary
+  +pie-clearfix
   .section_base
     padding: 0
   h3
     font-size: 12px
     font-weight: normal
+    padding-bottom: 7px
   h4
     color: $primary
     font-size: 32px
@@ -310,17 +312,18 @@ body.app #content .tabs
       font-size: 20px
   .half
     margin-bottom: 0
-    padding: 10px 3%
-    width: 44%
+    width: 50%
+    .arrow
+      background: image_url("arrow-small.png") no-repeat 94% center
+      display: block
+      padding: 10px 6%
+      text-decoration: none
+      &:hover, &:focus
+        background: #fff image_url("arrow-small.png") no-repeat 94% center
+  ul
+    +pie-clearfix
   li
-    &:nth-child(1), &:nth-child(3)
+    &:nth-child(1) a, &:nth-child(3) a
       border-right: 1px solid #eee
-      margin-right: -1px
-    &:nth-child(1), &:nth-child(2)
+    &:nth-child(1) a, &:nth-child(2) a
       border-bottom: 1px solid #eee
-  .arrow
-    position: absolute
-    right: 10px
-    top: 40%
-
-#admin-submission
