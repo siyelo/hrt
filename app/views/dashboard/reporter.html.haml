@@ -35,5 +35,47 @@
       %li
         = link_to "Contact Us", contact_link, :target => "_blank"
         %span Start a discussion with the support team.
+        
+.full
+  .main#admin-summary
+    %h2 Summary
+    .section_base
+      .full
+        %h3 Current Request
+        %h4= current_request.name
+        -# = link_to image_tag("arrow-small.png"), "#", :class => "arrow"
+      %ul
+        %li.half
+          - link_to "#", :class => "arrow" do
+            %h3 Accepted
+            %h4 50
+          
+        %li.half
+          - link_to "#", :class => "arrow" do
+            %h3 Not Yet Started
+            %h4 50
+          
+        %li.half
+          - link_to "#", :class => "arrow" do
+            %h3 Pending Approval
+            %h4 50
+          
+        %li.half
+          - link_to "#", :class => "arrow" do
+            %h3 Reporting Organizations
+            %h4 50
+          
+
+  .sidebar#admin-submission
+    %h2 Latest Updates
+    .section_base.wide
+      %table.data.slim
+        %tbody
+          %tr
+            %td
+              = link_to "#", "Projects path"
+              .hint May 10 2012
+        //- else
+        //    %p No responses have been submitted yet.
 
 = render 'comments_and_documents'
