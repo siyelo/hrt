@@ -105,12 +105,16 @@ body.landing
   margin: 35px auto 10px !important
   width: 60% !important
   .pagination
+    margin-top: 20px
     text-align: center
     span, a
       background: rgba(0, 0, 0, 0.1)
       border: none
       color: rgba(255, 255, 255, 0.8)
+      display: inline-block
       font-size: 11px
+      padding: 7px 10px
+      text-decoration: none
       +border-radius(1px)
       &:hover, &:focus
         border: none
@@ -118,9 +122,13 @@ body.landing
     .current
       background: rgba(255, 255, 255, 0.5)
       color: #222
-    .current, .disabled
       &:hover, &:focus
         background: rgba(255, 255, 255, 0.5)
+    .disabled
+      color: rgba(255, 255, 255, 0.3)
+      &:hover, &:focus
+        background: rgba(0, 0, 0, 0.1)
+        color: rgba(255, 255, 255, 0.3)
   h3
     margin: 10px 0 12px
     color: #D1E3F2
@@ -130,7 +138,7 @@ body.landing
   width: 100%
   td, a, th
     color: #fff
-    font-size: 11px
+    font-size: 12px
     text-decoration: none
   th
     background: rgba(0, 0, 0, 0.1)
@@ -139,5 +147,13 @@ body.landing
   td
     background: rgba(255, 255, 255, 0.03)
     border-bottom: rgba(0, 0, 0, 0.1) 1px solid
-    padding: 7px 15px
-
+    padding: 10px 15px 7px
+  .hint
+    clear: both
+    color: #fff
+    float: left
+    font-size: 11px
+    opacity: 0.5
+    padding-top: 3px
+  a
+    font-weight: bold
