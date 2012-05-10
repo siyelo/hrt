@@ -7,9 +7,9 @@
   - documents.each do |document|
     %tr{:class => cycle("even", "odd")}
       %td
-        = link_to(document.title, document.private_document_url, :class => 'title')
-
         - if document.description.present?
           = link_to "?", "#", :title => document.description, :class => 'tooltip typo right'
+        = link_to(document.title, document.private_document_url, :class => 'title')
 
         .hint= document.updated_at.strftime("%b %d, %Y")
+        
