@@ -19,7 +19,6 @@ describe Reports::Reporters do
                  Reports::Row.new("three", 300.0, 60.0) ] }
 
   let(:request) { mock :request, :data_responses => responses, :title => "Yaw"}
-
   let(:report) { Reports::Reporters.new(request) }
 
   it "has a name" do
