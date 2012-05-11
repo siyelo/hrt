@@ -12,8 +12,8 @@ Feature: Sysadmin can see dashboard
   Scenario: See dashboard
     Then I should see "Dashboard"
       And I should see "Current Request dr1"
-      And I should see "Not Yet Started 100.00%"
-      And I should see "Accepted 0.00%"
+      And I should see "Not Yet Started 100%"
+      And I should see "Accepted 0%"
       And I should see "Pending Approval 0"
       And I should see "Reporting Organizations 1"
       And I should see "No responses have been submitted yet."

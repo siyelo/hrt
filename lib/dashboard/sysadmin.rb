@@ -55,7 +55,7 @@ class Dashboard::Sysadmin
   private
 
   def calculate_percent(number)
-    number_to_percentage(number * 100 / all_count.to_f, :precision => 2)
+    number_to_percentage(number * 100 / all_count.to_f, :precision => 0)
   end
 
   def all_count
