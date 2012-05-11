@@ -15,7 +15,7 @@ module UserAuthentication
   def require_user
     unless current_user
       store_location
-      flash[:error] = "You must be logged in to access this page"
+      flash[:error] = "You must be logged in to access that page"
       redirect_to root_url
     end
   end

@@ -25,7 +25,7 @@ Feature: Reporter can see project overview report
     And I should see "Activities" within "#tabs-container"
     And I should see "Locations" within "#tabs-container"
     And I should see "Inputs" within "#tabs-container"
-    And I should see "USD" within ".summary"
+    And I should see "USD"
     And I should see "some cost" within "table"
     And I should see "activity1" within "table"
 

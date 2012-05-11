@@ -5,19 +5,19 @@ describe ReportsController do
     describe "#index" do
       before :each do get :index end
       it { should redirect_to(root_url) }
-      it { should set_the_flash.to("You must be logged in to access this page") }
+      it { should set_the_flash.to("You must be logged in to access that page") }
     end
 
     describe "#inputs" do
       before :each do get :inputs end
       it { should redirect_to(root_url) }
-      it { should set_the_flash.to("You must be logged in to access this page") }
+      it { should set_the_flash.to("You must be logged in to access that page") }
     end
 
     describe "#locations" do
       before :each do get :locations end
       it { should redirect_to(root_url) }
-      it { should set_the_flash.to("You must be logged in to access this page") }
+      it { should set_the_flash.to("You must be logged in to access that page") }
     end
   end
 

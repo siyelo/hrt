@@ -1,4 +1,5 @@
 require 'validators'
+
 class DataRequest < ActiveRecord::Base
   ### Attributes
   attr_accessible :organization_id, :title, :start_date
@@ -18,11 +19,9 @@ class DataRequest < ActiveRecord::Base
   ### Named scopes
   named_scope :sorted, { :order => "data_requests.start_date" }
 
-  ### Instance Methods
+  alias_attribute :name, :title
 
-  def name
-    title
-  end
+  ### Instance Methods
 
   def end_date
     start_date + (1.year - 1.day)

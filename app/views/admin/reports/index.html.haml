@@ -1,0 +1,27 @@
+- content_for :head do
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+- title 'Reports'
+
+- content_for :sub_nav do
+  = render('admin/shared/reports_sub_nav')
+
+%h1.request_nav
+  = render '/shared/request_nav'
+
+
+.section_overlap
+  %ul.section_nav#tabs-container
+    = render :partial => 'admin/reports/shared/tabs'
+
+#charts_tables
+  .reporters_tab{:"data-loaded" => 'true'}
+    = render '/reports/shared/report_data'
+  .funders_tab{:"data-loaded" => 'false', :"data-url" => 'TODO', :style => 'display: none;'}
+    = image_tag "ajax-loader.gif", :class => "ajax-loader"
+  .progress_tab{:"data-loaded" => 'false', :"data-url" => 'TODO', :style => 'display: none;'}
+    = image_tag "ajax-loader.gif", :class => "ajax-loader"
+  .locations_tab{:"data-loaded" => 'false', :"data-url" => 'TODO', :style => 'display: none;'}
+    = image_tag "ajax-loader.gif", :class => "ajax-loader"
+  .purposes_tab{:"data-loaded" => 'false', :"data-url" => 'TODO', :style => 'display: none;'}
+    = image_tag "ajax-loader.gif", :class => "ajax-loader"

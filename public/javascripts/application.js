@@ -23,6 +23,13 @@ var reports_activities_show = {
   }
 };
 
+var admin_reports_index = {
+  run: function () {
+    HrtCharts.drawPieChart($('.code_spent')[0], _expenditure_summary, 450, 300);
+    HrtCharts.drawPieChart($('.code_budget')[0], _budget_summary, 450, 300);
+  }
+}
+
 var admin_responses_index = {
   run: function () {
     HrtCharts.drawBarChart('response_chart', _responses, 900, 150);

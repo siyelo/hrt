@@ -37,7 +37,7 @@ describe DataResponse do
       organization = Factory :organization
       Factory :user, :organization => organization
       response     = organization.latest_response
-      response.name.should == 'Data Request 1'
+      response.name.should == organization.name
     end
   end
 

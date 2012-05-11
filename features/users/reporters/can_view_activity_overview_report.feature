@@ -25,4 +25,4 @@ Feature: Reporter can see activity overview report
     And I should see "Implementers" within "#tabs-container"
     And I should see "Locations" within "#tabs-container"
     And I should see "Inputs" within "#tabs-container"
-    And I should see "USD" within ".summary"
+    And I should see "USD"
