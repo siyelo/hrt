@@ -1,5 +1,5 @@
 / js event: .form_box, .new_form, .edit_form
-.edit-comment.section_form.single.connect{:class => "form_box #{(@comment.new_record? ? 'new_form' : 'edit_form')}"}
+.edit-comment.connect{:class => "form_box #{(@comment.new_record? ? 'new_form' : 'edit_form')}"}
   / js event: .cancel_btn
   - if request.format == "text/javascript"
     = link_to "Close", comments_path, :class => "cancel_btn close"
