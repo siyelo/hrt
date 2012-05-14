@@ -96,7 +96,6 @@ class ApplicationController < ActionController::Base
 
     def warn_if_not_classified(outlay)
       type = outlay.class.to_s.titleize
-      check_delayed_jobs_for(outlay)
 
       if outlay.approved? || outlay.am_approved?
         flash.now[:error] = "Classification for approved activity cannot be changed." unless flash[:error]
@@ -112,18 +111,6 @@ class ApplicationController < ActionController::Base
             session['flash'].present? && session['flash'][:notice].blank? )
           flash.now[:notice] = "This #{type} has been fully classified."
         end
-      end
-    end
-
-    def check_delayed_jobs_for(outlay)
-      dj = Delayed::Job.find(:first,
-        :conditions => "handler LIKE '%object: LOAD;#{outlay.class.to_s};#{outlay.id}\nmethod: :update_classified_amount_cache_without_delay%'")
-
-      if dj
-        flash.now[:warning] = "We are still busy processing changes to the
-          classification tree. Please reload the page to see whether this
-          #{outlay.class.to_s.titleize} has been
-          fully classified."
       end
     end
 
