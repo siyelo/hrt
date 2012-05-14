@@ -27,7 +27,8 @@ ActionController::Routing::Routes.draw do |map|
     admin.resources :organizations,
       :collection => {:duplicate => :get, :remove_duplicate  => :put,
         :download_template => :get, :create_from_file => :post}
-    admin.resources :reports, :only => [:index]
+    admin.resources :reports, :only => [:index],
+      :collection => { :locations => :get, :district_workplan => :get }
     admin.namespace :reports do |reports|
       reports.resources :detailed, :only => [:index, :show],
         :member => { :generate => :get },

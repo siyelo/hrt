@@ -2,6 +2,7 @@ require 'active_support/core_ext/float'
 
 module Reports
   class Base
+    include CurrencyViewNumberHelper
     attr_accessor :resource
 
     def name
@@ -18,6 +19,10 @@ module Reports
 
     def total_budget
       @total_budget ||= @resource.total_budget
+    end
+
+    def format(value)
+      n2c(value, "", ",")
     end
 
     def expenditure_pie

@@ -5,8 +5,6 @@ module ReportsHelper
     name = element.name.presence || "no name"
 
     case params[:controller]
-    when "admin/reports"
-      name
     when "reports"
       case params[:action]
       when 'index'
@@ -15,22 +13,25 @@ module ReportsHelper
         else
           link_to name, reports_activity_path(element)
         end
-      when 'inputs'
-        name
-      when 'locations'
+      else
         name
       end
     when "reports/projects"
       case params[:action]
       when 'show'
         link_to name, reports_activity_path(element)
-      when 'inputs'
-        name
-      when 'locations'
+      else
         name
       end
     when "reports/activities"
       name
+    when "admin/reports"
+      case params[:action]
+      when 'locations'
+        link_to name, district_workplan_admin_reports_path(:id => Location.find_by_short_display(element.name))
+      else
+        name
+      end
     end
   end
 end
