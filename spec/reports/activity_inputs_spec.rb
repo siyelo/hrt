@@ -1,7 +1,5 @@
 require File.dirname(__FILE__) + '/../spec_helper_lite'
-
 $: << File.join(APP_ROOT, "app/reports")
-
 require 'app/reports/activity_inputs'
 
 class DerpSpend; end
@@ -11,25 +9,25 @@ describe Reports::ActivityInputs do
   let(:input) { mock :input, :name => 'L2'}
   let(:input1) { mock :input, :name => 'L1' }
   let(:ssplit) { mock :coding_spend_input, :code => input,
-                 :cached_amount => 25.0, :name => input.name,
-                 :class => DerpSpend }
+    :cached_amount => 25.0, :name => input.name,
+    :class => DerpSpend }
   let(:ssplit1) { mock :coding_spend_input, :code => input1,
-                  :cached_amount => 20.0, :name => input1.name,
-                  :class => DerpSpend }
+    :cached_amount => 20.0, :name => input1.name,
+    :class => DerpSpend }
   let(:bsplit) { mock :coding_budget_input, :code => input,
-                 :cached_amount => 10.0, :name => input.name,
-                 :class => DerpBudget }
+    :cached_amount => 10.0, :name => input.name,
+    :class => DerpBudget }
   let(:bsplit1) { mock :coding_budget_input, :code => input1,
-                  :cached_amount => 5.0, :name => input1.name,
-                  :class => DerpBudget }
+    :cached_amount => 5.0, :name => input1.name,
+    :class => DerpBudget }
   let(:activity) { mock :activity, :name => 'act',
-                   :leaf_spend_inputs => [ssplit, ssplit1],
-                   :leaf_budget_inputs => [bsplit, bsplit1],
-                   :total_spend => 45.0, :total_budget => 15.0,
-                   :currency => 'USD'}
+    :coding_spend_cost_categorization => mock(:scope, :roots => [ssplit, ssplit1]),
+    :coding_budget_cost_categorization => mock(:scope, :roots => [bsplit, bsplit1]),
+    :total_spend => 45.0, :total_budget => 15.0,
+    :currency => 'USD'}
   let(:report) { Reports::ActivityInputs.new(activity) }
   let(:rows) { [ Reports::Row.new(input1.name, 20.0, 5.0),
-                 Reports::Row.new(input.name, 25.0, 10.0) ] }
+    Reports::Row.new(input.name, 25.0, 10.0) ] }
 
   it "should have a name" do
     report.name.should == 'act'
@@ -57,7 +55,7 @@ describe Reports::ActivityInputs do
 
     it "works if a split has a value of nil" do
       inputs_with_nil = [ Reports::Row.new(input1.name, 20.0, 5.0),
-                          Reports::Row.new(input.name, 0, 10.0) ]
+        Reports::Row.new(input.name, 0, 10.0) ]
       ssplit.stub(:cached_amount).and_return nil
       activity.stub(:total_spend).and_return BigDecimal.new("20.0")
       report.collection.should == inputs_with_nil
@@ -66,7 +64,8 @@ describe Reports::ActivityInputs do
 
   describe "unclassified inputs" do
     before :each do
-      activity.stub(:leaf_spend_inputs).and_return []
+      activity.stub(:coding_spend_cost_categorization).and_return mock(:scope, :roots => [])
+      activity.stub(:coding_budget_cost_categorization).and_return mock(:scope, :roots => [])
       activity.stub(:total_spend).and_return BigDecimal.new("45.015")
     end
 

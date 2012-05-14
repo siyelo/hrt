@@ -388,7 +388,7 @@ Given /^#{capture_model} state is: "([^"]*)"$/ do |name, state|
   response.save!
 end
 
-When /^a location_split exists with activity: "([^"]*)", location: "([^"]*)", spend_percentage: (\d+), budget_percentage: (\d+)$/ do |act_name, loc_name, spend_pc, budget_pc|
+When /^a 100% location split exists with activity: "([^"]*)", location: "([^"]*)", spend_percentage: (\d+), budget_percentage: (\d+)$/ do |act_name, loc_name, spend_pc, budget_pc|
    loc = Factory :location, :short_display => loc_name
    activity = Activity.find_by_name act_name
    Factory.create :coding_spend_district, :code => loc,
@@ -399,7 +399,7 @@ When /^a location_split exists with activity: "([^"]*)", location: "([^"]*)", sp
      :cached_amount => activity.total_budget * (budget_pc.to_f/100)
 end
 
-When /^a input_split exists with activity: "([^"]*)", input: "([^"]*)", spend_percentage: (\d+), budget_percentage: (\d+)$/ do |act_name, input_name, spend_pc, budget_pc|
+When /^a 100% input split exists with activity: "([^"]*)", input: "([^"]*)", spend_percentage: (\d+), budget_percentage: (\d+)$/ do |act_name, input_name, spend_pc, budget_pc|
    input = Factory :input, :short_display => input_name
    activity = Activity.find_by_name act_name
    Factory.create :coding_spend_cost_categorization, :code => input,

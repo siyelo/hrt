@@ -10,12 +10,12 @@ describe Activity do
     it { should have_many(:purposes) }
     it { should have_many(:code_assignments).dependent(:destroy) }
     it { should have_many(:comments).dependent(:destroy) }
-    it { should have_many(:coding_budget).dependent(:destroy) }
-    it { should have_many(:coding_budget_cost_categorization).dependent(:destroy) }
-    it { should have_many(:coding_budget_district).dependent(:destroy) }
     it { should have_many(:coding_spend).dependent(:destroy) }
+    it { should have_many(:coding_budget).dependent(:destroy) }
     it { should have_many(:coding_spend_cost_categorization).dependent(:destroy) }
+    it { should have_many(:coding_budget_cost_categorization).dependent(:destroy) }
     it { should have_many(:coding_spend_district).dependent(:destroy) }
+    it { should have_many(:coding_budget_district).dependent(:destroy) }
     it { should have_many(:targets).dependent(:destroy) }
     it { should have_many(:outputs).dependent(:destroy) }
     it { should have_many(:leaf_budget_purposes) }

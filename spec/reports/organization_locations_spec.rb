@@ -50,7 +50,7 @@ describe Reports::OrganizationLocations do
     report.total_spend.should == response.total_spend
   end
 
-  #table data
+  # Table data
   describe "#collection" do
     it 'returns all rows current Org (/response), sorted' do
       report.stub(:method_from_class).with("DerpSpend").and_return :spend
@@ -68,23 +68,19 @@ describe Reports::OrganizationLocations do
   end
 
   describe "unclassified rows" do
-    let(:other_cost) { mock :ocost, :name => 'act',
-                       :coding_spend_district => [],
-                       :coding_budget_district => [],
-                       :total_spend => 25, :total_budget => 5.0}
     before :each do
-      response.stub(:activities).and_return [activity, other_cost]
-      response.stub(:total_spend).and_return BigDecimal.new("70.015")
-      response.stub(:total_budget).and_return 20
+      activity.stub(:coding_spend_district).and_return []
+      activity.stub(:coding_budget_district).and_return []
+      response.stub(:total_spend).and_return BigDecimal.new("45.015")
     end
 
     it "rounds all amounts" do
       not_classifed_row = report.collection.last
-      not_classifed_row.total_spend.should == 25.02
+      not_classifed_row.total_spend.should == 45.02
     end
 
     it "does the not-classified calculation before rounding" do
-      report.stub(:rows_spend).and_return BigDecimal.new("70.011")
+      report.stub(:rows_spend).and_return BigDecimal.new("45.011")
       not_classifed_row = report.collection.last
       not_classifed_row.total_spend.to_s.should == "0.0" # .015 - .011 == 0.004 - rounded down to zero
     end
@@ -92,8 +88,8 @@ describe Reports::OrganizationLocations do
     it "returns the the rows with an extra split added if the rows totals are not equal to the responses" do
       not_classifed_row = report.collection.last
       not_classifed_row.name.should == "Not Classified"
-      not_classifed_row.total_spend.should == 25.02
-      not_classifed_row.total_budget.should == 5.0
+      not_classifed_row.total_spend.should == 45.02
+      not_classifed_row.total_budget.should == 15.0
     end
   end
 end

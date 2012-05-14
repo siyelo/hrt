@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../spec_helper_lite'
 
 $: << File.join(APP_ROOT, "app/reports")
 
-require 'app/reports/organization_locations'
+require 'app/reports/locations'
 
 describe Reports::ClassificationBase do
   let(:response) { mock :response,

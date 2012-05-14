@@ -64,8 +64,8 @@ module Reports
     # subclasses need to define implementation of
     # activities() and splits()
     def codings
-      ( activities.map { |a| a.send(splits(:spend)) } +
-        activities.map { |a| a.send(splits(:budget)) }).flatten
+      ( activities.map { |a| splits(a, :spend) } +
+        activities.map { |a| splits(a, :budget) }).flatten
     end
 
     def remaining_spend

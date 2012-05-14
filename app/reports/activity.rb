@@ -3,10 +3,6 @@ require 'active_support/core_ext/float'
 
 module Reports
   class Activity < Reports::Base
-    def initialize(activity)
-      @resource = activity
-    end
-
     def collection
       @resource.implementer_splits.sorted.find(:all, :include => :organization)
     end

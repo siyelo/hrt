@@ -1,15 +1,7 @@
-require 'app/reports/classification_base'
+require 'app/reports/locations'
 
 module Reports
-  class ProjectLocations < Reports::ClassificationBase
-    def initialize(project)
-      @resource = project
-    end
-
-    protected
-
-    def splits(type)
-      "coding_#{type}_district"
-    end
+  class ProjectLocations < Reports::Locations
   end
 end
+

@@ -1,15 +1,7 @@
-require 'app/reports/classification_base'
+require 'app/reports/inputs'
 
 module Reports
-  class OrganizationInputs < Reports::ClassificationBase
-    def initialize(response)
-      @resource = response
-    end
-
-    protected
-
-    def splits(type)
-      "leaf_#{type}_inputs"
-    end
+  class OrganizationInputs < Reports::Inputs
   end
 end
+

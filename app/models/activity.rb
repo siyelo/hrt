@@ -31,6 +31,9 @@ class Activity < ActiveRecord::Base
     :conditions => ["codes.type in (?)", Code::PURPOSES], :source => :code
   has_many :code_assignments, :dependent => :destroy
   has_many :comments, :as => :commentable, :dependent => :destroy
+
+  ### TODO: deprecate
+  #
   has_many :coding_budget, :dependent => :destroy
   has_many :coding_budget_cost_categorization, :dependent => :destroy
   has_many :coding_budget_district, :dependent => :destroy
@@ -41,6 +44,8 @@ class Activity < ActiveRecord::Base
     :class_name => 'CodingBudgetDistrict'
   has_many :spend_locations, :dependent => :destroy,
     :class_name => 'CodingSpendDistrict'
+  ###
+
   has_many :targets, :dependent => :destroy
   has_many :outputs, :dependent => :destroy
   has_many :leaf_budget_purposes, :dependent => :destroy,

@@ -1,6 +1,12 @@
 require 'spec_helper'
 
 describe ReportsController do
+  let(:current_response) { mock :response }
+
+  before :each do
+    controller.stub(:current_response).and_return current_response
+  end
+
   context "protection" do
     describe "#index" do
       before :each do get :index end
@@ -29,14 +35,21 @@ describe ReportsController do
     end
 
     it "should render index" do
+      Reports::Organization.should_receive(:new).with(current_response).and_return mock(:report)
       get :index
       response.should be_success
+      assigns[:report].should_not be_nil
       assigns[:response].should == @reporter.data_responses.first
     end
 
-    it "should initialize an org report presenter" do
-      get :index
-      assigns[:report].should_not be_nil
+    it "should initialize an org location presenter" do
+      Reports::OrganizationLocations.should_receive(:new).with(current_response).and_return mock(:report)
+      get :locations
+    end
+
+    it "should initialize an org inputs presenter" do
+      Reports::OrganizationInputs.should_receive(:new).with(current_response).and_return mock(:report)
+      get :inputs
     end
   end
 end

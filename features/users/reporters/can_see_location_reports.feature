@@ -16,7 +16,7 @@ Feature: Reporter can see location report
   @javascript
   Scenario: See locations overview
     When an implementer_split exists with organization: the organization, activity: the activity, spend: 120, budget: 220
-    And a location_split exists with activity: "Act1", location: "Some Loc", spend_percentage: 100, budget_percentage: 100
+    And a 100% location split exists with activity: "Act1", location: "Some Loc", spend_percentage: 100, budget_percentage: 100
     When I follow "Reports"
     And I follow "Locations"
     And I should see "Some Loc"

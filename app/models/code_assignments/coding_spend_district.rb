@@ -1,4 +1,4 @@
-class CodingSpendDistrict < CodeAssignment
+class CodingSpendDistrict < LocationSplit
 end
 
 

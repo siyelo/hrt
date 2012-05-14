@@ -6,6 +6,10 @@ module Reports
     include CurrencyViewNumberHelper
     attr_accessor :resource
 
+    def initialize(resource)
+      @resource = resource
+    end
+
     def name
       @resource.name
     end

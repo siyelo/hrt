@@ -1,4 +1,4 @@
-require 'action_view'
+require 'action_view/helpers/number_helper'
 
 module CurrencyViewNumberHelper
   include ActionView::Helpers::NumberHelper
