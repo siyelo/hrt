@@ -240,6 +240,7 @@ module ApplicationHelper
     when String
       require 'addressable/uri'
       uri = Addressable::URI.new
+      ## ResponseSession#set_url_options
       uri.query_values = @url_options
 
       if @url_options.present? && !options.include?('response_id')
@@ -256,6 +257,15 @@ module ApplicationHelper
     end
 
     super
+  end
+
+  def current_organization_name
+    if current_user.sysadmin? &&
+      !(params[:controller].include?('admin') || params[:controller] == 'dashboard')
+        current_response.organization.name
+    else
+      current_user.organization.name
+    end
   end
 
 end
