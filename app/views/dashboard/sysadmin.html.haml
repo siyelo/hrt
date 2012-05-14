@@ -16,22 +16,22 @@
           - link_to admin_responses_path(:filter => 'Accepted'), :class => "arrow" do
             %h3 Accepted
             %h4= @dashboard.accepted_percent
-          
+
+        %li.half
+          - link_to admin_responses_path(:filter => 'Started'), :class => "arrow" do
+            %h3 Started
+            %h4= @dashboard.started_percent
+
         %li.half
           - link_to admin_responses_path(:filter => 'Not Yet Started'), :class => "arrow" do
             %h3 Not Yet Started
             %h4= @dashboard.not_yet_started_percent
-          
+
         %li.half
           - link_to admin_responses_path(:filter => 'Submitted'), :class => "arrow" do
             %h3 Pending Approval
             %h4= @dashboard.pending_approval
-          
-        %li.half
-          - link_to admin_organizations_path(:filter => 'Reporting'), :class => "arrow" do
-            %h3 Reporting Organizations
-            %h4= @dashboard.reporting_organizations_count
-          
+
 
   .sidebar#admin-submission
     %h2 Latest Submissions

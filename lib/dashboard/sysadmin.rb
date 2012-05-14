@@ -23,6 +23,10 @@ class Dashboard::Sysadmin
     @accepted_count ||= current_request.data_responses.accepted.count
   end
 
+  def started_count
+    @started_count ||= current_request.data_responses.started.count
+  end
+
   def not_yet_started_count
     @not_yet_started_count ||= current_request.data_responses.unstarted.count
   end
@@ -31,16 +35,16 @@ class Dashboard::Sysadmin
     calculate_percent(accepted_count)
   end
 
+  def started_percent
+    calculate_percent(started_count)
+  end
+
   def not_yet_started_percent
     calculate_percent(not_yet_started_count)
   end
 
   def pending_approval
     current_request.data_responses.submitted.count
-  end
-
-  def reporting_organizations_count
-    @reporting_organizations_count ||= Organization.reporting.count
   end
 
   def comments
