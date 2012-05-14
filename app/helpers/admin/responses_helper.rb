@@ -6,10 +6,9 @@ module Admin::ResponsesHelper
       message += " matching <span class='bold'>#{query}</span>"
     end
     if filter && filter != "All"
-      message += " with a <span class='bold'>#{filter}</span> response"
+      message += " that are <span class='bold'>#{filter}</span>"
     end
-
-    if query || filter
+    if query || (filter && filter != "All")
       message += ". #{link_to "(Back to all responses)", admin_responses_url}"
     end
 
