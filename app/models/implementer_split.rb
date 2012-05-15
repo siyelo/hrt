@@ -101,6 +101,7 @@
 end
 
 
+
 # == Schema Information
 #
 # Table name: implementer_splits
@@ -113,5 +114,6 @@ end
 #  created_at      :datetime
 #  updated_at      :datetime
 #  double_count    :boolean
+#  currency        :string(255)
 #
 

@@ -112,7 +112,6 @@ GEM
     launchy (0.3.7)
       configuration (>= 0.0.5)
       rake (>= 0.8.1)
-    libnotify (0.7.2)
     linecache (0.46)
       rbx-require-relative (> 0.0.4)
     mime-types (1.18)
@@ -240,7 +239,6 @@ DEPENDENCIES
   interactive_editor
   json_pure
   launchy
-  libnotify
   money (~> 3.5)
   mongrel
   open_gem

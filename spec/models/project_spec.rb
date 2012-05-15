@@ -19,17 +19,19 @@ describe Project do
     subject { basic_setup_project; @project }
     it { should allow_mass_assignment_of(:name) }
     it { should allow_mass_assignment_of(:description) }
-    it { should allow_mass_assignment_of(:start_date) }
-    it { should allow_mass_assignment_of(:currency) }
-    it { should allow_mass_assignment_of(:end_date) }
     it { should allow_mass_assignment_of(:data_response) }
-    it { should allow_mass_assignment_of(:activities) }
+    it { should allow_mass_assignment_of(:data_response_id) }
+    it { should allow_mass_assignment_of(:start_date) }
+    it { should allow_mass_assignment_of(:end_date) }
+    it { should allow_mass_assignment_of(:currency) }
+    it { should allow_mass_assignment_of(:budget_type) }
     it { should allow_mass_assignment_of(:in_flows_attributes) }
   end
 
   describe "Validations" do
     subject { basic_setup_project; @project }
     it { should validate_presence_of(:name) }
+    it { should validate_presence_of(:budget_type) }
     it { should validate_presence_of(:data_response_id) }
     it { should validate_presence_of(:currency) }
     it { should allow_value('2010-12-01').for(:start_date) }
@@ -87,7 +89,7 @@ describe Project do
   describe "create" do
     it "should create a new project object with (unsaved) nested associations" do
       basic_setup_response
-      p = Project.new(:name => "new project", :description => "new description",
+      p = Project.new(:name => "new project", :budget_type => "ON", :description => "new description",
       :data_response => @response, :start_date => "2010-01-01", :end_date => "2010-12-31",
       :currency => "USD", :in_flows_attributes => { "0" => {
         :organization_id_from => "a new org plox k thx",
@@ -99,7 +101,7 @@ describe Project do
     it "should create a new project object with (unsaved) nested associations" do
       basic_setup_response
       p = Project.new(
-        {"name"=>"Kuraneza", "start_date"=>"2011-08-29",
+        {"name"=>"Kuraneza", "start_date"=>"2011-08-29", "budget_type"=>"ON",
          "in_flows_attributes"=> {"0"=>{"organization_id_from"=>"#{@organization.id}", "spend"=>"1", "budget"=>"1"}},
          "data_response_id"=>"#{@response.id}", "_destroy"=>"", "currency"=>"RWF", "description"=>"Describe the proje",
          "end_date"=>"2012-08-29",

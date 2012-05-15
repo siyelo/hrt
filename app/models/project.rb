@@ -41,7 +41,7 @@ class Project < ActiveRecord::Base
 
   ### Validations
   validates_uniqueness_of :name, :scope => :data_response_id
-  validates_presence_of :name, :data_response_id, :currency
+  validates_presence_of :name, :data_response_id, :currency, :budget_type
   validates_inclusion_of :currency,
     :in => Money::Currency::TABLE.map{|k, v| "#{k.to_s.upcase}"},
     :allow_nil => true, :unless => Proc.new {|p| p.currency.blank?}
@@ -57,10 +57,11 @@ class Project < ActiveRecord::Base
   validate :validate_funder_uniqueness
 
   ### Attributes
-  attr_accessible :name, :description, :user_id,:data_response_id,
-                  :start_date, :end_date, :currency, :data_response, :activities,
-                  :activities_attributes, :in_flows_attributes, :am_approved,
-                  :am_approved_date, :in_flows
+  attr_accessible :name, :description, :user, :user_id, :data_response,
+                  :data_response_id, :activities, :start_date,
+                  :end_date, :currency, :budget_type,
+                  # huh?
+                  :activities_attributes, :in_flows_attributes, :in_flows
 
   ### Delegates
   delegate :organization, :to => :data_response, :allow_nil => true #workaround for object creation
@@ -151,6 +152,7 @@ class Project < ActiveRecord::Base
 end
 
 
+
 # == Schema Information
 #
 # Table name: projects
@@ -164,5 +166,6 @@ end
 #  updated_at       :datetime
 #  currency         :string(255)
 #  data_response_id :integer         indexed
+#  budget_type      :string(255)     default("N/A")
 #
 
