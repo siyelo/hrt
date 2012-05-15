@@ -52,6 +52,7 @@ describe Reports::Reporters do
     end
 
     it "#expenditure_pie only displays the top spenders in the data_request" do
+      Reports::Reporters.send(:remove_const, 'NUMBER_OF_VALUES_IN_CHARTS')
       Reports::Reporters.const_set('NUMBER_OF_VALUES_IN_CHARTS', 2)
       Charts::Spend.stub(:new).and_return(mock(:pie, :google_pie => ""))
       Charts::Spend.should_receive(:new).once.with(rows)
@@ -60,6 +61,7 @@ describe Reports::Reporters do
     end
 
     it "#budget_pie only displays the top spenders in the data_request" do
+      Reports::Reporters.send(:remove_const, 'NUMBER_OF_VALUES_IN_CHARTS')
       Reports::Reporters.const_set('NUMBER_OF_VALUES_IN_CHARTS', 2)
       Charts::Spend.stub(:new).and_return(mock(:pie, :google_pie => ""))
       Charts::Spend.should_receive(:new).once.with(rows)

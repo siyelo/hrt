@@ -1,4 +1,5 @@
 require 'active_support/core_ext/float'
+require 'lib/currency_view_number_helper'
 
 module Reports
   class Base
