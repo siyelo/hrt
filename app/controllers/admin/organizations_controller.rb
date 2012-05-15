@@ -23,12 +23,11 @@ class Admin::OrganizationsController < Admin::BaseController
   end
 
   def show
-    @organization = Organization.find(params[:id], :include => [:projects,
+    @target = Organization.find(params[:id], :include => [:projects,
       :activities, :users])
-
-    respond_to do |format|
-      format.js {render :partial => 'organization_info'}
-    end
+    @duplicate = Organization.find(params[:duplicate_id], :include => [:projects,
+      :activities, :users])
+    render :partial => 'organization_info'
   end
 
   def create

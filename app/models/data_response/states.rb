@@ -58,4 +58,20 @@ module DataResponse::States
     when 'Accepted'        : 'accepted'
     end
   end
+
+  def self.lower_state(state1, state2)
+    state1_index = DataResponse::STATES.index(state1)
+    state2_index = DataResponse::STATES.index(state2)
+    DataResponse::STATES[[state1_index, state2_index].sort[0]]
+  end
+
+  def self.merged_response_state(duplicate_state, target_state)
+    if duplicate_state == 'unstarted' || duplicate_state.nil?
+      target_state
+    elsif target_state == 'unstarted' || target_state.nil?
+      duplicate_state
+    else
+      lower_state(target_state, duplicate_state)
+    end
+  end
 end

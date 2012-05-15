@@ -2,14 +2,14 @@ var HrtOrganizations = {};
 
 HrtOrganizations.init = function () {
   $("#duplicate_organization_id, #target_organization_id").change(function() {
-    var organization_id = $(this).val();
-    var type = $(this).parents('.box').attr('data-type');
-    var box = $('#' + type); // type = duplicate; target
-    HrtOrganizations.getOrganizationInfo(organization_id, box);
+    var target_id    = $('#target_organization_id').val();
+    var duplicate_id = $('#duplicate_organization_id').val();
+    HrtOrganizations.getOrganizationInfo(target_id, duplicate_id);
   });
 
-  HrtOrganizations.getOrganizationInfo($("#duplicate_organization_id").val(), $('#duplicate'));
-  HrtOrganizations.getOrganizationInfo($("#target_organization_id").val(), $('#target'));
+  var target_id    = $('#target_organization_id').val();
+  var duplicate_id = $('#duplicate_organization_id').val();
+  HrtOrganizations.getOrganizationInfo(target_id, duplicate_id);
 
   $("#replace_organization").click(function (e) {
     e.preventDefault();
@@ -18,7 +18,7 @@ HrtOrganizations.init = function () {
     if (confirm('Are you sure?')) {
       var duplicate_id = $("#duplicate_organization_id").val();
       $.post(HrtForm.buildUrl(form.attr('action')), form.serialize(), function (data, status, response) {
-        var data = $.parseJSON(data)
+        var data = $.parseJSON(data);
         response.status === 206 ? HrtOrganizations.ReplaceOrganizationErrorCallback(data.message) : HrtOrganizations.ReplaceOrganizationSuccessCallback(data.message, duplicate_id);
       });
     }
@@ -38,25 +38,18 @@ HrtOrganizations.displayFlashForReplaceOrganization = function (type, message) {
   });
 };
 
-HrtOrganizations.removeOrganizationFromLists = function (duplicate_id, box_type) {
-  $.each(['duplicate', 'target'], function (i, name) {
-    var select_element = $("#" + name + "_organization_id");
-    var current_option = select_element.find("option[value='" + duplicate_id + "']");
-
-    // remove element from page
-    if (name === box_type) {
-      var next_option = current_option.next().val();
-      if (next_option) {
-        select_element.val(next_option);
-        // update info block
-        HrtOrganizations.getOrganizationInfo(select_element.val(), $('#' + name));
-      } else {
-        $('#' + name).html('')
-      }
-    }
-
-    current_option.remove();
-  });
+HrtOrganizations.removeOrganizationFromLists = function (duplicate_id) {
+  var target_element    = $('#target_organization_id');
+  var duplicate_element = $('#duplicate_organization_id');
+  var duplicate_option  = duplicate_element.find("option[value='" + duplicate_id + "']");
+  var next_option       = duplicate_option.next().val();
+  if (next_option) {
+    duplicate_element.val(next_option);
+    HrtOrganizations.getOrganizationInfo(target_element.val(), next_option);
+  } else {
+    $('.preview').html('');
+  };
+  duplicate_option.remove();
 };
 
 HrtOrganizations.ReplaceOrganizationSuccessCallback = function (message, duplicate_id) {
@@ -68,10 +61,10 @@ HrtOrganizations.ReplaceOrganizationErrorCallback = function (message) {
   HrtOrganizations.displayFlashForReplaceOrganization('error', message);
 };
 
-HrtOrganizations.getOrganizationInfo = function (organization_id, box) {
-  if (organization_id) {
-    $.get(organization_id + '.js', function (data) {
-      box.find('.placer').html(data);
+HrtOrganizations.getOrganizationInfo = function (target_id, duplicate_id) {
+  if (target_id && duplicate_id) {
+    $.get(target_id + '.js?duplicate_id=' + duplicate_id, function (data) {
+      $('.preview').html(data);
     });
   }
 };

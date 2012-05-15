@@ -3,6 +3,11 @@ require 'spec_helper'
 describe DataResponse::States do
   let(:dr) { DataResponse.new }
 
+  describe "constants" do
+    DataResponse::STATES.should == ['unstarted', 'started', 'rejected',
+                                    'submitted', 'accepted']
+  end
+
   describe "#state_to_name" do
     it "returns 'Not Yet Started' when state is 'unstarted'" do
       dr.state = 'unstarted'
@@ -176,5 +181,23 @@ describe DataResponse::States do
         @response.submittable?.should be_false
       end
     end
+  end
+
+  it "returns the lower of 2 states" do
+    DataResponse::States.lower_state('unstarted', 'started').should == 'unstarted'
+    DataResponse::States.lower_state('started', 'rejected').should == 'started'
+    DataResponse::States.lower_state('rejected', 'submitted').should == 'rejected'
+    DataResponse::States.lower_state('submitted', 'accepted').should == 'submitted'
+
+    DataResponse::States.lower_state('started', 'unstarted').should == 'unstarted'
+    DataResponse::States.lower_state('rejected', 'submitted').should == 'rejected'
+    DataResponse::States.lower_state('submitted', 'started').should == 'started'
+    DataResponse::States.lower_state('unstarted', 'accepted').should == 'unstarted'
+  end
+
+  it "returns the other response state if response state is unstarted" do
+    DataResponse::States.merged_response_state('unstarted', 'started').should == 'started'
+    DataResponse::States.merged_response_state('started', 'unstarted').should == 'started'
+    DataResponse::States.merged_response_state('submitted', 'rejected').should == 'rejected'
   end
 end

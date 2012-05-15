@@ -54,9 +54,6 @@ class Organization < ActiveRecord::Base
   before_destroy :check_no_funder_references
   before_destroy :check_no_implementer_references
 
-  ### Delegates
-  delegate :name, :to => :location, :prefix => true, :allow_nil => true # gives you location_name - oh lordy!
-
   ### Named scopes
   named_scope :ordered, :order => 'lower(name) ASC, created_at DESC'
   named_scope :with_type, lambda { |type| {:conditions => ["organizations.raw_type = ?", type]} }
