@@ -13,7 +13,7 @@ class ActivitiesController < BaseController
 
   def edit
     @activity = @response.activities.find(params[:id])
-    warn_if_not_classified(@activity)
+    warn_if_not_classified(@activity) unless current_user.sysadmin?
     prepare_classifications(@activity)
     load_comment_resources(@activity)
     load_validation_errors(@activity) if on_implementers_page?
