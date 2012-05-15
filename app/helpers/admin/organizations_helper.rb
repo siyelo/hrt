@@ -5,12 +5,16 @@ module Admin::OrganizationsHelper
   end
 
   def search_and_filter_message(count, query, filter)
-    message = "Found #{pluralize(count, "organization")}"
+    message = "Found #{count}"
+    filter ||= "Reporting"
+
+    if filter && filter != "All"
+      message += " <span class='bold'>#{filter}</span> organizations"
+    else
+      message += " organizations"
+    end
     if query
       message += " matching <span class='bold'>#{query}</span>"
-    end
-    if filter && filter != "All"
-      message += " with a <span class='bold'>#{filter}</span> response"
     end
 
     if query || filter
