@@ -12,7 +12,7 @@ class CustomFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
-  %w[text_field select collection_select password_field text_area file_field].
+  %w[text_field collection_select password_field text_area file_field].
       each do |method_name|
 
     define_method(method_name) do |field_name, *args|
@@ -25,6 +25,17 @@ class CustomFormBuilder < ActionView::Helpers::FormBuilder
       @template.content_tag(:li, field_label(field_name, *args) +
                             super + hint, args[0][:wrapper_html])
     end
+  end
+
+  def select(field_name, *args)
+      if args.present? && args[2][:hint].present?
+        hint = @template.content_tag(:p, args[2][:hint], :class => 'input-hints')
+      else
+        hint = ""
+      end
+
+      @template.content_tag(:li, field_label(field_name, *args) +
+                            super + hint, args[2][:wrapper_html])
   end
 
   def check_box(field_name, *args)
