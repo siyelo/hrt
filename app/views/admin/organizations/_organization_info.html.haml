@@ -1,30 +1,52 @@
-.organization
-  Organization:
-  = link_to friendly_name(@organization), edit_admin_organization_path(@organization)
+%h2 Preview
+.section_form.last
+  %table.standard.rounded
+    %thead
+      %th
+      %th
+        Duplicate
+        %br
+        = link_to friendly_name(@duplicate), edit_admin_organization_path(@duplicate)
+      %th
+        Replacement
+        %br
+        = link_to friendly_name(@target), edit_admin_organization_path(@target)
+      %th
+        Merged
+        %br
+        = friendly_name(@target)
 
-%ul
-  %li
-    Total projects:
-    = @organization.projects.count
-
-  %li
-    Total activities:
-    = @organization.activities.only_simple.count
-
-  %li
-    Location:
-    = @organization.location_name
-
-  %li
-    Total users:
-    = @organization.users.count
-
-  %li
-    Total (External) Funder References:
-    = @organization.out_flows.length
-    = link_to "View", edit_admin_organization_path(@organization)
-
-  %li
-    Total (External) Implementer References:
-    = @organization.implementer_splits.length
-    = link_to "View", edit_admin_organization_path(@organization)
+    %tbody
+      %tr
+        %td Total projects:
+        %td= @duplicate.projects.count
+        %td= @target.projects.count
+        %td= @duplicate.projects.count + @target.projects.count
+      %tr
+        %td Total activities:
+        %td= @duplicate.activities.only_simple.count
+        %td= @target.activities.only_simple.count
+        %td= @duplicate.activities.only_simple.count + @target.activities.only_simple.count
+      %tr
+        %td Total users:
+        %td= @duplicate.users.count
+        %td= @target.users.count
+        %td= @duplicate.users.count + @target.users.count
+      %tr
+        %td Total (External) Funder References:
+        %td= link_to @duplicate.out_flows.length, edit_admin_organization_path(@duplicate)
+        %td= link_to @target.out_flows.length, edit_admin_organization_path(@target)
+        %td= @duplicate.out_flows.length + @target.out_flows.length
+      %tr
+        %td Total (External) Funder References:
+        %td= link_to @duplicate.implementer_splits.length, edit_admin_organization_path(@duplicate)
+        %td= link_to @target.implementer_splits.length, edit_admin_organization_path(@target)
+        %td= @duplicate.implementer_splits.length + @target.implementer_splits.length
+      - DataRequest.all.each do |request|
+        - duplicate_state = @duplicate.responses.with_request(request)[0].try(:state)
+        - target_state = @target.responses.with_request(request)[0].try(:state)
+        %tr
+          %td= request.name
+          %td= duplicate_state || 'N/A'
+          %td= target_state || 'N/A'
+          %td= DataResponse::States.merged_response_state(duplicate_state, target_state) || 'N/A'

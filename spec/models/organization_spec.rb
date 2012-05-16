@@ -219,6 +219,27 @@ describe Organization do
       @duplicate_response2 = @duplicate_org.latest_response
     end
 
+    it "should use the lower of the two started response states" do
+      @target_org.responses.latest_first.first.accept!
+      @duplicate_org.responses.latest_first.first.start!
+      Organization.merge_organizations!(@target_org, @duplicate_org)
+      @target_org.responses.latest_first.first.state.should == 'started'
+    end
+
+    it "should use the duplicate response state if target is unstarted" do
+      @target_org.responses.latest_first.first.state = 'unstarted'
+      @duplicate_org.responses.latest_first.first.start!
+      Organization.merge_organizations!(@target_org, @duplicate_org)
+      @target_org.responses.latest_first.first.state.should == 'started'
+    end
+
+    it "should use the target response state if duplicate is unstarted" do
+      @target_org.responses.latest_first.first.submit!
+      @duplicate_org.responses.latest_first.first.state = 'unstarted'
+      Organization.merge_organizations!(@target_org, @duplicate_org)
+      @target_org.responses.latest_first.first.state.should == 'submitted'
+    end
+
     it "should move users" do
       Organization.merge_organizations!(@target_org, @duplicate_org)
       @target_org.users.should == [@target_org_user, @duplicate_org_user]

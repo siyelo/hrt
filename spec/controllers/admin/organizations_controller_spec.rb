@@ -37,8 +37,10 @@ describe Admin::OrganizationsController do
 
   it "#show(s)" do
     organization = Factory(:organization)
-    get :show, :id => organization.id
-    assigns(:organization).should == organization
+    organization2 = Factory(:organization)
+    get :show, :id => organization.id, :duplicate_id => organization2.id
+    assigns(:target).should == organization
+    assigns(:duplicate).should == organization2
   end
 
   describe "#destroy" do

@@ -68,23 +68,15 @@ Feature: Admin can manage organizations
       | Org3 - 0 users | Org3 - 0 users | Same organizations for duplicate and target selected. |
       | Org3 - 0 users | Org2 - 1 user  | Organizations successfully merged.                    |
 
-  @javascript @wip
+  @javascript
   Scenario Outline: Merge duplicate organizations (with JS)
     Given an organization exists with name: "org3"
     And I follow "Fix duplicate organizations"
-    And I select "<duplicate>" from "Potential problem organization (duplicate)"
-    And I select "<target>" from "Replacement organization"
-    And I should see "Organization: <duplicate_box>" within "#duplicate"
-    And I should see "Organization: <target_box>" within "#target"
-    And I press "Replace"
-    And I confirm the popup dialog
-    Then I should see "<message>"
-    And "<removed_duplicates>" should not be an option for "Potential problem organization (duplicate)"
-
-    Examples:
-      | duplicate      | target         | duplicate_box  | target_box     | message                                               | remaining_duplicates |
-      | Org3 - 0 users | Org3 - 0 users | Org3 | Org3 | Same organizations for duplicate and target selected. |                      |
-      | Org3 - 0 users | Org2 - 1 user  | Org3 | Org2 | Organizations successfully merged.                    | org1                 |
+    Then I should see "Potential problem organization (duplicate)"
+    And I should see "Replacement organization"
+    Then I should see "Duplicate Org1"
+    And I should see "Replacement Org1"
+    And I should see "Merged Org1"
 
   Scenario Outline: An admin can sort organizations
     And I follow "<column_name>"

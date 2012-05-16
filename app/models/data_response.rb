@@ -1,5 +1,5 @@
 class DataResponse < ActiveRecord::Base
-  STATES = ['unstarted', 'started', 'submitted', 'rejected', 'accepted']
+  STATES = ['unstarted', 'started', 'rejected', 'submitted', 'accepted']
 
   include DataResponse::States
   include DataResponse::Totaller
