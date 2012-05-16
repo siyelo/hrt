@@ -28,14 +28,15 @@ class CustomFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def select(field_name, *args)
-      if args.present? && args[2][:hint].present?
-        hint = @template.content_tag(:p, args[2][:hint], :class => 'input-hints')
-      else
-        hint = ""
-      end
+    arguements = args.select{ |a| a.class == Hash }.inject({}){ |h, e| h.merge(e) }
+    if arguements.present? && arguements[:hint]
+      hint = @template.content_tag(:p, arguements[:hint], :class => 'input-hints')
+    else
+      hint = ""
+    end
 
-      @template.content_tag(:li, field_label(field_name, *args) +
-                            super + hint, args[2][:wrapper_html])
+    @template.content_tag(:li, field_label(field_name, *args) + super + hint,
+                          arguements[:wrapper_html])
   end
 
   def check_box(field_name, *args)
