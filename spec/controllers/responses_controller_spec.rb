@@ -8,7 +8,7 @@ describe ResponsesController do
       login # login as reporter
     end
 
-    it_should_require_sysadmin_for :restart, :reject, :accept
+    it_should_require_sysadmin_for :reject, :accept
   end
 
   describe "Submit" do
