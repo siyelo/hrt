@@ -53,11 +53,16 @@ class Reports::DistrictSplit < Reports::Base
 
   def code_assignments
     CodeAssignment.find :all,
-      :joins => [:code, {:activity => {:project => :data_response}}],
-      :include => [:code, {:activity => {:project => :data_response}}],
+      :select => 'code_assignments.type AS klass, codes.short_display AS district,
+        SUM("code_assignments".cached_amount) AS amount,
+        COALESCE(projects.currency, organizations.currency) AS amount_currency',
+      :joins => [:code, {:activity => {:project =>
+                                       {:data_response => :organization}}}],
       :conditions => ["data_responses.data_request_id = ? AND
                   code_assignments.type IN
-                  ('CodingBudgetDistrict', 'CodingSpendDistrict')", request.id]
+                  ('CodingBudgetDistrict', 'CodingSpendDistrict')", request.id],
+      :group => 'klass, district, amount_currency'
+
   end
 
   def district_percentages(district)
@@ -68,10 +73,10 @@ class Reports::DistrictSplit < Reports::Base
   end
 
   def map_data(collection)
-    collection.inject({}) do |result,e|
-      result[e.name] ||= Hash.new(0)
-      result[e.name][method_from_class(e.class.to_s)] +=
-        universal_currency_converter(e.cached_amount, e.activity.currency, 'RWF')
+    collection.inject({}) do |result, e|
+      result[e.district] ||= Hash.new(0)
+      result[e.district][method_from_class(e.klass.to_s)] +=
+        universal_currency_converter(e.amount.to_f, e.amount_currency, 'RWF')
       result
     end
   end
