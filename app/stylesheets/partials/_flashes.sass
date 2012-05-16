@@ -85,27 +85,32 @@
 
 // DR Settings Page
 .errorExplanation, .errorsNested
-  background-color: #ffccba
+  background: $error-bg + #111
+  border: 1px solid $error-bg - #222
   //border-color: #cc9999
-  color: #d63301
-  margin-bottom: 20px
-  padding: 10px
-  +border-radius(5px)
-  +box-shadow($very-light-grey, 0, 2px, 5px)
+  color: $red
+  margin-bottom: 15px
+  padding: 15px 18px 10px
+  +border-radius(2px)
+  +box-shadow(rgba(0, 0, 0, .1), 0, 1px, 3px)
+  +linear-gradient(color-stops($error-bg + #191919, $error-bg + #111))
   p
     font-style: italic
     font-weight: bold
+    margin-bottom: 5px
+    +text-shadow(#fff, 0, 1px, 0)
   ul, ol
     font-size: 12px
     list-style: disc
     padding-left: 30px
     li
       margin-bottom: 5px
+      +text-shadow(#fff, 0, 1px, 0)
 
 //Response notification message for Reporter Dashboard
 ul.response-notice
   clear: both
-  margin-bottom: 10px
+  +pie-clearfix
   li
     background: image_url("warning_16.png") #ffece9 no-repeat 10px center
     border: 1px solid #f4e8e6
@@ -116,7 +121,7 @@ ul.response-notice
     &:first-child
       +border-top-radius
     &:last-child
-      margin: 0
+      margin: 0 0 10px
       +border-bottom-radius
 
 .inline-response-notice
