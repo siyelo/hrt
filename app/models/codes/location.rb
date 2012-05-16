@@ -8,9 +8,6 @@ class Location < Code
   named_scope :sorted, { :order => "codes.short_display" }
 end
 
-
-
-
 # == Schema Information
 #
 # Table name: codes

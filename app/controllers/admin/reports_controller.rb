@@ -11,8 +11,8 @@ class Admin::ReportsController < Admin::BaseController
   def district_workplan
     district = Location.find(params[:id])
     if district
-      workplan = Reports::DistrictWorkplan.new(current_request, district).to_xls
-      send_xls(workplan, "#{district.short_display}_district_workplan.xls")
+      report = Reports::DistrictWorkplan.new(current_request, district, 'xls')
+      send_report_file(report, "#{district.short_display}_district_workplan")
     else
       redirect_to locations_admin_reports_path
     end

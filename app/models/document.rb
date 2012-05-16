@@ -51,3 +51,19 @@ end
 #  description           :text
 #
 
+# == Schema Information
+#
+# Table name: documents
+#
+#  id                    :integer         not null, primary key
+#  title                 :string(255)
+#  document_file_name    :string(255)
+#  document_content_type :string(255)
+#  document_file_size    :integer
+#  document_updated_at   :datetime
+#  created_at            :datetime
+#  updated_at            :datetime
+#  visibility            :string(255)
+#  description           :text
+#
+

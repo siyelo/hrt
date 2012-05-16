@@ -4,7 +4,8 @@ describe Reports::ActivityManagerWorkplan do
   describe "export projects and activities to xls" do
     it "should return xls with blank cells for repeated project & activity" do
       @organization  = Factory(:organization, :name => 'org1')
-      @user          = Factory.create(:activity_manager, :organization => @organization)
+      @user          = Factory.create(:activity_manager,
+                                      :organization => @organization)
       @organization2 = Factory(:organization, :name => 'org2')
       Factory :user, :organization => @organization2
       @organization3 = Factory(:organization, :name => 'org3')
@@ -18,24 +19,29 @@ describe Reports::ActivityManagerWorkplan do
       @activity      = Factory(:activity, :data_response => @response2,
                                :project => @project)
       split          = Factory(:implementer_split, :activity => @activity,
-                               :budget => 100, :spend => 200, :organization => @organization)
+                               :budget => 100, :spend => 200,
+                               :organization => @organization)
       @activity.reload
       @activity.save!
 
       @activity2     = Factory(:activity, :data_response => @response2,
                                :project => @project)
       split2         = Factory(:implementer_split, :activity => @activity2,
-                               :budget => 200, :spend => 200, :organization => @organization)
+                               :budget => 200, :spend => 200,
+                               :organization => @organization)
       split3         = Factory(:implementer_split, :activity => @activity2,
-                               :budget => 200, :spend => 200, :organization => @organization2)
+                               :budget => 200, :spend => 200,
+                               :organization => @organization2)
       @activity2.reload
       @activity2.save!
 
-      xls = Reports::ActivityManagerWorkplan.new(@response,@user.organizations).to_xls
+      xls = Reports::ActivityManagerWorkplan.new(@response,
+             @user.organizations, 'xls').data
       rows = Spreadsheet.open(StringIO.new(xls)).worksheet(0)
-      rows.row(0).should == ["Organization Name", "Project Name", "Project Description",
-        "Funding Sources", "Activity Name", "Activity Description", "Activity / Indirect Cost",
-        "Activity Budget", "Currency", "Implementers", "Targets", "Outputs", "Beneficiaries",
+      rows.row(0).should == ["Organization Name", "Project Name",
+        "Project Description", "Funding Sources", "Activity Name",
+        "Activity Description", "Activity / Indirect Cost", "Activity Budget",
+        "Currency", "Implementers", "Targets", "Outputs", "Beneficiaries",
         "Districts worked in/National focus"]
       rows[1,0].should == @organization2.try(:name)
       rows[1,1].should == @project.try(:name)

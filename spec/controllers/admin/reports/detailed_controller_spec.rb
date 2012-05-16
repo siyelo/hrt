@@ -15,7 +15,7 @@ describe Admin::Reports::DetailedController do
 
     context "file is correct" do
       it "sets flash notice" do
-        file = ActionController::TestUploadedFile.new('spec/fixtures/activity_overview.csv', "text/csv")
+        file = ActionController::TestUploadedFile.new('spec/fixtures/activity_overview.xls', "application/vnd.ms-excel")
         ImplementerSplit.should_receive(:mark_double_counting).and_return(true)
         put :mark_implementer_splits, :file => file
         flash[:notice].should == "Your file is being processed, please reload this page in a couple of minutes to see the results"
@@ -23,8 +23,8 @@ describe Admin::Reports::DetailedController do
     end
 
     context "valid format" do
-      it "accepts csv format" do
-        file = ActionController::TestUploadedFile.new('spec/fixtures/activity_overview.csv', "text/csv")
+      it "accepts xls format" do
+        file = ActionController::TestUploadedFile.new('spec/fixtures/activity_overview.xls', "application/vnd.ms-excel")
         ImplementerSplit.should_receive(:mark_double_counting).and_return(true)
         put :mark_implementer_splits, :file => file
         flash[:notice].should == "Your file is being processed, please reload this page in a couple of minutes to see the results"
@@ -42,7 +42,7 @@ describe Admin::Reports::DetailedController do
       it "does not accept pdf format" do
         file = ActionController::TestUploadedFile.new('spec/fixtures/activity_overview.pdf', "application/pdf")
         put :mark_implementer_splits, :file => file
-        flash[:error].should == "Invalid file format. Please select .csv or .zip format."
+        flash[:error].should == "Invalid file format. Please select .xls or .zip format."
       end
     end
   end

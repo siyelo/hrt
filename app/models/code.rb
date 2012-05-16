@@ -2,7 +2,9 @@ class Code < ActiveRecord::Base
 
   ### Constants
   PURPOSES            = %w[Mtef Nha Nasa Nsp]
-  FILE_UPLOAD_COLUMNS = %w[short_display long_display description type external_id parent_short_display hssp2_stratprog_val hssp2_stratobj_val official_name sub_account nha_code nasa_code]
+  FILE_UPLOAD_COLUMNS = %w[short_display long_display description type
+   external_id parent_short_display hssp2_stratprog_val hssp2_stratobj_val
+   official_name sub_account nha_code nasa_code]
 
   ### Attributes
   attr_writer   :type_string
@@ -55,12 +57,6 @@ class Code < ActiveRecord::Base
     short_display
   end
 
-  def self.download_template
-    FasterCSV.generate do |csv|
-      csv << Code::FILE_UPLOAD_COLUMNS
-    end
-  end
-
   def self.create_from_file(doc)
     saved, errors = 0, 0
     doc.each do |row|
@@ -81,12 +77,6 @@ class Code < ActiveRecord::Base
       self[:type] = type_string
     end
 end
-
-
-
-
-
-
 
 # == Schema Information
 #

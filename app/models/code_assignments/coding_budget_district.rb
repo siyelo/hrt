@@ -2,20 +2,6 @@ class CodingBudgetDistrict < LocationSplit
 end
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # == Schema Information
 #
 # Table name: code_assignments

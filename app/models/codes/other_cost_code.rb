@@ -1,12 +1,6 @@
 class OtherCostCode < Code
 end
 
-
-
-
-
-
-
 # == Schema Information
 #
 # Table name: codes

@@ -2,17 +2,9 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Reports::Targets do
   def run_report(request, amount_type)
-    report = Reports::Targets.new(request, amount_type)
-    csv = report.csv
-
-    #File.open('debug.csv', 'w') { |f| f.puts report.csv }
-
-    table = []
-    FasterCSV.parse(csv, :headers => true) { |row| table << row }
-
-    return table
+    content = Reports::Targets.new(request, amount_type, 'xls').data
+    FileParser.parse(content, 'xls')
   end
-
 
   [:budget, :spend].each do |amount_type|
     context "#{amount_type}" do
@@ -58,13 +50,13 @@ describe Reports::Targets do
         table[0]['Project'].should == 'project1'
         table[0]['Funding Source'].should == 'donor1 | donor2'
         table[0]['Activity'].should == 'activity1'
-        table[0]['Activity ID'].should == @activity1.id.to_s
-        table[0]["Total Activity #{amount_name} ($)"].should == '100.00'
+        table[0]['Activity ID'].should == @activity1.id
+        table[0]["Total Activity #{amount_name} ($)"].should == 100.00
         table[0]['Implementer'].should == 'organization1'
         table[0]['Implementer Type'].should == 'Implementer'
-        table[0]["Total Implementer #{amount_name} ($)"].should == '25.00'
+        table[0]["Total Implementer #{amount_name} ($)"].should == 25.00
         table[0]['Activity Target'].should == 'target1'
-        table[0]['Possible Double-Count?'].should == 'false'
+        table[0]['Possible Double-Count?'].should == false
         table[0]['Actual Double-Count?'].should == nil
 
         # row 2
@@ -72,13 +64,13 @@ describe Reports::Targets do
         table[1]['Project'].should == 'project1'
         table[0]['Funding Source'].should == 'donor1 | donor2'
         table[1]['Activity'].should == 'activity1'
-        table[1]['Activity ID'].should == @activity1.id.to_s
-        table[1]["Total Activity #{amount_name} ($)"].should == '100.00'
+        table[1]['Activity ID'].should == @activity1.id
+        table[1]["Total Activity #{amount_name} ($)"].should == 100.00
         table[1]['Implementer'].should == 'organization1'
         table[1]['Implementer Type'].should == 'Implementer'
-        table[1]["Total Implementer #{amount_name} ($)"].should == '25.00'
+        table[1]["Total Implementer #{amount_name} ($)"].should == 25.00
         table[1]['Activity Target'].should == 'target2'
-        table[1]['Possible Double-Count?'].should == 'false'
+        table[1]['Possible Double-Count?'].should == false
         table[1]['Actual Double-Count?'].should == nil
 
         # row 3
@@ -86,13 +78,13 @@ describe Reports::Targets do
         table[2]['Project'].should == 'project1'
         table[2]['Funding Source'].should == 'donor1 | donor2'
         table[2]['Activity'].should == 'activity1'
-        table[2]['Activity ID'].should == @activity1.id.to_s
-        table[2]["Total Activity #{amount_name} ($)"].should == '100.00'
+        table[2]['Activity ID'].should == @activity1.id
+        table[2]["Total Activity #{amount_name} ($)"].should == 100.00
         table[2]['Implementer'].should == 'organization2'
         table[2]['Implementer Type'].should be_nil
-        table[2]["Total Implementer #{amount_name} ($)"].should == '25.00'
+        table[2]["Total Implementer #{amount_name} ($)"].should == 25.00
         table[2]['Activity Target'].should == 'target1'
-        table[2]['Possible Double-Count?'].should == 'false'
+        table[2]['Possible Double-Count?'].should == false
         table[2]['Actual Double-Count?'].should == nil
 
         # row 4
@@ -100,13 +92,13 @@ describe Reports::Targets do
         table[3]['Project'].should == 'project1'
         table[3]['Funding Source'].should == 'donor1 | donor2'
         table[3]['Activity'].should == 'activity1'
-        table[3]['Activity ID'].should == @activity1.id.to_s
-        table[3]["Total Activity #{amount_name} ($)"].should == '100.00'
+        table[3]['Activity ID'].should == @activity1.id
+        table[3]["Total Activity #{amount_name} ($)"].should == 100.00
         table[3]['Implementer'].should == 'organization2'
         table[3]['Implementer Type'].should be_nil
-        table[3]["Total Implementer #{amount_name} ($)"].should == '25.00'
+        table[3]["Total Implementer #{amount_name} ($)"].should == 25.00
         table[3]['Activity Target'].should == 'target2'
-        table[3]['Possible Double-Count?'].should == 'false'
+        table[3]['Possible Double-Count?'].should == false
         table[3]['Actual Double-Count?'].should == nil
       end
     end

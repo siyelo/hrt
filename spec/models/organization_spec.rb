@@ -152,24 +152,6 @@ describe Organization do
     end
   end
 
-  describe "CSV" do
-    before :each do
-      @organization = Factory(:organization, :name => 'blarorg', :raw_type => 'NGO', :fosaid => "13")
-    end
-
-    it "will return just the headers if no organizations are passed" do
-      org_headers = Organization.download_template
-      org_headers.should == "name,raw_type,fosaid,currency\n"
-    end
-
-    it "will return a list of organizations if there are present" do
-      organizations = Organization.all
-      orgs = Organization.download_template(organizations)
-      orgs.should == "name,raw_type,fosaid,currency\nblarorg,NGO,13,USD\n"
-    end
-  end
-
-
   describe "remove duplicate organization" do
     before :each do
       @organization       = Factory(:organization)

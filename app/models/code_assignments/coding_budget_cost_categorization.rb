@@ -2,20 +2,6 @@ class CodingBudgetCostCategorization < InputSplit
 end
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # == Schema Information
 #
 # Table name: code_assignments

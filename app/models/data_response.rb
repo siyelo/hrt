@@ -59,8 +59,6 @@ class DataResponse < ActiveRecord::Base
 end
 
 
-
-
 # == Schema Information
 #
 # Table name: data_responses

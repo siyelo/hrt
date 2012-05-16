@@ -350,10 +350,6 @@ class Activity < ActiveRecord::Base
 end
 
 
-
-
-
-
 # == Schema Information
 #
 # Table name: activities

@@ -353,7 +353,7 @@ Then /^I should receive a csv file(?: "([^"]*)")?/ do |file|
 end
 
 Then /^I should receive a xls file(?: "([^"]*)")?/ do |file|
-  result = page.response_headers['Content-Type'].should == "application/excel"
+  result = page.response_headers['Content-Type'].should == "application/vnd.ms-excel"
   if result
     result = page.response_headers['Content-Disposition'].should =~ /#{file}/
   end

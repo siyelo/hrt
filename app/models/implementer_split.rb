@@ -78,17 +78,18 @@
     end
 
     implementing_org && implementing_org != reporting_org &&
-      implementing_org.reporting? && implementing_response.accepted? &&
+      implementing_org.reporting? && implementing_response &&
+      implementing_response.accepted? &&
       reporting_response.projects_count > 0
   end
 
   class << self
-    def mark_double_counting(file)
+    def mark_double_counting(content)
       hash = {}
-      rows = FasterCSV.parse(file, {:headers => true})
+      rows = FileParser.parse(content, 'xls')
 
       rows.map do |row|
-        hash[row['Implementer Split ID']] = row['Actual Double-Count?']
+        hash[row['Implementer Split ID'].to_s] = row['Actual Double-Count?']
       end
 
       ImplementerSplit.find(:all, :conditions => ["id IN (?)", hash.keys]).each do |split|
@@ -98,8 +99,8 @@
     end
     handle_asynchronously :mark_double_counting
   end
-end
 
+end
 
 
 # == Schema Information

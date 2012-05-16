@@ -17,10 +17,9 @@ class Admin::Reports::DetailedController < Admin::BaseController
     @report_map = @reports.map_to_hash{|r| {r.key => r}}
   end
 
-  # returns the report csv, or the formatted csv
   def show
-    if @report.csv.exists?
-      url = @report.private_csv_url
+    if @report.attachment.exists?
+      url = @report.private_url
     else
       url = admin_reports_detailed_index_path
       flash[:error] = "Report is not generated yet."
@@ -35,14 +34,14 @@ class Admin::Reports::DetailedController < Admin::BaseController
     if file
       if valid_format?(file)
         if is_zip?(file)
-          csv = Report.unzip_csv(file.path)
+          attachment = Report.unzip_file(file.path)
         else
-          csv = file.open.read
+          attachment = file.open.read
         end
-        ImplementerSplit.mark_double_counting(csv)
+        ImplementerSplit.mark_double_counting(attachment)
         flash[:notice] = 'Your file is being processed, please reload this page in a couple of minutes to see the results'
       else
-        flash[:error] = 'Invalid file format. Please select .csv or .zip format.'
+        flash[:error] = 'Invalid file format. Please select .xls or .zip format.'
       end
     else
       flash[:error] = 'Please select a file to upload'
@@ -55,7 +54,7 @@ class Admin::Reports::DetailedController < Admin::BaseController
     ### Commented out lines allow reports to be generated locally (increase the timeout first)
     # @report = Report.find_or_initialize_by_key_and_data_request_id(params[:id], current_request.id)
     # @report.generate_report
-    # redirect_to @report.private_csv_url
+    # redirect_to @report.private_url
 
     @report = Report.find_or_create_by_key_and_data_request_id(params[:id], current_request.id)
     @report.generate_report_for_download(current_user)
@@ -70,7 +69,7 @@ class Admin::Reports::DetailedController < Admin::BaseController
   end
 
   def valid_format?(file)
-    ['.csv', '.zip'].include?(File.extname(file.original_filename))
+    ['.xls', '.zip'].include?(File.extname(file.original_filename))
   end
 
   def find_report

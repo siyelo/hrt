@@ -95,7 +95,7 @@ class Importer
   end
 
   def import_and_save(response, file)
-    @file = FasterCSV.parse(file, {:headers => true})
+    @file = FileParser.parse(file, 'csv', {:headers => true})
     internal_initialize(response)
     @projects, @activities = import(response)
     @projects.each do |project|
@@ -279,4 +279,3 @@ class Importer
       split.organization_id_will_change!
     end
 end
-

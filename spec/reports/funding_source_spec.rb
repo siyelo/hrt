@@ -2,11 +2,8 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Reports::FundingSource do
   def run_report
-    report = Reports::FundingSource.new(@request)
-    csv = report.csv
-    table = []
-    FasterCSV.parse(csv, :headers => true) { |row| table << row }
-    return table
+    content = Reports::FundingSource.new(@request, 'xls').data
+    FileParser.parse(content, 'xls')
   end
 
   context "simple report" do
@@ -23,18 +20,16 @@ describe Reports::FundingSource do
       @response.state = 'accepted'; @response.save
     end
 
-    ["on", "off"].each do |budget_type|
-      it "should return a 1 funder report ( #{budget_type} budget)" do
-        @project.budget_type = budget_type
-        @project.save
-        table = run_report
-        table[0]['Funding Source'].should == @project.in_flows.first.from.name
-        table[0]['Organization'].should == @organization.try(:name)
-        table[0]['Project'].should == @project.try(:name)
-        table[0]['On/Off Budget'].should == budget_type
-        table[0]['Planned Disbursement'].should == "90.00"
-        table[0]['Disbursement Received'].should == "100.00"
-      end
+    it "should return a 1 funder report" do
+      @project.budget_type = 'on'
+      @project.save
+      table = run_report
+      table[0]['Funding Source'].should == @project.in_flows.first.from.name
+      table[0]['Organization'].should == @organization.try(:name)
+      table[0]['Project'].should == @project.try(:name)
+      table[0]['On/Off Budget'].should == 'on'
+      table[0]['Planned Disbursement'].should == 90.00
+      table[0]['Disbursement Received'].should == 100.00
     end
 
     context "multiflow reports" do
@@ -57,14 +52,14 @@ describe Reports::FundingSource do
         table[0]['Funding Source'].should == @project.in_flows.first.from.name
         table[0]['Organization'].should == @organization.name
         table[0]['Project'].should == @project.name
-        table[0]['Planned Disbursement'].should == "90.00"
-        table[0]['Disbursement Received'].should == "100.00"
+        table[0]['Planned Disbursement'].should == 90.00
+        table[0]['Disbursement Received'].should == 100.00
 
         table[1]['Funding Source'].should == @donor1.name
         table[1]['Organization'].should == "orgy"
         table[1]['Project'].should == "CoolProject"
-        table[1]['Planned Disbursement'].should == "49.00"
-        table[1]['Disbursement Received'].should == "49.50"
+        table[1]['Planned Disbursement'].should == 49.00
+        table[1]['Disbursement Received'].should == 49.50
       end
 
       it "should return a 2 funder report" do
@@ -72,14 +67,14 @@ describe Reports::FundingSource do
         table[0]['Funding Source'].should == @project.in_flows.first.from.name
         table[0]['Organization'].should == @organization.name
         table[0]['Project'].should == @project.name
-        table[0]['Planned Disbursement'].should == "90.00"
-        table[0]['Disbursement Received'].should == "100.00"
+        table[0]['Planned Disbursement'].should == 90.00
+        table[0]['Disbursement Received'].should == 100.00
 
         table[1]['Funding Source'].should == @donor1.name
         table[1]['Organization'].should == "orgy"
         table[1]['Project'].should == "CoolProject"
-        table[1]['Planned Disbursement'].should == "98.00"
-        table[1]['Disbursement Received'].should == "99.00"
+        table[1]['Planned Disbursement'].should == 98.00
+        table[1]['Disbursement Received'].should == 99.00
       end
     end
   end

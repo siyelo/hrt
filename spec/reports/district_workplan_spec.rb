@@ -39,16 +39,32 @@ describe Reports::DistrictWorkplan do
   end
 
   it "can generate district workplan" do
-    xls = Reports::DistrictWorkplan.new(@data_request, @district1).to_xls
-    rows = Spreadsheet.open(StringIO.new(xls)).worksheet(0)
-    rows.row(0).should == ["Partner", "Project", "Activity",
-                           "Expenditure", "Budget", "Implementers"]
-    rows.row(1).to_a.should == ['organization1', 'project1', 'activity1',
-                                 200.0, 50.0, 'organization2']
-    rows.row(2).to_a.should == [nil, nil, 'activity2',
-                                 200.0, 50.0, 'organization2']
-    rows.row(3).to_a.should == [nil, nil, 'Total',
-                                 400.0, 100.0, nil]
+    content = Reports::DistrictWorkplan.new(@data_request, @district1, 'xls').data
+    rows = FileParser.parse(content, 'xls')
+
+    rows[0]["Partner"].should == 'organization1'
+    rows[1]["Partner"].should == nil
+    rows[2]["Partner"].should == nil
+
+    rows[0]["Project"].should == 'project1'
+    rows[1]["Project"].should == nil
+    rows[2]["Project"].should == nil
+
+    rows[0]["Activity"].should == 'activity1'
+    rows[1]["Activity"].should == 'activity2'
+    rows[2]["Activity"].should == 'Total'
+
+    rows[0]["Expenditure"].should == 200.0
+    rows[1]["Expenditure"].should == 200.0
+    rows[2]["Expenditure"].should == 400.0
+
+    rows[0]["Budget"].should == 50.0
+    rows[1]["Budget"].should == 50.0
+    rows[2]["Budget"].should == 100.0
+
+    rows[0]["Implementers"].should == 'organization2'
+    rows[1]["Implementers"].should == 'organization2'
+    rows[2]["Implementers"].should == nil
   end
 
   it "can generate district workplan with more than 1 organization" do
@@ -82,7 +98,7 @@ describe Reports::DistrictWorkplan do
     classifications4 = { @district1.id => 50, @district2.id => 50 }
     CodingSpendDistrict.update_classifications(activity4, classifications4)
 
-    xls = Reports::DistrictWorkplan.new(@data_request, @district1).to_xls
+    xls = Reports::DistrictWorkplan.new(@data_request, @district1, 'xls').data
     rows = Spreadsheet.open(StringIO.new(xls)).worksheet(0)
     rows.row(4).to_a.should == ['organization3', 'project2', 'activity3',
                                  200.0, 50.0, 'organization4']

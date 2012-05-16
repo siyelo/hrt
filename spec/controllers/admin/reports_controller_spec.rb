@@ -42,7 +42,7 @@ describe Admin::ReportsController do
       Location.stub(:find).and_return(location)
       get :district_workplan, :id => 1
       response.should be_success
-      response.header["Content-Type"].should == "application/excel"
+      response.header["Content-Type"].should == "application/vnd.ms-excel"
       response.header["Content-Disposition"].should ==
         "attachment; filename=district1_district_workplan.xls"
     end

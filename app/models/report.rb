@@ -33,22 +33,22 @@ class Report < ActiveRecord::Base
   ]
 
   ### Attributes
-  attr_accessible :key, :csv, :data_request_id
-  attr_accessor :report, :raw_csv, :temp_file_name, :zip_file_name, :unzip_file_name
+  attr_accessible :key, :attachment, :data_request_id
+  attr_accessor :temp_file_name, :zip_file_name
 
   ### Attachments
-  has_attached_file :csv, Settings.paperclip_report.to_options
+  has_attached_file :attachment, Settings.paperclip_report.to_options
 
   ### Validations
   validates_presence_of :key, :data_request_id
   validates_uniqueness_of :key, :scope => :data_request_id
   validates_inclusion_of :key, :in => REPORTS
 
-  def private_csv_url
+  def private_url
     if private_url?
-      csv.expiring_url(3600)
+      attachment.expiring_url(3600)
     else
-      csv.url
+      attachment.url
     end
   end
 
@@ -64,58 +64,54 @@ class Report < ActiveRecord::Base
 
   protected
 
-    def run_report
-      self.report =
-        case key
-        when 'activity_overview'
-          Reports::ActivityOverview.new(data_request)
-        when 'budget_implementer_purpose'
-          Reports::ClassificationSplit.new(data_request, :budget, :purpose)
-        when 'budget_implementer_input'
-          Reports::ClassificationSplit.new(data_request, :budget, :input)
-        when 'budget_implementer_location'
-          Reports::ClassificationSplit.new(data_request, :budget, :location)
-        when 'spend_implementer_purpose'
-          Reports::ClassificationSplit.new(data_request, :spend, :purpose)
-        when 'spend_implementer_input'
-          Reports::ClassificationSplit.new(data_request, :spend, :input)
-        when 'spend_implementer_location'
-          Reports::ClassificationSplit.new(data_request, :spend, :location)
-        when 'budget_implementer_funding_source'
-          Reports::FundingSourceSplit.new(data_request, :budget)
-        when 'spend_implementer_funding_source'
-          Reports::FundingSourceSplit.new(data_request, :spend)
-        when 'budget_implementer_target'
-          Reports::Targets.new(data_request, :budget)
-        when 'spend_implementer_target'
-          Reports::Targets.new(data_request, :spend)
-        when 'budget_implementer_output'
-          Reports::Outputs.new(data_request, :budget)
-        when 'spend_implementer_output'
-          Reports::Outputs.new(data_request, :spend)
-        when 'budget_implementer_beneficiary'
-          Reports::Beneficiaries.new(data_request, :budget)
-        when 'spend_implementer_beneficiary'
-          Reports::Beneficiaries.new(data_request, :spend)
-        when 'budget_dynamic_query'
-          Reports::DynamicQuery.new(data_request, :budget)
-        when 'spend_dynamic_query'
-          Reports::DynamicQuery.new(data_request, :spend)
-        when 'funding_source_query'
-          Reports::FundingSource.new(data_request)
-        else
-          raise "Invalid report request '#{self.key}'"
-        end
-      self.raw_csv = report.csv #force the report to run.
+    def report
+      case key
+      when 'activity_overview'
+        Reports::ActivityOverview.new(data_request, 'xls')
+      when 'budget_implementer_purpose'
+        Reports::ClassificationSplit.new(data_request, :budget, :purpose, 'xls')
+      when 'budget_implementer_input'
+        Reports::ClassificationSplit.new(data_request, :budget, :input, 'xls')
+      when 'budget_implementer_location'
+        Reports::ClassificationSplit.new(data_request, :budget, :location, 'xls')
+      when 'spend_implementer_purpose'
+        Reports::ClassificationSplit.new(data_request, :spend, :purpose, 'xls')
+      when 'spend_implementer_input'
+        Reports::ClassificationSplit.new(data_request, :spend, :input, 'xls')
+      when 'spend_implementer_location'
+        Reports::ClassificationSplit.new(data_request, :spend, :location, 'xls')
+      when 'budget_implementer_funding_source'
+        Reports::FundingSourceSplit.new(data_request, :budget, 'xls')
+      when 'spend_implementer_funding_source'
+        Reports::FundingSourceSplit.new(data_request, :spend, 'xls')
+      when 'budget_implementer_target'
+        Reports::Targets.new(data_request, :budget, 'xls')
+      when 'spend_implementer_target'
+        Reports::Targets.new(data_request, :spend, 'xls')
+      when 'budget_implementer_output'
+        Reports::Outputs.new(data_request, :budget, 'xls')
+      when 'spend_implementer_output'
+        Reports::Outputs.new(data_request, :spend, 'xls')
+      when 'budget_implementer_beneficiary'
+        Reports::Beneficiaries.new(data_request, :budget, 'xls')
+      when 'spend_implementer_beneficiary'
+        Reports::Beneficiaries.new(data_request, :spend, 'xls')
+      when 'budget_dynamic_query'
+        Reports::DynamicQuery.new(data_request, :budget, 'xlsx')
+      when 'spend_dynamic_query'
+        Reports::DynamicQuery.new(data_request, :spend, 'xlsx')
+      when 'funding_source_query'
+        Reports::FundingSource.new(data_request, 'xls')
+      else
+        raise "Invalid report request '#{self.key}'"
+      end
     end
 
-    def create_tmp_csv
-      self.temp_file_name = "#{RAILS_ROOT}/tmp/#{self.key}_#{data_request_id}_#{get_date()}.csv"
-      # Convert to Windows-1252 encoding because Excel <2007 does not
-      # recognize UTF8 encoded files.
-      # self.raw_csv = Iconv.conv("WINDOWS-1252//IGNORE", "UTF-8", self.raw_csv)
-      self.raw_csv = self.raw_csv
-      File.open(self.temp_file_name, 'w')  {|f| f.write(self.raw_csv)}
+    def create_tmp_file
+      report.data do |content, filetype, mimetype|
+        self.temp_file_name = "#{RAILS_ROOT}/tmp/#{key}_#{data_request_id}_#{get_date()}.#{filetype}"
+        File.open(temp_file_name, 'w')  {|f| f.write(content)}
+      end
     end
 
     def zip_file
@@ -124,13 +120,13 @@ class Report < ActiveRecord::Base
       output = %x(#{cmd})
     end
 
-    def self.unzip_csv(file_path)
+    def self.unzip_file(file_path)
       cmd = "unzip -p #{file_path}"
       output = %x(#{cmd})
     end
 
     def attach_zip_file
-      self.csv = File.new(self.zip_file_name, 'r')
+      self.attachment = File.new(self.zip_file_name, 'r')
     end
 
     def cleanup_temp_files
@@ -139,8 +135,7 @@ class Report < ActiveRecord::Base
     end
 
     def create_report
-      run_report
-      create_tmp_csv
+      create_tmp_file
       zip_file
       attach_zip_file
       self.save
@@ -153,14 +148,14 @@ end
 #
 # Table name: reports
 #
-#  id               :integer         not null, primary key
-#  key              :string(255)
-#  created_at       :datetime
-#  updated_at       :datetime
-#  csv_file_name    :string(255)
-#  csv_content_type :string(255)
-#  csv_file_size    :integer
-#  csv_updated_at   :datetime
-#  data_request_id  :integer
+#  id                      :integer         not null, primary key
+#  key                     :string(255)
+#  created_at              :datetime
+#  updated_at              :datetime
+#  attachment_file_name    :string(255)
+#  attachment_content_type :string(255)
+#  attachment_file_size    :integer
+#  attachment_updated_at   :datetime
+#  data_request_id         :integer
 #
 

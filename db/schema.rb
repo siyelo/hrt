@@ -216,10 +216,10 @@ ActiveRecord::Schema.define(:version => 20120517142207) do
     t.string   "key"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "csv_file_name"
-    t.string   "csv_content_type"
-    t.integer  "csv_file_size"
-    t.datetime "csv_updated_at"
+    t.string   "attachment_file_name"
+    t.string   "attachment_content_type"
+    t.integer  "attachment_file_size"
+    t.datetime "attachment_updated_at"
     t.integer  "data_request_id"
   end
 

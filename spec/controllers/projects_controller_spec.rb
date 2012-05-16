@@ -70,7 +70,7 @@ describe ProjectsController do
         DataResponse.stub(:find).and_return(data_response)
         get :download_template
         response.should be_success
-        response.header["Content-Type"].should == "application/excel"
+        response.header["Content-Type"].should == "application/vnd.ms-excel"
         response.header["Content-Disposition"].should == "attachment; filename=import_template.xls"
       end
     end
@@ -131,11 +131,11 @@ describe ProjectsController do
         @data_response.stub(:request).and_return(@data_request)
         @organization.stub(:name).and_return('Org Name')
 
-        workplan = Reports::ActivityManagerWorkplan.new(@data_response)
+        workplan = Reports::ActivityManagerWorkplan.new(@data_response, nil, 'xls')
         workplan.stub(:data).and_return(StringIO.new('dummy,xls,header'))
         get :export_workplan
         response.should be_success
-        response.header["Content-Type"].should == "application/excel"
+        response.header["Content-Type"].should == "application/vnd.ms-excel"
         filename = "#{@organization.name.split.join('_').downcase.underscore}_workplan.xls"
         response.header["Content-Disposition"].should == "attachment; filename=#{filename}"
       end

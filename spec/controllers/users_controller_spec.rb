@@ -10,7 +10,7 @@ describe UsersController do
     login @user
     get :activity_manager_workplan
     response.should be_success
-    response.header["Content-Type"].should == "application/excel"
+    response.header["Content-Type"].should == "application/vnd.ms-excel"
     response.header["Content-Disposition"].should == "attachment; filename=combined_workplan.xls"
   end
 

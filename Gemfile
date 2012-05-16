@@ -25,6 +25,7 @@ gem 'validates_timeliness', '~> 2.3'
 gem 'version'
 gem 'will_paginate', '~> 2.3.11'
 gem 'addressable'
+gem 'axlsx'
 
 group :development do
   gem 'annotate'

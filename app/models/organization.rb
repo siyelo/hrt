@@ -5,8 +5,6 @@ class Organization < ActiveRecord::Base
   include Organization::Merger
 
   ### Constants
-  FILE_UPLOAD_COLUMNS = %w[name raw_type fosaid currency]
-
   ORGANIZATION_TYPES = ['Bilateral', 'Central Govt Revenue',
     'Clinic/Cabinet Medical', 'Communal FOSA', 'Dispensary', 'District',
     'District Hospital', 'Government', 'Govt Insurance', 'Health Center',
@@ -14,6 +12,7 @@ class Organization < ActiveRecord::Base
     'Military Hospital', 'MoH unit', 'Multilateral', 'National Hospital',
     'Non-Reporting', 'Other ministries', 'Parastatal', 'Prison Clinic',
     'RBC institutions']
+  FILE_UPLOAD_COLUMNS = %w[name raw_type fosaid currency]
 
   ### Attributes
   attr_accessible :name, :raw_type, :fosaid, :currency, :contact_name,
@@ -60,18 +59,6 @@ class Organization < ActiveRecord::Base
   class << self
     def with_users
       find(:all, :joins => :users, :order => 'organizations.name ASC').uniq
-    end
-
-    def download_template(organizations = [])
-      FasterCSV.generate do |csv|
-        csv << Organization::FILE_UPLOAD_COLUMNS
-        if organizations
-          organizations.each do |org|
-            row = [org.name, org.raw_type, org.fosaid, org.currency]
-            csv << row
-          end
-        end
-      end
     end
 
     def create_from_file(doc)
@@ -163,8 +150,6 @@ class Organization < ActiveRecord::Base
     end
   end
 end
-
-
 
 # == Schema Information
 #

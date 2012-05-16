@@ -47,10 +47,6 @@ class Comment < ActiveRecord::Base
 end
 
 
-
-
-
-
 # == Schema Information
 #
 # Table name: comments

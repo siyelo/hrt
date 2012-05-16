@@ -1,12 +1,6 @@
 class ActivityCostCategory < Code
 end
 
-
-
-
-
-
-
 # == Schema Information
 #
 # Table name: codes

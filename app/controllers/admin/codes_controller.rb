@@ -43,14 +43,14 @@ class Admin::CodesController < Admin::BaseController
   end
 
   def download_template
-    template = Code.download_template
-    send_csv(template, 'codes_template.csv')
+    report = Reports::Templates::Codes.new('csv')
+    send_report_file(report, 'codes_template')
   end
 
   def create_from_file
     begin
       if params[:file].present?
-        doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
+        doc = FileParser.parse(params[:file].open.read, 'csv', {:headers => true})
         if doc.headers.to_set == Code::FILE_UPLOAD_COLUMNS.to_set
           saved, errors = Code.create_from_file(doc)
           flash[:notice] = "Created #{saved} of #{saved + errors} codes successfully"

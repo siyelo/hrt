@@ -114,18 +114,22 @@ class ProjectsController < BaseController
   end
 
   def download_template
-    template = Reports::ProjectsExport.template
-    send_xls(template, 'import_template.xls')
+    report = Reports::Templates::Projects.new('xls')
+    send_report_file(report, 'import_template')
   end
 
   def export
-    template = Reports::ProjectsExport.new(@response).to_xls
-    send_xls(template, "all_activities.xls")
+    report = Reports::ProjectsExport.new(current_response, 'xls')
+    send_report_file(report, "all_activities")
   end
 
   def export_workplan
-    filename = "#{@response.organization.name.split.join('_').gsub(/\W+/, '').downcase.underscore}_workplan.xls"
-    send_xls(Reports::ActivityManagerWorkplan.new(@response).to_xls, filename)
+    # abt_associates_workplan
+    org_workplan_filename = "#{@response.organization.name.split.join('_').
+       gsub(/\W+/, '').downcase.underscore}_workplan"
+
+    report = Reports::ActivityManagerWorkplan.new(@response, nil, 'xls')
+    send_report_file(report, org_workplan_filename)
   end
 
   protected
@@ -182,5 +186,4 @@ class ProjectsController < BaseController
                        :locals => {:project => @project,
                                    :response => @response})}
     end
-
 end

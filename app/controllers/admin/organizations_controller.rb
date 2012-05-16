@@ -86,14 +86,14 @@ class Admin::OrganizationsController < Admin::BaseController
   end
 
   def download_template
-    template = Organization.download_template
-    send_csv(template, 'organization_template.csv')
+    report = Reports::Templates::Organizations.new([], 'csv')
+    send_report_file(report, 'organization_template.csv')
   end
 
   def create_from_file
     begin
       if params[:file].present?
-        doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
+        doc = FileParser.parse(params[:file].open.read, 'csv', {:headers => true})
         if doc.headers.to_set == Organization::FILE_UPLOAD_COLUMNS.to_set
           saved, errors = Organization.create_from_file(doc)
           flash[:notice] = "Created #{saved} of #{saved + errors} organizations successfully"

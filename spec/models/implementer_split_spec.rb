@@ -1,6 +1,22 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe ImplementerSplit do
+
+  # converts array of hashes to array of arrays
+  # [{:column1 => 1}, {:column1 => 2}] => [[:column1], [1], [2]]
+  def set_double_counts(rows, value)
+    rows.each{ |row| row['Actual Double-Count?'] = value }
+
+    table = []
+    table << rows[0].keys
+    table += rows.map{|h| h.values}
+
+    builder = FileBuilder.new('xls')
+    table.each { |row| builder.add_row(row) }
+    builder.data
+  end
+
+
   describe "Associations:" do
     it { should belong_to :activity }
     it { should belong_to :organization }
@@ -264,17 +280,14 @@ describe ImplementerSplit do
                        :activity => activity, :organization => org1, :double_count => false)
       split2 = Factory(:implementer_split, :id => 2,
                        :activity => activity, :organization => org2, :double_count => false)
+
+      content = File.open('spec/fixtures/activity_overview.xls').read
+      @rows = FileParser.parse(content, 'xls')
     end
 
-    it "marks double counting from csv file" do
-      file = File.open('spec/fixtures/activity_overview.csv')
-
-      report = Reports::ActivityOverview.new(@request)
-      rows = FasterCSV.parse(file, {:headers => true})
-
-      rows.each{ |row| row['Actual Double-Count?'] = true }
-
-      double_count_marker = ImplementerSplit.mark_double_counting(rows.to_csv)
+    it "marks double counting from file" do
+      xls = set_double_counts(@rows, true)
+      double_count_marker = ImplementerSplit.mark_double_counting(xls)
 
       splits = ImplementerSplit.all
       splits[0].double_count.should be_true
@@ -282,14 +295,8 @@ describe ImplementerSplit do
     end
 
     it "reset double-count marks when nil" do
-      file = File.open('spec/fixtures/activity_overview.csv')
-
-      report = Reports::ActivityOverview.new(@request)
-      rows = FasterCSV.parse(file, {:headers => true})
-
-      rows.each{ |row| row['Actual Double-Count?'] = nil }
-
-      double_count_marker = ImplementerSplit.mark_double_counting(rows.to_csv)
+      xls = set_double_counts(@rows, nil)
+      double_count_marker = ImplementerSplit.mark_double_counting(xls)
 
       splits = ImplementerSplit.all
       splits[0].double_count.should be_nil
@@ -297,14 +304,8 @@ describe ImplementerSplit do
     end
 
     it "reset double-count marks when empty string" do
-      file = File.open('spec/fixtures/activity_overview.csv')
-
-      report = Reports::ActivityOverview.new(@request)
-      rows = FasterCSV.parse(file, {:headers => true})
-
-      rows.each{ |row| row['Actual Double-Count?'] = '' }
-
-      double_count_marker = ImplementerSplit.mark_double_counting(rows.to_csv)
+      xls = set_double_counts(@rows, '')
+      double_count_marker = ImplementerSplit.mark_double_counting(xls)
 
       splits = ImplementerSplit.all
       splits[0].double_count.should be_nil

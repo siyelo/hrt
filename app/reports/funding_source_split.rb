@@ -1,11 +1,11 @@
-require 'fastercsv'
-
 class Reports::FundingSourceSplit
   include Reports::Helpers
   include CurrencyNumberHelper
   include CurrencyViewNumberHelper
 
-  def initialize(request, amount_type)
+  attr_accessor :builder
+
+  def initialize(request, amount_type, filetype)
     @amount_type        = amount_type
     @implementer_splits = ImplementerSplit.find :all,
       :joins => { :activity => :data_response },
@@ -15,22 +15,26 @@ class Reports::FundingSourceSplit
       :include => [{ :activity => [{ :project => [ { :activities => [:implementer_splits, :project] } , { :in_flows => :from }] },
         { :data_response => :organization }, :implementer_splits ]},
         { :organization => :data_responses }]
+    @builder = FileBuilder.new(filetype)
   end
 
-  def csv
-    FasterCSV.generate do |csv|
-      csv << build_header
-      @implementer_splits.each do |implementer_split|
-        build_rows(csv, implementer_split)
-      end
-    end
+  def data(&block)
+    build_rows
+    builder.data(&block)
   end
 
   private
+    def build_rows
+      builder.add_row(build_header)
+      @implementer_splits.each do |implementer_split|
+        build_split_rows(implementer_split)
+      end
+    end
+
     def build_header
       row = []
 
-      amount_name         = @amount_type.to_s.capitalize
+      amount_name = @amount_type.to_s.capitalize
 
       row << 'Organization'
       row << 'Project'
@@ -53,7 +57,7 @@ class Reports::FundingSourceSplit
       row
     end
 
-    def build_rows(csv, implementer_split)
+    def build_split_rows(implementer_split)
       activity = implementer_split.activity
       base_row = []
 
@@ -82,12 +86,12 @@ class Reports::FundingSourceSplit
         base_row << activity.data_response.id
         base_row << activity.id
         base_row << activity.name
-        base_row << n2c(activity_amount, "", "")
+        base_row << activity_amount
 
         # TODO: remove try after implementer_splits without implementer are fixed
         base_row << implementer_split.organization.try(:name)
         base_row << implementer_split.organization.try(:implementer_type)
-        base_row << n2c(split_amount, "", "")
+        base_row << split_amount
 
         # iterate here over funding sources
         in_flows.each do |in_flow|
@@ -105,13 +109,13 @@ class Reports::FundingSourceSplit
 
           row << in_flow.from.try(:name)
           row << in_flow.from.funder_type
-          row << n2c(funder_amount, '', '')
+          row << funder_amount
           row << funder_ratio
-          row << n2c(funder_ratio * split_amount, '', '')
+          row << funder_ratio * split_amount
           row << implementer_split.possible_double_count?
           row << implementer_split.double_count
 
-          csv << row
+          builder.add_row(row)
         end
       end
     end

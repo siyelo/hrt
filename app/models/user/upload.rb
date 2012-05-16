@@ -1,17 +1,13 @@
 module User::Upload
-  COLUMNS = %w[organization_name email full_name roles password password_confirmation]
+
+  FILE_UPLOAD_COLUMNS = %w[organization_name email full_name roles password
+                           password_confirmation]
 
   def self.included( klass )
     klass.extend ClassMethods
   end
 
   module ClassMethods
-    def download_template
-      FasterCSV.generate do |csv|
-        csv << User::Upload::COLUMNS
-      end
-    end
-
     def create_from_file(doc)
       saved, errors = 0, 0
       doc.each do |row|

@@ -4,7 +4,7 @@ describe Report do
   describe "Attributes" do
     it { should allow_mass_assignment_of(:key) }
     it { should allow_mass_assignment_of(:data_request_id) }
-    it { should allow_mass_assignment_of(:csv) }
+    it { should allow_mass_assignment_of(:attachment) }
   end
 
   describe "Associations" do
@@ -79,39 +79,39 @@ describe Report do
 
   describe "upload" do
     it "should unzip an uploaded file" do
-      csv = Report.unzip_csv("#{RAILS_ROOT}/spec/fixtures/activity_overview.zip")
-      csv.should == File.open("#{RAILS_ROOT}/spec/fixtures/activity_overview.csv").read
+      attachment = Report.unzip_file("#{RAILS_ROOT}/spec/fixtures/activity_overview.zip")
+      attachment.should == File.open("#{RAILS_ROOT}/spec/fixtures/activity_overview.xls").read
     end
   end
 
   describe "generate zip" do
     it "should create a temp zip file for user download" do
-      @request      = Factory(:data_request)
-      report        = Report.new(:key => 'activity_overview',
-                                 :data_request_id => @request.id)
-      report.temp_file_name = "#{RAILS_ROOT}/spec/fixtures/activity_overview.csv"
-      report.send(:zip_file).should == "  adding: activity_overview.csv (deflated 50%)\n"
+      @request = Factory(:data_request)
+      report   = Report.new(:key => 'activity_overview',
+                            :data_request_id => @request.id)
+      report.temp_file_name = "#{RAILS_ROOT}/spec/fixtures/activity_overview.xls"
+      report.send(:zip_file).should == "  adding: activity_overview.xls (deflated 77%)\n"
       %x(rm "#{report.zip_file_name}") ## removing the file it saved
     end
   end
 
-  describe "#private_csv_url" do
+  describe "#private_url" do
     it "sets private url for production environment" do
       report = Factory.build(:report)
       report.stub(:private_url?).and_return(true)
-      report.csv.should_receive(:expiring_url).and_return('test_url')
-      report.csv.should_not_receive(:url)
+      report.attachment.should_receive(:expiring_url).and_return('test_url')
+      report.attachment.should_not_receive(:url)
 
-      report.private_csv_url.should == 'test_url'
+      report.private_url.should == 'test_url'
     end
 
     it "sets public url for other than production environment" do
       report = Factory.build(:report)
       report.stub(:private_url?).and_return(false)
-      report.csv.should_not_receive(:expiring_url)
-      report.csv.should_receive(:url).and_return('test_url')
+      report.attachment.should_not_receive(:expiring_url)
+      report.attachment.should_receive(:url).and_return('test_url')
 
-      report.private_csv_url.should == 'test_url'
+      report.private_url.should == 'test_url'
     end
   end
 

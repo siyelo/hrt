@@ -1,9 +1,9 @@
 class Reports::DistrictWorkplan
   include CurrencyNumberHelper
 
-  attr_accessor :request, :district, :activities
+  attr_accessor :request, :district, :activities, :builder
 
-  def initialize(request, district)
+  def initialize(request, district, filetype)
     @request    = request
     @district   = district
     @activities = ::Activity.find :all,
@@ -15,10 +15,12 @@ class Reports::DistrictWorkplan
       :joins => [{:data_response => :organization}, :code_assignments],
       :conditions => ['code_assignments.code_id = ?', district.id],
       :order => 'organizations.name ASC'
+    @builder = FileBuilder.new(filetype)
   end
 
-  def to_xls
-    Exporter.to_xls(build_rows)
+  def data(&block)
+    build_rows
+    builder.data(&block)
   end
 
   private
@@ -28,11 +30,10 @@ class Reports::DistrictWorkplan
     spend_total           = 0
     budget_total          = 0
 
-    rows = []
-    rows << header
+    builder.add_row(header)
     activities.each do |activity|
       if previous_organization && previous_organization != activity.organization
-        rows << total_row(spend_total, budget_total)
+        builder.add_row(total_row(spend_total, budget_total))
         spend_total  = 0
         budget_total = 0
       end
@@ -49,15 +50,13 @@ class Reports::DistrictWorkplan
       row << spend_amount
       row << budget_amount
       row << activity.implementer_splits.map { |is| is.name }.join(',')
-      rows << row
+      builder.add_row(row)
 
       previous_organization = activity.organization
       previous_project      = activity.project
     end
 
-    rows << total_row(spend_total, budget_total)
-
-    rows
+    builder.add_row(total_row(spend_total, budget_total))
   end
 
   def header
