@@ -21,4 +21,4 @@
     .view-all= link_to "view all", current_user.sysadmin? ? admin_comments_path : comments_path
 - else
   .section_base.wide
-    %p There are no comments posted in the last 6 months.
+    %p.nothing There are no comments posted in the last 6 months.

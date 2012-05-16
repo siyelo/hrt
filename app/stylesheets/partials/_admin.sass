@@ -295,9 +295,10 @@ body.app #content .tabs
   .section_base
     padding: 0
   h3
+    color: $mid-blue + #222
     font-size: 12px
     font-weight: normal
-    padding-bottom: 7px
+    padding-bottom: 9px
   h4
     color: $primary
     font-size: 26px
@@ -310,11 +311,24 @@ body.app #content .tabs
     width: 94%
     h4
       font-size: 20px
-      +transition(all, 0.5s)
+      +transition(all, .5s)
   .currency
-    display: inline
-    font-size: 12px
-    color: #BBB
+    background: #ddd
+    border: 1px solid #d6d6d6
+    color: #fff
+    display: inline-block
+    font-size: 10px
+    font-weight: normal
+    height: 27px
+    line-height: 28px
+    margin-bottom: 0
+    position: relative
+    text-align: center
+    top: -7px
+    width: 27px
+    +border-radius(100px)
+    +text-shadow(rgba(0, 0, 0, .5), 0, 0, 2px)
+    +transition(all, .5s)
   .half
     margin-bottom: 0
     width: 50%
@@ -323,14 +337,17 @@ body.app #content .tabs
       display: block
       padding: 15px 6%
       text-decoration: none
-      +transition(all, 0.5s)
+      +transition(all, .2s)
       &:hover, &:focus
-        background: $primary_lightest image_url("arrow-small.png") no-repeat 94% center
+        background: $primary_lightest image_url("arrow-small.png") no-repeat 95% center
         +box-shadow(rgba(0, 0, 0, 0.05) 0, 0, 3px, inset)
         h4
-          color: $primary - #333
+          color: $secondary
           +text-shadow(#fff, 0, 1px, 0)
-          +transition(all, 0.5s)
+          +transition(all, .5s)
+        .currency
+          background: $primary_light
+          border-color: $primary_light - #111
   ul
     +pie-clearfix
   li

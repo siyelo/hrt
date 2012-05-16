@@ -6,7 +6,7 @@
 .full
   .main#admin-summary
     %h2 Summary
-    .section_base
+    .section_base.less_spacing
       .full
         %h3 Current Request
         %h4= current_request.name
@@ -39,7 +39,7 @@
 
   .sidebar#admin-submission
     %h2 Getting Started
-    .section_base.wide
+    .section_base.wide.less_spacing
       %ul.welcome_steps
         %li.first
           - link_to edit_organization_path do

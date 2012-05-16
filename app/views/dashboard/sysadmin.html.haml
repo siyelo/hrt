@@ -6,7 +6,7 @@
 .full
   .main#admin-summary
     %h2 Summary
-    .section_base
+    .section_base.less_spacing
       .full
         %h3 Current Request
         %h4= current_request.name
@@ -35,7 +35,7 @@
 
   .sidebar#admin-submission
     %h2 Latest Submissions
-    .section_base.wide
+    .section_base.wide.less_spacing
       %table.data.slim
         %tbody
           - if @dashboard.submitted_responses.present?
@@ -45,6 +45,6 @@
                   = link_to response.organization.name, projects_path(:response_id => response.id)
                   .hint= format_date(response.updated_at)
           - else
-            %p No responses have been submitted yet.
+            %p.nothing No responses have been submitted yet.
 
 = render 'comments_and_documents'

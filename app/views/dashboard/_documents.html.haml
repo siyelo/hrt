@@ -8,4 +8,4 @@
       = render 'documents/documents', :documents => @dashboard.documents
     .view-all= link_to "view all", current_user.sysadmin? ? admin_documents_path : documents_path
   - else
-    %p There are no files available for download.
+    %p.nothing There are no files available for download.
