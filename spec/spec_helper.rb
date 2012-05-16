@@ -140,6 +140,7 @@ Spork.each_run do
                            :description => "proj descr",
                            :start_date => "2010-01-01",
                            :end_date => "2011-01-01",
+                           :currency => "USD",
                            :in_flows_attributes => [:organization_id_from => @other_org.id,
                              :budget => 10, :spend => 20])
     @project.save!

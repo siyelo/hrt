@@ -31,6 +31,7 @@ describe Project do
     subject { basic_setup_project; @project }
     it { should validate_presence_of(:name) }
     it { should validate_presence_of(:data_response_id) }
+    it { should validate_presence_of(:currency) }
     it { should allow_value('2010-12-01').for(:start_date) }
     it { should allow_value('2010-12-01').for(:end_date) }
     it { should_not allow_value('').for(:start_date) }
@@ -88,7 +89,8 @@ describe Project do
       basic_setup_response
       p = Project.new(:name => "new project", :description => "new description",
       :data_response => @response, :start_date => "2010-01-01", :end_date => "2010-12-31",
-      :in_flows_attributes => { "0" => {:organization_id_from => "a new org plox k thx",
+      :currency => "USD", :in_flows_attributes => { "0" => {
+        :organization_id_from => "a new org plox k thx",
         :budget => 10, :spend => 20}})
       p.in_flows.should have(1).item
       p.save.should == true
@@ -113,10 +115,10 @@ describe Project do
       p.save.should == true
     end
 
-    it "should save without the optional currency override" do
+    it "should not save without the optional currency override" do
       basic_setup_response
-      p = Factory :project, :currency => "", :data_response => @response
-      p.save.should == true
+      p = Factory.build :project, :currency => "", :data_response => @response
+      p.save.should == false
     end
   end
 

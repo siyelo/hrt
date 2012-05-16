@@ -6,11 +6,14 @@ require 'app/reports/reporters'
 
 describe Reports::Reporters do
   let(:response1) { mock :response,
-                    :tot_spend => 100, :tot_budget => 20, :org_name => 'one', :currency => 'USD' }
+                    :tot_spend => 100, :tot_budget => 20, :org_name => 'one',
+                    :amount_currency => 'USD' }
   let(:response2) { mock :response,
-                    :tot_spend => 400, :tot_budget => 40, :org_name => 'two', :currency => 'USD' }
+                    :tot_spend => 400, :tot_budget => 40, :org_name => 'two',
+                    :amount_currency => 'USD' }
   let(:response3) { mock :response,
-                    :tot_spend => 300, :tot_budget => 60, :org_name => 'three', :currency => 'USD' }
+                    :tot_spend => 300, :tot_budget => 60, :org_name => 'three',
+                    :amount_currency => 'USD' }
   let(:responses) { [response1, response2, response3] }
   let(:rows) { [ Reports::Row.new("two", 400.0, 40.0),
                  Reports::Row.new("three", 300.0, 60.0) ] }

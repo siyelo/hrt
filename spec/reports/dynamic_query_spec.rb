@@ -1240,7 +1240,8 @@ describe Reports::DynamicQuery do
         :budget => 100]
       @project      = Factory :project, :data_response => @response,
         :name => 'project',
-        :in_flows => in_flows
+        :in_flows => in_flows,
+        :currency => 'RWF'
       @root_code = Factory :code
       @code1          = Factory :code, :official_name => "root"
       @mtef = Factory :mtef_code, :short_display => "sub_prog_name"

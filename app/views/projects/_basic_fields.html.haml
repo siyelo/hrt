@@ -30,7 +30,7 @@
       = f.label :currency, "Currency override"
       - link_to "#", :title => "Optionally override the currency for this Project. (Your default is #{@response.currency})", :class => 'tooltip' do
         = image_tag "tooltip.png"
-    = f.select :currency, currency_options_for_select, {:selected => @project.currency, :include_blank => true }, :class => f.object.errors.on(:currency) ? "error" : ""
+    = f.select :currency, currency_options_for_select, {:selected => (@project.currency || @response.organization.currency) }, :class => f.object.errors.on(:currency) ? "error" : ""
   %br
   %li#project_description_input.text
     .name

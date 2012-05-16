@@ -41,7 +41,7 @@ class Project < ActiveRecord::Base
 
   ### Validations
   validates_uniqueness_of :name, :scope => :data_response_id
-  validates_presence_of :name, :data_response_id
+  validates_presence_of :name, :data_response_id, :currency
   validates_inclusion_of :currency,
     :in => Money::Currency::TABLE.map{|k, v| "#{k.to_s.upcase}"},
     :allow_nil => true, :unless => Proc.new {|p| p.currency.blank?}
@@ -79,13 +79,6 @@ class Project < ActiveRecord::Base
   # view helper ??!
   def organization_name
     organization.name
-  end
-
-  # Returns DR.currency if no project currency specified
-  def currency
-    c = read_attribute(:currency)
-    return c unless c.blank?
-    return data_response.currency
   end
 
   def to_s

@@ -59,7 +59,7 @@ class Importer
         end
 
         project = @response.projects.find_by_name(project_name) unless project
-        project = @response.projects.new unless project
+        project = @response.projects.new(:currency => @response.organization.currency) unless project
         activity = project.activities.find_by_name(activity_name) unless activity
         activity = Activity.new unless activity
         activity.project = project

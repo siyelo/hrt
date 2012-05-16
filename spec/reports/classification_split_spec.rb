@@ -145,8 +145,8 @@ describe Reports::ClassificationSplit do
 
         it "does currency conversion to USD" do
           Money.default_bank.set_rate(:RWF, :USD, 0.1)
-          @organization1.currency = 'RWF'
-          @organization1.save!
+          @project1.currency = 'RWF'
+          @project1.save!
           table = run_report(classification_type)
           table[0]['Organization'].should == 'organization1'
           table[0]['Project'].should == 'project1'

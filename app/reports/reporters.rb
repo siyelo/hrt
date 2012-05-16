@@ -47,7 +47,7 @@ module Reports
     def create_rows
       rows.map do |split|
         if split.tot_spend.to_f > 0 && split.tot_budget.to_f > 0
-          org_currency = split.currency
+          org_currency = split.amount_currency
           Reports::Row.new(split.org_name,
             universal_currency_converter(split.tot_spend.to_f, org_currency, "USD"),
             universal_currency_converter(split.tot_budget.to_f, org_currency, "USD"))
@@ -69,6 +69,7 @@ module Reports
       @rows = ImplementerSplit.find(:all,
                :joins => "INNER JOIN activities ON
                    activities.id = implementer_splits.activity_id
+                   LEFT OUTER JOIN projects ON projects.id = activities.project_id
                    INNER JOIN data_responses ON
                    activities.data_response_id = data_responses.id
                    INNER JOIN data_requests ON
@@ -76,11 +77,11 @@ module Reports
                    INNER JOIN organizations ON
                    data_responses.organization_id = organizations.id",
                :select => "organizations.name AS org_name,
-                    implementer_splits.currency AS currency,
+                    COALESCE(projects.currency, organizations.currency) AS amount_currency,
                     SUM(implementer_splits.spend) AS tot_spend,
                     SUM(implementer_splits.budget) AS tot_budget",
                :conditions => "data_responses.data_request_id = #{@resource.id}",
-               :group => "organizations.name, implementer_splits.currency" )
+               :group => "organizations.name, amount_currency" )
     end
   end
 end

@@ -17,7 +17,7 @@ describe ProjectsController do
       @data_response = @organization.latest_response
       post :create,
         :project => {:name => "new project", :description => "new description",
-        :start_date => "2010-01-01", :end_date => "2010-12-31",
+        :start_date => "2010-01-01", :end_date => "2010-12-31", :currency => "USD",
         :in_flows_attributes => { "0" => {:organization_id_from => @organization.id,
           :budget => 10, :spend => 20}}}
       response.should redirect_to projects_path
@@ -33,7 +33,7 @@ describe ProjectsController do
       it "should create a new in-flow (eg. self implementer)" do
         post :create,
           :project => {:name => "new project", :description => "new description",
-          :start_date => "2010-01-01", :end_date => "2010-12-31",
+          :start_date => "2010-01-01", :end_date => "2010-12-31", :currency => "USD",
           :in_flows_attributes => { "0" => {:organization_id_from => @organization.id,
             :budget => 10, :spend => 20}}}
         project = Project.find_by_name('new project')
@@ -45,7 +45,7 @@ describe ProjectsController do
       it "should create a new from-org when new name given in in-flows" do
         post :create,
           :project => {:name => "new project", :description => "new description",
-          :start_date => "2010-01-01", :end_date => "2010-12-31",
+          :start_date => "2010-01-01", :end_date => "2010-12-31", :currency => "USD",
           :in_flows_attributes => { "0" => {:organization_id_from => "a new org plox k thx",
             :budget => 10, :spend => 20}}}
         project = Project.find_by_name('new project')
@@ -224,7 +224,7 @@ describe ProjectsController do
         session[:return_to] = new_project_url
         post :create,
           :project => { :name => "new project", :description => "description",
-            :start_date => "09-12-2012", :end_date => "09-12-2013",
+            :start_date => "09-12-2012", :end_date => "09-12-2013", :currency => "USD",
             "in_flows_attributes"=>{"0"=>{
               "organization_id_from"=>"#{@organization.id}",
              "spend"=>"120.0", "budget"=>"130.0"}}
