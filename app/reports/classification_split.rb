@@ -55,6 +55,7 @@ class Reports::ClassificationSplit
 
       row << 'Organization'
       row << 'Project'
+      row << 'On/Off Budget'
       row << 'Funding Source'
       row << 'Data Response ID'
       row << 'Activity ID'
@@ -97,6 +98,7 @@ class Reports::ClassificationSplit
 
         base_row << activity.organization.name
         base_row << activity.project.try(:name) # other costs does not have a project
+        base_row << project_budget_type(activity.project)
         base_row << project_in_flows(activity.project)
         base_row << activity.data_response.id
         base_row << activity.id

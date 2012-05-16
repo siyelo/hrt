@@ -40,4 +40,13 @@ module Reports::Helpers
   def activity_total_method(amount_type)
     'total_' + amount_type.to_s.downcase
   end
+
+  # returns the projects budget type
+  def project_budget_type(project)
+    if project && project.budget_type
+      project.budget_type
+    else
+      "N/A"
+    end
+  end
 end

@@ -15,7 +15,7 @@ Feature: Reporter can manage projects
     And I fill in "project[start_date]" with "2011-01-01"
     And I fill in "project[end_date]" with "2011-12-01"
     And I select "Euro (EUR)" from "Currency override"
-    And I select "ON" from "project_budget_type"
+    And I select "On-budget" from "project_budget_type"
     And I select "organization1" from "project_in_flows_attributes_0_organization_id_from"
     And I fill in "project_in_flows_attributes_0_spend" with "10"
     And I fill in "project_in_flows_attributes_0_budget" with "20"

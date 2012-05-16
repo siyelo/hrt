@@ -23,11 +23,12 @@ describe Reports::ActivityOverview do
   end
 
   context "1 funding source and 1 implementer" do
-    it "returns proper format" do
+    it "returns proper format (on budget)" do
       in_flow        = Factory.build(:funding_flow, :from => @donor1,
                                      :budget => 200, :spend => 100)
       @project1      = Factory(:project, :data_response => @response1,
-                               :name => 'project1', :in_flows => [in_flow])
+                               :name => 'project1', :in_flows => [in_flow],
+                               :budget_type => "on")
 
       @activity1     = Factory(:activity, :project => @project1,
                                :name => 'activity1',
@@ -43,6 +44,72 @@ describe Reports::ActivityOverview do
       # row 1
       table[0]['Organization'].should == 'organization1'
       table[0]['Project'].should == 'project1'
+      table[0]['On/Off Budget'].should == 'on'
+      table[0]['Activity'].should == 'activity1'
+      table[0]['Funding Source'].should == 'donor1 (donor)'
+      table[0]['Implementer'].should == 'organization1'
+      table[0]['Implementer Type'].should == 'implementer'
+      table[0]['Expenditure ($)'].should == '100.00'
+      table[0]['Budget ($)'].should == '200.00'
+      table[0]['Possible Double-Count?'].should == 'false'
+      table[0]['Actual Double-Count?'].should == nil
+    end
+
+    it "returns proper format (off budget)" do
+      in_flow        = Factory.build(:funding_flow, :from => @donor1,
+                                     :budget => 200, :spend => 100)
+      @project1      = Factory(:project, :data_response => @response1,
+                               :name => 'project1', :in_flows => [in_flow],
+                               :budget_type => "off")
+
+      @activity1     = Factory(:activity, :project => @project1,
+                               :name => 'activity1',
+                               :data_response => @response1)
+      Factory(:implementer_split, :activity => @activity1,
+              :organization => @organization1,
+              :budget => 200, :spend => 100)
+
+      @response1.state = 'accepted'; @response1.save!
+
+      table = run_report(@request)
+
+      # row 1
+      table[0]['Organization'].should == 'organization1'
+      table[0]['Project'].should == 'project1'
+      table[0]['On/Off Budget'].should == 'off'
+      table[0]['Activity'].should == 'activity1'
+      table[0]['Funding Source'].should == 'donor1 (donor)'
+      table[0]['Implementer'].should == 'organization1'
+      table[0]['Implementer Type'].should == 'implementer'
+      table[0]['Expenditure ($)'].should == '100.00'
+      table[0]['Budget ($)'].should == '200.00'
+      table[0]['Possible Double-Count?'].should == 'false'
+      table[0]['Actual Double-Count?'].should == nil
+    end
+
+    it "returns proper format (not specified (old project))" do
+      in_flow        = Factory.build(:funding_flow, :from => @donor1,
+                                     :budget => 200, :spend => 100)
+      @project1      = Factory.build(:project, :data_response => @response1,
+                               :name => 'project1', :in_flows => [in_flow],
+                               :budget_type => nil)
+      @project1.save(false)
+
+      @activity1     = Factory(:activity, :project => @project1,
+                               :name => 'activity1',
+                               :data_response => @response1)
+      Factory(:implementer_split, :activity => @activity1,
+              :organization => @organization1,
+              :budget => 200, :spend => 100)
+
+      @response1.state = 'accepted'; @response1.save!
+
+      table = run_report(@request)
+
+      # row 1
+      table[0]['Organization'].should == 'organization1'
+      table[0]['Project'].should == 'project1'
+      table[0]['On/Off Budget'].should == 'N/A'
       table[0]['Activity'].should == 'activity1'
       table[0]['Funding Source'].should == 'donor1 (donor)'
       table[0]['Implementer'].should == 'organization1'

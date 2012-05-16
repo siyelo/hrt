@@ -34,6 +34,7 @@ class Reports::Beneficiaries
 
       row << 'Organization'
       row << 'Project'
+      row << 'On/Off Budget'
       row << 'Funding Source'
       row << 'Activity'
       row << 'Activity ID'
@@ -65,6 +66,7 @@ class Reports::Beneficiaries
 
       base_row << activity.organization.name
       base_row << activity.project.try(:name) # other costs does not have a project
+      base_row << project_budget_type(activity.project)
       base_row << project_in_flows(activity.project)
       base_row << activity.name
       base_row << activity.id

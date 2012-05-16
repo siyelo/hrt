@@ -30,6 +30,7 @@ class Reports::ActivityOverview
       row = []
       row << 'Organization'
       row << 'Project'
+      row << 'On/Off Budget'
       row << 'Activity'
       row << 'Activity ID'
       row << 'Activity URL'
@@ -49,6 +50,7 @@ class Reports::ActivityOverview
       row = []
       row << activity.organization.name
       row << activity.project.try(:name) # other costs does not have a project
+      row << project_budget_type(activity.project)
       row << activity.name
       row << activity.id
       row << activity_url(activity)
