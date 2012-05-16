@@ -130,15 +130,6 @@ ul.manage_bar
     margin: 3px 0 10px
     width: 63%
 
-ul.status
-  padding-bottom: 15px
-  li
-    font-size: 14px
-    span
-      font-size: 12px
-      color: $dark-grey
-      padding-right: 5px
-
 ul.push
   font-size: 12px
   margin: 0 0 15px 65px
@@ -151,15 +142,14 @@ ul.push
     line-height: 1.5em
 
 .status
-  border: 1px solid $lighter-blue
-  margin-bottom: 5px
-  padding: 15px 15px 15px 75px
-  +border-radius
+  margin-bottom: 15px
+  padding-left: 85px
+  +text-shadow(#fff, 0, 1px, 0)
 
   &.go
-    background: image_url("flag_48_green.png") no-repeat 15px center $filler
+    background: image_url("flag_48_green.png") no-repeat 20px center $primary_lightest
   &.stop
-    background: image_url("flag_48_red.png") no-repeat 15px center $filler
+    background: image_url("flag_48_red.png") no-repeat 20px center $primary_lightest
 
   li
     color: $mid-blue
@@ -173,7 +163,7 @@ ul.push
       color: $light-blue - #333
       display: inline-block
       font-weight: normal
-      padding-top: 4px
+      padding: 4px 5px 0 0
       text-transform: lowercase
       min-width: 90px
 

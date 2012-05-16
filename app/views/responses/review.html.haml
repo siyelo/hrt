@@ -10,7 +10,7 @@
 
 = error_messages_for :response, :header_message  => nil, :message => "Oops, we couldn't process your submission."
 
-%ul{:class => "status #{flag}"}
+%ul{:class => "status section_form single wrapped #{flag}"}
   %li
     %span Request:
     = @response.request.title
@@ -26,7 +26,7 @@
 %ul.review
   %li.alt
     %h2 Settings
-  %li.section_base
+  %li.section_form
     %h3{:class => ready(@response.valid?)}
       Organization Settings Complete
       - unless @response.valid?
@@ -34,7 +34,7 @@
           = "Your Settings are not complete. Please visit the #{link_to "settings", edit_organization_path(current_user.organization)} to make the necessary changes."
   %li.alt
     %h2 Projects
-  %li.section_base
+  %li.section_form
     %h3{:class => projects_class}
       Your Projects
 
@@ -91,7 +91,7 @@
 
   %li.alt
     %h2 Classifications
-  %li.section_base
+  %li.section_form.last
     %h3{:class => ready(@response.activities_coded? && @response.other_costs_coded?)}
       Detailed Classifications
 

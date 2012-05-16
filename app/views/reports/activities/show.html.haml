@@ -16,10 +16,9 @@
 
 .crumb_heading
   %ul.breadcrumb
-    %li
-      = link_to "Overview", reports_path
-      - if @report.resource.project
-        = link_to @report.resource.project.name, reports_project_path(@report.resource.project)
+    %li= link_to "Overview", reports_path
+    - if @report.resource.project
+      %li= link_to @report.resource.project.name, reports_project_path(@report.resource.project)
 
   %h1= @report.name
 

@@ -1,0 +1,147 @@
+
+//
+// Advanced sectioning element
+//
+.section_form
+  background: $filler
+  border-left: 1px solid $primary_border4
+  border-right: 1px solid $primary_border4
+  border-top: 1px solid $primary_border4
+  padding: 10px 18px 15px
+  position: relative
+  +border-bottom-radius(0)
+  +pie-clearfix
+  &.first
+    border-top: 1px solid $primary_border
+    padding-top: 15px
+  &.last
+    border-bottom: 1px solid $primary_border
+  &.top
+    border-top: 1px solid $primary_border
+  &.bordered
+    border-top: 1px solid $primary_border
+    border-bottom: 1px solid $primary_border
+  &.single
+    padding-top: 15px
+    border-top: 1px solid $primary_border
+    border-bottom: 1px solid $primary_border
+  &.connect
+    padding-bottom: 0
+  &.strong
+    background: $primary_lightest
+  &.topless
+    border-top: none
+  &.wrapped
+    background: #FDFDFD
+    border-left: 1px solid $primary_border
+    border-right: 1px solid $primary_border
+    padding-top: 15px
+    -webkit-box-shadow: rgba(0,0,0,0.03) 0 -4px 6px inset
+    -moz-box-shadow: rgba(0,0,0,0.03) 0 -4px 6px inset
+    box-shadow: rgba(0,0,0,0.03) 0 -4px 6px inset
+  p
+    font-size: 12px
+
+  // temporary hack to override basic_form input widths
+  // remove after formtastic refactor is finished
+  select, input[type=text], input[type=password], textarea
+    width: auto
+    &.date_picker
+      background: #fff image_url("icon_calendar2.png") no-repeat 95% 50%
+      &:hover, &:focus
+        background: #fff image_url("icon_calendar.png") no-repeat 95% 50%
+
+//
+// Sectioning for the sub-navigation
+//
+.section_overlap
+  background: image_url("overlap.png") no-repeat bottom
+  padding-bottom: 5px
+  margin: 0 -6px
+  
+//
+// Sectioning for deleting forms
+//
+.delete_section
+  background-color: #EEEEEE
+  border-top: 1px solid #CCCCCC
+  color: #666666
+  font-size: 11px
+  margin: 0 0 20px
+  padding: 10px
+
+  a.delete_action
+    border: 0 none
+    color: #990000
+    font-size: 11px
+    font-weight: bold
+    text-decoration: underline
+
+  strong
+    font-weight: bold
+
+  p
+    margin-top: 5px
+
+//
+// Sectioning for simple elements
+//
+.section_base
+  background: $filler
+  border: 1px solid $lightest-blue
+  margin-bottom: 20px
+  padding: 7px 10px 12px 10px
+  +border-bottom-radius
+  +clearfix
+  &.less_spacing
+    margin-bottom: 10px
+  &.no_spacing
+    margin-bottom: 0
+  &.wide
+    padding: 0
+  .first-half, .second-half
+    margin: 0 !important
+  p
+    color: #666666
+    font-size: 12px
+    line-height: 1.4
+    padding: 0 20px 3px 10px
+  ul
+    margin-bottom: 0 !important
+    &.recently_submitted
+      margin-top: 5px
+  li
+    position: relative
+    +transition(hover, 1s, ease, 0)
+    &:hover
+      a
+        color: $mid-blue
+        +transition(hover, 1s, ease, 0)
+    &:last-child a
+      margin-bottom: 0
+  h3
+    padding-top: 10px !important
+    .large
+      display: block
+      font-size: 40px
+      margin-top: 5px
+      +text-shadow(#fff, 0, 1px, 0)
+    .light
+      color: $blue
+      font-size: 12px
+      +text-shadow(#fff, 0, 1px, 0)
+    .none
+      display: block
+      font-size: 12px
+      margin-top: 5px
+    &.tracked
+      float: left
+      margin-left: 2%
+      width: 23%
+      &.last
+        margin-left: 0
+
+  ul.review li:hover a
+    color: $primary
+    &:hover
+      color: $mid-blue
