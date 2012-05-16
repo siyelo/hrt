@@ -57,7 +57,6 @@
           = image_tag "icon_dropdown.png"
 
         %ul.menu_items{:style => 'display: none'}
-          %li= link_to 'Restart', restart_response_path(@response), :method => :put, :confirm => "Are you sure you want to Restart this response?"
           %li= link_to 'Reject', reject_response_path(@response), :method => :put, :confirm => "Are you sure you want to Reject this response?"
           %li= link_to 'Accept', accept_response_path(@response), :method => :put, :confirm => "Are you sure you want to Accept this response?"
 

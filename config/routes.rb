@@ -44,11 +44,12 @@ ActionController::Routing::Routes.draw do |map|
   end
 
   # ACTIVITY MANAGER
-  map.activity_manager_workplan 'activity_manager/workplan', :controller => 'users', :action => :activity_manager_workplan
+  map.activity_manager_workplan 'activity_manager/workplan', :controller => 'users',
+    :action => :activity_manager_workplan
 
   # REPORTER USER: DATA ENTRY
   map.resources :responses, :only => [],
-    :member => {:review => :get, :submit => :put, :restart => :put,
+    :member => {:review => :get, :submit => :put,
       :reject => :put, :accept => :put,
       :send_data_response => :put, :approve_all_budgets => :put}
 
