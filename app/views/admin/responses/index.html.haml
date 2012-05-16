@@ -19,13 +19,13 @@
 
 = render 'filters'
 
-.section_form.wrapped.last
+.section_form.wrapped.topless.last
   #filter_help
     %p= search_and_filter_responses(@responses.total_entries, params[:query], params[:filter])
 
   - unless @responses.empty?
-    %table.standard.rounded
-      %thead
+    %table.standard
+      %thead.static
         %tr
           %th Response
           %th Organization

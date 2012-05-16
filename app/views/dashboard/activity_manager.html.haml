@@ -33,34 +33,34 @@
   = link_to "Download Combined Workplan", activity_manager_workplan_path, :class => 'dropdown dropless right heading_button'
   = image_tag "icon_reporter.png", :class => "heading_icon"
   Organizations List
-.section_base.less_spacing
-  %table.modern_table.am_organizations
-    %thead
-      %tr
-        %th.am_organization Organization
-        %th.am_contacts Contacts
-        %th.am_activities.center Approved Activities
-        %th.am_status.center Status
-        %th.am_download.center Actions
-    %tbody
-      - @dashboard.organizations.each do |organization|
-        - response = organization.data_responses.detect { |dr| dr.data_request_id == current_request.id }
-        %tr
-          %td.title= link_to organization.name, projects_path(:response_id => response.id)
-          %td
-            %ul
-              %li
-                = organization.contact_name
-                %span= "(#{organization.contact_position})" if organization.contact_position.present?
-              %li
-                = organization.contact_phone_number.presence || organization.contact_main_office_phone_number
-            %ul
-              - organization.user_emails(2).each do |email|
-                %li= mail_to email
 
-          %td.center= link_to "#{response.activities.manager_approved.count}/#{response.activities.count}", projects_path(:response_id => response.id)
-          %td.center= link_to response.status, projects_path(:response_id => response.id)
-          %td.center= link_to "Download Workplan", export_workplan_projects_path(:response_id => response.id), :class => 'download_workplan'
+%table.standard.am_organizations
+  %thead
+    %tr
+      %th.am_organization Organization
+      %th.am_contacts Contacts
+      %th.am_activities.center Approved Activities
+      %th.am_status.center Status
+      %th.am_download.center Actions
+  %tbody
+    - @dashboard.organizations.each do |organization|
+      - response = organization.data_responses.detect { |dr| dr.data_request_id == current_request.id }
+      %tr
+        %td.title= link_to organization.name, projects_path(:response_id => response.id)
+        %td
+          %ul
+            %li
+              = organization.contact_name
+              %span= "(#{organization.contact_position})" if organization.contact_position.present?
+            %li
+              = organization.contact_phone_number.presence || organization.contact_main_office_phone_number
+          %ul
+            - organization.user_emails(2).each do |email|
+              %li= mail_to email
+
+        %td.center= link_to "#{response.activities.manager_approved.count}/#{response.activities.count}", projects_path(:response_id => response.id)
+        %td.center= link_to response.status, projects_path(:response_id => response.id)
+        %td.center= link_to "Download Workplan", export_workplan_projects_path(:response_id => response.id), :class => 'download_workplan'
 
 = render 'comments_and_documents'
 

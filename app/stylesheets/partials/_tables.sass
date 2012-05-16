@@ -16,7 +16,6 @@ table.standard
     th
       background: $primary_dark
       color: white
-      padding-left: 5px
       height: 25px
       &.login
         min-width: 15%
@@ -25,7 +24,7 @@ table.standard
       &.invitation
         min-width: 12%
       &.dummy
-        padding: 5px
+        padding: 12px 5px 7px
       a
         background: $primary_dark
         color: white
@@ -45,10 +44,11 @@ table.standard
       &:last-child a
         +border-top-right-radius
 
-
-      &.static th
-        color: $lightest-blue
-        padding: 9px 7px 7px
+    &.static th
+      color: $lightest-blue
+      padding: 12px 5px 7px
+      &:first-child
+        padding-left: 10px
 
   tbody tr
     border-spacing: 0
@@ -82,8 +82,8 @@ table.standard
     padding: 5px 10px 5px
 
   td
-    border-bottom: 1px solid $primary_border2
-    padding: 5px
+    border-bottom: 1px solid $primary_border4
+    padding: 8px 5px
     vertical-align: middle
     &.alt
       border: none
@@ -302,56 +302,8 @@ tr.filler th, tr.filler td
 tr.filler2 th, tr.filler2 td
   background: $primary_lightest
   font-weight: bold
-
-
-// default layout for a simple table
-.modern_table
-  font-size: 12px
-  margin-top: 10px
-  width: 100%
-
-  td
-    &:first-child
-      padding-left: 7px
-    &:last-child
-      padding-right: 5px
-
-  th
-    border-bottom: 1px solid $light-blue
-    color: $blue
-    font-weight: bold
-    padding-bottom: 5px
-    +linear-gradient(color-stops($filler, $primary_lightest))
-  tbody td
-    border-bottom: 1px solid $lightest-blue
-    padding: 5px 0
-    &.title
-      color: $mid-blue
-      font-weight: bold
-
-  a
-    background: none
-    display: inline-block
-    font-size: 11px
-    padding: 0
-    text-decoration: none
-    +border-radius
-    &.title
-      color: $primary
-      font-size: 12px
-      font-weight: bold
-    &.respond
-      background: green
-      color: #fff
-      float: right
-      font-size: 9px
-      font-weight: bold
-      padding: 7px 10px 4px
-      text-transform: uppercase
-      &:hover, &:focus
-        background: orange
         
-.modern_table.am_organizations
+.am_organizations
   line-height: 18px
   th.center, td.center
     text-align: center
