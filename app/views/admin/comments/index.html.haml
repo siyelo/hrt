@@ -1,24 +1,25 @@
 - title("Comments")
 
 %h1.main_heading
-  Comments
+  All Comments
 
-%table.standard.rounded
-  %thead
-    %tr
-      %th Comment
-      %th Comment on
-      %th Created at
-      %th.wrap-10
-
-  %tbody
-    - @comments.each do |comment|
+.section_form.single
+  %table.standard
+    %thead
       %tr
-        %td= comment.comment
-        %td= comment.commentable.try(:name) if comment.commentable.respond_to?(:name)
-        %td= comment.created_at
-        %td.wrap-10
-          = link_to "Edit", edit_admin_comment_path(comment), :class => "create_inline"
-          = link_to "Delete", admin_comment_path(comment), :method => :delete, :confirm => "Are you sure you want to delete this comment?", :title => 'Delete', :class => "create_inline"
+        %th Comment
+        %th Comment on
+        %th Created at
+        %th.wrap-10
+
+    %tbody
+      - @comments.each do |comment|
+        %tr
+          %td= comment.comment
+          %td= comment.commentable.try(:name) if comment.commentable.respond_to?(:name)
+          %td= comment.created_at
+          %td.wrap-10
+            = link_to "Edit", edit_admin_comment_path(comment), :class => "create_inline"
+            = link_to "Delete", admin_comment_path(comment), :method => :delete, :confirm => "Are you sure you want to delete this comment?", :title => 'Delete', :class => "create_inline"
 
 = will_paginate @comments

@@ -8,7 +8,7 @@
   = image_tag "alertwarning_icon.png", :title => "Files downloaded from this website are not for distribution.", :class => 'tooltip'
 .section_form.single
   - if @documents.present?
-    %table.standard.rounded
+    %table.standard
       = render 'documents', :documents => @documents
   - else
     %p.no_data There are no files available for download.

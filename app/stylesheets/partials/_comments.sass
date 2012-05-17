@@ -8,15 +8,18 @@
   li
     border-bottom: 1px solid $primary_lighter
     margin-top: -1px
-    padding: 0 10px 10px
+    padding: 0 10px 10px 18px
     +pie-clearfix
+    &.view-all
+      border-bottom: none
+      padding-top: 10px
   .avatar
     float: left
     padding-top: 10px
-    width: 13%
+    width: 6%
   .comment
     float: right
-    width: 87%
+    width: 94%
   h5
     font: normal 14px Avenir, sans-serif
     padding: 15px 0 5px 10px
@@ -47,23 +50,28 @@
     font-size: 0.8em
     font-style: italic
     line-height: 1.3
-    margin: 15px 0 0
+    margin: 15px 0 5px
     overflow: hidden
     white-space: nowrap
     a
       text-decoration: none
   img
-    border: 4px solid #fff
-    margin: 1px 10px 1px 1px
-    
+    margin: 5px 10px 0 0
+  .nothing
+    padding-top: 10px
+
+.view-all
+  padding: 10px 18px
+  font: normal 11px Arial, sans-serif
+
 
 // MAIN COMMENTS //
 .comments_input
   li
     margin-bottom: 0 !important
   textarea
-    height: 60px
-    width: 60% !important
+    height: auto !important
+    width: auto !important
   .inline-errors
     color: $red
     font-size: 12px
@@ -77,11 +85,13 @@
     .delete_btn
       margin: 2px 0 0 5px
   &.reply
-    background: image_url("icon_reply.png") no-repeat 10px 10px
-    margin-top: 15px
-    padding-left: 25px
+    background: image_url("icon_reply.png") no-repeat 18px 10px
+    margin: 10px 0 18px
+    padding-left: 35px
+    .comment
+      padding: 0 0 0 5px
+      width: 95%
     h2
-
       font-size: 12px
   .big_gravatar
     float: left
@@ -90,19 +100,22 @@
 
 .comments_list
   .comment_item
-    margin-top: 15px
+
     > ul
-      margin-bottom: 10px
-      padding-left: 30px
+      margin-bottom: 15px
+      padding-left: 18px
+      > li
+        width: 98%
+        &:first-child
+          border-top: 1px solid $primary_border
 
   .author
     background: $filler
-    border: 1px solid $lightest-blue
+    border-bottom: 1px solid $lightest-blue
     font-weight: normal
-    margin-bottom: 5px
-    padding: 6px !important
+    margin: 0 0 5px 18px
+    padding: 7px 7px 7px 0 !important
     text-transform: none
-    +border-radius(3px)
     +pie-clearfix
     img
       float: left
@@ -111,32 +124,33 @@
       color: $light-blue - #111
       display: inline-block
       float: right
-      margin-top: 11px
+      font-size: 11px
+      margin-top: 7px
       padding: 0 8px
-      strong
-        color: $light-blue - #333
-        font-weight: bold
       &.name
         border: none
         color: $mid-blue
         display: block
         float: left
-        font-size: 14px
-        font-weight: bold
-        margin-top: 9px
+        font-size: 12px
+        margin-top: 6px
       &.time
         border:none
         float: left
-        font-weight: bold
+        font-size: 11px
+        font-style: italic
+      &.org
+        border: none
+        color: #444
     .add_row
-      padding: 8px
-      img
-        margin: -5px 2px 0 0
+      padding: 4px 10px
 
   .comment
+    color: #555
     font-size: 12px
-    line-height: 1.4
-    padding-left: 7px
+    line-height: 1.5
+    padding: 0 0 10px 18px
+    width: 70%
 
 // MAIN COMMENTS end //
 .plain

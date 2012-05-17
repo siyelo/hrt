@@ -1,24 +1,23 @@
 %h2
   Recent Comments
-  
-- if comments.present?
-  %ul.dashboard_comments
+
+%ul.dashboard_comments
+  - if comments.present?
     - comments.each do |comment|
       - if comment.commentable
         %li
           .avatar
-            = image_tag comment.user.gravatar(60)
+            = image_tag comment.user.gravatar(22)
           .comment
             .author
-              .left= "from #{comment.user.name} (#{time_ago_in_words(comment.created_at)} ago)"
-              .right= "#{auto_link(comment.user.email)}"
-
-            %h5.title
-              - comment_title = truncate(model_name(comment.commentable), :length => 40)
-              - comment_title += " (#{comment.commentable.organization.name})" unless comment.commentable.organization == current_user.organization
-              %span= link_to comment_title, commentable_path(comment, current_user)
+              .left
+                = mail_to comment.user.email, comment.user.name
+                == #{time_ago_in_words(comment.created_at)} ago
+              .right
+                - comment_title = truncate(model_name(comment.commentable), :length => 40)
+                %span= link_to comment_title, commentable_path(comment, current_user)
             %p= truncate(comment.comment, :length => 300)
-    .view-all= link_to "view all", current_user.sysadmin? ? admin_comments_path : comments_path
-- else
-  .section_base.wide
-    %p.nothing There are no comments posted in the last 6 months.
+  - else
+    %li.nothing There are no comments posted in the last 6 months.
+
+  %li.view-all= link_to "view all", current_user.sysadmin? ? admin_comments_path : comments_path

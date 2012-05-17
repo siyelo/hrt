@@ -1,7 +1,7 @@
 - title("Organizations")
 
 %h1.main_heading Organizations
-
+%hr.heading
 = render :partial => 'buttons'
 
 = render :partial => 'import'
@@ -16,7 +16,7 @@
     %p= search_and_filter_message(@organizations.total_entries, params[:query], params[:filter])
 
   - unless @organizations.empty?
-    %table.standard.rounded
+    %table.standard
       %thead
         %tr
           %th= sortable "name", "Organization"

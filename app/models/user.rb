@@ -87,7 +87,7 @@ class User < ActiveRecord::Base
     Notifier.deliver_send_user_invitation(self, inviter)
   end
 
-  def gravatar(size = 30)
+  def gravatar(size = 22)
     "http://gravatar.com/avatar/#{Digest::MD5.hexdigest(email.downcase)}.png?s=#{size}&d=mm"
   end
 

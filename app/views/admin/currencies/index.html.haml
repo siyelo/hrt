@@ -1,7 +1,7 @@
 - title("Currencies")
 
 %h1.main_heading Currencies
-
+%hr.heading
 %ul.horizontal
   %li
     - link_to new_admin_currency_path, :class => "create_alt" do
@@ -15,7 +15,7 @@
   #search.push
     - form_tag admin_currencies_path, :method => :get do
       = render 'shared/search_form'
-  %table.standard.rounded
+  %table.standard
     %thead
       %tr
         %th From

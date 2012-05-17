@@ -1,19 +1,18 @@
-%li.comment_item
+%li.comment_item.section_form.wide.topless.last
   %h4.author.horizontal
     = image_tag comment.user.gravatar
-    %span.name= "#{comment.user.name} (#{auto_link(comment.user.email)})"
+    %span.name= mail_to comment.user.email, comment.user.name
     %span.time= "#{time_ago_in_words(comment.created_at)} ago"
     - link_to '#', :class => 'js_reply add_row right' do
-      = image_tag "icon_reply.png"
       Reply
 
     - if params[:controller] == 'projects' && params[:action] == 'index'
-      %span
-        commented on:
+      %span.org
+
         - if comment.commentable.is_a?(DataResponse)
-          %strong= model_name(comment.commentable)
+          = model_name(comment.commentable)
         - else
-          %strong= link_to model_name(comment.commentable), commentable_path(comment, current_user)
+          = link_to model_name(comment.commentable), commentable_path(comment, current_user)
 
   %p.comment= comment.comment
 

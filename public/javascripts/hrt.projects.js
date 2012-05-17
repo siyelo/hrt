@@ -4,6 +4,8 @@ HrtProjects.init = function () {
   // use click() not toggle() here, as toggle() doesnt
   // work when menu items are also toggling it
 
+  $('.js_am_approve').hide();
+
   $('.js_project_row').hover(
     function(e){
       $(this).find('.js_am_approve').show();
