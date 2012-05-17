@@ -17,7 +17,7 @@ class DataRequest < ActiveRecord::Base
   after_create :create_data_responses
 
   ### Named scopes
-  named_scope :sorted, { :order => "data_requests.start_date" }
+  named_scope :sorted, { :order => "data_requests.start_date DESC" }
 
   alias_attribute :name, :title
 

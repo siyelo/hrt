@@ -78,6 +78,11 @@ Spork.each_run do
     it { should set_the_flash.to("You must be logged in to access that page") }
   end
 
+  shared_examples_for "a protected admin endpoint" do
+    it { should redirect_to(root_url) }
+    it { should set_the_flash.to("You must be an administrator to access that page") }
+  end
+
   def save_and_deep_clone
     @original.save!
     @clone = @original.deep_clone

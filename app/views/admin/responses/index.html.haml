@@ -7,15 +7,23 @@
 
 - title("Responses")
 
+
 %h1.request_nav
   = render '/shared/request_nav'
   #search
     - form_tag admin_responses_path, :method => :get do
       = render 'shared/search_form'
 
+%h1.main_heading Responses
+
+%ul.horizontal
+  %li
+    - link_to new_admin_response_path, :class => "create_alt" do
+      = image_tag "new.png"
+      Create Response
+
 #reports-summary
-  %h2 Response Status
-  #response_chart
+  #response_chart.section_form.top.connect
 
 = render 'filters'
 

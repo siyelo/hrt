@@ -47,3 +47,13 @@ Feature: Admin can manage data responses
         And I should see "Status: Rejected" within "#state"
       When "reporter1@hrtapp.com" open the email with subject "Your FY2010-11 Expenditures and FY2011-12 Budget response is Rejected"
       Then I should see "We have reviewed your submission and noted some issues that you need to correct" in the email body
+
+  Scenario: can create response
+    Given an organization exists with name: "MegaCorp"
+    When I follow "Responses"
+     And I follow "Create Response"
+     And I select "MegaCorp" from "Organization"
+     And I select "FY2010-11 Expenditures and FY2011-12 Budget" from "Request"
+     And I press "Save"
+    Then I should see "Response was successfully created"
+    And I should see "MegaCorp: FY2010-11 Expenditures and FY2011-12 Budget"

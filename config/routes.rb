@@ -23,7 +23,7 @@ ActionController::Routing::Routes.draw do |map|
   # ADMIN
   map.namespace :admin do |admin|
     admin.resources :requests
-    admin.resources :responses, :only => [:index]
+    admin.resources :responses, :only => [:index, :new, :create]
     admin.resources :organizations,
       :collection => {:duplicate => :get, :remove_duplicate  => :put,
         :download_template => :get, :create_from_file => :post}
