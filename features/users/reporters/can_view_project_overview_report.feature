@@ -33,8 +33,8 @@ Feature: Reporter can see project overview report
   Scenario: See reports projects locations
     Given an implementer_split exists with organization: the organization, activity: the activity, spend: 100, budget: 200
     And an implementer_split exists with organization: the organization, activity: the other cost, spend: 10, budget: 20
-    And a location_split exists with activity: "activity1", location: "Some Loc", spend_percentage: 100, budget_percentage: 100
-    And a location_split exists with activity: "some cost", location: "Some Loc", spend_percentage: 100, budget_percentage: 100
+    And a 100% location split exists with activity: "activity1", location: "Some Loc", spend_percentage: 100, budget_percentage: 100
+    And a 100% location split exists with activity: "some cost", location: "Some Loc", spend_percentage: 100, budget_percentage: 100
     When I follow "Reports"
     And I follow "project1"
     And I follow "Locations"

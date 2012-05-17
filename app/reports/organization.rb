@@ -3,10 +3,6 @@ require 'app/charts/base'
 
 module Reports
   class Organization < Reports::Base
-    def initialize(response)
-      @resource = response
-    end
-
     def collection
       @collection ||= (@resource.projects + @resource.other_costs.without_project).
         sort{ |a, b| a.name.downcase <=> b.name.downcase }

@@ -1,7 +1,5 @@
 require File.dirname(__FILE__) + '/../spec_helper_lite'
-
 $: << File.join(APP_ROOT, "app/reports")
-
 require 'app/reports/project_inputs'
 
 class DerpSpend; end
@@ -10,21 +8,21 @@ class DerpBudget; end
 describe Reports::ProjectInputs do
   let(:input) { mock :input, :name => 'L2'}
   let(:input1) { mock :input, :name => 'L1' }
-  let(:ssplit) { mock :leaf_spend_inputs, :code => input,
+  let(:ssplit) { mock :input_split, :code => input,
                  :cached_amount => 25.0, :name => input.name,
                  :class => DerpSpend }
-  let(:ssplit1) { mock :leaf_spend_inputs, :code => input1,
+  let(:ssplit1) { mock :input_split, :code => input1,
                   :cached_amount => 20.0, :name => input1.name,
                   :class => DerpSpend }
-  let(:bsplit) { mock :leaf_budget_inputs, :code => input,
+  let(:bsplit) { mock :input_split, :code => input,
                  :cached_amount => 10.0, :name => input.name,
                  :class => DerpBudget }
-  let(:bsplit1) { mock :leaf_budget_inputs, :code => input1,
+  let(:bsplit1) { mock :input_split, :code => input1,
                   :cached_amount => 5.0, :name => input1.name,
                   :class => DerpBudget }
   let(:activity) { mock :activity, :name => 'act',
-                   :leaf_spend_inputs => [ssplit, ssplit1],
-                   :leaf_budget_inputs => [bsplit, bsplit1],
+                   :coding_spend_cost_categorization => mock(:scope, :roots => [ssplit, ssplit1]),
+                   :coding_budget_cost_categorization => mock(:scope, :roots => [bsplit, bsplit1]),
                    :total_spend => 45.0, :total_budget => 15.0 }
   let(:project) { mock :project, :activities => [activity],
                   :name => 'Project1', :currency => 'USD',
@@ -51,6 +49,7 @@ describe Reports::ProjectInputs do
 
   #table data
   describe "#collection" do
+
     it 'returns all locations current Org (/project), sorted' do
       report.stub(:method_from_class).with("DerpSpend").and_return :spend
       report.stub(:method_from_class).with("DerpBudget").and_return :budget
@@ -67,23 +66,19 @@ describe Reports::ProjectInputs do
   end
 
   describe "unclassified inputs" do
-    let(:other_cost) { mock :ocost, :name => 'act',
-                       :leaf_spend_inputs => [],
-                       :leaf_budget_inputs => [],
-                       :total_spend => 25, :total_budget => 5.0}
     before :each do
-      project.stub(:activities).and_return [activity, other_cost]
-      project.stub(:total_spend).and_return BigDecimal.new("70.015")
-      project.stub(:total_budget).and_return 20
+      activity.stub(:coding_spend_cost_categorization).and_return mock(:scope, :roots => [])
+      activity.stub(:coding_budget_cost_categorization).and_return mock(:scope, :roots => [])
+      project.stub(:total_spend).and_return BigDecimal.new("45.015")
     end
 
     it "rounds all amounts" do
       not_classified_input = report.collection.last
-      not_classified_input.total_spend.should == 25.02
+      not_classified_input.total_spend.should == 45.02
     end
 
     it "does the not-classified calculation before rounding" do
-      report.stub(:rows_spend).and_return BigDecimal.new("70.011")
+      report.stub(:rows_spend).and_return BigDecimal.new("45.011")
       not_classified_input = report.collection.last
       not_classified_input.total_spend.should == 0 # .015 - .011 == 0.004 - rounded down to zero
     end
@@ -91,8 +86,8 @@ describe Reports::ProjectInputs do
     it "returns the the inputs with an extra split added if the inputs totals are not equal to the project" do
       not_classified_input = report.collection.last
       not_classified_input.name.should == "Not Classified"
-      not_classified_input.total_spend.should == 25.02
-      not_classified_input.total_budget.should == 5.0
+      not_classified_input.total_spend.should == 45.02
+      not_classified_input.total_budget.should == 15.0
     end
   end
 end

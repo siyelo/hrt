@@ -1,23 +1,10 @@
-require 'app/reports/classification_base'
+require 'app/reports/locations'
 
 module Reports
-  class ActivityLocations < Reports::ClassificationBase
-    def initialize(activity)
-      @resource = activity
-    end
-
-    def currency
-      @resource.data_response.currency
-    end
-
-    protected
-
+  class ActivityLocations < Reports::Locations
     def activities
       [@resource]
     end
-
-    def splits(type)
-      "coding_#{type}_district"
-    end
   end
 end
+

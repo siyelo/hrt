@@ -1,7 +1,5 @@
 require File.dirname(__FILE__) + '/../spec_helper_lite'
-
 $: << File.join(APP_ROOT, "app/reports")
-
 require 'app/reports/project_locations'
 
 class DerpSpend; end
@@ -69,6 +67,7 @@ describe Reports::ProjectLocations do
   describe "unclassified locations" do
     before :each do
       activity.stub(:coding_spend_district).and_return []
+      activity.stub(:coding_budget_district).and_return []
       project.stub(:total_spend).and_return BigDecimal.new("45.015")
     end
 

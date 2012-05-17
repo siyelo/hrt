@@ -1,4 +1,4 @@
-class CodingBudgetDistrict < CodeAssignment
+class CodingBudgetDistrict < LocationSplit
 end
 
 

@@ -14,9 +14,9 @@ Feature: Reporter can see location report
      When I am signed in as "reporter@hrtapp.com"
 
   @javascript
-  Scenario: See locations overview
+  Scenario: See overview
     When an implementer_split exists with organization: the organization, activity: the activity, spend: 120, budget: 220
-    And a input_split exists with activity: "Act1", input: "Some Input", spend_percentage: 100, budget_percentage: 100
+    And a 100% input split exists with activity: "Act1", input: "Some Input", spend_percentage: 100, budget_percentage: 100
     When I follow "Reports"
     And I follow "Inputs"
     And I should see "Some Input"

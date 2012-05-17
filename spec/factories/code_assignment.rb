@@ -18,7 +18,7 @@ Factory.define :coding_budget_district, :class => CodingBudgetDistrict, :parent 
 end
 
 Factory.define :coding_budget_cost_categorization, :class => CodingBudgetCostCategorization, :parent => :code_assignment do |f|
-  f.code            { Factory.create :cost_category_code }
+  f.code            { Factory.create :input}
 end
 
 Factory.define :coding_spend, :class => CodingSpend, :parent => :code_assignment do |f|
@@ -34,7 +34,7 @@ Factory.define :coding_spend_district, :class => CodingSpendDistrict, :parent =>
 end
 
 Factory.define :coding_spend_cost_categorization, :class => CodingSpendCostCategorization, :parent => :code_assignment do |f|
-  f.code            { Factory.create :cost_category_code }
+  f.code            { Factory.create :input }
 end
 
 Factory.define :budget_purpose, :class => CodingBudget, :parent => :code_assignment do |f|

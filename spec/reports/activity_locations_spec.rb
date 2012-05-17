@@ -1,7 +1,5 @@
 require File.dirname(__FILE__) + '/../spec_helper_lite'
-
 $: << File.join(APP_ROOT, "app/reports")
-
 require 'app/reports/activity_locations'
 
 class DerpSpend; end
@@ -25,8 +23,9 @@ describe Reports::ActivityLocations do
   let(:activity) { mock :activity, :name => 'act',
                    :coding_spend_district => [ssplit, ssplit1],
                    :coding_budget_district => [bsplit, bsplit1],
-                   :total_spend => 45.0, :total_budget => 15.0 }
-  let(:response) { mock :response, :currency => 'USD' }
+                   :total_spend => 45.0, :total_budget => 15.0,
+                   :currency => 'USD' }
+  let(:response) { mock :response }
   let(:report) { Reports::ActivityLocations.new(activity) }
   let(:rows) { [ Reports::Row.new(location1.name, 20.0, 5.0),
                  Reports::Row.new(location.name, 25.0, 10.0) ] }
@@ -36,7 +35,6 @@ describe Reports::ActivityLocations do
   end
 
   it "has a currency" do
-    activity.should_receive(:data_response).once.and_return response
     report.currency.should == 'USD'
   end
 
@@ -68,6 +66,7 @@ describe Reports::ActivityLocations do
   describe "unclassified locations" do
     before :each do
       activity.stub(:coding_spend_district).and_return []
+      activity.stub(:coding_budget_district).and_return []
       activity.stub(:total_spend).and_return BigDecimal.new("45.015")
     end
 
@@ -89,3 +88,4 @@ describe Reports::ActivityLocations do
     end
   end
 end
+

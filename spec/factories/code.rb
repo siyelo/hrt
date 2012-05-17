@@ -21,10 +21,11 @@ end
 Factory.define :purpose, :parent => :nha_code do |f|
 end
 
-Factory.define :cost_category_code, :class => CostCategory, :parent => :code do |f|
+Factory.define :input, :class => CostCategory, :parent => :code do |f|
 end
 
-Factory.define :input, :parent => :cost_category_code do |f|
+# todo - deprecate
+Factory.define :cost_category_code, :parent => :input do |f|
 end
 
 Factory.define :other_cost_code, :class => OtherCostCode, :parent => :code do |f|

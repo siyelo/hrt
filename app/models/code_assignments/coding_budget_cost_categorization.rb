@@ -1,4 +1,4 @@
-class CodingBudgetCostCategorization < CodeAssignment
+class CodingBudgetCostCategorization < InputSplit
 end
 
 
