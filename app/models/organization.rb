@@ -16,10 +16,9 @@ class Organization < ActiveRecord::Base
     'RBC institutions']
 
   ### Attributes
-  attr_accessible :name, :raw_type, :fosaid, :currency, :fiscal_year_end_date,
-    :fiscal_year_start_date, :contact_name, :contact_position, :contact_phone_number,
-    :contact_main_office_phone_number, :contact_office_location,
-    :implementer_type, :funder_type
+  attr_accessible :name, :raw_type, :fosaid, :currency, :contact_name,
+    :contact_position, :contact_phone_number, :contact_main_office_phone_number,
+    :contact_office_location, :implementer_type, :funder_type
 
 
   ### Associations
@@ -44,11 +43,6 @@ class Organization < ActiveRecord::Base
   validates_presence_of :name, :raw_type, :currency
   validates_uniqueness_of :name
   validates_inclusion_of :currency, :in => Money::Currency::TABLE.map{|k, v| "#{k.to_s.upcase}"}
-  validates_date :fiscal_year_start_date, :fiscal_year_end_date, :allow_blank => true
-  validates_presence_of :fiscal_year_start_date,
-    :if => Proc.new { |model| model.fiscal_year_end_date.present? }
-  validate :validates_date_range,
-    :if => Proc.new { |model| model.fiscal_year_start_date.present? }
 
   ### Callbacks
   before_destroy :check_no_funder_references
@@ -168,13 +162,6 @@ class Organization < ActiveRecord::Base
       return false
     end
   end
-
-  private
-
-  def validates_date_range
-    errors.add(:base, "The end date must be exactly one year after the start date") unless (fiscal_year_start_date + (1.year - 1.day)).eql? fiscal_year_end_date
-  end
-
 end
 
 
@@ -191,8 +178,6 @@ end
 #  fosaid                           :string(255)
 #  users_count                      :integer         default(0)
 #  currency                         :string(255)
-#  fiscal_year_start_date           :date
-#  fiscal_year_end_date             :date
 #  contact_name                     :string(255)
 #  contact_position                 :string(255)
 #  contact_phone_number             :string(255)

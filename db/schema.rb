@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120516085315) do
+ActiveRecord::Schema.define(:version => 20120517142207) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -177,8 +177,6 @@ ActiveRecord::Schema.define(:version => 20120516085315) do
     t.string   "fosaid"
     t.integer  "users_count",                      :default => 0
     t.string   "currency"
-    t.date     "fiscal_year_start_date"
-    t.date     "fiscal_year_end_date"
     t.string   "contact_name"
     t.string   "contact_position"
     t.string   "contact_phone_number"

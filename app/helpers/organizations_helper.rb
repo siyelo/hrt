@@ -43,16 +43,6 @@ module OrganizationsHelper
     "Fosaid of organization"
   end
 
-  def fiscal_year_start_date_hint
-    "The start of the Fiscal Year (FY) that you wish to report in.
-    This may correspond to the FY of your organization, donors, country etc."
-  end
-
-  def fiscal_year_end_date_hint
-    "The end of the Fiscal Year (FY) that you wish to report in.
-    This may correspond to the FY of your organization, donors, country etc."
-  end
-
   def currency_hint
     "You can override the currency for individual projects
     should you deem it necessary."

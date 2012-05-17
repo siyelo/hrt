@@ -19,11 +19,6 @@
           {:label => 'Default Currency', :required => true, :hint => currency_hint,
           :label_html => {:class => 'indented'}, :wrapper_html => {:class => 'input-wrapper'} }
 
-        = f.text_field :fiscal_year_start_date,
-          input_date(f.object.fiscal_year_start_date, "Start of Fiscal Year", fiscal_year_start_date_hint)
-        = f.text_field :fiscal_year_end_date,
-          input_date(f.object.fiscal_year_end_date, "End of Fiscal Year", fiscal_year_end_date_hint)
-
     %li.last
       %h2 Contact Details
       %ul.section_form
