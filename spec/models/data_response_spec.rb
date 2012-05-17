@@ -11,6 +11,9 @@ describe DataResponse do
     it { should have_many(:comments).dependent(:destroy) }
   end
 
+  it { should allow_mass_assignment_of(:organization_id) }
+  it { should allow_mass_assignment_of(:data_request_id) }
+
   describe "Validations" do
     subject { basic_setup_response; @response }
     it { should validate_presence_of(:data_request_id) }

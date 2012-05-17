@@ -1,0 +1,11 @@
+%fieldset.inputs
+  %ol.section_form.single.connect
+    %li
+      %ul
+        = f.input :organization_id, :label => "Organization", :as => :select, :collection => Organization.ordered, :hint => "The organization to create the response for"
+        = f.input :data_request_id, :label => "Request", :as => :select, :collection => DataRequest.sorted, :hint => "The request to respond to"
+    %li.last
+      %fieldset.buttons.push-12
+        %ol
+          - f.buttons :class => 'buttons', :style => 'float: none' do
+            = f.commit_button "Save", :button_html => {:class => "last big_button"}

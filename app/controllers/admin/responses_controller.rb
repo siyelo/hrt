@@ -21,6 +21,21 @@ class Admin::ResponsesController < Admin::BaseController
                                 :order => "UPPER(organizations.name), id ASC")
   end
 
+  def new
+    @response = DataResponse.new
+  end
+
+  def create
+    @response = DataResponse.new(params[:data_response])
+    if @response.save
+      flash[:notice] = "Response was successfully created"
+      redirect_to admin_responses_path
+    else
+      flash.now[:error] = "Sorry, we were unable to save that response"
+      render :action => 'new'
+    end
+  end
+
   private
 
   # show reporting orgs by default.

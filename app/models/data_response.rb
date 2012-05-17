@@ -6,7 +6,7 @@ class DataResponse < ActiveRecord::Base
   include DataResponse::ErrorChecker
 
   ### Attributes
-  attr_accessible :data_request_id
+  attr_accessible :data_request_id, :organization_id
 
   ### Associations
   belongs_to :organization
