@@ -22,14 +22,11 @@
       = render 'double_report_row', :title => 'Implementer Location', :budget_key => 'budget_implementer_location', :spend_key => 'spend_implementer_location'
       = render 'double_report_row', :title => 'Implementer Funding Source', :budget_key => 'budget_implementer_funding_source', :spend_key => 'spend_implementer_funding_source'
       = render 'double_report_row', :title => 'Implementer Output', :budget_key => 'budget_implementer_output', :spend_key => 'spend_implementer_output'
-
       = render 'double_report_row', :title => 'Implementer Beneficiary', :budget_key => 'budget_implementer_beneficiary', :spend_key => 'spend_implementer_beneficiary'
       = render 'double_report_row', :title => 'Dynamic Query', :budget_key => 'budget_dynamic_query', :spend_key => 'spend_dynamic_query'
       = render 'single_report_row', :title => 'Funding Source Query', :key => 'funding_source_query'
 
-%h2
-  =image_tag "icon_reporter.png", :class => "heading_icon"
-  Mark Double Counting
+%h2 Mark Double Counting
 .section_base
   %ul.admin_reports
     - form_tag mark_implementer_splits_admin_reports_detailed_path, :method => :put, :multipart => true do
