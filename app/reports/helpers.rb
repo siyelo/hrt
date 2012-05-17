@@ -26,7 +26,9 @@ module Reports::Helpers
   end
 
   def project_in_flows(project)
-    project ? project.in_flows.map{ |f| "#{f.from.name}#{organization_funder_type(f.from)}" }.sort.join(' | ') : ''
+    project ? project.in_flows.map do |f|
+      "#{f.from.name}#{organization_funder_type(f.from)}"
+    end.sort.join(' | ') : ''
   end
 
   def organization_funder_type(org)
@@ -43,7 +45,7 @@ module Reports::Helpers
 
   # returns the projects budget type
   def project_budget_type(project)
-    if project && project.budget_type
+    if project
       project.budget_type
     else
       "N/A"
