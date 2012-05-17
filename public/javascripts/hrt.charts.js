@@ -33,6 +33,7 @@ HrtCharts.drawPieChart = function (element, data_rows, width, height) {
   };
   var chart = new google.visualization.PieChart(element);
   chart.draw(data, {width: width, height: height,
-             chartArea: {width: 360, height: 220}
+             chartArea: {width: 360, height: 220},
+             sliceVisibilityThreshold: 1/120
   });
 };

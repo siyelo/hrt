@@ -7,9 +7,6 @@ module Reports
   class Reporters < Reports::Base
     include CurrencyNumberHelper
 
-    ### Constants
-    NUMBER_OF_VALUES_IN_CHARTS = 10
-
     def initialize(request)
       @resource = request
     end
@@ -19,17 +16,17 @@ module Reports
     end
 
     def collection
-      @collection ||= create_rows
+      @collection ||= create_rows.sort{ |x,y| y.total_spend <=> x.total_spend }
     end
 
     def total_spend
-      collection.inject(0) do |sum, e|
+      @total_spend ||= collection.inject(0) do |sum, e|
         sum + (e.total_spend || 0)
       end
     end
 
     def total_budget
-      collection.inject(0) do |sum, e|
+      @total_budget ||= collection.inject(0) do |sum, e|
         sum + (e.total_budget || 0)
       end
     end
@@ -45,24 +42,29 @@ module Reports
     private
 
     def create_rows
-      rows.map do |split|
-        if split.tot_spend.to_f > 0 && split.tot_budget.to_f > 0
-          org_currency = split.amount_currency
-          Reports::Row.new(split.org_name,
-            universal_currency_converter(split.tot_spend.to_f, org_currency, "USD"),
-            universal_currency_converter(split.tot_budget.to_f, org_currency, "USD"))
-        end
-      end.compact
+      mapped_data.map do |split|
+        Reports::Row.new( split[0],
+                          split[1]["spend"].round(2),
+                          split[1]["budget"].round(2) )
+      end
     end
 
-    def top_spenders
-      collection.sort{ |x, y| y.total_spend <=> x.total_spend }.
-        first(NUMBER_OF_VALUES_IN_CHARTS)
-    end
 
-    def top_budgeters
-      collection.sort{ |x, y| y.total_budget <=> x.total_budget }.
-        first(NUMBER_OF_VALUES_IN_CHARTS)
+    ###
+    # In the case that there are 2 of of the same organizations
+    # because the query can't disregard organizations that report in
+    # several currencies, this mapped_data merges thos organizations
+    def mapped_data
+      rows.inject({}) do |result, e|
+        name = e.org_name
+        currency = e.amount_currency
+        result[name] ||= Hash.new(0)
+        result[name]["spend"] +=
+          universal_currency_converter(e.tot_spend.to_f, currency, 'USD')
+        result[name]["budget"] +=
+          universal_currency_converter(e.tot_budget.to_f, currency, 'USD')
+        result
+      end
     end
 
     def rows
@@ -82,6 +84,18 @@ module Reports
                     SUM(implementer_splits.budget) AS tot_budget",
                :conditions => "data_responses.data_request_id = #{@resource.id}",
                :group => "organizations.name, amount_currency" )
+    end
+
+    ####
+    # The top 10 spenders
+    def top_spenders
+      collection
+    end
+
+    ####
+    # The top 10 budgeters
+    def top_budgeters
+      collection.sort{ |x, y| y.total_budget <=> x.total_budget }
     end
   end
 end

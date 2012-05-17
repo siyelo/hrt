@@ -16,6 +16,9 @@ describe Reports::Funders do
   let(:funding_flow3) { mock :response,
     :spend => 300, :budget => 60, :organization => organization2}
   let(:funding_flows) { [funding_flow1, funding_flow2, funding_flow3] }
+  let(:rows) { [ Reports::Row.new("two", 400.0, 40.0),
+                 Reports::Row.new("three", 300.0, 60.0) ] }
+
   let(:request) { mock :request, :title => "Yaw"}
   let(:report) { Reports::Funders.new(request) }
 
@@ -28,13 +31,13 @@ describe Reports::Funders do
     report.currency.should == 'USD'
   end
 
-  it "#collection is made up of funding_flows embedded in Report:Rows" do
+  it "#collection is made up of funding_flows embedded in Report:Rows (joins duplicate orgs)" do
     report.should_receive(:funders).once.and_return funding_flows
     rows = report.collection
-    rows.size.should == 3
+    rows.size.should == 2
     rows.first.class.should == Reports::Row
-    rows.first.total_spend.should == BigDecimal.new("100")
-    rows.first.total_budget.should == BigDecimal.new("20")
+    rows.first.total_spend.should == BigDecimal.new("500")
+    rows.first.total_budget.should == BigDecimal.new("60")
   end
 
   it "#total_spend" do

@@ -104,6 +104,12 @@ module Charts
 
   ### Common charts
   #
+  class UnorderedSpend < Charts::Base
+    def self.value_method
+      :total_spend
+    end
+  end
+
   class Spend < Charts::Base
     def self.value_method
       :total_spend
