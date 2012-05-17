@@ -34,7 +34,7 @@ describe Reports::ActivityManagerWorkplan do
       xls = Reports::ActivityManagerWorkplan.new(@response,@user.organizations).to_xls
       rows = Spreadsheet.open(StringIO.new(xls)).worksheet(0)
       rows.row(0).should == ["Organization Name", "Project Name", "Project Description",
-        "Funding Sources", "Activity Name", "Activity Description", "Activity / Other Cost",
+        "Funding Sources", "Activity Name", "Activity Description", "Activity / Indirect Cost",
         "Activity Budget", "Currency", "Implementers", "Targets", "Outputs", "Beneficiaries",
         "Districts worked in/National focus"]
       rows[1,0].should == @organization2.try(:name)

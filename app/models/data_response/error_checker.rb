@@ -11,7 +11,7 @@ class DataResponse < ActiveRecord::Base
       errors.add_to_base("Activites are not yet classified.") unless activities_coded?
       errors.add_to_base("Projects have invalid funding sources.") unless projects_have_valid_funding_sources?
      if projects_have_other_costs? && !other_costs_coded?
-        errors.add_to_base("Other Costs are not yet classified.")
+        errors.add_to_base("Indirect Costs are not yet classified.")
       end
       unless implementer_splits_entered_and_valid?
         errors.add_to_base("Activities are missing implementers or implementer

@@ -30,7 +30,7 @@ module ApplicationHelper
     unless active
       if tab == 'reports'
         active = current_controller_with_nesting?('admin', 'reports') ||
-                 current_controller_with_nesting?('admin', 'documents')
+          current_controller_with_nesting?('admin', 'documents')
       end
     end
     content_tag(:li, :class => ('active' if active)) do
@@ -87,7 +87,7 @@ module ApplicationHelper
     direction = column == sort_column && sort_direction == "asc" ? "desc" : "asc"
     direction = "desc" if column != sort_column && reverse_sort
     link_to title, {:sort => column, :direction => direction, :query => params[:query],
-        :filter => params[:filter]}, {:class => css_class}
+      :filter => params[:filter]}, {:class => css_class}
   end
 
   # Helper for adding remove link to nested form models
@@ -222,7 +222,7 @@ module ApplicationHelper
 
   def login_form_opacity_class
     if (params[:controller] == 'registrations' && params[:action] == 'edit' ||
-         params[:controller] == 'password_resets' && params[:action] == 'edit')
+        params[:controller] == 'password_resets' && params[:action] == 'edit')
       "login_form_opacity"
     else
       nil
@@ -237,24 +237,24 @@ module ApplicationHelper
   # Overrides url_for to inject response_id in the URL
   def url_for(options={})
     options = case options
-    when String
-      require 'addressable/uri'
-      uri = Addressable::URI.new
-      ## ResponseSession#set_url_options
-      uri.query_values = @url_options
+              when String
+                require 'addressable/uri'
+                uri = Addressable::URI.new
+                ## ResponseSession#set_url_options
+                uri.query_values = @url_options
 
-      if @url_options.present? && !options.include?('response_id')
-        options = options + (options.index('?').nil? ? '?' : '&') + uri.query
-      end
-      options
-    when Hash
-      if @url_options.present? && !options.include?(:response_id)
-        options = options.reverse_merge(@url_options)
-      end
-      options
-    else
-      options
-    end
+                if @url_options.present? && !options.include?('response_id')
+                  options = options + (options.index('?').nil? ? '?' : '&') + uri.query
+                end
+                options
+              when Hash
+                if @url_options.present? && !options.include?(:response_id)
+                  options = options.reverse_merge(@url_options)
+                end
+                options
+              else
+                options
+              end
 
     super
   end
@@ -262,10 +262,9 @@ module ApplicationHelper
   def current_organization_name
     if current_user.sysadmin? &&
       !(params[:controller].include?('admin') || params[:controller] == 'dashboard')
-        current_response.organization.name
+      current_response.organization.name
     else
       current_user.organization.name
     end
   end
-
 end

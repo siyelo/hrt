@@ -47,7 +47,7 @@ Feature: Reporter can manage activities
         And I follow "organization2: data_request1"
         And I follow "activity1"
         And I follow "Approve (Admin)"
-        And I follow "Approve Budget"
+        And I follow "Approve"
         And wait a few moments
         Then I should see "Admin Approved"
         And I should see "Budget Approved"

@@ -7,7 +7,7 @@
 = render '/shared/outlays/uncoded_overlay', :outlay => outlay
 
 %h1.main_heading
-  = klass == Activity ? "Edit Activity" : "Edit Other Cost"
+  = klass == Activity ? "Edit Activity" : "Edit Indirect Cost"
   %span= klass == Activity ? render('activities/help') : render('other_costs/help')
 
   %ul.horizontal.right

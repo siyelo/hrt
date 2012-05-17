@@ -15,7 +15,7 @@ end
 
 
 ### OTHER COSTS
-# Note: we dont yet define a Non-Project Other Cost. Simply create it by not
+# Note: we dont yet define a Non-Project Indirect Cost. Simply create it by not
 # passing project_id e.g.
 #   oc = Factory(:other_cost_fully_coded, :data_response => @response)
 #
