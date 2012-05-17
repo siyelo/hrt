@@ -8,7 +8,7 @@ module Admin::OrganizationsHelper
     message = "Found #{count}"
     filter ||= "Reporting"
 
-    if filter && filter != "All"
+    if filter != "All"
       message += " <span class='bold'>#{filter}</span> organizations"
     else
       message += " organizations"
