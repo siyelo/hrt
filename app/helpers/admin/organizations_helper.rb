@@ -6,7 +6,7 @@ module Admin::OrganizationsHelper
 
   def search_and_filter_message(count, query, filter)
     message = "Found #{count}"
-    filter ||= "Reporting"
+    filter = "Reporting" if filter.blank?
 
     if filter != "All"
       message += " <span class='bold'>#{filter}</span> organizations"
@@ -17,8 +17,8 @@ module Admin::OrganizationsHelper
       message += " matching <span class='bold'>#{query}</span>"
     end
 
-    if query || filter
-      message += ". #{link_to "(Back to all reporting organizations)", admin_organizations_url}"
+    if query || filter != "Reporting"
+      message += ". #{link_to "(Back to reporting organizations)", admin_organizations_url}"
     end
 
     message
