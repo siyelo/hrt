@@ -38,6 +38,3 @@ Feature: Admin can view responses
     Given an organization exists with name: "some clinic", raw_type: "Clinic/Cabinet Medical"
     And I follow "Responses"
     Then I should not see "some clinic"
-
-  Scenario: See pie chart
-    Then I should see "Response Status" within "#reports-summary"
