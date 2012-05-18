@@ -267,4 +267,14 @@ module ApplicationHelper
       current_user.organization.name
     end
   end
+  
+  def search_message(items, count, query, return_url)
+    message = "Found #{count} #{items}"
+    if query
+      message += " matching <span class='bold'>#{query}</span>"
+      message += ". #{link_to "(Back to all #{items})", return_url}"
+    end
+    message
+  end
+
 end

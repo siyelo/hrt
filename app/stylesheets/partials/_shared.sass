@@ -19,13 +19,13 @@ h2, h3, h4, h5, h6
 
 /* universal float right class */
 .left
-  display: inline
-  float: left
+  display: inline !important
+  float: left !important
 
 /* universal float right class */
 .right
-  display: inline
-  float: right
+  display: inline !important
+  float: right !important
 
 /* shared content>wrapper styles */
 #content .wrapper
@@ -78,6 +78,9 @@ h3.title_bar
 hr
   border: none
   border-top: 3px solid $lightest-blue
+  &.heading
+    border-top: 1px solid $primary_border4
+    margin: 5px 0 10px
 
 .clearfix
   +pie-clearfix

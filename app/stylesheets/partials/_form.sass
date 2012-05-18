@@ -298,17 +298,19 @@ input[type="text"], input[type="password"], textarea, select
 // SEARCH
 #search
   float: right
+  &.push
+    margin-bottom: 10px
 
   #search_box
     +border-radius(2px)
-    background: image_url("icon_search.png") no-repeat 97% 7px
+    background: image_url("icon_search.png") no-repeat 97% 5px #fff
     border: 1px solid $primary_border3
     float: left
     font-size: 12px
     padding: 0 28px 0 0px
     width: 210px
     &:hover, &:focus
-      background: image_url("icon_search2.png") no-repeat 97% 7px
+      background: image_url("icon_search2.png") no-repeat 97% 5px
       border: 1px solid $primary_border
 
   input[type='text']
@@ -319,7 +321,7 @@ input[type="text"], input[type="password"], textarea, select
     color: #000000
     font-size: 12px
     font-weight: normal
-    padding: 5px
+    padding: 4px 5px
     width: 200px
     height: 16px
     line-height: 1.4em

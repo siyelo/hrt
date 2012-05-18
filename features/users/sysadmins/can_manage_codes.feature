@@ -75,29 +75,27 @@ Feature: Admin can manage codes
       When I follow "Download template"
       Then I should see "short_display,long_display,description,type,external_id,parent_short_display,hssp2_stratprog_val,hssp2_stratobj_val,official_name,sub_account,nha_code,nasa_code"
 
-
     Scenario Outline: An admin can filter codes
       Given a mtef_code exists with short_display: "code1", description: "code1 desc"
         And a nha_code exists with short_display: "code2", description: "code2 desc"
-
       When I follow "Codes"
         And I fill in "query" with "<first>"
         And I press "Search"
-      Then I should see "Codes with short_display, type or description containing <first>"
+      Then I should see "Found 1 codes matching <first>"
         And I should see "<first>"
         And I should not see "<second>"
         And I fill in "query" with "<second>"
         And I press "Search"
-        And I should see "Codes with short_display, type or description containing <second>"
+        And I should see "Found 1 codes matching <second>"
         And I should see "<second>"
         And I should not see "<first>"
 
         Examples:
             | first      | second     |
-            | user1      | user2      |
-            | user2      | user1      |
-            | user1 desc | user2 desc |
-            | user2 desc | user1 desc |
+            | code1      | code2      |
+            | code2      | code1      |
+            | code1 desc | code2 desc |
+            | code2 desc | code1 desc |
             | Nha        | Mtef       |
             | Mtef       | Nha        |
 

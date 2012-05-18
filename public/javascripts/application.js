@@ -103,6 +103,14 @@ $(function () {
     html: true
   });
 
+  // tipsy tooltips everywhere!
+  $('.tooltip-S').tipsy({
+    gravity: 's',
+    fade: true,
+    live: true,
+    html: true
+  });
+
   // combobox everywhere!
   $( ".js_combobox" ).combobox();
 

@@ -6,11 +6,11 @@
 %h1.main_heading
   Files
   = image_tag "alertwarning_icon.png", :title => "Files downloaded from this website are not for distribution.", :class => 'tooltip'
-
-- if @documents.present?
-  %table.standard.rounded
-    = render 'documents', :documents => @documents
-- else
-  %p.no_data There are no files available for download.
+.section_form.single
+  - if @documents.present?
+    %table.standard.rounded
+      = render 'documents', :documents => @documents
+  - else
+    %p.no_data There are no files available for download.
 
 = will_paginate @documents

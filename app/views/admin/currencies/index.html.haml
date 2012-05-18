@@ -1,10 +1,6 @@
 - title("Currencies")
 
-%h1.main_heading
-  #search
-    - form_tag admin_currencies_path, :method => :get do
-      = render 'shared/search_form'
-  Currencies
+%h1.main_heading Currencies
 
 %ul.horizontal
   %li
@@ -12,25 +8,32 @@
       = image_tag "new.png"
       Create Currency
 
-%table.standard.rounded
-  %thead
-    %tr
-      %th From
-      %th To
-      %th Rate
-      %th Last Modified
-      %th
 
-  %tbody
-    - @currencies.each do |currency|
-      %tr{:class => cycle("even", "odd")}
-        %td= currency.from
-        %td= currency.to
-        %td= currency.rate
-        %td= format_date(currency.updated_at)
-        %td
-          %ul.manage_bar
-            %li= link_to "Edit", edit_admin_currency_path(currency)
-            %li= link_to "x", admin_currency_path(currency), :confirm => "Are you sure you want to delete this currency?", :method => :delete, :class => "right"
+.section_form.single.connect
+  #filter_help.left
+    %p= search_message("currencies", @currencies.total_entries, params[:query], admin_currencies_url)
+  #search.push
+    - form_tag admin_currencies_path, :method => :get do
+      = render 'shared/search_form'
+  %table.standard.rounded
+    %thead
+      %tr
+        %th From
+        %th To
+        %th Rate
+        %th Last Modified
+        %th
+
+    %tbody
+      - @currencies.each do |currency|
+        %tr{:class => cycle("even", "odd")}
+          %td= currency.from
+          %td= currency.to
+          %td= currency.rate
+          %td= format_date(currency.updated_at)
+          %td
+            %ul.manage_bar
+              %li= link_to "Edit", edit_admin_currency_path(currency)
+              %li= link_to "x", admin_currency_path(currency), :confirm => "Are you sure you want to delete this currency?", :method => :delete, :class => "right"
 
 = will_paginate @currencies

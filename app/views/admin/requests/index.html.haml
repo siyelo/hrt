@@ -5,24 +5,24 @@
 - link_to new_admin_request_path, :class => "create_alt" do
   = image_tag "new.png"
   Create Data Request
-
-%table.standard.rounded
-  %thead.static
-    %tr
-      %th Organization
-      %th Title
-      %th Start date
-      %th.action Manage
-  %tbody
-    - @requests.each do |request|
+.section_form.single
+  %table.standard
+    %thead.static
       %tr
-        %td= request.organization.try(:name)
-        %td= request.title
-        %td= formatted_date(request.start_date)
-        %td.action
-          %ul.manage_bar
-            %li= link_to "Edit", edit_admin_request_path(request)
-            %li= link_to "Delete", admin_request_path(request), :method => :delete, :confirm => "Are you sure?"
+        %th Organization
+        %th Title
+        %th Start date
+        %th.action Manage
+    %tbody
+      - @requests.each do |request|
+        %tr
+          %td= request.organization.try(:name)
+          %td= request.title
+          %td= formatted_date(request.start_date)
+          %td.action
+            %ul.manage_bar
+              %li= link_to "Edit", edit_admin_request_path(request)
+              %li= link_to "Delete", admin_request_path(request), :method => :delete, :confirm => "Are you sure?"
 
 
-= will_paginate @requests
+  = will_paginate @requests

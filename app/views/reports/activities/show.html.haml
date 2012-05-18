@@ -11,23 +11,25 @@
 - content_for :sub_nav do
   = render('shared/reports_sub_nav')
 
-%h1.request_nav
-  = render '/shared/request_nav', :disable => true
-
-.crumb_heading
+%h1.main_heading
   %ul.breadcrumb
     %li= link_to "Overview", reports_path
     - if @report.resource.project
-      %li= link_to @report.resource.project.name, reports_project_path(@report.resource.project)
+      %li= link_to @report.resource.project.name.first(30), reports_project_path(@report.resource.project)
 
-  %h1= @report.name
+  - if @report.name.length >= 44
+    .tooltip-S.left{:title=>@report.name}= @report.name.first(41) + '...'
+  - else
+    = @report.name
+
+  .request_nav.right
+    = render '/shared/request_nav', :disable => true
 
 = render 'reports/shared/summary'
 
 .section_overlap
   %ul.section_nav#tabs-container
     = render '/reports/shared/activity_tabs'
-
 
 #charts_tables
   .implementers_tab{:"data-loaded" => 'true'}

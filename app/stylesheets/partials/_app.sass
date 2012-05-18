@@ -314,8 +314,7 @@ body.app
   p
     font-size: 12px
     color: #425160
-    padding-bottom: 10px
-    margin-left: 10px
+    margin: 7px 0 0 0
 
 .app #footer
   background: #f9f9f9
@@ -331,52 +330,24 @@ p.no_data
   font-size: 12px
   line-height: 1.4
 
-h1.request_nav
-  font: normal 16px "Avenir", Arial, sans-serif !important
-  margin: 20px 0 10px
-
+.request_nav
+  font: normal 15px "Avenir", Arial, sans-serif !important
   span
     display: inline-block
-    background: #EEE
     padding: 0 5px
-
-.crumb_heading
-  background: $primary_lightest
-  border-top: 1px solid $primary_border
-  border-left: 1px solid $primary_border3
-  border-right: 1px solid $primary_border3
-  color: #fff
-  h1, a
-    color: #fff
-    +text-shadow(#fff 0 1px 0)
-  a
-    background: image_url("breadcrumb.png") no-repeat right center
-    display: inline-block
-    margin: 7px 0 0
-    padding: 3px 14px 3px 7px
-    text-decoration: none
-  h1
-    padding: 7px 18px
-
-  .breadcrumb
-    color: #666
-    font-size: 11px
-    +pie-clearfix
-    a
-      color: #888
-      text-decoration: underline
-  li
-    display: inline
-    float: left
-    &:first-child a
-      padding-left: 18px
+    &.heading
+      background: none
+      float: left
+      font-size: 15px
+      padding: 0 7px
+      position: relative
+      top: 4px
 
 .arrow-nav
-  display: inline-block
+  display: block
+  float: right
   margin-right: 1px
-  position: relative
   opacity: 0.85
-  top: 4px
   @transition (opacity .4s)
   &:hover, &:focus
     opacity: 1
@@ -384,5 +355,3 @@ h1.request_nav
     margin-right: 7px
   &.disabled
     opacity: 0.4
-
-

@@ -3,11 +3,12 @@
 - content_for :sub_nav do
   = render('admin/shared/reports_sub_nav')
 
-%h1.request_nav
-  = render '/shared/request_nav'
+%h1.main_heading
+  Dynamic Reports
+  .request_nav.right
+    = render '/shared/request_nav'
 
-%h2 Dynamic Reports
-.section_base
+.section_form.single
   %table.data
     %thead
       %tr.head

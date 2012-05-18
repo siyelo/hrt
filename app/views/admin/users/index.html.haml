@@ -1,10 +1,6 @@
 - title("Users")
 
-%h1.main_heading
-  #search
-    - form_tag admin_users_path, :method => :get do
-      = render 'shared/search_form'
-  Users
+%h1.main_heading Users
 
 %ul.horizontal
   %li
@@ -29,11 +25,13 @@
 
       = link_to "Download template", download_template_admin_users_path, :class => "create_alt right"
 
-- if params[:query]
-  %p
-    = "Users containing #{params[:query]}"
-    = link_to "(Back to complete users listing)", admin_users_path
+.section_form.single
+  #filter_help.left
+    %p= search_message("users", @users.total_entries, params[:query], admin_users_url)
+  #search.push
+    - form_tag admin_users_path, :method => :get do
+      = render 'shared/search_form'
 
-= render "admin/users/users", :users => @users, :show_organization => true
+  = render "admin/users/users", :users => @users, :show_organization => true
 
 = will_paginate @users

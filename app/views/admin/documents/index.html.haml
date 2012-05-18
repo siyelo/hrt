@@ -12,7 +12,9 @@
     - link_to new_admin_document_path, :class => "create_alt" do
       = image_tag "new.png"
       Create File
-%table.standard.rounded
-  = render 'admin/documents/documents', :documents => @documents, :show_manage_bar => true
+      
+.section_form.single
+  %table.standard
+    = render 'admin/documents/documents', :documents => @documents, :show_manage_bar => true
 
 = will_paginate @documents
