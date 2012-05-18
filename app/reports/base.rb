@@ -44,6 +44,10 @@ module Reports
       change.round_with_precision(1)
     end
 
+    def unit
+      currency
+    end
+
     private
 
     # Combines collection of CodingBudgetDistrict and CodingSpendDistrict objects

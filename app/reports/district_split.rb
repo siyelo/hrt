@@ -11,6 +11,10 @@ class Reports::DistrictSplit < Reports::Base
     @locations = Location.find(:all, :order => 'short_display ASC')
   end
 
+  def unit
+    "%"
+  end
+
   def collection
     percentage_by_districts
   end
