@@ -41,28 +41,33 @@ describe Reports::DynamicQuery do
       @activity.reload;@activity.save
     end
 
-    it "should return a 1 funder, 1 implementer report" do
-      table = run_report
-      table[0]['Data Source'].should == @organization.name
-      table[0]['Funding Source'].should == @organization.name
-      table[0]['Implementer'].should == @is.organization.name
-      table[0]['Project'].should == @project.name
-      table[0]['Description of Project'].should == @project.description
-      table[0]['Activity'].should == @activity.name
-      table[0]['Description of Activity'].should == @activity.description
-      table[0]['Targets'].should == @activity.targets.map(&:description).join(',')
-      table[0]['Cost Category Split Total %'].should == "100.0"
-      table[0]['Cost Category Split %'].should == "100.0"
-      table[0]['Cost Category'].should == @cost_categorization.code.short_display
-      table[0]['Purpose Split Total %'].should == '100.0'
-      table[0]['Purpose Split %'].should == "100.0"
-      table[0]['MTEF Code'].should == "sub_prog_name"
-      table[0]['NSP Code'].should == "Nsp_code"
-      table[0]['Location Split Total %'].should == '100.0'
-      table[0]['Location Split %'].should == "100.0"
-      table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
-      table[0]['Total Amount ($)'].should == "100.00"
-      table[0]['Actual Double Count'].should == @is.double_count
+    ["on", "off"].each do |budget_type|
+      it "should return a 1 funder, 1 implementer report (#{ budget_type } budget)" do
+        @project.budget_type = budget_type
+        @project.save
+        table = run_report
+        table[0]['Data Source'].should == @organization.name
+        table[0]['Funding Source'].should == @organization.name
+        table[0]['Implementer'].should == @is.organization.name
+        table[0]['Project'].should == @project.name
+        table[0]['On/Off Budget'].should == budget_type
+        table[0]['Description of Project'].should == @project.description
+        table[0]['Activity'].should == @activity.name
+        table[0]['Description of Activity'].should == @activity.description
+        table[0]['Targets'].should == @activity.targets.map(&:description).join(',')
+        table[0]['Cost Category Split Total %'].should == "100.0"
+        table[0]['Cost Category Split %'].should == "100.0"
+        table[0]['Cost Category'].should == @cost_categorization.code.short_display
+        table[0]['Purpose Split Total %'].should == '100.0'
+        table[0]['Purpose Split %'].should == "100.0"
+        table[0]['MTEF Code'].should == "sub_prog_name"
+        table[0]['NSP Code'].should == "Nsp_code"
+        table[0]['Location Split Total %'].should == '100.0'
+        table[0]['Location Split %'].should == "100.0"
+        table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
+        table[0]['Total Amount ($)'].should == "100.00"
+        table[0]['Actual Double Count'].should == @is.double_count
+      end
     end
 
     it "should adjust total amount if there are 2 funders" do

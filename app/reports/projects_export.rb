@@ -2,9 +2,11 @@ require 'fastercsv'
 
 class Reports::ProjectsExport
   include EncodingHelper
+  include Reports::Helpers
 
   ### Constants
   FILE_UPLOAD_COLUMNS = ["Project Name",
+                         "On/Off Budget",
                          "Project Description",
                          "Project Start Date",
                          "Project End Date",
@@ -39,6 +41,7 @@ class Reports::ProjectsExport
       @response.projects.sorted.each do |project|
         row = []
         row << sanitize_encoding(project.name.slice(0..Project::MAX_NAME_LENGTH-1))
+        row << project_budget_type(project)
         row << sanitize_encoding(project.description)
         row << project.start_date.to_s
         row << project.end_date.to_s

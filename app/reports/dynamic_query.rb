@@ -44,6 +44,7 @@ class Reports::DynamicQuery
       row << 'Funding Source'
       row << 'Implementer'
       row << 'Project'
+      row << 'On/Off Budget'
       row << 'Description of Project'
       row << 'Activity'
       row << 'Description of Activity'
@@ -95,6 +96,7 @@ class Reports::DynamicQuery
       base_row << in_flow.from.try(:name)
       base_row << implementer_split.organization.try(:name)
       base_row << activity.project.try(:name)
+      base_row << project_budget_type(activity.project)
       base_row << activity.project.try(:description)
       base_row << activity.try(:name)
       base_row << activity.try(:description)

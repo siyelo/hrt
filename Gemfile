@@ -60,12 +60,15 @@ group :test do
   gem 'database_cleaner'
   gem 'email_spec', :git => 'git://github.com/bmabey/email-spec.git', :branch => '0.6-rails2-compat'
   gem 'gherkin', '2.3.7'
-  gem 'growl'
   gem 'guard'
   gem 'guard-bundler'
   gem 'guard-rspec'
   gem 'guard-spork'
-  gem 'libnotify'
+  if RbConfig::CONFIG['target_os'] =~ /linux/i
+    gem 'libnotify'
+  else
+    gem 'growl'
+  end
   gem 'launchy'               # So you can do 'Then show me the page'
   gem 'pickle', '~> 0.4.4'
   gem 'rb-fsevent' # inject GoFast Juice (TM) into Guard on OSX

@@ -1,6 +1,7 @@
 - project_id = f.object.id
 %ul.condensed_fields
   = f.hidden_field :data_response_id, :value => current_response.id
+
   %li#project_name_input.string.required
     .name
       = f.label :name, "Name"
@@ -31,6 +32,15 @@
       - link_to "#", :title => "Optionally override the currency for this Project. (Your default is #{@response.currency})", :class => 'tooltip' do
         = image_tag "tooltip.png"
     = f.select :currency, currency_options_for_select, {:selected => (@project.currency || @response.organization.currency) }, :class => f.object.errors.on(:currency) ? "error" : ""
+
+  %li#budget_type.select.required
+    .name
+      = f.label :budget_type, "On Budget?"
+      - link_to "#", :title => "Is the project on budget?", :class => 'tooltip' do
+        = image_tag "tooltip.png"
+    = f.select :budget_type,
+      options_for_select([[ "Please Select", nil ], [ "On-budget", "on" ],
+      [ "Off-budget", "off" ]], @project.new_record? ? "on" : @project.budget_type)
   %br
   %li#project_description_input.text
     .name

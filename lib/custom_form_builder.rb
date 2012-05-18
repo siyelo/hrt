@@ -6,38 +6,26 @@ class CustomFormBuilder < ActionView::Helpers::FormBuilder
       html_tag
     else
       error_tag = '<p class="input-errors">' +
-                    [instance.error_message].join(', ') +
-                  '</p>'
-                  "<div class='input-box'>#{html_tag}#{error_tag}</div>"
+        [instance.error_message].join(', ') +
+        '</p>'
+      "<div class='input-box'>#{html_tag}#{error_tag}</div>"
     end
   end
 
-  %w[text_field collection_select password_field text_area file_field].
-      each do |method_name|
+  %w[text_field select collection_select password_field text_area file_field].
+    each do |method_name|
+      define_method(method_name) do |field_name, *args|
+        arguements = args.select{ |a| a.class == Hash }.inject({}){ |h, e| h.merge(e) }
+        if arguements.present? && arguements[:hint]
+          hint = @template.content_tag(:p, arguements[:hint], :class => 'input-hints')
+        else
+          hint = ""
+        end
 
-    define_method(method_name) do |field_name, *args|
-      if args.present? && args[0][:hint].present?
-        hint = @template.content_tag(:p, args[0][:hint], :class => 'input-hints')
-      else
-        hint = ""
+        @template.content_tag(:li, field_label(field_name, *args) + super + hint,
+                              arguements[:wrapper_html])
       end
-
-      @template.content_tag(:li, field_label(field_name, *args) +
-                            super + hint, args[0][:wrapper_html])
     end
-  end
-
-  def select(field_name, *args)
-    arguements = args.select{ |a| a.class == Hash }.inject({}){ |h, e| h.merge(e) }
-    if arguements.present? && arguements[:hint]
-      hint = @template.content_tag(:p, arguements[:hint], :class => 'input-hints')
-    else
-      hint = ""
-    end
-
-    @template.content_tag(:li, field_label(field_name, *args) + super + hint,
-                          arguements[:wrapper_html])
-  end
 
   def check_box(field_name, *args)
     @template.content_tag(:p, super + " " + field_error(field_name) +
@@ -57,8 +45,8 @@ class CustomFormBuilder < ActionView::Helpers::FormBuilder
   def field_error(field_name)
     if object.errors.invalid? field_name
       @template.content_tag(:span,
-          [object.errors.on(field_name)].flatten.first.sub(/^\^/, ''),
-          :class => 'error_message')
+                            [object.errors.on(field_name)].flatten.first.sub(/^\^/, ''),
+                            :class => 'error_message')
     else
       ''
     end

@@ -34,6 +34,7 @@ class Reports::FundingSourceSplit
 
       row << 'Organization'
       row << 'Project'
+      row << 'On/Off Budget'
       row << 'Data Response ID'
       row << 'Activity ID'
       row << 'Activity'
@@ -77,6 +78,7 @@ class Reports::FundingSourceSplit
       if implementer_split.send(@amount_type) && implementer_split.send(@amount_type) > 0
         base_row << activity.organization.name
         base_row << project.try(:name) # other costs does not have a project
+        base_row << project_budget_type(activity.project)
         base_row << activity.data_response.id
         base_row << activity.id
         base_row << activity.name

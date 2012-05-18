@@ -307,6 +307,7 @@ describe Organization do
         @other_project = Project.new(:data_response => data_response,
                                      :name => "p1",
                                      :currency => "USD",
+                                     :budget_type => "ON",
                                      :description => "proj descr",
                                      :start_date => "2010-01-01",
                                      :end_date => "2011-01-01",
@@ -478,6 +479,7 @@ describe Organization do
         response     = organization.latest_response
         project      = Project.new(:data_response => response,
                                    :name => "non_factory_project_name_#{rand(100_000_000)}",
+                                   :budget_type => "ON",
                                    :description => "proj descr",
                                    :currency => "USD",
                                    :start_date => "2010-01-01",
