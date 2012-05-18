@@ -166,6 +166,6 @@ end
 #  updated_at       :datetime
 #  currency         :string(255)
 #  data_response_id :integer         indexed
-#  budget_type      :string(255)     default("N/A")
+#  budget_type      :string(255)
 #
 

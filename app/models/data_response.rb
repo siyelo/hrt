@@ -39,8 +39,7 @@ class DataResponse < ActiveRecord::Base
   ### Delegates
   delegate :name, :to => :organization
   delegate :title, :to => :data_request
-  delegate :currency, :fiscal_year_start_date, :fiscal_year_end_date,
-    :contact_name, :contact_position, :contact_phone_number,
+  delegate :currency, :contact_name, :contact_position, :contact_phone_number,
     :contact_main_office_phone_number, :contact_office_location,
     :to => :organization
 

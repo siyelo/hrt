@@ -8,8 +8,6 @@ describe Organization do
     it { should allow_mass_assignment_of(:funder_type) }
     it { should allow_mass_assignment_of(:fosaid) }
     it { should allow_mass_assignment_of(:currency) }
-    it { should allow_mass_assignment_of(:fiscal_year_end_date) }
-    it { should allow_mass_assignment_of(:fiscal_year_start_date) }
     it { should allow_mass_assignment_of(:contact_name) }
     it { should allow_mass_assignment_of(:contact_position) }
     it { should allow_mass_assignment_of(:contact_phone_number) }
@@ -44,43 +42,11 @@ describe Organization do
   end
 
   describe "custom date validations" do
-    it { should allow_mass_assignment_of(:fiscal_year_start_date) }
-    it { should allow_mass_assignment_of(:fiscal_year_end_date) }
     it { should allow_mass_assignment_of(:contact_name) }
     it { should allow_mass_assignment_of(:contact_position) }
     it { should allow_mass_assignment_of(:contact_phone_number) }
     it { should allow_mass_assignment_of(:contact_main_office_phone_number) }
     it { should allow_mass_assignment_of(:contact_office_location) }
-    it { should allow_value('2010-12-01').for(:fiscal_year_start_date) }
-    it { should allow_value('2010-12-01').for(:fiscal_year_end_date) }
-
-    it "accepts start date < end date (exactly 1 year)" do
-      organization = Factory.build(:organization,
-                                   :fiscal_year_start_date => DateTime.new(2010, 01, 01),
-                                   :fiscal_year_end_date =>   DateTime.new(2010, 12, 31) )
-      organization.should be_valid
-    end
-
-    it "does not accept an end date that is not one year after the start date" do
-      organization = Factory.build(:organization,
-                                   :fiscal_year_start_date => DateTime.new(2010, 01, 01),
-                                   :fiscal_year_end_date =>   DateTime.new(2010, 12, 30) )
-      organization.should_not be_valid
-    end
-
-    it "does not accept start date > end date" do
-      organization = Factory.build(:organization,
-                                   :fiscal_year_start_date => DateTime.new(2010, 01, 02),
-                                   :fiscal_year_end_date =>   DateTime.new(2009, 01, 01) )
-      organization.should_not be_valid
-    end
-
-    it "does not accept start date = end date" do
-      organization = Factory.build(:organization,
-                                   :fiscal_year_start_date => DateTime.new(2010, 01, 01),
-                                   :fiscal_year_end_date =>   DateTime.new(2010, 01, 01) )
-      organization.should_not be_valid
-    end
   end
 
   describe "named_scopes" do
@@ -267,9 +233,6 @@ describe Organization do
     end
 
     it "copies also invalid data responses from duplicate to @target" do
-      @duplicate_org.fiscal_year_start_date = "2010-02-01"
-      @duplicate_org.fiscal_year_end_date = "2010-01-01"
-      @duplicate_org.save(false)
       duplicate_data_response = @duplicate_org.latest_response
       Organization.merge_organizations!(@target_org, @duplicate_org)
       @target_org.data_responses.count.should == 2 # not 2, since our before block created a valid DR
