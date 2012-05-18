@@ -17,7 +17,7 @@
 #charts_tables
   .reporters_tab{:"data-loaded" => 'true'}
     = render '/reports/shared/report_data'
-  .funders_tab{:"data-loaded" => 'false', :"data-url" => 'TODO', :style => 'display: none;'}
+  .funders_tab{:"data-loaded" => 'false', :"data-url" => funders_admin_reports_path, :style => 'display: none;'}
     = image_tag "ajax-loader.gif", :class => "ajax-loader"
   .progress_tab{:"data-loaded" => 'false', :"data-url" => 'TODO', :style => 'display: none;'}
     = image_tag "ajax-loader.gif", :class => "ajax-loader"

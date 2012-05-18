@@ -17,4 +17,9 @@ class Admin::ReportsController < Admin::BaseController
       redirect_to locations_admin_reports_path
     end
   end
+
+  def funders
+    @report = Reports::Funders.new(current_response.data_request)
+    render :partial => '/reports/shared/report_data', :layout => false
+  end
 end

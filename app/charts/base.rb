@@ -103,7 +103,7 @@ module Charts
   end
 
   ### Common charts
-  #
+
   class Spend < Charts::Base
     def self.value_method
       :total_spend
