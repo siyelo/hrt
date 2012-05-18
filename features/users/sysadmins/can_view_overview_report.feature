@@ -17,9 +17,7 @@ Feature: admin can see overview report
     When I follow "Reports"
     And I should see "Reporters" within "#tabs-container"
     And I should see "Funders" within "#tabs-container"
-    And I should see "Progress" within "#tabs-container"
     And I should see "Locations" within "#tabs-container"
-    And I should see "Purposes" within "#tabs-container"
     And I should see "organization2" within "table"
 
 
