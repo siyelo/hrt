@@ -2,8 +2,8 @@
   %thead
     %tr.head
       %th Name
-      %th.align Expenditure
-      %th.align Budget
+      %th.align= "Expenditure (#{@report.currency})"
+      %th.align= "Budget (#{@report.currency})"
 
   %tbody
     - @report.collection.each do |e|
@@ -11,13 +11,3 @@
         %td= resource_link(e)
         %td.align= @report.format(e.total_spend)
         %td.align= @report.format(e.total_budget)
-
-    -#%tr.summary
-      -#%td
-        -#Total
-      -#%td.align
-        -#%span.currency= @report.currency
-        -#= n2c(@report.total_spend, "", ",")
-      -#%td.align
-        -#%span.currency= @report.currency
-        -#= n2c(@report.total_budget, "", ",")
