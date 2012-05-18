@@ -7,6 +7,8 @@ module FileBuilder
       Xls.new
     when 'csv'
       Csv.new
+    when 'xml'
+      Xml.new
     end
   end
 end

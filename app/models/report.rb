@@ -97,9 +97,9 @@ class Report < ActiveRecord::Base
       when 'spend_implementer_beneficiary'
         Reports::Beneficiaries.new(data_request, :spend, 'xls')
       when 'budget_dynamic_query'
-        Reports::DynamicQuery.new(data_request, :budget, 'xlsx')
+        Reports::DynamicQuery.new(data_request, :budget, 'xml')
       when 'spend_dynamic_query'
-        Reports::DynamicQuery.new(data_request, :spend, 'xlsx')
+        Reports::DynamicQuery.new(data_request, :spend, 'xml')
       when 'funding_source_query'
         Reports::FundingSource.new(data_request, 'xls')
       else
