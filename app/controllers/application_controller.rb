@@ -95,21 +95,14 @@ class ApplicationController < ActionController::Base
     end
 
     def warn_if_not_classified(outlay)
-      type = outlay.class.to_s.titleize
-
       if outlay.approved? || outlay.am_approved?
         flash.now[:error] = "Classification for approved activity cannot be changed." unless flash[:error]
       elsif !outlay.classified?
         if flash[:warning].blank? && ( session['flash'].blank? ||
           session['warning'].present? && session['warning'][:notice].blank? )
-          flash.now[:warning] = "This #{type} has not been fully classified.
+          flash.now[:warning] = "This #{outlay.human_name} has not been fully classified.
             #{"<a href=\"#\" rel=\"#uncoded_overlay\" class=\"overlay\">Click here</a>
             to see what still needs to be classified"}"
-        end
-      else
-        if flash[:notice].blank? && ( session['flash'].blank? ||
-            session['flash'].present? && session['flash'][:notice].blank? )
-          flash.now[:notice] = "This #{type} has been fully classified."
         end
       end
     end

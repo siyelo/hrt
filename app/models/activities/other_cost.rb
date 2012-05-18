@@ -23,7 +23,7 @@ class OtherCost < Activity
   end
 
   def human_name
-    "Other Cost"
+    "Indirect Cost"
   end
 
   # An OCost can be considered classified if the locations are classified

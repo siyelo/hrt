@@ -119,6 +119,7 @@ Feature: Reporter can enter a code breakdown for each activity
       # And I confirm the popup dialog
       Then I should not see "Activity classification was successfully updated."
 
+
     Scenario: Reporter classify Purposes for activity and see flash error
       Given an activity exists with name: "activity1", data_response: the data_response, project: the project
       And an implementer_split exists with budget: "5000000", spend: "6000000", organization: the organization, activity: the activity
@@ -147,7 +148,7 @@ Feature: Reporter can enter a code breakdown for each activity
       Then the "spend_purposes" checkbox should be checked
         And the "budget_purposes" checkbox should be checked
 
-    Scenario: Reporter classify Locations for other cost and see flash error
+    Scenario: Reporter classify Locations for other cost
       Given an other cost exists with name: "othercost1", data_response: the data_response, project: the project
       And an implementer_split exists with budget: "5000000", spend: "6000000", organization: the organization, activity: the other_cost
       And a location exists with short_display: "National", id: 5
@@ -161,9 +162,8 @@ Feature: Reporter can enter a code breakdown for each activity
       When I fill in "other_cost[classifications][coding_budget_district][5]" with "100"
       And I fill in "other_cost[classifications][coding_spend_district][5]" with "100"
       And I press "Save"
-      Then I should see "Other Cost was successfully updated."
+      Then I should see "Indirect Cost was successfully updated."
       When I refresh the page
-      Then I should see "This Other Cost has been fully classified"
       Then the "spend_locations" checkbox should be checked
         And the "budget_locations" checkbox should be checked
 
@@ -259,7 +259,7 @@ Feature: Reporter can enter a code breakdown for each activity
         And I press "Save & Go to Overview >"
       Then I should see "data_request1" within "h1"
 
-    Scenario: Reporter can follow Overhead Costs workflow for other cost
+    Scenario: Reporter can follow Indirect Costs workflow for other cost
       Given an other cost exists with name: "OC1", data_response: the data_response, project: the project
       When I follow "Projects"
         And I follow "OC1"

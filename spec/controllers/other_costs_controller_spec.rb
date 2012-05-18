@@ -49,7 +49,7 @@ describe OtherCostsController do
                                 :data_response => @data_response)
       put :update, :other_cost => {:description => "some description"}, :id => @other_cost.id,
                                    :commit => 'Save', :response_id => @data_response.id
-      flash[:notice].should == "Other Cost was successfully updated."
+      flash[:notice].should == "Indirect Cost was successfully updated."
       response.should redirect_to(edit_other_cost_path(@other_cost.id))
     end
 
@@ -59,7 +59,7 @@ describe OtherCostsController do
       @other_cost.write_attribute(:spend, nil); @other_cost.save
       put :update, :other_cost => {:description => "some description"}, :id => @other_cost.id,
                                    :commit => 'Save', :response_id => @data_response.id
-      flash[:notice].should == "Other Cost was successfully updated."
+      flash[:notice].should == "Indirect Cost was successfully updated."
       response.should redirect_to(edit_other_cost_path(@other_cost.id))
     end
 
@@ -153,7 +153,7 @@ describe OtherCostsController do
           :other_cost => {:description => "thedesc", :project_id => @project.id}
 
         flash[:error].should_not == "You do not have permission to edit this other_cost"
-        flash[:notice].should == "Other Cost was successfully updated."
+        flash[:notice].should == "Indirect Cost was successfully updated."
         response.should redirect_to(edit_other_cost_url(@other_cost))
       end
 
@@ -196,7 +196,7 @@ describe OtherCostsController do
                 "organization_mask"=>"#{@organization.id}", "budget"=>"4"}}}
 
         flash[:error].should_not == "You do not have permission to edit this other_cost"
-        flash[:notice].should match("Other Cost was successfully created.")
+        flash[:notice].should match("Indirect Cost was successfully created.")
       end
 
       it "allows them to edit the other_cost" do
@@ -205,7 +205,7 @@ describe OtherCostsController do
           :other_cost => {:description => "thedesc", :project_id => @project.id}
 
         flash[:error].should_not == "You do not have permission to edit this other_cost"
-        flash[:notice].should == "Other Cost was successfully updated."
+        flash[:notice].should == "Indirect Cost was successfully updated."
         response.should redirect_to(edit_other_cost_url(@other_cost))
         @other_cost.reload.description.should == "thedesc"
       end

@@ -36,7 +36,7 @@ class OtherCostsController < BaseController
       html_redirect
     else
       if @other_cost.am_approved?(current_user)
-        flash[:error] = ("Other Cost was already approved by #{@other_cost.user.try(:full_name)}
+        flash[:error] = ("Indirect Cost was already approved by #{@other_cost.user.try(:full_name)}
                          (#{@other_cost.user.try(:email)}) on #{@other_cost.am_approved_date}")
       end
       prepare_classifications(@other_cost)
@@ -49,14 +49,14 @@ class OtherCostsController < BaseController
   def destroy
     @other_cost = @response.other_costs.find(params[:id])
     @other_cost.destroy
-    flash[:notice] = 'Other Cost was successfully destroyed'
+    flash[:notice] = 'Indirect Cost was successfully destroyed'
     redirect_to projects_url
   end
 
   private
 
     def success_flash(action)
-      flash[:notice] = "Other Cost was successfully #{action}."
+      flash[:notice] = "Indirect Cost was successfully #{action}."
       if params[:other_cost][:project_id] == Activity::AUTOCREATE
         flash[:notice] += "  <a href=#{edit_project_path(@other_cost.project)}>Click here</a>
                            to enter the funding sources for the automatically created project."

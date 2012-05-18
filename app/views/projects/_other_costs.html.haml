@@ -1,15 +1,15 @@
 %tr.filler2.sub-head
   %td{:colspan => 4}
     %h4
-      Overhead Costs
+      Indirect Costs
   %td.js_approve_all_other_costs
     - if (current_user.sysadmin? || current_user.activity_manager?) && other_costs.detect{ |a| !a.am_approved? }
-      = link_to "Approve all Budgets", approve_all_budgets_response_path(response, :type => 'other_costs', :project_id => project.id), :method => :put, :class => "add_row"
+      = link_to "Approve all", approve_all_budgets_response_path(response, :type => 'other_costs', :project_id => project.id), :method => :put, :class => "add_row"
 - if other_costs.present?
   - other_costs.each do |other_cost|
     = render "other_costs/other_cost", :other_cost => other_cost
 - else
   %tr.none
     %td{:colspan => 100}
-      No Overhead Costs found.
-      = link_to "Add Overhead Costs now.", new_other_cost_path(:project_id => project.id), :class => 'js_toggle_other_cost_form'
+      No Indirect Costs found.
+      = link_to "Add Indirect Costs now.", new_other_cost_path(:project_id => project.id), :class => 'js_toggle_other_cost_form'

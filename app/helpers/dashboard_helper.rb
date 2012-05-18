@@ -19,7 +19,7 @@ module DashboardHelper
       (commentable.try(:to) == user.organization) ?
         "Funding Source" : "Implementer"
     when "OtherCost"
-      "Other Cost"
+      "Indirect Cost"
     else
       type
     end

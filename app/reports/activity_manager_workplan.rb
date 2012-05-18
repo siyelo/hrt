@@ -55,7 +55,7 @@ class Reports::ActivityManagerWorkplan
       row << "Funding Sources"
       row << "Activity Name"
       row << "Activity Description"
-      row << "Activity / Other Cost"
+      row << "Activity / Indirect Cost"
       row << "Activity Budget"
       row << "Currency"
       row << "Implementers"
