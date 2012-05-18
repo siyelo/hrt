@@ -6,13 +6,13 @@ require 'app/reports/reporters'
 
 describe Reports::Reporters do
   let(:response1) { mock :response,
-                    :tot_spend => 100, :tot_budget => 20, :org_name => 'two',
+                    :spend => 100, :budget => 20, :org_name => 'two',
                     :amount_currency => 'USD' }
   let(:response2) { mock :response,
-                    :tot_spend => 400, :tot_budget => 40, :org_name => 'two',
+                    :spend => 400, :budget => 40, :org_name => 'two',
                     :amount_currency => 'USD' }
   let(:response3) { mock :response,
-                    :tot_spend => 300, :tot_budget => 60, :org_name => 'three',
+                    :spend => 300, :budget => 60, :org_name => 'three',
                     :amount_currency => 'USD' }
   let(:responses) { [response1, response2, response3] }
   let(:rows) { [ Reports::Row.new("two", 400.0, 40.0),
@@ -47,5 +47,21 @@ describe Reports::Reporters do
     rows.first.class.should == Reports::Row
     rows.first.total_spend.should == BigDecimal.new("500")
     rows.first.total_budget.should == BigDecimal.new("60")
+  end
+
+  it "orders the spend chart" do
+    expected = rows
+    Charts::Spend.should_receive(:new).once.with(expected).
+      and_return(mock(:pie, :google_pie => ""))
+    report.should_receive(:create_rows).once.and_return rows
+    report.expenditure_pie
+  end
+
+  it "orders the budget chart" do
+    expected = rows.reverse
+    Charts::Budget.should_receive(:new).once.with(expected).
+      and_return(mock(:pie, :google_pie => ""))
+    report.should_receive(:create_rows).once.and_return rows
+    report.budget_pie
   end
 end
