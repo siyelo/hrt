@@ -1,6 +1,6 @@
 class FundingFlow < ActiveRecord::Base
   include AutocreateHelper
-  default_scope :order => "id ASC"
+  #default_scope :order => "id ASC"
 
   ### Attributes
   attr_accessible :organization_text, :project_id, :from, :to,
