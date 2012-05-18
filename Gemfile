@@ -64,11 +64,6 @@ group :test do
   gem 'guard-bundler'
   gem 'guard-rspec'
   gem 'guard-spork'
-  if RbConfig::CONFIG['target_os'] =~ /linux/i
-    gem 'libnotify'
-  else
-    gem 'growl'
-  end
   gem 'launchy'               # So you can do 'Then show me the page'
   gem 'pickle', '~> 0.4.4'
   gem 'rb-fsevent' # inject GoFast Juice (TM) into Guard on OSX
@@ -76,4 +71,10 @@ group :test do
   gem 'shoulda', '~> 2.11'
   gem 'spork', '= 0.8.5'
   gem 'timecop'
+  case RbConfig::CONFIG['target_os']
+  when /linux/i
+    gem 'libnotify', :require => false
+  when /darwin/i
+    gem 'growl'
+  end
 end
