@@ -11,7 +11,6 @@ Feature: Sysadmin can see dashboard
 
   Scenario: See dashboard
     Then I should see "Dashboard"
-      And I should see "Current Request dr1"
       And I should see "Not Yet Started 100%"
       And I should see "Accepted 0%"
       And I should see "Started 0%"

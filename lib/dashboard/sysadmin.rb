@@ -55,6 +55,14 @@ class Dashboard::Sysadmin
   def documents
     @documents ||= Document.latest_first.limited
   end
+  
+  def reporting_organizations
+    Organization.reporting.count
+  end
+  
+  def total_users
+    User.count
+  end
 
   private
 

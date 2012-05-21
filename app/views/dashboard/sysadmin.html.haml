@@ -2,16 +2,20 @@
 
 %h1.main_heading
   Dashboard
+  .request_nav.right
+    = render '/shared/request_nav'
 
 .full
   .main#admin-summary
     %h2 Summary
     .section_base.less_spacing
-      .full
-        %h3 Current Request
-        %h4= current_request.name
-        -# = link_to image_tag("arrow-small.png"), "#", :class => "arrow"
+      / .full
+      /   %h3 Current Request
+      /   %h4= current_request.name
+      /   -# = link_to image_tag("arrow-small.png"), "#", :class => "arrow"
       %ul
+        
+            
         %li.half
           - link_to admin_responses_path(:filter => 'Accepted'), :class => "arrow" do
             %h3 Accepted
@@ -31,6 +35,16 @@
           - link_to admin_responses_path(:filter => 'Submitted'), :class => "arrow" do
             %h3 Pending Approval
             %h4= @dashboard.pending_approval
+            
+        %li.half
+          - link_to admin_organizations_path, :class => "arrow" do
+            %h3 Reporting Organizations
+            %h4= @dashboard.reporting_organizations
+
+        %li.half
+          - link_to admin_users_path, :class => "arrow" do
+            %h3 Users
+            %h4= @dashboard.total_users
 
 
   .sidebar#admin-submission

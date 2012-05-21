@@ -299,10 +299,11 @@ body.app #content .tabs
   ul
     +pie-clearfix
   li
-    &:nth-child(1) a, &:nth-child(3) a
+    border-bottom: 1px solid #eee
+    &:nth-child(1) a, &:nth-child(3) a, &:nth-child(5) a
       border-right: 1px solid #eee
-    &:nth-child(1) a, &:nth-child(2) a
-      border-bottom: 1px solid #eee
+    &:nth-child(5) a, &:nth-child(6) a
+      border-bottom: none
 
 .download td a
   background: image_url("icon_download.png") no-repeat left center
