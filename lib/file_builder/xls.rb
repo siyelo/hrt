@@ -12,7 +12,12 @@ module FileBuilder
 
     def add_row(row)
       row.each_with_index do |cell, column_index|
-        sheet[row_index, column_index] = cell
+        case cell
+        when BigDecimal, Float
+          sheet[row_index, column_index] = cell.to_f
+        else
+          sheet[row_index, column_index] = cell
+        end
       end
       @row_index += 1
     end

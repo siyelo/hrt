@@ -59,10 +59,8 @@ class ExcelXML
         xml.Cell { xml.Data column, 'ss:Type' => 'Date' }
       when Integer
         xml.Cell { xml.Data(column, 'ss:Type' => 'Number') }
-      when BigDecimal
+      when BigDecimal, Float
         xml.Cell { xml.Data(column.to_f.round_with_precision(10), 'ss:Type' => 'Number') }
-      when Float
-        xml.Cell { xml.Data(column.round_with_precision(10), 'ss:Type' => 'Number') }
       else
         xml.Cell { xml.Data(column.to_s, 'ss:Type' => 'String') }
       end
