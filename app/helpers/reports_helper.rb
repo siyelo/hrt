@@ -28,7 +28,7 @@ module ReportsHelper
     when "admin/reports"
       case params[:action]
       when 'locations'
-        link_to name, district_workplan_admin_reports_path(:id => Location.find_by_short_display(element.name))
+        link_to name, district_workplan_admin_reports_path(:district => element.name)
       else
         name
       end

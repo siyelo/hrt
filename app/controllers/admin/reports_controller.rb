@@ -9,7 +9,7 @@ class Admin::ReportsController < Admin::BaseController
   end
 
   def district_workplan
-    district = Location.find(params[:id])
+    district = Location.find_by_short_display(params[:district])
     if district
       report = Reports::DistrictWorkplan.new(current_request, district, 'xls')
       send_report_file(report, "#{district.short_display}_district_workplan")

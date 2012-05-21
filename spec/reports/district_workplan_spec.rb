@@ -28,6 +28,8 @@ describe Reports::DistrictWorkplan do
                             :organization => organization2)
     @district1     = Factory(:location, :short_display => 'district1')
     @district2     = Factory(:location, :short_display => 'district2')
+    activity1.reload
+    activity2.reload
     classifications1 = { @district1.id => 25, @district2.id => 75 }
     CodingBudgetDistrict.update_classifications(activity1, classifications1)
     classifications2 = { @district1.id => 50, @district2.id => 50 }
@@ -89,6 +91,8 @@ describe Reports::DistrictWorkplan do
     split4        = Factory(:implementer_split, :activity => activity4,
                             :budget => 100, :spend => 200,
                             :organization => organization4)
+    activity3.reload
+    activity4.reload
     classifications1 = { @district1.id => 25, @district2.id => 75 }
     CodingBudgetDistrict.update_classifications(activity3, classifications1)
     classifications2 = { @district1.id => 50, @district2.id => 50 }

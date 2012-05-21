@@ -9,11 +9,13 @@ class Reports::DistrictWorkplan
     @activities = ::Activity.find :all,
       :select => 'DISTINCT activities.*,
                   organizations.name AS organization_name',
-      :include => [{:data_response => :organization},
-                   :project, :implementer_splits,
+      :include => [:data_response, :project,
+                   {:implementer_splits => :organization},
                    :coding_budget_district, :coding_spend_district],
       :joins => [{:data_response => :organization}, :code_assignments],
-      :conditions => ['code_assignments.code_id = ?', district.id],
+      :conditions => ['code_assignments.code_id = ?
+                      AND data_responses.data_request_id = ?',
+                      district.id, request.id],
       :order => 'organizations.name ASC'
     @builder = FileBuilder.new(filetype)
   end
@@ -32,7 +34,7 @@ class Reports::DistrictWorkplan
 
     builder.add_row(header)
     activities.each do |activity|
-      if previous_organization && previous_organization != activity.organization
+      if previous_organization && previous_organization != activity.organization_name
         builder.add_row(total_row(spend_total, budget_total))
         spend_total  = 0
         budget_total = 0
@@ -52,7 +54,7 @@ class Reports::DistrictWorkplan
       row << activity.implementer_splits.map { |is| is.name }.join(',')
       builder.add_row(row)
 
-      previous_organization = activity.organization
+      previous_organization = activity.organization_name
       previous_project      = activity.project
     end
 
@@ -65,16 +67,12 @@ class Reports::DistrictWorkplan
 
   def spend_district_amount(activity)
     ca = activity.coding_spend_district.detect { |ca| ca.code_id == district.id }
-    percentage = (ca && ca.percentage) ? ca.percentage / 100.0 : 0
-    universal_currency_converter(activity.total_spend * percentage,
-                                 activity.currency, "RWF")
+    ca ? universal_currency_converter(ca.cached_amount, activity.currency, "RWF") : 0
   end
 
   def budget_district_amount(activity)
     ca = activity.coding_budget_district.detect { |ca| ca.code_id == district.id }
-    percentage = (ca && ca.percentage) ? ca.percentage / 100.0 : 0
-    universal_currency_converter(activity.total_budget * percentage,
-                                 activity.currency, "RWF")
+    ca ? universal_currency_converter(ca.cached_amount, activity.currency, "RWF") : 0
   end
 
   def total_row(spend_total, budget_total)
@@ -82,8 +80,8 @@ class Reports::DistrictWorkplan
   end
 
   def organization_name(activity, previous_organization)
-    if previous_organization != activity.organization
-      activity.organization.try(:name) || 'N/A'
+    if previous_organization != activity.organization_name
+      activity.organization_name.presence || 'N/A'
     else
       nil
     end

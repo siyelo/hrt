@@ -76,8 +76,8 @@ module Charts
     def map_data(collection)
       @data ||= collection.inject({}) do |result,e|
         val = e.send(self.class.value_method) || 0
-        if val.to_i > 0
-          name = e.send(self.class.name_method) || "no name"
+        if val.to_f > 0.0
+          name = e.send(self.class.name_method).presence || "no name"
           key = name.send(self.class.name_format)
           result[key] = val.send(self.class.value_format)
         end
