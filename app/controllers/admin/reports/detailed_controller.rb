@@ -34,7 +34,7 @@ class Admin::Reports::DetailedController < Admin::BaseController
     if file
       if valid_format?(file)
         if is_zip?(file)
-          attachment = Report.unzip_file(file.path)
+          attachment = FileZipper.unzip(file.path)
         else
           attachment = file.open.read
         end

@@ -77,24 +77,6 @@ describe Report do
     end
   end
 
-  describe "upload" do
-    it "should unzip an uploaded file" do
-      attachment = Report.unzip_file("#{RAILS_ROOT}/spec/fixtures/activity_overview.zip")
-      attachment.should == File.open("#{RAILS_ROOT}/spec/fixtures/activity_overview.xls").read
-    end
-  end
-
-  describe "generate zip" do
-    it "should create a temp zip file for user download" do
-      @request = Factory(:data_request)
-      report   = Report.new(:key => 'activity_overview',
-                            :data_request_id => @request.id)
-      report.temp_file_name = "#{RAILS_ROOT}/spec/fixtures/activity_overview.xls"
-      report.send(:zip_file).should == "  adding: activity_overview.xls (deflated 77%)\n"
-      %x(rm "#{report.zip_file_name}") ## removing the file it saved
-    end
-  end
-
   describe "#private_url" do
     it "sets private url for production environment" do
       report = Factory.build(:report)

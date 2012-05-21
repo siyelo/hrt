@@ -34,7 +34,6 @@ class Report < ActiveRecord::Base
 
   ### Attributes
   attr_accessible :key, :attachment, :data_request_id
-  attr_accessor :temp_file_name, :zip_file_name
 
   ### Attachments
   has_attached_file :attachment, Settings.paperclip_report.to_options
@@ -64,85 +63,61 @@ class Report < ActiveRecord::Base
 
   protected
 
-    def report
-      case key
-      when 'activity_overview'
-        Reports::ActivityOverview.new(data_request, 'xls')
-      when 'budget_implementer_purpose'
-        Reports::ClassificationSplit.new(data_request, :budget, :purpose, 'xls')
-      when 'budget_implementer_input'
-        Reports::ClassificationSplit.new(data_request, :budget, :input, 'xls')
-      when 'budget_implementer_location'
-        Reports::ClassificationSplit.new(data_request, :budget, :location, 'xls')
-      when 'spend_implementer_purpose'
-        Reports::ClassificationSplit.new(data_request, :spend, :purpose, 'xls')
-      when 'spend_implementer_input'
-        Reports::ClassificationSplit.new(data_request, :spend, :input, 'xls')
-      when 'spend_implementer_location'
-        Reports::ClassificationSplit.new(data_request, :spend, :location, 'xls')
-      when 'budget_implementer_funding_source'
-        Reports::FundingSourceSplit.new(data_request, :budget, 'xls')
-      when 'spend_implementer_funding_source'
-        Reports::FundingSourceSplit.new(data_request, :spend, 'xls')
-      when 'budget_implementer_target'
-        Reports::Targets.new(data_request, :budget, 'xls')
-      when 'spend_implementer_target'
-        Reports::Targets.new(data_request, :spend, 'xls')
-      when 'budget_implementer_output'
-        Reports::Outputs.new(data_request, :budget, 'xls')
-      when 'spend_implementer_output'
-        Reports::Outputs.new(data_request, :spend, 'xls')
-      when 'budget_implementer_beneficiary'
-        Reports::Beneficiaries.new(data_request, :budget, 'xls')
-      when 'spend_implementer_beneficiary'
-        Reports::Beneficiaries.new(data_request, :spend, 'xls')
-      when 'budget_dynamic_query'
-        Reports::DynamicQuery.new(data_request, :budget, 'xml')
-      when 'spend_dynamic_query'
-        Reports::DynamicQuery.new(data_request, :spend, 'xml')
-      when 'funding_source_query'
-        Reports::FundingSource.new(data_request, 'xls')
-      else
-        raise "Invalid report request '#{self.key}'"
+  def report
+    case key
+    when 'activity_overview'
+      Reports::ActivityOverview.new(data_request, 'xls')
+    when 'budget_implementer_purpose'
+      Reports::ClassificationSplit.new(data_request, :budget, :purpose, 'xls')
+    when 'budget_implementer_input'
+      Reports::ClassificationSplit.new(data_request, :budget, :input, 'xls')
+    when 'budget_implementer_location'
+      Reports::ClassificationSplit.new(data_request, :budget, :location, 'xls')
+    when 'spend_implementer_purpose'
+      Reports::ClassificationSplit.new(data_request, :spend, :purpose, 'xls')
+    when 'spend_implementer_input'
+      Reports::ClassificationSplit.new(data_request, :spend, :input, 'xls')
+    when 'spend_implementer_location'
+      Reports::ClassificationSplit.new(data_request, :spend, :location, 'xls')
+    when 'budget_implementer_funding_source'
+      Reports::FundingSourceSplit.new(data_request, :budget, 'xls')
+    when 'spend_implementer_funding_source'
+      Reports::FundingSourceSplit.new(data_request, :spend, 'xls')
+    when 'budget_implementer_target'
+      Reports::Targets.new(data_request, :budget, 'xls')
+    when 'spend_implementer_target'
+      Reports::Targets.new(data_request, :spend, 'xls')
+    when 'budget_implementer_output'
+      Reports::Outputs.new(data_request, :budget, 'xls')
+    when 'spend_implementer_output'
+      Reports::Outputs.new(data_request, :spend, 'xls')
+    when 'budget_implementer_beneficiary'
+      Reports::Beneficiaries.new(data_request, :budget, 'xls')
+    when 'spend_implementer_beneficiary'
+      Reports::Beneficiaries.new(data_request, :spend, 'xls')
+    when 'budget_dynamic_query'
+      Reports::DynamicQuery.new(data_request, :budget, 'xml')
+    when 'spend_dynamic_query'
+      Reports::DynamicQuery.new(data_request, :spend, 'xml')
+    when 'funding_source_query'
+      Reports::FundingSource.new(data_request, 'xls')
+    else
+      raise "Invalid report request '#{self.key}'"
+    end
+  end
+
+  def create_report
+    report.data do |content, filetype, mimetype|
+      file_name = "#{RAILS_ROOT}/tmp/#{key}_#{data_request_id}_#{get_date()}.#{filetype}"
+      File.open(file_name, 'w') {|f| f.write(content)}
+
+      FileZipper.zip(file_name) do |zip_file_name|
+        self.attachment = File.new(zip_file_name, 'r')
+        self.save
       end
     end
-
-    def create_tmp_file
-      report.data do |content, filetype, mimetype|
-        self.temp_file_name = "#{RAILS_ROOT}/tmp/#{key}_#{data_request_id}_#{get_date()}.#{filetype}"
-        File.open(temp_file_name, 'w')  {|f| f.write(content)}
-      end
-    end
-
-    def zip_file
-      self.zip_file_name = self.temp_file_name + ".zip"
-      cmd = "zip -j -9 #{self.zip_file_name} #{self.temp_file_name}"
-      output = %x(#{cmd})
-    end
-
-    def self.unzip_file(file_path)
-      cmd = "unzip -p #{file_path}"
-      output = %x(#{cmd})
-    end
-
-    def attach_zip_file
-      self.attachment = File.new(self.zip_file_name, 'r')
-    end
-
-    def cleanup_temp_files
-      File.delete self.temp_file_name if self.temp_file_name
-      File.delete self.zip_file_name if self.zip_file_name
-    end
-
-    def create_report
-      create_tmp_file
-      zip_file
-      attach_zip_file
-      self.save
-      cleanup_temp_files
-    end
+  end
 end
-
 
 # == Schema Information
 #
