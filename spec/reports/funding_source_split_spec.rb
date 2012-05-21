@@ -11,7 +11,7 @@ describe Reports::FundingSourceSplit do
   end
 
   [:budget, :spend].each do |amount_type|
-    ["on", "of"].each do |budget_type|
+    ["on", "off"].each do |budget_type|
       context "#{amount_type} #{ budget_type } budget" do
         before :each do
           @request       = Factory :data_request

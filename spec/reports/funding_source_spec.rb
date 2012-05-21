@@ -16,19 +16,25 @@ describe Reports::FundingSource do
       @organization = Factory(:organization)
       Factory :user, :organization => @organization
       @response     = @organization.latest_response
-      @project      = Factory(:project, :data_response => @response)
+      @project      = Factory(:project,
+                              :data_response => @response)
       @project.in_flows = [Factory(:funding_flow, :project => @project,
                                    :from => @donor)]
       @response.state = 'accepted'; @response.save
     end
 
-    it "should return a 1 funder report" do
-      table = run_report
-      table[0]['Funding Source'].should == @project.in_flows.first.from.name
-      table[0]['Organization'].should == @organization.try(:name)
-      table[0]['Project'].should == @project.try(:name)
-      table[0]['Planned Disbursement'].should == "90.00"
-      table[0]['Disbursement Received'].should == "100.00"
+    ["on", "off"].each do |budget_type|
+      it "should return a 1 funder report ( #{budget_type} budget)" do
+        @project.budget_type = budget_type
+        @project.save
+        table = run_report
+        table[0]['Funding Source'].should == @project.in_flows.first.from.name
+        table[0]['Organization'].should == @organization.try(:name)
+        table[0]['Project'].should == @project.try(:name)
+        table[0]['On/Off Budget'].should == budget_type
+        table[0]['Planned Disbursement'].should == "90.00"
+        table[0]['Disbursement Received'].should == "100.00"
+      end
     end
 
     context "multiflow reports" do

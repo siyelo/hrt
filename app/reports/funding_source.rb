@@ -29,6 +29,7 @@ class Reports::FundingSource
       row << 'Funding Source'
       row << "Organization"
       row << 'Project'
+      row << 'On/Off Budget'
       row << 'Disbursement Received'
       row << 'Planned Disbursement'
       row
@@ -40,6 +41,7 @@ class Reports::FundingSource
       row << in_flow.from.try(:name)
       row << in_flow.organization.try(:name)
       row << in_flow.project.name
+      row << project_budget_type(in_flow.project)
       row << n2c(universal_currency_converter(in_flow.spend, in_flow_currency, "USD"))
       row << n2c(universal_currency_converter(in_flow.budget, in_flow_currency, "USD"))
       csv << row
