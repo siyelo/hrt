@@ -97,8 +97,6 @@ class Activity < ActiveRecord::Base
   named_scope :greatest_first,       { :order => "activities.budget DESC" }
   named_scope :with_type,         lambda { |type| {:conditions =>
                                              ["activities.type = ?", type]} }
-  named_scope :only_simple,          { :conditions => ["activities.type IS NULL
-                                    OR activities.type IN (?)", ["OtherCost"]] }
   named_scope :with_request, lambda {|request| {
               :select => 'DISTINCT activities.*',
               :joins => 'INNER JOIN data_responses ON
@@ -113,9 +111,6 @@ class Activity < ActiveRecord::Base
   named_scope :sorted,               { :order => "activities.name" }
 
   ### Class Methods
-  def self.only_simple_activities(activities)
-    activities.select{|s| s.type.nil? or s.type == "OtherCost"}
-  end
 
   def self.unclassified
     self.find(:all).select {|a| !a.classified?}

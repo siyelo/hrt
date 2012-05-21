@@ -24,9 +24,9 @@
         %td= @duplicate.projects.count + @target.projects.count
       %tr
         %td Total activities:
-        %td= @duplicate.activities.only_simple.count
-        %td= @target.activities.only_simple.count
-        %td= @duplicate.activities.only_simple.count + @target.activities.only_simple.count
+        %td= @duplicate.activities.count
+        %td= @target.activities.count
+        %td= @duplicate.activities.count + @target.activities.count
       %tr
         %td Total users:
         %td= @duplicate.users.count

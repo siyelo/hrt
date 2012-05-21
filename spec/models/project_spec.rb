@@ -134,6 +134,7 @@ describe Project do
       Factory(:coding_budget_district, :activity => activity1, :code => location1)
       Factory(:coding_budget_district, :activity => activity1, :code => location2)
       Factory(:coding_budget_district, :activity => activity2, :code => location1)
+      @project.reload
       @project.locations.length.should == 2
       @project.locations.should include(location1)
       @project.locations.should include(location2)

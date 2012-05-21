@@ -13,14 +13,14 @@ class Dashboard::ActivityManager
   end
 
   def approved_count
-    Activity.only_simple.with_organization.count(:all,
+    Activity.with_organization.count(:all,
       :conditions =>  ["organization_id in (?) AND
                 data_responses.data_request_id = ? AND
                 am_approved = ?", organization_ids, current_request, true])
   end
 
   def all_count
-    Activity.only_simple.with_organization.count(:all,
+    Activity.with_organization.count(:all,
       :conditions =>  ["organization_id in (?) AND
                         data_responses.data_request_id = ?",
                         organization_ids, current_request])

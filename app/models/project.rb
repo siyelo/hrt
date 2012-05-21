@@ -82,12 +82,6 @@ class Project < ActiveRecord::Base
     organization.name
   end
 
-  def to_s
-    result = ''
-    result = name unless name.nil?
-    result
-  end
-
   def deep_clone
     clone = self.clone
     # HABTM's
@@ -113,7 +107,7 @@ class Project < ActiveRecord::Base
 
 
   def locations
-    activities.only_simple.inject([]){ |acc, a| acc.concat(a.locations) }.uniq
+    activities.inject([]){ |acc, a| acc.concat(a.locations) }.uniq
   end
 
   def <=>(e)
