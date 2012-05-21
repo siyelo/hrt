@@ -23,6 +23,6 @@ module ResponsesHelper
   end
 
   def flag
-    @response.submitted? ? "go" : "stop"
+    @response.submitted? || @response.accepted? ? "go" : "stop"
   end
 end

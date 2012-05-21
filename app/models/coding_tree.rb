@@ -55,7 +55,7 @@ class CodingTree
     def valid_children?
       children.detect{|node| node.valid? == false} == nil
     end
-  end
+  end #### END OF TREE CLASS
 
   attr_reader :activity, :coding_klass
 
@@ -72,7 +72,7 @@ class CodingTree
   #   - if all root assignments are valid
   #   - if sum of children is same as activity classification amount
   def valid?
-    children_sum    = inner_root.children.inject(0){|sum, tree| sum += tree.ca.cached_amount}
+    children_sum    = roots.inject(0){|sum, tree| sum += tree.ca.cached_amount}
     activity_amount = @activity.classification_amount(@coding_klass.to_s) || 0
 
     variance = activity_amount * (0.5/100)
@@ -162,11 +162,10 @@ class CodingTree
     end
 
     def build_tree
-      codes             = root_codes
       @code_assignments = @coding_klass.with_activity(@activity)
       @inner_root       = Tree.new({})
 
-      build_subtree(@inner_root, codes)
+      build_subtree(@inner_root, root_codes)
 
       return @inner_root
     end
