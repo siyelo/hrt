@@ -1,8 +1,8 @@
 %h2
   Recent Comments
 
-%ul.dashboard_comments
-  - if comments.present?
+- if comments.present?
+  %ul.dashboard_comments
     - comments.each do |comment|
       - if comment.commentable
         %li
@@ -17,7 +17,8 @@
                 - comment_title = truncate(model_name(comment.commentable), :length => 40)
                 %span= link_to comment_title, commentable_path(comment, current_user)
             %p= truncate(comment.comment, :length => 300)
-  - else
-    %li.nothing There are no comments posted in the last 6 months.
-
-  %li.view-all= link_to "view all", current_user.sysadmin? ? admin_comments_path : comments_path
+    - if current_user.sysadmin?
+      .view-all= link_to "view all", admin_comments_path
+- else
+  .section_base.wide
+    %p.nothing There are no comments posted in the last 6 months.

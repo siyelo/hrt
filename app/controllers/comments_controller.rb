@@ -1,32 +1,4 @@
 class CommentsController < BaseController
-  def index
-    dr_ids    = current_user.organization.data_responses.map(&:id)
-    @comments = Comment.on_all(dr_ids).paginate :per_page => 20,
-                                                :page => params[:page],
-                                                :order => 'created_at DESC'
-  end
-
-  def new
-    @comment = Comment.new
-    @comment.commentable = find_commentable
-    load_data_response(@comment)
-  end
-
-  def show
-    @comment = find_comment
-    load_data_response(@comment)
-
-    respond_to do |format|
-      format.html
-      format.json { render :json => @comment}
-    end
-  end
-
-  def edit
-    @comment = find_comment
-    load_data_response(@comment)
-  end
-
   def create
     @comment = current_user.comments.new(params[:comment])
     @comment.commentable = find_commentable
@@ -62,63 +34,11 @@ class CommentsController < BaseController
     end
   end
 
-  def update
-    @comment = find_comment
-    load_data_response(@comment)
-
-    if @comment.update_attributes(params[:comment])
-      respond_to do |format|
-        format.html do
-          flash[:notice] = "Comment was successfully updated."
-          redirect_to commentable_resource(@comment)
-        end
-        format.json { render :nothing => true }
-      end
-    else
-      respond_to do |format|
-        format.html { render :action => "edit" }
-        format.json { render :nothing => true }
-      end
-    end
-  end
-
-  def destroy
-    @comment = find_comment
-    @comment.destroy
-
-    flash[:notice] = "Comment was successfully deleted."
-    redirect_to comments_url
-  end
 
   protected
     def find_commentable
       klass = params[:commentable_type].constantize
       klass.find(params[:commentable_id])
-    end
-
-    def find_comment
-      if current_user.sysadmin?
-        Comment.find(params[:id])
-      else
-        dr_ids  = current_user.organization.data_responses.map(&:id)
-        Comment.on_all(dr_ids).find(params[:id], :readonly => false)
-      end
-    end
-
-    def commentable_resource(comment)
-      if comment.commentable_type == "Activity"
-        if comment.commentable.is_a?(OtherCost)
-          edit_other_cost_url(comment.commentable)
-        else
-          edit_activity_url(comment.commentable)
-        end
-      elsif comment.commentable_type == "Project"
-        edit_project_url(comment.commentable)
-      elsif comment.commentable_type == "DataResponse"
-        projects_url
-      else
-        comments_url
-      end
     end
 
     def load_data_response(comment)

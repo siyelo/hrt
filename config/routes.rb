@@ -15,7 +15,7 @@ ActionController::Routing::Routes.draw do |map|
   # STATIC PAGES
   map.about_page 'about', :controller => 'static_page', :action => 'about'
 
-  map.resources :comments
+  map.resources :comments, :only => [:create]
 
   # ALL USERS
   map.dashboard 'dashboard', :controller => 'dashboard', :action => :index

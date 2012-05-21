@@ -25,9 +25,6 @@ module NavigationHelpers
     when /the admin comments page/
       admin_comments_path
 
-    when /the comments page/
-      comments_path
-
     when /the organizations page/
       organizations_path
 
