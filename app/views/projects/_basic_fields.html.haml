@@ -40,7 +40,9 @@
         = image_tag "tooltip.png"
     = f.select :budget_type,
       options_for_select([[ "Please Select", nil ], [ "On-budget", "on" ],
-      [ "Off-budget", "off" ]], @project.new_record? ? "on" : @project.budget_type)
+      [ "Off-budget", "off" ]], @project.new_record? ? "on" : @project.budget_type), {},
+      :class => f.object.errors.on(:budget_type) ? "error" : ""
+
   %br
   %li#project_description_input.text
     .name
