@@ -261,22 +261,21 @@ body.app #content .tabs
       font-size: 20px
       +transition(all, .5s)
   .currency
-    background: #ddd
-    border: 1px solid #d6d6d6
+    background: #ccc
     color: #fff
     display: inline-block
-    font-size: 10px
-    font-weight: normal
-    height: 27px
-    line-height: 28px
-    margin-bottom: 0
+    font-size: 11px
+    height: 25px
+    line-height: 25px
+    padding: 3px
     position: relative
     text-align: center
     top: -7px
-    width: 27px
-    +border-radius(100px)
-    +text-shadow(rgba(0, 0, 0, .5), 0, 0, 2px)
-    +transition(all, .5s)
+    width: 25px
+    +border-radius(20px)
+    +box-shadow(rgba(0, 0, 0, 0.3) 0 0 3px inset)
+    +text-shadow(#888, 0, 0, 1px)
+    +transition(all, .4s)
   .half
     margin-bottom: 0
     width: 50%
@@ -294,8 +293,8 @@ body.app #content .tabs
           +text-shadow(#fff, 0, 1px, 0)
           +transition(all, .5s)
         .currency
-          background: $primary_light
-          border-color: $primary_light - #111
+          background: #aaa
+          +text-shadow(#666, 0, 0, 1px)
   ul
     +pie-clearfix
   li
