@@ -9,7 +9,7 @@ module Reports
     end
 
     def resource_link(element)
-      if element.is_a?(Project)
+      if element.is_a?(::Project)
         reports_project_path(element)
       else
         reports_activity_path(element)
