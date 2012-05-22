@@ -3,6 +3,7 @@
 
   belongs_to :activity
   belongs_to :organization # the implementer
+  belongs_to :previous, :class_name => 'ImplementerSplit'
 
   attr_accessible :activity_id, :organization_id, :budget, :spend,
     :organization_mask, :organization

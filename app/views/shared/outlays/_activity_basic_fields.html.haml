@@ -28,6 +28,7 @@
   %li#activity_description_input.text
     .name
       = f.label :description, "Description"
+      %span.required *
       - link_to "#", :title => "A general 1-2 sentence description of the purpose of the #{klass}.", :class => 'tooltip' do
         =image_tag"tooltip.png"
     = f.text_area :description, :rows => 1, :class => f.object.errors.on(:description) ? "error" : ""

@@ -12,7 +12,7 @@ class Project < ActiveRecord::Base
 
   ### Associations
   belongs_to :data_response, :counter_cache => true
-  belongs_to :user
+  belongs_to :previous, :class_name => 'Project'
   has_one :organization, :through => :data_response
   has_many :activities, :dependent => :destroy
   has_many :other_costs, :dependent => :destroy
@@ -25,7 +25,6 @@ class Project < ActiveRecord::Base
   has_many :out_flows, :class_name => "FundingFlow",
            :conditions => [ 'organization_id_from = #{organization.id}' ]
   has_many :comments, :as => :commentable, :dependent => :destroy
-
   has_many :implementer_splits, :through => :activities
 
   # Nested attributes
@@ -59,7 +58,7 @@ class Project < ActiveRecord::Base
   validate :validate_funder_uniqueness
 
   ### Attributes
-  attr_accessible :name, :description, :user, :user_id, :data_response,
+  attr_accessible :name, :description, :data_response,
                   :data_response_id, :activities, :start_date,
                   :end_date, :currency, :budget_type,
                   # huh?
@@ -73,19 +72,12 @@ class Project < ActiveRecord::Base
 
 
   ### Instance methods
-  #
-
   def response
     data_response
   end
 
   def deep_clone
     clone = self.clone
-    # HABTM's
-    %w[user].each do |assoc|
-      clone.send("#{assoc}=", self.send(assoc))
-    end
-
     # has_many's with deep associations
     [:normal_activities, :other_costs].each do |assoc|
       clone.send(assoc) << self.send(assoc).map { |obj| obj.deep_clone }
@@ -101,7 +93,6 @@ class Project < ActiveRecord::Base
   def funding_sources_have_organizations_and_amounts?
     in_flows.all? { |ff| ff.has_organization_and_amounts? }
   end
-
 
   def locations
     activities.inject([]){ |acc, a| acc.concat(a.locations) }.uniq

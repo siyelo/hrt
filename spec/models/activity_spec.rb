@@ -4,6 +4,7 @@ describe Activity do
   describe "Associations" do
     it { should belong_to(:data_response) }
     it { should belong_to(:project) }
+    it { should belong_to(:previous) }
     it { should have_and_belong_to_many :beneficiaries }
     it { should have_many(:implementer_splits).dependent(:delete_all) }
     it { should have_many(:implementers) }

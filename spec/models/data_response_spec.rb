@@ -4,6 +4,7 @@ describe DataResponse do
   describe "Associations" do
     it { should belong_to(:organization) }
     it { should belong_to(:data_request) }
+    it { should belong_to(:previous) }
     it { should have_many(:activities) }
     it { should have_many(:other_costs).dependent(:destroy) }
     it { should have_many(:projects).dependent(:destroy) }
