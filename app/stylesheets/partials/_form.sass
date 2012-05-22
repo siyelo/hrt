@@ -36,7 +36,6 @@ input[type="text"], input[type="password"], textarea, select
   ol
     li
       margin-bottom: 7px
-      padding-bottom: 7px
       position: relative
       +pie-clearfix
       &:last-child
@@ -163,8 +162,6 @@ input[type="text"], input[type="password"], textarea, select
   .planned_dates_boxes
     li
       width: 50% !important
-      label
-        margin-top: 3px
 
 
   .check_boxes
@@ -221,6 +218,7 @@ input[type="text"], input[type="password"], textarea, select
   float: right !important
   padding: 1% 2% 1%
   width: 16%
+  margin-left: 5px
 
   .warn
     color: $warm-red
@@ -265,7 +263,7 @@ input[type="text"], input[type="password"], textarea, select
   margin: -10px -10px 10px
   padding: 9px 10px 5px
 
-.sub_activities
+.implementer_splits
 
   h4
     margin: 15px 0 10px
@@ -984,3 +982,6 @@ p.input-hints
       text-decoration: none
       +box-shadow(rgba(0, 0, 0, 0.1), 0, 1px, 0)
       +linear-gradient(color-stops($green, $green - #111))
+
+.fields
+  +pie-clearfix

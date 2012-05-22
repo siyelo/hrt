@@ -1,9 +1,10 @@
 - f.inputs :class => 'inputs' do
-  = f.input :from, :label => 'From', :hint => 'From currency'
-  = f.input :to, :label => 'To', :hint => 'To currency'
-  = f.input :rate, :label => 'Rate', :hint => 'What is the conversion rate'
-
-- f.buttons :class => 'buttons' do
-  = f.commit_button "Save", :button_html => {:class => "next"}
-
-
+  %li.last
+    %ul.section_form.first
+      = f.input :from, :label => 'From', :hint => 'From currency'
+      = f.input :to, :label => 'To', :hint => 'To currency'
+      = f.input :rate, :label => 'Rate', :hint => 'What is the conversion rate'
+  %li.last
+    %ul.horizontal.section_form.last.connect
+      - f.buttons :class => 'buttons' do
+        = f.commit_button "Save", :button_html => {:class => "next"}

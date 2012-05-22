@@ -16,18 +16,20 @@
         %p.inline-hints
           Email of the user
 
-  %li
+  %li.last
     %h3 Roles
-    %ul.section_form.last
+    %ul.section_form
       = f.input :roles, :label => "Assign roles to this user", :required => false, :as => :select, :collection => User::ROLES.map{|u| [u.humanize, u]}, :input_html => {:multiple => :multiple,:class => 'multiselect'}, :include_blank => false, :wrapper_html => {:class => 'roles'}, :error_class => 'input-errors'
 
-  %li.js_manage_orgs
+  %li.js_manage_orgs.last
     %h3 Organizations to Manage
     %ul.section_form.last
       = f.input :organizations, :label => "Assign organizations to this Activity Manager", :required => false, :as => :select, :collection => Organization.with_users, :input_html => {:class => 'multiselect'}, :wrapper_html => {:class => 'organizations', :style => 'visibility: hidden;'}, :error_class => 'input-errors'
 
-  - f.buttons :class => 'buttons' do
-    = f.commit_button button_label, :button_html => {:class => "next"}
+  %li.last
+    %ul.horizontal.section_form.last.connect
+      - f.buttons :class => 'buttons' do
+        = f.commit_button button_label, :button_html => {:class => "next"}
 
 - unless @user.new_record?
   .delete_section

@@ -10,5 +10,5 @@
   %td.spend= ff.text_field :spend, :class => 'js_spend'
   %td.budget= ff.text_field :budget, :class => 'js_budget'
   %td.edit
-    = link_to_remove_fields "x", ff, {:class => 'delete_button totals_callback', :callback => 'updateTotalsValuesCallback'}
+    = link_to_remove_fields "x", ff, {:class => 'delete_row totals_callback', :callback => 'updateTotalsValuesCallback'}
 

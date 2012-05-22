@@ -1,14 +1,13 @@
 - funders = f.object.errors.empty? ? f.object.in_flows.sorted : f.object.in_flows
-%h3
-  Project Funding Sources
-  %span
-    - link_to "#", :title => "The sources from which your organization receives funding for its Projects.", :class => 'tooltip' do
-      = image_tag "tooltip.png"
-%ul.section_form.last
+%ul.section_form.wrapped.last.topless
   %table.input_table
     %thead
       %tr
-        %th Funding Organization
+        %th
+          Funding Organization
+          %span
+            - link_to "#", :title => "The sources from which your organization receives funding for its Projects.", :class => 'tooltip' do
+              = image_tag "tooltip.png"
         %th
           .right_justified= "Disbursements Received (#{current_fy(@response)})"
         %th

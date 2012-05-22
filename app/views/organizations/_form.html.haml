@@ -33,10 +33,12 @@
         = f.text_field :contact_office_location,
           input_options('Office Location', office_location_hint)
 
-      %fieldset.buttons.push-12
-        %ol
-          - button_label = @organization.new_record? ? 'Create organization' : 'Update organization'
-          = f.submit button_label, :class => 'next update'
+    %li.last
+      %ul.horizontal.section_form.last.connect
+        %fieldset.buttons.push-12
+          %ol
+            - button_label = @organization.new_record? ? 'Create organization' : 'Update organization'
+            = f.submit button_label, :class => 'next update'
 
 - if !@organization.new_record? && current_user.sysadmin?
   .delete_section

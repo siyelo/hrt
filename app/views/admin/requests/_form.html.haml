@@ -1,7 +1,7 @@
 %fieldset.inputs
-  %ol.section_form.single.connect
-    %li
-      %ul
+  %ol
+    %li.last
+      %ul.section_form.first
         = f.text_field :title, :label => 'Title', :hint => 'Descriptive name of the data request'
         = f.hidden_field :organization_id, :value => current_user.organization.id
         %li
@@ -9,7 +9,7 @@
           %p= current_user.organization
         = f.text_field :start_date, :value => formatted_date(f.object.start_date), :label => 'Start date', :class => 'date_picker', :hint => 'What is the start date of period for which data is requested?'
     %li.last
-      %fieldset.buttons.push-12
-        %ol
+      %ul.horizontal.section_form.last.connect
+        %fieldset.buttons.push-12
           - button_label = @request.new_record? ? 'Create request' : 'Update request'
           = f.submit button_label, :class => 'next update'

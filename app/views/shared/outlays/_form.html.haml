@@ -9,26 +9,27 @@
   %li.last= render 'shared/outlays/tab_nav', :outlay => outlay
 
   - if ['locations', 'purposes', 'inputs'].include? params[:mode]
-    #classification.section_form.wrapped.last
+    #classification.section_form.topless.wrapped.last
       #activity_classification
         %div.tab1{:style => 'display: block'}
           = render 'shared/outlays/classification', :outlay => outlay
 
   - elsif params[:mode].nil?
-    %li.last.sub_activities
-      %ul.section_form
+    %li.implementer_splits.last
+      %ul.section_form.topless.wrapped.last
         = render 'shared/outlays/implementers', :f => f, :outlay => outlay, :blank_rows => 3, :bulk_review => false
 
   - elsif params[:mode] == 'outputs'
-    = render 'shared/outlays/outputs_targets_benefs', :f => f, :outlay => outlay
+    %li.implementer_splits.last
+      %ul.section_form.topless.wrapped.last
+        = render 'shared/outlays/outputs_targets_benefs', :f => f, :outlay => outlay
 
-  %br
-  %li.clear
-    %ul.horizontal.borderless
+  %li.last
+    %ul.horizontal.section_form.last.connect
       - f.buttons :class => 'buttons1' do
-        = f.commit_button "Save", :button_html => {:class => "last big_button js_submit_btn"}
-        = f.commit_button save_and_add_button_text(params[:mode], outlay), :button_html => {:class => "last big_button js_submit_btn"}
+        = f.commit_button "Save", :button_html => {:class => "last next js_submit_btn"}
+        = f.commit_button save_and_add_button_text(params[:mode], outlay), :button_html => {:class => "last next js_submit_btn"}
         %li
-          = link_to "Cancel", projects_path, :class => "js_toggle_projects_listing add_row cancel_button last"
+          = link_to "Cancel", projects_path, :class => "js_toggle_projects_listing cancel"
         %li
           = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

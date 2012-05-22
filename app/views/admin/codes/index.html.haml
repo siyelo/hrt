@@ -23,14 +23,14 @@
         = submit_tag "Upload and Import", :class => 'small_submit_button'
 
       = link_to "Download template", download_template_admin_codes_path
-    
+
 .section_form.single.connect
   #filter_help.left
     %p= search_message("codes", @codes.total_entries, params[:query], admin_codes_path)
   #search.push
     - form_tag admin_codes_path, :method => :get do
       = render 'shared/search_form'
-        
+
   %table.standard
     %thead
       %tr

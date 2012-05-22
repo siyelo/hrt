@@ -9,7 +9,7 @@
 %ul.wrapped.last
   - unless bulk_review || outlay.new_record? || @split_errors
     = will_paginate @splits
-    %br
+
   - if @split_errors && @splits.size > 50
     #filter_help
       %p
@@ -62,4 +62,4 @@
             %span.currency.right= outlay.currency
   - unless bulk_review || outlay.new_record? || @split_errors
     = will_paginate @splits
-    %br
+    
