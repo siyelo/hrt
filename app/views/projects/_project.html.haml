@@ -1,5 +1,5 @@
 %tbody
-  %tr
+  %tr.strong
     %td.name.wrap-20{:rowspan => 100}
       = link_to "#{h project.name}", edit_project_path(project)
 
@@ -21,7 +21,7 @@
       .right_justified= n2cs(project.total_budget, project.currency)
     %td
 
-  %tr.filler2
+  %tr.strong
     %td{:colspan => 1}
       %ul.horizontal
         %li

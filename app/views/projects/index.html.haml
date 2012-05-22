@@ -87,17 +87,16 @@
     %tbody
       - @projects.each do |project|
         = render "project", :project => project
-
-      = render 'other_costs_no_project', :response => @response, :other_costs => @response.other_costs
-
+      
       - if @projects.empty? && @response.other_costs.empty?
         %tr
           %td{:colspan => 100}
             = render 'no_projects_yet'
 
-      %tr.filler
-        %td{:colspan => 2}
-        %td.total TOTAL
+      = render 'other_costs_no_project', :response => @response, :other_costs => @response.other_costs
+
+      %tr.filler2.big-total
+        %td{:colspan => 3} TOTAL
         %td.wrap-12
           .right_justified= n2cs(@response.total_spend, @response.currency)
         %td.wrap-12

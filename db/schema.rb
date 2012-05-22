@@ -87,6 +87,16 @@ ActiveRecord::Schema.define(:version => 20120517142207) do
   add_index "comments", ["commentable_type"], :name => "index_comments_on_commentable_type"
   add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
 
+  create_table "commodities", :force => true do |t|
+    t.string   "commodity_type"
+    t.text     "description"
+    t.decimal  "unit_cost",        :default => 0.0
+    t.integer  "quantity"
+    t.integer  "data_response_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "currencies", :force => true do |t|
     t.float    "rate"
     t.datetime "created_at"
@@ -158,6 +168,25 @@ ActiveRecord::Schema.define(:version => 20120517142207) do
 
   add_index "funding_flows", ["project_id"], :name => "index_funding_flows_on_project_id"
   add_index "funding_flows", ["self_provider_flag"], :name => "index_funding_flows_on_self_provider_flag"
+
+  create_table "funding_streams", :force => true do |t|
+    t.integer  "project_id"
+    t.integer  "organization_ufs_id"
+    t.integer  "organization_fa_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.decimal  "budget",              :default => 0.0
+    t.decimal  "spend",               :default => 0.0
+    t.decimal  "budget_in_usd",       :default => 0.0
+    t.decimal  "spend_in_usd",        :default => 0.0
+  end
+
+  create_table "help_requests", :force => true do |t|
+    t.string   "email"
+    t.text     "message"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "implementer_splits", :force => true do |t|
     t.integer  "activity_id"

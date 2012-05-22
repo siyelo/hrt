@@ -224,7 +224,6 @@ table.data
     vertical-align: top
     a
       color: $secondary
-      text-decoration: none
       &:hover, &:focus
         color: $primary
         text-decoration: underline
@@ -242,11 +241,40 @@ table.data
         li span
           color: $primary_dark
           font-weight: bold
-    tr.summary td
-      background: #fff
-      border-top: 1px solid $primary_border
-      border-bottom: none
-      font-weight: bold
+    tr
+      &.summary td
+        background: $primary_lightest
+        border-top: 1px solid $primary_border
+        border-bottom: none
+        font-size: 12px
+        font-weight: bold
+        
+      &.sub-head
+        td
+          padding: 12px 0 10px 7px
+          h4
+            color: #bbb
+            font-size: 10px
+            line-height: 1
+        &.alt td
+          padding-left: 0
+          
+      &.js_project_row a
+        font-size: 12px
+        font-weight: normal
+        text-decoration: underline
+        &.add_row
+          font: bold 11px Arial, sans-serif
+          text-decoration: none
+        
+      &.strong td
+        border-bottom: 1px solid $primary_border3
+      &.big-total td
+        border-top: 1px solid $primary_border3
+        border-bottom: 1px solid $primary_border
+        font-size: 14px
+        &:first-child
+          font-size: 12px
 
   input[type=text]
     padding: 4px 2px !important
@@ -284,12 +312,6 @@ table.data
     margin-top: 8px
   td:hover .regenerate
     display: block
-    
-  tr.summary td
-    background: $primary_lightest
-    border-top: 1px solid $primary_light
-    font-size: 12px
-    font-weight: bold
       
   &.slim
     td, th

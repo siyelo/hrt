@@ -32,26 +32,3 @@ Feature: Activity Manager can approve a code breakdown for each activity
     When I follow "Approve"
     And wait a few moments
     Then I should see "Budget Approved"
-
-  Scenario: Approve all Activities from listing
-    Given an activity exists with name: "activity2", description: "a1 description", data_response: the data_response, project: the project
-    And I follow "reporter_org"
-    When I follow "Approve all" within ".js_approve_all_activities"
-    Then I should not see "Approve all" within ".js_approve_all_activities"
-    And I should see "Budget Approved"
-
-  Scenario: Approve all Indirect Costs from listing
-    Given an other_cost exists with name: "other_cost1", description: "oc1 description", data_response: the data_response, project: the project
-    And an other_cost exists with name: "other_cost2", description: "oc2 description", data_response: the data_response, project: the project
-    And I follow "reporter_org"
-    When I follow "Approve all" within ".js_approve_all_other_costs"
-    Then I should not see "Approve all" within ".js_approve_all_other_costs"
-    And I should see "Budget Approved"
-
-  Scenario: Approve all Indirect Costs with no project from listing
-    Given an other_cost exists with name: "other_cost1", description: "oc1 description", data_response: the data_response
-    And an other_cost exists with name: "other_cost2", description: "oc2 description", data_response: the data_response
-    And I follow "reporter_org"
-    When I follow "Approve all" within ".js_approve_all_other_costs_np"
-    Then I should not see "Approve all" within ".js_approve_all_other_costs_np"
-    And I should see "Budget Approved"

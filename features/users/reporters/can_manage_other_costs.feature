@@ -10,7 +10,7 @@ Feature: Reporter can manage Indirect Costs
     And I follow "Projects"
 
   Scenario: Reporter can CRUD Indirect Costs
-    When I follow "Add Indirect Costs now"
+    When I follow "Add an Indirect Cost now"
     Then I should see "New Indirect Cost"
     When I fill in "Name" with "other_cost1"
     And I fill in "Description" with "other_cost2 description"
@@ -33,7 +33,7 @@ Feature: Reporter can manage Indirect Costs
     And I should not see "other_cost2"
 
   Scenario: Reported can create other cost with automatically created project
-    When I follow "Add Indirect Costs now"
+    When I follow "Add an Indirect Cost now"
     And I fill in "Name" with "other_cost1"
     And I fill in "Description" with "other_cost2 description"
     And I select "<Automatically create a project for me>" from "Project"
@@ -44,7 +44,7 @@ Feature: Reporter can manage Indirect Costs
     Then I should see "Indirect Cost was successfully created"
 
   Scenario: Reporter can create an Indirect Cost at an Org level (i.e. without a project)
-    When I follow "Add Indirect Costs now"
+    When I follow "Add an Indirect Cost now"
     And I fill in "Name" with "other_cost1"
     And I fill in "Description" with "other_cost1"
     # self org should already be selected

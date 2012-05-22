@@ -1,11 +1,3 @@
-%tr.filler2.sub-head
-  %td{:colspan => 4}
-    %h4
-      Activities
-  %td.js_approve_all_activities
-    -if (current_user.sysadmin? || current_user.activity_manager?) && activities.detect{ |a| !a.am_approved? }
-      = link_to "Approve all", approve_all_budgets_response_path(response, :type => 'activities', :project_id => project.id), :method => :put, :class => "add_row"
-
 - if activities.present?
   - activities.each do |activity|
     = render "activities/activity", :activity => activity
