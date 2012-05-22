@@ -4,7 +4,6 @@ module Reports
   class Reporters < TopBase
 
     private
-
     def rows
       @rows = ImplementerSplit.find(:all,
                :joins => "INNER JOIN activities ON

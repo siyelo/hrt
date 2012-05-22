@@ -8,6 +8,14 @@ module Reports
         sort{ |a, b| a.name.downcase <=> b.name.downcase }
     end
 
+    def resource_link(element)
+      if element.is_a?(Project)
+        reports_project_path(element)
+      else
+        reports_activity_path(element)
+      end
+    end
+
     def expenditure_pie
       Charts::Spend.new(collection).google_pie
     end

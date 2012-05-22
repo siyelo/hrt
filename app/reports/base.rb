@@ -4,6 +4,7 @@ require 'lib/currency_view_number_helper'
 module Reports
   class Base
     include CurrencyViewNumberHelper
+    include ActionController::UrlWriter
     attr_accessor :resource
 
     def initialize(resource)
@@ -28,6 +29,10 @@ module Reports
 
     def format(value)
       n2c(value, "", ",")
+    end
+
+    def resource_link(name)
+      nil
     end
 
     def expenditure_pie

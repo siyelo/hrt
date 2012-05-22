@@ -23,6 +23,10 @@ class Reports::DistrictSplit < Reports::Base
     number_to_percentage(value,  :precision => 2)
   end
 
+  def resource_link(element)
+    district_workplan_admin_reports_path(:district => element.name)
+  end
+
   private
   def percentage_by_districts
     national  = locations.detect{|l| l.short_display == 'National Level' }

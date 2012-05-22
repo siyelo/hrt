@@ -6,5 +6,9 @@ module Reports
     def collection
       @resource.activities.sorted
     end
+
+    def resource_link(element)
+      reports_activity_path(element)
+    end
   end
 end
