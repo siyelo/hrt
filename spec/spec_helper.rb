@@ -215,7 +215,7 @@ Spork.each_run do
   end
 
   def write_xls_with_header(rows)
-    row = ['Project Name','Project Description','Project Start Date',
+    row = ['Project Name','On/Off Budget','Project Description','Project Start Date',
       'Project End Date','Activity Name','Activity Description',
       'Id','Implementer','Past Expenditure','Current Budget']
     rows.insert(0,row)

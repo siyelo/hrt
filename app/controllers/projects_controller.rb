@@ -78,39 +78,27 @@ class ProjectsController < BaseController
   end
 
   def import
-    begin
-      if params[:file].present?
-        @i = Importer.new
-        @i.import(@response, params[:file].path)
-        @projects = @i.projects
-        @activities = @i.activities
-      else
-        flash[:error] = 'Please select a file to upload'
-        redirect_to projects_url
-      end
-    rescue FasterCSV::MalformedCSVError
-      flash[:error] = "There was a problem with your file. Did you use the template provided and save the file as either XLS or CSV?
-                       Please post a problem at <a href='https://hrtapp.tenderapp.com/kb'>TenderApp</a> if you can't figure out what's wrong."
+    if params[:file].present?
+      @i = Importer.new(@response, params[:file].path)
+      @i.import
+      @projects = @i.projects
+      @activities = @i.activities
+    else
+      flash[:error] = 'Please select a file to upload'
       redirect_to projects_url
     end
   end
 
   def import_and_save
-    begin
-      if params[:file].present?
-        file = params[:file].open.read
-        @i = Importer.new
-        @i.import_and_save(@response, file)
-        flash[:notice] = 'Your file is being processed, please reload this page in a couple of minutes to see the results'
-      else
-        flash[:error] = 'Please select a file to upload'
-      end
-      redirect_to projects_url
-    rescue FasterCSV::MalformedCSVError
-      flash[:error] = "There was a problem with your file. Did you use the template provided and save the file as either XLS or CSV?
-                       Please post a problem at <a href='https://hrtapp.tenderapp.com/kb'>TenderApp</a> if you can't figure out what's wrong."
-      redirect_to projects_url
+    if params[:file].present?
+      file = params[:file].open.read
+      @i = Importer.new(@response, file)
+      @i.save
+      flash[:notice] = 'Your file is being processed, please reload this page in a couple of minutes to see the results'
+    else
+      flash[:error] = 'Please select a file to upload'
     end
+    redirect_to projects_url
   end
 
   def download_template
