@@ -9,17 +9,17 @@ describe Reports::ProjectsExport do
                        :organization => @organization)
 
       @activity.save!
-      @project.budget_type = 'on'
+      @project.budget_type = "on"
       @project.save
 
       xls = Reports::ProjectsExport.new(@response, 'xls').data
       rows = Spreadsheet.open(StringIO.new(xls)).worksheet(0)
       rows.row(0).should == Reports::ProjectsExport::FILE_UPLOAD_COLUMNS
-      rows[1,0].should == @project.try(:name)
-      rows[1,1].should == 'on'
-      rows[1,2].should == @project.try(:description)
-      rows[1,3].should == @project.try(:start_date).to_s
-      rows[1,4].should == @project.try(:end_date).to_s
+      rows[1,0].should == @project.name
+      rows[1,1].should == "on"
+      rows[1,2].should == @project.description
+      rows[1,3].should == @project.start_date.to_s
+      rows[1,4].should == @project.end_date.to_s
       rows[1,5].should == @activity.name
       rows[1,6].should == @activity.description
       rows[1,7].should == split.id

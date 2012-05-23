@@ -7,7 +7,7 @@ describe Reports::FundingSourceSplit do
   end
 
   [:budget, :spend].each do |amount_type|
-    context "amount_type" do
+    context "#{amount_type}" do
       before :each do
         @request       = Factory :data_request
         @donor1        = Factory(:organization, :name => "donor1",
@@ -25,7 +25,7 @@ describe Reports::FundingSourceSplit do
         in_flows       = [in_flow1, in_flow2]
         @project1      = Factory(:project, :data_response => @response1,
                                  :name => 'project1',
-                                 :budget_type => 'on',
+                                 :budget_type => "on",
                                  :in_flows => in_flows)
         impl_splits   = []
         organization2 = Factory(:organization, :name => 'organization2',

@@ -41,7 +41,7 @@ class Reports::ProjectsExport
         builder.add_row(row)
       else
         project.activities.roots.sorted.each_with_index do |activity, index|
-          4.times do
+          5.times do
             row << "" if index > 0 # dont re-print project details on each line
           end
           row << sanitize_encoding(activity.name.slice(0..Project::MAX_NAME_LENGTH-1))

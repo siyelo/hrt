@@ -8,5 +8,3 @@ config.action_controller.perform_caching             = true
 config.action_view.cache_template_loading            = true
 config.action_mailer.default_url_options             = { :host => 'hrt-staging.heroku.com' }
 
-# Prevent from sending emails
-config.action_mailer.delivery_method = :test

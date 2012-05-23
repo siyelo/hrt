@@ -141,7 +141,7 @@ Spork.each_run do
     basic_setup_response_for_controller
     @other_org = Factory(:organization)
     @project = Project.new(:data_response => @data_response,
-                           :budget_type => "ON",
+                           :budget_type => "on",
                            :name => "non_factory_project_name_#{rand(100_000_000)}",
                            :description => "proj descr",
                            :start_date => "2010-01-01",

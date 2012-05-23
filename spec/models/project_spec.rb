@@ -21,17 +21,26 @@ describe Project do
     it { should allow_mass_assignment_of(:description) }
     it { should allow_mass_assignment_of(:data_response) }
     it { should allow_mass_assignment_of(:data_response_id) }
+    it { should allow_mass_assignment_of(:budget_type) }
     it { should allow_mass_assignment_of(:start_date) }
     it { should allow_mass_assignment_of(:end_date) }
     it { should allow_mass_assignment_of(:currency) }
-    it { should allow_mass_assignment_of(:budget_type) }
     it { should allow_mass_assignment_of(:in_flows_attributes) }
+  end
+
+  describe "Callbacks" do
+    it "downcases the budget_type" do
+      basic_setup_response
+      project = Factory(:project, :data_response => @response,
+                              :budget_type => "ON")
+      project.valid?.should be_true
+      project.budget_type.should == "on"
+    end
   end
 
   describe "Validations" do
     subject { basic_setup_project; @project }
     it { should validate_presence_of(:name) }
-    it { should validate_presence_of(:budget_type) }
     it { should validate_presence_of(:data_response_id) }
     it { should validate_presence_of(:currency) }
     it { should allow_value('2010-12-01').for(:start_date) }
@@ -53,6 +62,25 @@ describe Project do
       @project.save.should be_false
       @project.errors.on(:name).should == "is too long (maximum is 64 characters)"
     end
+
+    it "validates that the budget_type is either on or off" do
+      basic_setup_response
+      project = Factory.build(:project, :data_response => @response, :budget_type => nil)
+      project.valid?.should be_false
+      project.budget_type = "on"
+      project.valid?.should be_true
+      project.budget_type = "off"
+      project.valid?.should be_true
+      project.budget_type = "na"
+      project.valid?.should be_true
+      project.budget_type = "lsdkfj"
+      project.valid?.should be_false
+      project.budget_type = "ON"
+      project.valid?.should be_true
+      project.budget_type = "OFF"
+      project.valid?.should be_true
+    end
+
 
     it "should have at least one funder" do
       basic_setup_response
@@ -89,7 +117,7 @@ describe Project do
   describe "create" do
     it "should create a new project object with (unsaved) nested associations" do
       basic_setup_response
-      p = Project.new(:name => "new project", :budget_type => "ON", :description => "new description",
+      p = Project.new(:name => "new project", :budget_type => "on", :description => "new description",
       :data_response => @response, :start_date => "2010-01-01", :end_date => "2010-12-31",
       :currency => "USD", :in_flows_attributes => { "0" => {
         :organization_id_from => "a new org plox k thx",
@@ -101,7 +129,7 @@ describe Project do
     it "should create a new project object with (unsaved) nested associations" do
       basic_setup_response
       p = Project.new(
-        {"name"=>"Kuraneza", "start_date"=>"2011-08-29", "budget_type"=>"ON",
+        {"name"=>"Kuraneza", "start_date"=>"2011-08-29", "budget_type"=>"on",
          "in_flows_attributes"=> {"0"=>{"organization_id_from"=>"#{@organization.id}", "spend"=>"1", "budget"=>"1"}},
          "data_response_id"=>"#{@response.id}", "_destroy"=>"", "currency"=>"RWF", "description"=>"Describe the proje",
          "end_date"=>"2012-08-29",

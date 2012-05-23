@@ -38,10 +38,12 @@ class Project < ActiveRecord::Base
   before_validation :strip_leading_spaces
   before_validation :assign_project_to_in_flows
   before_validation :assign_project_to_activities
+  before_validation :downcase_budget_type
 
   ### Validations
   validates_uniqueness_of :name, :scope => :data_response_id
-  validates_presence_of :name, :data_response_id, :currency, :budget_type
+  validates_presence_of :name, :data_response_id, :currency
+  validates_inclusion_of :budget_type, :in => ["on", "off", "na"]
   validates_inclusion_of :currency,
     :in => Money::Currency::TABLE.map{|k, v| "#{k.to_s.upcase}"},
     :allow_nil => true, :unless => Proc.new {|p| p.currency.blank?}
@@ -75,11 +77,6 @@ class Project < ActiveRecord::Base
 
   def response
     data_response
-  end
-
-  # view helper ??!
-  def organization_name
-    organization.name
   end
 
   def deep_clone
@@ -123,6 +120,10 @@ class Project < ActiveRecord::Base
     def strip_leading_spaces
       self.name = self.name.strip if self.name
       self.description = self.description.strip if self.description
+    end
+
+    def downcase_budget_type
+      self.budget_type = budget_type.to_s.downcase
     end
 
     # work arround for validates_presence_of :project issue
