@@ -14,7 +14,7 @@ Feature: SysAdmin can manage files
         And I follow "Create File"
         And I fill in "document_title" with "File 1"
         And I fill in "document_description" with "description of the document"
-        And I attach the file "spec/fixtures/activities.csv" to "document_document"
+        And I attach the file "spec/fixtures/codes.csv" to "document_document"
         And I select "Public" from "document_visibility"
         And I press "Save"
         Then I should see "File was successfully uploaded."
@@ -27,7 +27,7 @@ Feature: SysAdmin can manage files
 
       When I go to admin files page
       And I follow "Edit"
-        Then I should see "Current file: activities.csv"
+        Then I should see "Current file: codes.csv"
         When I fill in "document_title" with "New file 1"
           And I select "Reporter" from "document_visibility"
           And I fill in "document_description" with ""

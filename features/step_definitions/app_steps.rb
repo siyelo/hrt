@@ -399,6 +399,10 @@ When /^a 100% location split exists with activity: "([^"]*)", location: "([^"]*)
      :cached_amount => activity.total_budget * (budget_pc.to_f/100)
 end
 
+Then /^I should see the title text "([^"]*)"$/ do |title|
+  page.should have_xpath("//img[@title=\"#{title}\"]")
+end
+
 When /^a 100% input split exists with activity: "([^"]*)", input: "([^"]*)", spend_percentage: (\d+), budget_percentage: (\d+)$/ do |act_name, input_name, spend_pc, budget_pc|
    input = Factory :input, :short_display => input_name
    activity = Activity.find_by_name act_name

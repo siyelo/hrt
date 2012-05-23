@@ -25,21 +25,31 @@ describe ImplementerSplit do
   describe "Attributes:" do
     it { should allow_mass_assignment_of(:activity_id) }
     it { should allow_mass_assignment_of(:organization_id) }
+    it { should allow_mass_assignment_of(:organization_mask) }
+    it { should allow_mass_assignment_of(:organization) }
+    it { should allow_mass_assignment_of(:organization_temp_name) }
     it { should allow_mass_assignment_of(:budget) }
     it { should allow_mass_assignment_of(:spend) }
   end
 
   describe "Validations:" do
-    it { should validate_presence_of(:organization_id) }
     it { should validate_numericality_of(:spend) }
     it { should validate_numericality_of(:budget) }
 
     it "should validate presence of organization_mask" do
       basic_setup_activity
       @split = ImplementerSplit.new(:data_response => @response,
+                                    :spend => 1, :budget => 1,
                                     :activity => @activity)
-      @split.save.should == false
+      @split.valid?.should be_false
       @split.errors.on(:organization_mask).should == "can't be blank"
+
+      @split.organization_mask = nil
+      @split.organization_id = 1
+      @split.valid?.should be_true
+      @split.organization_mask = 'organization_name'
+      @split.organization_id = nil
+      @split.valid?.should be_true
     end
 
     it "should validate spend/budget greater than 0" do

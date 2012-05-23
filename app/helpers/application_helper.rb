@@ -267,7 +267,7 @@ module ApplicationHelper
       current_user.organization.name
     end
   end
-  
+
   def search_message(items, count, query, return_url)
     message = "Found #{count} #{items}"
     if query

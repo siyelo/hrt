@@ -6,7 +6,6 @@ class ProjectsController < BaseController
   helper_method :sort_column, :sort_direction
   before_filter :strip_commas_from_in_flows, :only => [:create, :update]
   before_filter :prevent_browser_cache, :only => [:index, :edit, :update] # firefox misbehaving
-  before_filter :require_admin, :only => [:import_and_save]
   before_filter :prevent_activity_manager, :only => [:create, :update, :destroy]
 
   def new
@@ -54,6 +53,7 @@ class ProjectsController < BaseController
 
   def update
     @project = @response.projects.find(params[:id])
+    @project.activities.each { |a| a.name_will_change! } #force save
     if @project.update_attributes(params[:project])
       respond_to do |format|
         format.html {
@@ -80,8 +80,7 @@ class ProjectsController < BaseController
   def import
     begin
       if params[:file].present?
-        @i = Importer.new
-        @i.import(@response, params[:file].path)
+        @i = Importer.new(@response, params[:file].path)
         @projects = @i.projects
         @activities = @i.activities
       else
@@ -89,26 +88,11 @@ class ProjectsController < BaseController
         redirect_to projects_url
       end
     rescue FasterCSV::MalformedCSVError
-      flash[:error] = "There was a problem with your file. Did you use the template provided and save the file as either XLS or CSV?
-                       Please post a problem at <a href='https://hrtapp.tenderapp.com/kb'>TenderApp</a> if you can't figure out what's wrong."
-      redirect_to projects_url
-    end
-  end
-
-  def import_and_save
-    begin
-      if params[:file].present?
-        file = params[:file].open.read
-        @i = Importer.new
-        @i.import_and_save(@response, file)
-        flash[:notice] = 'Your file is being processed, please reload this page in a couple of minutes to see the results'
-      else
-        flash[:error] = 'Please select a file to upload'
-      end
-      redirect_to projects_url
-    rescue FasterCSV::MalformedCSVError
-      flash[:error] = "There was a problem with your file. Did you use the template provided and save the file as either XLS or CSV?
-                       Please post a problem at <a href='https://hrtapp.tenderapp.com/kb'>TenderApp</a> if you can't figure out what's wrong."
+      flash[:error] = "There was a problem with your file. Did you use the
+                      template provided and save the file as either XLS or CSV?
+                      Please post a problem at
+                      <a href='https://hrtapp.tenderapp.com/kb'>TenderApp</a>
+                      if you can't figure out what's wrong."
       redirect_to projects_url
     end
   end

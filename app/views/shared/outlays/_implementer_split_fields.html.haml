@@ -3,10 +3,11 @@
 - error_class = ""
 - error_class = "error" unless f.object.errors.empty?
 
-%tr.fields{:class => error_class}
+%tr.fields{:class => error_class, :style => f.object.marked_for_destruction? ? "display: none;" : nil}
   %td.title
-    = f.hidden_field :data_response_id, :value => @response.id
-    = f.text_field :organization_mask, :value => f.object.organization.try(:name), :class => 'js_autocomplete'
+    - if f.object.errors.on(:organization_temp_name).present?
+      = image_tag "tooltip.png", :title => "Cannot find organization '#{f.object.organization_temp_name}'", :class => 'tooltip-S input_error'
+    = f.text_field :organization_mask, :value => f.object.organization.try(:name) || f.object.organization_temp_name, :class => 'js_autocomplete'
   %td= f.text_field :spend, :class => 'js_spend no_style'
   %td= f.text_field :budget, :class => 'js_budget no_style'
   %td.delete= link_to_remove_fields "x", f, {:class => 'delete_row totals_callback', :callback => 'updateTotalsValuesCallback'}

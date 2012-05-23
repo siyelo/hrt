@@ -19,11 +19,10 @@ project1,on,project description,01/01/2010,31/12/2010,activity1,activity1 descri
 new project,blah,01/01/2010,31/12/2010,new activity,blah activity,,implementer2,4,8
 EOS
       @filename = write_csv_with_header(@csv_string)
-      @i = Importer.new
+      @i = Importer.new(@response, @filename)
     end
 
     it "should return its attributes" do
-      @i.import(@response, @filename)
       @i.response.should == @response
       @i.filename.should == @filename
       @i.projects.size.should == 2
@@ -31,32 +30,7 @@ EOS
     end
 
     it "should track new splits it creates" do
-      @i.import(@response, @filename)
       @i.new_splits.should_not be_empty
-    end
-
-    describe 'row parsing' do
-      before :each do
-        @i.import(@response, @filename) # seems to have a side effect of hosing @file... ?
-      end
-
-      it "should carry over a description on subsequent lines" do
-        previous_row_name = "some name"
-        previous_row_descr = "some descr"
-        @i.name_for("", previous_row_name).should == 'some name'
-        @i.description_for("", previous_row_descr, "").should == 'some descr'
-      end
-
-      it "should find existing splits based on their given id" do
-        @i.find_cached_split_using_split_id(@split.id).should == @split
-        @i.find_cached_activity_using_split_id(@split.id).should == @activity
-      end
-
-      it "should always return the same activity object from the cache" do
-        activity = @i.activities.first
-        @i.find_cached_activity_using_split_id(@split.id).should === activity
-      end
-
     end
   end
 
@@ -66,15 +40,14 @@ EOS
       @split2    = Factory(:implementer_split, :activity => @activity,
                    :organization => @implementer2)
       rows = []
-      rows << ['project1','project description','01/01/2010','31/12/2010','activity1','activity1 description',"#{@split.id}",'selfimplementer1','2','4']
-      rows << ['','','','','','',"#{@split2.id}",'selfimplementer2','3','6']
-      rows << ['new project','blah','01/01/2010','31/12/2010','new activity','blah activity','','implementer2','4','8']
+      rows << ['project1','on', 'project description','01/01/2010','31/12/2010','activity1','activity1 description',"#{@split.id}",'selfimplementer1','2','4']
+      rows << ['','', '','','','','',"#{@split2.id}",'selfimplementer2','3','6']
+      rows << ['new project','on','blah','01/01/2010','31/12/2010','new activity','blah activity','','implementer2','4','8']
       @filename = write_xls_with_header(rows)
-      @i = Importer.new
+      @i = Importer.new(@response, @filename)
     end
 
     it "should return its attributes" do
-      @i.import(@response, @filename)
       @i.response.should == @response
       @i.filename.should == @filename
       @i.projects.size.should == 2
@@ -82,32 +55,7 @@ EOS
     end
 
     it "should track new splits it creates" do
-      @i.import(@response, @filename)
       @i.new_splits.should_not be_empty
-    end
-
-    describe 'row parsing' do
-      before :each do
-        @i.import(@response, @filename) # seems to have a side effect of hosing @file... ?
-      end
-
-      it "should carry over a description on subsequent lines" do
-        previous_row_name = "some name"
-        previous_row_descr = "some descr"
-        @i.name_for("", previous_row_name).should == 'some name'
-        @i.description_for("", previous_row_descr, "").should == 'some descr'
-      end
-
-      it "should find existing splits based on their given id" do
-        @i.find_cached_split_using_split_id(@split.id).should == @split
-        @i.find_cached_activity_using_split_id(@split.id).should == @activity
-      end
-
-      it "should always return the same activity object from the cache" do
-        activity = @i.activities.first
-        @i.find_cached_activity_using_split_id(@split.id).should === activity
-      end
-
     end
   end
 
@@ -115,8 +63,7 @@ EOS
     csv_string = <<-EOS
 project1,on,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,99.9,100.1
 EOS
-    i = Importer.new
-    i.import(@response, write_csv_with_header(csv_string))
+    i = Importer.new(@response, write_csv_with_header(csv_string))
     i.projects.should_not be_empty
   end
 
@@ -124,8 +71,7 @@ EOS
     csv_string = <<-EOS
 ,on,project description,01/01/2010,31/12/2010,,activity1 description,#{@split.id},selfimplementer1,99.9,aaa
 EOS
-    i = Importer.new
-    i.import(@response, write_csv_with_header(csv_string))
+    i = Importer.new(@response, write_csv_with_header(csv_string))
     i.projects.first.errors.on(:name).should == ["can't be blank", "is too short (minimum is 1 characters)"]
   end
 
@@ -133,8 +79,7 @@ EOS
     csv_string = <<-EOS
 newproj,on,project description,01/01/2010,31/12/2010,act name,activity1 description,#{@split.id},selfimplementer1,99.9,100.1
 EOS
-    i = Importer.new
-    i.import(@response, write_csv_with_header(csv_string))
+    i = Importer.new(@response, write_csv_with_header(csv_string))
     i.projects.size.should == 1
     i.projects.first.should be_valid
     i.projects.first.name.should == 'newproj'
@@ -145,8 +90,7 @@ EOS
     csv_string = <<-EOS
 project,on,project description,01/01/2010,31/12/2010,,activity1 description,#{@split.id},selfimplementer1,99.9,100
 EOS
-    i = Importer.new
-    i.import(@response, write_csv_with_header(csv_string))
+    i = Importer.new(@response, write_csv_with_header(csv_string))
     i.activities.first.errors.on(:name)[0].should == "can't be blank"
   end
 
@@ -154,8 +98,7 @@ EOS
     csv_string = <<-EOS
 project,on,project description,01/01/2010,31/12/2010,activity,activity1 description,#{@split.id},selfimplementer1,,aaa
 EOS
-    i = Importer.new
-    i.import(@response, write_csv_with_header(csv_string))
+    i = Importer.new(@response, write_csv_with_header(csv_string))
     i.activities.first.implementer_splits.first.errors.on(:budget).should == "is not a number"
   end
 
@@ -163,8 +106,7 @@ EOS
     csv_string = <<-EOS
 project,on,project description,01/01/2010,31/12/2010,activity,activity1 description,,lfimplemente,99.9,0
 EOS
-    i = Importer.new
-    i.import(@response, write_csv_with_header(csv_string))
+    i = Importer.new(@response, write_csv_with_header(csv_string))
     i.activities.first.implementer_splits.first.organization.should == @split.organization
   end
 
@@ -172,8 +114,7 @@ EOS
     csv_string = <<-EOS
 project,on,project description,01/01/2010,31/12/2010,activity,activity1 description,,selfimplementer1 blarpants,99.9,0
 EOS
-    i = Importer.new
-    i.import(@response, write_csv_with_header(csv_string))
+    i = Importer.new(@response, write_csv_with_header(csv_string))
     i.activities.first.implementer_splits.first.organization.should == @split.organization
   end
 
@@ -182,8 +123,7 @@ EOS
 project,on,project description,2010-01-15,2010/12/31,activity,activity1 description,#{@split.id},selfimplementer1,99.9,100
 project2,on,project description,15-01-2010,31/12/2010,activity,activity1 description,,selfimplementer1,99.9,100
 EOS
-    i = Importer.new
-    i.import(@response, write_csv_with_header(csv_string))
+    i = Importer.new(@response, write_csv_with_header(csv_string))
     i.projects.first.start_date.to_s.should == "2010-01-15"
     i.projects.first.end_date.to_s.should   == "2010-12-31"
     i.projects[1].start_date.to_s.should == "2010-01-15"
@@ -194,8 +134,7 @@ EOS
     csv_string = <<-EOS
 project,on,project description,99/99/99,2010/12/31,activity,activity1 description,#{@split.id},selfimplementer1,99.9,100
 EOS
-    i = Importer.new
-    i.import(@response, write_csv_with_header(csv_string))
+    i = Importer.new(@response, write_csv_with_header(csv_string))
     i.projects.first.start_date.to_s.should == ""
     i.projects.first.errors.on(:start_date).should == "is not a valid date"
   end
@@ -205,8 +144,7 @@ EOS
 Project Name,on,Project Description,Activity Name,Activity Description,Id,Implementer,Past Expenditure,Current Budget
 new project,project description,activity,activity1 description,,selfimplementer1,99.9,100
 EOS
-    i = Importer.new
-    i.import(@response, write_csv(csv_string))
+    i = Importer.new(@response, write_csv(csv_string))
     i.projects.first.start_date.should == nil
     i.projects.first.end_date.should == nil
   end
@@ -216,8 +154,7 @@ EOS
 project,on,project description,2010/01/01,2010/12/31,activity,activity1 description,#{@split.id},selfimplementer1,99.9,100
 ,,,,activity,activity1 description,#{@split.id},selfimplementer1,99.9,100
 EOS
-    i = Importer.new
-    i.import(@response, write_csv_with_header(csv_string))
+    i = Importer.new(@response, write_csv_with_header(csv_string))
     i.projects.first.start_date.to_s.should == "2010-01-01"
   end
 
@@ -225,8 +162,7 @@ EOS
     csv_string = <<-EOS
 project1,on,project description with utf chars äóäó,activity1,01/01/2010,31/12/2010,activity1 description,#{@split.id},selfimplementer1,99.9,100.1
 EOS
-    i = Importer.new
-    i.import(@response, write_csv_with_header(csv_string))
+    i = Importer.new(@response, write_csv_with_header(csv_string))
     i.projects.first.description.should == "project description with utf chars äóäó"
   end
 
@@ -234,8 +170,7 @@ EOS
     csv_string = <<-EOS
 project1,on,project description with Norwegian: æøå. French: êèé,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,99.9,100.1
 EOS
-    i = Importer.new
-    i.import(@response, write_csv_with_header(csv_string))
+    i = Importer.new(@response, write_csv_with_header(csv_string))
     i.projects.first.description.should == "project description with Norwegian: æøå. French: êèé"
   end
 
@@ -244,8 +179,7 @@ EOS
       csv_string = <<-EOS
 project1,on,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,99.9,100.1
 EOS
-      i = Importer.new
-      i.import(@response, write_csv_with_header(csv_string))
+      i = Importer.new(@response, write_csv_with_header(csv_string))
       i.projects.size.should == 1
       i.activities.size.should == 1
       i.activities[0].implementer_splits.first.organization_name.should == 'selfimplementer1'
@@ -259,8 +193,7 @@ EOS
 project1,on,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,99.9,100.1
 
 EOS
-      i = Importer.new
-      i.import(@response, write_csv_with_header(csv_string))
+      i = Importer.new(@response, write_csv_with_header(csv_string))
       i.projects.size.should == 1
       i.activities.size.should == 1
       i.activities[0].implementer_splits.first.organization_name.should == 'selfimplementer1'
@@ -273,8 +206,7 @@ EOS
 "Coordination, planning, M&E and partnership of the national HIV 1234567",on,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,99.9,100.1
 
 EOS
-      i = Importer.new
-      i.import(@response, write_csv_with_header(csv_string))
+      i = Importer.new(@response, write_csv_with_header(csv_string))
       i.projects.size.should == 1
       i.projects[0].name.should == 'Coordination, planning, M&E and partnership of the national HIV'
     end
@@ -286,8 +218,7 @@ EOS
       csv_string = <<-EOS
 project1,on,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},#{@split.organization_name},#{@split.spend},#{@split.budget}
 EOS
-      i = Importer.new
-      i.import(@response, write_csv_with_header(csv_string))
+      i = Importer.new(@response, write_csv_with_header(csv_string))
       i.projects.size.should == 1
       i.activities.size.should == 1
       i.activities[0].implementer_splits.first.organization_name.should == @split.organization_name
@@ -303,8 +234,7 @@ EOS
 project1,on,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,2,4
 ,,,,,,,#{@split.id},selfimplementer1,3,6
 EOS
-      i = Importer.new
-      i.import(@response, write_csv_with_header(csv_string))
+      i = Importer.new(@response, write_csv_with_header(csv_string))
       i.activities[0].implementer_splits.first.organization_name.should == 'selfimplementer1'
       i.activities[0].implementer_splits.first.spend.to_f.should == 3
       i.activities[0].implementer_splits.first.budget.to_f.should == 6
@@ -318,8 +248,7 @@ project1,on,project description,01/01/2010,31/12/2010,activity1,activity1 descri
 ,,,,,,,#{@split.id},selfimplementer1,3,6
 ,,,,,,,#{@split.id},selfimplementer1,4,8
 EOS
-      i = Importer.new
-      i.import(@response, write_csv_with_header(csv_string))
+      i = Importer.new(@response, write_csv_with_header(csv_string))
       i.activities[0].implementer_splits.first.organization_name.should == 'selfimplementer1'
       i.activities[0].implementer_splits.first.spend.to_f.should == 4
       i.activities[0].implementer_splits.first.budget.to_f.should == 8
@@ -331,8 +260,7 @@ EOS
       csv_string = <<-EOS
 project1,on,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,2,4
 EOS
-      i = Importer.new
-      i.import(@response, write_csv_with_header(csv_string))
+      i = Importer.new(@response, write_csv_with_header(csv_string))
       i.activities[0].total_spend.to_f.should == 2
       i.activities[0].total_budget.to_f.should == 4
     end
@@ -349,8 +277,7 @@ EOS
 "Coordination, planning, M&E and partnership of the national HIV 1234567",on,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,99.9,100.1
 ,,,,,,,implementer2,99.9,100.1
 EOS
-        i = Importer.new
-        i.import(@response, write_csv_with_header(csv_string))
+        i = Importer.new(@response, write_csv_with_header(csv_string))
         i.projects.size.should == 1
         i.projects[0].name == 'Coordination, planning, M&E and partnership of the national HIV'
       end
@@ -360,8 +287,7 @@ EOS
 project1,on,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,2.0,4.0
 ,,,,,,,#{@split2.id},implementer2,3.0,6.0
 EOS
-        i = Importer.new
-        i.import(@response, write_csv_with_header(csv_string))
+        i = Importer.new(@response, write_csv_with_header(csv_string))
         i.activities[0].implementer_splits.first.organization_name.should == 'selfimplementer1'
         i.activities[0].implementer_splits.first.spend.to_f.should == 2.0
         i.activities[0].implementer_splits.first.budget.to_f.should == 4.0
@@ -376,8 +302,7 @@ EOS
         csv_string = <<-EOS
 project1,on,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split2.id},implementer2,2.0,4.0
 EOS
-        i = Importer.new
-        i.import(@response, write_csv_with_header(csv_string))
+        i = Importer.new(@response, write_csv_with_header(csv_string))
         i.activities[0].implementer_splits.size.should == 2
         i.activities[0].implementer_splits.first.marked_for_destruction?.should == true
         i.activities[0].implementer_splits[1].organization_name.should == 'implementer2'
@@ -387,8 +312,7 @@ EOS
         csv_string = <<-EOS
 project1,on,project description,01/01/2010,31/12/2010,activity BLAR,activity blar description,#{@split2.id},implementer2,2.0,4.0
 EOS
-        i = Importer.new
-        i.import(@response, write_csv_with_header(csv_string))
+        i = Importer.new(@response, write_csv_with_header(csv_string))
         i.activities[0].implementer_splits.size.should == 2
         i.activities[0].implementer_splits.first.marked_for_destruction?.should == true
         i.activities[0].implementer_splits[1].organization_name.should == 'implementer2'
@@ -399,8 +323,7 @@ EOS
 project1,on,project description,01/01/2010,31/12/2010,activity1,activity1 NEW description,#{@split.id},selfimplementer1,2.0,4.0
 ,,,,,,,#{@split2.id},implementer2,3.0,6.0
 EOS
-        i = Importer.new
-        i.import(@response, write_csv_with_header(csv_string))
+        i = Importer.new(@response, write_csv_with_header(csv_string))
         i.activities[0].description.should == 'activity1 NEW description'
         i.activities[0].implementer_splits.first.organization_name.should == 'selfimplementer1'
         i.activities[0].implementer_splits.first.spend.to_f.should == 2.0
@@ -417,8 +340,7 @@ EOS
         csv_string = <<-EOS
 project1,on,project description,01/01/2010,31/12/2010,activity1,activity1 description,,implementer3,2.0,4.0
 EOS
-        i = Importer.new
-        i.import(@response, write_csv_with_header(csv_string))
+        i = Importer.new(@response, write_csv_with_header(csv_string))
         i.activities[0].implementer_splits.size.should == 3
         i.activities[0].implementer_splits[0].marked_for_destruction?.should == true
         i.activities[0].implementer_splits[1].marked_for_destruction?.should == true
@@ -433,8 +355,7 @@ EOS
 project1,on,project NEW description,01/01/2010,31/12/2010,activity1,activity1 NEW description,#{@split.id},selfimplementer1,2.0,4.0
 ,,,,,,,#{@split2.id},implementer2,3.0,6.0
 EOS
-        i = Importer.new
-        i.import(@response, write_csv_with_header(csv_string))
+        i = Importer.new(@response, write_csv_with_header(csv_string))
         i.projects.size.should == 1
         i.activities.size.should == 1
         i.projects[0].description.should == 'project NEW description'
@@ -459,8 +380,7 @@ EOS
 project1,on,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,2.0,4.0
 project1,on,project description,01/01/2010,31/12/2010,activity2,activity2 description,#{@split2.id},implementer2,3.0,6.0
 EOS
-      i = Importer.new
-      i.import(@response, write_csv_with_header(csv_string))
+      i = Importer.new(@response, write_csv_with_header(csv_string))
       i.activities[0].implementer_splits.first.organization_name.should == 'selfimplementer1'
       i.activities[0].implementer_splits.first.spend.to_f.should == 2.0
       i.activities[0].implementer_splits.first.budget.to_f.should == 4.0
@@ -482,8 +402,7 @@ project1,on,project description,01/01/2010,31/12/2010,activity1,activity1 descri
 ,,,,,,,#{@split3.id},implementer3,4.0,6.0
 ,,,,,,,#{@split4.id},implementer4,5.0,6.0
 EOS
-      i = Importer.new
-      i.import(@response, write_csv_with_header(csv_string))
+      i = Importer.new(@response, write_csv_with_header(csv_string))
       i.activities[0].implementer_splits[0].organization_name.should == 'selfimplementer1'
       i.activities[0].implementer_splits[0].spend.to_f.should == 2.0
       i.activities[0].implementer_splits[0].budget.to_f.should == 4.0
@@ -516,8 +435,7 @@ EOS
 project1,on,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,2.0,4.0
 ,,,,,activity2,d2,#{@split2.id},implementer2,3.0,6.0
 EOS
-        i = Importer.new
-        i.import(@response, write_csv_with_header(csv_string))
+        i = Importer.new(@response, write_csv_with_header(csv_string))
         i.activities[0].implementer_splits[0].organization_name.should == 'selfimplementer1'
         i.activities[0].implementer_splits[0].spend.to_f.should == 2.0
         i.activities[0].implementer_splits[0].budget.to_f.should == 4.0
@@ -533,8 +451,7 @@ project1,on,project description,01/01/2010,31/12/2010,activity1,activity1 descri
 ,,,,,activity3,d3,#{@split3.id},implementer3,4.0,6.0
 ,,,,,activity4,d4,#{@split4.id},implementer4,5.0,6.0
 EOS
-        i = Importer.new
-        i.import(@response, write_csv_with_header(csv_string))
+        i = Importer.new(@response, write_csv_with_header(csv_string))
         i.activities[0].implementer_splits[0].organization_name.should == 'selfimplementer1'
         i.activities[0].implementer_splits[0].spend.to_f.should == 2.0
         i.activities[0].implementer_splits[0].budget.to_f.should == 4.0
@@ -562,8 +479,7 @@ EOS
 project2,on,project2 description,01/01/2010,31/12/2010,activity21,activity21 description,#{@split21.id},selfimplementer1,2.0,4.0
 project1,on,project1 description,01/01/2010,31/12/2010,activity1,d1,#{@split.id},selfimplementer1,3.0,6.0
 EOS
-          i = Importer.new
-          i.import(@response, write_csv_with_header(csv_string))
+          i = Importer.new(@response, write_csv_with_header(csv_string))
           i.activities[0].implementer_splits[0].organization_name.should == 'selfimplementer1'
           i.activities[0].implementer_splits[0].spend.to_f.should == 2.0
           i.activities[0].implementer_splits[0].budget.to_f.should == 4.0
@@ -580,8 +496,7 @@ project1,on,project1 description,01/01/2010,31/12/2010,activity1,d1,#{@split.id}
 ,,,,,activity3,d3,#{@split3.id},implementer3,4.0,6.0
 ,,,,,activity4,d4,#{@split4.id},implementer4,5.0,6.0
 EOS
-          i = Importer.new
-          i.import(@response, write_csv_with_header(csv_string))
+          i = Importer.new(@response, write_csv_with_header(csv_string))
           i.activities[0].implementer_splits[0].organization_name.should == 'selfimplementer1'
           i.activities[0].implementer_splits[0].spend.to_f.should == 1.0
           i.activities[0].implementer_splits[0].budget.to_f.should == 2.0
@@ -607,8 +522,7 @@ EOS
     csv_string = <<-EOS
 project1,on,project description,01/01/2010,31/12/2010,activity1,activity1 description,,new implementer,2,4
 EOS
-    i = Importer.new
-    i.import(@response, write_csv_with_header(csv_string))
+    i = Importer.new(@response, write_csv_with_header(csv_string))
     i.activities[0].implementer_splits.size.should == 2 # new one plus existing split
     i.activities[0].implementer_splits[1].organization.should == nil
     i.activities[0].implementer_splits[1].spend.to_f.should == 2
@@ -621,8 +535,7 @@ EOS
     csv_string = <<-EOS
 project1,on,project description,01/01/2010,31/12/2010,activity1,activity1 description,,,2,4
 EOS
-    i = Importer.new
-    i.import(@response, write_csv_with_header(csv_string))
+    i = Importer.new(@response, write_csv_with_header(csv_string))
     i.activities[0].implementer_splits.size.should == 2
     i.activities[0].implementer_splits[1].organization.should == nil
     i.activities[0].implementer_splits[1].spend.to_f.should == 2
@@ -633,8 +546,7 @@ EOS
     csv_string = <<-EOS
 project1,on,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},new implementer,2,4
 EOS
-    i = Importer.new
-    i.import(@response, write_csv_with_header(csv_string))
+    i = Importer.new(@response, write_csv_with_header(csv_string))
     i.activities[0].implementer_splits.size.should == 1
     i.activities[0].implementer_splits.first.organization.should == nil
     i.activities[0].implementer_splits.first.spend.to_f.should == 2
@@ -649,8 +561,7 @@ project1,on,project description,01/01/2010,31/12/2010,activity1,activity1 descri
 ,,,,,,,,new implementer,3,6
 ,,,,,,,,new implementer,4,8
 EOS
-    i = Importer.new
-    i.import(@response, write_csv_with_header(csv_string))
+    i = Importer.new(@response, write_csv_with_header(csv_string))
     i.activities[0].implementer_splits.size.should == 4
     i.activities[0].implementer_splits.first.marked_for_destruction?.should == true
     i.activities[0].implementer_splits[1].organization.should == nil
@@ -668,8 +579,7 @@ EOS
     csv_string = <<-EOS
 project1,on,project description,01/01/2010,31/12/2010,activity1,activity1 description,,selfimplementer1,aaaa,
 EOS
-    i = Importer.new
-    i.import(@response, write_csv_with_header(csv_string))
+    i = Importer.new(@response, write_csv_with_header(csv_string))
     i.activities[0].implementer_splits.size.should == 1
     i.activities[0].implementer_splits.first.organization_name.should == 'selfimplementer1'
     i.activities[0].implementer_splits.first.save.should == false
@@ -683,8 +593,7 @@ project1,on,project description,01/01/2010,31/12/2010,activity1,activity1 descri
 ,,,,,,,organization2,3,6
 EOS
     @organization2 = Factory(:organization, :name => 'organization2')
-    i = Importer.new
-    i.import(@response, write_csv_with_header(csv_string))
+    i = Importer.new(@response, write_csv_with_header(csv_string))
     i.activities[0].implementer_splits.size.should == 2
     i.activities[0].implementer_splits.first.organization_name.should == 'selfimplementer1'
     i.activities[0].implementer_splits.first.save.should == false
@@ -698,8 +607,7 @@ EOS
 project1,on,project description,01/01/2010,31/12/2010,ac,activity1 description,,selfimplementer1,2,4
 ,,,,,,,,selfimplementer2,3,6
 EOS
-    i = Importer.new
-    i.import(@response, write_csv_with_header(csv_string))
+    i = Importer.new(@response, write_csv_with_header(csv_string))
     i.activities[0].implementer_splits.size.should == 2
     i.activities[0].save.should == false
     i.activities[0].name = "Activity Name"
@@ -714,8 +622,7 @@ Project Name,on,project description,01/01/2010,31/12/2010,HERP DERP,Activity Des
 project1,on,project description,01/01/2010,31/12/2010,my activity name,activity1 description,,selfimplementer1,2,4
 ,,,,,,,selfimplementer1,3,6
 EOS
-    i = Importer.new
-    i.import(@response, write_csv(csv_string))
+    i = Importer.new(@response, write_csv(csv_string))
     i.projects.size.should == 1
     i.activities[0].implementer_splits.size.should == 2
     i.activities[0].save.should == false
@@ -727,8 +634,7 @@ EOS
     csv_string = <<-EOS
 11111111112222222222333333333344444444445555555555666666666677777777778,on,project description,01/01/2010,31/12/2010,act,activity1 description,,selfimplementer1,2,4
 EOS
-    i = Importer.new
-    i.import(@response, write_csv_with_header(csv_string))
+    i = Importer.new(@response, write_csv_with_header(csv_string))
     i.projects.size.should == 1
     i.projects[0].activities.size.should == 0 #the association wont be loaded first time round,
     i.activities.size.should == 1 # so you must use the loaded activities not project.activities
@@ -741,8 +647,7 @@ EOS
     csv_string = <<-EOS
 ,on,project description,01/01/2010,31/12/2010,act,activity1 description,,selfimplementer1,2,4
 EOS
-    i = Importer.new
-    i.import(@response, write_csv_with_header(csv_string))
+    i = Importer.new(@response, write_csv_with_header(csv_string))
     i.projects.size.should == 1
     i.projects[0].activities.size.should == 0 #the association wont be loaded first time round,
     i.activities.size.should == 1 # so you must use the loaded activities not project.activities
@@ -758,8 +663,7 @@ EOS
 project1,on,project description,01/01/2010,31/12/2010,activity2,activity2 description,,Shyira HD District Hospital,3,6
 EOS
       @implementer2   = Factory(:organization, :name => "Shyira HD District Hospital | Nyabihu")
-      @i = Importer.new
-      @i.import(@response, write_csv_with_header(csv_string))
+      @i = Importer.new(@response, write_csv_with_header(csv_string))
     end
 
     it "recognizes the correct project" do
@@ -772,15 +676,5 @@ EOS
       @i.activities[0].save.should == true
       @i.activities[0].implementer_splits.first.organization.should == @implementer2
     end
-  end
-
-  it "should import and save a file" do
-    csv_string = <<-EOS
-project2,on,project description,01/01/2010,31/12/2010,activity1,activity1 description,,selfimplementer1,99.9,100.1
-EOS
-    @response.projects.count.should == 1
-    i = Importer.new
-    i.import_and_save(@response, File.open(write_csv_with_header(csv_string)).read)
-    @response.projects.count.should == 2
   end
 end

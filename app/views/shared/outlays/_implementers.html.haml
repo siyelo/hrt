@@ -29,7 +29,7 @@
           .right_justified Current Budget
         %th.delete
     %tbody
-      - f.semantic_fields_for :implementer_splits, @splits do |ff|
+      - f.semantic_fields_for :implementer_splits do |ff|
         - show_only_errors = @split_errors && ( @splits.size <= 50 || !ff.object.errors.empty?)
         = render 'shared/outlays/implementer_split_fields', :f => ff if (bulk_review || show_only_errors) || outlay.errors.empty?
 
@@ -57,4 +57,4 @@
             %span.currency.right= outlay.currency
   - unless bulk_review || outlay.new_record? || @split_errors
     = will_paginate @splits
-    
+

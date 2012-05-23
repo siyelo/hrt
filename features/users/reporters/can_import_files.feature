@@ -12,7 +12,12 @@ Feature: Reporter can import/export workplans
   Scenario: Reporter can upload activities
     When I attach the file "spec/fixtures/activities.csv" to "File" within ".activities_upload_box"
     And I press "Import" within ".activities_upload_box"
-    Then I should see "Import: Review & Save"
+    And I should see "Import: Review & Save"
+    And I should see the title text "Cannot find organization 'non_existing_implementer'"
+    When I press "Save Project"
+    And I follow "Projects"
+    And I follow "activity1"
+    Then the "activity_implementer_splits_attributes_0_organization_mask" field should contain "non_existing_implementer"
 
   Scenario: Reporter can see error if no csv file is not attached for upload
     When I press "Import" within ".activities_upload_box"

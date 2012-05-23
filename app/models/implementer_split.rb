@@ -5,20 +5,21 @@
   belongs_to :organization # the implementer
 
   attr_accessible :activity_id, :organization_id, :budget, :spend,
-    :organization_mask, :organization
+    :organization_mask, :organization, :organization_temp_name
+
+  attr_accessor :organization_temp_name
 
   ### Validations
-  validates_presence_of :organization_mask
   # this seems to be bypassed on activity update if you pass two of the same orgs
   validates_uniqueness_of :organization_id, :scope => :activity_id,
     :message => "must be unique", :unless => Proc.new { |m| m.new_record? }
-  validates_presence_of :organization_id
   validates_numericality_of :spend, :greater_than => 0,
     :if => Proc.new { |is| is.spend.present? && (!is.budget.present? || is.budget == 0) }
   validates_numericality_of :budget, :greater_than => 0,
     :if => Proc.new { |is| is.budget.present? && (!is.spend.present? || is.spend == 0) }
   validates_presence_of :spend, :message => " and/or Budget must be present",
     :if => lambda { |is| (!((is.budget || 0) > 0)) && (!((is.spend || 0) > 0)) }
+  validate :validate_organization_presence
 
   ### Delegates
   delegate :name, :to => :organization, :prefix => true, :allow_nil => true # organization_name
@@ -99,6 +100,13 @@
     end
     handle_asynchronously :mark_double_counting
   end
+
+  private
+    def validate_organization_presence
+      if organization_mask.blank? && organization_id.blank?
+        errors.add(:organization_mask, "can't be blank")
+      end
+    end
 
 end
 

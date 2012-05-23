@@ -31,7 +31,7 @@ class Project < ActiveRecord::Base
   # Nested attributes
   accepts_nested_attributes_for :in_flows, :allow_destroy => true,
     :reject_if => Proc.new { |attrs| attrs['organization_id_from'].blank? }
-  accepts_nested_attributes_for :activities
+  accepts_nested_attributes_for :activities, :allow_destroy => true
 
   ### Callbacks
   # also check lib/response_state_callbacks
@@ -62,7 +62,6 @@ class Project < ActiveRecord::Base
   attr_accessible :name, :description, :user, :user_id, :data_response,
                   :data_response_id, :activities, :start_date,
                   :end_date, :currency, :budget_type,
-                  # huh?
                   :activities_attributes, :in_flows_attributes, :in_flows
 
   ### Delegates
