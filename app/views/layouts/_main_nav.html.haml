@@ -22,4 +22,4 @@
           = link_to 'Reports', reports_path
 
         %li{:class => (controller.class == OrganizationsController && ['new', 'edit', 'create', 'update'].include?(controller.action_name) ? "active" : nil)}
-          = link_to 'Settings', edit_organization_url
+          = link_to 'Settings', edit_organization_url(:current)

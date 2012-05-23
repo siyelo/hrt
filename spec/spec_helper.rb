@@ -234,7 +234,7 @@ Spork.each_run do
 
   def write_csv_with_header(csv_string)
     header = <<-EOS
-Project Name,Project Description,Project Start Date,Project End Date,Activity Name,Activity Description,Id,Implementer,Past Expenditure,Current Budget
+Project Name,On/Off Budget,Project Description,Project Start Date,Project End Date,Activity Name,Activity Description,Id,Implementer,Past Expenditure,Current Budget
     EOS
     write_csv(header + csv_string)
   end

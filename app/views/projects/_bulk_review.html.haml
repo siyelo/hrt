@@ -34,15 +34,7 @@
           %tbody
             - f.fields_for :in_flows, project.in_flows do |flows|
               %tr.overflow_fix.fields
-                %td.title
-                  = flows.input :organization_id_from, :as => :hidden
-                  - unless flows.object.errors.on(:organization_id_from)
-                    -# for faster page loading
-                    %span.org_name= flows.object.from.try(:name) || "< n/a >"
-                  - else
-                    .js_implementer_container.ui_widget
-                      = flows.select :organization_id_from, options_for_select(funding_organizations_select, flows.object.organization_id_from), {}, :class =>'js_implementer_select js_combobox f_from'
-
+                %td.title= flows.text_field :organization_id_from, :value => flows.object.from.try(:name), :class =>'js_autocomplete'
                 %td= flows.text_field :spend, :class => 'js_spend no_style', :class => flows.object.errors.on(:spend) ? "error" : ""
                 %td= flows.text_field :budget , :class => 'js_budget no_style', :class => flows.object.errors.on(:budget) ? "error" : ""
                 %td.delete= link_to_remove_fields "x", f, :class => 'delete_row'

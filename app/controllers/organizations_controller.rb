@@ -6,6 +6,17 @@ class OrganizationsController < BaseController
   before_filter :load_organization, :only => [:edit, :update]
   before_filter :load_users, :only => [:edit, :update]
 
+  def index
+    organizations = Organization.find(:all,
+      :order => 'UPPER(name)', :limit => 100,
+      :conditions => ["UPPER(organizations.name) LIKE UPPER(?)",
+                      "%#{params[:term]}%"])
+
+    respond_to do |format|
+      format.json { render :json => organizations.map(&:name) }
+    end
+  end
+
   def edit
     @organization.valid? # trigger validation errors
   end
@@ -13,7 +24,7 @@ class OrganizationsController < BaseController
   def update
     if @organization.update_attributes(params[:organization])
       flash[:notice] = "Settings were successfully updated."
-      redirect_to edit_organization_path
+      redirect_to edit_organization_path(:current)
     else
       flash.now[:error] = "Oops, we couldn't save your changes."
       render :action => :edit

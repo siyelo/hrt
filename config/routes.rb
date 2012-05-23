@@ -67,7 +67,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :other_costs, :except => [:index, :show],
     :collection => {:create_from_file => :post, :download_template => :get}
 
-  map.resource :organization, :only => [:edit, :update],
+  map.resources :organizations, :only => [:index, :edit, :update],
     :collection => { :export => :get }
 
 

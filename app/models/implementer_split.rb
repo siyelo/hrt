@@ -31,7 +31,7 @@
   ### Instance methods
 
   def organization_mask
-    @organization_mask || organization_id
+    @organization_mask || organization_name
   end
 
   # used in activity report

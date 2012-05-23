@@ -31,7 +31,7 @@
       Organization Settings Complete
       - unless @response.valid?
         %span.info
-          = "Your Settings are not complete. Please visit the #{link_to "settings", edit_organization_path(current_user.organization)} to make the necessary changes."
+          = "Your Settings are not complete. Please visit the #{link_to "settings", edit_organization_path(:current)} to make the necessary changes."
   %li.alt
     %h2 Projects
   %li.section_form

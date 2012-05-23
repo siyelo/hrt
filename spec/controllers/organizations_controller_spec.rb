@@ -3,12 +3,12 @@ require 'spec_helper'
 shared_examples_for 'an organization controller' do
   it "should allow admin to edit settings of reporting organization" do
     o = Factory :organization
-    get :edit
+    get :edit, :id => :current
     response.should be_success
   end
   it "should allow admin to edit settings of nonreporting org" do
     o = Factory :organization, :raw_type => 'Communal FOSA'
-    get :edit
+    get :edit, :id => :current
     response.should be_success
   end
 end
@@ -24,7 +24,7 @@ describe OrganizationsController do
 
     it "redirects to dashboard_path" do
       put :update, :id => :current
-      response.should redirect_to(edit_organization_path)
+      response.should redirect_to(edit_organization_path(:current))
     end
 
     it "downloads csv template" do

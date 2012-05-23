@@ -142,7 +142,6 @@ HrtProjects.import = function () {
 
     $.post(HrtForm.buildUrl(form.attr('action')), form.serialize(), function (data) {
       activity_box.html(data.html);
-      activity_box.find(".js_combobox").combobox();
       ajaxLoader.hide();
       if (data.status == 'success') {
          activity_box.find('.saved_tick').show();

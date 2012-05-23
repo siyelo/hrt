@@ -190,7 +190,7 @@ describe ImplementerSplit do
   it "should return organization_mask as the org id" do
     org = Factory.build :organization
     split = Factory.build :implementer_split, :organization => org
-    split.organization_mask.should == org.id
+    split.organization_mask.should == org.name
   end
 
   it "should respond to assign_or_create_organization" do

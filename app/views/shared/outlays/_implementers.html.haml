@@ -29,14 +29,9 @@
           .right_justified Current Budget
         %th.delete
     %tbody
-      - if outlay.new_record? && @splits.empty?
-        - @splits = outlay.implementer_splits
-        - self_org_id = outlay.organization.id
-        - @splits.build(:organization_id => self_org_id, :data_response_id => outlay.data_response_id)
-      - @splits.each do |is|
-        - f.semantic_fields_for :implementer_splits, is do |ff|
-          - show_only_errors = @split_errors && ( @splits.size <= 50 || !ff.object.errors.empty?)
-          = render 'shared/outlays/implementer_splits', :ff => ff if (bulk_review || show_only_errors) || outlay.errors.empty?
+      - f.semantic_fields_for :implementer_splits, @splits do |ff|
+        - show_only_errors = @split_errors && ( @splits.size <= 50 || !ff.object.errors.empty?)
+        = render 'shared/outlays/implementer_split_fields', :f => ff if (bulk_review || show_only_errors) || outlay.errors.empty?
 
       - if @splits.size < 50 || @split_errors
         - blank_rows.times do

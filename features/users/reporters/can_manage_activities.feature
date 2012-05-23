@@ -64,7 +64,7 @@ Feature: Reporter can manage activities
     When I follow "Projects"
     And I follow "existing activity"
     And I follow "Implementers" within ".section_nav"
-    And I select "organization2" from "activity_implementer_splits_attributes_0_organization_mask"
+    And I fill in "activity_implementer_splits_attributes_0_organization_mask" with "organization2"
     And I fill in "activity[implementer_splits_attributes][0][spend]" with "99"
     And I fill in "activity[implementer_splits_attributes][0][budget]" with "19"
     And I press "Save"
@@ -78,9 +78,10 @@ Feature: Reporter can manage activities
     And I fill in "activity_description" with "activity1 description"
     And I select "project1" from "Project"
     # self org should already be present/selected
+    And I fill in "activity_implementer_splits_attributes_0_organization_mask" with "organization2"
     And I fill in "activity[implementer_splits_attributes][0][spend]" with "99"
     And I fill in "activity[implementer_splits_attributes][0][budget]" with "19"
-    And I select "organization2" from "activity_implementer_splits_attributes_1_organization_mask"
+    And I fill in "activity_implementer_splits_attributes_1_organization_mask" with "organization2"
     And I fill in "activity[implementer_splits_attributes][1][spend]" with "99"
     And I fill in "activity[implementer_splits_attributes][1][budget]" with "19"
     And I press "Save"
@@ -91,24 +92,21 @@ Feature: Reporter can manage activities
     When I follow "Projects"
     And I follow "existing activity"
     And I follow "Implementers" within ".section_nav"
-    And I select "organization2" from "activity_implementer_splits_attributes_0_organization_mask"
+    And I fill in "activity_implementer_splits_attributes_0_organization_mask" with "organization2"
     And I fill in "activity[implementer_splits_attributes][0][spend]" with "99"
     And I fill in "activity[implementer_splits_attributes][0][budget]" with "19"
-    And I select "organization2" from "activity_implementer_splits_attributes_1_organization_mask"
+    And I fill in "activity_implementer_splits_attributes_1_organization_mask" with "organization2"
     And I fill in "activity[implementer_splits_attributes][1][spend]" with "99"
     And I fill in "activity[implementer_splits_attributes][1][budget]" with "19"
     And I press "Save"
     Then I should see "Duplicate Implementer"
 
-  # @javascript
   Scenario: Reporter can see live total being updated
     Given an activity exists with project: the project, name: "existing activity", description: "existing description", data_response: the data_response
     When I follow "Projects"
     And I follow "existing activity"
     And I fill in "activity[implementer_splits_attributes][0][spend]" with "99"
     And I fill in "activity[implementer_splits_attributes][1][spend]" with "100"
-    # Because of javascript driver issue this scenario fails, marked as @wip
-    # Then I should see "199"
 
   Scenario: A reporter can create comments for a Activity
     Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response

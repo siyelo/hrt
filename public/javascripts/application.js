@@ -111,9 +111,6 @@ $(function () {
     html: true
   });
 
-  // combobox everywhere!
-  $( ".js_combobox" ).combobox();
-
   // keep below combobox
   HrtForm.autoTab();
 
@@ -155,6 +152,13 @@ $(function () {
        authenticity_token: rails_authenticity_token });
   });
 
+  $( ".js_autocomplete").live("keydown.autocomplete", function () {
+    $(this).autocomplete({
+      source: "/organizations.json",
+      minLength: 2
+    });
+  });
+
   // Scope javascript by page id
   var id = $('body').attr("id");
   if (id) {
@@ -163,5 +167,5 @@ $(function () {
         typeof(window[controller_action]['run']) === 'function') {
       window[controller_action]['run']();
     }
-  }
+  };
 });

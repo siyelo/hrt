@@ -20,33 +20,6 @@ HrtOutlays.init = function () {
     }
   });
 
-  $('.cancel_organization_link').live('click', function(e) {
-    e.preventDefault();
-    $('.organization_name').attr('value', '');
-    $('.add_organization').hide();
-    $('.js_implementer_container').show();
-    $('.js_implementer_select').val(null);
-  });
-
-  $('.add_organization_link').live('click', function(e) {
-    e.preventDefault();
-    var name = $('.organization_name').val();
-    $.post("/organizations.js", { "name" : name,
-       authenticity_token: rails_authenticity_token }, function(data){
-      var data = $.parseJSON(data);
-      $('.js_implementer_container').show();
-      $('.add_organization').hide();
-      if (isNaN(data.organization.id)) {
-        $('.js_implementer_select').val(null);
-      } else {
-        $('.js_implementer_select').prepend("<option value=\'"+ data.organization.id + "\'>" + data.organization.name + "</option>");
-        $('.js_implementer_select').val(data.organization.id);
-      }
-    });
-    $('.organization_name').attr('value', '');
-    $('.add_organization').slideToggle();
-  });
-
   $('.js_target_field').live('keydown', function (e) {
     var block = $(this).parents('.js_targets');
 

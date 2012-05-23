@@ -39,7 +39,7 @@
     .section_base.wide.less_spacing
       %ul.welcome_steps
         %li.first
-          - link_to edit_organization_path do
+          - link_to edit_organization_path(:current) do
             %span.icon= image_tag "icon_welcome1.png", :alt => "Setup Your Organization", :height => "66"
             %span.title 1. Basic Settings
             %span.desc Your Organization's preferences and contact settings

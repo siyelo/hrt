@@ -8,6 +8,7 @@ class Importer
 
     activity_name = project_name = sub_activity_name = ''
     project_description = activity_description = ''
+    project_budget_type = ''
     @new_splits = []
 
     @file.each do |row|
@@ -18,6 +19,7 @@ class Importer
       project_name         = name_for(row['Project Name'], project_name)
       project_description  = description_for(row['Project Description'],
                                             project_description, row['Project Name'])
+      project_budget_type = name_for(row['On/Off Budget'], project_budget_type)
       sub_activity_name   = sanitize_encoding(row['Implementer'].try(:strip))
       sub_activity_id     = row['Id']
 
@@ -59,7 +61,7 @@ class Importer
         end
 
         project = @response.projects.find_by_name(project_name) unless project
-        project = @response.projects.new(:budget_type => "ON",
+        project = @response.projects.new(:budget_type => "on",
                      :currency => @response.organization.currency) unless project
         activity = project.activities.find_by_name(activity_name) unless activity
         activity = Activity.new unless activity
@@ -76,7 +78,7 @@ class Importer
       # so we reference the same object. (AR find might pull out a new object)
       split = activity.implementer_splits.detect{ |is| is.id == split.id } || split
 
-      assign_project_fields(project, project_name, project_description,
+      assign_project_fields(project, project_name, project_budget_type, project_description,
         row['Project Start Date'], row['Project End Date'])
       assign_activity_fields(activity, project, activity_name, activity_description)
       assign_split_fields(split, implementer, row["Past Expenditure"], row["Current Budget"])
@@ -256,9 +258,10 @@ class Importer
       split
     end
 
-    def assign_project_fields(project, name, description, start_date, end_date)
+    def assign_project_fields(project, name, project_budget_type, description, start_date, end_date)
       project.data_response       = @response
       project.name                = name
+      project.budget_type         = project_budget_type
       project.description         = description.try(:strip)
       project.start_date          = date_for(start_date, project.start_date)
       project.end_date            = date_for(end_date, project.end_date)

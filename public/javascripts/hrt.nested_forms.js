@@ -21,19 +21,13 @@ var add_fields = function (link, association, content) {
     $(link).parent().before(content.replace(regexp, new_id));
   }
 
-  after_add_fields_callback(association);
+  // after_add_fields_callback(association);
 };
 
 var before_add_fields_callback = function (association) {
   if (association === 'funding_sources') {
     close_activity_funding_sources_fields($('.funding_sources .fields'));
   }
-};
-
-var after_add_fields_callback = function (association) {
-  // show the jquery autocomplete combobox instead of
-  // standard dropdowns
-  $( ".js_combobox" ).combobox();
 };
 
 var updateTotalValuesCallback = function (el) {
