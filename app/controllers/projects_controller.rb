@@ -128,7 +128,7 @@ class ProjectsController < BaseController
     org_workplan_filename = "#{@response.organization.name.split.join('_').
        gsub(/\W+/, '').downcase.underscore}_workplan"
 
-    report = Reports::ActivityManagerWorkplan.new(@response, nil, 'xls')
+    report = Reports::FunctionalWorkplan.new(@response, nil, 'xls')
     send_report_file(report, org_workplan_filename)
   end
 

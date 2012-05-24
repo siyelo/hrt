@@ -1,6 +1,7 @@
-class Reports::ActivityManagerWorkplan
+class Reports::FunctionalWorkplan
   include Reports::Helpers
   include EncodingHelper
+  include CurrencyNumberHelper
   include CurrencyViewNumberHelper
 
   attr_accessor :builder
@@ -55,9 +56,8 @@ class Reports::ActivityManagerWorkplan
     row << "Funding Sources"
     row << "Activity Name"
     row << "Activity Description"
-    row << "Activity / Indirect Cost"
-    row << "Activity Budget"
-    row << "Currency"
+    row << "Type"
+    row << "Activity Budget ($)"
     row << "Implementers"
     row << "Targets"
     row << "Outputs"
@@ -75,14 +75,14 @@ class Reports::ActivityManagerWorkplan
   end
 
   def add_activity_columns(activity, index, row)
+    klass = activity.class == OtherCost ? 'Indirect Cost' : activity.class.to_s.titleize
     4.times do
       row << "" if index > 0
     end
     row << nice_activity_name(activity, 50)
     row << sanitize_encoding(activity.description)
-    row << activity.class.to_s.titleize
-    row << activity.total_budget
-    row << activity.currency
+    row << klass
+    row << universal_currency_converter(activity.total_budget, activity.project.currency, 'USD')
     row << sanitize_encoding(activity.implementer_splits.map{|is| is.organization.name}.join(', '))
     row << sanitize_encoding(activity.targets.map{ |e| e.description }.join(', '))
     row << sanitize_encoding(activity.beneficiaries.map{ |e| e.short_display }.join(', '))
