@@ -74,41 +74,6 @@ describe ProjectsController do
         response.header["Content-Disposition"].should == "attachment; filename=import_template.xls"
       end
     end
-
-    describe "Import and Save" do
-      before :each do
-        @data_response = mock_model(DataResponse)
-        DataResponse.stub(:find).and_return(@data_response)
-      end
-
-      context "reporter" do
-        it "cannot import and save using delayed_job" do
-          user = stub_logged_in_reporter
-          user.stub_chain(:organization, :data_responses,
-                          :latest_first, :first).and_return(@data_response)
-
-          post :import_and_save
-
-          response.should redirect_to(root_url)
-          flash[:error].should == "You must be an administrator to access that page"
-        end
-      end
-
-      # TODO: stub params[:file]
-      context "sysadmin" do
-        it "can import and save using delayed_job" do
-          user = stub_logged_in_sysadmin
-          user.stub_chain(:organization, :data_responses,
-                          :latest_first, :first).and_return(@data_response)
-          DataResponse.stub(:find_by_id).with('1').and_return(@data_response)
-          post :import_and_save
-
-          response.should redirect_to(projects_path)
-          flash[:error].should == "Please select a file to upload"
-        end
-      end
-    end
-
   end
 
   describe "as a activity_manager" do

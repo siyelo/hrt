@@ -115,12 +115,12 @@ HrtProjects.import = function () {
     var activity_box = $(this).parents('.activity_box');
     //collapse the others, in an accordion style
     $.each($.merge(activity_box.prevAll('.activity_box'), activity_box.nextAll('.activity_box')), function () {
-      $(this).find('.main').hide();
-      HrtForm.toggleCollapsed($(this).find('.main'), $(this).find('.header span'));
+      $(this).find('.js_main').hide();
+      HrtForm.toggleCollapsed($(this).find('.js_main'), $(this).find('.header span'));
     });
 
-    activity_box.find('.main').toggle();
-    HrtForm.toggleCollapsed(activity_box.find('.main'), activity_box.find('.header span'));
+    activity_box.find('.js_main').toggle();
+    HrtForm.toggleCollapsed(activity_box.find('.js_main'), activity_box.find('.header span'));
   });
 
   $('.header:first').trigger('click'); // expand the first one on page load

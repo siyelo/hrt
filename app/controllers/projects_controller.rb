@@ -6,7 +6,6 @@ class ProjectsController < BaseController
   helper_method :sort_column, :sort_direction
   before_filter :strip_commas_from_in_flows, :only => [:create, :update]
   before_filter :prevent_browser_cache, :only => [:index, :edit, :update] # firefox misbehaving
-  before_filter :require_admin, :only => [:import_and_save]
   before_filter :prevent_activity_manager, :only => [:create, :update, :destroy]
 
   def new
@@ -80,25 +79,12 @@ class ProjectsController < BaseController
   def import
     if params[:file].present?
       @i = Importer.new(@response, params[:file].path)
-      @i.import
       @projects = @i.projects
       @activities = @i.activities
     else
       flash[:error] = 'Please select a file to upload'
       redirect_to projects_url
     end
-  end
-
-  def import_and_save
-    if params[:file].present?
-      file = params[:file].open.read
-      @i = Importer.new(@response, file)
-      @i.save
-      flash[:notice] = 'Your file is being processed, please reload this page in a couple of minutes to see the results'
-    else
-      flash[:error] = 'Please select a file to upload'
-    end
-    redirect_to projects_url
   end
 
   def download_template
