@@ -26,3 +26,4 @@ Feature: Reporter can see activity overview report
     And I should see "Locations" within "#tabs-container"
     And I should see "Inputs" within "#tabs-container"
     And I should see "USD"
+    And I should see "Total" within "table"

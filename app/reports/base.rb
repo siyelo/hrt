@@ -53,6 +53,10 @@ module Reports
       currency
     end
 
+    def show_totals
+      true
+    end
+
     private
 
     # Combines collection of CodingBudgetDistrict and CodingSpendDistrict objects

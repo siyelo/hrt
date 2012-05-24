@@ -79,7 +79,8 @@ module Charts
         if val.to_f > 0.0
           name = e.send(self.class.name_method).presence || "no name"
           key = name.send(self.class.name_format)
-          result[key] = val.send(self.class.value_format)
+          # in the event of duplicate keys, just add the values together
+          result[key] = val.send(self.class.value_format) + (result[key] || 0)
         end
         result
       end

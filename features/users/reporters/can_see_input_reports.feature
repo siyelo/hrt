@@ -22,5 +22,6 @@ Feature: Reporter can see location report
     And I should see "Some Input"
     And I should see "120" within "table"
     And I should see "220" within "table"
+    And I should see "Total" within "table"
 
 

@@ -11,3 +11,13 @@
         %td= resource_link(@report, e)
         %td.align= @report.format(e.total_spend)
         %td.align= @report.format(e.total_budget)
+    - if @report.show_totals
+      %tr.summary
+        %td
+          Total
+        %td.align
+          %span.currency= @report.currency
+          = n2c(@report.total_spend, "", ",")
+        %td.align
+          %span.currency= @report.currency
+          = n2c(@report.total_budget, "", ",")

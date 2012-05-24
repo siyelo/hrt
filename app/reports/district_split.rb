@@ -27,6 +27,10 @@ class Reports::DistrictSplit < Reports::Base
     district_workplan_admin_reports_path(:district => element.name)
   end
 
+  def show_totals
+    false
+  end
+
   private
   def percentage_by_districts
     national  = locations.detect{|l| l.short_display == 'National Level' }

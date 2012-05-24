@@ -28,6 +28,7 @@ Feature: Reporter can see project overview report
     And I should see "USD"
     And I should see "some cost" within "table"
     And I should see "activity1" within "table"
+    And I should see "Total" within "table"
 
   @javascript
   Scenario: See reports projects locations
@@ -40,3 +41,4 @@ Feature: Reporter can see project overview report
     And I follow "Locations"
     And I should see "110.00" within "table"
     And I should see "220.00" within "table"
+    And I should see "Total" within "table"

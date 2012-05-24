@@ -38,6 +38,9 @@ module Reports
       Charts::Budget.new(top_budgeters).google_pie
     end
 
+    def show_totals
+      false
+    end
 
     private
     ###
