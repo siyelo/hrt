@@ -18,11 +18,11 @@
 #charts_tables
   .reporters_tab{:"data-loaded" => 'true'}
     = render '/reports/shared/report_data'
-  .funders_tab{:"data-loaded" => 'false', :"data-url" => funders_admin_reports_path, :style => 'display: none;'}
+  .funders_tab{:"data-loaded" => 'false', :"data-url" => funders_admin_reports_path, :"data-chart" => 'column', :style => 'display: none;'}
     = image_tag "ajax-loader.gif", :class => "ajax-loader"
-  .progress_tab{:"data-loaded" => 'false', :"data-url" => 'TODO', :style => 'display: none;'}
+  .progress_tab{:"data-loaded" => 'false', :"data-url" => 'TODO', :"data-chart" => 'column', :style => 'display: none;'}
     = image_tag "ajax-loader.gif", :class => "ajax-loader"
-  .locations_tab.download{:"data-loaded" => 'false', :"data-url" => locations_admin_reports_path, :style => 'display: none;'}
+  .locations_tab.download{:"data-loaded" => 'false', :"data-url" => locations_admin_reports_path, :"data-chart" => 'column', :style => 'display: none;'}
     = image_tag "ajax-loader.gif", :class => "ajax-loader"
-  .purposes_tab{:"data-loaded" => 'false', :"data-url" => 'TODO', :style => 'display: none;'}
+  .purposes_tab{:"data-loaded" => 'false', :"data-url" => 'TODO', :"data-chart" => 'column', :style => 'display: none;'}
     = image_tag "ajax-loader.gif", :class => "ajax-loader"

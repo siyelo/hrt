@@ -17,6 +17,22 @@ HrtCharts.drawBarChart = function (id, rawData, width, height) {
   });
 };
 
+HrtCharts.drawColumnChart = function (id, rawData, width, height, maxPercentage) {
+  var data = google.visualization.arrayToDataTable(rawData);
+
+  var formatter = new google.visualization.NumberFormat({fractionDigits: 1, suffix: '%'});
+  for (var i = 0; i < rawData[0].length; i++) {
+    formatter.format(data, i);
+  }
+
+  var chart = new google.visualization.ColumnChart(id);
+  chart.draw(data, {width: width, height: height,
+    chartArea: {width: 250, height: 220, left: 50},
+    backgroundColor: '#FBFBFB',
+    vAxis: {format:"#'%", maxValue: maxPercentage}
+  });
+};
+
 HrtCharts.drawPieChart = function (element, data_rows, width, height) {
   if (typeof(data_rows) === "undefined") {
     return;

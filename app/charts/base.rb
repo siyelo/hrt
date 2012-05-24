@@ -55,12 +55,24 @@ module Charts
       ].to_json
     end
 
+    def google_column
+      return empty_google_column if @data.empty?
+      [
+        [bar_legend].concat(column_sort.map{ |e| e[0] }),
+        [''].concat(column_sort.map{ |e| (e[1] * 100.0 / total).round_with_precision(2) })
+      ].to_json
+    end
+
     def pie_sort
       self.sort_by_values_desc
     end
 
     def bar_sort
       self.sort_by_name
+    end
+
+    def column_sort
+      self.sort_by_values_desc[0..9]
     end
 
     def sort_by_values_desc
@@ -88,6 +100,10 @@ module Charts
 
     def empty_google_pie
       { :names => {}, :values => [] }.to_json
+    end
+
+    def empty_google_column
+      [['', 'No data'],['', 0]].to_json
     end
 
     def total

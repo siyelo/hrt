@@ -46,14 +46,14 @@ describe Reports::Organization do
     Charts::Spend.stub(:new).and_return(mock(:pie, :google_pie => ""))
     Charts::Spend.should_receive(:new).once.with(projects)
     report.should_receive(:collection).once.and_return projects # avoid sorted scope
-    pie = report.expenditure_pie
+    pie = report.expenditure_chart
   end
 
   it "should have budget pie" do
     Charts::Budget.stub(:new).and_return(mock(:pie, :google_pie => ""))
     Charts::Budget.should_receive(:new).once.with(projects)
     report.should_receive(:collection).once.and_return projects # avoid sorted scope
-    report.budget_pie
+    report.budget_chart
   end
 
   describe "#percentage_change" do
