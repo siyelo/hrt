@@ -3,8 +3,12 @@
   .wrapper
     %ul
       %li.home_tab{:class => ( controller.class == DashboardController ? 'active' : nil)}
-        %a{:href => dashboard_path}
-          %span Home
+        - if current_user.sysadmin? && !is_admin_controller
+          %a{:href => dashboard_path(:response_id => current_user_response_for_current_request)}
+            %span Home
+        - else
+          %a{:href => dashboard_path}
+            %span Home
 
       - if current_user.sysadmin? && is_admin_controller
         = build_admin_nav_tab('responses', admin_responses_path)

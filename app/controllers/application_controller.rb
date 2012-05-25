@@ -7,7 +7,8 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   filter_parameter_logging :password, :password_confirmation
   helper_method :current_user_session, :current_user, :current_request,
-    :current_response, :previous_response, :next_response
+    :current_response, :previous_response, :next_response,
+    :current_user_response_for_current_request
 
   include ApplicationHelper
   include SslRequirement

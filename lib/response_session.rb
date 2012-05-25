@@ -25,6 +25,15 @@ module ResponseSession
       response_for_request(current_request.next_request)
     end
 
+    def current_user_response_for_current_request
+      if current_request
+        response = current_user.organization.data_responses.
+          with_request(current_request).first
+      end
+
+      response ? response.id : current_user.organization.data_responses.last.id
+    end
+
     private
       def set_current_response
         set_response(detect_response)
