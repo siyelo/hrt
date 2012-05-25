@@ -62,7 +62,7 @@ class Reports::DistrictWorkplan
   end
 
   def header
-    ["Partner", "Project", "Activity", "Expenditure", "Budget", "Implementers"]
+    ["Partner", "Project", "Activity", "Expenditure (RWF)", "Budget (RWF)", "Implementers"]
   end
 
   def spend_district_amount(activity)

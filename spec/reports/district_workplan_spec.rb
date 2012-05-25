@@ -56,13 +56,13 @@ describe Reports::DistrictWorkplan do
     rows[1]["Activity"].should == 'activity2'
     rows[2]["Activity"].should == 'Total'
 
-    rows[0]["Expenditure"].should == 200.0
-    rows[1]["Expenditure"].should == 200.0
-    rows[2]["Expenditure"].should == 400.0
+    rows[0]["Expenditure (RWF)"].should == 200.0
+    rows[1]["Expenditure (RWF)"].should == 200.0
+    rows[2]["Expenditure (RWF)"].should == 400.0
 
-    rows[0]["Budget"].should == 50.0
-    rows[1]["Budget"].should == 50.0
-    rows[2]["Budget"].should == 100.0
+    rows[0]["Budget (RWF)"].should == 50.0
+    rows[1]["Budget (RWF)"].should == 50.0
+    rows[2]["Budget (RWF)"].should == 100.0
 
     rows[0]["Implementers"].should == 'organization2'
     rows[1]["Implementers"].should == 'organization2'
