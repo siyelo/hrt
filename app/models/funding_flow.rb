@@ -4,7 +4,7 @@ class FundingFlow < ActiveRecord::Base
   ### Attributes
   attr_accessible :organization_text, :project_id, :from, :to,
                   :self_provider_flag, :organization_id_from,
-                  :spend, :budget
+                  :spend, :budget, :_destroy
 
   ### Associations
   belongs_to :from, :class_name => "Organization", :foreign_key => "organization_id_from"

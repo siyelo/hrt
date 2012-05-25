@@ -5,7 +5,7 @@
   belongs_to :organization # the implementer
 
   attr_accessible :activity_id, :organization_id, :budget, :spend,
-    :organization_mask, :organization
+    :organization_mask, :organization, :_destroy
 
   ### Validations
   validates_presence_of :organization_mask

@@ -18,7 +18,7 @@ class Activity < ActiveRecord::Base
     :beneficiary_ids, :other_beneficiaries, :implementer_splits_attributes,
     :organization_ids, :targets_attributes, :outputs_attributes,
     :am_approved_date, :user_id, :data_response_id, :planned_for_gor_q1,
-    :planned_for_gor_q2, :planned_for_gor_q3, :planned_for_gor_q4
+    :planned_for_gor_q2, :planned_for_gor_q3, :planned_for_gor_q4, :_destroy
 
   ### Associations
   belongs_to :data_response
