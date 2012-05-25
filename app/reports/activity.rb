@@ -7,11 +7,11 @@ module Reports
       @resource.implementer_splits.sorted.find(:all, :include => :organization)
     end
 
-    def expenditure_pie
+    def expenditure_chart
       Charts::ImplementerSplits::Spend.new(collection).google_pie
     end
 
-    def budget_pie
+    def budget_chart
       Charts::ImplementerSplits::Budget.new(collection).google_pie
     end
   end

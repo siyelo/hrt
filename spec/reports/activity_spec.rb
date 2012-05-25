@@ -42,14 +42,14 @@ describe Reports::Activity do
     Charts::ImplementerSplits::Spend.stub(:new).and_return(mock(:pie, :google_pie => ""))
     Charts::ImplementerSplits::Spend.should_receive(:new).once.with(implementer_splits)
     report.should_receive(:collection).once.and_return implementer_splits
-    report.expenditure_pie
+    report.expenditure_chart
   end
 
   it "should have budget pie" do
     Charts::ImplementerSplits::Budget.stub(:new).and_return(mock(:pie, :google_pie => ""))
     Charts::ImplementerSplits::Budget.should_receive(:new).once.with(implementer_splits)
     report.should_receive(:collection).once.and_return implementer_splits
-    report.budget_pie
+    report.budget_chart
   end
 
 end

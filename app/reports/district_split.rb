@@ -31,6 +31,20 @@ class Reports::DistrictSplit < Reports::Base
     false
   end
 
+  def expenditure_chart
+    Charts::Spend.new(collection).google_column
+  end
+
+  def budget_chart
+    Charts::Budget.new(collection).google_column
+  end
+
+  def max_percentage
+    spend = collection[0].total_spend
+    budget = collection[0].total_budget
+    spend > budget ? spend : budget
+  end
+
   private
   def percentage_by_districts
     national  = locations.detect{|l| l.short_display == 'National Level' }
@@ -51,12 +65,18 @@ class Reports::DistrictSplit < Reports::Base
     @total_budget ||= amount_by_district.inject(0) do |acc, district|
       acc += district[1][:budget]
     end
+    return 1 if @total_budget == 0
+
+    @total_budget
   end
 
   def total_spend
     @total_spend ||= amount_by_district.inject(0) do |acc, district|
       acc += district[1][:spend]
     end
+    return 1 if @total_spend == 0
+
+    @total_spend
   end
 
   def amount_by_district

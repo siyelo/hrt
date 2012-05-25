@@ -30,16 +30,23 @@ module Reports
       end
     end
 
-    def expenditure_pie
+    def expenditure_chart
       Charts::Spend.new(top_spenders).google_pie
     end
 
-    def budget_pie
+    def budget_chart
       Charts::Budget.new(top_budgeters).google_pie
     end
 
     def show_totals
       false
+    end
+
+    def max_percentage
+      return 0 if collection.blank?
+      max_spend = (top_spenders[0].total_spend / total_spend) * 100
+      max_budget = (top_budgeters[0].total_budget / total_budget) * 100
+      max_spend > max_budget ? max_spend : max_budget
     end
 
     private

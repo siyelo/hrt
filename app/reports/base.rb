@@ -35,11 +35,11 @@ module Reports
       nil
     end
 
-    def expenditure_pie
+    def expenditure_chart
       Charts::Spend.new(collection).google_pie
     end
 
-    def budget_pie
+    def budget_chart
       Charts::Budget.new(collection).google_pie
     end
 
@@ -55,6 +55,10 @@ module Reports
 
     def show_totals
       true
+    end
+
+    def max_percentage
+      100
     end
 
     private

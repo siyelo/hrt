@@ -52,16 +52,16 @@ describe Reports::Reporters do
   it "orders the spend chart" do
     expected = rows
     Charts::Spend.should_receive(:new).once.with(expected).
-      and_return(mock(:pie, :google_pie => ""))
+      and_return(mock(:column, :google_column => ""))
     report.should_receive(:create_rows).once.and_return rows
-    report.expenditure_pie
+    report.expenditure_chart
   end
 
   it "orders the budget chart" do
     expected = rows.reverse
     Charts::Budget.should_receive(:new).once.with(expected).
-      and_return(mock(:pie, :google_pie => ""))
+      and_return(mock(:column, :google_column => ""))
     report.should_receive(:create_rows).once.and_return rows
-    report.budget_pie
+    report.budget_chart
   end
 end
