@@ -25,9 +25,7 @@ class ResponseCloner
       project = previous_project.clone
       project.previous = previous_project
       project.data_response_id = nil
-      %w[data_response_id budget_type].each do |assoc|
-        project.send("#{assoc}=", nil)
-      end
+      project.budget_type = nil
       project.in_flows = clone_in_flows(previous_project)
       project.activities = clone_activities(previous_project.activities, new_response)
       project.data_response = new_response
@@ -36,12 +34,13 @@ class ResponseCloner
   end
 
   def clone_in_flows(project)
-    project.in_flows.map do |in_flow|
+    project.in_flows.map do |previous_in_flow|
+      in_flow = previous_in_flow.clone
       in_flow.project_id = nil
-      in_flow.previous = in_flow
+      in_flow.previous = previous_in_flow
       in_flow.spend = 0
       in_flow.budget = 0
-      in_flow.clone
+      in_flow
     end
   end
 
@@ -49,9 +48,11 @@ class ResponseCloner
     activities.map do |old_activity|
       activity = old_activity.clone
       activity.previous = old_activity
-      %w[project_id approved am_approved data_response_id am_approved_date].each do |assoc|
-        activity.send("#{assoc}=", nil)
-      end
+      activity.project_id = nil
+      activity.data_response_id = nil
+      activity.approved = nil
+      activity.am_approved = nil
+      activity.am_approved_date = nil
       activity.data_response = new_response
       activity.implementer_splits = clone_implementer_splits(old_activity)
       activity.beneficiaries = old_activity.beneficiaries
@@ -70,9 +71,8 @@ class ResponseCloner
     activity.implementer_splits.map do |old_split|
       split = old_split.clone
       split.previous = old_split
-      %w[activity_id double_count].each do |assoc|
-        split.send("#{assoc}=", nil)
-      end
+      split.activity_id = nil
+      split.double_count = nil
       split.spend = 0
       split.budget = 0
       split

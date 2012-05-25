@@ -30,8 +30,10 @@ describe ResponseCloner do
     @current_activity.targets       = [Factory :target]
     @current_activity.outputs       = [Factory :output]
     @current_split    = Factory :implementer_split,
-                               :activity => @current_activity,
-                               :organization => @organization
+                                :activity => @current_activity,
+                                :organization => @organization,
+                                :budget => 100,
+                                :spend => 200
     @current_activity.save #recalculate implementer split total on activity
   end
 
@@ -64,7 +66,6 @@ describe ResponseCloner do
     project.total_budget.should == 0
 
     #clones activities & other costs
-    ::Activity.count.should == 6
     project.activities.count.should == 2
     new_response.activities.count.should == 3
     new_response.other_costs.without_project.count.should == 1
@@ -79,6 +80,13 @@ describe ResponseCloner do
     activity.targets.count.should == 1
     activity.outputs.count.should == 1
     Beneficiary.count.should == 1 #sanity - doesn't create new beneficiaries
+
+    #it does not change existing data
+    @current_project.reload
+    @current_project.total_budget.should == 100
+    @current_project.total_spend.should == 200
+    @current_project.in_flows_total_budget.to_i.should == 10
+    @current_project.in_flows_total_spend.to_i.should == 20
 
     Activity.last.data_response_id.should_not be_nil
   end
