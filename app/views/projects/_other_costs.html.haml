@@ -3,12 +3,12 @@
     %td{:colspan => 100}
       %h4
         Indirect Costs
-        
+
   - other_costs.each do |other_cost|
     = render "other_costs/other_cost", :other_cost => other_cost
-    
+
 - else
   %tr.none
     %td{:colspan => 100}
       Indirect Costs not yet added.
-      = link_to "Add an Indirect Cost now.", new_other_cost_path(:project_id => project.id), :class => 'js_toggle_other_cost_form'
+      = link_to "Add an Indirect Cost now.", new_other_cost_path(:project_id => project.id), :"data-project" => project.id, :"data-type" => 'other_cost', :class => 'js_toggle_other_cost_form js_address'

@@ -47,7 +47,7 @@ HrtProjects.init = function () {
   Hrt.approveBudget();
 
   $('.js_address').address(function() {
-    return 'new_' + $(this).html().toLowerCase();
+    return 'new_' + $(this).data('type');
   });
 
   $.address.externalChange(function() {
@@ -66,7 +66,7 @@ HrtProjects.init = function () {
         $('#new_activity_form').fadeIn();
         HrtOutlays.init();
       }
-      else if (hash == '/new_other cost'){
+      else if (hash == '/new_other_cost'){
         HrtForm.hideAll();
         $('#new_other_cost_form').fadeIn();
       }
@@ -84,6 +84,7 @@ HrtProjects.init = function () {
     e.preventDefault();
     HrtForm.hideAll();
     $('#new_activity_form').fadeIn();
+    $('#activity_project_id').val($(this).data('project'));
     $('#new_activity_form #activity_name').focus();
     HrtOutlays.init();
   });
@@ -92,6 +93,7 @@ HrtProjects.init = function () {
     e.preventDefault();
     HrtForm.hideAll();
     $('#new_other_cost_form').fadeIn();
+    $('#other_cost_project_id').val($(this).data('project'));
     $('#new_other_cost_form #other_cost_name').focus();
   });
 

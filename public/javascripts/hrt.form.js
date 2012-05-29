@@ -162,6 +162,8 @@ HrtForm.blurDemoText = function (elements) {
 };
 
 HrtForm.hideAll = function() {
+  $('#activity_project_id').val(-1);
+  $('#other_cost_project_id').val('');
   $('#projects_listing').hide();
   $('#new_project_form').hide();
   $('#new_activity_form').hide();
