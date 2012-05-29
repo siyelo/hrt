@@ -5,6 +5,7 @@ describe Project do
   describe "Associations" do
     subject { basic_setup_project; @project }
     it { should belong_to(:data_response) }
+    it { should belong_to(:previous) }
     it { should have_many(:activities).dependent(:destroy) }
     it { should have_many(:other_costs).dependent(:destroy) }
     it { should have_many(:normal_activities).dependent(:destroy) }

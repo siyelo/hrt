@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120523082733) do
+ActiveRecord::Schema.define(:version => 20120525083025) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(:version => 20120523082733) do
     t.boolean  "planned_for_gor_q2"
     t.boolean  "planned_for_gor_q3"
     t.boolean  "planned_for_gor_q4"
+    t.integer  "previous_id"
   end
 
   add_index "activities", ["activity_id"], :name => "index_activities_on_activity_id"
@@ -110,6 +111,7 @@ ActiveRecord::Schema.define(:version => 20120523082733) do
     t.integer  "organization_id"
     t.string   "state"
     t.integer  "projects_count",  :default => 0
+    t.integer  "previous_id"
   end
 
   add_index "data_responses", ["data_request_id"], :name => "index_data_responses_on_data_request_id"
@@ -154,6 +156,7 @@ ActiveRecord::Schema.define(:version => 20120523082733) do
     t.decimal  "spend_q4_prev"
     t.decimal  "budget_q4_prev"
     t.integer  "project_from_id"
+    t.integer  "previous_id"
   end
 
   add_index "funding_flows", ["project_id"], :name => "index_funding_flows_on_project_id"
@@ -167,6 +170,7 @@ ActiveRecord::Schema.define(:version => 20120523082733) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "double_count"
+    t.integer  "previous_id"
   end
 
   create_table "organizations", :force => true do |t|
@@ -208,6 +212,7 @@ ActiveRecord::Schema.define(:version => 20120523082733) do
     t.string   "currency"
     t.integer  "data_response_id"
     t.string   "budget_type"
+    t.integer  "previous_id"
   end
 
   add_index "projects", ["data_response_id"], :name => "index_projects_on_data_response_id"

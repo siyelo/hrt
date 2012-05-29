@@ -86,7 +86,7 @@ describe DataResponse::States do
     context "first project is created" do
       it "transitions from unstarted to started when first project is created" do
         @response.state.should == 'unstarted'
-        Factory(:project, :data_response => @response)
+        project = Factory(:project, :data_response => @response)
         @response.state.should == 'started'
       end
 
@@ -100,7 +100,10 @@ describe DataResponse::States do
     context "first other cost without is created" do
       it "transitions from unstarted to started when first project is created" do
         @response.state.should == 'unstarted'
-        Factory(:other_cost, :data_response => @response)
+        split = Factory(:implementer_split, :organization => Factory(:organization))
+        other_cost = Factory(:other_cost,
+                             :data_response => @response,
+                             :implementer_splits => [split])
         @response.reload.state.should == 'started'
       end
 

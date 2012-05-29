@@ -46,8 +46,12 @@ class DataRequest < ActiveRecord::Base
 
   def create_data_responses
     transaction do
-      Organization.reporting.all.each do |organization|
-        organization.create_data_responses!
+      if previous_request
+        ResponseCloner.new(previous_request, self).deep_clone!
+      else
+        Organization.reporting.all.each do |organization|
+          organization.create_data_responses!
+        end
       end
     end
   end

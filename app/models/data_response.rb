@@ -18,6 +18,9 @@ class DataResponse < ActiveRecord::Base
   has_many :other_costs, :dependent => :destroy
   has_many :implementer_splits, :through => :activities
   has_many :comments, :as => :commentable, :dependent => :destroy
+  belongs_to :previous, :class_name => 'DataResponse'
+
+  accepts_nested_attributes_for :projects, :other_costs
 
   ### Validations
   validates_presence_of   :data_request_id, :organization_id

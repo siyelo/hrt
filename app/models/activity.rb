@@ -24,6 +24,7 @@ class Activity < ActiveRecord::Base
   belongs_to :data_response
   belongs_to :project
   belongs_to :user
+  belongs_to :previous, :class_name => 'Activity'
   has_and_belongs_to_many :beneficiaries # codes representing who benefits from this activity
   has_many :implementer_splits, :dependent => :delete_all
   has_many :implementers, :through => :implementer_splits, :source => :organization
@@ -320,7 +321,7 @@ class Activity < ActiveRecord::Base
 
     def restart_response_if_all_activities_removed
       # use .length since .empty? uses counter cache that isnt updated yet.
-      if self.response.activities.length == 0
+      if response && self.response.activities.length == 0
         response.state = 'started'
         response.save!
       end

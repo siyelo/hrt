@@ -20,6 +20,7 @@ describe ImplementerSplit do
   describe "Associations:" do
     it { should belong_to :activity }
     it { should belong_to :organization }
+    it { should belong_to :previous }
   end
 
   describe "Attributes:" do
