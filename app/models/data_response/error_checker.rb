@@ -10,10 +10,10 @@ class DataResponse < ActiveRecord::Base
       errors.add_to_base("Activites are not yet entered.") unless projects_have_activities?
       errors.add_to_base("Activites are not yet classified.") unless activities_coded?
       errors.add_to_base("Projects have invalid funding sources.") unless projects_have_valid_funding_sources?
-     if projects_have_other_costs? && !other_costs_coded?
+      if projects_have_other_costs? && !other_costs_coded?
         errors.add_to_base("Indirect Costs are not yet classified.")
       end
-      unless implementer_splits_entered_and_valid?
+      unless implementer_splits_entered?
         errors.add_to_base("Activities are missing implementers or implementer
         splits are invalid.")
       end
@@ -23,7 +23,7 @@ class DataResponse < ActiveRecord::Base
       projects_entered? &&
         projects_have_activities? &&
         projects_have_valid_funding_sources? &&
-        implementer_splits_entered_and_valid? &&
+        implementer_splits_entered? &&
         activities_coded? &&
         (projects_have_other_costs? ? other_costs_coded? : true)
     end
@@ -75,18 +75,8 @@ class DataResponse < ActiveRecord::Base
     end
     memoize :projects_have_other_costs?
 
-    def implementer_splits_entered_and_valid?
-      activities_without_implementer_splits.empty? && invalid_implementer_splits.empty?
-    end
-
-    def invalid_implementer_splits
-      invalid = []
-      activities.each do |activity|
-        activity.implementer_splits.select{ |is| !is.valid? }.each do |split|
-          invalid << split
-        end
-      end
-      return invalid
+    def implementer_splits_entered?
+      activities_without_implementer_splits.empty?
     end
 
     def activities_without_implementer_splits

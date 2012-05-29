@@ -3,7 +3,3 @@
 %ul.push
   - activities.each do |activity|
     %li= link_to friendly_name(activity, 50), edit_activity_path(activity)
-    %ol.group
-      - invalid_implementers.each do |split|
-        - if split.activity == activity
-          %li= split.try(:organization).try(:name)

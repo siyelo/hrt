@@ -1,5 +1,3 @@
-- invalid_implementers = @response.invalid_implementer_splits
-- activities_with_invalid_implementers = invalid_implementers.map(&:activity).uniq
 - activities_without_implementers = @response.activities_without_implementer_splits
 - title("Submit Response")
 
@@ -86,8 +84,8 @@
           - unless activities_without_implementers.empty?
             = render 'activities_without_implementers', :activities => activities_without_implementers
 
-          - unless invalid_implementers.empty?
-            = render 'invalid_activities', :activities => activities_with_invalid_implementers, :invalid_implementers => invalid_implementers
+          - unless activities_without_implementers.empty?
+            = render 'invalid_activities', :activities => activities_without_implementers
 
   %li.alt
     %h2 Classifications
