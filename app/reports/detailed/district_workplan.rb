@@ -1,4 +1,4 @@
-class Reports::DistrictWorkplan
+class Reports::Detailed::DistrictWorkplan
   include CurrencyNumberHelper
 
   attr_accessor :request, :district, :activities, :builder

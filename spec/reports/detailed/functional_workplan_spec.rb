@@ -1,6 +1,6 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe Reports::FunctionalWorkplan do
+describe Reports::Detailed::FunctionalWorkplan do
   describe "export projects and activities to xls" do
     it "should return xls with blank cells for repeated project & activity" do
       @organization  = Factory(:organization, :name => 'org1')
@@ -35,7 +35,7 @@ describe Reports::FunctionalWorkplan do
       @activity2.reload
       @activity2.save!
 
-      xls = Reports::FunctionalWorkplan.new(@response,
+      xls = Reports::Detailed::FunctionalWorkplan.new(@response,
              @user.organizations, 'xls').data
       rows = Spreadsheet.open(StringIO.new(xls)).worksheet(0)
       rows.row(0).should == ["Organization Name", "Project Name",

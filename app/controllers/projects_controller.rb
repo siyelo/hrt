@@ -103,7 +103,7 @@ class ProjectsController < BaseController
   end
 
   def export
-    report = Reports::ProjectsExport.new(current_response, 'xls')
+    report = Reports::Detailed::ProjectsExport.new(current_response, 'xls')
     send_report_file(report, "all_activities")
   end
 
@@ -112,7 +112,7 @@ class ProjectsController < BaseController
     org_workplan_filename = "#{@response.organization.name.split.join('_').
        gsub(/\W+/, '').downcase.underscore}_workplan"
 
-    report = Reports::FunctionalWorkplan.new(@response, nil, 'xls')
+    report = Reports::Detailed::FunctionalWorkplan.new(@response, nil, 'xls')
     send_report_file(report, org_workplan_filename)
   end
 

@@ -1,5 +1,5 @@
-class Reports::FundingSourceSplit
-  include Reports::Helpers
+class Reports::Detailed::FundingSourceSplit
+  include Reports::Detailed::Helpers
   include CurrencyNumberHelper
   include CurrencyViewNumberHelper
 

@@ -1,8 +1,8 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe Reports::ActivityOverview do
+describe Reports::Detailed::ActivityOverview do
   def run_report(request)
-    content = Reports::ActivityOverview.new(request, 'xls').data
+    content = Reports::Detailed::ActivityOverview.new(request, 'xls').data
     FileParser.parse(content, 'xls')
   end
 

@@ -1,5 +1,5 @@
-class Reports::DynamicQuery
-  include Reports::Helpers
+class Reports::Detailed::DynamicQuery
+  include Reports::Detailed::Helpers
   include CurrencyNumberHelper
   include CurrencyViewNumberHelper
 

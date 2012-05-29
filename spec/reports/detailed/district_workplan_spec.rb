@@ -1,6 +1,6 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe Reports::DistrictWorkplan do
+describe Reports::Detailed::DistrictWorkplan do
   before :each do
     currency = Factory(:currency, :from => 'USD', :to => 'RWF', :rate => 2)
     organization1 = Factory(:organization, :name => 'organization1')
@@ -41,7 +41,8 @@ describe Reports::DistrictWorkplan do
   end
 
   it "can generate district workplan" do
-    content = Reports::DistrictWorkplan.new(@data_request, @district1, 'xls').data
+    content = Reports::Detailed::DistrictWorkplan.new(
+      @data_request, @district1, 'xls').data
     rows = FileParser.parse(content, 'xls')
 
     rows[0]["Partner"].should == 'organization1'
@@ -102,7 +103,8 @@ describe Reports::DistrictWorkplan do
     classifications4 = { @district1.id => 50, @district2.id => 50 }
     CodingSpendDistrict.update_classifications(activity4, classifications4)
 
-    xls = Reports::DistrictWorkplan.new(@data_request, @district1, 'xls').data
+    xls = Reports::Detailed::DistrictWorkplan.new(
+      @data_request, @district1, 'xls').data
     rows = Spreadsheet.open(StringIO.new(xls)).worksheet(0)
     rows.row(4).to_a.should == ['organization3', 'project2', 'activity3',
                                  200.0, 50.0, 'organization4']

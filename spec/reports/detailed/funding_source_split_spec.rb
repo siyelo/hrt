@@ -1,8 +1,8 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe Reports::FundingSourceSplit do
+describe Reports::Detailed::FundingSourceSplit do
   def run_report(amount_type)
-    content = Reports::FundingSourceSplit.new(@request, amount_type, 'xls').data
+    content = Reports::Detailed::FundingSourceSplit.new(@request, amount_type, 'xls').data
     FileParser.parse(content, 'xls')
   end
 

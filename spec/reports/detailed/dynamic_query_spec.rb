@@ -1,10 +1,10 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe Reports::DynamicQuery do
+describe Reports::Detailed::DynamicQuery do
 
   describe "budget report" do
     def run_report
-      content = Reports::DynamicQuery.new(@request, :budget, 'xls').data
+      content = Reports::Detailed::DynamicQuery.new(@request, :budget, 'xls').data
       FileParser.parse(content, 'xls')
     end
     context "simple reports" do
@@ -1581,7 +1581,7 @@ describe Reports::DynamicQuery do
 
   describe "spend report" do
     def run_report
-      content = Reports::DynamicQuery.new(@request, :spend, 'xls').data
+      content = Reports::Detailed::DynamicQuery.new(@request, :spend, 'xls').data
       FileParser.parse(content, 'xls')
     end
 

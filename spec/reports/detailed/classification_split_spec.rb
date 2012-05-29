@@ -1,9 +1,9 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe Reports::ClassificationSplit do
+describe Reports::Detailed::ClassificationSplit do
   def run_report(classification_type)
-    content = Reports::ClassificationSplit.new(@request, :budget,
-                                               classification_type.to_sym, 'xls').data
+    content = Reports::Detailed::ClassificationSplit.new(@request, :budget,
+                                        classification_type.to_sym, 'xls').data
     FileParser.parse(content, 'xls')
   end
 
