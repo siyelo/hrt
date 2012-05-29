@@ -35,8 +35,8 @@ end
 data_request = DataRequest.last
 
 
-table1 = run_report(Reports::DynamicQuery.new(data_request, :spend), 'dynamic')
+table1 = run_report(Reports::Detailed::DynamicQuery.new(data_request, :spend), 'dynamic')
 puts find_total(table1, 'Total Amount ($)')
 
-table2 = run_report(Reports::ClassificationSplit.new(data_request, :spend, :purpose), 'classification')
+table2 = run_report(Reports::Detailed::ClassificationSplit.new(data_request, :spend, :purpose), 'classification')
 puts find_total(table2, 'Implementer Spend by Purpose ($)')

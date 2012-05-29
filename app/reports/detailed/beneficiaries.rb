@@ -1,5 +1,5 @@
-class Reports::Beneficiaries
-  include Reports::Helpers
+class Reports::Detailed::Beneficiaries
+  include Reports::Detailed::Helpers
   include CurrencyNumberHelper
   include CurrencyViewNumberHelper
 

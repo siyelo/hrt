@@ -1,5 +1,5 @@
-class Reports::FunctionalWorkplan
-  include Reports::Helpers
+class Reports::Detailed::FunctionalWorkplan
+  include Reports::Detailed::Helpers
   include EncodingHelper
   include CurrencyNumberHelper
   include CurrencyViewNumberHelper

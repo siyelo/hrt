@@ -1,4 +1,4 @@
-module Reports::Helpers
+module Reports::Detailed::Helpers
   # remove me
   include CurrencyNumberHelper # gives n2c method
   include StringCleanerHelper # gives h method

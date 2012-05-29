@@ -1,6 +1,6 @@
-class Reports::ProjectsExport
+class Reports::Detailed::ProjectsExport
   include EncodingHelper
-  include Reports::Helpers
+  include Reports::Detailed::Helpers
 
   attr_accessor :builder
 

@@ -96,7 +96,7 @@ describe ProjectsController do
         @data_response.stub(:request).and_return(@data_request)
         @organization.stub(:name).and_return('Org Name')
 
-        workplan = Reports::FunctionalWorkplan.new(@data_response, nil, 'xls')
+        workplan = Reports::Detailed::FunctionalWorkplan.new(@data_response, nil, 'xls')
         workplan.stub(:data).and_return(StringIO.new('dummy,xls,header'))
         get :export_workplan
         response.should be_success

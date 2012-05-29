@@ -1,5 +1,5 @@
-class Reports::Outputs
-  include Reports::Helpers
+class Reports::Detailed::Outputs
+  include Reports::Detailed::Helpers
   include CurrencyNumberHelper
   include CurrencyViewNumberHelper
 

@@ -1,6 +1,6 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe Reports::ProjectsExport do
+describe Reports::Detailed::ProjectsExport do
   describe "export projects and activities to xls" do
     it "returns xls with blank cells for repeated project & activity" do
       basic_setup_implementer_split
@@ -12,9 +12,9 @@ describe Reports::ProjectsExport do
       @project.budget_type = "on"
       @project.save
 
-      xls = Reports::ProjectsExport.new(@response, 'xls').data
+      xls = Reports::Detailed::ProjectsExport.new(@response, 'xls').data
       rows = Spreadsheet.open(StringIO.new(xls)).worksheet(0)
-      rows.row(0).should == Reports::ProjectsExport::FILE_UPLOAD_COLUMNS
+      rows.row(0).should == Reports::Detailed::ProjectsExport::FILE_UPLOAD_COLUMNS
       rows[1,0].should == @project.name
       rows[1,1].should == "on"
       rows[1,2].should == @project.description

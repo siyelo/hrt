@@ -66,41 +66,41 @@ class Report < ActiveRecord::Base
   def report
     case key
     when 'activity_overview'
-      Reports::ActivityOverview.new(data_request, 'xls')
+      Reports::Detailed::ActivityOverview.new(data_request, 'xls')
     when 'budget_implementer_purpose'
-      Reports::ClassificationSplit.new(data_request, :budget, :purpose, 'xls')
+      Reports::Detailed::ClassificationSplit.new(data_request, :budget, :purpose, 'xls')
     when 'budget_implementer_input'
-      Reports::ClassificationSplit.new(data_request, :budget, :input, 'xls')
+      Reports::Detailed::ClassificationSplit.new(data_request, :budget, :input, 'xls')
     when 'budget_implementer_location'
-      Reports::ClassificationSplit.new(data_request, :budget, :location, 'xls')
+      Reports::Detailed::ClassificationSplit.new(data_request, :budget, :location, 'xls')
     when 'spend_implementer_purpose'
-      Reports::ClassificationSplit.new(data_request, :spend, :purpose, 'xls')
+      Reports::Detailed::ClassificationSplit.new(data_request, :spend, :purpose, 'xls')
     when 'spend_implementer_input'
-      Reports::ClassificationSplit.new(data_request, :spend, :input, 'xls')
+      Reports::Detailed::ClassificationSplit.new(data_request, :spend, :input, 'xls')
     when 'spend_implementer_location'
-      Reports::ClassificationSplit.new(data_request, :spend, :location, 'xls')
+      Reports::Detailed::ClassificationSplit.new(data_request, :spend, :location, 'xls')
     when 'budget_implementer_funding_source'
-      Reports::FundingSourceSplit.new(data_request, :budget, 'xls')
+      Reports::Detailed::FundingSourceSplit.new(data_request, :budget, 'xls')
     when 'spend_implementer_funding_source'
-      Reports::FundingSourceSplit.new(data_request, :spend, 'xls')
+      Reports::Detailed::FundingSourceSplit.new(data_request, :spend, 'xls')
     when 'budget_implementer_target'
-      Reports::Targets.new(data_request, :budget, 'xls')
+      Reports::Detailed::Targets.new(data_request, :budget, 'xls')
     when 'spend_implementer_target'
-      Reports::Targets.new(data_request, :spend, 'xls')
+      Reports::Detailed::Targets.new(data_request, :spend, 'xls')
     when 'budget_implementer_output'
-      Reports::Outputs.new(data_request, :budget, 'xls')
+      Reports::Detailed::Outputs.new(data_request, :budget, 'xls')
     when 'spend_implementer_output'
-      Reports::Outputs.new(data_request, :spend, 'xls')
+      Reports::Detailed::Outputs.new(data_request, :spend, 'xls')
     when 'budget_implementer_beneficiary'
-      Reports::Beneficiaries.new(data_request, :budget, 'xls')
+      Reports::Detailed::Beneficiaries.new(data_request, :budget, 'xls')
     when 'spend_implementer_beneficiary'
-      Reports::Beneficiaries.new(data_request, :spend, 'xls')
+      Reports::Detailed::Beneficiaries.new(data_request, :spend, 'xls')
     when 'budget_dynamic_query'
-      Reports::DynamicQuery.new(data_request, :budget, 'xml')
+      Reports::Detailed::DynamicQuery.new(data_request, :budget, 'xml')
     when 'spend_dynamic_query'
-      Reports::DynamicQuery.new(data_request, :spend, 'xml')
+      Reports::Detailed::DynamicQuery.new(data_request, :spend, 'xml')
     when 'funding_source_query'
-      Reports::FundingSource.new(data_request, 'xls')
+      Reports::Detailed::FundingSource.new(data_request, 'xls')
     else
       raise "Invalid report request '#{self.key}'"
     end

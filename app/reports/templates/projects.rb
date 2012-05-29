@@ -7,7 +7,7 @@ class Reports::Templates::Projects
   end
 
   def data(&block)
-    builder.add_row Reports::ProjectsExport::FILE_UPLOAD_COLUMNS
+    builder.add_row Reports::Detailed::ProjectsExport::FILE_UPLOAD_COLUMNS
     builder.data(&block)
   end
 

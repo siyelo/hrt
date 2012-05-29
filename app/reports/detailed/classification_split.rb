@@ -1,8 +1,8 @@
 # Report of all Implementers by Purpose/Location or Input
 # includes all Activities and Other Costs
 
-class Reports::ClassificationSplit
-  include Reports::Helpers
+class Reports::Detailed::ClassificationSplit
+  include Reports::Detailed::Helpers
   include CurrencyNumberHelper
   include CurrencyViewNumberHelper
 
