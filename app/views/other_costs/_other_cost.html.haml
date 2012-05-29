@@ -1,9 +1,6 @@
-- name = other_cost.name.presence || '<No name>'
-/- name += (other_cost.project.present? ? ' (Indirect Cost)' : ' (Non-Project Indirect Cost)')
-
 %tr.js_project_row
   %td{:colspan => 2}
-    = link_to name, edit_other_cost_path(other_cost), :title => other_cost.description, :class => 'tooltip-S'
+    = link_to other_cost.name.presence || 'Unnamed Other Cost', edit_other_cost_path(other_cost), :title => other_cost.description, :class => 'tooltip-S'
 
   %td
     .right_justified= n2c other_cost.total_spend

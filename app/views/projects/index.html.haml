@@ -14,10 +14,10 @@
         = render '/shared/request_nav'
       - else
         = current_request.name
-  
+
   %hr.heading
   = render 'getting_started'
-  
+
   %ul#nav.horizontal
     %li.js_dropdown_menu
       - link_to '#', :class => 'js_dropdown_trigger dropdown' do
@@ -87,13 +87,13 @@
     %tbody
       - @projects.each do |project|
         = render "project", :project => project
-      
+
       - if @projects.empty? && @response.other_costs.empty?
         %tr
           %td{:colspan => 100}
             = render 'no_projects_yet'
 
-      = render 'other_costs_no_project', :response => @response, :other_costs => @response.other_costs
+      = render 'other_costs_no_project', :response => @response, :other_costs => @response.other_costs.without_project
 
       %tr.filler2.big-total
         %td{:colspan => 3} TOTAL

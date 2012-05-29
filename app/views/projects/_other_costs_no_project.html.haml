@@ -1,13 +1,12 @@
 %tbody
-  - if other_costs.select{ |oc| oc.project.nil? }.present?
+  - if other_costs.present?
     %tr.sub-head
       %td.wrap-20{:rowspan => 100}
         %h4 Non-Project Indirect Costs
 
     - other_costs.each do |other_cost|
-      - if other_cost.project.nil?
-        = render "other_costs/other_cost", :other_cost => other_cost
-        
+      = render "other_costs/other_cost", :other_cost => other_cost
+
   - else
     %tr.none.strong
       %td{:colspan => 100}
