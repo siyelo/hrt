@@ -5,6 +5,7 @@ module Reports
   class Base
     include CurrencyViewNumberHelper
     include ActionController::UrlWriter
+    include ChartColours
     attr_accessor :resource
 
     def initialize(resource)
@@ -41,6 +42,24 @@ module Reports
 
     def budget_chart
       Charts::Budget.new(collection).google_pie
+    end
+
+    def expenditure_colours
+      colours = {}
+      top_spenders[0..14].each_with_index do |ts, index|
+        colours[index] = { :color => get_colour(ts.name) }
+      end
+
+      colours.to_json
+    end
+
+    def budget_colours
+      colours = {}
+      top_budgeters[0..14].each_with_index do |ts, index|
+        colours[index] = { :color => get_colour(ts.name) }
+      end
+
+      colours.to_json
     end
 
     def percentage_change
@@ -81,6 +100,31 @@ module Reports
     # Determines whether it is a budget or spend
     def method_from_class(klass_string)
       klass_string.match("Spend") ? :spend : :budget
+    end
+
+    def top_budgeters
+      @top_budgeters ||= collection.sort{ |x, y| y.total_budget <=> x.total_budget }
+    end
+
+    def top_spenders
+      @top_spenders ||= collection.sort{ |x, y| y.total_spend <=> x.total_spend }
+    end
+
+    def get_colour(name)
+      @colours ||= assign_colours
+      @colours[name]
+    end
+
+    def assign_colours
+      top_budget = top_budgeters[0..14].map{ |row| row.name }
+      top_spend = top_spenders[0..14].map{ |row| row.name }
+      top_all = (top_spend + top_budget).uniq!
+      colours = {}
+      top_all.each_with_index do |name, index|
+        colours[name] = AVAILABLE_COLOURS[index]
+      end
+
+      colours
     end
   end
 end

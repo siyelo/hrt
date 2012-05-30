@@ -1,6 +1,6 @@
 require 'app/reports/base'
 require 'app/charts/base'
-class Reports::DistrictSplit < Reports::Base
+class Reports::DistrictSplit < Reports::TopBase
   include CurrencyNumberHelper
   include ActionView::Helpers::NumberHelper
 
@@ -27,10 +27,6 @@ class Reports::DistrictSplit < Reports::Base
     district_workplan_admin_reports_path(:district => element.name)
   end
 
-  def show_totals
-    false
-  end
-
   def expenditure_chart
     Charts::Spend.new(collection).google_column
   end
@@ -47,18 +43,20 @@ class Reports::DistrictSplit < Reports::Base
 
   private
   def percentage_by_districts
-    national  = locations.detect{|l| l.short_display == 'National Level' }
-    districts = locations.select{|l| l != national}
+    unless @percentages
+      national  = locations.detect{|l| l.short_display == 'National Level' }
+      districts = locations.select{|l| l != national}
 
-    percentages = []
+      @percentages = []
 
-    percentages << district_percentages(national) if national
+      @percentages << district_percentages(national) if national
 
-    districts.each do |district|
-      percentages << district_percentages(district)
+      districts.each do |district|
+        @percentages << district_percentages(district)
+      end
     end
 
-    percentages
+    @percentages
   end
 
   def total_budget
@@ -103,7 +101,8 @@ class Reports::DistrictSplit < Reports::Base
   def district_percentages(district)
     spend  = amount_by_district[district.short_display][:spend] * 100 / total_spend
     budget = amount_by_district[district.short_display][:budget] * 100 / total_budget
-    Reports::Row.new(district.short_display, spend.to_f.round_with_precision(2),
+    Reports::Row.new(district.short_display,
+                     spend.to_f.round_with_precision(2),
                      budget.to_f.round_with_precision(2))
   end
 
@@ -116,5 +115,12 @@ class Reports::DistrictSplit < Reports::Base
         universal_currency_converter(e.amount.to_f, e.amount_currency, 'RWF')
     end
     result
+  end
+
+  def top_spenders
+    national = [percentage_by_districts[0]]
+    others = percentage_by_districts.drop(1)
+    others.sort!{ |x, y| y.total_spend <=> x.total_spend }
+    national + others
   end
 end

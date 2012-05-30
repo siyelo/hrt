@@ -17,7 +17,7 @@ HrtCharts.drawBarChart = function (id, rawData, width, height) {
   });
 };
 
-HrtCharts.drawColumnChart = function (id, rawData, width, height, maxPercentage) {
+HrtCharts.drawColumnChart = function (id, rawData, series, width, height, maxPercentage) {
   var data = google.visualization.arrayToDataTable(rawData);
 
   var formatter = new google.visualization.NumberFormat({fractionDigits: 1, suffix: '%'});
@@ -29,15 +29,15 @@ HrtCharts.drawColumnChart = function (id, rawData, width, height, maxPercentage)
   chart.draw(data, {width: width, height: height,
     chartArea: {width: 250, height: 220, left: 50},
     backgroundColor: '#FBFBFB',
+    series: series,
     vAxis: {format:"#'%", maxValue: maxPercentage}
   });
 };
 
-HrtCharts.drawPieChart = function (element, data_rows, width, height) {
+HrtCharts.drawPieChart = function (element, data_rows, series, width, height) {
   if (typeof(data_rows) === "undefined") {
     return;
   }
-
   var data = new google.visualization.DataTable();
   data.addColumn('string', data_rows.names.column1);
   data.addColumn('number', data_rows.names.column2);
@@ -50,6 +50,7 @@ HrtCharts.drawPieChart = function (element, data_rows, width, height) {
   var chart = new google.visualization.PieChart(element);
   chart.draw(data, {width: width, height: height,
              chartArea: {width: 360, height: 220},
-             sliceVisibilityThreshold: 1/60
+             slices: series,
+             sliceVisibilityThreshold: 1/30
   });
 };

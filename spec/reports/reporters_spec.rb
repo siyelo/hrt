@@ -1,8 +1,4 @@
-require File.dirname(__FILE__) + '/../spec_helper_lite'
-
-$: << File.join(APP_ROOT, "app/reports")
-
-require 'app/reports/reporters'
+require 'spec_helper'
 
 describe Reports::Reporters do
   let(:response1) { mock :response,
@@ -63,5 +59,13 @@ describe Reports::Reporters do
       and_return(mock(:column, :google_column => ""))
     report.should_receive(:create_rows).once.and_return rows
     report.budget_chart
+  end
+
+  it "uses the same colours" do
+    report.should_receive(:create_rows).once.and_return rows
+    report.budget_colours.should ==
+      "{\"0\":{\"color\":\"#dc3912\"},\"1\":{\"color\":\"#3366cc\"}}"
+    report.expenditure_colours.should ==
+      "{\"0\":{\"color\":\"#3366cc\"},\"1\":{\"color\":\"#dc3912\"}}"
   end
 end
