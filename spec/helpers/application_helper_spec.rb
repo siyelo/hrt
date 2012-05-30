@@ -4,12 +4,12 @@ describe ApplicationHelper do
   describe "link to unclassified activity" do
     before :each do
       basic_setup_activity
-      @activity.stub(:coding_spend_valid?) { true }
-      @activity.stub(:coding_spend_district_valid?) { true }
-      @activity.stub(:coding_spend_cc_valid?) { true }
-      @activity.stub(:coding_budget_valid?) { true }
-      @activity.stub(:coding_budget_district_valid?) { true }
-      @activity.stub(:coding_budget_cc_valid?) { true }
+      @activity.stub(:purpose_spend_splits_valid?) { true }
+      @activity.stub(:location_spend_splits_valid?) { true }
+      @activity.stub(:input_spend_splits_valid?) { true }
+      @activity.stub(:purpose_budget_splits_valid?) { true }
+      @activity.stub(:location_budget_splits_valid?) { true }
+      @activity.stub(:input_budget_splits_valid?) { true }
     end
 
     it "should link to the activity if there is nothing uncoded" do
@@ -17,16 +17,16 @@ describe ApplicationHelper do
     end
 
     it "should link to the locations if locations is uncoded" do
-      @activity.stub(:coding_spend_district_valid?) { false }
-      @activity.stub(:coding_budget_district_valid?) { false }
+      @activity.stub(:location_spend_splits_valid?) { false }
+      @activity.stub(:location_budget_splits_valid?) { false }
       helper.link_to_unclassified(@activity).should == edit_activity_path(@activity, :mode => 'locations')
     end
 
     it "should link to the locations if locations and purposes are uncoded" do
-      @activity.stub(:coding_budget_valid?) { false }
-      @activity.stub(:coding_budget_district_valid?) { false }
-      @activity.stub(:coding_spend_valid?) { false }
-      @activity.stub(:coding_spend_district_valid?) { false }
+      @activity.stub(:purpose_budget_splits_valid?) { false }
+      @activity.stub(:location_budget_splits_valid?) { false }
+      @activity.stub(:purpose_spend_splits_valid?) { false }
+      @activity.stub(:location_spend_splits_valid?) { false }
       helper.link_to_unclassified(@activity).should == edit_activity_path(@activity, :mode => 'locations')
     end
   end

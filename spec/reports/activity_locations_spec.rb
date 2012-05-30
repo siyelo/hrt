@@ -8,21 +8,21 @@ class DerpBudget; end
 describe Reports::ActivityLocations do
   let(:location) { mock :location, :name => 'L2'}
   let(:location1) { mock :location, :name => 'L1' }
-  let(:ssplit) { mock :coding_spend_district, :code => location,
+  let(:ssplit) { mock :location_spend_split, :code => location,
                  :cached_amount => 25.0, :name => location.name,
                  :class => DerpSpend }
-  let(:ssplit1) { mock :coding_spend_district, :code => location1,
+  let(:ssplit1) { mock :location_spend_split, :code => location1,
                   :cached_amount => 20.0, :name => location1.name,
                   :class => DerpSpend }
-  let(:bsplit) { mock :coding_budget_district, :code => location,
+  let(:bsplit) { mock :location_budget_split, :code => location,
                  :cached_amount => 10.0, :name => location.name,
                  :class => DerpBudget }
-  let(:bsplit1) { mock :coding_budget_district, :code => location1,
+  let(:bsplit1) { mock :location_budget_split, :code => location1,
                   :cached_amount => 5.0, :name => location1.name,
                   :class => DerpBudget }
   let(:activity) { mock :activity, :name => 'act',
-                   :coding_spend_district => [ssplit, ssplit1],
-                   :coding_budget_district => [bsplit, bsplit1],
+                   :location_spend_splits => [ssplit, ssplit1],
+                   :location_budget_splits => [bsplit, bsplit1],
                    :total_spend => 45.0, :total_budget => 15.0,
                    :currency => 'USD' }
   let(:response) { mock :response }
@@ -65,8 +65,8 @@ describe Reports::ActivityLocations do
 
   describe "unclassified locations" do
     before :each do
-      activity.stub(:coding_spend_district).and_return []
-      activity.stub(:coding_budget_district).and_return []
+      activity.stub(:location_spend_splits).and_return []
+      activity.stub(:location_budget_splits).and_return []
       activity.stub(:total_spend).and_return BigDecimal.new("45.015")
     end
 

@@ -4,13 +4,13 @@ Factory.define :activity, :class => Activity do |f|
 end
 
 Factory.define :activity_fully_coded, :class => Activity, :parent => :activity do |f|
-  f.after_create { |a| Factory(:coding_spend, :percentage => 100, :activity => a) }
-  f.after_create { |a| Factory(:coding_spend_district, :percentage => 100, :activity => a) }
-  f.after_create { |a| Factory(:coding_spend_cost_categorization, :percentage => 100, :activity => a) }
+  f.after_create { |a| Factory(:purpose_spend_split, :percentage => 100, :activity => a) }
+  f.after_create { |a| Factory(:location_spend_split, :percentage => 100, :activity => a) }
+  f.after_create { |a| Factory(:input_spend_split, :percentage => 100, :activity => a) }
   # Not DRY. Need to figure out how to mix two factories together
-  f.after_create { |a| Factory(:coding_budget, :percentage => 100, :activity => a) }
-  f.after_create { |a| Factory(:coding_budget_district, :percentage => 100, :activity => a) }
-  f.after_create { |a| Factory(:coding_budget_cost_categorization, :percentage => 100, :activity => a) }
+  f.after_create { |a| Factory(:purpose_budget_split, :percentage => 100, :activity => a) }
+  f.after_create { |a| Factory(:location_budget_split, :percentage => 100, :activity => a) }
+  f.after_create { |a| Factory(:input_budget_split, :percentage => 100, :activity => a) }
 end
 
 
@@ -26,7 +26,7 @@ end
 
 # To fully code an OCost, you need to do Location Splits
 Factory.define :other_cost_fully_coded, :class => OtherCost, :parent => :other_cost  do |f|
-  f.after_create { |a| Factory(:coding_spend_district, :percentage => 100, :activity => a) }
-  f.after_create { |a| Factory(:coding_budget_district, :percentage => 100, :activity => a) }
+  f.after_create { |a| Factory(:location_spend_split, :percentage => 100, :activity => a) }
+  f.after_create { |a| Factory(:location_budget_split, :percentage => 100, :activity => a) }
 end
 

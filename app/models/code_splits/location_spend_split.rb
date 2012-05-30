@@ -1,10 +1,9 @@
-class CodingBudgetCostCategorization < InputSplit
-end
+class LocationSpendSplit < LocationSplit; end
 
 
 # == Schema Information
 #
-# Table name: code_assignments
+# Table name: code_splits
 #
 #  id              :integer         not null, primary key
 #  activity_id     :integer         indexed => [code_id, type]

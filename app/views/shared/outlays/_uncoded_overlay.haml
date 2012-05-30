@@ -27,15 +27,15 @@
       %tr
         %td Past Expenditure
         %td
-          = check_box_tag "spend_locations", "", outlay.coding_spend_district_valid?
+          = check_box_tag "spend_locations", "", outlay.location_spend_splits_valid?
         - unless is_other_cost
-          %td=check_box_tag "spend_purposes", "", outlay.coding_spend_valid?
-          %td= check_box_tag "spend_inputs", "", outlay.coding_spend_cc_valid?
+          %td=check_box_tag "spend_purposes", "", outlay.purpose_spend_splits_valid?
+          %td= check_box_tag "spend_inputs", "", outlay.input_spend_splits_valid?
 
       %tr
         %td Current Budget
         %td
-          = check_box_tag "budget_locations", "", outlay.coding_budget_district_valid?
+          = check_box_tag "budget_locations", "", outlay.location_budget_splits_valid?
         - unless is_other_cost
-          %td= check_box_tag "budget_purposes", "", outlay.coding_budget_valid?
-          %td= check_box_tag "budget_inputs", "", outlay.coding_budget_cc_valid?
+          %td= check_box_tag "budget_purposes", "", outlay.purpose_budget_splits_valid?
+          %td= check_box_tag "budget_inputs", "", outlay.input_budget_splits_valid?

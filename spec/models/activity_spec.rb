@@ -9,14 +9,14 @@ describe Activity do
     it { should have_many(:implementer_splits).dependent(:delete_all) }
     it { should have_many(:implementers) }
     it { should have_many(:purposes) }
-    it { should have_many(:code_assignments).dependent(:destroy) }
+    it { should have_many(:code_splits).dependent(:destroy) }
     it { should have_many(:comments).dependent(:destroy) }
-    it { should have_many(:coding_spend).dependent(:destroy) }
-    it { should have_many(:coding_budget).dependent(:destroy) }
-    it { should have_many(:coding_spend_cost_categorization).dependent(:destroy) }
-    it { should have_many(:coding_budget_cost_categorization).dependent(:destroy) }
-    it { should have_many(:coding_spend_district).dependent(:destroy) }
-    it { should have_many(:coding_budget_district).dependent(:destroy) }
+    it { should have_many(:purpose_spend_splits).dependent(:destroy) }
+    it { should have_many(:purpose_budget_splits).dependent(:destroy) }
+    it { should have_many(:input_spend_splits).dependent(:destroy) }
+    it { should have_many(:input_budget_splits).dependent(:destroy) }
+    it { should have_many(:location_spend_splits).dependent(:destroy) }
+    it { should have_many(:location_budget_splits).dependent(:destroy) }
     it { should have_many(:targets).dependent(:destroy) }
     it { should have_many(:outputs).dependent(:destroy) }
     it { should have_many(:leaf_budget_purposes) }
@@ -222,12 +222,12 @@ describe Activity do
     end
 
     it "should clone associated code assignments" do
-      @ca = Factory(:code_assignment, :activity => @activity)
+      @ca = Factory(:code_split, :activity => @activity)
       save_and_deep_clone
-      @clone.code_assignments.count.should == 1
-      @clone.code_assignments[0].code.should == @ca.code
-      @clone.code_assignments[0].activity.should_not == @activity
-      @clone.code_assignments[0].activity.should == @clone
+      @clone.code_splits.count.should == 1
+      @clone.code_splits[0].code.should == @ca.code
+      @clone.code_splits[0].activity.should_not == @activity
+      @clone.code_splits[0].activity.should == @clone
     end
 
     it "should clone beneficiaries" do
@@ -244,11 +244,11 @@ describe Activity do
       @purpose1    = Factory(:purpose, :short_display => 'purp1')
       @purpose2    = Factory(:mtef_code, :short_display => 'purp2')
       @input       = Factory(:input, :short_display => 'input')
-      Factory(:coding_budget, :activity => @activity,
+      Factory(:purpose_budget_split, :activity => @activity,
               :code => @purpose1, :cached_amount => 5)
-      Factory(:coding_budget, :activity => @activity,
+      Factory(:purpose_budget_split, :activity => @activity,
               :code => @purpose2, :cached_amount => 15)
-      Factory(:coding_budget_cost_categorization, :activity => @activity,
+      Factory(:input_budget_split, :activity => @activity,
               :code => @input, :cached_amount => 5)
       @activity.purposes.should == [@purpose1, @purpose2]
     end
@@ -261,11 +261,11 @@ describe Activity do
       location2 = Factory(:location)
       location3 = Factory(:location)
       location4 = Factory(:location)
-      Factory(:coding_budget_district, :activity => @activity, :code => location1)
-      Factory(:coding_budget_district, :activity => @activity, :code => location2)
-      Factory(:coding_spend_district, :activity => @activity, :code => location2)
-      Factory(:coding_budget, :activity => @activity, :code => location3)
-      Factory(:coding_spend, :activity => @activity, :code => location4)
+      Factory(:location_budget_split, :activity => @activity, :code => location1)
+      Factory(:location_budget_split, :activity => @activity, :code => location2)
+      Factory(:location_spend_split, :activity => @activity, :code => location2)
+      Factory(:purpose_budget_split, :activity => @activity, :code => location3)
+      Factory(:purpose_spend_split, :activity => @activity, :code => location4)
 
       @activity.locations.length.should == 2
       @activity.locations.should include(location1)

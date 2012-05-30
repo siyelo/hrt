@@ -80,22 +80,22 @@ class Reports::DistrictSplit < Reports::Base
   end
 
   def amount_by_district
-    @amount_by_district ||= map_data(code_assignments)
+    @amount_by_district ||= map_data(code_splits)
   end
 
-  def code_assignments
-    CodeAssignment.find :all,
-      :select => 'code_assignments.type AS klass, codes.short_display AS district,
-        SUM("code_assignments".cached_amount) AS amount,
+  def code_splits
+    CodeSplit.find :all,
+      :select => 'code_splits.type AS klass, codes.short_display AS district,
+        SUM("code_splits".cached_amount) AS amount,
         COALESCE(projects.currency, organizations.currency) AS amount_currency',
-      :joins => 'INNER JOIN "codes" ON "codes".id = "code_assignments".code_id
-                 INNER JOIN "activities" ON "activities".id = "code_assignments".activity_id
+      :joins => 'INNER JOIN "codes" ON "codes".id = "code_splits".code_id
+                 INNER JOIN "activities" ON "activities".id = "code_splits".activity_id
                  LEFT OUTER JOIN "projects" ON "projects".id = "activities".project_id
                  INNER JOIN "data_responses" ON "data_responses".id = "activities".data_response_id
                  INNER JOIN "organizations" ON "organizations".id = "data_responses".organization_id',
       :conditions => ["data_responses.data_request_id = ? AND
-                  code_assignments.type IN
-                  ('CodingBudgetDistrict', 'CodingSpendDistrict')", request.id],
+                  code_splits.type IN
+                  ('LocationBudgetSplit', 'LocationSpendSplit')", request.id],
       :group => 'klass, district, amount_currency'
 
   end

@@ -31,13 +31,13 @@ describe Reports::Detailed::DistrictWorkplan do
     activity1.reload
     activity2.reload
     classifications1 = { @district1.id => 25, @district2.id => 75 }
-    CodingBudgetDistrict.update_classifications(activity1, classifications1)
+    LocationBudgetSplit.update_classifications(activity1, classifications1)
     classifications2 = { @district1.id => 50, @district2.id => 50 }
-    CodingSpendDistrict.update_classifications(activity1, classifications2)
+    LocationSpendSplit.update_classifications(activity1, classifications2)
     classifications3 = { @district1.id => 25, @district2.id => 75 }
-    CodingBudgetDistrict.update_classifications(activity2, classifications3)
+    LocationBudgetSplit.update_classifications(activity2, classifications3)
     classifications4 = { @district1.id => 50, @district2.id => 50 }
-    CodingSpendDistrict.update_classifications(activity2, classifications4)
+    LocationSpendSplit.update_classifications(activity2, classifications4)
   end
 
   it "can generate district workplan" do
@@ -95,13 +95,13 @@ describe Reports::Detailed::DistrictWorkplan do
     activity3.reload
     activity4.reload
     classifications1 = { @district1.id => 25, @district2.id => 75 }
-    CodingBudgetDistrict.update_classifications(activity3, classifications1)
+    LocationBudgetSplit.update_classifications(activity3, classifications1)
     classifications2 = { @district1.id => 50, @district2.id => 50 }
-    CodingSpendDistrict.update_classifications(activity3, classifications2)
+    LocationSpendSplit.update_classifications(activity3, classifications2)
     classifications3 = { @district1.id => 25, @district2.id => 75 }
-    CodingBudgetDistrict.update_classifications(activity4, classifications3)
+    LocationBudgetSplit.update_classifications(activity4, classifications3)
     classifications4 = { @district1.id => 50, @district2.id => 50 }
-    CodingSpendDistrict.update_classifications(activity4, classifications4)
+    LocationSpendSplit.update_classifications(activity4, classifications4)
 
     xls = Reports::Detailed::DistrictWorkplan.new(
       @data_request, @district1, 'xls').data

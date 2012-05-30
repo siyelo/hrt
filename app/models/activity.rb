@@ -28,39 +28,39 @@ class Activity < ActiveRecord::Base
   has_and_belongs_to_many :beneficiaries # codes representing who benefits from this activity
   has_many :implementer_splits, :dependent => :delete_all
   has_many :implementers, :through => :implementer_splits, :source => :organization
-  has_many :purposes, :through => :code_assignments,
+  has_many :purposes, :through => :code_splits,
     :conditions => ["codes.type in (?)", Code::PURPOSES], :source => :code
-  has_many :code_assignments, :dependent => :destroy
+  has_many :code_splits, :dependent => :destroy
   has_many :comments, :as => :commentable, :dependent => :destroy
 
   ### TODO: deprecate
   #
-  has_many :coding_budget, :dependent => :destroy
-  has_many :coding_budget_cost_categorization, :dependent => :destroy
-  has_many :coding_budget_district, :dependent => :destroy
-  has_many :coding_spend, :dependent => :destroy
-  has_many :coding_spend_cost_categorization, :dependent => :destroy
-  has_many :coding_spend_district, :dependent => :destroy
+  has_many :purpose_budget_splits, :dependent => :destroy
+  has_many :purpose_spend_splits, :dependent => :destroy
+  has_many :input_budget_splits, :dependent => :destroy
+  has_many :input_spend_splits, :dependent => :destroy
+  has_many :location_budget_splits, :dependent => :destroy
+  has_many :location_spend_splits, :dependent => :destroy
   has_many :budget_locations, :dependent => :destroy,
-    :class_name => 'CodingBudgetDistrict'
+    :class_name => 'LocationBudgetSplit'
   has_many :spend_locations, :dependent => :destroy,
-    :class_name => 'CodingSpendDistrict'
+    :class_name => 'LocationSpendSplit'
   ###
 
   has_many :targets, :dependent => :destroy
   has_many :outputs, :dependent => :destroy
   has_many :leaf_budget_purposes, :dependent => :destroy,
-    :class_name => 'CodingBudget',
-    :conditions => ["code_assignments.sum_of_children = 0"]
+    :class_name => 'PurposeBudgetSplit',
+    :conditions => ["code_splits.sum_of_children = 0"]
   has_many :leaf_spend_purposes, :dependent => :destroy,
-    :class_name => 'CodingSpend',
-    :conditions => ["code_assignments.sum_of_children = 0"]
+    :class_name => 'PurposeSpendSplit',
+    :conditions => ["code_splits.sum_of_children = 0"]
   has_many :leaf_budget_inputs, :dependent => :destroy,
-    :class_name => 'CodingBudgetCostCategorization',
-    :conditions => ["code_assignments.sum_of_children = 0"]
+    :class_name => 'InputBudgetSplit',
+    :conditions => ["code_splits.sum_of_children = 0"]
   has_many :leaf_spend_inputs, :dependent => :destroy,
-    :class_name => 'CodingSpendCostCategorization',
-    :conditions => ["code_assignments.sum_of_children = 0"]
+    :class_name => 'InputSpendSplit',
+    :conditions => ["code_splits.sum_of_children = 0"]
 
   ### Nested attributes
   accepts_nested_attributes_for :implementer_splits, :allow_destroy => true,
@@ -168,10 +168,10 @@ class Activity < ActiveRecord::Base
   #
   # Updates classified amount caches if budget or spend have been changed
   def update_all_classified_amount_caches
-    [CodingBudget, CodingBudgetDistrict, CodingBudgetCostCategorization].each do |type|
+    [PurposeBudgetSplit, LocationBudgetSplit, InputBudgetSplit].each do |type|
       update_classified_amount_cache(type)
     end
-    [CodingSpend, CodingSpendDistrict, CodingSpendCostCategorization].each do |type|
+    [PurposeSpendSplit, LocationSpendSplit, InputSpendSplit].each do |type|
       update_classified_amount_cache(type)
     end
   end
@@ -182,7 +182,7 @@ class Activity < ActiveRecord::Base
       clone.send("#{assoc}=", self.send(assoc))
     end
     # hasmany's
-    %w[code_assignments implementer_splits targets].each do |assoc|
+    %w[code_splits implementer_splits targets].each do |assoc|
       clone.send("#{assoc}=", self.send(assoc).collect { |obj| obj.clone })
     end
     clone
@@ -190,9 +190,9 @@ class Activity < ActiveRecord::Base
 
   def classification_amount(classification_type)
     case classification_type.to_s
-    when 'CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization'
+    when 'PurposeBudgetSplit', 'LocationBudgetSplit', 'InputBudgetSplit'
       total_budget
-    when 'CodingSpend', 'CodingSpendDistrict', 'CodingSpendCostCategorization'
+    when 'PurposeSpendSplit', 'LocationSpendSplit', 'InputSpendSplit'
       total_spend
     else
       raise "Invalid coding_klass #{classification_type}".to_yaml
@@ -200,11 +200,11 @@ class Activity < ActiveRecord::Base
   end
 
   def implementer_splits_each_have_defined_districts?(coding_type)
-    !implementer_split_district_code_assignments_if_complete(coding_type).empty?
+    !implementer_split_district_code_splits(coding_type).empty?
   end
 
   def locations
-    code_assignments.with_types(['CodingBudgetDistrict', 'CodingSpendDistrict']).
+    code_splits.with_types(['LocationBudgetSplit', 'LocationSpendSplit']).
       find(:all, :include => :code).map{|ca| ca.code }.uniq
   end
 
@@ -223,28 +223,28 @@ class Activity < ActiveRecord::Base
     valid
   end
 
-  def coding_spend_valid?
-    CodingTree.new(self, CodingSpend).valid?
+  def purpose_spend_splits_valid?
+    CodingTree.new(self, PurposeSpendSplit).valid?
   end
 
-  def coding_budget_valid?
-    CodingTree.new(self, CodingBudget).valid?
+  def purpose_budget_splits_valid?
+    CodingTree.new(self, PurposeBudgetSplit).valid?
   end
 
-  def coding_spend_cc_valid?
-    CodingTree.new(self, CodingSpendCostCategorization).valid?
+  def input_spend_splits_valid?
+    CodingTree.new(self, InputSpendSplit).valid?
   end
 
-  def coding_budget_cc_valid?
-    CodingTree.new(self, CodingBudgetCostCategorization).valid?
+  def input_budget_splits_valid?
+    CodingTree.new(self, InputBudgetSplit).valid?
   end
 
-  def coding_spend_district_valid?
-    CodingTree.new(self, CodingSpendDistrict).valid?
+  def location_spend_splits_valid?
+    CodingTree.new(self, LocationSpendSplit).valid?
   end
 
-  def coding_budget_district_valid?
-    CodingTree.new(self, CodingBudgetDistrict).valid?
+  def location_budget_splits_valid?
+    CodingTree.new(self, LocationBudgetSplit).valid?
   end
 
   protected
@@ -295,12 +295,12 @@ class Activity < ActiveRecord::Base
 
     def get_valid_attribute_name(type)
       case type.to_s
-      when 'CodingBudget' then :coding_budget_valid
-      when 'CodingBudgetCostCategorization' then :coding_budget_cc_valid
-      when 'CodingBudgetDistrict' then :coding_budget_district_valid
-      when 'CodingSpend' then :coding_spend_valid
-      when 'CodingSpendCostCategorization' then :coding_spend_cc_valid
-      when 'CodingSpendDistrict' then :coding_spend_district_valid
+      when 'PurposeBudgetSplit' then :purpose_budget_splits_valid
+      when 'InputBudgetSplit' then :input_budget_splits_valid
+      when 'LocationBudgetSplit' then :location_budget_splits_valid
+      when 'PurposeSpendSplit' then :purpose_spend_splits_valid
+      when 'InputSpendSplit' then :input_spend_splits_valid
+      when 'LocationSpendSplit' then :location_spend_splits_valid
       else raise "Unknown type #{type}".to_yaml
       end
     end

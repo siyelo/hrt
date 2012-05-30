@@ -73,11 +73,11 @@ class ApplicationController < ActionController::Base
     def load_klasses(field = :id) #TODO: deprecate id field - use only :mode
       @budget_klass, @spend_klass = case params[field]
       when 'purposes'
-        [CodingBudget, CodingSpend]
+        [PurposeBudgetSplit, PurposeSpendSplit]
       when 'inputs'
-        [CodingBudgetCostCategorization, CodingSpendCostCategorization]
+        [InputBudgetSplit, InputSpendSplit]
       when 'locations'
-        [CodingBudgetDistrict, CodingSpendDistrict]
+        [LocationBudgetSplit, LocationSpendSplit]
       else
         raise "Invalid type #{params[field]}".to_yaml
       end

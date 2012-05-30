@@ -36,13 +36,13 @@ describe Reports::DistrictSplit do
     district2     = Factory(:location, :short_display => 'district2')
 
     classifications1 = { district1.id => 25, district2.id => 75 }
-    CodingBudgetDistrict.update_classifications(activity1, classifications1)
+    LocationBudgetSplit.update_classifications(activity1, classifications1)
     classifications2 = { district1.id => 50, district2.id => 50 }
-    CodingSpendDistrict.update_classifications(activity1, classifications2)
+    LocationSpendSplit.update_classifications(activity1, classifications2)
     classifications3 = { district1.id => 35, district2.id => 65 }
-    CodingBudgetDistrict.update_classifications(activity2, classifications3)
+    LocationBudgetSplit.update_classifications(activity2, classifications3)
     classifications4 = { district1.id => 40, district2.id => 60 }
-    CodingSpendDistrict.update_classifications(activity2, classifications4)
+    LocationSpendSplit.update_classifications(activity2, classifications4)
 
     report = Reports::DistrictSplit.new(data_request)
     collection = report.collection

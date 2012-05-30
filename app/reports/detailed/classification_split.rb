@@ -193,7 +193,7 @@ class Reports::Detailed::ClassificationSplit
     end
   end
 
-  # get the class name e.g. "CodingBudget" from the association
+  # get the class name e.g. "PurposeBudgetSplit" from the association
   # "leaf_budget_purposes"
   def classification_class(classification_association)
     Activity.reflect_on_association(classification_association).klass

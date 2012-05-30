@@ -6,13 +6,13 @@ describe OtherCost do
     it { should belong_to :project }
     it { should have_and_belong_to_many :beneficiaries }
     it { should have_many :implementer_splits }
-    it { should have_many :code_assignments }
-    it { should have_many :coding_budget }
-    it { should have_many :coding_budget_cost_categorization }
-    it { should have_many :coding_budget_district }
-    it { should have_many :coding_spend }
-    it { should have_many :coding_spend_cost_categorization }
-    it { should have_many :coding_spend_district }
+    it { should have_many :code_splits }
+    it { should have_many :purpose_budget_splits }
+    it { should have_many :input_budget_splits }
+    it { should have_many :location_budget_splits }
+    it { should have_many :purpose_spend_splits }
+    it { should have_many :input_spend_splits }
+    it { should have_many :location_spend_splits }
   end
 
   describe "Attributes" do
@@ -29,7 +29,6 @@ describe OtherCost do
     it { should validate_presence_of(:name) }
   end
 
-
   describe "classified?" do
     before :each do
       @organization = Factory(:organization)
@@ -42,16 +41,16 @@ describe OtherCost do
       @split1 = Factory(:implementer_split, :activity => @activity,
                         :organization => @organization, :budget => 50, :spend => 40)
 
-      @activity.stub(:coding_budget_district_valid?) { true }
-      @activity.stub(:coding_spend_district_valid?) { true }
+      @activity.stub(:location_budget_splits_valid?) { true }
+      @activity.stub(:location_spend_splits_valid?) { true }
       @activity.save
       @activity.reload
     end
 
     it "is classified? when only locations are classified" do
-      @activity.coding_budget_district_valid?.should == true
+      @activity.location_budget_splits_valid?.should == true
       @activity.budget_classified?.should == true
-      @activity.coding_spend_district_valid?.should == true
+      @activity.location_spend_splits_valid?.should == true
       @activity.spend_classified?.should == true
       @activity.classified?.should be_true
     end

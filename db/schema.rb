@@ -41,7 +41,7 @@ ActiveRecord::Schema.define(:version => 20120525083025) do
     t.integer "beneficiary_id"
   end
 
-  create_table "code_assignments", :force => true do |t|
+  create_table "code_splits", :force => true do |t|
     t.integer  "activity_id"
     t.integer  "code_id"
     t.string   "type"
@@ -52,8 +52,8 @@ ActiveRecord::Schema.define(:version => 20120525083025) do
     t.datetime "updated_at"
   end
 
-  add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
-  add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
+  add_index "code_splits", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
+  add_index "code_splits", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|
     t.integer  "parent_id"

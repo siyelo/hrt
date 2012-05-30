@@ -391,10 +391,10 @@ end
 When /^a 100% location split exists with activity: "([^"]*)", location: "([^"]*)", spend_percentage: (\d+), budget_percentage: (\d+)$/ do |act_name, loc_name, spend_pc, budget_pc|
    loc = Factory :location, :short_display => loc_name
    activity = Activity.find_by_name act_name
-   Factory.create :coding_spend_district, :code => loc,
+   Factory.create :location_spend_split, :code => loc,
      :activity => activity, :percentage => spend_pc,
      :cached_amount => activity.total_spend * (spend_pc.to_f/100)
-   Factory.create :coding_budget_district, :code => loc,
+   Factory.create :location_budget_split, :code => loc,
      :activity => activity, :percentage => budget_pc,
      :cached_amount => activity.total_budget * (budget_pc.to_f/100)
 end
@@ -406,10 +406,10 @@ end
 When /^a 100% input split exists with activity: "([^"]*)", input: "([^"]*)", spend_percentage: (\d+), budget_percentage: (\d+)$/ do |act_name, input_name, spend_pc, budget_pc|
    input = Factory :input, :short_display => input_name
    activity = Activity.find_by_name act_name
-   Factory.create :coding_spend_cost_categorization, :code => input,
+   Factory.create :input_spend_split, :code => input,
      :activity => activity, :percentage => spend_pc,
      :cached_amount => activity.total_spend * (spend_pc.to_f/100)
-   Factory.create :coding_budget_cost_categorization, :code => input,
+   Factory.create :input_budget_split, :code => input,
      :activity => activity, :percentage => budget_pc,
      :cached_amount => activity.total_budget * (budget_pc.to_f/100)
 end

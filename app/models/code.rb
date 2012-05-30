@@ -23,8 +23,8 @@ class Code < ActiveRecord::Base
   acts_as_nested_set
 
   ### Associations
-  has_many :code_assignments, :dependent => :destroy
-  has_many :activities, :through => :code_assignments
+  has_many :code_splits, :dependent => :destroy
+  has_many :activities, :through => :code_splits
 
   ### Named scope
   named_scope :with_type,  lambda { |type| {:conditions => ["codes.type = ?", type]} }

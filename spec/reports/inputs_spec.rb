@@ -10,9 +10,9 @@ describe Reports::Inputs do
 
   it "finds the location splits for an activity" do
     splits.should_receive(:roots).twice.and_return root_splits
-    resource.should_receive(:coding_spend_cost_categorization).and_return splits
+    resource.should_receive(:input_spend_splits).and_return splits
     report.splits(resource, :spend)
-    resource.should_receive(:coding_budget_cost_categorization).and_return splits
+    resource.should_receive(:input_budget_splits).and_return splits
     report.splits(resource, :budget)
   end
 end

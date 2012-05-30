@@ -19,7 +19,7 @@ describe Code do
   end
 
   describe "Associations" do
-    it { should have_many(:code_assignments).dependent(:destroy) }
+    it { should have_many(:code_splits).dependent(:destroy) }
     it { should have_many(:activities) }
   end
 

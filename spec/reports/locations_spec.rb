@@ -8,9 +8,9 @@ describe Reports::Locations do
   let(:report) { Reports::Locations.new(resource) }
 
   it "finds the location splits for an activity" do
-    resource.should_receive(:coding_spend_district).and_return splits
+    resource.should_receive(:location_spend_splits).and_return splits
     report.splits(resource, :spend)
-    resource.should_receive(:coding_budget_district).and_return splits
+    resource.should_receive(:location_budget_splits).and_return splits
     report.splits(resource, :budget)
   end
 end

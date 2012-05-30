@@ -7,9 +7,9 @@ module Reports
     def splits(activity, type)
       case type
       when :spend
-        activity.coding_spend_district
+        activity.location_spend_splits
       when :budget
-        activity.coding_budget_district
+        activity.location_budget_splits
       end
     end
   end
