@@ -38,13 +38,13 @@ Feature: Reporter can enter a code breakdown for each activity
       #since we used a factory above, need save to refresh cache by saving activity
       And I press "Save"
       And I follow "Purposes" within ".section_nav"
-      And I fill in "activity[classifications][coding_budget][1]" with "100"
-      And I fill in "activity[classifications][coding_spend][1]" with "100"
+      And I fill in "activity[classifications][purpose_budget_split][1]" with "100"
+      And I fill in "activity[classifications][purpose_spend_split][1]" with "100"
       And I press "Save"
       Then I should see "Activity was successfully updated."
       And I should not see "Purposes by Current Budget are not classified and Purposes by Past Expenditure are not classified"
-      And the "activity[classifications][coding_budget][1]" field should contain "100"
-      And the "activity[classifications][coding_spend][1]" field should contain "100"
+      And the "activity[classifications][purpose_budget_split][1]" field should contain "100"
+      And the "activity[classifications][purpose_spend_split][1]" field should contain "100"
 
 
     Scenario: Reporter can classify Purposes for activity (second level)
@@ -54,17 +54,17 @@ Feature: Reporter can enter a code breakdown for each activity
       When I follow "Projects"
       And I follow "activity1"
       And I follow "Purposes" within ".section_nav"
-      And I fill in "activity[classifications][coding_budget][11]" with "40"
-      And I fill in "activity[classifications][coding_spend][11]" with "60"
-      And I fill in "activity[classifications][coding_budget][12]" with "60"
-      And I fill in "activity[classifications][coding_spend][12]" with "40"
+      And I fill in "activity[classifications][purpose_budget_split][11]" with "40"
+      And I fill in "activity[classifications][purpose_spend_split][11]" with "60"
+      And I fill in "activity[classifications][purpose_budget_split][12]" with "60"
+      And I fill in "activity[classifications][purpose_spend_split][12]" with "40"
       And I press "Save"
       Then I should see "Activity was successfully updated."
       And I should not see "Purposes by Current Budget are not classified and Purposes by Past Expenditure are not classified"
-      And the "activity[classifications][coding_budget][11]" field should contain "40"
-      And the "activity[classifications][coding_spend][11]" field should contain "60"
-      And the "activity[classifications][coding_budget][12]" field should contain "60"
-      And the "activity[classifications][coding_spend][12]" field should contain "40"
+      And the "activity[classifications][purpose_budget_split][11]" field should contain "40"
+      And the "activity[classifications][purpose_spend_split][11]" field should contain "60"
+      And the "activity[classifications][purpose_budget_split][12]" field should contain "60"
+      And the "activity[classifications][purpose_spend_split][12]" field should contain "40"
 
     Scenario: Reporter can classify Purposes for activity (third level)
       Given an activity exists with name: "activity1", data_response: the data_response, project: the project
@@ -75,17 +75,17 @@ Feature: Reporter can enter a code breakdown for each activity
       When I follow "Projects"
       And I follow "activity1"
       And I follow "Purposes" within ".section_nav"
-      And I fill in "activity[classifications][coding_budget][111]" with "40"
-      And I fill in "activity[classifications][coding_spend][111]" with "60"
-      And I fill in "activity[classifications][coding_budget][112]" with "60"
-      And I fill in "activity[classifications][coding_spend][112]" with "40"
+      And I fill in "activity[classifications][purpose_budget_split][111]" with "40"
+      And I fill in "activity[classifications][purpose_spend_split][111]" with "60"
+      And I fill in "activity[classifications][purpose_budget_split][112]" with "60"
+      And I fill in "activity[classifications][purpose_spend_split][112]" with "40"
       And I press "Save"
       Then I should see "Activity was successfully updated."
       And I should not see "Purposes by Current Budget are not classified and Purposes by Past Expenditure are not classified"
-      And the "activity[classifications][coding_budget][111]" field should contain "40"
-      And the "activity[classifications][coding_spend][111]" field should contain "60"
-      And the "activity[classifications][coding_budget][112]" field should contain "60"
-      And the "activity[classifications][coding_spend][112]" field should contain "40"
+      And the "activity[classifications][purpose_budget_split][111]" field should contain "40"
+      And the "activity[classifications][purpose_spend_split][111]" field should contain "60"
+      And the "activity[classifications][purpose_budget_split][112]" field should contain "60"
+      And the "activity[classifications][purpose_spend_split][112]" field should contain "40"
 
     # Because of javascript driver issue this scenario fails, marked as @wip
     # @javascript
@@ -99,20 +99,20 @@ Feature: Reporter can enter a code breakdown for each activity
       And I follow "activity1"
       And I follow "Purposes" within ".section_nav"
 
-      When I fill in "activity[classifications][coding_budget][111]" with "40"
-      # Then the "activity[classifications][coding_budget][11]" field should contain "40"
-      # And the "activity[classifications][coding_budget][1]" field should contain "40"
+      When I fill in "activity[classifications][purpose_budget_split][111]" with "40"
+      # Then the "activity[classifications][purpose_budget_split][11]" field should contain "40"
+      # And the "activity[classifications][purpose_budget_split][1]" field should contain "40"
 
-      When I fill in "activity[classifications][coding_spend][111]" with "40"
-      # Then the "activity[classifications][coding_spend][11]" field should contain "40"
-      # And the "activity[classifications][coding_spend][1]" field should contain "40"
+      When I fill in "activity[classifications][purpose_spend_split][111]" with "40"
+      # Then the "activity[classifications][purpose_spend_split][11]" field should contain "40"
+      # And the "activity[classifications][purpose_spend_split][1]" field should contain "40"
 
-      When I fill in "activity[classifications][coding_spend][1]" with "100"
-      And I fill in "activity[classifications][coding_budget][1]" with "100"
+      When I fill in "activity[classifications][purpose_spend_split][1]" with "100"
+      And I fill in "activity[classifications][purpose_budget_split][1]" with "100"
       # And I hover over ".tooltip" within ".values"
       # Then I should see "This amount is not the same as the sum of the amounts underneath (100.00% - 40.00% = 60%)"
 
-      When I fill in "activity[classifications][coding_spend][1]" with "10"
+      When I fill in "activity[classifications][purpose_spend_split][1]" with "10"
       # And I hover over ".tooltip" within ".values"
       # Then I should see "The root nodes do not add up to 100%"
       When I press "Save"
@@ -130,8 +130,8 @@ Feature: Reporter can enter a code breakdown for each activity
       And I follow "Purposes" within ".section_nav"
       Then the "spend_purposes" checkbox should not be checked
       And the "budget_purposes" checkbox should not be checked
-      When I fill in "activity[classifications][coding_budget][1]" with "99"
-      And I fill in "activity[classifications][coding_spend][1]" with "99"
+      When I fill in "activity[classifications][purpose_budget_split][1]" with "99"
+      And I fill in "activity[classifications][purpose_spend_split][1]" with "99"
       And I press "Save"
       Then I should see "Activity was successfully updated."
       And the "spend_purposes" checkbox should not be checked
@@ -139,8 +139,8 @@ Feature: Reporter can enter a code breakdown for each activity
       When I follow "Projects"
       And I follow "activity1"
       And I follow "Purposes" within ".section_nav"
-      And I fill in "activity[classifications][coding_budget][1]" with "100"
-      And I fill in "activity[classifications][coding_spend][1]" with "100"
+      And I fill in "activity[classifications][purpose_budget_split][1]" with "100"
+      And I fill in "activity[classifications][purpose_spend_split][1]" with "100"
       And I press "Save"
       Then I should see "Activity was successfully updated."
       When I refresh the page
@@ -159,8 +159,8 @@ Feature: Reporter can enter a code breakdown for each activity
       And I follow "Locations" within ".section_nav"
       Then the "spend_locations" checkbox should not be checked
       And the "budget_locations" checkbox should not be checked
-      When I fill in "other_cost[classifications][coding_budget_district][5]" with "100"
-      And I fill in "other_cost[classifications][coding_spend_district][5]" with "100"
+      When I fill in "other_cost[classifications][location_budget_split][5]" with "100"
+      And I fill in "other_cost[classifications][location_spend_split][5]" with "100"
       And I press "Save"
       Then I should see "Indirect Cost was successfully updated."
       When I refresh the page
@@ -174,11 +174,11 @@ Feature: Reporter can enter a code breakdown for each activity
       When I follow "Projects"
       And I follow "activity1"
       And I follow "Purposes" within ".section_nav"
-      And I fill in "activity[classifications][coding_budget][1]" with "100"
+      And I fill in "activity[classifications][purpose_budget_split][1]" with "100"
       And I follow "Copy across Budget classifications to Expenditure classifications"
       And I press "Save"
-      And the "activity[classifications][coding_budget][1]" field should contain "100"
-      And the "activity[classifications][coding_spend][1]" field should contain "100"
+      And the "activity[classifications][purpose_budget_split][1]" field should contain "100"
+      And the "activity[classifications][purpose_spend_split][1]" field should contain "100"
 
     @javascript
     Scenario: Reporter can copy Purposes from Past Expenditure to Current Budget
@@ -187,11 +187,11 @@ Feature: Reporter can enter a code breakdown for each activity
       When I follow "Projects"
       And I follow "activity1"
       And I follow "Purposes" within ".section_nav"
-      And I fill in "activity[classifications][coding_spend][1]" with "100"
+      And I fill in "activity[classifications][purpose_spend_split][1]" with "100"
       And I follow "Copy across Expenditure classifications to Budget classifications"
       And I press "Save"
-      And the "activity[classifications][coding_budget][1]" field should contain "100"
-      And the "activity[classifications][coding_spend][1]" field should contain "100"
+      And the "activity[classifications][purpose_budget_split][1]" field should contain "100"
+      And the "activity[classifications][purpose_spend_split][1]" field should contain "100"
 
     Scenario: Reporter cannot clasify approved Activity
       Given an activity exists with name: "activity2", data_response: the data_response, project: the project, am_approved: true
@@ -199,7 +199,7 @@ Feature: Reporter can enter a code breakdown for each activity
       When I follow "Projects"
       And I follow "activity2"
       And I follow "Purposes" within ".section_nav"
-      And I fill in "activity[classifications][coding_spend][1]" with "100"
+      And I fill in "activity[classifications][purpose_spend_split][1]" with "100"
       And I press "Save"
       Then I should see "Activity was already approved "
 
@@ -213,14 +213,14 @@ Feature: Reporter can enter a code breakdown for each activity
       When I follow "Projects"
       And I follow "activity1"
       And I follow "Inputs" within ".section_nav"
-      And I fill in "activity[classifications][coding_budget_cost_categorization][3]" with "100"
-      And I fill in "activity[classifications][coding_spend_cost_categorization][3]" with "100"
+      And I fill in "activity[classifications][input_budget_split][3]" with "100"
+      And I fill in "activity[classifications][input_spend_split][3]" with "100"
       And I press "Save"
       Then I should see "Activity was successfully updated."
         And I should not see "Purposes by Current Budget are not classified and Purposes by Past Expenditure are not classified"
       When I refresh the page
-      Then the "activity[classifications][coding_budget_cost_categorization][3]" field should contain "100"
-        And the "activity[classifications][coding_spend_cost_categorization][3]" field should contain "100"
+      Then the "activity[classifications][input_budget_split][3]" field should contain "100"
+        And the "activity[classifications][input_spend_split][3]" field should contain "100"
 
     Scenario: Reporter can enter Inputs for activity and see flash error
       Given an activity exists with name: "activity1", data_response: the data_response, project: the project
@@ -230,8 +230,8 @@ Feature: Reporter can enter a code breakdown for each activity
       #since we used a factory above, need save to refresh cache by saving activity
       And I press "Save"
       And I follow "Inputs" within ".section_nav"
-      And I fill in "activity[classifications][coding_budget_cost_categorization][3]" with "99"
-      And I fill in "activity[classifications][coding_spend_cost_categorization][3]" with "99"
+      And I fill in "activity[classifications][input_budget_split][3]" with "99"
+      And I fill in "activity[classifications][input_spend_split][3]" with "99"
       And I press "Save"
       Then I should see "Activity was successfully updated."
       And the "spend_inputs" checkbox should not be checked
@@ -239,8 +239,8 @@ Feature: Reporter can enter a code breakdown for each activity
       When I follow "Projects"
       And I follow "activity1"
       And I follow "Inputs" within ".section_nav"
-      And I fill in "activity[classifications][coding_budget_cost_categorization][3]" with "100"
-      And I fill in "activity[classifications][coding_spend_cost_categorization][3]" with "100"
+      And I fill in "activity[classifications][input_budget_split][3]" with "100"
+      And I fill in "activity[classifications][input_spend_split][3]" with "100"
       And I press "Save"
       Then I should see "Activity was successfully updated."
       When I refresh the page

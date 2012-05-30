@@ -63,7 +63,7 @@ module Reports
 
     private
 
-    # Combines collection of CodingBudgetDistrict and CodingSpendDistrict objects
+    # Combines collection of LocationBudgetSplit and LocationSpendSplit objects
     # into a single hash, keyed by Location (Code) name
     # E.g.
     #   { "Input1" => {:spend => 10, :budget => 10} }

@@ -47,7 +47,7 @@ module Reports
 
     # Report data is built as a collection of Row objects
     # which is easier than dealing with hashes or individual
-    # CodingBudgetDistrict / CodingSpendDistrict objects
+    # LocationBudgetSplit / LocationSpendSplit objects
     def create_rows
       mapped_data = map_data(codings)
       mapped_data.inject([]) do |splits, e|
@@ -60,7 +60,7 @@ module Reports
       @resource.activities
     end
 
-    # All CodingBudgetDistrict and CodingSpendDistrict objects for given resource
+    # All LocationBudgetSplit and LocationSpendSplit objects for given resource
     # subclasses need to define implementation of
     # activities() and splits()
     def codings

@@ -6,5 +6,4 @@ class AddTypeToCodeAssignments < ActiveRecord::Migration
   def self.down
     remove_column :code_assignments, :type
   end
-
 end

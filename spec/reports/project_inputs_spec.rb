@@ -21,8 +21,8 @@ describe Reports::ProjectInputs do
                   :cached_amount => 5.0, :name => input1.name,
                   :class => DerpBudget }
   let(:activity) { mock :activity, :name => 'act',
-                   :coding_spend_cost_categorization => mock(:scope, :roots => [ssplit, ssplit1]),
-                   :coding_budget_cost_categorization => mock(:scope, :roots => [bsplit, bsplit1]),
+                   :input_spend_splits => mock(:scope, :roots => [ssplit, ssplit1]),
+                   :input_budget_splits => mock(:scope, :roots => [bsplit, bsplit1]),
                    :total_spend => 45.0, :total_budget => 15.0 }
   let(:project) { mock :project, :activities => [activity],
                   :name => 'Project1', :currency => 'USD',
@@ -67,8 +67,8 @@ describe Reports::ProjectInputs do
 
   describe "unclassified inputs" do
     before :each do
-      activity.stub(:coding_spend_cost_categorization).and_return mock(:scope, :roots => [])
-      activity.stub(:coding_budget_cost_categorization).and_return mock(:scope, :roots => [])
+      activity.stub(:input_spend_splits).and_return mock(:scope, :roots => [])
+      activity.stub(:input_budget_splits).and_return mock(:scope, :roots => [])
       project.stub(:total_spend).and_return BigDecimal.new("45.015")
     end
 

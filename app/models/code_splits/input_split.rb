@@ -1,10 +1,14 @@
-class CodingSpendCostCategorization < InputSplit
+class InputSplit < CodeSplit
+  named_scope :roots, lambda { { :conditions => [
+    "code_splits.code_id IN (?)",
+    CostCategory.roots.map{|c| c.id}] } }
+
 end
 
 
 # == Schema Information
 #
-# Table name: code_assignments
+# Table name: code_splits
 #
 #  id              :integer         not null, primary key
 #  activity_id     :integer         indexed => [code_id, type]

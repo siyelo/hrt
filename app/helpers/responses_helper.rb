@@ -14,8 +14,7 @@ module ResponsesHelper
 
   def activities_have_splits_class
     ready(@response.projects_have_activities? &&
-      @response.activities_without_implementer_splits.empty? &&
-      @response.invalid_implementer_splits.empty?)
+      @response.activities_without_implementer_splits.empty?)
   end
 
   def response_title(response)

@@ -47,11 +47,11 @@ describe Report do
                                    :project => @project)
       @split2            = Factory(:implementer_split, :activity => @activity,
                             :organization => @organization, :budget => 10, :spend => 10)
-      Factory(:coding_budget, :activity => @activity,
+      Factory(:purpose_budget_split, :activity => @activity,
               :percentage => 100, :code => mtef_code)
-      Factory(:coding_budget_district, :activity => @activity,
+      Factory(:location_budget_split, :activity => @activity,
               :percentage => 100, :code => location)
-      Factory(:coding_budget_cost_categorization, :activity => @activity,
+      Factory(:input_budget_split, :activity => @activity,
               :percentage => 100, :code => cost_category_code)
     end
 

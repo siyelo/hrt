@@ -1,4 +1,4 @@
-class CodeAssignment < ActiveRecord::Base
+class CodeSplit < ActiveRecord::Base
   include CurrencyNumberHelper
 
   strip_commas_from_all_numbers
@@ -26,29 +26,29 @@ class CodeAssignment < ActiveRecord::Base
 
   named_scope :with_code_id,
               lambda { |code_id| { :conditions =>
-                ["code_assignments.code_id = ?", code_id]} }
+                ["code_splits.code_id = ?", code_id]} }
   named_scope :with_code_ids,
               lambda { |code_ids| { :conditions =>
-                ["code_assignments.code_id IN (?)", code_ids]} }
+                ["code_splits.code_id IN (?)", code_ids]} }
   named_scope :with_activity,
               lambda { |activity_id| { :conditions =>
-                ["code_assignments.activity_id = ?", activity_id]} }
+                ["code_splits.activity_id = ?", activity_id]} }
   named_scope :with_activities,
               lambda { |activity_ids|{ :conditions =>
-                ["code_assignments.activity_id in (?)", activity_ids]} }
+                ["code_splits.activity_id in (?)", activity_ids]} }
   named_scope :with_type,
               lambda { |type| { :conditions =>
-                ["code_assignments.type = ?", type]} }
+                ["code_splits.type = ?", type]} }
   named_scope :with_types,
               lambda { |types| { :conditions =>
-                ["code_assignments.type IN (?)", types]} }
+                ["code_splits.type IN (?)", types]} }
   named_scope :sorted, {
-              :order => "code_assignments.cached_amount DESC" }
+              :order => "code_splits.cached_amount DESC" }
   named_scope :with_request,
               lambda { |request_id| {
                 :joins =>
                   "INNER JOIN activities ON
-                    activities.id = code_assignments.activity_id
+                    activities.id = code_splits.activity_id
                   INNER JOIN data_responses
                     ON activities.data_response_id = data_responses.id
                   INNER JOIN data_requests
@@ -105,16 +105,16 @@ class CodeAssignment < ActiveRecord::Base
 
   # Checks if it's a budget code assignment
   def budget?
-    ['CodingBudget',
-     'CodingBudgetCostCategorization',
-     'CodingBudgetDistrict'].include?(type.to_s)
+    ['PurposeBudgetSplit',
+     'InputBudgetSplit',
+     'LocationBudgetSplit'].include?(type.to_s)
   end
 end
 
 
 # == Schema Information
 #
-# Table name: code_assignments
+# Table name: code_splits
 #
 #  id              :integer         not null, primary key
 #  activity_id     :integer         indexed => [code_id, type]

@@ -1,7 +1,7 @@
 #  USAGE:
 #
 #  activity    = Activity.find(889)
-#  coding_type = CodingBudget
+#  coding_type = PurposeBudgetSplit
 
 #  ct = CodingTree.new(activity, coding_type)
 #
@@ -84,11 +84,11 @@ class CodingTree
 
   def root_codes
     case @coding_klass.to_s
-    when 'CodingBudget', 'CodingSpend'
+    when 'PurposeBudgetSplit', 'PurposeSpendSplit'
       @activity.class.to_s == "OtherCost" ? OtherCostCode.roots : Code.purposes.roots
-    when 'CodingBudgetCostCategorization', 'CodingSpendCostCategorization'
+    when 'InputBudgetSplit', 'InputSpendSplit'
       CostCategory.roots
-    when 'CodingBudgetDistrict', 'CodingSpendDistrict'
+    when 'LocationBudgetSplit', 'LocationSpendSplit'
       Location.national_level + Location.without_national_level.sorted.all
     else
       raise "Invalid coding_klass #{@coding_klass.to_s}".to_yaml
@@ -162,7 +162,7 @@ class CodingTree
     end
 
     def build_tree
-      @code_assignments = @coding_klass.with_activity(@activity)
+      @code_splits = @coding_klass.with_activity(@activity)
       @inner_root       = Tree.new({})
 
       build_subtree(@inner_root, root_codes)
@@ -172,7 +172,7 @@ class CodingTree
 
     def build_subtree(root, codes)
       codes.each do |code|
-        code_assignment = @code_assignments.detect{|ca| ca.code_id == code.id}
+        code_assignment = @code_splits.detect{|ca| ca.code_id == code.id}
         if code_assignment
           node = Tree.new({:ca => code_assignment, :code => code})
           root.children << node
@@ -187,11 +187,11 @@ class CodingTree
 
     def all_codes
       @all_codes ||= case @coding_klass.to_s
-      when 'CodingBudget', 'CodingSpend'
+      when 'PurposeBudgetSplit', 'PurposeSpendSplit'
         @activity.class.to_s == "OtherCost" ? OtherCostCode.all : Code.all
-      when 'CodingBudgetCostCategorization', 'CodingSpendCostCategorization'
+      when 'InputBudgetSplit', 'InputSpendSplit'
         CostCategory.all
-      when 'CodingBudgetDistrict', 'CodingSpendDistrict'
+      when 'LocationBudgetSplit', 'LocationSpendSplit'
         Location.all
       else
         raise "Invalid coding_klass #{@coding_klass.to_s}".to_yaml

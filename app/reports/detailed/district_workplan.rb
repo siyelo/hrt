@@ -11,9 +11,9 @@ class Reports::Detailed::DistrictWorkplan
                   organizations.name AS organization_name',
       :include => [:data_response, :project,
                    {:implementer_splits => :organization},
-                   :coding_budget_district, :coding_spend_district],
-      :joins => [{:data_response => :organization}, :code_assignments],
-      :conditions => ['code_assignments.code_id = ?
+                   :location_budget_splits, :location_spend_splits],
+      :joins => [{:data_response => :organization}, :code_splits],
+      :conditions => ['code_splits.code_id = ?
                       AND data_responses.data_request_id = ?',
                       district.id, request.id],
       :order => 'organizations.name ASC'
@@ -66,12 +66,12 @@ class Reports::Detailed::DistrictWorkplan
   end
 
   def spend_district_amount(activity)
-    ca = activity.coding_spend_district.detect { |ca| ca.code_id == district.id }
+    ca = activity.location_spend_splits.detect { |ca| ca.code_id == district.id }
     ca ? universal_currency_converter(ca.cached_amount, activity.currency, "RWF") : 0
   end
 
   def budget_district_amount(activity)
-    ca = activity.coding_budget_district.detect { |ca| ca.code_id == district.id }
+    ca = activity.location_budget_splits.detect { |ca| ca.code_id == district.id }
     ca ? universal_currency_converter(ca.cached_amount, activity.currency, "RWF") : 0
   end
 

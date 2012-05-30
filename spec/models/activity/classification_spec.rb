@@ -6,13 +6,12 @@ describe Activity, "Classification" do
     basic_setup_project
   end
 
-
-  [['coding_budget_valid?', CodingBudget, :budget, :mtef_code, 'purposes_classified?'],
-   ['coding_spend_valid?', CodingSpend, :spend, :mtef_code, 'purposes_classified?'],
-   ['coding_budget_district_valid?', CodingBudgetDistrict, :budget, :location, 'locations_classified?'],
-   ['coding_spend_district_valid?', CodingSpendDistrict, :spend,  :location, 'locations_classified?'],
-   ['coding_budget_cc_valid?', CodingBudgetCostCategorization, :budget, :cost_category_code, 'inputs_classified?'],
-   ['coding_spend_cc_valid?', CodingSpendCostCategorization, :spend,  :cost_category_code, 'inputs_classified?']
+  [['purpose_budget_splits_valid?', PurposeBudgetSplit, :budget, :mtef_code, 'purposes_classified?'],
+   ['purpose_spend_splits_valid?', PurposeSpendSplit, :spend, :mtef_code, 'purposes_classified?'],
+   ['location_budget_splits_valid?', LocationBudgetSplit, :budget, :location, 'locations_classified?'],
+   ['location_spend_splits_valid?', LocationSpendSplit, :spend,  :location, 'locations_classified?'],
+   ['input_budget_splits_valid?', InputBudgetSplit, :budget, :cost_category_code, 'inputs_classified?'],
+   ['input_spend_splits_valid?', InputSpendSplit, :spend,  :cost_category_code, 'inputs_classified?']
    ].each do |valid_method, klass, amount_field, code_type, all_valid_method|
     describe "#{valid_method}" do
       before :each do
@@ -55,39 +54,39 @@ describe Activity, "Classification" do
     end
 
     it "is budget_classified? when all budgets are classified" do
-      @activity.stub(:coding_budget_valid?) { true }
-      @activity.stub(:coding_budget_district_valid?) { true }
-      @activity.stub(:coding_budget_cc_valid?) { true }
+      @activity.stub(:purpose_budget_splits_valid?) { true }
+      @activity.stub(:location_budget_splits_valid?) { true }
+      @activity.stub(:input_budget_splits_valid?) { true }
       @activity.budget_classified?.should be_true
     end
 
     it "is not budget_classified? when budget is not classified" do
-      @activity.stub(:coding_budget_valid?) { false }
-      @activity.stub(:coding_budget_district_valid?) { true }
-      @activity.stub(:coding_budget_cc_valid?) { true }
+      @activity.stub(:purpose_budget_splits_valid?) { false }
+      @activity.stub(:location_budget_splits_valid?) { true }
+      @activity.stub(:input_budget_splits_valid?) { true }
       @activity.budget_classified?.should be_false
     end
 
     it "is not budget_classified? when districts are not classified" do
-      @activity.stub(:coding_budget_valid?) { true }
-      @activity.stub(:coding_budget_district_valid?) { false }
-      @activity.stub(:coding_budget_cc_valid?) { true }
+      @activity.stub(:purpose_budget_splits_valid?) { true }
+      @activity.stub(:location_budget_splits_valid?) { false }
+      @activity.stub(:input_budget_splits_valid?) { true }
       @activity.budget_classified?.should be_false
     end
 
     it "is not budget_classified? when cost categories are not classified" do
-      @activity.stub(:coding_budget_valid?) { true }
-      @activity.stub(:coding_budget_district_valid?) { true }
-      @activity.stub(:coding_budget_cc_valid?) { false }
+      @activity.stub(:purpose_budget_splits_valid?) { true }
+      @activity.stub(:location_budget_splits_valid?) { true }
+      @activity.stub(:input_budget_splits_valid?) { false }
       @activity.budget_classified?.should be_false
     end
 
     it "is budget_classified? when no budgets are classified & budget is blank or zero" do
       @split.budget = nil; @split.save
       @activity.reload; @activity.save
-      @activity.stub(:coding_budget_valid?) { false }
-      @activity.stub(:coding_budget_district_valid?) { false }
-      @activity.stub(:coding_budget_cc_valid?) { false }
+      @activity.stub(:purpose_budget_splits_valid?) { false }
+      @activity.stub(:location_budget_splits_valid?) { false }
+      @activity.stub(:input_budget_splits_valid?) { false }
       @activity.budget_classified?.should be_true
     end
   end
@@ -101,39 +100,39 @@ describe Activity, "Classification" do
       @activity.save
     end
     it "is spend_classified? when all spends are classified" do
-      @activity.stub(:coding_spend_valid?) { true }
-      @activity.stub(:coding_spend_district_valid?) { true }
-      @activity.stub(:coding_spend_cc_valid?) { true }
+      @activity.stub(:purpose_spend_splits_valid?) { true }
+      @activity.stub(:location_spend_splits_valid?) { true }
+      @activity.stub(:input_spend_splits_valid?) { true }
       @activity.spend_classified?.should be_true
     end
 
     it "is not spend_classified? when spend is not classified" do
-      @activity.stub(:coding_spend_valid?) { false }
-      @activity.stub(:coding_spend_district_valid?) { true }
-      @activity.stub(:coding_spend_cc_valid?) { true }
+      @activity.stub(:purpose_spend_splits_valid?) { false }
+      @activity.stub(:location_spend_splits_valid?) { true }
+      @activity.stub(:input_spend_splits_valid?) { true }
       @activity.spend_classified?.should be_false
     end
 
     it "is not spend_classified? when districts are not classified" do
-      @activity.stub(:coding_spend_valid?) { true }
-      @activity.stub(:coding_spend_district_valid?) { false }
-      @activity.stub(:coding_spend_cc_valid?) { true }
+      @activity.stub(:purpose_spend_splits_valid?) { true }
+      @activity.stub(:location_spend_splits_valid?) { false }
+      @activity.stub(:input_spend_splits_valid?) { true }
       @activity.spend_classified?.should be_false
     end
 
     it "is not spend_classified? when cost categories are not classified" do
-      @activity.stub(:coding_spend_valid?) { true }
-      @activity.stub(:coding_spend_district_valid?) { true }
-      @activity.stub(:coding_spend_cc_valid?) { false }
+      @activity.stub(:purpose_spend_splits_valid?) { true }
+      @activity.stub(:location_spend_splits_valid?) { true }
+      @activity.stub(:input_spend_splits_valid?) { false }
       @activity.spend_classified?.should be_false
     end
 
     it "is spend_classified? when no spends are classified & spend is blank or zero" do
       @split.spend = nil; @split.save
       @activity.reload; @activity.save
-      @activity.stub(:coding_spend_valid?) { false }
-      @activity.stub(:coding_spend_district_valid?) { false }
-      @activity.stub(:coding_spend_cc_valid?) { false }
+      @activity.stub(:purpose_spend_splits_valid?) { false }
+      @activity.stub(:location_spend_splits_valid?) { false }
+      @activity.stub(:input_spend_splits_valid?) { false }
       @activity.spend_classified?.should be_true
     end
   end

@@ -1,4 +1,4 @@
-Activity.find_all_by_new_spend_currency("AUD").each { |a| puts " #{a.id}: #{a.currency} (#{a.project.currency}) (#{a.data_response.currency}) "; p = a.project ; p.currency = p.data_response.currency; p.save!; a.save!; a.code_assignments.each {|ca| ca.save!} }
+Activity.find_all_by_new_spend_currency("AUD").each { |a| puts " #{a.id}: #{a.currency} (#{a.project.currency}) (#{a.data_response.currency}) "; p = a.project ; p.currency = p.data_response.currency; p.save!; a.save!; a.code_splits.each {|ca| ca.save!} }
 
 #
 #  log

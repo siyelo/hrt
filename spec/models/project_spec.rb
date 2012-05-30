@@ -160,9 +160,9 @@ describe Project do
       activity2 = Factory(:activity, :data_response => @response, :project => @project)
       location1 = Factory(:location)
       location2 = Factory(:location)
-      Factory(:coding_budget_district, :activity => activity1, :code => location1)
-      Factory(:coding_budget_district, :activity => activity1, :code => location2)
-      Factory(:coding_budget_district, :activity => activity2, :code => location1)
+      Factory(:location_budget_split, :activity => activity1, :code => location1)
+      Factory(:location_budget_split, :activity => activity1, :code => location2)
+      Factory(:location_budget_split, :activity => activity2, :code => location1)
       @project.reload
       @project.locations.length.should == 2
       @project.locations.should include(location1)

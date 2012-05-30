@@ -25,11 +25,11 @@ describe Reports::Detailed::DynamicQuery do
         @is = Factory :implementer_split, :activity => @activity, :organization => @organization, :budget => 100
         @mtef = Factory :mtef_code, :short_display => "sub_prog_name"
         @nsp = Factory :nsp_code, :short_display => "Nsp_code"
-        @cost_categorization = Factory :coding_budget_cost_categorization,
+        @cost_categorization = Factory :input_budget_split,
           :percentage => 100, :activity => @activity, :code => @code1
         @budget_purpose = Factory :budget_purpose, :percentage => 100,
           :activity => @activity, :code => @code1
-        @coding_budget_district = Factory :coding_budget_district,
+        @location_budget_split = Factory :location_budget_split,
           :percentage => 100, :activity => @activity, :code => @code1
 
         #creating dummy tree
@@ -178,13 +178,13 @@ describe Reports::Detailed::DynamicQuery do
       end
 
       it "should adjust the total amounts as per codings (2 cost categorys splits)" do
-        @cost_categorization = Factory :coding_budget_cost_categorization,
+        @cost_categorization = Factory :input_budget_split,
           :percentage => 25, :activity => @activity, :code => @code1
-        @cost_categorization1 = Factory :coding_budget_cost_categorization,
+        @cost_categorization1 = Factory :input_budget_split,
           :percentage => 75, :activity => @activity, :code => @code1
         @budget_purpose = Factory :budget_purpose, :percentage => 100,
           :activity => @activity, :code => @code1
-        @coding_budget_district = Factory :coding_budget_district,
+        @location_budget_split = Factory :location_budget_split,
           :percentage => 100, :activity => @activity, :code => @code1
         table = run_report
         table[0]['Funding Source'].should == @organization.name
@@ -225,13 +225,13 @@ describe Reports::Detailed::DynamicQuery do
       end
 
       it "should adjust the total amounts as per codings (2 coding budget splits)" do
-        @cost_categorization = Factory :coding_budget_cost_categorization,
+        @cost_categorization = Factory :input_budget_split,
           :percentage => 100, :activity => @activity, :code => @code1
         @budget_purpose = Factory :budget_purpose, :percentage => 80,
           :activity => @activity, :code => @code1
-        @coding_budget1 = Factory :coding_budget,
+        @purpose_budget_split1 = Factory :purpose_budget_split,
           :percentage => 20, :activity => @activity, :code => @code1
-        @coding_budget_district = Factory :coding_budget_district,
+        @location_budget_split = Factory :location_budget_split,
           :percentage => 100, :activity => @activity, :code => @code1
         table = run_report
         table[0]['Funding Source'].should == @organization.name
@@ -272,13 +272,13 @@ describe Reports::Detailed::DynamicQuery do
       end
 
       it "should adjust the total amounts as per codings (2 location budget splits)" do
-        @cost_categorization = Factory :coding_budget_cost_categorization,
+        @cost_categorization = Factory :input_budget_split,
           :percentage => 100, :activity => @activity, :code => @code1
         @budget_purpose = Factory :budget_purpose, :percentage => 100,
           :activity => @activity, :code => @code1
-        @coding_budget_district = Factory :coding_budget_district,
+        @location_budget_split = Factory :location_budget_split,
           :percentage => 70, :activity => @activity, :code => @code1
-        @coding_budget_district = Factory :coding_budget_district,
+        @location_budget_split = Factory :location_budget_split,
           :percentage => 30, :activity => @activity, :code => @code1
         table = run_report
         table[0]['Funding Source'].should == @organization.name
@@ -319,17 +319,17 @@ describe Reports::Detailed::DynamicQuery do
       end
 
       it "should adjust the total amounts as per codings (2 of each budget splits)" do
-        @cost_categorization = Factory :coding_budget_cost_categorization,
+        @cost_categorization = Factory :input_budget_split,
           :percentage => 90, :activity => @activity, :code => @code1
-        @cost_categorization1 = Factory :coding_budget_cost_categorization,
+        @cost_categorization1 = Factory :input_budget_split,
           :percentage => 10, :activity => @activity, :code => @code1
         @budget_purpose = Factory :budget_purpose, :percentage => 80,
           :activity => @activity, :code => @code1
         @budget_purpose = Factory :budget_purpose, :percentage => 20,
           :activity => @activity, :code => @code1
-        @coding_budget_district = Factory :coding_budget_district,
+        @location_budget_split = Factory :location_budget_split,
           :percentage => 70, :activity => @activity, :code => @code1
-        @coding_budget_district = Factory :coding_budget_district,
+        @location_budget_split = Factory :location_budget_split,
           :percentage => 30, :activity => @activity, :code => @code1
 
         table = run_report
@@ -480,17 +480,17 @@ describe Reports::Detailed::DynamicQuery do
 
       it "should adjust the total amounts as per codings (2 of each budget splits and 2 funders)" do
         #total amount is 100 because the amount of the activity is 100 despite being funded 150
-        @cost_categorization = Factory :coding_budget_cost_categorization,
+        @cost_categorization = Factory :input_budget_split,
           :percentage => 90, :activity => @activity, :code => @code1
-        @cost_categorization1 = Factory :coding_budget_cost_categorization,
+        @cost_categorization1 = Factory :input_budget_split,
           :percentage => 10, :activity => @activity, :code => @code1
         @budget_purpose = Factory :budget_purpose, :percentage => 80,
           :activity => @activity, :code => @code1
         @budget_purpose = Factory :budget_purpose, :percentage => 20,
           :activity => @activity, :code => @code1
-        @coding_budget_district = Factory :coding_budget_district,
+        @location_budget_split = Factory :location_budget_split,
           :percentage => 70, :activity => @activity, :code => @code1
-        @coding_budget_district = Factory :coding_budget_district,
+        @location_budget_split = Factory :location_budget_split,
           :percentage => 30, :activity => @activity, :code => @code1
         @funder2 = Factory :organization, :name => "zz_funder2"
         @project.in_flows << [Factory.build :funding_flow, :from => @funder2,
@@ -817,9 +817,9 @@ describe Reports::Detailed::DynamicQuery do
           :activity => @activity, :code => @code1
         @budget_purpose = Factory :budget_purpose, :percentage => 20,
           :activity => @activity, :code => @code1
-        @coding_budget_district = Factory :coding_budget_district,
+        @location_budget_split = Factory :location_budget_split,
           :percentage => 70, :activity => @activity, :code => @code1
-        @coding_budget_district = Factory :coding_budget_district,
+        @location_budget_split = Factory :location_budget_split,
           :percentage => 30, :activity => @activity, :code => @code1
         @funder2 = Factory :organization, :name => "zzfunder2"
         @project.in_flows << [Factory.build :funding_flow, :from => @funder2,
@@ -970,14 +970,14 @@ describe Reports::Detailed::DynamicQuery do
         table[7]['Total Amount ($)'].round_with_precision(2).should == 2.00
         table[7]['Actual Double Count'].should == @is.double_count
 
-        @activity.coding_budget_cost_categorization.size.should == 0
+        @activity.input_budget_splits.size.should == 0
       end
 
       it "budget purpose - should replace incomplete codings with 'not coded' (should not affect calculated amounts)" do
         #total amount is 100 because the amount of the activity is 100 despite being funded 150
-        @cost_categorization = Factory :coding_budget_cost_categorization,
+        @cost_categorization = Factory :input_budget_split,
           :percentage => 100, :activity => @activity, :code => @code1
-        @coding_budget_district = Factory :coding_budget_district,
+        @location_budget_split = Factory :location_budget_split,
           :percentage => 100, :activity => @activity, :code => @code1
 
         table = run_report
@@ -999,14 +999,14 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Total Amount ($)'].round_with_precision(2).should == 100.00
         table[0]['Actual Double Count'].should == @is.double_count
 
-        @activity.coding_budget.size.should == 0
-        @activity.coding_budget_cost_categorization.size.should == 1
-        @activity.coding_budget_district.size.should == 1
+        @activity.purpose_budget_splits.size.should == 0
+        @activity.input_budget_splits.size.should == 1
+        @activity.location_budget_splits.size.should == 1
       end
 
       it "budget district - should replace incomplete codings with 'not coded' (should not affect calculated amounts)" do
         #total amount is 100 because the amount of the activity is 100 despite being funded 150
-        @cost_categorization = Factory :coding_budget_cost_categorization,
+        @cost_categorization = Factory :input_budget_split,
           :percentage => 100, :activity => @activity, :code => @code1
         @budget_purpose = Factory :budget_purpose, :percentage => 100,
           :activity => @activity, :code => @code1
@@ -1030,9 +1030,9 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Total Amount ($)'].round_with_precision(2).should == 100.00
         table[0]['Actual Double Count'].should == @is.double_count
 
-        @activity.coding_budget.size.should == 1
-        @activity.coding_budget_cost_categorization.size.should == 1
-        @activity.coding_budget_district.size.should == 0
+        @activity.purpose_budget_splits.size.should == 1
+        @activity.input_budget_splits.size.should == 1
+        @activity.location_budget_splits.size.should == 0
       end
     end
 
@@ -1063,17 +1063,17 @@ describe Reports::Detailed::DynamicQuery do
 
       it "should adjust the total amounts as per codings (2 of each budget splits and 2 funders)" do
         #total amount is 100 because the amount of the activity is 100 despite being funded 150
-        @cost_categorization = Factory :coding_budget_cost_categorization,
+        @cost_categorization = Factory :input_budget_split,
           :percentage => 90, :activity => @activity, :code => @code1
-        @cost_categorization1 = Factory :coding_budget_cost_categorization,
+        @cost_categorization1 = Factory :input_budget_split,
           :percentage => 10, :activity => @activity, :code => @code1
         @budget_purpose = Factory :budget_purpose, :percentage => 80,
           :activity => @activity, :code => @code1
         @budget_purpose = Factory :budget_purpose, :percentage => 20,
           :activity => @activity, :code => @code1
-        @coding_budget_district = Factory :coding_budget_district,
+        @location_budget_split = Factory :location_budget_split,
           :percentage => 70, :activity => @activity, :code => @code1
-        @coding_budget_district = Factory :coding_budget_district,
+        @location_budget_split = Factory :location_budget_split,
           :percentage => 30, :activity => @activity, :code => @code1
 
         table = run_report
@@ -1259,11 +1259,11 @@ describe Reports::Detailed::DynamicQuery do
           :data_response => @response, :description => "desc"
         @is = Factory :implementer_split, :activity => @activity,
           :organization => @organization, :budget => 100
-        @cost_categorization = Factory :coding_budget_cost_categorization,
+        @cost_categorization = Factory :input_budget_split,
           :percentage => 100, :activity => @activity, :code => @code1
         @budget_purpose = Factory :budget_purpose, :percentage => 100,
           :activity => @activity, :code => @code1
-        @coding_budget_district = Factory :coding_budget_district,
+        @location_budget_split = Factory :location_budget_split,
           :percentage => 100, :activity => @activity, :code => @code1
         @activity.reload;@activity.save
 
@@ -1292,11 +1292,11 @@ describe Reports::Detailed::DynamicQuery do
           :data_response => @response, :description => "desc"
         @is = Factory :implementer_split, :activity => @other_cost,
           :organization => @organization, :budget => 100
-        @cost_categorization = Factory :coding_budget_cost_categorization,
+        @cost_categorization = Factory :input_budget_split,
           :percentage => 100, :activity => @other_cost, :code => @code1
         @budget_purpose = Factory :budget_purpose, :percentage => 100,
           :activity => @other_cost, :code => @code1
-        @coding_budget_district = Factory :coding_budget_district,
+        @location_budget_split = Factory :location_budget_split,
           :percentage => 100, :activity => @other_cost, :code => @code1
         @other_cost.reload;@other_cost.save
         table = run_report
@@ -1348,11 +1348,11 @@ describe Reports::Detailed::DynamicQuery do
       end
 
       it "should create a purposes row with the outstanding amount (should make 2 rows)" do
-        @cost_categorization = Factory :coding_budget_cost_categorization,
+        @cost_categorization = Factory :input_budget_split,
           :percentage => 100, :activity => @activity, :code => @code1
         @budget_purpose = Factory :budget_purpose, :percentage => 90,
           :activity => @activity, :code => @code1
-        @coding_budget_district = Factory :coding_budget_district,
+        @location_budget_split = Factory :location_budget_split,
           :percentage => 100, :activity => @activity, :code => @code1
 
         table = run_report
@@ -1394,11 +1394,11 @@ describe Reports::Detailed::DynamicQuery do
       end
 
       it "should create a inputs row with the outstanding amount (should make 2 rows)" do
-        @cost_categorization = Factory :coding_budget_cost_categorization,
+        @cost_categorization = Factory :input_budget_split,
           :percentage => 80, :activity => @activity, :code => @code1
         @budget_purpose = Factory :budget_purpose, :percentage => 100,
           :activity => @activity, :code => @code1
-        @coding_budget_district = Factory :coding_budget_district,
+        @location_budget_split = Factory :location_budget_split,
           :percentage => 100, :activity => @activity, :code => @code1
 
         table = run_report
@@ -1440,11 +1440,11 @@ describe Reports::Detailed::DynamicQuery do
       end
 
       it "should create a districts row with the outstanding amount (should make 2 rows)" do
-        @cost_categorization = Factory :coding_budget_cost_categorization,
+        @cost_categorization = Factory :input_budget_split,
           :percentage => 100, :activity => @activity, :code => @code1
         @budget_purpose = Factory :budget_purpose, :percentage => 100,
           :activity => @activity, :code => @code1
-        @coding_budget_district = Factory :coding_budget_district,
+        @location_budget_split = Factory :location_budget_split,
           :percentage => 85, :activity => @activity, :code => @code1
 
         table = run_report
@@ -1487,11 +1487,11 @@ describe Reports::Detailed::DynamicQuery do
 
       context "within allowed leeway" do
         it "should not create a inputs row with the outstanding amount (should make 1 row)" do
-          @cost_categorization = Factory :coding_budget_cost_categorization,
+          @cost_categorization = Factory :input_budget_split,
             :percentage => 99.5, :activity => @activity, :code => @code1
           @budget_purpose = Factory :budget_purpose, :percentage => 100,
             :activity => @activity, :code => @code1
-          @coding_budget_district = Factory :coding_budget_district,
+          @location_budget_split = Factory :location_budget_split,
             :percentage => 100, :activity => @activity, :code => @code1
 
           table = run_report
@@ -1536,11 +1536,11 @@ describe Reports::Detailed::DynamicQuery do
           :organization => @organization, :budget => 100
         @mtef = Factory :mtef_code, :short_display => "sub_prog_name"
         @nsp = Factory :nsp_code, :short_display => "Nsp_code"
-        @cost_categorization = Factory :coding_budget_cost_categorization,
+        @cost_categorization = Factory :input_budget_split,
           :percentage => 100, :activity => @activity, :code => @code1
         @budget_purpose = Factory :budget_purpose, :percentage => 100,
           :activity => @activity, :code => @code1
-        @coding_budget_district = Factory :coding_budget_district,
+        @location_budget_split = Factory :location_budget_split,
           :percentage => 100, :activity => @activity, :code => @code1
 
         #creating dummy tree
@@ -1603,11 +1603,11 @@ describe Reports::Detailed::DynamicQuery do
           :organization => @organization, :spend => 100
         @mtef = Factory :mtef_code, :short_display => "sub_prog_name"
         @nsp = Factory :nsp_code, :short_display => "Nsp_code"
-        @cost_categorization = Factory :coding_spend_cost_categorization,
+        @cost_categorization = Factory :input_spend_split,
           :percentage => 100, :activity => @activity, :code => @code1
         @spend_purpose = Factory :spend_purpose, :percentage => 100,
           :activity => @activity, :code => @code1
-        @coding_spend_district = Factory :coding_spend_district,
+        @location_spend_split = Factory :location_spend_split,
           :percentage => 100, :activity => @activity, :code => @code1
 
         #creating dummy tree

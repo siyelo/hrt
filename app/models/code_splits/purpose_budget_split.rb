@@ -1,13 +1,10 @@
-class LocationSplit < CodeAssignment
-  named_scope :roots, lambda { { :conditions => [
-    "code_assignments.code_id IN (?)",
-    Location.roots.map{|c| c.id}] } }
+class PurposeBudgetSplit < CodeSplit
 end
 
 
 # == Schema Information
 #
-# Table name: code_assignments
+# Table name: code_splits
 #
 #  id              :integer         not null, primary key
 #  activity_id     :integer         indexed => [code_id, type]

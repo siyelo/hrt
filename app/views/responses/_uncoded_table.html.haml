@@ -21,5 +21,5 @@
         %td= check_box_tag "", "", activity.locations_classified?
         - unless other_costs
           %td= check_box_tag "", "", activity.purposes_classified?
-          %td= check_box_tag "", "", activity.coding_spend_cc_valid? && activity.coding_budget_cc_valid?
+          %td= check_box_tag "", "", activity.input_spend_splits_valid? && activity.input_budget_splits_valid?
         %td= link_to 'Classify', link_to_unclassified(activity)

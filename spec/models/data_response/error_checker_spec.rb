@@ -52,23 +52,10 @@ describe DataResponse::ErrorChecker do
     end
 
     it "fails if an ocost is missing a location split" do
-      oc = mock :othercost, :coding_budget_district_valid? => false
+      oc = mock :othercost, :location_budget_splits_valid? => false
       response.should_receive(:other_costs).exactly(3).times.and_return [oc]
       response.uncoded_other_costs.should have(1).item
       response.other_costs_coded?.should be_false
-    end
-  end
-
-  describe "#implementer_splits_entered_and_valid" do
-    it "returns true if all activities have splits and the splits are valid" do
-      response.should_receive(:activities_without_implementer_splits).and_return []
-      response.should_receive(:invalid_implementer_splits).and_return []
-      response.implementer_splits_entered_and_valid?.should be_true
-    end
-
-    it "returns false if any activity doesn't have splits or a split is invalid" do
-      response.should_receive(:activities_without_implementer_splits).and_return [ mock :activity ]
-      response.implementer_splits_entered_and_valid?.should be_false
     end
   end
 
@@ -79,7 +66,7 @@ describe DataResponse::ErrorChecker do
     response.should_receive(:projects_have_other_costs?).and_return true
     response.should_receive(:activities_coded?).and_return true
     response.should_receive(:other_costs_coded?).and_return true
-    response.should_receive(:implementer_splits_entered_and_valid?).and_return true
+    response.should_receive(:implementer_splits_entered?).and_return true
     response.ready_to_submit?.should be_true
   end
 end

@@ -51,11 +51,11 @@ describe Reports::Detailed::ClassificationSplit do
           # Classifications
           classifications = { code1.id => 25, code2.id => 75 }
           if classification_type == :purpose
-            CodingBudget.update_classifications(@activity1, classifications)
+            PurposeBudgetSplit.update_classifications(@activity1, classifications)
           elsif classification_type == :input
-            CodingBudgetCostCategorization.update_classifications(@activity1, classifications)
+            InputBudgetSplit.update_classifications(@activity1, classifications)
           elsif classification_type == :location
-            CodingBudgetDistrict.update_classifications(@activity1, classifications)
+            LocationBudgetSplit.update_classifications(@activity1, classifications)
           else
             raise "Invalid type #{classification_type}".to_yaml
           end

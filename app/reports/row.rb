@@ -1,6 +1,6 @@
 # Represents the assignment of a Location to an activity
 #
-# (At time of writing is used as a pseudo-aggregate of CodingBudgetDistrict & Spend equivalents
+# (At time of writing is used as a pseudo-aggregate of LocationBudgetSplit & Spend equivalents
 #
 require 'action_view/helpers/number_helper'
 require 'bigdecimal'

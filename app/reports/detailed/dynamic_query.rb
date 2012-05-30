@@ -18,7 +18,7 @@ class Reports::Detailed::DynamicQuery
           :targets,
           { "leaf_#{@amount_type}_purposes".to_sym => :code },
           { "leaf_#{@amount_type}_inputs".to_sym => :code },
-          { "coding_#{@amount_type}_district".to_sym => :code },
+          { "location_#{@amount_type}_splits".to_sym => :code },
           { :project => { :in_flows => :from } },
           { :data_response => :organization },
           :implementer_splits, #eager load for activity.total_*
@@ -133,11 +133,11 @@ class Reports::Detailed::DynamicQuery
         purpose_row << mtef_name(purpose_classification.code)
         purpose_row << nsp_name(purpose_classification.code)
 
-        fake_district = is_fake?(activity.send("coding_#{@amount_type}_district").first.code)
-        build_incomplete_classificiation(activity, "coding_#{@amount_type}_district")
-        purpose_row << funder_ratio(activity.send("coding_#{@amount_type}_district"), in_flow_ratio, fake_district)
+        fake_district = is_fake?(activity.send("location_#{@amount_type}_splits").first.code)
+        build_incomplete_classificiation(activity, "location_#{@amount_type}_splits")
+        purpose_row << funder_ratio(activity.send("location_#{@amount_type}_splits"), in_flow_ratio, fake_district)
 
-        activity.send("coding_#{@amount_type}_district").reject{|ca| ca.percentage.nil?}.sort{|a,b| b.percentage <=> a.percentage}.each do |district_classification|
+        activity.send("location_#{@amount_type}_splits").reject{|ca| ca.percentage.nil?}.sort{|a,b| b.percentage <=> a.percentage}.each do |district_classification|
           district_row = purpose_row.dup
           district_row << ( fake_district ? 'N/A' : district_classification.percentage.to_f.round_with_precision(2) )
           district_row << district_classification.code.short_display
@@ -182,7 +182,7 @@ class Reports::Detailed::DynamicQuery
   end
 
   def build_fake_classifications(activity)
-    ["coding_#{@amount_type}_district", "leaf_#{@amount_type}_purposes",
+    ["location_#{@amount_type}_splits", "leaf_#{@amount_type}_purposes",
      "leaf_#{@amount_type}_inputs"].each do |method|
        if activity.send(method).length == 0
          activity.send(method).build(:percentage => 100, :code => fake_code)
