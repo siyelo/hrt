@@ -34,7 +34,7 @@ HrtCharts.drawColumnChart = function (id, rawData, series, width, height, maxPer
   });
 };
 
-HrtCharts.drawPieChart = function (element, data_rows, series, width, height) {
+HrtCharts.drawPieChart = function (element, data_rows, series, width, height, links) {
   if (typeof(data_rows) === "undefined") {
     return;
   }
@@ -52,5 +52,12 @@ HrtCharts.drawPieChart = function (element, data_rows, series, width, height) {
              chartArea: {width: 360, height: 220},
              slices: series,
              sliceVisibilityThreshold: 1/30
+  });
+  google.visualization.events.addListener(chart, 'select', function () {
+    if ( Object.keys(links).length > 0 ) {
+      var element = data.getValue(chart.getSelection()[0].row, 0);
+      var link = "http://" + location.host + links[element];
+      window.location.href = link;
+    }
   });
 };

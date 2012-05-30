@@ -6,6 +6,14 @@ module Charts
   class Base
     attr_reader :data
 
+    # Charts are initialized with a collection of objects that respond to
+    # name_method and value_method.
+    # names and values are saved into @data
+    def initialize(collection)
+      map_data collection
+    end
+
+    ### Class methods
     class << self
       # Default method for extracting data label names from the given collection
       # The objects in the collection should respond to this
@@ -30,13 +38,7 @@ module Charts
       end
     end
 
-    # Charts are initialized with a collection of objects that respond to
-    # name_method and value_method.
-    # names and values are saved into @data
-    def initialize(collection)
-      map_data collection
-    end
-
+    ### Instance methods
     # Json for use with a google pie chart visualization
     def google_pie
       return empty_google_pie if @data.empty?
@@ -63,33 +65,13 @@ module Charts
       ].to_json
     end
 
-    def pie_sort
-      self.sort_by_values_desc
-    end
-
-    def bar_sort
-      self.sort_by_name
-    end
-
-    def column_sort
-      self.sort_by_values_desc[0..9]
-    end
-
-    def sort_by_values_desc
-      @data.sort_by{ |k,v| v }.reverse
-    end
-
-    def sort_by_name
-      @data.sort_by { |k,v| k }
-    end
-
     protected
 
     def map_data(collection)
       @data ||= collection.inject({}) do |result,e|
         val = e.send(self.class.value_method) || 0
         if val.to_f > 0.0
-          name = e.send(self.class.name_method).presence || "no name"
+          name = e.send(self.class.name_method) || "no name"
           key = name.send(self.class.name_format)
           # in the event of duplicate keys, just add the values together
           result[key] = val.send(self.class.value_format) + (result[key] || 0)
@@ -117,6 +99,27 @@ module Charts
     def bar_legend
       'Default Bar Chart Title'
     end
+
+    def pie_sort
+      self.sort_by_values_desc
+    end
+
+    def bar_sort
+      self.sort_by_name
+    end
+
+    def column_sort
+      self.sort_by_values_desc[0..9]
+    end
+
+    def sort_by_values_desc
+      @data.sort_by{ |k,v| v }.reverse
+    end
+
+    def sort_by_name
+      @data.sort_by { |k,v| k }
+    end
+
   end
 
   ### Common charts

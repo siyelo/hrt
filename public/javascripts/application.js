@@ -2,9 +2,9 @@
 var reports_index = {
   run: function () {
     HrtCharts.drawPieChart($('.projects_tab .code_spent')[0],
-        _expenditure_summary, _expenditure_colours, 450, 300);
+        _expenditure_summary, _expenditure_colours, 450, 300, _links);
     HrtCharts.drawPieChart($('.projects_tab .code_budget')[0],
-        _budget_summary, _budget_colours, 450, 300);
+        _budget_summary, _budget_colours, 450, 300, _links);
     HrtReports.tabInit();
   }
 };
@@ -12,9 +12,9 @@ var reports_index = {
 var reports_projects_show = {
   run: function () {
     HrtCharts.drawPieChart($('.code_spent')[0],
-        _expenditure_summary, _expenditure_colours, 450, 300);
+        _expenditure_summary, _expenditure_colours, 450, 300, _links);
     HrtCharts.drawPieChart($('.code_budget')[0],
-        _budget_summary, _budget_colours, 450, 300);
+        _budget_summary, _budget_colours, 450, 300, _links);
     HrtReports.tabInit();
   }
 };
@@ -22,9 +22,9 @@ var reports_projects_show = {
 var reports_activities_show = {
   run: function () {
     HrtCharts.drawPieChart($('.code_spent')[0],
-        _expenditure_summary, _expenditure_colours, 450, 300);
+        _expenditure_summary, _expenditure_colours, 450, 300, _links);
     HrtCharts.drawPieChart($('.code_budget')[0],
-        _budget_summary, _budget_colours, 450, 300);
+        _budget_summary, _budget_colours, 450, 300, _links);
     HrtReports.tabInit();
   }
 };
