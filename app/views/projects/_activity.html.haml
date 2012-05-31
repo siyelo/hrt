@@ -1,0 +1,10 @@
+%li
+  %ul.activity_wrapper{:class => f.object.errors.empty? ? "" : "error"}
+    = f.input :name, :required => false, :input_html => {:size => '80'}, :error_class => 'input-errors'
+    = f.input :description, :input_html => { :rows => 2 }, :required => false, :error_class => 'input-errors'
+    -unless f.object.new_record?
+      = f.input :id, :as => :hidden
+    = f.input :data_response_id, :as => :hidden
+
+    %li
+      = render 'shared/outlays/implementers', :f => f, :outlay => f.object, :blank_rows => 0, :bulk_review => true

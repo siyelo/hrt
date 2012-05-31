@@ -10,8 +10,10 @@
 / = render 'getting_started_bulk'
 
 - @projects.each_with_index do |project, index|
-  .activity_box
-    = render 'projects/bulk_review', :project => project, :response => @response
+  = render 'projects/bulk_review', :project => project, :response => @response
+
+- @other_costs.each_with_index do |other_cost, index|
+  = render 'projects/bulk_review_other_cost', :other_cost => other_cost, :response => @response
 
 %br
 

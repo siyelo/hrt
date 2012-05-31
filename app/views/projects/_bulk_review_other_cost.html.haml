@@ -1,0 +1,21 @@
+.activity_box
+  .header.section_nav
+    %span.indicator.collapsed
+    - if other_cost.errors.empty?
+      = image_tag "tick_12.png", :class => 'hidden saved_tick js_unsaved'
+    - else
+      = image_tag "warning_12.png", :title => "This other cost has not been saved because you need to add more information and/or correct any errors. Click here to open the other cost if it is closed", :class => 'tooltip js_unsaved'
+
+    = link_to friendly_name(other_cost, 50), "#"
+
+  .js_main.section_base{:style => (other_cost.errors.blank? && params[:format] != 'js' ? 'display: none;' : nil)}
+    - semantic_form_for other_cost, :html => {:class => "condensed_form basic_form bulk_edit_form"} do |f|
+      %ul.condensed_fields.section_form.activities_form
+        - f.inputs :class => 'inputs_condensed' do
+          = render 'projects/activity', :f => f
+
+          %li.borderless.marginless.full
+            %br
+            - f.buttons :class => 'buttons' do
+              = f.commit_button "Save Other cost", :wrapper_html => {:class => "left save_btn"}, :button_html => {:class => "next"}
+              = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

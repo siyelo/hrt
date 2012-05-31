@@ -17,6 +17,7 @@ describe Importer do
 project1,on,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,2,4
 ,,,,,,#{@split2.id},selfimplementer2,3,6
 new project,blah,01/01/2010,31/12/2010,new activity,blah activity,,implementer2,4,8
+N/A,N/A,N/A,N/A,N/A,other cost,other cost description,implementer2,4,8
 EOS
       @filename = write_csv_with_header(@csv_string)
       @i = Importer.new(@response, @filename)
@@ -27,6 +28,7 @@ EOS
       @i.filename.should == @filename
       @i.projects.size.should == 2
       @i.activities.size.should == 2
+      @i.other_costs.size.should == 1
     end
 
     it "should track new splits it creates" do
@@ -675,6 +677,40 @@ EOS
       @i.activities.should have(1).item
       @i.activities[0].save.should == true
       @i.activities[0].implementer_splits.first.organization.should == @implementer2
+    end
+  end
+
+  describe "other costs without a project" do
+    before :each do
+      @implementer = Factory(:organization, :name => "implementer2")
+      @split       = Factory(:implementer_split, :activity => @activity,
+                             :organization => @implementer)
+    end
+
+    it "should return initialize new other cost" do
+      @csv_string = <<-EOS
+N/A,N/A,N/A,N/A,N/A,other cost,other cost description,implementer2,4,8
+EOS
+      @filename = write_csv_with_header(@csv_string)
+      @i = Importer.new(@response, @filename)
+      @i.response.should == @response
+      @i.filename.should == @filename
+      @i.other_costs.size.should == 1
+      @i.other_costs.first.new_record?.should be_true
+    end
+
+    it "should return existing other cost" do
+      Factory(:other_cost, :name => "other cost",
+              :project => nil, :data_response => @response)
+      @csv_string = <<-EOS
+N/A,N/A,N/A,N/A,N/A,other cost,other cost description,implementer2,4,8
+EOS
+      @filename = write_csv_with_header(@csv_string)
+      @i = Importer.new(@response, @filename)
+      @i.response.should == @response
+      @i.filename.should == @filename
+      @i.other_costs.size.should == 1
+      @i.other_costs.first.new_record?.should be_false
     end
   end
 end
