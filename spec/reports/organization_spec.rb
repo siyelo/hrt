@@ -74,12 +74,12 @@ describe Reports::Organization do
 
     it "calculates correctly if spend is 0 (returns 0)" do
       response.should_receive(:total_spend).once.and_return(0)
-      report.percentage_change.should == 0
+      report.percentage_change.should == 'N/A'
     end
 
     it "calculates correctly if budget is 0 (returns 0)" do
       response.should_receive(:total_budget).once.and_return(0)
-      report.percentage_change.should == 0
+      report.percentage_change.should == -100
     end
   end
 

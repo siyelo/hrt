@@ -1,8 +1,4 @@
-require File.dirname(__FILE__) + '/../spec_helper_lite'
-
-$: << File.join(APP_ROOT, "app/reports")
-
-require 'app/reports/locations'
+require 'spec_helper'
 
 describe Reports::ClassificationBase do
   let(:response) { mock :response,
@@ -36,14 +32,14 @@ describe Reports::ClassificationBase do
     end
 
     it "calculates correctly if spend is 0 (returns 0)" do
-      report.should_receive(:total_spend).once.and_return(0)
-      report.percentage_change.should == 0
+      report.stub(:total_spend).and_return(0)
+      report.percentage_change.should == 'N/A'
     end
 
     it "calculates correctly if budget is 0 (returns 0)" do
-      report.should_receive(:total_spend).once.and_return(1)
-      report.should_receive(:total_budget).once.and_return(0)
-      report.percentage_change.should == 0
+      report.stub(:total_spend).and_return(1)
+      report.stub(:total_budget).and_return(0)
+      report.percentage_change.should == -100
     end
   end
 
