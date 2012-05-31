@@ -1,8 +1,10 @@
 :javascript
   google.load("visualization", "1", {packages:["corechart"]});
   var _expenditure_summary   = #{js_safe(@report.expenditure_chart)};
-  var _budget_summary  = #{js_safe(@report.budget_chart)};
-  var _max_percentage = #{js_safe(@report.max_percentage)}
+  var _budget_summary        = #{js_safe(@report.budget_chart)};
+  var _max_percentage        = #{js_safe(@report.max_percentage)};
+  var _budget_colours        = #{js_safe(@report.budget_colours)};
+  var _expenditure_colours   = #{js_safe(@report.expenditure_colours)};
 
 .section_form.topless.wrapped.last
   .full

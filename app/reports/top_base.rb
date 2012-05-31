@@ -31,11 +31,11 @@ module Reports
     end
 
     def expenditure_chart
-      Charts::Spend.new(top_spenders).google_pie
+      Charts::Spend.new(top_spenders).google_column
     end
 
     def budget_chart
-      Charts::Budget.new(top_budgeters).google_pie
+      Charts::Budget.new(top_budgeters).google_column
     end
 
     def show_totals
@@ -54,11 +54,14 @@ module Reports
     # organizations report in differnt currencies
     # doing this ensures that there is no discrepencies
     def create_rows
-      mapped_data.map do |md|
-        Reports::Row.new( md[0],
-                          md[1]["spend"].round(2),
-                          md[1]["budget"].round(2) )
+      rows = []
+      mapped_data.each_with_index do |md, index|
+        rows << Reports::Row.new( md[0],
+                                 md[1]["spend"].round(2),
+                                 md[1]["budget"].round(2))
       end
+
+      rows
     end
 
     ###
@@ -78,17 +81,8 @@ module Reports
       end
     end
 
-    ####
-    # The top 10 spenders
     def top_spenders
       collection
     end
-
-    ####
-    # The top 10 budgeters
-    def top_budgeters
-      collection.sort{ |x, y| y.total_budget <=> x.total_budget }
-    end
-
   end
 end
