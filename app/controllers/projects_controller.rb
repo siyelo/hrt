@@ -41,12 +41,12 @@ class ProjectsController < BaseController
           flash[:notice] = "Project successfully created";
           redirect_to projects_path
         end
-        format.js   { js_redirect('success') }
+        format.js   { js_redirect_success }
       end
     else
       respond_to do |format|
         format.html { render :action => 'new' }
-        format.js   { js_redirect('failed') }
+        format.js   { js_redirect_failed }
       end
     end
   end
@@ -60,12 +60,12 @@ class ProjectsController < BaseController
           flash[:notice] = "Project successfully updated";
           redirect_to edit_project_url(@project)
         }
-        format.js {js_redirect('success')}
+        format.js { js_redirect_success }
       end
     else
       respond_to do |format|
         format.html {load_comment_resources(@project); render :action => 'edit'}
-        format.js {js_redirect('failed')}
+        format.js { js_redirect_failed }
       end
     end
   end
@@ -83,6 +83,9 @@ class ProjectsController < BaseController
         @i = Importer.new(@response, params[:file].path)
         @projects = @i.projects
         @activities = @i.activities
+        @other_costs = @i.other_costs
+        # raise @activities.map(&:name).to_yaml
+        # raise @activities.length.to_yaml
       else
         flash[:error] = 'Please select a file to upload'
         redirect_to projects_url
@@ -163,11 +166,17 @@ class ProjectsController < BaseController
       self.load_other_cost_new
     end
 
-    def js_redirect(status)
-      render :json => {:status => status,
-                       :html => render_to_string(:partial => 'projects/bulk_result',
-                       :layout => false,
-                       :locals => {:project => @project,
-                                   :response => @response})}
+    def js_redirect_success
+      render :json => {:status => 'success',
+               :html => render_to_string(:partial => 'shared/saved_ok',
+                 :layout => false,
+                 :locals => {:object => @project})}
+    end
+
+    def js_redirect_failed
+      render :json => {:status => 'failed',
+               :html => render_to_string(:partial => 'projects/bulk_review',
+                 :layout => false,
+                 :locals => {:project => @project, :response => @response})}
     end
 end

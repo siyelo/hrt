@@ -7,6 +7,10 @@ describe Reports::Detailed::ProjectsExport do
       split = @split
       split2 = Factory(:implementer_split, :activity => @activity,
                        :organization => @organization)
+      other_cost = Factory(:other_cost, :name => 'other cost',
+                           :project => nil, :data_response => @response)
+      split3 = Factory(:implementer_split, :activity => other_cost,
+                       :organization => @organization)
 
       @activity.save!
       @project.budget_type = "on"
@@ -38,6 +42,18 @@ describe Reports::Detailed::ProjectsExport do
       rows[2,8].should == split2.organization_name
       rows[2,9].should == split2.spend.to_f
       rows[2,10].should == split2.budget.to_f
+
+      rows[3,0].should == 'N/A'
+      rows[3,1].should == 'N/A'
+      rows[3,2].should == 'N/A'
+      rows[3,3].should == 'N/A'
+      rows[3,4].should == 'N/A'
+      rows[3,5].should == other_cost.name
+      rows[3,6].should == other_cost.description
+      rows[3,7].should == split3.id
+      rows[3,8].should == split3.organization_name
+      rows[3,9].should == split3.spend.to_f
+      rows[3,10].should == split3.budget.to_f
     end
   end
 end

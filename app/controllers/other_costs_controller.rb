@@ -20,11 +20,21 @@ class OtherCostsController < BaseController
   def create
     @other_cost = @response.other_costs.new(params[:other_cost])
     if @other_cost.save
-      success_flash("created")
-      html_redirect
+      respond_to do |format|
+        format.html do
+          success_flash("created")
+          html_redirect
+        end
+        format.js { js_redirect_success }
+      end
     else
-      paginate_splits(@other_cost)
-      render :action => 'new'
+      respond_to do |format|
+        format.html do
+          paginate_splits(@other_cost)
+          render :action => 'new'
+        end
+        format.js { js_redirect_failed }
+      end
     end
   end
 
@@ -32,17 +42,28 @@ class OtherCostsController < BaseController
     @other_cost = @response.other_costs.find(params[:id])
     if !@other_cost.am_approved?(current_user) &&
         @other_cost.update_attributes(params[:other_cost])
-      success_flash("updated")
-      html_redirect
-    else
-      if @other_cost.am_approved?(current_user)
-        flash[:error] = ("Indirect Cost was already approved by #{@other_cost.user.try(:full_name)}
-                         (#{@other_cost.user.try(:email)}) on #{@other_cost.am_approved_date}")
+      respond_to do |format|
+        format.html do
+          success_flash("updated")
+          html_redirect
+        end
+        format.js { js_redirect_success }
       end
-      prepare_classifications(@other_cost)
-      load_comment_resources(@other_cost)
-      paginate_splits(@other_cost)
-      render :action => 'edit'
+    else
+      respond_to do |format|
+        format.html do
+          if @other_cost.am_approved?(current_user)
+            flash[:error] = ("Indirect Cost was already approved by #{@other_cost.user.try(:full_name)}
+                             (#{@other_cost.user.try(:email)}) on #{@other_cost.am_approved_date}")
+          end
+          prepare_classifications(@other_cost)
+          load_comment_resources(@other_cost)
+          paginate_splits(@other_cost)
+
+          render :action => 'edit'
+        end
+        format.js { js_redirect_failed }
+      end
     end
   end
 
@@ -55,41 +76,56 @@ class OtherCostsController < BaseController
 
   private
 
-    def success_flash(action)
-      flash[:notice] = "Indirect Cost was successfully #{action}."
-      if params[:other_cost][:project_id] == Activity::AUTOCREATE
-        flash[:notice] += "  <a href=#{edit_project_path(@other_cost.project)}>Click here</a>
-                           to enter the funding sources for the automatically created project."
+  def success_flash(action)
+    flash[:notice] = "Indirect Cost was successfully #{action}."
+    if params[:other_cost][:project_id] == Activity::AUTOCREATE
+      flash[:notice] += "  <a href=#{edit_project_path(@other_cost.project)}>Click here</a>
+                         to enter the funding sources for the automatically created project."
+    end
+  end
+
+  def sort_column
+    SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "activities.name"
+  end
+
+  def sort_direction
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
+  end
+
+  def confirm_activity_type
+    @other_cost = OtherCost.find(params[:id])
+    return redirect_to edit_activity_path(@other_cost) if @other_cost.class.eql? Activity
+  end
+
+  def prepare_classifications(other_cost)
+    # if we're viewing classification 'tabs'
+    if ['locations', 'purposes', 'inputs'].include? params[:mode]
+      load_klasses :mode
+      @budget_coding_tree = CodingTree.new(other_cost, @budget_klass)
+      @spend_coding_tree  = CodingTree.new(other_cost, @spend_klass)
+      @budget_assignments = @budget_klass.with_activity(other_cost).all.
+                              map_to_hash{ |b| {b.code_id => b} }
+      @spend_assignments  = @spend_klass.with_activity(other_cost).all.
+                              map_to_hash{ |b| {b.code_id => b} }
+      # set default to 'my' view if there are code assignments present
+      if params[:view].blank?
+        params[:view] = @budget_coding_tree.roots.present? ? 'my' : 'all'
       end
     end
+  end
 
-    def sort_column
-      SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "activities.name"
-    end
+  def js_redirect_success
+    render :json => {:status => 'success',
+                     :html => render_to_string(:partial => 'shared/saved_ok',
+                       :layout => false,
+                       :locals => {:object => @other_cost})}
+  end
 
-    def sort_direction
-      %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
-    end
-
-    def confirm_activity_type
-      @other_cost = OtherCost.find(params[:id])
-      return redirect_to edit_activity_path(@other_cost) if @other_cost.class.eql? Activity
-    end
-
-    def prepare_classifications(other_cost)
-      # if we're viewing classification 'tabs'
-      if ['locations', 'purposes', 'inputs'].include? params[:mode]
-        load_klasses :mode
-        @budget_coding_tree = CodingTree.new(other_cost, @budget_klass)
-        @spend_coding_tree  = CodingTree.new(other_cost, @spend_klass)
-        @budget_assignments = @budget_klass.with_activity(other_cost).all.
-                                map_to_hash{ |b| {b.code_id => b} }
-        @spend_assignments  = @spend_klass.with_activity(other_cost).all.
-                                map_to_hash{ |b| {b.code_id => b} }
-        # set default to 'my' view if there are code assignments present
-        if params[:view].blank?
-          params[:view] = @budget_coding_tree.roots.present? ? 'my' : 'all'
-        end
-      end
-    end
+  def js_redirect_failed
+    render :json => {:status => 'failed',
+       :html => render_to_string(:partial => 'projects/bulk_review_other_cost',
+         :layout => false,
+         :locals => {:other_cost => @other_cost,
+                     :response => @response})}
+  end
 end

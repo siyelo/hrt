@@ -2,21 +2,23 @@ class Importer
   include EncodingHelper
 
   attr_accessor :response, :rows, :filename, :projects, :activities,
-    :new_splits, :all_projects, :all_activities, :all_splits
+    :other_costs, :new_splits, :all_projects, :all_activities, :all_splits
 
   # Instance variables cannot be assigned in the initializer because
   # delayed_job will not recognize them - they have to be initialized
   # within the method which is handled asynchronously
   def initialize(response, filename = '')
-    @response   = response
-    @filename   = filename
-    @rows       ||= open_xls_or_csv(@filename)
-    @projects   = []
-    @activities = []
-    @new_splits = []
-    @all_projects = response.projects
+    @response       = response
+    @filename       = filename
+    @rows           ||= open_xls_or_csv(@filename)
+    @projects       = []
+    @activities     = []
+    @other_costs    = []
+    @new_splits     = []
+    @all_projects   = response.projects
     @all_activities = response.activities.find(:all, :include => :implementer_splits)
-    @all_splits = @all_activities.map(&:implementer_splits).flatten
+    @all_splits     = @all_activities.map(&:implementer_splits).flatten
+
     import
   end
 
@@ -28,12 +30,21 @@ class Importer
     rows.each do |row|
       params      = set_params(params, row)
       implementer = find_implementer(params)
-      project     = find_project(params)
-      activity    = find_activity(project, params)
-      split       = find_split(activity, implementer, params)
 
-      activities << activity unless activities.include?(activity)
-      projects   << project  unless projects.include?(project)
+      if is_other_without_a_project?(params)
+        other_cost  = find_activity(nil, params, OtherCost)
+        split       = find_split(other_cost, implementer, params)
+
+        other_costs << other_cost unless other_costs.include?(other_cost)
+      else
+        project     = find_project(params)
+        activity    = find_activity(project, params, Activity)
+        split       = find_split(activity, implementer, params)
+
+        projects   << project  unless projects.include?(project)
+        activities << activity unless activities.include?(activity)
+      end
+
     end
 
     mark_splits_for_destruction
@@ -41,23 +52,34 @@ class Importer
     check_projects_activities_valid(projects, activities) # TODO: refactor
   end
 
-    def set_params(params, row)
-      # determine project & activity details depending on blank rows
-      params[:implementer_name] = sanitize_encoding(row['Implementer'].try(:strip))
-      params[:split_id] = row['Id']
-      params[:activity_name] = name_for(row['Activity Name'], params[:activity_name])
-      params[:activity_description] = description_for(row['Activity Description'],
-                               params[:activity_description], row['Activity Name'])
-      params[:project_name]         = name_for(row['Project Name'], params[:project_name])
-      params[:project_description]  = description_for(row['Project Description'],
-                               params[:project_description], row['Project Name'])
-      params[:project_budget_type]  = name_for(row['On/Off Budget'], params[:project_budget_type])
-      params[:project_start_date]   = row['Project Start Date']
-      params[:project_end_date]     = row['Project End Date']
-      params[:spend]                = row["Past Expenditure"]
-      params[:budget]               = row["Current Budget"]
-      params
-    end
+  def is_other_without_a_project?(params)
+    project_name = params.fetch(:project_name)
+    project_description = params.fetch(:project_description)
+    project_end_date = params.fetch(:project_end_date)
+    project_start_date = params.fetch(:project_start_date)
+    project_budget_type = params.fetch(:project_budget_type)
+
+    [project_name, project_description, project_end_date,
+        project_start_date, project_budget_type].all? { |e| e == 'N/A' }
+  end
+
+  def set_params(params, row)
+    # determine project & activity details depending on blank rows
+    params[:implementer_name] = sanitize_encoding(row['Implementer'].try(:strip))
+    params[:split_id] = row['Id']
+    params[:activity_name] = name_for(row['Activity Name'], params[:activity_name])
+    params[:activity_description] = description_for(row['Activity Description'],
+                             params[:activity_description], row['Activity Name'])
+    params[:project_name]         = name_for(row['Project Name'], params[:project_name])
+    params[:project_description]  = description_for(row['Project Description'],
+                             params[:project_description], row['Project Name'])
+    params[:project_budget_type]  = name_for(row['On/Off Budget'], params[:project_budget_type])
+    params[:project_start_date]   = row['Project Start Date']
+    params[:project_end_date]     = row['Project End Date']
+    params[:spend]                = row["Past Expenditure"]
+    params[:budget]               = row["Current Budget"]
+    params
+  end
 
   def check_projects_activities_valid(projects, activities)
     projects.each { |p| p.valid? }
@@ -179,22 +201,21 @@ class Importer
   end
 
   # finds activity in memory, db or creates new one
-  def find_activity(project, params)
+  def find_activity(project, params, klass)
     split_id             = params.fetch(:split_id)
     activity_name        = params.fetch(:activity_name)
     activity_description = params.fetch(:activity_description)
 
     activity = find_cached_activity(split_id)
     activity ||= activities.detect do |a|
-      a.name == activity_name && a.project.name == project.name
+      a.name == activity_name && a.project && a.project.name == project.name
     end
-    activity ||= all_activities.detect do |a|
-      a.name == activity_name && a.project_id == project.id
-    end
-    activity ||= project.activities.new
+    activity ||= all_activities.detect { |a| a.name == activity_name }
+    activity ||= klass.new
     activity.attributes = { :data_response_id => response.id,
-      :project_id => project.id, :name => activity_name,
+      :project_id => project.try(:id), :name => activity_name,
       :description => activity_description }
+    activity.project = project
     activity
   end
 
