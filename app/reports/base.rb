@@ -63,13 +63,10 @@ module Reports
     end
 
     def percentage_change
-      change = -100  if total_spend >  0 && total_budget == 0
       change = 'N/A' if total_spend == 0 && total_budget > 0
-      change = 0     if total_spend == 0 && total_budget == 0
-
       return change if change
 
-      change = ((total_budget.to_f / total_spend.to_f) * 100) - 100
+      change = ((total_budget.to_f - total_spend.to_f) / total_spend.to_f) * 100
       change.round_with_precision(1)
     end
 
