@@ -10,16 +10,16 @@ describe Reports::ProjectLocations do
   let(:location1) { mock :location, :name => 'L1' }
   let(:ssplit) { mock :location_spend_split, :code => location,
                  :cached_amount => 25.0, :name => location.name,
-                 :class => DerpSpend }
+                 :currency => 'USD', :class => DerpSpend }
   let(:ssplit1) { mock :location_spend_split, :code => location1,
                   :cached_amount => 20.0, :name => location1.name,
-                  :class => DerpSpend }
+                  :currency => 'USD', :class => DerpSpend }
   let(:bsplit) { mock :location_budget_split, :code => location,
                  :cached_amount => 10.0, :name => location.name,
-                 :class => DerpBudget }
+                 :currency => 'USD', :class => DerpBudget }
   let(:bsplit1) { mock :location_budget_split, :code => location1,
                   :cached_amount => 5.0, :name => location1.name,
-                  :class => DerpBudget }
+                  :currency => 'USD', :class => DerpBudget }
   let(:activity) { mock :activity, :name => 'act',
                    :location_spend_splits => [ssplit, ssplit1],
                    :location_budget_splits => [bsplit, bsplit1],

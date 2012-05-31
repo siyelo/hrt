@@ -23,6 +23,16 @@ class OtherCost < Activity
     "Indirect Cost"
   end
 
+  # Convenience method for non-project other costs
+  # on the Organization Overview report
+  def converted_budget
+    total_budget
+  end
+
+  def converted_spend
+    total_spend
+  end
+
   # An OCost can be considered classified if the locations are classified
   def classified?
     location_budget_splits_valid? && location_spend_splits_valid?

@@ -10,16 +10,16 @@ describe Reports::ActivityInputs do
   let(:input1) { mock :input, :name => 'L1' }
   let(:ssplit) { mock :coding_spend_input, :code => input,
     :cached_amount => 25.0, :name => input.name,
-    :class => DerpSpend }
+    :currency => 'USD', :class => DerpSpend }
   let(:ssplit1) { mock :coding_spend_input, :code => input1,
     :cached_amount => 20.0, :name => input1.name,
-    :class => DerpSpend }
+    :currency => 'USD', :class => DerpSpend }
   let(:bsplit) { mock :coding_budget_input, :code => input,
     :cached_amount => 10.0, :name => input.name,
-    :class => DerpBudget }
+    :currency => 'USD', :class => DerpBudget }
   let(:bsplit1) { mock :coding_budget_input, :code => input1,
     :cached_amount => 5.0, :name => input1.name,
-    :class => DerpBudget }
+    :currency => 'USD', :class => DerpBudget }
   let(:activity) { mock :activity, :name => 'act',
     :input_spend_splits => mock(:scope, :roots => [ssplit, ssplit1]),
     :input_budget_splits => mock(:scope, :roots => [bsplit, bsplit1]),

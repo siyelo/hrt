@@ -15,6 +15,14 @@ module BudgetSpendHelper
     implementer_splits.inject(0){ |sum, is| sum + (is.budget || 0) }
   end
 
+  def converted_spend
+    universal_currency_converter(total_spend, currency, response.currency)
+  end
+
+  def converted_budget
+    universal_currency_converter(total_budget, currency, response.currency)
+  end
+
   def smart_sum(collection, method)
     s = collection.reject do |e|
       e.nil? or e.send(method).nil? or e.marked_for_destruction?

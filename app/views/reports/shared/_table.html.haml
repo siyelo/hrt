@@ -9,8 +9,8 @@
     - @report.collection.each do |e|
       %tr
         %td= resource_link(@report, e)
-        %td.align= @report.format(e.total_spend)
-        %td.align= @report.format(e.total_budget)
+        %td.align= @report.format(@report.spend_value_method(e))
+        %td.align= @report.format(@report.budget_value_method(e))
     - if @report.show_totals
       %tr.summary
         %td

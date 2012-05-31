@@ -14,5 +14,13 @@ module Reports
     def budget_chart
       Charts::ImplementerSplits::Budget.new(collection).google_pie
     end
+
+    def budget_value_method(element)
+      element.budget
+    end
+
+    def spend_value_method(element)
+      element.spend
+    end
   end
 end
