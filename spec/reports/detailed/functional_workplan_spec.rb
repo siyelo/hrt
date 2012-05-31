@@ -15,7 +15,8 @@ describe Reports::Detailed::FunctionalWorkplan do
       @response2     = @organization2.latest_response
       @user.organizations << @organization2
       @user.organizations << @organization3
-      @project       = Factory(:project, :data_response => @response2)
+      @project       = Factory(:project, :data_response => @response2,
+                               :in_flows => [Factory :funding_flow, :from => @organization3])
       @activity      = Factory(:activity, :data_response => @response2,
                                :project => @project)
       split          = Factory(:implementer_split, :activity => @activity,
@@ -46,7 +47,7 @@ describe Reports::Detailed::FunctionalWorkplan do
       rows[1,0].should == @organization2.try(:name)
       rows[1,1].should == @project.try(:name)
       rows[1,2].should == @project.try(:description)
-      rows[1,3].should == @project.in_flows.map{|ff| ff.organization.name}.join(',')
+      rows[1,3].should == @project.in_flows.map{|ff| ff.from.name}.join(',')
       rows[1,4].should == ApplicationController.helpers.friendly_name(@activity,50)
       rows[1,5].should == @activity.description
       rows[1,6].should == @activity.class.to_s.titleize

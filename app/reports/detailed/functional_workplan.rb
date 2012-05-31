@@ -70,7 +70,7 @@ class Reports::Detailed::FunctionalWorkplan
     row << "" if index > 0
     row << sanitize_encoding(project.name)
     row << sanitize_encoding(project.description)
-    row << sanitize_encoding(project.in_flows.map{|ff| ff.organization.name}.join(','))
+    row << sanitize_encoding(project.in_flows.map{|ff| ff.from.name}.join(','))
     row
   end
 
@@ -85,8 +85,8 @@ class Reports::Detailed::FunctionalWorkplan
     row << universal_currency_converter(activity.total_budget, activity.project.currency, 'USD')
     row << sanitize_encoding(activity.implementer_splits.map{|is| is.organization.name}.join(', '))
     row << sanitize_encoding(activity.targets.map{ |e| e.description }.join(', '))
-    row << sanitize_encoding(activity.beneficiaries.map{ |e| e.short_display }.join(', '))
     row << sanitize_encoding(activity.outputs.map{ |e| e.description }.join(', '))
+    row << sanitize_encoding(activity.beneficiaries.map{ |e| e.short_display }.join(', '))
     row << sanitize_encoding(activity.locations.map{ |e| e.short_display }.join(', '))
     row
   end
