@@ -22,6 +22,7 @@ describe Reports::Detailed::FunctionalWorkplan do
       split          = Factory(:implementer_split, :activity => @activity,
                                :budget => 100, :spend => 200,
                                :organization => @organization)
+      @ocost_no_project = Factory(:other_cost, :data_response => @response2)
       @activity.reload
       @activity.save!
 
@@ -63,8 +64,8 @@ describe Reports::Detailed::FunctionalWorkplan do
       rows[2,6].should == @activity2.class.to_s.titleize
       rows[2,7].should == 400.00
       rows[2,8].should == @activity2.implementer_splits.map{|is| is.organization.name}.join(', ')
-
-      rows[3,0].should == @organization3.try(:name)
+      rows[3,4].should == ApplicationController.helpers.friendly_name(@ocost_no_project,50)
+      rows[4,0].should == @organization3.try(:name)
     end
   end
 end

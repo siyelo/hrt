@@ -109,7 +109,7 @@ class Activity < ActiveRecord::Base
                                     INNER JOIN organizations
                                     ON data_responses.organization_id = organizations.id" }
   named_scope :manager_approved,     { :conditions => ["am_approved = ?", true] }
-  named_scope :sorted,               { :order => "activities.name" }
+  named_scope :sorted,               { :order => "activities.name ASC" }
 
   ### Class Methods
 

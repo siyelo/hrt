@@ -25,24 +25,21 @@ class Reports::Detailed::FunctionalWorkplan
   def build_rows
     builder.add_row(header)
     @organizations.each do |organization|
+      org_response = organization.responses.find(:first,
+                      :conditions => "data_request_id = #{@response.request.id}")
       row = []
-      org_response = organization.responses.find(:first, :conditions => "data_request_id = #{@response.request.id}")
       row << sanitize_encoding(organization.name)
-      if org_response.projects.empty?
+      if org_response.projects.empty? && org_response.other_costs.without_project.empty?
         builder.add_row(row)
         row = []
       else
-        org_response.projects.sorted.each_with_index do |project, index|
-          row = add_project_columns(project, index, row)
-          if project.activities.empty?
-            builder.add_row(row)
-            row = []
-          else
-            project.activities.each_with_index do |activity, index|
-              builder.add_row(add_activity_columns(activity, index, row))
-              row = []
-            end
-          end
+        unless org_response.projects.empty?
+          build_project_rows(row, org_response)
+          row = []
+        end
+
+        unless org_response.other_costs.without_project.empty?
+          build_other_cost_without_project_rows(row, org_response)
         end
       end
     end
@@ -82,7 +79,7 @@ class Reports::Detailed::FunctionalWorkplan
     row << nice_activity_name(activity, 50)
     row << sanitize_encoding(activity.description)
     row << klass
-    row << universal_currency_converter(activity.total_budget, activity.project.currency, 'USD')
+    row << universal_currency_converter(activity.total_budget, activity.currency, 'USD')
     row << sanitize_encoding(activity.implementer_splits.map{|is| is.organization.name}.join(', '))
     row << sanitize_encoding(activity.targets.map{ |e| e.description }.join(', '))
     row << sanitize_encoding(activity.outputs.map{ |e| e.description }.join(', '))
@@ -96,4 +93,27 @@ class Reports::Detailed::FunctionalWorkplan
     sanitize_encoding(nice_name)
   end
 
+  def build_project_rows(row, org_response)
+    org_response.projects.sorted.each_with_index do |project, index|
+      row = add_project_columns(project, index, row)
+      if project.activities.empty?
+        builder.add_row(row)
+        row = []
+      else
+        project.activities.sorted.each_with_index do |activity, index|
+          row = add_activity_columns(activity, index, row)
+          builder.add_row(row)
+          row = []
+        end
+      end
+    end
+  end
+
+  def build_other_cost_without_project_rows(row, org_response)
+    org_response.other_costs.without_project.sorted.each do |ocost|
+      row = add_activity_columns(ocost, 1, row)
+      builder.add_row(row)
+      row = []
+    end
+  end
 end

@@ -92,6 +92,8 @@ describe ProjectsController do
         @data_request.stub(:id).and_return(1)
         @data_response.stub(:organization).and_return(@organization)
         @data_response.stub_chain(:projects, :sorted).and_return([])
+        @data_response.stub_chain(:other_costs, :without_project, :sorted).and_return([])
+        @data_response.stub_chain(:other_costs, :without_project, :empty?).and_return(true)
         @data_response.stub_chain(:projects, :empty?).and_return(true)
         @data_response.stub(:request).and_return(@data_request)
         @organization.stub(:name).and_return('Org Name')
