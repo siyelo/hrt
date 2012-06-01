@@ -67,29 +67,16 @@ describe Charts::Base do
     bar[1][3].should == 33.33
   end
 
-  it "returns data sorted by values desc" do
-    data = chart.sort_by_values_desc
-    data[0].should == ["E1", 30]
-    data[1].should == ["E3", 20]
-    data[2].should == ["E2", 10]
-  end
-
-  it "returns data sorted by name" do
-    data = chart.sort_by_name
-    data[0].should == ["E1", 30]
-    data[1].should == ["E2", 10]
-    data[2].should == ["E3", 20]
-  end
-
   it "#bar_sort defaults to sort by name" do
-    data = chart.bar_sort
-    data[0].should == ["E1", 30]
-    data[1].should == ["E2", 10]
-    data[2].should == ["E3", 20]
+    data = JSON.parse(chart.google_bar)[0]
+    data[0].should == "Default Bar Chart Title"
+    data[1].should == "E1"
+    data[2].should == "E2"
+    data[3].should == "E3"
   end
 
   it "#pie_sort defaults to sort by values desc" do
-    data = chart.pie_sort
+    data = JSON.parse(chart.google_pie)["values"]
     data[0].should == ["E1", 30]
     data[1].should == ["E3", 20]
     data[2].should == ["E2", 10]

@@ -16,6 +16,14 @@ module Reports
       end
     end
 
+    def chart_links
+      elements = Hash.new("")
+      collection.each do |c|
+        elements[c.try(:name).to_s.downcase.capitalize] = resource_link(c)
+      end
+      elements.to_json
+    end
+
     def expenditure_chart
       Charts::Spend.new(collection).google_pie
     end

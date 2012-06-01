@@ -44,6 +44,10 @@ module Reports
       Charts::Budget.new(collection).google_pie
     end
 
+    def chart_links
+      {}.to_json
+    end
+
     def expenditure_colours
       colours = {}
       top_spenders[0..14].each_with_index do |ts, index|
