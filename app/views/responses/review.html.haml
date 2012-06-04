@@ -45,6 +45,15 @@
               = render 'projects/no_projects_yet'
 
       %li
+        %h3{:class => ready(@response.projects_have_budget_types?)}
+          Projects Budget Type Entered
+          - unless @response.projects_have_budget_types?
+            %span.info The Projects below are missing their budget type
+            %ul.push
+              - @response.projects_without_budget_type.each do |project|
+                %li= link_to friendly_name(project, 100), edit_project_path(project)
+
+      %li
         %h3{:class => ready(@response.projects_have_valid_funding_sources?)}
           All Projects have Funding Sources
           - unless @response.projects_have_valid_funding_sources?
