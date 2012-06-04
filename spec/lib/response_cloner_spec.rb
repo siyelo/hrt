@@ -61,7 +61,8 @@ describe ResponseCloner do
     project.in_flows_total_spend.should == 0
     project.in_flows_total_budget.should == 0
 
-    #it zeroes out projects
+    #it clones & zeroes out projects
+    project.budget_type.should == "on"
     project.total_spend.should == 0
     project.total_budget.should == 0
 

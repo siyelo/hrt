@@ -25,7 +25,6 @@ class ResponseCloner
       project = previous_project.clone
       project.previous = previous_project
       project.data_response_id = nil
-      project.budget_type = nil
       project.in_flows = clone_in_flows(previous_project)
       project.activities = clone_activities(previous_project.activities, new_response)
       project.data_response = new_response
