@@ -54,6 +54,7 @@ class Reports::Detailed::FunctionalWorkplan
     row << "Activity Name"
     row << "Activity Description"
     row << "Type"
+    row << "Activity Expenditure ($)"
     row << "Activity Budget ($)"
     row << "Implementers"
     row << "Targets"
@@ -79,6 +80,7 @@ class Reports::Detailed::FunctionalWorkplan
     row << nice_activity_name(activity, 50)
     row << sanitize_encoding(activity.description)
     row << klass
+    row << universal_currency_converter(activity.total_spend, activity.currency, 'USD')
     row << universal_currency_converter(activity.total_budget, activity.currency, 'USD')
     row << sanitize_encoding(activity.implementer_splits.map{|is| is.organization.name}.join(', '))
     row << sanitize_encoding(activity.targets.map{ |e| e.description }.join(', '))
