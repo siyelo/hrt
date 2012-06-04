@@ -59,15 +59,18 @@ HrtProjects.init = function () {
     } else {
       if (hash == '/new_project'){
         HrtForm.hideAll();
+        $('#new_project_form').removeClass('hidden');
         $('#new_project_form').fadeIn();
         HrtForm.validateDates($('.start_date'), $('.end_date'));
       } else if (hash == '/new_activity'){
         HrtForm.hideAll();
+        $('#new_activity_form').removeClass('hidden');
         $('#new_activity_form').fadeIn();
         HrtOutlays.init();
       }
       else if (hash == '/new_other_cost'){
         HrtForm.hideAll();
+        $('#new_other_cost_form').removeClass('hidden');
         $('#new_other_cost_form').fadeIn();
       }
     };
@@ -76,14 +79,14 @@ HrtProjects.init = function () {
   $('.js_toggle_project_form').click(function (e) {
     e.preventDefault();
     HrtForm.hideAll();
-    $('#new_project_form').fadeIn();
+    $('#new_project_form').show();
     $('#new_project_form #project_name').focus();
   });
 
   $('.js_toggle_activity_form').click(function (e) {
     e.preventDefault();
     HrtForm.hideAll();
-    $('#new_activity_form').fadeIn();
+    $('#new_activity_form').show();
     $('#activity_project_id').val($(this).data('project'));
     $('#new_activity_form #activity_name').focus();
     HrtOutlays.init();
@@ -92,7 +95,8 @@ HrtProjects.init = function () {
   $('.js_toggle_other_cost_form').click(function (e) {
     e.preventDefault();
     HrtForm.hideAll();
-    $('#new_other_cost_form').fadeIn();
+    $('#new_other_cost_form').removeClass('hidden');
+    $('#new_other_cost_form').show();
     $('#other_cost_project_id').val($(this).data('project'));
     $('#new_other_cost_form #other_cost_name').focus();
   });
@@ -102,7 +106,7 @@ HrtProjects.init = function () {
     HrtForm.hideAll();
     $.address.path('/');
     $( "form" )[ 0 ].reset()
-    $('#projects_listing').fadeIn();
+    $('#projects_listing').show();
     $("html, body").animate({ scrollTop: 0 }, 0);
   });
 
