@@ -84,5 +84,11 @@ module Reports
     def top_spenders
       collection
     end
+
+    def top_budgeters
+      @top_budgeters ||= collection.sort do |x, y|
+        (y.total_budget || 0) <=> (x.total_budget || 0)
+      end
+    end
   end
 end
