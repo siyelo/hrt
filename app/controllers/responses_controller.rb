@@ -23,21 +23,27 @@ class ResponsesController < BaseController
 
   def reject
     @response.reject!
+    if current_response.organization.users.map{ |u| u.email }.present?
+      Notifier.deliver_response_rejected_notification(@response)
+    end
     flash[:notice] = "Response was successfully rejected"
-    Notifier.deliver_response_rejected_notification(@response)
     redirect_to projects_path
   end
 
   def accept
     @response.accept!
-    Notifier.deliver_response_accepted_notification(@response)
+    if current_response.organization.users.map{ |u| u.email }.present?
+      Notifier.deliver_response_accepted_notification(@response)
+    end
     flash[:notice] = "Response was successfully accepted"
     redirect_to projects_path
   end
 
   def restart
     @response.restart!
-    Notifier.deliver_response_restarted_notification(@response)
+    if current_response.organization.users.map{ |u| u.email }.present?
+      Notifier.deliver_response_restarted_notification(@response)
+    end
     flash[:notice] = "Response was successfully restarted"
     redirect_to projects_path
   end

@@ -59,5 +59,5 @@ class Notifier < ActionMailer::Base
     recipients    user.email
     sent_on       Time.now
     body          :report => report
- end
+  end
 end
