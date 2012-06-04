@@ -9,21 +9,9 @@ Feature: Admin can manage codes
       And I am signed in as "admin@hrtapp.com"
 
     Scenario: Admin can CRUD codes
+      Given a code exists with short_display: "code1", long_display: "code1 long", official_name: "code1 official name", description: "code1 description", type: "Mtef"
       When I follow "Codes"
-        And I follow "Create Code"
-        And I fill in "Short display" with "code1"
-        And I select "Mtef" from "Type"
-        And I fill in "Long display" with "code1 long"
-        And I fill in "Official name" with "code1 official name"
-        And I fill in "Description" with "code1 description"
-        And I press "Create New Code"
-      Then I should see "Code was successfully created"
-        And the "Short display" field should contain "code1"
-        And the "Long display" field should contain "code1 long"
-        And the "Official name" field should contain "code1 official name"
-        And the "Description" field should contain "code1 description"
-        And the "Type" field should contain "Mtef"
-
+        And I follow "Edit"
       When I fill in "Short display" with "code2"
         And I fill in "Long display" with "code2 long"
         And I fill in "Official name" with "code2 official name"
@@ -36,18 +24,11 @@ Feature: Admin can manage codes
         And the "Description" field should contain "code2 description"
         And the "Type" field should contain "Mtef"
 
-      When I follow "Delete this Code"
-      Then I should see "Code was successfully destroyed"
-        And I should not see "code1"
-        And I should not see "code2"
-
-
     Scenario: Adding malformed CSV file doesnt throw exception
       When I follow "Codes"
         And I attach the file "spec/fixtures/malformed.csv" to "File"
         And I press "Upload and Import"
       Then I should see "There was a problem with your file. Did you use the template and save it after making changes as a CSV file instead of an Excel file? Please post a problem at"
-
 
     Scenario: Admin can upload codes
       When I follow "Codes"
@@ -59,12 +40,10 @@ Feature: Admin can manage codes
         And I should see "code3"
         And I should see "code4"
 
-
     Scenario: Admin can see error if no csv file is not attached for upload
       When I follow "Codes"
         And I press "Upload and Import"
       Then I should see "Please select a file to upload"
-
 
     Scenario: Admin can see error when invalid csv file is attached for upload and download template
       When I follow "Codes"

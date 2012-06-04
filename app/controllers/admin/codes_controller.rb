@@ -20,15 +20,6 @@ class Admin::CodesController < Admin::BaseController
                     :order => "#{sort_column} #{sort_direction}")
   end
 
-  def create
-    create! do |success, failure|
-      success.html do
-        flash[:notice] = "Code was successfully created"
-        redirect_to edit_admin_code_url(resource)
-      end
-    end
-  end
-
   def update
     update! do |success, failure|
       success.html do
@@ -36,10 +27,6 @@ class Admin::CodesController < Admin::BaseController
         redirect_to edit_admin_code_url(resource)
       end
     end
-  end
-
-  def destroy
-    destroy!(:notice => "Code was successfully destroyed") { admin_codes_url }
   end
 
   def download_template
