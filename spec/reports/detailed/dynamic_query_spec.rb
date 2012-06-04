@@ -52,9 +52,9 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Activity'].should == @activity.name
         table[0]['Description of Activity'].should == @activity.description
         table[0]['Targets'].should == nil
-        table[0]['Cost Category Split Total %'].should == 100.0
-        table[0]['Cost Category Split %'].should == 100.0
-        table[0]['Cost Category'].should == @cost_categorization.code.short_display
+        table[0]['Input Split Total %'].should == 100.0
+        table[0]['Input Split %'].should == 100.0
+        table[0]['Input'].should == @cost_categorization.code.short_display
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 100.0
         table[0]['MTEF Code'].should == "sub_prog_name"
@@ -77,9 +77,9 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Implementer'].should == @is.organization.name
         table[0]['Description of Activity'].should == @activity.description
         table[0]['Targets'].should == nil
-        table[0]['Cost Category Split Total %'].should == 66.67
-        table[0]['Cost Category Split %'].should == 100.0
-        table[0]['Cost Category'].should == @cost_categorization.code.short_display
+        table[0]['Input Split Total %'].should == 66.67
+        table[0]['Input Split %'].should == 100.0
+        table[0]['Input'].should == @cost_categorization.code.short_display
         table[0]['Purpose Split Total %'].should == 66.67
         table[0]['Purpose Split %'].should == 100.0
         table[0]['MTEF Code'].should == "sub_prog_name"
@@ -95,9 +95,9 @@ describe Reports::Detailed::DynamicQuery do
         table[1]['Implementer'].should == @is.organization.name
         table[1]['Description of Activity'].should == @activity.description
         table[1]['Targets'].should == nil
-        table[1]['Cost Category Split Total %'].should == 33.33
-        table[1]['Cost Category Split %'].should == 100.0
-        table[1]['Cost Category'].should == @cost_categorization.code.short_display
+        table[1]['Input Split Total %'].should == 33.33
+        table[1]['Input Split %'].should == 100.0
+        table[1]['Input'].should == @cost_categorization.code.short_display
         table[1]['Purpose Split Total %'].should == 33.33
         table[1]['Purpose Split %'].should == 100.0
         table[1]['MTEF Code'].should == "sub_prog_name"
@@ -120,9 +120,9 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Implementer'].should == @is.organization.name
         table[0]['Description of Activity'].should == @activity.description
         table[0]['Targets'].should == nil
-        table[0]['Cost Category Split Total %'].should == 100.0
-        table[0]['Cost Category Split %'].should == 100.0
-        table[0]['Cost Category'].should == @cost_categorization.code.short_display
+        table[0]['Input Split Total %'].should == 100.0
+        table[0]['Input Split %'].should == 100.0
+        table[0]['Input'].should == @cost_categorization.code.short_display
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 100.0
         table[0]['MTEF Code'].should == "sub_prog_name"
@@ -138,9 +138,9 @@ describe Reports::Detailed::DynamicQuery do
         table[1]['Implementer'].should == @is2.organization.name
         table[1]['Description of Activity'].should == @activity.description
         table[1]['Targets'].should == nil
-        table[1]['Cost Category Split Total %'].should == 100.0
-        table[1]['Cost Category Split %'].should == 100.0
-        table[1]['Cost Category'].should == @cost_categorization.code.short_display
+        table[1]['Input Split Total %'].should == 100.0
+        table[1]['Input Split %'].should == 100.0
+        table[1]['Input'].should == @cost_categorization.code.short_display
         table[1]['Purpose Split Total %'].should == 100.0
         table[1]['Purpose Split %'].should == 100.0
         table[1]['MTEF Code'].should == "sub_prog_name"
@@ -192,9 +192,9 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Implementer'].should == @is.organization.name
         table[0]['Description of Activity'].should == @activity.description
         table[0]['Targets'].should == nil
-        table[0]['Cost Category Split Total %'].should == 100.0
-        table[0]['Cost Category Split %'].should == 75.0
-        table[0]['Cost Category'].should == @cost_categorization.code.short_display
+        table[0]['Input Split Total %'].should == 100.0
+        table[0]['Input Split %'].should == 75.0
+        table[0]['Input'].should == @cost_categorization.code.short_display
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 100.0
         table[0]['MTEF Code'].should == "sub_prog_name"
@@ -210,9 +210,9 @@ describe Reports::Detailed::DynamicQuery do
         table[1]['Implementer'].should == @is.organization.name
         table[1]['Description of Activity'].should == @activity.description
         table[1]['Targets'].should == nil
-        table[1]['Cost Category Split Total %'].should == 100.0
-        table[1]['Cost Category Split %'].should == 25.0
-        table[1]['Cost Category'].should == @cost_categorization.code.short_display
+        table[1]['Input Split Total %'].should == 100.0
+        table[1]['Input Split %'].should == 25.0
+        table[1]['Input'].should == @cost_categorization.code.short_display
         table[1]['Purpose Split Total %'].should == 100.0
         table[1]['Purpose Split %'].should == 100.0
         table[1]['MTEF Code'].should == "sub_prog_name"
@@ -239,9 +239,9 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Implementer'].should == @is.organization.name
         table[0]['Description of Activity'].should == @activity.description
         table[0]['Targets'].should == nil
-        table[0]['Cost Category Split Total %'].should == 100.0
-        table[0]['Cost Category Split %'].should == 100.0
-        table[0]['Cost Category'].should == @cost_categorization.code.short_display
+        table[0]['Input Split Total %'].should == 100.0
+        table[0]['Input Split %'].should == 100.0
+        table[0]['Input'].should == @cost_categorization.code.short_display
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 80.0
         table[0]['MTEF Code'].should == "sub_prog_name"
@@ -257,9 +257,9 @@ describe Reports::Detailed::DynamicQuery do
         table[1]['Implementer'].should == @is.organization.name
         table[1]['Description of Activity'].should == @activity.description
         table[1]['Targets'].should == nil
-        table[1]['Cost Category Split Total %'].should == 100.0
-        table[1]['Cost Category Split %'].should == 100.0
-        table[1]['Cost Category'].should == @cost_categorization.code.short_display
+        table[1]['Input Split Total %'].should == 100.0
+        table[1]['Input Split %'].should == 100.0
+        table[1]['Input'].should == @cost_categorization.code.short_display
         table[1]['Purpose Split Total %'].should == 100.0
         table[1]['Purpose Split %'].should == 20.0
         table[1]['MTEF Code'].should == "sub_prog_name"
@@ -286,9 +286,9 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Implementer'].should == @is.organization.name
         table[0]['Description of Activity'].should == @activity.description
         table[0]['Targets'].should == nil
-        table[0]['Cost Category Split Total %'].should == 100.0
-        table[0]['Cost Category Split %'].should == 100.0
-        table[0]['Cost Category'].should == @cost_categorization.code.short_display
+        table[0]['Input Split Total %'].should == 100.0
+        table[0]['Input Split %'].should == 100.0
+        table[0]['Input'].should == @cost_categorization.code.short_display
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 100.0
         table[0]['MTEF Code'].should == "sub_prog_name"
@@ -304,9 +304,9 @@ describe Reports::Detailed::DynamicQuery do
         table[1]['Implementer'].should == @is.organization.name
         table[1]['Description of Activity'].should == @activity.description
         table[1]['Targets'].should == nil
-        table[1]['Cost Category Split Total %'].should == 100.0
-        table[1]['Cost Category Split %'].should == 100.0
-        table[1]['Cost Category'].should == @cost_categorization.code.short_display
+        table[1]['Input Split Total %'].should == 100.0
+        table[1]['Input Split %'].should == 100.0
+        table[1]['Input'].should == @cost_categorization.code.short_display
         table[1]['Purpose Split Total %'].should == 100.0
         table[1]['Purpose Split %'].should == 100.0
         table[1]['MTEF Code'].should == "sub_prog_name"
@@ -338,9 +338,9 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Implementer'].should == @is.organization.name
         table[0]['Description of Activity'].should == @activity.description
         table[0]['Targets'].should == nil
-        table[0]['Cost Category Split Total %'].should == 100.0
-        table[0]['Cost Category Split %'].should == 90.0
-        table[0]['Cost Category'].should == @cost_categorization.code.short_display
+        table[0]['Input Split Total %'].should == 100.0
+        table[0]['Input Split %'].should == 90.0
+        table[0]['Input'].should == @cost_categorization.code.short_display
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 80.0
         table[0]['MTEF Code'].should == "sub_prog_name"
@@ -356,9 +356,9 @@ describe Reports::Detailed::DynamicQuery do
         table[1]['Implementer'].should == @is.organization.name
         table[1]['Description of Activity'].should == @activity.description
         table[1]['Targets'].should == nil
-        table[1]['Cost Category Split Total %'].should == 100.0
-        table[1]['Cost Category Split %'].should == 90.0
-        table[1]['Cost Category'].should == @cost_categorization.code.short_display
+        table[1]['Input Split Total %'].should == 100.0
+        table[1]['Input Split %'].should == 90.0
+        table[1]['Input'].should == @cost_categorization.code.short_display
         table[1]['Purpose Split Total %'].should == 100.0
         table[1]['Purpose Split %'].should == 80.0
         table[1]['MTEF Code'].should == "sub_prog_name"
@@ -374,9 +374,9 @@ describe Reports::Detailed::DynamicQuery do
         table[2]['Implementer'].should == @is.organization.name
         table[2]['Description of Activity'].should == @activity.description
         table[2]['Targets'].should == nil
-        table[2]['Cost Category Split Total %'].should == 100.0
-        table[2]['Cost Category Split %'].should == 90.0
-        table[2]['Cost Category'].should == @cost_categorization.code.short_display
+        table[2]['Input Split Total %'].should == 100.0
+        table[2]['Input Split %'].should == 90.0
+        table[2]['Input'].should == @cost_categorization.code.short_display
         table[2]['Purpose Split Total %'].should == 100.0
         table[2]['Purpose Split %'].should == 20.0
         table[2]['MTEF Code'].should == "sub_prog_name"
@@ -392,9 +392,9 @@ describe Reports::Detailed::DynamicQuery do
         table[3]['Implementer'].should == @is.organization.name
         table[3]['Description of Activity'].should == @activity.description
         table[3]['Targets'].should == nil
-        table[3]['Cost Category Split Total %'].should == 100.0
-        table[3]['Cost Category Split %'].should == 90.0
-        table[3]['Cost Category'].should == @cost_categorization.code.short_display
+        table[3]['Input Split Total %'].should == 100.0
+        table[3]['Input Split %'].should == 90.0
+        table[3]['Input'].should == @cost_categorization.code.short_display
         table[3]['Purpose Split Total %'].should == 100.0
         table[3]['Purpose Split %'].should == 20.0
         table[3]['MTEF Code'].should == "sub_prog_name"
@@ -410,9 +410,9 @@ describe Reports::Detailed::DynamicQuery do
         table[4]['Implementer'].should == @is.organization.name
         table[4]['Description of Activity'].should == @activity.description
         table[4]['Targets'].should == nil
-        table[4]['Cost Category Split Total %'].should == 100.0
-        table[4]['Cost Category Split %'].should == 10.0
-        table[4]['Cost Category'].should == @cost_categorization.code.short_display
+        table[4]['Input Split Total %'].should == 100.0
+        table[4]['Input Split %'].should == 10.0
+        table[4]['Input'].should == @cost_categorization.code.short_display
         table[4]['Purpose Split Total %'].should == 100.0
         table[4]['Purpose Split %'].should == 80.0
         table[4]['MTEF Code'].should == "sub_prog_name"
@@ -428,9 +428,9 @@ describe Reports::Detailed::DynamicQuery do
         table[5]['Implementer'].should == @is.organization.name
         table[5]['Description of Activity'].should == @activity.description
         table[5]['Targets'].should == nil
-        table[5]['Cost Category Split Total %'].should == 100.0
-        table[5]['Cost Category Split %'].should == 10.0
-        table[5]['Cost Category'].should == @cost_categorization.code.short_display
+        table[5]['Input Split Total %'].should == 100.0
+        table[5]['Input Split %'].should == 10.0
+        table[5]['Input'].should == @cost_categorization.code.short_display
         table[5]['Purpose Split Total %'].should == 100.0
         table[5]['Purpose Split %'].should == 80.0
         table[5]['MTEF Code'].should == "sub_prog_name"
@@ -446,9 +446,9 @@ describe Reports::Detailed::DynamicQuery do
         table[6]['Implementer'].should == @is.organization.name
         table[6]['Description of Activity'].should == @activity.description
         table[6]['Targets'].should == nil
-        table[6]['Cost Category Split Total %'].should == 100.0
-        table[6]['Cost Category Split %'].should == 10.0
-        table[6]['Cost Category'].should == @cost_categorization.code.short_display
+        table[6]['Input Split Total %'].should == 100.0
+        table[6]['Input Split %'].should == 10.0
+        table[6]['Input'].should == @cost_categorization.code.short_display
         table[6]['Purpose Split Total %'].should == 100.0
         table[6]['Purpose Split %'].should == 20.0
         table[6]['MTEF Code'].should == "sub_prog_name"
@@ -464,9 +464,9 @@ describe Reports::Detailed::DynamicQuery do
         table[7]['Implementer'].should == @is.organization.name
         table[7]['Description of Activity'].should == @activity.description
         table[7]['Targets'].should == nil
-        table[7]['Cost Category Split Total %'].should == 100.0
-        table[7]['Cost Category Split %'].should == 10.0
-        table[7]['Cost Category'].should == @cost_categorization.code.short_display
+        table[7]['Input Split Total %'].should == 100.0
+        table[7]['Input Split %'].should == 10.0
+        table[7]['Input'].should == @cost_categorization.code.short_display
         table[7]['Purpose Split Total %'].should == 100.0
         table[7]['Purpose Split %'].should == 20.0
         table[7]['MTEF Code'].should == "sub_prog_name"
@@ -502,9 +502,9 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Implementer'].should == @is.organization.name
         table[0]['Description of Activity'].should == @activity.description
         table[0]['Targets'].should == nil
-        table[0]['Cost Category Split Total %'].should == 66.67
-        table[0]['Cost Category Split %'].should == 90.0
-        table[0]['Cost Category'].should == @cost_categorization.code.short_display
+        table[0]['Input Split Total %'].should == 66.67
+        table[0]['Input Split %'].should == 90.0
+        table[0]['Input'].should == @cost_categorization.code.short_display
         table[0]['Purpose Split Total %'].should == 66.67
         table[0]['Purpose Split %'].should == 80.0
         table[0]['MTEF Code'].should == "sub_prog_name"
@@ -520,9 +520,9 @@ describe Reports::Detailed::DynamicQuery do
         table[1]['Implementer'].should == @is.organization.name
         table[1]['Description of Activity'].should == @activity.description
         table[1]['Targets'].should == nil
-        table[1]['Cost Category Split Total %'].should == 66.67
-        table[1]['Cost Category Split %'].should == 90.0
-        table[1]['Cost Category'].should == @cost_categorization.code.short_display
+        table[1]['Input Split Total %'].should == 66.67
+        table[1]['Input Split %'].should == 90.0
+        table[1]['Input'].should == @cost_categorization.code.short_display
         table[1]['Purpose Split Total %'].should == 66.67
         table[1]['Purpose Split %'].should == 80.0
         table[1]['MTEF Code'].should == "sub_prog_name"
@@ -538,9 +538,9 @@ describe Reports::Detailed::DynamicQuery do
         table[2]['Implementer'].should == @is.organization.name
         table[2]['Description of Activity'].should == @activity.description
         table[2]['Targets'].should == nil
-        table[2]['Cost Category Split Total %'].should == 66.67
-        table[2]['Cost Category Split %'].should == 90.0
-        table[2]['Cost Category'].should == @cost_categorization.code.short_display
+        table[2]['Input Split Total %'].should == 66.67
+        table[2]['Input Split %'].should == 90.0
+        table[2]['Input'].should == @cost_categorization.code.short_display
         table[2]['Purpose Split Total %'].should == 66.67
         table[2]['Purpose Split %'].should == 20.0
         table[2]['MTEF Code'].should == "sub_prog_name"
@@ -556,9 +556,9 @@ describe Reports::Detailed::DynamicQuery do
         table[3]['Implementer'].should == @is.organization.name
         table[3]['Description of Activity'].should == @activity.description
         table[3]['Targets'].should == nil
-        table[3]['Cost Category Split Total %'].should == 66.67
-        table[3]['Cost Category Split %'].should == 90.0
-        table[3]['Cost Category'].should == @cost_categorization.code.short_display
+        table[3]['Input Split Total %'].should == 66.67
+        table[3]['Input Split %'].should == 90.0
+        table[3]['Input'].should == @cost_categorization.code.short_display
         table[3]['Purpose Split Total %'].should == 66.67
         table[3]['Purpose Split %'].should == 20.0
         table[3]['MTEF Code'].should == "sub_prog_name"
@@ -574,9 +574,9 @@ describe Reports::Detailed::DynamicQuery do
         table[4]['Implementer'].should == @is.organization.name
         table[4]['Description of Activity'].should == @activity.description
         table[4]['Targets'].should == nil
-        table[4]['Cost Category Split Total %'].should == 66.67
-        table[4]['Cost Category Split %'].should == 10.0
-        table[4]['Cost Category'].should == @cost_categorization.code.short_display
+        table[4]['Input Split Total %'].should == 66.67
+        table[4]['Input Split %'].should == 10.0
+        table[4]['Input'].should == @cost_categorization.code.short_display
         table[4]['Purpose Split Total %'].should == 66.67
         table[4]['Purpose Split %'].should == 80.0
         table[4]['MTEF Code'].should == "sub_prog_name"
@@ -592,9 +592,9 @@ describe Reports::Detailed::DynamicQuery do
         table[5]['Implementer'].should == @is.organization.name
         table[5]['Description of Activity'].should == @activity.description
         table[5]['Targets'].should == nil
-        table[5]['Cost Category Split Total %'].should == 66.67
-        table[5]['Cost Category Split %'].should == 10.0
-        table[5]['Cost Category'].should == @cost_categorization.code.short_display
+        table[5]['Input Split Total %'].should == 66.67
+        table[5]['Input Split %'].should == 10.0
+        table[5]['Input'].should == @cost_categorization.code.short_display
         table[5]['Purpose Split Total %'].should == 66.67
         table[5]['Purpose Split %'].should == 80.0
         table[5]['MTEF Code'].should == "sub_prog_name"
@@ -610,9 +610,9 @@ describe Reports::Detailed::DynamicQuery do
         table[6]['Implementer'].should == @is.organization.name
         table[6]['Description of Activity'].should == @activity.description
         table[6]['Targets'].should == nil
-        table[6]['Cost Category Split Total %'].should == 66.67
-        table[6]['Cost Category Split %'].should == 10.0
-        table[6]['Cost Category'].should == @cost_categorization.code.short_display
+        table[6]['Input Split Total %'].should == 66.67
+        table[6]['Input Split %'].should == 10.0
+        table[6]['Input'].should == @cost_categorization.code.short_display
         table[6]['Purpose Split Total %'].should == 66.67
         table[6]['Purpose Split %'].should == 20.0
         table[6]['MTEF Code'].should == "sub_prog_name"
@@ -628,9 +628,9 @@ describe Reports::Detailed::DynamicQuery do
         table[7]['Implementer'].should == @is.organization.name
         table[7]['Description of Activity'].should == @activity.description
         table[7]['Targets'].should == nil
-        table[7]['Cost Category Split Total %'].should == 66.67
-        table[7]['Cost Category Split %'].should == 10.0
-        table[7]['Cost Category'].should == @cost_categorization.code.short_display
+        table[7]['Input Split Total %'].should == 66.67
+        table[7]['Input Split %'].should == 10.0
+        table[7]['Input'].should == @cost_categorization.code.short_display
         table[7]['Purpose Split Total %'].should == 66.67
         table[7]['Purpose Split %'].should == 20.0
         table[7]['MTEF Code'].should == "sub_prog_name"
@@ -646,9 +646,9 @@ describe Reports::Detailed::DynamicQuery do
         table[8]['Implementer'].should == @is.organization.name
         table[8]['Description of Activity'].should == @activity.description
         table[8]['Targets'].should == nil
-        table[8]['Cost Category Split Total %'].should == 33.33
-        table[8]['Cost Category Split %'].should == 90.0
-        table[8]['Cost Category'].should == @cost_categorization.code.short_display
+        table[8]['Input Split Total %'].should == 33.33
+        table[8]['Input Split %'].should == 90.0
+        table[8]['Input'].should == @cost_categorization.code.short_display
         table[8]['Purpose Split Total %'].should == 33.33
         table[8]['Purpose Split %'].should == 80.0
         table[8]['MTEF Code'].should == "sub_prog_name"
@@ -664,9 +664,9 @@ describe Reports::Detailed::DynamicQuery do
         table[9]['Implementer'].should == @is.organization.name
         table[9]['Description of Activity'].should == @activity.description
         table[9]['Targets'].should == nil
-        table[9]['Cost Category Split Total %'].should == 33.33
-        table[9]['Cost Category Split %'].should == 90.0
-        table[9]['Cost Category'].should == @cost_categorization.code.short_display
+        table[9]['Input Split Total %'].should == 33.33
+        table[9]['Input Split %'].should == 90.0
+        table[9]['Input'].should == @cost_categorization.code.short_display
         table[9]['Purpose Split Total %'].should == 33.33
         table[9]['Purpose Split %'].should == 80.0
         table[9]['MTEF Code'].should == "sub_prog_name"
@@ -682,9 +682,9 @@ describe Reports::Detailed::DynamicQuery do
         table[10]['Implementer'].should == @is.organization.name
         table[10]['Description of Activity'].should == @activity.description
         table[10]['Targets'].should == nil
-        table[10]['Cost Category Split Total %'].should == 33.33
-        table[10]['Cost Category Split %'].should == 90.0
-        table[10]['Cost Category'].should == @cost_categorization.code.short_display
+        table[10]['Input Split Total %'].should == 33.33
+        table[10]['Input Split %'].should == 90.0
+        table[10]['Input'].should == @cost_categorization.code.short_display
         table[10]['Purpose Split Total %'].should == 33.33
         table[10]['Purpose Split %'].should == 20.0
         table[10]['MTEF Code'].should == "sub_prog_name"
@@ -700,9 +700,9 @@ describe Reports::Detailed::DynamicQuery do
         table[11]['Implementer'].should == @is.organization.name
         table[11]['Description of Activity'].should == @activity.description
         table[11]['Targets'].should == nil
-        table[11]['Cost Category Split Total %'].should == 33.33
-        table[11]['Cost Category Split %'].should == 90.0
-        table[11]['Cost Category'].should == @cost_categorization.code.short_display
+        table[11]['Input Split Total %'].should == 33.33
+        table[11]['Input Split %'].should == 90.0
+        table[11]['Input'].should == @cost_categorization.code.short_display
         table[11]['Purpose Split Total %'].should == 33.33
         table[11]['Purpose Split %'].should == 20.0
         table[11]['MTEF Code'].should == "sub_prog_name"
@@ -718,9 +718,9 @@ describe Reports::Detailed::DynamicQuery do
         table[12]['Implementer'].should == @is.organization.name
         table[12]['Description of Activity'].should == @activity.description
         table[12]['Targets'].should == nil
-        table[12]['Cost Category Split Total %'].should == 33.33
-        table[12]['Cost Category Split %'].should == 10.0
-        table[12]['Cost Category'].should == @cost_categorization.code.short_display
+        table[12]['Input Split Total %'].should == 33.33
+        table[12]['Input Split %'].should == 10.0
+        table[12]['Input'].should == @cost_categorization.code.short_display
         table[12]['Purpose Split Total %'].should == 33.33
         table[12]['Purpose Split %'].should == 80.0
         table[12]['MTEF Code'].should == "sub_prog_name"
@@ -736,9 +736,9 @@ describe Reports::Detailed::DynamicQuery do
         table[13]['Implementer'].should == @is.organization.name
         table[13]['Description of Activity'].should == @activity.description
         table[13]['Targets'].should == nil
-        table[13]['Cost Category Split Total %'].should == 33.33
-        table[13]['Cost Category Split %'].should == 10.0
-        table[13]['Cost Category'].should == @cost_categorization.code.short_display
+        table[13]['Input Split Total %'].should == 33.33
+        table[13]['Input Split %'].should == 10.0
+        table[13]['Input'].should == @cost_categorization.code.short_display
         table[13]['Purpose Split Total %'].should == 33.33
         table[13]['Purpose Split %'].should == 80.0
         table[13]['MTEF Code'].should == "sub_prog_name"
@@ -754,9 +754,9 @@ describe Reports::Detailed::DynamicQuery do
         table[14]['Implementer'].should == @is.organization.name
         table[14]['Description of Activity'].should == @activity.description
         table[14]['Targets'].should == nil
-        table[14]['Cost Category Split Total %'].should == 33.33
-        table[14]['Cost Category Split %'].should == 10.0
-        table[14]['Cost Category'].should == @cost_categorization.code.short_display
+        table[14]['Input Split Total %'].should == 33.33
+        table[14]['Input Split %'].should == 10.0
+        table[14]['Input'].should == @cost_categorization.code.short_display
         table[14]['Purpose Split Total %'].should == 33.33
         table[14]['Purpose Split %'].should == 20.0
         table[14]['MTEF Code'].should == "sub_prog_name"
@@ -772,9 +772,9 @@ describe Reports::Detailed::DynamicQuery do
         table[15]['Implementer'].should == @is.organization.name
         table[15]['Description of Activity'].should == @activity.description
         table[15]['Targets'].should == nil
-        table[15]['Cost Category Split Total %'].should == 33.33
-        table[15]['Cost Category Split %'].should == 10.0
-        table[15]['Cost Category'].should == @cost_categorization.code.short_display
+        table[15]['Input Split Total %'].should == 33.33
+        table[15]['Input Split %'].should == 10.0
+        table[15]['Input'].should == @cost_categorization.code.short_display
         table[15]['Purpose Split Total %'].should == 33.33
         table[15]['Purpose Split %'].should == 20.0
         table[15]['MTEF Code'].should == "sub_prog_name"
@@ -831,9 +831,9 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Implementer'].should == @is.organization.name
         table[0]['Description of Activity'].should == @activity.description
         table[0]['Targets'].should == nil
-        table[0]['Cost Category Split Total %'].should == "N/A"
-        table[0]['Cost Category Split %'].should == "N/A"
-        table[0]['Cost Category'].should == 'N/A'
+        table[0]['Input Split Total %'].should == "N/A"
+        table[0]['Input Split %'].should == "N/A"
+        table[0]['Input'].should == 'N/A'
         table[0]['Purpose Split Total %'].should == 66.67
         table[0]['Purpose Split %'].should == 80.0
         table[0]['MTEF Code'].should == "sub_prog_name"
@@ -849,9 +849,9 @@ describe Reports::Detailed::DynamicQuery do
         table[1]['Implementer'].should == @is.organization.name
         table[1]['Description of Activity'].should == @activity.description
         table[1]['Targets'].should == nil
-        table[1]['Cost Category Split Total %'].should == 'N/A'
-        table[1]['Cost Category Split %'].should == 'N/A'
-        table[1]['Cost Category'].should == 'N/A'
+        table[1]['Input Split Total %'].should == 'N/A'
+        table[1]['Input Split %'].should == 'N/A'
+        table[1]['Input'].should == 'N/A'
         table[1]['Purpose Split Total %'].should == 66.67
         table[1]['Purpose Split %'].should == 80.0
         table[1]['MTEF Code'].should == "sub_prog_name"
@@ -867,9 +867,9 @@ describe Reports::Detailed::DynamicQuery do
         table[2]['Implementer'].should == @is.organization.name
         table[2]['Description of Activity'].should == @activity.description
         table[2]['Targets'].should == nil
-        table[2]['Cost Category Split Total %'].should == 'N/A'
-        table[2]['Cost Category Split %'].should == 'N/A'
-        table[2]['Cost Category'].should == 'N/A'
+        table[2]['Input Split Total %'].should == 'N/A'
+        table[2]['Input Split %'].should == 'N/A'
+        table[2]['Input'].should == 'N/A'
         table[2]['Purpose Split Total %'].should == 66.67
         table[2]['Purpose Split %'].should == 20.0
         table[2]['MTEF Code'].should == "sub_prog_name"
@@ -885,9 +885,9 @@ describe Reports::Detailed::DynamicQuery do
         table[3]['Implementer'].should == @is.organization.name
         table[3]['Description of Activity'].should == @activity.description
         table[3]['Targets'].should == nil
-        table[3]['Cost Category Split Total %'].should == 'N/A'
-        table[3]['Cost Category Split %'].should == 'N/A'
-        table[3]['Cost Category'].should == 'N/A'
+        table[3]['Input Split Total %'].should == 'N/A'
+        table[3]['Input Split %'].should == 'N/A'
+        table[3]['Input'].should == 'N/A'
         table[3]['Purpose Split Total %'].should == 66.67
         table[3]['Purpose Split %'].should == 20.0
         table[3]['MTEF Code'].should == "sub_prog_name"
@@ -903,9 +903,9 @@ describe Reports::Detailed::DynamicQuery do
         table[4]['Implementer'].should == @is.organization.name
         table[4]['Description of Activity'].should == @activity.description
         table[4]['Targets'].should == nil
-        table[4]['Cost Category Split Total %'].should == 'N/A'
-        table[4]['Cost Category Split %'].should == 'N/A'
-        table[4]['Cost Category'].should == 'N/A'
+        table[4]['Input Split Total %'].should == 'N/A'
+        table[4]['Input Split %'].should == 'N/A'
+        table[4]['Input'].should == 'N/A'
         table[4]['Purpose Split Total %'].should == 33.33
         table[4]['Purpose Split %'].should == 80.0
         table[4]['MTEF Code'].should == "sub_prog_name"
@@ -921,9 +921,9 @@ describe Reports::Detailed::DynamicQuery do
         table[5]['Implementer'].should == @is.organization.name
         table[5]['Description of Activity'].should == @activity.description
         table[5]['Targets'].should == nil
-        table[5]['Cost Category Split Total %'].should == 'N/A'
-        table[5]['Cost Category Split %'].should == 'N/A'
-        table[5]['Cost Category'].should == 'N/A'
+        table[5]['Input Split Total %'].should == 'N/A'
+        table[5]['Input Split %'].should == 'N/A'
+        table[5]['Input'].should == 'N/A'
         table[5]['Purpose Split Total %'].should == 33.33
         table[5]['Purpose Split %'].should == 80.0
         table[5]['MTEF Code'].should == "sub_prog_name"
@@ -939,9 +939,9 @@ describe Reports::Detailed::DynamicQuery do
         table[6]['Implementer'].should == @is.organization.name
         table[6]['Description of Activity'].should == @activity.description
         table[6]['Targets'].should == nil
-        table[6]['Cost Category Split Total %'].should == 'N/A'
-        table[6]['Cost Category Split %'].should == 'N/A'
-        table[6]['Cost Category'].should == 'N/A'
+        table[6]['Input Split Total %'].should == 'N/A'
+        table[6]['Input Split %'].should == 'N/A'
+        table[6]['Input'].should == 'N/A'
         table[6]['Purpose Split Total %'].should == 33.33
         table[6]['Purpose Split %'].should == 20.0
         table[6]['MTEF Code'].should == "sub_prog_name"
@@ -957,9 +957,9 @@ describe Reports::Detailed::DynamicQuery do
         table[7]['Implementer'].should == @is.organization.name
         table[7]['Description of Activity'].should == @activity.description
         table[7]['Targets'].should == nil
-        table[7]['Cost Category Split Total %'].should == 'N/A'
-        table[7]['Cost Category Split %'].should == 'N/A'
-        table[7]['Cost Category'].should == 'N/A'
+        table[7]['Input Split Total %'].should == 'N/A'
+        table[7]['Input Split %'].should == 'N/A'
+        table[7]['Input'].should == 'N/A'
         table[7]['Purpose Split Total %'].should == 33.33
         table[7]['Purpose Split %'].should == 20.0
         table[7]['MTEF Code'].should == "sub_prog_name"
@@ -986,9 +986,9 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Implementer'].should == @is.organization.name
         table[0]['Description of Activity'].should == @activity.description
         table[0]['Targets'].should == nil
-        table[0]['Cost Category Split Total %'].should == 100.0
-        table[0]['Cost Category Split %'].should == 100.0
-        table[0]['Cost Category'].should == @cost_categorization.code.short_display
+        table[0]['Input Split Total %'].should == 100.0
+        table[0]['Input Split %'].should == 100.0
+        table[0]['Input'].should == @cost_categorization.code.short_display
         table[0]['Purpose Split Total %'].should == 'N/A'
         table[0]['Purpose Split %'].should == 'N/A'
         table[0]['MTEF Code'].should == 'N/A'
@@ -1017,9 +1017,9 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Implementer'].should == @is.organization.name
         table[0]['Description of Activity'].should == @activity.description
         table[0]['Targets'].should == nil
-        table[0]['Cost Category Split Total %'].should == 100.0
-        table[0]['Cost Category Split %'].should == 100.0
-        table[0]['Cost Category'].should == @cost_categorization.code.short_display
+        table[0]['Input Split Total %'].should == 100.0
+        table[0]['Input Split %'].should == 100.0
+        table[0]['Input'].should == @cost_categorization.code.short_display
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 100.0
         table[0]['MTEF Code'].should == "sub_prog_name"
@@ -1084,9 +1084,9 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Description of Project'].should == 'N/A'
         table[0]['Description of Activity'].should == @activity.description
         table[0]['Targets'].should == nil
-        table[0]['Cost Category Split Total %'].should == 100.0
-        table[0]['Cost Category Split %'].should == 90.0
-        table[0]['Cost Category'].should == @cost_categorization.code.short_display
+        table[0]['Input Split Total %'].should == 100.0
+        table[0]['Input Split %'].should == 90.0
+        table[0]['Input'].should == @cost_categorization.code.short_display
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 80.0
         table[0]['MTEF Code'].should == "sub_prog_name"
@@ -1102,9 +1102,9 @@ describe Reports::Detailed::DynamicQuery do
         table[1]['Implementer'].should == @is.organization.name
         table[1]['Description of Activity'].should == @activity.description
         table[1]['Targets'].should == nil
-        table[1]['Cost Category Split Total %'].should == 100.0
-        table[1]['Cost Category Split %'].should == 90.0
-        table[1]['Cost Category'].should == @cost_categorization.code.short_display
+        table[1]['Input Split Total %'].should == 100.0
+        table[1]['Input Split %'].should == 90.0
+        table[1]['Input'].should == @cost_categorization.code.short_display
         table[1]['Purpose Split Total %'].should == 100.0
         table[1]['Purpose Split %'].should == 80.0
         table[1]['MTEF Code'].should == "sub_prog_name"
@@ -1120,9 +1120,9 @@ describe Reports::Detailed::DynamicQuery do
         table[2]['Implementer'].should == @is.organization.name
         table[2]['Description of Activity'].should == @activity.description
         table[2]['Targets'].should == nil
-        table[2]['Cost Category Split Total %'].should == 100.0
-        table[2]['Cost Category Split %'].should == 90.0
-        table[2]['Cost Category'].should == @cost_categorization.code.short_display
+        table[2]['Input Split Total %'].should == 100.0
+        table[2]['Input Split %'].should == 90.0
+        table[2]['Input'].should == @cost_categorization.code.short_display
         table[2]['Purpose Split Total %'].should == 100.0
         table[2]['Purpose Split %'].should == 20.0
         table[2]['MTEF Code'].should == "sub_prog_name"
@@ -1138,9 +1138,9 @@ describe Reports::Detailed::DynamicQuery do
         table[3]['Implementer'].should == @is.organization.name
         table[3]['Description of Activity'].should == @activity.description
         table[3]['Targets'].should == nil
-        table[3]['Cost Category Split Total %'].should == 100.0
-        table[3]['Cost Category Split %'].should == 90.0
-        table[3]['Cost Category'].should == @cost_categorization.code.short_display
+        table[3]['Input Split Total %'].should == 100.0
+        table[3]['Input Split %'].should == 90.0
+        table[3]['Input'].should == @cost_categorization.code.short_display
         table[3]['Purpose Split Total %'].should == 100.0
         table[3]['Purpose Split %'].should == 20.0
         table[3]['MTEF Code'].should == "sub_prog_name"
@@ -1156,9 +1156,9 @@ describe Reports::Detailed::DynamicQuery do
         table[4]['Implementer'].should == @is.organization.name
         table[4]['Description of Activity'].should == @activity.description
         table[4]['Targets'].should == nil
-        table[4]['Cost Category Split Total %'].should == 100.0
-        table[4]['Cost Category Split %'].should == 10.0
-        table[4]['Cost Category'].should == @cost_categorization.code.short_display
+        table[4]['Input Split Total %'].should == 100.0
+        table[4]['Input Split %'].should == 10.0
+        table[4]['Input'].should == @cost_categorization.code.short_display
         table[4]['Purpose Split Total %'].should == 100.0
         table[4]['Purpose Split %'].should == 80.0
         table[4]['MTEF Code'].should == "sub_prog_name"
@@ -1174,9 +1174,9 @@ describe Reports::Detailed::DynamicQuery do
         table[5]['Implementer'].should == @is.organization.name
         table[5]['Description of Activity'].should == @activity.description
         table[5]['Targets'].should == nil
-        table[5]['Cost Category Split Total %'].should == 100.0
-        table[5]['Cost Category Split %'].should == 10.0
-        table[5]['Cost Category'].should == @cost_categorization.code.short_display
+        table[5]['Input Split Total %'].should == 100.0
+        table[5]['Input Split %'].should == 10.0
+        table[5]['Input'].should == @cost_categorization.code.short_display
         table[5]['Purpose Split Total %'].should == 100.0
         table[5]['Purpose Split %'].should == 80.0
         table[5]['MTEF Code'].should == "sub_prog_name"
@@ -1192,9 +1192,9 @@ describe Reports::Detailed::DynamicQuery do
         table[6]['Implementer'].should == @is.organization.name
         table[6]['Description of Activity'].should == @activity.description
         table[6]['Targets'].should == nil
-        table[6]['Cost Category Split Total %'].should == 100.0
-        table[6]['Cost Category Split %'].should == 10.0
-        table[6]['Cost Category'].should == @cost_categorization.code.short_display
+        table[6]['Input Split Total %'].should == 100.0
+        table[6]['Input Split %'].should == 10.0
+        table[6]['Input'].should == @cost_categorization.code.short_display
         table[6]['Purpose Split Total %'].should == 100.0
         table[6]['Purpose Split %'].should == 20.0
         table[6]['MTEF Code'].should == "sub_prog_name"
@@ -1210,9 +1210,9 @@ describe Reports::Detailed::DynamicQuery do
         table[7]['Implementer'].should == @is.organization.name
         table[7]['Description of Activity'].should == @activity.description
         table[7]['Targets'].should == nil
-        table[7]['Cost Category Split Total %'].should == 100.0
-        table[7]['Cost Category Split %'].should == 10.0
-        table[7]['Cost Category'].should == @cost_categorization.code.short_display
+        table[7]['Input Split Total %'].should == 100.0
+        table[7]['Input Split %'].should == 10.0
+        table[7]['Input'].should == @cost_categorization.code.short_display
         table[7]['Purpose Split Total %'].should == 100.0
         table[7]['Purpose Split %'].should == 20.0
         table[7]['MTEF Code'].should == "sub_prog_name"
@@ -1273,9 +1273,9 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Implementer'].should == @is.organization.name
         table[0]['Description of Activity'].should == @activity.description
         table[0]['Targets'].should == nil
-        table[0]['Cost Category Split Total %'].should == 100.0
-        table[0]['Cost Category Split %'].should == 100.0
-        table[0]['Cost Category'].should == @cost_categorization.code.short_display
+        table[0]['Input Split Total %'].should == 100.0
+        table[0]['Input Split %'].should == 100.0
+        table[0]['Input'].should == @cost_categorization.code.short_display
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 100.0
         table[0]['MTEF Code'].should == "sub_prog_name"
@@ -1305,9 +1305,9 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Implementer'].should == @is.organization.name
         table[0]['Description of Activity'].should == @other_cost.description
         table[0]['Targets'].should == nil
-        table[0]['Cost Category Split Total %'].should == 100.0
-        table[0]['Cost Category Split %'].should == 100.0
-        table[0]['Cost Category'].should == @cost_categorization.code.short_display
+        table[0]['Input Split Total %'].should == 100.0
+        table[0]['Input Split %'].should == 100.0
+        table[0]['Input'].should == @cost_categorization.code.short_display
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 100.0
         table[0]['MTEF Code'].should == "sub_prog_name"
@@ -1361,9 +1361,9 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Implementer'].should == @is.organization.name
         table[0]['Description of Activity'].should == @activity.description
         table[0]['Targets'].should == nil
-        table[0]['Cost Category Split Total %'].should == 100.0
-        table[0]['Cost Category Split %'].should == 100.0
-        table[0]['Cost Category'].should == @cost_categorization.code.short_display
+        table[0]['Input Split Total %'].should == 100.0
+        table[0]['Input Split %'].should == 100.0
+        table[0]['Input'].should == @cost_categorization.code.short_display
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 90.0
         table[0]['MTEF Code'].should == "sub_prog_name"
@@ -1379,9 +1379,9 @@ describe Reports::Detailed::DynamicQuery do
         table[1]['Implementer'].should == @is.organization.name
         table[1]['Description of Activity'].should == @activity.description
         table[1]['Targets'].should == nil
-        table[1]['Cost Category Split Total %'].should == 100.0
-        table[1]['Cost Category Split %'].should == 100.0
-        table[1]['Cost Category'].should == @cost_categorization.code.short_display
+        table[1]['Input Split Total %'].should == 100.0
+        table[1]['Input Split %'].should == 100.0
+        table[1]['Input'].should == @cost_categorization.code.short_display
         table[1]['Purpose Split Total %'].should == 100.0
         table[1]['Purpose Split %'].should == 10.0
         table[1]['MTEF Code'].should == "N/A"
@@ -1407,9 +1407,9 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Implementer'].should == @is.organization.name
         table[0]['Description of Activity'].should == @activity.description
         table[0]['Targets'].should == nil
-        table[0]['Cost Category Split Total %'].should == 100.0
-        table[0]['Cost Category Split %'].should == 80.0
-        table[0]['Cost Category'].should == @cost_categorization.code.short_display
+        table[0]['Input Split Total %'].should == 100.0
+        table[0]['Input Split %'].should == 80.0
+        table[0]['Input'].should == @cost_categorization.code.short_display
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 100.0
         table[0]['MTEF Code'].should == "sub_prog_name"
@@ -1425,9 +1425,9 @@ describe Reports::Detailed::DynamicQuery do
         table[1]['Implementer'].should == @is.organization.name
         table[1]['Description of Activity'].should == @activity.description
         table[1]['Targets'].should == nil
-        table[1]['Cost Category Split Total %'].should == 100.0
-        table[1]['Cost Category Split %'].should == 20.0
-        table[1]['Cost Category'].should == "Not Classified"
+        table[1]['Input Split Total %'].should == 100.0
+        table[1]['Input Split %'].should == 20.0
+        table[1]['Input'].should == "Not Classified"
         table[1]['Purpose Split Total %'].should == 100.0
         table[1]['Purpose Split %'].should == 100.0
         table[1]['MTEF Code'].should == "sub_prog_name"
@@ -1453,9 +1453,9 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Implementer'].should == @is.organization.name
         table[0]['Description of Activity'].should == @activity.description
         table[0]['Targets'].should == nil
-        table[0]['Cost Category Split Total %'].should == 100.0
-        table[0]['Cost Category Split %'].should == 100.0
-        table[0]['Cost Category'].should == @cost_categorization.code.short_display
+        table[0]['Input Split Total %'].should == 100.0
+        table[0]['Input Split %'].should == 100.0
+        table[0]['Input'].should == @cost_categorization.code.short_display
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 100.0
         table[0]['MTEF Code'].should == "sub_prog_name"
@@ -1471,9 +1471,9 @@ describe Reports::Detailed::DynamicQuery do
         table[1]['Implementer'].should == @is.organization.name
         table[1]['Description of Activity'].should == @activity.description
         table[1]['Targets'].should == nil
-        table[1]['Cost Category Split Total %'].should == 100.0
-        table[1]['Cost Category Split %'].should == 100.0
-        table[1]['Cost Category'].should == @cost_categorization.code.short_display
+        table[1]['Input Split Total %'].should == 100.0
+        table[1]['Input Split %'].should == 100.0
+        table[1]['Input'].should == @cost_categorization.code.short_display
         table[1]['Purpose Split Total %'].should == 100.0
         table[1]['Purpose Split %'].should == 100.0
         table[1]['MTEF Code'].should == "sub_prog_name"
@@ -1500,9 +1500,9 @@ describe Reports::Detailed::DynamicQuery do
           table[0]['Implementer'].should == @is.organization.name
           table[0]['Description of Activity'].should == @activity.description
           table[0]['Targets'].should == nil
-          table[0]['Cost Category Split Total %'].should == 99.5
-          table[0]['Cost Category Split %'].should == 99.5
-          table[0]['Cost Category'].should == @cost_categorization.code.short_display
+          table[0]['Input Split Total %'].should == 99.5
+          table[0]['Input Split %'].should == 99.5
+          table[0]['Input'].should == @cost_categorization.code.short_display
           table[0]['Purpose Split Total %'].should == 100.0
           table[0]['Purpose Split %'].should == 100.0
           table[0]['MTEF Code'].should == "sub_prog_name"
@@ -1557,9 +1557,9 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Implementer'].should == @is.organization.name
         table[0]['Description of Activity'].should == @activity.description
         table[0]['Targets'].should == nil
-        table[0]['Cost Category Split Total %'].should == 100.0
-        table[0]['Cost Category Split %'].should == 100.0
-        table[0]['Cost Category'].should == @cost_categorization.code.short_display
+        table[0]['Input Split Total %'].should == 100.0
+        table[0]['Input Split %'].should == 100.0
+        table[0]['Input'].should == @cost_categorization.code.short_display
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 100.0
         table[0]['MTEF Code'].should == "sub_prog_name"
@@ -1624,9 +1624,9 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Implementer'].should == @is.organization.name
         table[0]['Description of Activity'].should == @activity.description
         table[0]['Targets'].should == nil
-        table[0]['Cost Category Split Total %'].should == 100.0
-        table[0]['Cost Category Split %'].should == 100.0
-        table[0]['Cost Category'].should == @cost_categorization.code.short_display
+        table[0]['Input Split Total %'].should == 100.0
+        table[0]['Input Split %'].should == 100.0
+        table[0]['Input'].should == @cost_categorization.code.short_display
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 100.0
         table[0]['MTEF Code'].should == "sub_prog_name"
