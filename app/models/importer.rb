@@ -65,17 +65,23 @@ class Importer
 
   def set_params(params, row)
     # determine project & activity details depending on blank rows
-    params[:implementer_name] = sanitize_encoding(row['Implementer'].try(:strip))
-    params[:split_id] = row['Id']
-    params[:activity_name] = name_for(row['Activity Name'], params[:activity_name])
-    params[:activity_description] = description_for(row['Activity Description'],
-                             params[:activity_description], row['Activity Name'])
+
+    if row['Project Name'].present?
+      params[:activity_name] = ''
+      params[:activity_description] = ''
+    end
+
     params[:project_name]         = name_for(row['Project Name'], params[:project_name])
+    params[:project_budget_type]  = name_for(row['On/Off Budget'], params[:project_budget_type])
     params[:project_description]  = description_for(row['Project Description'],
                              params[:project_description], row['Project Name'])
-    params[:project_budget_type]  = name_for(row['On/Off Budget'], params[:project_budget_type])
     params[:project_start_date]   = row['Project Start Date']
     params[:project_end_date]     = row['Project End Date']
+    params[:activity_name]        = name_for(row['Activity Name'], params[:activity_name])
+    params[:activity_description] = description_for(row['Activity Description'],
+                             params[:activity_description], row['Activity Name'])
+    params[:split_id]             = row['Id']
+    params[:implementer_name]     = sanitize_encoding(row['Implementer'].try(:strip))
     params[:spend]                = row["Past Expenditure"]
     params[:budget]               = row["Current Budget"]
     params

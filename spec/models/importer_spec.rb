@@ -446,6 +446,18 @@ EOS
         i.activities[1].implementer_splits[0].budget.to_f.should == 6.0
       end
 
+      it "should reset activity values when new project" do
+        csv_string = <<-EOS
+project1,on,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,2.0,4.0
+project2,on,project 2 description,01/01/2010,31/12/2010,,,,,,
+EOS
+        i = Importer.new(@response, write_csv_with_header(csv_string))
+        i.activities[0].name.should == 'activity1'
+        i.activities[0].description.should == 'activity1 description'
+        i.activities[1].name.should == ''
+        i.activities[1].description.should == ''
+      end
+
       it "should update > 2 implementers across multiple activities" do
         csv_string = <<-EOS
 project1,on,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,2.0,4.0
