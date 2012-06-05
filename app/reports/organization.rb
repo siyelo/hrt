@@ -25,11 +25,19 @@ module Reports
     end
 
     def expenditure_chart
-      Charts::Spend.new(collection).google_pie
+      Charts::Projects::Spend.new(collection).google_pie
     end
 
     def budget_chart
-      Charts::Budget.new(collection).google_pie
+      Charts::Projects::Budget.new(collection).google_pie
+    end
+
+    def budget_value_method(project)
+      project.converted_budget
+    end
+
+    def spend_value_method(project)
+      project.converted_spend
     end
   end
 end

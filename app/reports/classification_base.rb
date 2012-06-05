@@ -15,11 +15,11 @@ module Reports
     protected
 
     def rows_budget
-      rows.inject(0){ |sum, e| sum + ( e.total_budget.round(2) || 0 ) }
+      rows.inject(0){ |sum, e| sum + (e.total_budget.round(2) || 0) }
     end
 
     def rows_spend
-      rows.inject(0){ |sum, e| sum + ( e.total_spend.round(2) || 0 ) }
+      rows.inject(0){ |sum, e| sum + (e.total_spend.round(2) || 0) }
     end
 
     def rows
@@ -34,7 +34,7 @@ module Reports
         rows
       else
         [rows, Reports::Row.new("Not Classified",
-                                 remaining_spend, remaining_budget)].flatten
+                                remaining_spend, remaining_budget)].flatten
       end
     end
 
@@ -52,6 +52,21 @@ module Reports
       mapped_data = map_data(codings)
       mapped_data.inject([]) do |splits, e|
         splits << Reports::Row.new(e[0], e[1][:spend], e[1][:budget])
+      end
+    end
+
+    # Combines collection of LocationBudgetSplit and LocationSpendSplit objects
+    # into a single hash, keyed by Location (Code) name
+    # E.g.
+    #   { "Input1" => {:spend => 10, :budget => 10} }
+    #
+    def map_data(collection)
+      collection.inject({}) do |result,e|
+        result[e.name] ||= {}
+        result[e.name][method_from_class(e.class.to_s)] ||= 0
+        value = universal_currency_converter((e.cached_amount || 0), e.currency, @resource.currency)
+        result[e.name][method_from_class(e.class.to_s)] += value
+        result
       end
     end
 

@@ -5,7 +5,7 @@ Feature: Reporter can see location report
 
   Background:
     Given a input exists with short_display: "Some input"
-      And an organization exists with name: "Organization1", currency: "RWF"
+      And an organization exists with name: "Organization1"
       And a data_request exists with title: "dr1", organization: the organization
       And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
       And a data_response should exist with data_request: the data_request, organization: the organization

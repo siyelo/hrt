@@ -41,16 +41,6 @@
     organization_name
   end
 
-  # used in activity report
-  def total_spend
-    spend
-  end
-
-  # used in activity report
-  def total_budget
-    budget
-  end
-
   def organization_mask=(the_organization_mask)
     self.organization_id_will_change! # trigger saving of this model
     self.organization_id = assign_or_create_organization(the_organization_mask)

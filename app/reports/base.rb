@@ -4,6 +4,7 @@ require 'lib/currency_view_number_helper'
 module Reports
   class Base
     include CurrencyViewNumberHelper
+    include CurrencyNumberHelper
     include ActionController::UrlWriter
     include ChartColours
     attr_accessor :resource
@@ -87,22 +88,15 @@ module Reports
       100
     end
 
-    private
-
-    # Combines collection of LocationBudgetSplit and LocationSpendSplit objects
-    # into a single hash, keyed by Location (Code) name
-    # E.g.
-    #   { "Input1" => {:spend => 10, :budget => 10} }
-    #
-    def map_data(collection)
-      collection.inject({}) do |result,e|
-        result[e.name] ||= {}
-        result[e.name][method_from_class(e.class.to_s)] ||= 0
-        result[e.name][method_from_class(e.class.to_s)] += e.cached_amount || 0
-        result
-      end
+    def budget_value_method(element)
+      element.total_budget
     end
 
+    def spend_value_method(element)
+      element.total_spend
+    end
+
+    private
     ###
     # Determines whether it is a budget or spend
     def method_from_class(klass_string)
@@ -111,13 +105,13 @@ module Reports
 
     def top_budgeters
       @top_budgeters ||= collection.sort do |x, y|
-        (y.total_budget || 0) <=> (x.total_budget || 0)
+        (budget_value_method(y) || 0) <=> (budget_value_method(x) || 0)
       end
     end
 
     def top_spenders
       @top_spenders ||= collection.sort do |x, y|
-        (y.total_spend || 0) <=> (x.total_spend || 0)
+        (spend_value_method(y) || 0) <=> (spend_value_method(x) || 0)
       end
     end
 
