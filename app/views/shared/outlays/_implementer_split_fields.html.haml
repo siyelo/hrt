@@ -5,7 +5,7 @@
 
 %tr.fields{:class => error_class, :style => f.object.marked_for_destruction? ? "display: none;" : nil}
   %td.title
-    = f.text_field :organization_mask, :value => f.object.organization.try(:name) || f.object.organization_temp_name, :class => 'js_autocomplete bulk_organization_mask'
+    = f.text_field :organization_mask, :value => f.object.organization.try(:name).presence || f.object.organization_temp_name.presence || f.object.organization_mask, :class => 'js_autocomplete bulk_organization_mask'
     - if f.object.errors.on(:organization_temp_name).present?
       = image_tag "tooltip.png", :title => "Cannot find organization '#{f.object.organization_temp_name}'", :class => 'tooltip-S input_error'
   %td= f.text_field :spend, :class => 'js_spend no_style'

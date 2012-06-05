@@ -44,7 +44,7 @@
   def organization_mask=(the_organization_mask)
     self.organization_id_will_change! # trigger saving of this model
     self.organization_id = assign_or_create_organization(the_organization_mask)
-    @organization_mask   = organization_id
+    @organization_mask   = the_organization_mask
   end
 
   def budget=(amount)

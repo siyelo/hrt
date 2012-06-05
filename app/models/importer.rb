@@ -49,7 +49,7 @@ class Importer
 
     mark_splits_for_destruction
     new_splits.each { |split| split.activity.implementer_splits << split }
-    check_projects_activities_valid(projects, activities) # TODO: refactor
+    check_objects_valid
   end
 
   def is_other_without_a_project?(params)
@@ -87,10 +87,14 @@ class Importer
     params
   end
 
-  def check_projects_activities_valid(projects, activities)
+  def check_objects_valid
     projects.each { |p| p.valid? }
     activities.each { |a| a.valid? }
     activities.map(&:implementer_splits).flatten.each do |is|
+      is.errors.add(:organization_temp_name, "does not exist") if is.organization_mask.blank?
+    end
+    other_costs.each { |a| a.valid? }
+    other_costs.map(&:implementer_splits).flatten.each do |is|
       is.errors.add(:organization_temp_name, "does not exist") if is.organization_mask.blank?
     end
   end
