@@ -84,8 +84,6 @@ class ProjectsController < BaseController
         @projects = @i.projects
         @activities = @i.activities
         @other_costs = @i.other_costs
-        # raise @activities.map(&:name).to_yaml
-        # raise @activities.length.to_yaml
       else
         flash[:error] = 'Please select a file to upload'
         redirect_to projects_url
