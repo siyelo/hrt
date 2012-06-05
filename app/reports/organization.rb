@@ -24,12 +24,12 @@ module Reports
       Charts::Projects::Budget.new(collection).google_pie
     end
 
-    def budget_value_method(element)
-      element.converted_budget
+    def budget_value_method(project)
+      project.converted_budget
     end
 
-    def spend_value_method(element)
-      element.converted_spend
+    def spend_value_method(project)
+      project.converted_spend
     end
   end
 end
