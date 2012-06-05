@@ -11,16 +11,8 @@ class Reports::DistrictSplit < Reports::TopBase
     @locations = Location.find(:all, :order => 'short_display ASC')
   end
 
-  def unit
-    "%"
-  end
-
   def collection
-    percentage_by_districts
-  end
-
-  def format(value)
-    number_to_percentage(value,  :precision => 2)
+    amounts_by_districts
   end
 
   def resource_link(element)
@@ -35,28 +27,22 @@ class Reports::DistrictSplit < Reports::TopBase
     Charts::Budget.new(collection).google_column
   end
 
-  def max_percentage
-    spend = collection[0].total_spend
-    budget = collection[0].total_budget
-    spend > budget ? spend : budget
-  end
-
   private
-  def percentage_by_districts
-    unless @percentages
+  def amounts_by_districts
+    unless @amounts
       national  = locations.detect{|l| l.short_display == 'National Level' }
       districts = locations.select{|l| l != national}
 
-      @percentages = []
+      @amounts = []
 
-      @percentages << district_percentages(national) if national
+      @amounts << district_amounts(national) if national
 
       districts.each do |district|
-        @percentages << district_percentages(district)
+        @amounts << district_amounts(district)
       end
     end
 
-    @percentages
+    @amounts
   end
 
   def total_budget
@@ -98,9 +84,9 @@ class Reports::DistrictSplit < Reports::TopBase
 
   end
 
-  def district_percentages(district)
-    spend  = amount_by_district[district.short_display][:spend] * 100 / total_spend
-    budget = amount_by_district[district.short_display][:budget] * 100 / total_budget
+  def district_amounts(district)
+    spend  = amount_by_district[district.short_display][:spend]
+    budget = amount_by_district[district.short_display][:budget]
     Reports::Row.new(district.short_display,
                      spend.to_f.round_with_precision(2),
                      budget.to_f.round_with_precision(2))
@@ -112,14 +98,15 @@ class Reports::DistrictSplit < Reports::TopBase
 
     collection.each do |e|
       result[e.district][method_from_class(e.klass.to_s)] +=
-        universal_currency_converter(e.amount.to_f, e.amount_currency, 'RWF')
+        universal_currency_converter(e.amount.to_f, e.amount_currency, 'USD')
     end
+
     result
   end
 
   def top_spenders
-    national = [percentage_by_districts[0]]
-    others = percentage_by_districts.drop(1)
+    national = [amounts_by_districts[0]]
+    others = amounts_by_districts.drop(1)
     others.sort!{ |x, y| y.total_spend <=> x.total_spend }
     national + others
   end
