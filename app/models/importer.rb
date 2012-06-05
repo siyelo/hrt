@@ -220,14 +220,17 @@ class Importer
   end
 
   def find_split(activity, implementer, params)
+    implementer_name = params.fetch(:implementer_name)
     split = find_cached_split(params.fetch(:split_id))
     split ||= activity.implementer_splits.detect { |s| s.organization_id == implementer.id } if implementer
     #split = activity.implementer_splits.find(:first,
                     #:conditions => { :organization_id => implementer.id}) if implementer
-    split ||= create_new_implementer_split(activity, params.fetch(:implementer_name))
+    split ||= create_new_implementer_split(activity, implementer_name)
     split = activity.implementer_splits.detect{ |is| is.id == split.id } || split # TODO: refactor
-    split.attributes = { :organization => implementer, :spend => params.fetch(:spend),
-      :budget => params.fetch(:budget) }
+    split.attributes = { :organization => implementer,
+                         :organization_temp_name => implementer_name,
+                         :spend => params.fetch(:spend),
+                         :budget => params.fetch(:budget) }
     split.organization_id_will_change!
     split
   end
