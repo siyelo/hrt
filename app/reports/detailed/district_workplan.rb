@@ -62,17 +62,17 @@ class Reports::Detailed::DistrictWorkplan
   end
 
   def header
-    ["Partner", "Project", "Activity", "Expenditure (RWF)", "Budget (RWF)", "Implementers"]
+    ["Partner", "Project", "Activity", "Expenditure (USD)", "Budget (USD)", "Implementers"]
   end
 
   def spend_district_amount(activity)
     ca = activity.location_spend_splits.detect { |ca| ca.code_id == district.id }
-    ca ? universal_currency_converter(ca.cached_amount, activity.currency, "RWF") : 0
+    ca ? universal_currency_converter(ca.cached_amount, activity.currency, "USD") : 0
   end
 
   def budget_district_amount(activity)
     ca = activity.location_budget_splits.detect { |ca| ca.code_id == district.id }
-    ca ? universal_currency_converter(ca.cached_amount, activity.currency, "RWF") : 0
+    ca ? universal_currency_converter(ca.cached_amount, activity.currency, "USD") : 0
   end
 
   def total_row(spend_total, budget_total)

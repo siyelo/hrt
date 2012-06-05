@@ -2,9 +2,9 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe Reports::Detailed::DistrictWorkplan do
   before :each do
-    currency = Factory(:currency, :from => 'USD', :to => 'RWF', :rate => 2)
-    organization1 = Factory(:organization, :name => 'organization1')
-    organization2 = Factory(:organization, :name => 'organization2')
+    currency = Factory(:currency, :from => 'RWF', :to => 'USD', :rate => 2)
+    organization1 = Factory(:organization, :name => 'organization1', :currency => 'RWF')
+    organization2 = Factory(:organization, :name => 'organization2', :currency => 'RWF')
     reporter1     = Factory(:reporter, :organization => organization1)
     @data_request  = Factory(:data_request, :organization => organization1)
     data_response = organization1.latest_response
@@ -12,7 +12,8 @@ describe Reports::Detailed::DistrictWorkplan do
                       :budget => 100, :spend => 200]
     project1      = Factory(:project, :name => 'project1',
                             :data_response => data_response,
-                            :in_flows => in_flows)
+                            :in_flows => in_flows,
+                            :currency => 'RWF')
     activity1     = Factory(:activity, :name => 'activity1',
                             :data_response => data_response,
                             :project => project1)
@@ -57,13 +58,13 @@ describe Reports::Detailed::DistrictWorkplan do
     rows[1]["Activity"].should == 'activity2'
     rows[2]["Activity"].should == 'Total'
 
-    rows[0]["Expenditure (RWF)"].should == 200.0
-    rows[1]["Expenditure (RWF)"].should == 200.0
-    rows[2]["Expenditure (RWF)"].should == 400.0
+    rows[0]["Expenditure (USD)"].should == 200.0
+    rows[1]["Expenditure (USD)"].should == 200.0
+    rows[2]["Expenditure (USD)"].should == 400.0
 
-    rows[0]["Budget (RWF)"].should == 50.0
-    rows[1]["Budget (RWF)"].should == 50.0
-    rows[2]["Budget (RWF)"].should == 100.0
+    rows[0]["Budget (USD)"].should == 50.0
+    rows[1]["Budget (USD)"].should == 50.0
+    rows[2]["Budget (USD)"].should == 100.0
 
     rows[0]["Implementers"].should == 'organization2'
     rows[1]["Implementers"].should == 'organization2'
@@ -71,15 +72,15 @@ describe Reports::Detailed::DistrictWorkplan do
   end
 
   it "can generate district workplan with more than 1 organization" do
-    organization3 = Factory(:organization, :name => 'organization3')
+    organization3 = Factory(:organization, :name => 'organization3', :currency => 'RWF')
     Factory(:reporter, :organization => organization3)
-    organization4 = Factory(:organization, :name => 'organization4')
+    organization4 = Factory(:organization, :name => 'organization4', :currency => 'RWF')
     data_response2 = organization3.latest_response
     in_flows      = [Factory.build :funding_flow, :from => organization3,
                       :budget => 100, :spend => 200]
     project2      = Factory(:project, :name => 'project2',
                             :data_response => data_response2,
-                            :in_flows => in_flows)
+                            :in_flows => in_flows, :currency => 'RWF')
     activity3     = Factory(:activity, :name => 'activity3',
                             :data_response => data_response2,
                             :project => project2)
