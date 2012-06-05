@@ -42,15 +42,24 @@ describe Reports::Project do
        "1" => {"color" => "#dc3912"}}
   end
 
-  it "combines activities with the same name" do
+  it "numbers duplicates" do
+    activity2 = mock :activity, :name => 'activity', :total_spend => 6, :total_budget => 10
+    activities2 = [activity, activity1, activity2]
+    project.stub_chain(:activities, :sorted).and_return activities2
+    report.non_duplicate_collection.map(&:name).should == ["activity", "activity 2", "activity1"]
+  end
+
+  it "does not combines activities with the same name" do
     activity2 = mock :activity, :name => 'activity', :total_spend => 6, :total_budget => 10
     activities2 = [activity, activity1, activity2]
     project.stub_chain(:activities, :sorted).and_return activities2
     JSON.parse(report.budget_colours).should ==
-      {"0" => {"color" => "#3366cc"},
-       "1" => {"color" => "#dc3912"}}
+      {"0"=>{"color"=>"#ff9900"},
+       "1"=>{"color"=>"#dc3912"},
+       "2"=>{"color"=>"#3366cc"}}
     JSON.parse(report.expenditure_colours).should ==
-      {"0" => {"color" => "#3366cc"},
-       "1" => {"color" => "#dc3912"}}
+      {"0"=>{"color"=>"#3366cc"},
+       "1"=>{"color"=>"#dc3912"},
+       "2"=>{"color"=>"#ff9900"}}
   end
 end

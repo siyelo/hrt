@@ -6,11 +6,11 @@
       %th.align= "Budget (#{@report.unit})"
 
   %tbody
-    - @report.collection.each do |e|
+    - @report.non_duplicate_collection.each do |e|
       %tr
-        %td= resource_link(@report, e)
-        %td.align= @report.format(@report.spend_value_method(e))
-        %td.align= @report.format(@report.budget_value_method(e))
+        %td= resource_link(e)
+        %td.align= @report.format(e.total_spend)
+        %td.align= @report.format(e.total_budget)
     - if @report.show_totals
       %tr.summary
         %td

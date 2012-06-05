@@ -8,11 +8,12 @@ require 'bigdecimal'
 module Reports
   class Row
     include ActionView::Helpers::NumberHelper
-    attr_reader :name, :total_spend, :total_budget
-    def initialize(name, spend = 0, budget = 0)
+    attr_reader :name, :total_spend, :total_budget, :link_path
+    def initialize(name, spend = 0, budget = 0, link_path = nil)
       @name = name
       @total_spend = BigDecimal.new(spend.to_s)
       @total_budget = BigDecimal.new(budget.to_s)
+      @link_path = link_path
     end
 
     def <=>(x)
