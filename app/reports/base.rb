@@ -104,15 +104,33 @@ module Reports
     end
 
     def top_budgeters
-      @top_budgeters ||= collection.sort do |x, y|
-        (budget_value_method(y) || 0) <=> (budget_value_method(x) || 0)
+      unless @top_budgeters
+        budgeters = Hash.new(0)
+        collection.each do |e|
+          budgeters[e.name] += budget_value_method(e) || 0
+        end
+
+        @top_budgeters = budgeters.map do |e|
+          Reports::Row.new(e[0], 0, e[1])
+        end.sort{ |x, y| y.total_budget <=> x.total_budget }
       end
+
+      @top_budgeters
     end
 
     def top_spenders
-      @top_spenders ||= collection.sort do |x, y|
-        (spend_value_method(y) || 0) <=> (spend_value_method(x) || 0)
+      unless @top_spenders
+        spenders = Hash.new(0)
+        collection.each do |e|
+          spenders[e.name] += spend_value_method(e) || 0
+        end
+
+        @top_spenders = spenders.map do |e|
+          Reports::Row.new(e[0], e[1])
+        end.sort{ |x, y| y.total_spend <=> x.total_spend }
       end
+
+      @top_spenders
     end
 
     def get_colour(name)
@@ -128,7 +146,6 @@ module Reports
       top_all.each_with_index do |name, index|
         colours[name] = AVAILABLE_COLOURS[index]
       end
-
       colours
     end
   end
