@@ -1,4 +1,3 @@
-
 # Health Resource Tracker
 
 This app tracks resource flows in the health sector from their many sources to the ultimate health function they serve. Information about health spending, both planned and realized, are essential for evidence-based budgeting, planning and policy-making.
@@ -20,6 +19,31 @@ This app tracks resource flows in the health sector from their many sources to t
     [remote "production"]
       url = git@heroku.com:resourcetracking.git
       fetch = +refs/heads/*:refs/remotes/production/*
+
+### rbenv/RVM
+
+Preferably use rbenv.
+
+We are no longer supporting RVM.
+
+Database:
+
+  cp config/database.yml.sample config/database.yml
+
+Edit config/database.yml per your environment.  This file is not tracked by git.
+
+  rake db:setup
+
+  rake db:populate [optional]
+
+
+### Feature Dev
+
+Tests/TDD - before every commit, and after every fetch, is your friend.
+
+  $ rake test
+
+Develop on a local feature branch, make a pull request via GitHub.
 
 
 ## License
