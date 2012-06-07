@@ -9,13 +9,13 @@ development:
   paperclip_report:
     # LOCAL CONFIG:
     storage: :filesystem
-    # # S3 CONFIG:
-    # storage: :s3
-    # path: "report/:attachment/:key.:extension"
-    # s3_credentials:
-    #   bucket: us.assets.dev.hrtapp.com
-    #   <<: *access_keys
-    # s3_permissions: authenticated-read
+    # #S3 CONFIG:
+    #storage: :s3
+    #path: "report/:attachment/:data_request_id/:key.:extension"
+    #s3_credentials:
+      #bucket: us.assets.dev.hrtapp.com
+      #<<: *access_keys
+    #s3_permissions: authenticated-read
   paperclip_document:
     # LOCAL CONFIG:
     storage: :filesystem
@@ -52,7 +52,7 @@ staging:
   <<: *defaults
   paperclip_report:
     storage: :s3
-    path: "report/:attachment/:key.:extension"
+    path: "report/:attachment/:data_request_id/:key.:extension"
     s3_credentials:
       bucket: us.assets.staging.hrtapp.com
       <<: *access_keys
@@ -70,7 +70,7 @@ production:
   google_account_id: UA-22139528-1
   paperclip_report:
     storage: :s3
-    path: "report/:attachment/:key.:extension"
+    path: "report/:attachment/:data_request_id/:key.:extension"
     s3_credentials:
       bucket: us.assets.hrtapp.com
       <<: *access_keys
