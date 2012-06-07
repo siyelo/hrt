@@ -33,7 +33,7 @@ end
 
 def specs
   setup_specs
-  run_or_die "spec spec"
+  run_or_die "bundle exec spec spec"
   #run_or_die "spec spec/models/<pick_some_quick_spec>.rb" #debug
 end
 
@@ -41,19 +41,12 @@ end
 # and http://markgandolfo.com/2010/07/01/hudson-ci-server-running-cucumber-in-headless-mode-xvfb
 def setup_cukes
   ENV['RAILS_ENV'] = 'cucumber'
-  ENV['DISPLAY'] = ":99"
-  run "/etc/init.d/xvfb start"
-end
-
-def teardown_cukes
-  run "/etc/init.d/xvfb stop"
+  ENV['DISPLAY'] = ":0.0"
 end
 
 def cukes
   setup_cukes
-  run_or_die "rake cucumber"
-  #run_or_die "rake cucumber:run" #for debug
-  teardown_cukes
+  run_or_die "xvfb-run bundle exec cucumber features"
 end
 
 # main
