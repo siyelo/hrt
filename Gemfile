@@ -59,9 +59,9 @@ group :test do
   gem 'cucumber'
   gem 'cucumber-rails', '0.3.2'
   gem 'database_cleaner'
-  gem 'email_spec', :git => 'git://github.com/bmabey/email-spec.git', :branch => '0.6-rails2-compat'
+  gem 'email_spec'
   gem 'gherkin', '2.3.7'
-  gem 'guard'
+  gem 'guard' , '~> 1.0.3' # avoids 1.1.1 issue: no such file to load -- listen
   gem 'guard-bundler'
   gem 'guard-rspec'
   gem 'guard-spork'
