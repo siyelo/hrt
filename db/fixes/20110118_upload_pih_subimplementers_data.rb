@@ -26,7 +26,7 @@ Activity.transaction do
       raise "Activity not found #{activity_id}".to_yaml unless activity
 
       p "Creating sub implementers for activity #{activity.description}"
-      FasterCSV.foreach(file_location, :headers => false) do |row|
+      CSV.foreach(file_location, :headers => false) do |row|
         provider_name = row[organization_col]
         if provider_name.present?
           provider = Organization.find_by_name(provider_name)

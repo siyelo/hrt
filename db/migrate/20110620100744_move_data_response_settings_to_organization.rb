@@ -27,7 +27,7 @@ class MoveDataResponseSettingsToOrganization < ActiveRecord::Migration
         if o.send(:update_without_callbacks)
           puts "Copying response setting to organization #{o.id} [UPDATE]"
         else
-          o.save(false)
+          o.save(validate: false)
           puts "Copying response setting to organization #{o.id} [SAVE]"
         end
       end
@@ -69,7 +69,7 @@ class MoveDataResponseSettingsToOrganization < ActiveRecord::Migration
         dr.contact_phone_number             = o.contact_phone_number
         dr.contact_main_office_phone_number = o.contact_main_office_phone_number
         dr.contact_office_location          = o.contact_office_location
-        dr.save(false)
+        dr.save(validate: false)
       end
     end
 

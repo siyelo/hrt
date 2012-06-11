@@ -12,7 +12,7 @@ module Admin::ResponsesHelper
       message += ". #{link_to "(Back to all responses)", admin_responses_url}"
     end
 
-    message
+    message.html_safe
   end
 
 end

@@ -1,14 +1,14 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require 'spec_helper'
 
 describe OtherCostsController do
   describe "Redirects to budget or spend depending on datarequest" do
     before :each do
-      @data_request  = Factory(:data_request)
-      @organization  = Factory(:organization)
-      @user          = Factory(:reporter, :organization => @organization)
+      @data_request  = FactoryGirl.create(:data_request)
+      @organization  = FactoryGirl.create(:organization)
+      @user          = FactoryGirl.create(:reporter, :organization => @organization)
       @data_response = @organization.latest_response
-      @project       = Factory(:project, :data_response => @data_response)
-      @other_cost    = Factory(:other_cost, :project => @project, :data_response => @data_response)
+      @project       = FactoryGirl.create(:project, :data_response => @data_response)
+      @other_cost    = FactoryGirl.create(:other_cost, :project => @project, :data_response => @data_response)
       login @user
     end
 
@@ -45,7 +45,7 @@ describe OtherCostsController do
     end
 
     it "correctly updates when an othercost doesn't have a project" do
-      @other_cost    = Factory(:other_cost, :project => nil,
+      @other_cost    = FactoryGirl.create(:other_cost, :project => nil,
                                 :data_response => @data_response)
       put :update, :other_cost => {:description => "some description"}, :id => @other_cost.id,
                                    :commit => 'Save', :response_id => @data_response.id
@@ -54,9 +54,8 @@ describe OtherCostsController do
     end
 
     it "correctly updates when an othercost doesn't have a project or a spend" do
-      @other_cost    = Factory(:other_cost, :project => nil,
+      @other_cost    = FactoryGirl.create(:other_cost, :project => nil,
                                 :data_response => @data_response)
-      @other_cost.write_attribute(:spend, nil); @other_cost.save
       put :update, :other_cost => {:description => "some description"}, :id => @other_cost.id,
                                    :commit => 'Save', :response_id => @data_response.id
       flash[:notice].should == "Indirect Cost was successfully updated."
@@ -76,7 +75,7 @@ describe OtherCostsController do
       post :create, :response_id => @data_response.id, :other_cost => {:project_id => '-1',
          :name => "new other_cost", :description => "description",
          "implementer_splits_attributes"=>
-           {"0"=> {"updated_at" => Time.now, "spend"=>"2", "data_response_id"=>"#{@data_response.id}",
+           {"0"=> {"spend"=>"2",
              "organization_mask"=>"#{@organization.id}", "budget"=>"4"}}}
       @new_other_cost = Activity.find_by_name('new other_cost')
       @new_other_cost.project.name.should == @new_other_cost.name
@@ -93,12 +92,12 @@ describe OtherCostsController do
   describe "Permissions" do
     context "Activity Manager" do
       before :each do
-        @data_request = Factory :data_request
-        @organization = Factory :organization
-        @user = Factory :activity_manager, :organization => @organization
+        @data_request = FactoryGirl.create :data_request
+        @organization = FactoryGirl.create :organization
+        @user = FactoryGirl.create :activity_manager, :organization => @organization
         @data_response = @organization.latest_response
-        @project = Factory(:project, :data_response => @data_response)
-        @other_cost = Factory :other_cost, :project => @project,
+        @project = FactoryGirl.create(:project, :data_response => @data_response)
+        @other_cost = FactoryGirl.create :other_cost, :project => @project,
           :data_response => @data_response, :am_approved => false
         login @user
       end
@@ -134,13 +133,13 @@ describe OtherCostsController do
 
     context "Reporter and Activity Manager" do
       before :each do
-        @data_request = Factory :data_request
-        @organization = Factory :organization
-        @user = Factory :user, :roles => ['reporter', 'activity_manager'],
+        @data_request = FactoryGirl.create :data_request
+        @organization = FactoryGirl.create :organization
+        @user = FactoryGirl.create :user, :roles => ['reporter', 'activity_manager'],
           :organization => @organization
         @data_response = @organization.latest_response
-        @project = Factory(:project, :data_response => @data_response)
-        @other_cost = Factory :other_cost, :project => @project,
+        @project = FactoryGirl.create(:project, :data_response => @data_response)
+        @other_cost = FactoryGirl.create :other_cost, :project => @project,
           :data_response => @data_response, :am_approved => false
       end
 
@@ -160,8 +159,8 @@ describe OtherCostsController do
       it "disallows the editing of organization the reporter is not in" do
         request.env['HTTP_REFERER'] = edit_other_cost_path(@other_cost,
                                         :response_id => @other_cost.response.id)
-        @organization2 = Factory :organization
-        @user = Factory :user, :roles => ['reporter', 'activity_manager'],
+        @organization2 = FactoryGirl.create :organization
+        @user = FactoryGirl.create :user, :roles => ['reporter', 'activity_manager'],
           :organization => @organization2
         @user.organizations << @organization
         login @user
@@ -175,13 +174,13 @@ describe OtherCostsController do
 
     context "who are sysadmins and activity managers" do
       before :each do
-        @data_request = Factory :data_request
-        @organization = Factory :organization
-        @user = Factory :user, :roles => ['admin', 'activity_manager'],
+        @data_request = FactoryGirl.create :data_request
+        @organization = FactoryGirl.create :organization
+        @user = FactoryGirl.create :user, :roles => ['admin', 'activity_manager'],
           :organization => @organization
         @data_response = @organization.latest_response
-        @project = Factory(:project, :data_response => @data_response)
-        @other_cost = Factory :other_cost, :project => @project,
+        @project = FactoryGirl.create(:project, :data_response => @data_response)
+        @other_cost = FactoryGirl.create :other_cost, :project => @project,
           :data_response => @data_response, :am_approved => false
         login @user
       end
@@ -192,7 +191,7 @@ describe OtherCostsController do
         post :create, :response_id => @data_response.id,
           :other_cost => {:project_id => '-1', :name => "new other_cost", :description => "description",
             "implementer_splits_attributes"=>
-              {"0"=> {"updated_at" => Time.now, "spend"=>"2", "data_response_id"=>"#{@data_response.id}",
+              {"0"=> {"spend"=>"2",
                 "organization_mask"=>"#{@organization.id}", "budget"=>"4"}}}
 
         flash[:error].should_not == "You do not have permission to edit this other_cost"

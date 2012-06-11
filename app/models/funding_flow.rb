@@ -46,7 +46,7 @@ class FundingFlow < ActiveRecord::Base
   alias :to :organization
 
   ### Named Scopes
-  named_scope :sorted, { :joins => "LEFT OUTER JOIN organizations ON
+  scope :sorted, { :joins => "LEFT OUTER JOIN organizations ON
     organizations.id = funding_flows.organization_id_from",
     :order => "LOWER(organizations.name) ASC"}
 

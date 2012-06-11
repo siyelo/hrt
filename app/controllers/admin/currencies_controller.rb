@@ -5,10 +5,10 @@ class Admin::CurrenciesController < Admin::BaseController
 
   def index
     if params[:query]
-      @currencies = Currency.sorted.find(:all,
-        :conditions => ['UPPER("currencies"."from") LIKE UPPER(:q) OR
-                        UPPER("currencies"."to") LIKE UPPER(:q)',
-                          {:q => "%#{params[:query]}%"}]).
+      @currencies = Currency.sorted.
+        where(['UPPER("currencies"."from") LIKE UPPER(:q) OR
+                UPPER("currencies"."to") LIKE UPPER(:q)',
+                {:q => "%#{params[:query]}%"}]).
         paginate(:page => params[:page], :per_page => 100)
     else
       @currencies = Currency.sorted.

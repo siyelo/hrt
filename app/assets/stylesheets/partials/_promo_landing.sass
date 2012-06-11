@@ -1,0 +1,159 @@
+/* STYLES EXCLUSIVE TO THE LANDING PAGES */
+body.landing
+  background: $primary_dark
+  height: 100%
+
+  #content
+    .center
+      position: absolute
+      top: 35%
+
+    p
+      color: $primary_light
+      font-size: 11px
+      line-height: 1.5
+      padding-bottom: 15px
+
+  h2.tagline
+    clear: both
+    color: $primary_lighter
+    font-family: Avenir Black
+    font-size: 65px
+    font-weight: normal
+    letter-spacing: 1px
+    margin-top: 100px
+    padding-bottom: 20px
+    text-align: center
+    white-space: nowrap
+    span
+      display: block
+      font-family: Avenir
+      font-size: 31.5px
+      font-weight: bold
+      letter-spacing: 2px
+      opacity: 0.5
+
+  .column3
+    p
+      padding: 0 10px
+    img
+      padding-right: 7px
+
+  .supporter
+    clear: both
+    color: $primary_light
+    font-family: Avenir Black, Arial, sans-serif
+    font-size: 14px
+    font-weight: normal
+    line-height: 1.3
+    margin-bottom: 10px
+    span
+      display: block
+      font-family: Arial, sans-serif
+      font-size: 11px
+      text-transform: lowercase
+    img
+      margin: 2px 7px 0 10px
+      width: 100px
+  .tipsy-inner
+    +box-shadow(rgba(0, 0, 0, 0.3) 0 0 5px)
+
+#guide
+  h2
+    border-top: 3px solid $primary_dark - #060606
+    color: rgba(255, 255, 255, 0.5)
+    font: normal 24px Avenir, sans-serif
+    margin: 10px 0 20px
+    padding-top: 20px
+    text-transform: none
+    +text-shadow(rgba(0, 0, 0, 0.1), 0, 1px, 0)
+
+  h3
+    color: rgba(255, 255, 255, 0.4)
+    font: normal 16px Avenir, sans-serif
+    text-transform: uppercase
+    +text-shadow(rgba(0, 0, 0, 0.1), 0, 1px, 0)
+
+  h3, h5, h6
+    padding: 20px 0 10px 10px
+  h6
+    font-style: italic
+    text-decoration: underline
+  p
+    padding: 0 0 10px 10px
+  a
+    margin-bottom: 10px
+  em
+    font-style: italic
+  ul, ol
+    padding-left: 20px
+    margin-bottom: 10px
+    font-size: 0.8em
+    li
+      padding-bottom: 5px
+  ul li
+    list-style-type: disc
+    margin-left: 10px
+
+.landing-empty
+  background: rgba(0, 0, 0, 0.1)
+  color: #fff
+  padding: 15px
+  text-align: center
+
+.landing-table-wrap
+  margin: 35px auto 10px !important
+  width: 60% !important
+  .pagination
+    margin-top: 20px
+    text-align: center
+    span, a
+      background: rgba(0, 0, 0, 0.1)
+      border: none
+      color: rgba(255, 255, 255, 0.8)
+      display: inline-block
+      font-size: 11px
+      padding: 7px 10px
+      text-decoration: none
+      +border-radius(1px)
+      &:hover, &:focus
+        border: none
+        background: rgba(0, 0, 0, 0.2)
+    .current
+      background: rgba(255, 255, 255, 0.5)
+      color: #222
+      &:hover, &:focus
+        background: rgba(255, 255, 255, 0.5)
+    .disabled
+      color: rgba(255, 255, 255, 0.3)
+      &:hover, &:focus
+        background: rgba(0, 0, 0, 0.1)
+        color: rgba(255, 255, 255, 0.3)
+  h3
+    margin: 10px 0 12px
+    color: #D1E3F2
+    font: 15px "Avenir Black",Arial,sans-serif
+
+.landing-table
+  width: 100%
+  td, a, th
+    color: #fff
+    font-size: 12px
+    text-decoration: none
+  th
+    background: rgba(0, 0, 0, 0.1)
+    color: rgba(255, 255, 255, 0.6)
+    padding: 10px 15px
+  td
+    background: rgba(255, 255, 255, 0.03)
+    border-bottom: rgba(0, 0, 0, 0.1) 1px solid
+    padding: 10px 15px 7px
+  .title, .hint
+    width: 90%
+  .hint
+    color: #fff
+    font-size: 11px
+    opacity: 0.5
+    padding-top: 3px
+  a
+    font-weight: bold

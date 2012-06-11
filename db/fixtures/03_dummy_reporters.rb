@@ -1,11 +1,11 @@
-require 'factory_girl'
+require 'Factory_girl'
 Dir[File.expand_path(File.join(File.dirname(__FILE__),'../','../','spec','factories','**','*.rb'))].each {|f| require f}
 ## REPORTER
 begin
   puts "creating org"
-  @org = Factory(:organization, :name => "internal_reporter_org")
+  @org = FactoryGirl.create(:organization, :name => "internal_reporter_org")
   puts "creating reporter user"
-  @reporter = Factory(:reporter, :email => 'reporter@hrtapp.com', :organization => @org,
+  @reporter = FactoryGirl.create(:reporter, :email => 'reporter@hrtapp.com', :organization => @org,
     :password => ENV['HRT_REPORTER_PASSWORD'] || 'si@yelo',
     :password_confirmation => ENV['HRT_REPORTER_PASSWORD'] || 'si@yelo')
 rescue ActiveRecord::RecordInvalid => e
@@ -20,11 +20,11 @@ begin
   puts "creating project"
   @org = @reporter.organization
   resp = @reporter.current_response
-  @project = Factory :project, :organization => @org, :data_response => resp
+  @project = FactoryGirl.create :project, :organization => @org, :data_response => resp
   puts "creating activity & coding"
-  Factory(:activity_fully_coded, :project => @project, :data_response => resp)
+  FactoryGirl.create(:activity_fully_coded, :project => @project, :data_response => resp)
   puts "creating other costs & coding"
-  Factory(:other_cost_fully_coded, :project => @project, :data_response => resp)
+  FactoryGirl.create(:other_cost_fully_coded, :project => @project, :data_response => resp)
   puts "=> added sample data for reporter #{@reporter.name}"
 rescue Exception => e
   puts e.message

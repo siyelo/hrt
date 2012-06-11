@@ -60,7 +60,7 @@ class ExcelXML
       when Integer
         xml.Cell { xml.Data(column, 'ss:Type' => 'Number') }
       when BigDecimal, Float
-        xml.Cell { xml.Data(column.to_f.round_with_precision(10), 'ss:Type' => 'Number') }
+        xml.Cell { xml.Data(column.to_f.round(10), 'ss:Type' => 'Number') }
       else
         xml.Cell { xml.Data(column.to_s, 'ss:Type' => 'String') }
       end

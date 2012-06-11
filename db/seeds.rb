@@ -2,8 +2,6 @@
 # The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
 #
 
-require 'fastercsv'
-
 puts "\n\nLoading seeds..."
 
 load 'db/seed_files/codes.rb'

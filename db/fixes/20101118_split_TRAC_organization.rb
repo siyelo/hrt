@@ -63,7 +63,7 @@ Organization.transaction do
       a.save!
     end
     # Note: you may need to move sub activities !!
-    p.save(false)
+    p.save(validate: false)
   end
   new_dr.reload
   raise  "  project counts dont match!" unless new_dr.projects.size == 12
@@ -71,7 +71,7 @@ Organization.transaction do
   original_trac.in_flows.each do |f|
     f.to = trac_malaria
     f.data_response = new_dr
-    f.save(false)
+    f.save(validate: false)
   end
   trac_malaria.reload
   raise  "  in_flows counts dont match!" unless trac_malaria.in_flows.size == original_trac.in_flows.size
@@ -79,7 +79,7 @@ Organization.transaction do
   original_trac.out_flows.each do |f|
     f.from = trac_malaria
     f.data_response = new_dr
-    f.save(false)
+    f.save(validate: false)
   end
   trac_malaria.reload
   raise  "  out_flows counts dont match!" unless trac_malaria.out_flows.size == original_trac.out_flows.size

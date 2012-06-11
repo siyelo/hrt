@@ -1,5 +1,5 @@
 -button_label = @user.new_record? ? "Create New User" : "Update User"
-- f.inputs :class => 'inputs' do
+= f.inputs :class => 'inputs' do
   %li.last
     %h3 User details
     %ul.section_form
@@ -12,14 +12,14 @@
 
       %li
         = f.label :email, "Email*"
-        = f.text_field :email, :class =>  f.object.errors.on(:email) ? 'error' : ''
+        = f.text_field :email, :class =>  f.object.errors[:email] ? 'error' : ''
         %p.inline-hints
           Email of the user
 
   %li.last
     %h3 Roles
     %ul.section_form
-      = f.input :roles, :label => "Assign roles to this user", :required => false, :as => :select, :collection => User::ROLES.map{|u| [u.humanize, u]}, :input_html => {:multiple => :multiple,:class => 'multiselect'}, :include_blank => false, :wrapper_html => {:class => 'roles'}, :error_class => 'input-errors'
+      = f.input :roles, :label => "Assign roles to this user", :required => false, :as => :select, :collection => User::ROLES.map{|u| [u.humanize, u]}, :input_html => {:multiple => :multiple, :class => 'chzn-select'}, :include_blank => false, :wrapper_html => {:class => 'roles'}, :error_class => 'input-errors'
 
   %li.js_manage_orgs.last
     %h3 Organizations to Manage
@@ -28,12 +28,12 @@
 
   %li.last
     %ul.horizontal.section_form.last.connect
-      - f.buttons :class => 'buttons' do
-        = f.commit_button button_label, :button_html => {:class => "next"}
+      = f.actions :class => 'buttons' do
+        = f.action :submit, :label => button_label, :button_html => {:class => "next"}
 
 - unless @user.new_record?
   .delete_section
-    = link_to "Delete this User", admin_user_path(@user), :confirm => "Are you sure you want to delete this User?", :method => :delete, :class => 'delete_action'
+    = link_to "Delete this User", admin_user_path(@user), :data => { :confirm => "Are you sure you want to delete this User?" }, :method => :delete, :class => 'delete_action'
     %p
       %strong Warning:
       Once you delete an User, you will lose all data associated with it, and there is no undo.

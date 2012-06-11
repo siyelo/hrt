@@ -1,6 +1,6 @@
 puts "\n  Loading other_cost_codes.csv..."
 OtherCostCode.delete_all
-FasterCSV.foreach("db/seed_files/other_cost_codes.csv", :headers=>true) do |row|
+CSV.foreach("db/seed_files/other_cost_codes.csv", :headers=>true) do |row|
 
   c             = OtherCostCode.new
   c.external_id = row["id"]

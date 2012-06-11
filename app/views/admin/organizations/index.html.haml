@@ -10,7 +10,7 @@
 
 .section_form.wrapped.last.topless
   #search.push
-    - form_tag admin_organizations_path, :method => :get do
+    = form_tag admin_organizations_path, :method => :get do
       = render 'shared/search_form'
   #filter_help.left
     %p= search_and_filter_message(@organizations.total_entries, params[:query], params[:filter])

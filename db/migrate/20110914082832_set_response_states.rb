@@ -10,7 +10,7 @@ class SetResponseStates < ActiveRecord::Migration
       end
 
       data_response.state = state
-      data_response.save(false)
+      data_response.save(validate: false)
     end
   end
 

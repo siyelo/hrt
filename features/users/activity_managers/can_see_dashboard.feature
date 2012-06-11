@@ -11,8 +11,7 @@ Feature: Activity Manager can see dashboard
       And I am signed in as "activity_manager@hrtapp.com"
 
   Scenario: See dashboard
-    Then I should see "Dashboard"
-      And I should see "Organizations I Manage"
+    Then I should see "Organizations I Manage"
       And I should see "Total Organizations 0"
       And I should see "Approved Activities 0"
       And I should see "Pending Activities 0"

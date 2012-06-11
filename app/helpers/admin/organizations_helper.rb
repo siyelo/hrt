@@ -21,7 +21,7 @@ module Admin::OrganizationsHelper
       message += ". #{link_to "(Back to reporting organizations)", admin_organizations_url}"
     end
 
-    message
+    message.html_safe
   end
 
   def select_with_all_orgs_plus_user_count(orgs)

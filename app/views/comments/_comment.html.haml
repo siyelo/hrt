@@ -3,7 +3,7 @@
     = image_tag comment.user.gravatar
     %span.name= mail_to comment.user.email, comment.user.name
     %span.time= "#{time_ago_in_words(comment.created_at)} ago"
-    - link_to '#', :class => 'js_reply add_row right' do
+    = link_to '#', :class => 'js_reply add_row right' do
       Reply
 
     - if params[:controller] == 'projects' && params[:action] == 'index'
@@ -17,8 +17,8 @@
   %p.comment= comment.comment
 
   .js_reply_box.comments_input.reply{:style => 'display: none; !important'}
-    = render 'comments/reply_form.html.haml', :comment => comment.children.new, :parent => comment
+    = render 'comments/reply_form.html.haml', :comment => Comment.new(:parent_id => comment.id), :parent => comment
 
   - if comment.children.present?
     %ul
-      = render :partial => 'comments/comment', :collection => comment.children
+      = render :partial => 'comments/comment.html.haml', :collection => comment.children

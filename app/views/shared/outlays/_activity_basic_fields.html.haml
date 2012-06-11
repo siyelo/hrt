@@ -6,20 +6,20 @@
     .name
       = f.label :name, "Name"
       %span.required *
-      - link_to "#", :title => "A short name for this #{klass}", :class => 'tooltip remaining_characters' do
+      = link_to "#", :title => "A short name for this #{klass}", :class => 'tooltip remaining_characters' do
         =image_tag"tooltip.png"
     = f.text_field :name, :size => "80", "data-maxlength" => "#{Activity::MAX_NAME_LENGTH}"
 
   %li#activity_project_id_input.select.required
     .name
       = f.label :project_id, "Project"
-      - link_to "#", :title => "The Project which this #{klass} belongs to", :class => 'tooltip' do
+      = link_to "#", :title => "The Project which this #{klass} belongs to", :class => 'tooltip' do
         =image_tag"tooltip.png"
-    = f.select :project_id, sorted_project_select(@response, klass), {}, :class => f.object.errors.on(:project_id) ? "error" : ""
+    = f.select :project_id, sorted_project_select(@response, klass), {}, :class => f.object.errors[:project_id] ? "error" : ""
   %li.select.required
     .name
       = f.label :currency, "Currency"
-      - link_to "#", :title => "The default (Organization) currency or the Project currency, if selected", :class => 'tooltip' do
+      = link_to "#", :title => "The default (Organization) currency or the Project currency, if selected", :class => 'tooltip' do
         = image_tag "tooltip.png"
     %span.noedit= f.object.currency.nil? ? @response.currency : f.object.currency
 
@@ -29,6 +29,6 @@
     .name
       = f.label :description, "Description"
       %span.required *
-      - link_to "#", :title => "A general 1-2 sentence description of the purpose of the #{klass}.", :class => 'tooltip' do
+      = link_to "#", :title => "A general 1-2 sentence description of the purpose of the #{klass}.", :class => 'tooltip' do
         =image_tag"tooltip.png"
-    = f.text_area :description, :rows => 1, :class => f.object.errors.on(:description) ? "error" : ""
+    = f.text_area :description, :rows => 1, :class => f.object.errors[:description] ? "error" : ""

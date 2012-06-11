@@ -13,10 +13,10 @@
 
   .js_main.section_base{:style => (project.valid? && params[:format] != 'js' ? 'display: none;' : nil)}
 
-    = error_messages_for :project, :object => project, :header_message  => nil, :message => "Oops, we couldn't save your changes."
+    = render 'shared/error_messages', :resource => @project
 
-    - semantic_form_for project, :namespace => form_namespace(project), :url => create_or_edit_project_path(project, @response), :html => {:class => "condensed_form basic_form bulk_edit_form"} do |f|
-      - f.inputs :class => 'inputs_condensed' do
+    = semantic_form_for project, :namespace => form_namespace(project), :url => create_or_edit_project_path(project, @response), :html => {:class => "condensed_form basic_form bulk_edit_form"} do |f|
+      = f.inputs :class => 'inputs_condensed' do
 
         .project_heading Project
         = f.input :data_response_id, :as => :hidden
@@ -33,23 +33,23 @@
                 %th
 
             %tbody
-              - f.fields_for :in_flows, project.in_flows do |flows|
+              = f.fields_for :in_flows, project.in_flows do |flows|
                 %tr.overflow_fix.fields
                   %td.title= flows.text_field :organization_id_from, :value => flows.object.from.try(:name), :class =>'js_autocomplete'
-                  %td= flows.text_field :spend, :class => 'js_spend no_style', :class => flows.object.errors.on(:spend) ? "error" : ""
-                  %td= flows.text_field :budget , :class => 'js_budget no_style', :class => flows.object.errors.on(:budget) ? "error" : ""
-                  %td.delete= link_to_remove_fields "x", f, :class => 'delete_row'
+                  %td= flows.text_field :spend, :class => 'js_spend no_style', :class => flows.object.errors[:spend] ? "error" : ""
+                  %td= flows.text_field :budget , :class => 'js_budget no_style', :class => flows.object.errors[:budget] ? "error" : ""
+                  %td.delete= link_to_remove_fields "x", flows, :class => 'delete_row'
 
         -# project_activities will be empty once the Save is pressed
         - unless project_activities.empty?
           %li.section_form
             %h3 Activities
             %ul.condensed_fields.section_form.activities_form
-              - f.fields_for :activities, project_activities, :class => 'section_form' do |ff|
+              = f.fields_for :activities, project_activities, :class => 'section_form' do |ff|
                 = render 'activity', :f => ff
 
         %li.borderless.marginless.full
           %br
-          - f.buttons :class => 'buttons' do
-            = f.commit_button "Save Project", :wrapper_html => {:class => "left save_btn"}, :button_html => {:class => "next"}
+          = f.actions :class => 'buttons' do
+            = f.action :submit, :label => "Save Project", :wrapper_html => {:class => "left save_btn"}, :button_html => {:class => "next"}
             = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

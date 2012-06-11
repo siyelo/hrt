@@ -8,10 +8,10 @@ describe Admin::OrganizationsController do
   describe "#index" do
     before :each do
       # login as admin creates 1 NR and 1 Reporting org
-      request1 = Factory(:data_request) # +1 NR
-      organization = Factory(:organization)
-      Factory :user, :organization => organization #+1 R
-      Factory :organization # +1 NR
+      request1 = FactoryGirl.create(:data_request) # +1 NR
+      organization = FactoryGirl.create(:organization)
+      FactoryGirl.create :user, :organization => organization #+1 R
+      FactoryGirl.create :organization # +1 NR
     end
 
     it "displays reporting organization by default" do
@@ -36,8 +36,8 @@ describe Admin::OrganizationsController do
   end
 
   it "#show(s)" do
-    organization = Factory(:organization)
-    organization2 = Factory(:organization)
+    organization = FactoryGirl.create(:organization)
+    organization2 = FactoryGirl.create(:organization)
     get :show, :id => organization.id, :duplicate_id => organization2.id
     assigns(:target).should == organization
     assigns(:duplicate).should == organization2
@@ -104,14 +104,14 @@ describe Admin::OrganizationsController do
 
       it "sets status to :partial_content with js" do
         delete :destroy, :id => @organization.id, :format => "js"
-        response.status.should == "206 Partial Content"
+        response.status.should == 206
       end
     end
   end
 
   describe "#duplicate" do
     before :each do
-      @organization = Factory(:organization)
+      @organization = FactoryGirl.create(:organization)
       organizations = [@organization]
       Organization.stub_chain(:ordered).and_return(organizations)
       Organization.stub!(:ordered).and_return(organizations)
@@ -141,7 +141,7 @@ describe Admin::OrganizationsController do
         put :remove_duplicate, :format => 'js'
         response.body.should == '{"message":"Duplicate or target organizations not selected."}'
         response.should_not be_redirect
-        response.status.should == "206 Partial Content"
+        response.status.should == 206
       end
     end
 
@@ -156,13 +156,13 @@ describe Admin::OrganizationsController do
         put :remove_duplicate, :format => 'js', :duplicate_organization_id => 1, :target_organization_id => 1
         response.body.should == '{"message":"Same organizations for duplicate and target selected."}'
         response.should_not be_redirect
-        response.status.should == "206 Partial Content"
+        response.status.should == 206
       end
     end
 
     context "merge ok" do
-      let(:dupe) { Factory(:organization) }
-      let(:target) { Factory(:organization) }
+      let(:dupe) { FactoryGirl.create(:organization) }
+      let(:target) { FactoryGirl.create(:organization) }
 
       before :each do
         Organization.should_receive(:merge_organizations!).with(target, dupe).and_return true
@@ -180,7 +180,7 @@ describe Admin::OrganizationsController do
           :target_organization_id => target.id
         response.body.should == '{"message":"Organizations successfully merged."}'
         response.should_not be_redirect
-        response.status.should == "200 OK"
+        response.status.should == 200
       end
     end
   end

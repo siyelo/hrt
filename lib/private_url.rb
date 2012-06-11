@@ -1,6 +1,6 @@
 module PrivateUrl
 
   def private_url?
-    RAILS_ENV == 'production' || RAILS_ENV == 'staging'
+    Rails.env == 'production' || Rails.env == 'staging'
   end
 end

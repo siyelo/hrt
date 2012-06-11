@@ -1,6 +1,6 @@
 puts "\n  loading beneficiaries"
 Beneficiary.delete_all
-FasterCSV.foreach("db/seed_files/beneficiaries.csv", :headers=>true) do |row|
+CSV.foreach("db/seed_files/beneficiaries.csv", :headers=>true) do |row|
   c=nil #ActivityCostCategory.first( :conditions => {:id =>row[:id]}) implement update later
   if c.nil?
     c=Beneficiary.new

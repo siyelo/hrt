@@ -29,8 +29,8 @@ describe ReportsController do
 
   context "as a reporter" do
     before :each do
-      @req = Factory :data_request
-      @reporter = Factory :reporter
+      @req = FactoryGirl.create :data_request
+      @reporter = FactoryGirl.create :reporter
       login @reporter
     end
 

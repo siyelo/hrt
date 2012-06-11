@@ -5,7 +5,7 @@ if data_request
 
   Report.all.each do |report|
     report.data_request = data_request
-    report.save(false)
+    report.save(validate: false)
   end
 
   puts 'updated!'

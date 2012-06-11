@@ -14,7 +14,7 @@ class Currency < ActiveRecord::Base
   after_save :reload_currencies
 
   ### Named scopes
-  named_scope :sorted, {:order => 'updated_at DESC'}
+  scope :sorted, {:order => 'updated_at DESC'}
 
   def conversion
     "#{from}_TO_#{to}"

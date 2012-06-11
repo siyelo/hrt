@@ -1,8 +1,8 @@
 %h1.main_heading New Currency
 
-= error_messages_for :organization, :header_message  => nil, :message => "Oops, we couldn't save your changes."
+= render 'shared/error_messages', :resource => @currency
 
 %h2 New currency information
 .section_base
-  - semantic_form_for [:admin, @currency], :html => {:class => 'basic_form js_form'} do |f|
+  = semantic_form_for [:admin, @currency], :html => {:class => 'basic_form js_form'} do |f|
     = render 'form', :f => f

@@ -2,20 +2,19 @@
 #
 class DataResponse < ActiveRecord::Base
   module ErrorChecker
-    extend ActiveSupport::Memoizable
 
     # TODO: move to presenter
     def load_validation_errors
-      errors.add_to_base("Projects are not yet entered.") unless projects_entered?
-      errors.add_to_base("Projects have invalid budget types.") unless projects_have_budget_types?
-      errors.add_to_base("Activites are not yet entered.") unless projects_have_activities?
-      errors.add_to_base("Activites are not yet classified.") unless activities_coded?
-      errors.add_to_base("Projects have invalid funding sources.") unless projects_have_valid_funding_sources?
+      errors.add(:base, "Projects are not yet entered.") unless projects_entered?
+      errors.add(:base, "Projects have invalid budget types.") unless projects_have_budget_types?
+      errors.add(:base, "Activites are not yet entered.") unless projects_have_activities?
+      errors.add(:base, "Activites are not yet classified.") unless activities_coded?
+      errors.add(:base, "Projects have invalid funding sources.") unless projects_have_valid_funding_sources?
       if projects_have_other_costs? && !other_costs_coded?
-        errors.add_to_base("Indirect Costs are not yet classified.")
+        errors.add(:base, "Indirect Costs are not yet classified.")
       end
       unless implementer_splits_entered?
-        errors.add_to_base("Activities are missing implementers or implementer
+        errors.add(:base, "Activities are missing implementers or implementer
         splits are invalid.")
       end
     end
@@ -35,58 +34,50 @@ class DataResponse < ActiveRecord::Base
     end
 
     def projects_entered?
-      !projects.empty?
+      @projects_entered ||= !projects.empty?
     end
-    memoize :projects_entered?
 
     def projects_have_valid_funding_sources?
-      projects_with_invalid_funding_sources.empty?
+      @projects_have_valid_funding_sources ||= projects_with_invalid_funding_sources.empty?
     end
-    memoize :projects_have_valid_funding_sources?
 
     def projects_with_invalid_funding_sources
-      projects.select do |p|
+      @projects_with_invalid_funding_sources ||= projects.select do |p|
         p.in_flows.empty? || !p.funding_sources_have_organizations_and_amounts?
       end
     end
-    memoize :projects_with_invalid_funding_sources
 
     def projects_have_budget_types?
-      projects_without_budget_type.empty?
+      @projects_have_budget_types ||= projects_without_budget_type.empty?
     end
-    memoize :projects_have_budget_types?
 
     def projects_without_budget_type
-      projects.select { |p| p.budget_type.nil? || p.budget_type == "na" }
+      @projects_without_budget_type ||= projects.select { |p| p.budget_type.nil? || p.budget_type == "na" }
     end
-    memoize :projects_without_budget_type
 
     def activities_entered?
-      !normal_activities.empty?
+      @activities_entered ||= !normal_activities.empty?
     end
-    memoize :activities_entered?
 
     def projects_have_activities?
-      activities.find(:first,
+      @projects_have_activities ||= activities.find(:first,
                       :select => 'COUNT(DISTINCT(activities.project_id)) as total',
                       :conditions => {:type => nil, :project_id => projects}
                      ).total.to_i == projects.length
     end
-    memoize :projects_have_activities?
 
     def other_costs_entered?
-      !other_costs.empty?
+      @other_costs_entered ||= !other_costs.empty?
     end
-    memoize :other_costs_entered?
 
     def projects_have_other_costs?
+      return @projects_have_other_costs if @projects_have_other_costs
       other_costs = activities.find(:first,
                                     :select => 'COUNT(DISTINCT(activities.project_id)) as total',
                                     :conditions => {:type => 'OtherCost', :project_id => projects}
                                    ).total.to_i
-                                   other_costs > 0 && other_costs == projects.length
+      @projects_have_other_costs = other_costs > 0 && other_costs == projects.length
     end
-    memoize :projects_have_other_costs?
 
     def implementer_splits_entered?
       activities_without_implementer_splits.empty?
@@ -105,14 +96,12 @@ class DataResponse < ActiveRecord::Base
     end
 
     def activities_coded?
-      activities_entered? && uncoded_activities.empty?
+      @activities_coded ||= activities_entered? && uncoded_activities.empty?
     end
-    memoize :activities_coded?
 
     def other_costs_coded?
-      other_costs_entered? && uncoded_other_costs.empty?
+      @other_costs_coded ||= other_costs_entered? && uncoded_other_costs.empty?
     end
-    memoize :other_costs_coded?
 
     def submittable?
       started? || rejected?

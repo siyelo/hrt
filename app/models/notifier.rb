@@ -2,62 +2,57 @@
 class Notifier < ActionMailer::Base
   #default_url_options[:host] = "resourcetracking.heroku.com"
   FROM = "HRT Notifier <hrt-do-not-reply@hrtapp.com>"
-
-  def password_reset_instructions(user)
-    subject       "[Health Resource Tracker] Password Reset Instructions"
-    from          FROM
-    recipients    user.email
-    sent_on       Time.now
-    body          :password_reset_url => edit_password_reset_url(user.perishable_token)
-  end
+  default :from => FROM, :date => Time.now
 
   def comment_notification(comment, users)
-    subject       "[Health Resource Tracker] A Comment Has Been Made"
-    from          FROM
-    recipients    users.map{ |u| u.email }
-    sent_on       Time.now
-    body          :comment => comment
+    @comment = comment
+
+    mail(
+      :subject => "[Health Resource Tracker] A Comment Has Been Made",
+      :to => users.map{ |u| u.email }
+    )
   end
 
   def send_user_invitation(user, inviter)
-    subject       "[Health Resource Tracker] You have been invited to HRT"
-    from          FROM
-    recipients    user.email
-    sent_on       Time.now
-    body          :full_name => user.full_name,
-                  :org => user.organization,
-                  :invite_token => user.invite_token,
-                  :follow_me => "#{edit_registration_url}?invite_token=#{user.invite_token}",
-                  :sys_admin_org => inviter.organization ? "(#{inviter.organization.try(:name)})" : '',
-                  :inviter_name => inviter.full_name ||= inviter.email
+    @full_name = user.full_name
+    @org = user.organization
+    @invite_token = user.invite_token
+    @follow_me = "#{edit_invitation_url(user.invite_token)}"
+    @sys_admin_org = inviter.organization ? "(#{inviter.organization.try(:name)})" : ''
+    @inviter_name = inviter.full_name ||= inviter.email
+
+    mail(
+      :subject => "[Health Resource Tracker] You have been invited to HRT",
+      :to => user.email
+    )
   end
 
   def response_rejected_notification(response)
-    subject       "Your #{response.title} response is Rejected"
-    from          FROM
-    recipients    response.organization.users.map{ |u| u.email }
-    sent_on       Time.now
+    mail(
+      :subject => "Your #{response.title} response is Rejected",
+      :to => response.organization.users.map{ |u| u.email }
+    )
   end
 
   def response_accepted_notification(response)
-    subject       "Your #{response.title} response is Accepted"
-    from          FROM
-    recipients    response.organization.users.map{ |u| u.email }
-    sent_on       Time.now
+    mail(
+      :subject => "Your #{response.title} response is Accepted",
+      :to => response.organization.users.map{ |u| u.email }
+    )
   end
 
   def response_restarted_notification(response)
-    subject       "Your #{response.title} response is Restarted"
-    from          FROM
-    recipients    response.organization.users.map{ |u| u.email }
-    sent_on       Time.now
+    mail(
+      :subject => "Your #{response.title} response is Restarted",
+      :to => response.organization.users.map{ |u| u.email }
+    )
   end
 
   def report_download_notification(user, report)
-    subject       "Download link for your report"
-    from          FROM
-    recipients    user.email
-    sent_on       Time.now
-    body          :report => report
+    @report = report
+    mail(
+      :subject => "Download link for your report",
+      :to => user.email
+    )
   end
 end

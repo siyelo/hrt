@@ -23,33 +23,33 @@ describe Comment do
 
   describe "Named scopes" do
     it "returns all comment in the last 6 monts" do
-      request      = Factory :data_request
-      organization = Factory :organization
-      Factory :user, :organization => organization
+      request      = FactoryGirl.create :data_request
+      organization = FactoryGirl.create :organization
+      FactoryGirl.create :user, :organization => organization
       response     = organization.latest_response
-      project      = Factory(:project, :data_response => response)
-      activity     = Factory(:activity, :data_response => response, :project => project)
-      other_cost   = Factory(:other_cost, :data_response => response, :project => project)
-      reporter     = Factory(:reporter, :organization => organization)
+      project      = FactoryGirl.create(:project, :data_response => response)
+      activity     = FactoryGirl.create(:activity, :data_response => response, :project => project)
+      other_cost   = FactoryGirl.create(:other_cost, :data_response => response, :project => project)
+      reporter     = FactoryGirl.create(:reporter, :organization => organization)
 
       Timecop.freeze(Date.parse("2010-09-01"))
 
-      response_comment       = Factory(:comment, :commentable => response,
+      response_comment       = FactoryGirl.create(:comment, :commentable => response,
                                        :user => reporter, :created_at => "2010-08-01")
-      project_comment        =  Factory(:comment, :commentable => project,
+      project_comment        =  FactoryGirl.create(:comment, :commentable => project,
                                        :user => reporter, :created_at => "2010-08-01")
-      activity_comment       =  Factory(:comment, :commentable => activity,
+      activity_comment       =  FactoryGirl.create(:comment, :commentable => activity,
                                        :user => reporter, :created_at => "2010-08-01")
-      other_cost_comment     = Factory(:comment, :commentable => other_cost,
+      other_cost_comment     = FactoryGirl.create(:comment, :commentable => other_cost,
                                        :user => reporter, :created_at => "2010-08-01")
 
-      old_response_comment   = Factory(:comment, :commentable => response,
+      old_response_comment   = FactoryGirl.create(:comment, :commentable => response,
                                        :user => reporter, :created_at => "2010-02-01")
-      old_project_comment    = Factory(:comment, :commentable => project,
+      old_project_comment    = FactoryGirl.create(:comment, :commentable => project,
                                        :user => reporter, :created_at => "2010-02-01")
-      old_activity_comment   = Factory(:comment, :commentable => activity,
+      old_activity_comment   = FactoryGirl.create(:comment, :commentable => activity,
                                        :user => reporter, :created_at => "2010-02-01")
-      old_other_cost_comment = Factory(:comment, :commentable => other_cost,
+      old_other_cost_comment = FactoryGirl.create(:comment, :commentable => other_cost,
                                        :user => reporter, :created_at => "2010-02-01")
 
       comments = Comment.on_all([response.id])

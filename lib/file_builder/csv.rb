@@ -1,10 +1,12 @@
+require 'csv'
+
 module FileBuilder
   class Csv
     attr_accessor :filetype, :workbook
 
     def initialize
       @filetype = 'csv'
-      @workbook = FasterCSV.new("")
+      @workbook = CSV.new("")
     end
 
     def add_row(row)

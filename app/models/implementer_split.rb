@@ -5,7 +5,7 @@
   belongs_to :organization # the implementer
   belongs_to :previous, :class_name => 'ImplementerSplit'
 
-  attr_accessible :activity_id, :organization_id, :budget, :spend,
+  attr_accessible :activity, :activity_id, :organization_id, :budget, :spend,
     :organization_mask, :organization, :organization_temp_name
 
   attr_accessor :organization_temp_name
@@ -26,7 +26,7 @@
   delegate :name, :to => :organization, :prefix => true, :allow_nil => true # organization_name
 
   ### Named Scopes
-  named_scope :sorted, { :joins => "LEFT OUTER JOIN organizations ON
+  scope :sorted, { :joins => "LEFT OUTER JOIN organizations ON
     organizations.id = implementer_splits.organization_id",
     :order => "LOWER(organizations.name) ASC"}
 
@@ -48,11 +48,11 @@
   end
 
   def budget=(amount)
-    write_attribute(:budget, NumberHelper.is_number?(amount) ? amount.to_f.round_with_precision(2) : amount)
+    write_attribute(:budget, NumberHelper.is_number?(amount) ? amount.to_f.round(2) : amount)
   end
 
   def spend=(amount)
-    write_attribute(:spend, NumberHelper.is_number?(amount) ? amount.to_f.round_with_precision(2) : amount)
+    write_attribute(:spend, NumberHelper.is_number?(amount) ? amount.to_f.round(2) : amount)
   end
 
   def self_implemented?
@@ -86,7 +86,7 @@
 
       ImplementerSplit.find(:all, :conditions => ["id IN (?)", hash.keys]).each do |split|
         split.double_count = hash[split.id.to_s]
-        split.save(false)
+        split.save(validate: false)
       end
     end
     handle_asynchronously :mark_double_counting

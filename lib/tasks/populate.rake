@@ -1,20 +1,20 @@
 namespace :db do
   desc "Loads initial database models for the current environment."
   task :populate => :environment do
-    puts "Populating environment #{RAILS_ENV}"
-    Dir[File.join(RAILS_ROOT, 'db', 'fixtures', '*.rb')].sort.each { |fixture| puts "Loading #{fixture}\n"; load fixture }
-    Dir[File.join(RAILS_ROOT, 'db', 'fixtures', RAILS_ENV, '*.rb')].sort.each { |fixture| "Loading #{fixture}\n"; load fixture }
+    puts "Populating environment #{Rails.env}"
+    Dir[File.join(Rails.root, 'db', 'fixtures', '*.rb')].sort.each { |fixture| puts "Loading #{fixture}\n"; load fixture }
+    Dir[File.join(Rails.root, 'db', 'fixtures', Rails.env, '*.rb')].sort.each { |fixture| "Loading #{fixture}\n"; load fixture }
   end
 
   # this fixture file no long exists
   #task :populate_users => :environment do
-  #  puts "Populating users in environment #{RAILS_ENV}"
-  #  load File.join(RAILS_ROOT, 'db', 'fixtures', '04_users.rb')
+  #  puts "Populating users in environment #{Rails.env}"
+  #  load File.join(Rails.root, 'db', 'fixtures', '04_users.rb')
   #end
 
   desc "Resets user passwords for current environment."
   task :password_reset => :environment do
-    puts "Reseting user passwords for environment #{RAILS_ENV}"
+    puts "Reseting user passwords for environment #{Rails.env}"
     password = 'si@yelo'
     User.all.each{|u| u.password = password; u.password_confirmation = password; u.save}
     puts "------------------------------------------------------------------"
@@ -29,7 +29,7 @@ namespace :db do
   desc "Populates the database with currencies."
   task :load_currencies => :environment do
     require 'yaml'
-    file = YAML.load_file "#{RAILS_ROOT}/db/seed_files/currencies.yml"
+    file = YAML.load_file "#{Rails.root}/db/seed_files/currencies.yml"
     puts "\nImporting currencies to the database\n"
     file.each do |currency|
       splits = currency[0].split('_TO_')

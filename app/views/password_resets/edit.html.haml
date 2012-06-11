@@ -4,9 +4,9 @@
 
   %h2 Change Password
 
-  - semantic_form_for @user, :url => password_reset_path(:id => params[:id]) do |f|
-    - f.inputs do
+  = semantic_form_for @user, :url => password_reset_path(:id => params[:id]) do |f|
+    = f.inputs do
       = f.input :password, :label => "New Password"
       = f.input :password_confirmation
-    - f.buttons do
-      = f.commit_button "Change My Password", :button_html => {:class => "create_alt"}
+    = f.actions do
+      = f.action :submit, :label => "Change My Password", :button_html => {:class => "create_alt"}

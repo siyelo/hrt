@@ -9,7 +9,7 @@ class AddLocationToOrganization < ActiveRecord::Migration
     add_column :organizations, :location_id, :integer
     Organization.all.each do |org|
       org.location = org.locations.first
-      org.save(false)
+      org.save(validate: false)
     end
     drop_table :locations_organizations
   end
@@ -21,7 +21,7 @@ class AddLocationToOrganization < ActiveRecord::Migration
     end
     Organization.all.each do |org|
       org.locations << org.location
-      org.save(false)
+      org.save(validate: false)
     end
     remove_column :organizations, :location_id, :integer
   end

@@ -12,7 +12,7 @@ describe DataResponse::ErrorChecker do
     end
 
     it "fails if an in flow has a 0 budget AND spend" do
-      p = mock :project, :in_flows => [mock :in_flow],
+      p = mock :project, :in_flows => [mock(:in_flow)],
         :funding_sources_have_organizations_and_amounts? => false
       response.should_receive(:projects).and_return [p]
       response.projects_have_valid_funding_sources?.should == false
@@ -41,8 +41,8 @@ describe DataResponse::ErrorChecker do
     end
 
     it "fails if there are uncoded activities" do
-      response.should_receive(:normal_activities).and_return [mock :activity]
-      response.should_receive(:uncoded_activities).and_return [mock :activity]
+      response.should_receive(:normal_activities).and_return [mock(:activity)]
+      response.should_receive(:uncoded_activities).and_return [mock(:activity)]
       response.activities_coded?.should be_false
     end
 
@@ -61,8 +61,8 @@ describe DataResponse::ErrorChecker do
     end
 
     it "fails if there are uncoded activities" do
-      response.should_receive(:other_costs).and_return [mock :oc]
-      response.should_receive(:uncoded_other_costs).and_return [mock :oc]
+      response.should_receive(:other_costs).and_return [mock(:oc)]
+      response.should_receive(:uncoded_other_costs).and_return [mock(:oc)]
       response.other_costs_coded?.should be_false
     end
 

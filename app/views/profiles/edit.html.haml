@@ -1,7 +1,7 @@
 %h1.main_heading Edit Profile
 
 %h2 Your profile settings
-- form_for @user, :builder => CustomFormBuilder, :url => profile_path, :html => {:class => "basic_form js_form"} do |f|
+= form_for @user, :builder => CustomFormBuilder, :url => profile_path, :html => {:class => "basic_form js_form"} do |f|
   %fieldset.inputs
     %ol
       %li.last

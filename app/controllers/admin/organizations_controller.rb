@@ -12,7 +12,7 @@ class Admin::OrganizationsController < Admin::BaseController
 
   def index
     scope = scope_organizations(params[:filter])
-    scope = scope.scoped(:conditions => ["UPPER(organizations.name) LIKE UPPER(:q) OR
+    scope = scope.where(["UPPER(organizations.name) LIKE UPPER(:q) OR
                                           UPPER(organizations.raw_type) LIKE UPPER(:q) OR
                                           UPPER(organizations.fosaid) LIKE UPPER(:q)",
                                           {:q => "%#{params[:query]}%"}]) if params[:query]

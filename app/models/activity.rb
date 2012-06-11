@@ -1,5 +1,3 @@
-require 'validators'
-
 class Activity < ActiveRecord::Base
   include CurrencyNumberHelper
   include Activity::Classification
@@ -94,22 +92,22 @@ class Activity < ActiveRecord::Base
   validates_length_of :name, :within => 3..MAX_NAME_LENGTH
 
   ### Scopes
-  named_scope :roots,                { :conditions => "activities.type IS NULL" }
-  named_scope :greatest_first,       { :order => "activities.budget DESC" }
-  named_scope :with_type,         lambda { |type| {:conditions =>
+  scope :roots,                { :conditions => "activities.type IS NULL" }
+  scope :greatest_first,       { :order => "activities.budget DESC" }
+  scope :with_type,         lambda { |type| {:conditions =>
                                              ["activities.type = ?", type]} }
-  named_scope :with_request, lambda {|request| {
+  scope :with_request, lambda {|request| {
               :select => 'DISTINCT activities.*',
               :joins => 'INNER JOIN data_responses ON
                          data_responses.id = activities.data_response_id',
               :conditions => ['data_responses.data_request_id = ?', request.id]}}
-  named_scope :without_a_project,    { :conditions => "project_id IS NULL" }
-  named_scope :with_organization,    { :joins => "INNER JOIN data_responses
+  scope :without_a_project,    { :conditions => "project_id IS NULL" }
+  scope :with_organization,    { :joins => "INNER JOIN data_responses
                                     ON data_responses.id = activities.data_response_id
                                     INNER JOIN organizations
                                     ON data_responses.organization_id = organizations.id" }
-  named_scope :manager_approved,     { :conditions => ["am_approved = ?", true] }
-  named_scope :sorted,               { :order => "activities.name ASC" }
+  scope :manager_approved,     { :conditions => ["am_approved = ?", true] }
+  scope :sorted,               { :order => "activities.name ASC" }
 
   ### Class Methods
 
@@ -155,11 +153,9 @@ class Activity < ActiveRecord::Base
   def update_classified_amount_cache(type)
     # disable update_all_classified_amount_caches
     # callback to be run again on save !!
-    Activity.before_update.reject! do |callback|
-      callback.method.to_s == 'update_all_classified_amount_caches'
-    end
+    Activity.skip_callback(:update, :before, :update_all_classified_amount_caches)
     set_classified_amount_cache(type)
-    self.save(false) # save the activity even if it's approved
+    self.save(validate: false) # save the activity even if it's approved
   end
   handle_asynchronously :update_classified_amount_cache
 
@@ -177,13 +173,13 @@ class Activity < ActiveRecord::Base
   end
 
   def deep_clone
-    clone = self.clone
+    clone = self.dup
     %w[beneficiaries].each do |assoc|
       clone.send("#{assoc}=", self.send(assoc))
     end
     # hasmany's
     %w[code_splits implementer_splits targets].each do |assoc|
-      clone.send("#{assoc}=", self.send(assoc).collect { |obj| obj.clone })
+      clone.send("#{assoc}=", self.send(assoc).collect { |obj| obj.dup })
     end
     clone
   end
@@ -313,7 +309,7 @@ class Activity < ActiveRecord::Base
           project = Project.new(:name => name, :start_date => Time.now,
             :end_date => Time.now + 1.year, :data_response => data_response,
             :in_flows => [self_funder])
-          project.save(false)
+          project.save(validate: false)
         end
         self.project = project
       end
@@ -337,9 +333,9 @@ class Activity < ActiveRecord::Base
         dup_ids = implementer_orgs.reject {|org_id| implementer_orgs.one? { |id| id == org_id } }
         # Find implmenter splits with an organization that has been duplicated
         duplicates = implementer_splits.select { |is| dup_ids.include?(is.organization_id) }
-        self.errors.add_to_base("Duplicate Implementers")
+        self.errors.add(:base, "Duplicate Implementers")
         duplicates.each do |dup|
-          dup.errors.add_to_base("Duplicate Implementer")
+          dup.errors.add(:base, "Duplicate Implementer")
         end
       end
     end

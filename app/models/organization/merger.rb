@@ -7,7 +7,7 @@ class Organization < ActiveRecord::Base
         :conditions => ["data_request_id = ?", response.data_request_id])
       target_response.state = DataResponse::States.
         merged_response_state(response.state, target_response.state)
-      target_response.save(false)
+      target_response.save(validate: false)
 
       target_response.projects << response.projects
       ### move Funder references of Duplicate to Target
@@ -15,7 +15,7 @@ class Organization < ActiveRecord::Base
         project.in_flows.each do |in_flow|
           if in_flow.from == duplicate
             in_flow.from = target
-            in_flow.save(false)
+            in_flow.save(validate: false)
           end
         end
       end
@@ -36,7 +36,7 @@ class Organization < ActiveRecord::Base
     def move_funder_references!(target_org)
       self.out_flows.each do |referencing_flow|
         referencing_flow.from = target_org
-        referencing_flow.save(false)
+        referencing_flow.save(validate: false)
       end
     end
 
@@ -44,7 +44,7 @@ class Organization < ActiveRecord::Base
     def move_implementer_references!(target_org)
       self.implementer_splits.each do |referencing_split|
         referencing_split.organization = target_org
-        referencing_split.save(false)
+        referencing_split.save(validate: false)
       end
     end
 

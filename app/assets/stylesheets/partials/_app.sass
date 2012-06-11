@@ -1,0 +1,347 @@
+=normal_link()
+  color: $primary
+  background: none
+  font-size: 0.8em
+  padding-left: 10px
+  text-decoration: none
+  &:hover
+    background: none
+    color: $mid-blue
+    text-decoration: underline
+
+.currency
+  font-size: 9px
+
+.bold
+  font-weight: bold
+
+.main
+  float: left
+  width: 64%
+
+.sidebar
+  float: right
+  width: 34%
+
+body.app
+  /* adding properties to the shared admin style */
+  #admin
+    margin-top: 10px
+    right: 75px
+    position: absolute
+    z-index: 10
+    span
+      padding-top: 10px !important
+    a
+      padding: 6px 10px 5px !important
+
+  #page_tips
+    .nav
+      display: none
+      padding: 10px 10px 0 10px
+      height: 16px
+      a
+        float: right
+        +normal_link
+
+  #content .wrapper
+    padding-bottom: 20px
+
+    .comments
+      border-bottom: 1px dashed #ddd
+      display: block
+      margin: 20px 0 10px
+      width: 100%
+      +clearfix
+
+    .collapsed
+      margin: 0
+      width: auto
+
+    a.comments
+      border: none
+
+    #page_tips .desc, #helper, #c-help
+      +border-radius
+      border: $very-light-grey 1px solid
+      padding-bottom: 15px
+      margin-bottom: 10px
+
+    #page_tips .desc
+      span.close
+        float: right
+
+      .close
+        margin: -25px 10px 0 0
+
+    #c-help
+      margin: 20px 0
+
+  #content #map_fields_form
+    .map_fields
+      padding-left: 10px
+      margin-bottom: 20px
+    tr th
+      background: none
+      border: none
+      padding-right: 20px
+    td
+      font-size: 0.8em
+      padding: 2px 0
+
+.read_more
+  padding-bottom: 10px
+  float: right
+  font: normal 11px Arial, sans-serif
+
+.link_list
+  border: 1px solid $lightest-blue
+  padding: 7px 0 12px
+  li a
+    border-bottom: 1px solid #eee
+    display: inline-block
+    font-size: 12px
+    padding: 0 0 3px 10px
+
+.bordered
+  border: 1px solid $lightest-blue
+  border-top: none
+  margin-bottom: 10px
+  +border-bottom-radius
+  +clearfix
+
+.app .pagination
+  font-size: 12px
+  margin-top: 20px
+  span, a
+    background: $primary_lightest
+    border: 1px solid $primary_light
+    color: $primary
+    display: inline-block
+    line-height: 1
+    padding: 6px 8px 5px
+    text-decoration: none
+    +border-radius(2px)
+    &:hover, &:focus
+      background: $primary
+      border: 1px solid $primary - #111
+      color: #fff
+  .disabled
+    color: #aaa
+    &:hover, &:focus
+      background: $primary_lightest
+  .current
+    background: $primary
+    border: 1px solid $primary - #111
+    color: #fff
+
+.half h2
+  clear: both
+
+.edit_user label
+  margin-right: 10px
+
+#import
+  display: none
+  .section_base
+    background: $filler
+  p
+    font-size: 12px
+
+#import_csv
+  padding-top: 10px
+  *
+    display: inline-block
+
+  label
+    margin: 5px 0px
+
+#gs_container
+  width: 100%
+  +box-shadow(#ddd, 1px, 1px, 3px)
+  font-family: sans-serif
+
+  span
+    font-size: 11px
+    margin-top: 4px
+
+  #getting_started_title
+    overflow: hidden
+    +border-top-radius
+    background-color: #64B23B
+
+    h2
+      background: none
+      border: none
+      color: #fff
+      float: left
+      padding: 5px 5px 5px 10px
+      +text-shadow(#64B23B - #222, 0, 1px, 0)
+
+    span.close
+      background: image_url("tips_close.png") no-repeat right
+      cursor: pointer
+      float: right
+      height: 16px
+      margin: -2px 0 0 10px
+      width: 17px
+
+    a
+      margin: 5px 5px 0 0
+      text-decoration: none
+      font-size: 11px
+      float: right
+      color: #FFF
+      span.hint_text
+        visibility: hidden
+        color: #D4EF74
+        margin-right: 5px
+
+    &:hover
+      span.hint_text
+        visibility: visible
+
+  .getting_started
+    background: #F9FEF6
+    border-color: #C1C1C1
+    border-right: 1px solid #C1C1C1
+    border-style: solid
+    border-width: 0 1px 1px
+    margin-bottom: 10px
+    padding: 10px
+    +border-bottom-radius
+    +pie-clearfix
+
+    .message
+      color: #555555
+      padding: 0
+      display: block
+      float: left
+      font-size: 11px
+      line-height: 14px
+      margin: 0
+    a
+      font-size: 11px
+
+// overlayed element
+.simple_overlay
+  display: none
+  background-color: #F7F7F7
+  width: 640px
+  min-height: 200px
+  padding: 35px
+  z-index: 10000
+  border: 1px solid #666
+  -moz-box-shadow: 0 0 90px 5px #000
+  -webkit-box-shadow: 0 0 90px #000
+  font-size: 12px
+
+.simple_overlay .close
+  background-image: image_url("overlay/close.png")
+  position: absolute
+  left: -18px
+  top: -15px
+  cursor: pointer
+  height: 35px
+  width: 35px
+
+.pointer
+  cursor: pointer
+
+.full-width-container
+  display: block
+  +clearfix
+
+  h1.main_heading
+    padding: 0
+    margin: 0
+
+.welcome_continue
+  color: $mid-blue
+  float: left
+  font-size: 12px
+  margin: 10px 0 20px 15%
+  width: 40%
+
+.centered
+  text-align: center
+
+.attention
+  font: bold 20px/26px Arial,sans-serif
+
+
+// Welcome wrapper
+
+#welcome_box
+  background: $filler
+  clear: both
+  margin: -5px -15px 30px
+  padding: 5px 15px
+  width: 100%
+  +box-shadow(#eee, 0, 2px, 3px)
+
+.welcome_info
+  color: $light-blue - #111
+  font-size: 12px
+  line-height: 1.4
+  +pie-clearfix
+
+  *
+    float: left
+  p
+    color: $light-blue - #333
+    font-weight: bold
+    margin-right: 15px
+  a
+    text-decoration: none
+  span
+    margin: 0 20px 0 5px
+
+.gravatar
+  float: left
+
+#filter_help
+  p
+    font-size: 12px
+    color: #425160
+    margin: 7px 0 0 0
+
+.app #footer
+  background: #f9f9f9
+  border-top: $primary_border4 1px solid
+  padding-top: 30px
+
+.overflow_hidden
+  overflow: hidden
+
+p.no_data
+  margin: 20px 0 0
+  color: #666666
+  font-size: 12px
+  line-height: 1.4
+
+.request_nav
+  font: normal 15px "Avenir", Arial, sans-serif !important
+  span
+    display: inline-block
+    padding: 0 5px
+    &.heading
+      background: none
+      float: left
+      font-size: 15px
+      padding: 0 7px
+      position: relative
+      top: 4px
+
+.arrow-nav
+  display: block
+  float: right
+  margin-right: 1px
+  opacity: 0.85
+  @transition opacity .4s
+  &:hover, &:focus
+    opacity: 1
+  &.last
+    margin-right: 7px
+  &.disabled
+    opacity: 0.4

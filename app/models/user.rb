@@ -2,14 +2,11 @@ class User < ActiveRecord::Base
   include User::Upload
   include User::Roles
 
-  acts_as_authentic do |c|
-    c.validates_length_of_password_field_options = {:minimum => 6,
-      :if => :require_password? }
-    c.validates_confirmation_of_password_field_options = {:minimum => 6,
-      :if => (password_salt_field ? "#{password_salt_field}_changed?".to_sym : nil)}
-    c.validates_length_of_password_confirmation_field_options = {:minimum => 6,
-      :if => :require_password?}
-  end
+  # Include default devise modules. Others available are:
+  # :token_authenticatable, :confirmable, :lockable, :timeoutable,
+  # :registerable, :omniauthable, :confirmable
+  devise :database_authenticatable, :recoverable, :rememberable, :trackable,
+         :validatable, :encryptable, :registerable
 
   ### Attributes
   attr_accessible :full_name, :email, :organization_id, :organization,
@@ -26,6 +23,7 @@ class User < ActiveRecord::Base
   ### Validations
   # AuthLogic handles email uniqueness validation
   validates_presence_of :full_name, :email, :organization_id
+  validates_length_of :password, :minimum => 6, :if => :password_required?
 
   ### Callbacks
   after_create :create_organization_responses
@@ -38,7 +36,7 @@ class User < ActiveRecord::Base
 
   def deliver_password_reset_instructions!
     reset_perishable_token!
-    Notifier.deliver_password_reset_instructions(self)
+    Notifier.password_reset_instructions(self).deliver
   end
 
   def to_s
@@ -64,27 +62,22 @@ class User < ActiveRecord::Base
     self.save
   end
 
-  def deliver_password_reset_instructions!
-    reset_perishable_token!
-    Notifier.deliver_password_reset_instructions(self)
-  end
-
   def only_password_errors?
-    errors.length == errors.on(:password).to_a.length +
-      errors.on(:password_confirmation).to_a.length
+    errors.size == errors[:password].size +
+      errors[:password_confirmation].size
   end
 
   def save_and_invite(inviter)
     self.valid? ## We need to call self.valid?
     if only_password_errors?
       self.invite_token = generate_token
-      self.save(false)
+      self.save(validate: false)
       send_user_invitation(inviter)
     end
   end
 
   def send_user_invitation(inviter)
-    Notifier.deliver_send_user_invitation(self, inviter)
+    Notifier.send_user_invitation(self, inviter).deliver
   end
 
   def gravatar(size = 22)
@@ -94,21 +87,42 @@ class User < ActiveRecord::Base
   # authlogic only updates last_login after youve signed in the 2nd time
   # if the user has only signed in once, return the current login date
   def last_signin_at
-    current_login_at
+    current_sign_in_at
   end
+
+  protected
+
+  # admin create user ||
+  #   - encrypted_password -> nil
+  #   password.blank?
+  # admin edit user ||
+  # user edit themself
+  # user accepts invitation
+  #   -> enforce password required
+  #   - encrypted_password -> nil
+
+  # when user is not in database don't require
+
+
+  # devise method override
+  def password_required?
+    (!persisted? || !password.nil? || !password_confirmation.nil?)# &&
+      # (password.blank? || password_confirmation.blank? || encrypted_password.nil?)
+  end
+
+  # allow user to be created without a password
+  # allow user to be updated without a password
+  # but dont allow them to go active with an empty password
+  # def require_password?
+  #   self.active? && (!self.password.blank? || self.crypted_password.nil?)
+  # end
 
   private
 
-    # allow user to be created without a password
-    # allow user to be updated without a password
-    # but dont allow them to go active with an empty password
-    def require_password?
-      self.active? && (!self.password.blank? || self.crypted_password.nil?)
-    end
+  def create_organization_responses
+    organization.create_data_responses!
+  end
 
-    def create_organization_responses
-      organization.create_data_responses!
-    end
 end
 
 # == Schema Information
@@ -131,7 +145,7 @@ end
 #  invite_token          :string(255)
 #  active                :boolean         default(FALSE)
 #  location_id           :integer
-#  current_login_at      :datetime
+#  current_sign_in_at    :datetime
 #  last_login_at         :datetime
 #
 

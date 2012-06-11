@@ -25,12 +25,12 @@ def merge_responses(from, to)
   if from_response && to_response
     from_response.projects.each do |project|
       project.data_response = to_response
-      project.save(false)
+      project.save(validate: false)
     end
 
     from_response.activities.each do |activity|
       activity.data_response = to_response
-      activity.save(false)
+      activity.save(validate: false)
     end
 
     delete_response(from_response.reload.id)

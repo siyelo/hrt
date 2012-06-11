@@ -5,7 +5,7 @@
       %th= sortable "email"
       - if show_organization
         %th.org= sortable "organizations.name", "Organization"
-      %th.login= sortable "current_login_at", "Last login"
+      %th.login= sortable "current_sign_in_at", "Last login"
       %th= sortable "roles_mask", "Role"
       %th.invitation= sortable "invite_token", "Invitation"
       - if current_user.sysadmin?
@@ -25,6 +25,6 @@
           %td
             %ul.manage_bar
               %li= link_to "Edit", edit_admin_user_path(user)
-              %li= link_to "x", admin_user_path(user), :confirm => "Are you sure you want to delete this user?", :method => :delete, :class => "right"
+              %li= link_to "x", admin_user_path(user), :data => { :confirm => "Are you sure you want to delete this user?" }, :method => :delete, :class => "right"
 
 

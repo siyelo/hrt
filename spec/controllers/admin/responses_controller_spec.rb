@@ -21,9 +21,9 @@ describe Admin::ResponsesController do
         Charts::Responses::State.should_receive(:new).once.and_return pie
         # login as admin creates 1 NR and 1 Reporting org(1 response)
         @data_response = @admin_org.responses.first
-        @request1 = Factory(:data_request) # autocreate 1 response for first reporting org
-        @org = Factory(:organization)
-        Factory :user, :organization => @org #+2 responses
+        @request1 = FactoryGirl.create(:data_request) # autocreate 1 response for first reporting org
+        @org = FactoryGirl.create(:organization)
+        FactoryGirl.create :user, :organization => @org #+2 responses
         @latest_response = @org.responses.latest_first.first
       end
 
@@ -78,21 +78,21 @@ describe Admin::ResponsesController do
     end
 
     describe "#create" do
-      let(:fields) { {"organization_id" => 1, "data_request_id" => 1} }
+      let(:fields) { {"organization_id" => "1", "data_request_id" => "1"} }
       let(:resp) {mock :response, :save => true}
 
       it "creates OK" do
         DataResponse.should_receive(:new).with(fields).and_return resp
         post :create, :data_response => fields
         flash[:notice].should == "Response was successfully created"
-        response.should redirect_to admin_responses_path
+        response.should redirect_to(admin_responses_path)
       end
 
       it "flashes and renders on error" do
         resp.should_receive(:save).and_return false
         DataResponse.should_receive(:new).with(fields).and_return resp
         post :create, :data_response => fields
-        response.flash[:error].should == "Sorry, we were unable to save that response"
+        flash[:error].should == "Sorry, we were unable to save that response"
         response.should render_template(:new)
       end
     end

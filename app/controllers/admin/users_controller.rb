@@ -3,7 +3,7 @@ class Admin::UsersController < Admin::BaseController
 
   ### Constants
   SORTABLE_COLUMNS = ['email', 'full_name', 'organizations.name',
-    'current_login_at', 'roles_mask', 'invite_token']
+    'current_sign_in_at', 'roles_mask', 'invite_token']
 
   ### Inherited Resources
   inherit_resources
@@ -12,9 +12,9 @@ class Admin::UsersController < Admin::BaseController
   helper_method :sort_column, :sort_direction
 
   def index
-    scope  = User.scoped({:joins => :organization, :include => :organization})
+    scope  = User.joins(:organization).includes(:organization)
     if params[:query]
-      scope  = scope.scoped(:conditions => ["UPPER(email) LIKE UPPER(:q) OR
+      scope  = scope.where(["UPPER(email) LIKE UPPER(:q) OR
         UPPER(full_name) LIKE UPPER(:q) OR
         UPPER(organizations.name) LIKE UPPER(:q)",
         {:q => "%#{params[:query]}%"}])

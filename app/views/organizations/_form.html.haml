@@ -42,7 +42,7 @@
 
 - if !@organization.new_record? && current_user.sysadmin?
   .delete_section
-    = link_to 'Delete this Organization', admin_organization_path(@organization), :confirm => 'Are you sure you want to delete this Organization?', :method => :delete, :class => 'delete_action'
+    = link_to 'Delete this Organization', admin_organization_path(@organization), :data => { :confirm => 'Are you sure you want to delete this Organization?' }, :method => :delete, :class => 'delete_action'
     %p
       %strong Warning:
       Once you delete an Organization, you will lose all data associated with it, and there is no undo.

@@ -1,0 +1,51 @@
+- Install rails_upgrade plugin
+  ruby script/plugin install git://github.com/rails/rails_upgrade.git
+- Comment out all unnecessary gems for booting Rails 3
+- Remove plugins that are not compatible with Rails 3
+- Run rails_upgrade rake tasks
+  rake rails:upgrade:check
+  rake rails:upgrade:backup
+  rake rails:upgrade:configuration
+- Generate new routes
+  rake rails:upgrade:routes
+- Follow notes from rails_upgrade plugin
+- Copy rails script to scripts/rails
+- Try starting server 'rails s'
+- Add encoding to files that use UTF-u characters
+  # encoding: UTF-8
+- Replace errors.on(:base) with errors[:base]
+- FasterCSV is integrated in Ruby 1.9 with CSV namespace
+- ActionController::TestUploadedFile is deprecated, use:
+  include ActionDispatch::TestProcess
+  fixture_file_upload('/files/spongebob.png', 'image/png')
+- Fix random errors
+- Copy files from newly generated rails app: Rakefile
+
+Cukes
+  - Factory
+    Factory.define :code, :class => Code do |f|
+    end
+
+    =>
+
+    Factory.define do
+      FactoryGirl.create :code do |f|
+      end
+    end
+Forms
+  - form_for => = form_for
+  - form_tag => = form_tag
+  - semantic_form_for => = semantic_form_for
+  - f.inputs => = f.inputs
+  - f.buttons => = f.buttons
+  - f.fields_for => f.fields_for
+  - f.semantic_fields_for => f.semantic_fields_for
+
+
+
+
+- Enable SSL for production and staging env
+- Check if this change is correct in report model:
+  File.open(file_name, "w:US-ASCII") {|f| f.write(content)}
+- Check user invitation
+- Check user.activate field

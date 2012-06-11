@@ -1,4 +1,4 @@
-- form_tag remove_duplicate_admin_organizations_path, :method => :put do
+= form_tag remove_duplicate_admin_organizations_path, :method => :put do
   .box{:"data-type" => 'duplicate'}
     = label_tag :duplicate_organization_id, "Potential problem organization (duplicate)"
     = select_tag :duplicate_organization_id, select_with_all_orgs_plus_user_count(@all_organizations)

@@ -3,12 +3,12 @@
 - if current_response.present?
   %span.heading= current_request.name
   - if next_response.present? && !disable
-    - link_to url_for({:response_id => next_response.id}), :title => "Next Request", :class => 'arrow-nav last' do
+    = link_to url_for({:response_id => next_response.id}), :title => "Next Request", :class => 'arrow-nav last' do
       = image_tag("arrow-nav-right.png")
   - else
     %a.arrow-nav.disabled= image_tag("arrow-nav-right.png")
   - if previous_response.present? && !disable
-    - link_to url_for({:response_id => previous_response.id}), :title => "Previous Request", :class => 'arrow-nav' do
+    = link_to url_for({:response_id => previous_response.id}), :title => "Previous Request", :class => 'arrow-nav' do
       = image_tag("arrow-nav-left.png")
   - else
     %a.arrow-nav.disabled= image_tag("arrow-nav-left.png")

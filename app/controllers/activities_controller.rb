@@ -76,7 +76,7 @@ class ActivitiesController < BaseController
       date = nil if toggle_approved == false
       @activity.attributes = {:user_id => current_user.id, :am_approved => toggle_approved,
         :am_approved_date => date}
-      @activity.save(false)
+      @activity.save(validate: false)
       render :json => {:status => 'success'}
     else
       render :json => {:status => 'access denied'}

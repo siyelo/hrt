@@ -57,7 +57,7 @@ describe Activity do
 
       subject.name = "new activity name"
       subject.save.should == false
-      subject.errors.on(:base).should include("Activity was approved by SysAdmin and cannot be changed")
+      subject.errors[:base].should include("Activity was approved by SysAdmin and cannot be changed")
     end
 
     it "cannot be approved if unclassified" do
@@ -65,7 +65,7 @@ describe Activity do
 
       subject.approved = true
       subject.save.should == false
-      subject.errors.on(:base).should include("Cannot approve unclassified Activity")
+      subject.errors[:base].should include("Cannot approve unclassified Activity")
     end
   end
 
@@ -75,7 +75,7 @@ describe Activity do
         basic_setup_activity
         attributes = {"name"=>"dsf", "project_id"=>"#{@project.id}",
           "implementer_splits_attributes"=>
-            {"0"=>{"spend"=>"10", "data_response_id"=>"#{@response.id}", "organization_mask"=>"#{@organization.id}",
+            {"0"=>{"spend"=>"10", "organization_mask"=>"#{@organization.id}",
             "budget"=>"20.0", "_destroy"=>""}
             }, "description"=>"adfasdf"}
         @activity.reload
@@ -97,8 +97,8 @@ describe Activity do
     context "when two implementer_splits" do
       before :each do
         basic_setup_implementer_split
-        @implementer2 = Factory :organization
-        @split2 = Factory :implementer_split, :activity => @activity,
+        @implementer2 = FactoryGirl.create :organization
+        @split2 = FactoryGirl.create :implementer_split, :activity => @activity,
           :organization => @implementer2
       end
 
@@ -107,29 +107,29 @@ describe Activity do
           "project_id"=>"#{@project.id}",
           "implementer_splits_attributes"=>
             {"0"=>
-              {"id" => "#{@split.id}", "data_response_id"=>"#{@response.id}",
-               "organization_mask"=>"#{@organization.id}", "spend"=>"10",
-               "budget"=>"20.0"},
+              {"id" => "#{@split.id}",
+               "organization_mask"=>"#{@organization.id}",
+               "spend"=>"10", "budget"=>"20.0"},
             "1"=>
-              {"id" => "#{@split2.id}","data_response_id"=>"#{@response.id}",
-               "organization_mask"=>"#{@organization.id}", "spend"=>"20",
-               "budget"=>"40.0"},
+              {"id" => "#{@split2.id}",
+               "organization_mask"=>"#{@organization.id}",
+               "spend"=>"20", "budget"=>"40.0"},
             }}
         @activity.reload
         @activity.update_attributes(attributes).should be_false
-        @activity.implementer_splits[1].errors.on(:base).should include "Duplicate Implementer"
-        @activity.implementer_splits[0].errors.on(:base).should include "Duplicate Implementer"
+        @activity.implementer_splits[1].errors[:base].should include "Duplicate Implementer"
+        @activity.implementer_splits[0].errors[:base].should include "Duplicate Implementer"
 
         #spec breaks if split into two seperate specs - objects persist in memory
         attributes = {"name"=>"dsf", "description"=>"adfasdf",
           "project_id"=>"#{@project.id}",
           "implementer_splits_attributes"=>
             {"0"=>
-              {"id" => "#{@split.id}", "data_response_id"=>"#{@response.id}",
+              {"id" => "#{@split.id}",
                "organization_mask"=>"#{@organization.id}", "spend"=>"10",
                "budget"=>"20.0"},
             "1"=>
-              {"id" => "#{@split2.id}","data_response_id"=>"#{@response.id}",
+              {"id" => "#{@split2.id}",
                "organization_mask"=>"#{@implementer2.id}", "spend"=>"20",
                "budget"=>"40.0"},
             }}
@@ -153,19 +153,19 @@ describe Activity do
   end
 
     it "returns organization name" do
-      @organization = Factory(:organization, :name => "Organization1")
-      user = Factory :user, :organization => @organization
-      @request      = Factory(:data_request, :organization => @organization)
+      @organization = FactoryGirl.create(:organization, :name => "Organization1")
+      user = FactoryGirl.create :user, :organization => @organization
+      @request      = FactoryGirl.create(:data_request, :organization => @organization)
       @response     = @organization.latest_response
-      @project      = Factory(:project, :data_response => @response)
-      @activity     = Factory(:activity, :data_response => @response, :project => @project)
+      @project      = FactoryGirl.create(:project, :data_response => @response)
+      @activity     = FactoryGirl.create(:activity, :data_response => @response, :project => @project)
       @activity.organization_name.should == "Organization1"
     end
 
   describe "gets budget and spend from sub activities" do
     before :each do
       basic_setup_activity
-      @split = Factory :implementer_split, :activity => @activity,
+      @split = FactoryGirl.create :implementer_split, :activity => @activity,
         :spend => 10, :budget => 25, :organization => @organization
       @activity.reload; @activity.save;
     end
@@ -186,8 +186,8 @@ describe Activity do
 
     describe "works with more than one sub activity" do
       before :each do
-        @split1 = Factory :implementer_split, :activity => @activity,
-          :spend => 100, :budget => 125, :organization => Factory(:organization)
+        @split1 = FactoryGirl.create :implementer_split, :activity => @activity,
+          :spend => 100, :budget => 125, :organization => FactoryGirl.create(:organization)
         @activity.reload; @activity.save;
       end
 
@@ -222,7 +222,7 @@ describe Activity do
     end
 
     it "should clone associated code assignments" do
-      @ca = Factory(:code_split, :activity => @activity)
+      @ca = FactoryGirl.create(:code_split, :activity => @activity)
       save_and_deep_clone
       @clone.code_splits.count.should == 1
       @clone.code_splits[0].code.should == @ca.code
@@ -231,7 +231,7 @@ describe Activity do
     end
 
     it "should clone beneficiaries" do
-      @benefs = [Factory(:beneficiary)]
+      @benefs = [FactoryGirl.create(:beneficiary)]
       @activity.beneficiaries << @benefs
       save_and_deep_clone
       @clone.beneficiaries.should == @benefs
@@ -241,14 +241,14 @@ describe Activity do
   describe "purposes" do
     it "should return only those codes designated as Purpose codes" do
       basic_setup_activity
-      @purpose1    = Factory(:purpose, :short_display => 'purp1')
-      @purpose2    = Factory(:mtef_code, :short_display => 'purp2')
-      @input       = Factory(:input, :short_display => 'input')
-      Factory(:purpose_budget_split, :activity => @activity,
+      @purpose1    = FactoryGirl.create(:purpose, :short_display => 'purp1')
+      @purpose2    = FactoryGirl.create(:mtef_code, :short_display => 'purp2')
+      @input       = FactoryGirl.create(:input, :short_display => 'input')
+      FactoryGirl.create(:purpose_budget_split, :activity => @activity,
               :code => @purpose1, :cached_amount => 5)
-      Factory(:purpose_budget_split, :activity => @activity,
+      FactoryGirl.create(:purpose_budget_split, :activity => @activity,
               :code => @purpose2, :cached_amount => 15)
-      Factory(:input_budget_split, :activity => @activity,
+      FactoryGirl.create(:input_budget_split, :activity => @activity,
               :code => @input, :cached_amount => 5)
       @activity.purposes.should == [@purpose1, @purpose2]
     end
@@ -257,15 +257,15 @@ describe Activity do
   describe "#locations" do
     it "returns uniq locations only from district classifications" do
       basic_setup_activity
-      location1 = Factory(:location)
-      location2 = Factory(:location)
-      location3 = Factory(:location)
-      location4 = Factory(:location)
-      Factory(:location_budget_split, :activity => @activity, :code => location1)
-      Factory(:location_budget_split, :activity => @activity, :code => location2)
-      Factory(:location_spend_split, :activity => @activity, :code => location2)
-      Factory(:purpose_budget_split, :activity => @activity, :code => location3)
-      Factory(:purpose_spend_split, :activity => @activity, :code => location4)
+      location1 = FactoryGirl.create(:location)
+      location2 = FactoryGirl.create(:location)
+      location3 = FactoryGirl.create(:location)
+      location4 = FactoryGirl.create(:location)
+      FactoryGirl.create(:location_budget_split, :activity => @activity, :code => location1)
+      FactoryGirl.create(:location_budget_split, :activity => @activity, :code => location2)
+      FactoryGirl.create(:location_spend_split, :activity => @activity, :code => location2)
+      FactoryGirl.create(:purpose_budget_split, :activity => @activity, :code => location3)
+      FactoryGirl.create(:purpose_spend_split, :activity => @activity, :code => location4)
 
       @activity.locations.length.should == 2
       @activity.locations.should include(location1)
@@ -275,16 +275,16 @@ describe Activity do
 
   describe "approve all budgets" do
     it "approves all budgets for activities" do
-      @request      = Factory :data_request
-      @organization = Factory :organization
-      user = Factory :user, :organization => @organization
+      @request      = FactoryGirl.create :data_request
+      @organization = FactoryGirl.create :organization
+      user = FactoryGirl.create :user, :organization => @organization
       @response     = @organization.latest_response
-      @project      = Factory(:project, :data_response => @response)
-      @activity     = Factory(:activity, :data_response => @response,
+      @project      = FactoryGirl.create(:project, :data_response => @response)
+      @activity     = FactoryGirl.create(:activity, :data_response => @response,
                               :project => @project, :user_id => nil, :am_approved => nil)
-      @activity2    = Factory(:activity, :data_response => @response,
+      @activity2    = FactoryGirl.create(:activity, :data_response => @response,
                               :project => @project, :user_id => nil, :am_approved => nil)
-      activity_manager = Factory(:activity_manager)
+      activity_manager = FactoryGirl.create(:activity_manager)
       Activity.approve_all_budgets([@activity.id, @activity2.id], activity_manager.id)
       @activity.reload
       @activity2.reload
@@ -296,7 +296,7 @@ describe Activity do
   end
   describe "#am_approved?" do
     before :each do
-      @activity = Factory.build(:activity)
+      @activity = FactoryGirl.build(:activity)
     end
 
     context "no user" do
@@ -313,7 +313,7 @@ describe Activity do
 
     context "sysadmin" do
       before :each do
-        @user = Factory.build(:sysadmin)
+        @user = FactoryGirl.build(:sysadmin)
       end
 
       context "am_approved value is false" do
@@ -333,7 +333,7 @@ describe Activity do
 
     context "reporter" do
       before :each do
-        @user = Factory.build(:reporter)
+        @user = FactoryGirl.build(:reporter)
       end
 
       context "am_approved value is false" do

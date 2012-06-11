@@ -1,18 +1,18 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require 'spec_helper'
 
 include ControllerStubs
 
 describe ProjectsController do
   describe "as a reporter" do
     before :each do
-      @organization = Factory :organization, :name => "Reporter Org"
-      @user = Factory.create(:reporter, :organization => @organization)
+      @organization = FactoryGirl.create :organization, :name => "Reporter Org"
+      @user = FactoryGirl.create(:reporter, :organization => @organization)
       @organization = @user.organization
       login @user
     end
 
     it "redirects to the projects index after create" do
-      request        = Factory(:data_request, :organization => @organization)
+      request        = FactoryGirl.create(:data_request, :organization => @organization)
       @data_request  = request
       @data_response = @organization.latest_response
       post :create,
@@ -26,7 +26,7 @@ describe ProjectsController do
 
     describe "nested funder management" do
       before :each do
-        request      = Factory(:data_request, :organization => @organization)
+        request      = FactoryGirl.create(:data_request, :organization => @organization)
         @data_request = request
         @data_response     = @organization.latest_response
       end
@@ -78,45 +78,31 @@ describe ProjectsController do
 
   describe "as a activity_manager" do
     before :each do
-      @organization = Factory :organization, :name => "Reporter Org"
-      @user = Factory.create(:reporter, :organization => @organization)
+      @organization = FactoryGirl.create :organization, :name => "Reporter Org"
+      @user = FactoryGirl.create(:reporter, :organization => @organization)
       @organization = @user.organization
       login @user
-      @data_response = mock_model(DataResponse)
-      @data_request = mock_model(DataRequest)
-      DataResponse.stub(:find).and_return(@data_response)
+      @data_request = FactoryGirl.create(:data_request, :organization => @organization)
+      @data_response = @organization.latest_response
     end
 
-    describe "import / export" do
-      it "downloads csv workplan" do
-        @data_request.stub(:id).and_return(1)
-        @data_response.stub(:organization).and_return(@organization)
-        @data_response.stub_chain(:projects, :sorted).and_return([])
-        @data_response.stub_chain(:other_costs, :without_project, :sorted).and_return([])
-        @data_response.stub_chain(:other_costs, :without_project, :empty?).and_return(true)
-        @data_response.stub_chain(:projects, :empty?).and_return(true)
-        @data_response.stub(:request).and_return(@data_request)
-        @organization.stub(:name).and_return('Org Name')
-
-        workplan = Reports::Detailed::FunctionalWorkplan.new(@data_response, nil, 'xls')
-        workplan.stub(:data).and_return(StringIO.new('dummy,xls,header'))
-        get :export_workplan
-        response.should be_success
-        response.header["Content-Type"].should == "application/vnd.ms-excel"
-        filename = "#{@organization.name.split.join('_').downcase.underscore}_workplan.xls"
-        response.header["Content-Disposition"].should == "attachment; filename=#{filename}"
-      end
+    it "downloads csv workplan" do
+      get :export_workplan
+      response.should be_success
+      response.header["Content-Type"].should == "application/vnd.ms-excel"
+      filename = "#{@organization.name.split.join('_').downcase.underscore}_workplan.xls"
+      response.header["Content-Disposition"].should == "attachment; filename=#{filename}"
     end
   end
 
   describe "Permissions" do
     context "Activity Manager" do
       before :each do
-        @organization = Factory :organization
-        @data_request = Factory :data_request, :organization => @organization
-        @user = Factory :activity_manager, :organization => @organization
+        @organization = FactoryGirl.create :organization
+        @data_request = FactoryGirl.create :data_request, :organization => @organization
+        @user = FactoryGirl.create :activity_manager, :organization => @organization
         @data_response = @organization.latest_response
-        @project = Factory(:project, :data_response => @data_response)
+        @project = FactoryGirl.create(:project, :data_response => @data_response)
         login @user
         request.env['HTTP_REFERER'] = projects_url
       end
@@ -125,32 +111,32 @@ describe ProjectsController do
         controller.should_not_receive(:create)
         post :create
         flash[:error].should == "You do not have permission to edit this resource"
-        response.should redirect_to(projects_url)
+        response.should redirect_to(request.env['HTTP_REFERER'])
       end
 
       it "disallows an activity manager to update an project" do
         controller.should_not_receive(:update)
         put :update, :id => @project.id
         flash[:error].should == "You do not have permission to edit this resource"
-        response.should redirect_to(projects_url)
+        response.should redirect_to(request.env['HTTP_REFERER'])
       end
 
       it "allows an activity manager to destroy an project" do
         controller.should_not_receive(:destroy)
         delete :destroy, :id => @project.id
         flash[:error].should == "You do not have permission to edit this resource"
-        response.should redirect_to(projects_url)
+        response.should redirect_to(request.env['HTTP_REFERER'])
       end
     end
 
     context "Reporter and Activity Manager" do
       before :each do
-        @data_request = Factory :data_request
-        @organization = Factory :organization
-        @user = Factory :user, :roles => ['reporter', 'activity_manager'],
+        @data_request = FactoryGirl.create :data_request
+        @organization = FactoryGirl.create :organization
+        @user = FactoryGirl.create :user, :roles => ['reporter', 'activity_manager'],
           :organization => @organization
         @data_response = @organization.latest_response
-        @project = Factory(:project, :data_response => @data_response)
+        @project = FactoryGirl.create(:project, :data_response => @data_response)
       end
 
       it "allows the editing of the organization the reporter is in" do
@@ -167,7 +153,7 @@ describe ProjectsController do
 
       it "should not allow the editing of organization the reporter is not in" do
         request.env['HTTP_REFERER'] = projects_url
-        @organization2 = Factory :organization
+        @organization2 = FactoryGirl.create :organization
         @user.organization = @organization2
         @user.organizations << @organization
         @user.save!
@@ -175,18 +161,18 @@ describe ProjectsController do
         session[:return_to] = edit_project_url(@project)
         controller.should_not_receive(:update)
         put :update, :id => @project.id, :response_id => @data_response.id
-        response.should redirect_to(projects_url)
+        response.should redirect_to(request.env['HTTP_REFERER'])
       end
     end
 
     context "who are sysadmins and activity managers" do
       before :each do
-        @organization = Factory :organization
-        @data_request = Factory :data_request, :organization => @organization
-        @user = Factory :user, :roles => ['admin', 'activity_manager'],
+        @organization = FactoryGirl.create :organization
+        @data_request = FactoryGirl.create :data_request, :organization => @organization
+        @user = FactoryGirl.create :user, :roles => ['admin', 'activity_manager'],
           :organization => @organization
         @data_response = @organization.latest_response
-        @project = Factory(:project, :data_response => @data_response)
+        @project = FactoryGirl.create(:project, :data_response => @data_response)
         login @user
       end
 
@@ -208,7 +194,7 @@ describe ProjectsController do
       it "allows user to edit the project" do
         session[:return_to] = edit_project_url(@project)
         put :update, :id => @project.id,
-          :project => {:description => "thedesc", :project_id => @project.id}
+          :project => {:description => "thedesc"}
 
         flash[:error].should_not == "You do not have permission to edit this project"
         flash[:notice].should == "Project successfully updated"

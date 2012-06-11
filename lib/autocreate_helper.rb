@@ -4,7 +4,7 @@ module AutocreateHelper
       new_id = id_or_name
     else
       organization = Organization.find_or_create_by_name(id_or_name)
-      organization.save(false) # ignore any errors e.g. on currency or contact details
+      organization.save(validate: false) # ignore any errors e.g. on currency or contact details
       new_id = organization.id
     end
     new_id

@@ -19,7 +19,7 @@
               %tr
                 %th= sortable "full_name"
                 %th= sortable "email"
-                %th.login= sortable "last_login_at", "Last login"
+                %th.login= sortable "last_sign_in_at", "Last login"
                 %th= sortable "roles_mask", "Role"
             %tbody
               - activity_managers.each do |user|
@@ -67,7 +67,7 @@
 
 - unless @organization.new_record?
   .delete_section
-    = link_to "Delete this Organization", admin_organization_path(@organization), :confirm => "Are you sure you want to delete this Organization?", :method => :delete, :class => 'delete_action'
+    = link_to "Delete this Organization", admin_organization_path(@organization), :data => { :confirm => "Are you sure you want to delete this Organization?" }, :method => :delete, :class => 'delete_action'
     %p
       %strong Warning:
       Once you delete an Organization, you will lose all data associated with it, and there is no undo.

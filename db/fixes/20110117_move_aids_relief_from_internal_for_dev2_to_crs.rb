@@ -25,7 +25,7 @@ if organization1 && organization2
         end
 
         project.data_response = data_response2
-        project.save(false)
+        project.save(validate: false)
       end
     else
       raise "!!! Didn't merge !!!".to_yaml

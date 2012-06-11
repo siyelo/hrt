@@ -39,11 +39,10 @@ describe ImplementerSplit do
 
     it "should validate presence of organization_mask" do
       basic_setup_activity
-      @split = ImplementerSplit.new(:data_response => @response,
-                                    :spend => 1, :budget => 1,
+      @split = ImplementerSplit.new(:spend => 1, :budget => 1,
                                     :activity => @activity)
       @split.valid?.should be_false
-      @split.errors.on(:organization_mask).should == "can't be blank"
+      @split.errors[:organization_mask].should include("can't be blank")
 
       @split.organization_mask = nil
       @split.organization_id = 1
@@ -55,24 +54,21 @@ describe ImplementerSplit do
 
     it "should validate spend/budget greater than 0" do
       basic_setup_activity
-      @split = ImplementerSplit.new(:data_response => @response,
-                                    :activity => @activity, :organization => @organization,
+      @split = ImplementerSplit.new(:activity => @activity, :organization => @organization,
                                     :spend => 0, :budget => 0)
       @split.save.should == false
-      @split.errors.on(:spend).should == "must be greater than 0"
-      @split.errors.on(:budget).should == "must be greater than 0"
+      @split.errors[:spend].should include("must be greater than 0")
+      @split.errors[:budget].should include("must be greater than 0")
 
-      @split = ImplementerSplit.new(:data_response => @response,
-                                    :activity => @activity, :organization => @organization,
+      @split = ImplementerSplit.new(:activity => @activity, :organization => @organization,
                                     :spend => 0, :budget => "")
       @split.save.should == false
-      @split.errors.on(:spend).should == "must be greater than 0"
+      @split.errors[:spend].should include("must be greater than 0")
 
-      @split = ImplementerSplit.new(:data_response => @response,
-                                    :activity => @activity, :organization => @organization,
+      @split = ImplementerSplit.new(:activity => @activity, :organization => @organization,
                                     :spend => 1, :budget => 0)
       @split.save.should == true
-      @split.errors.on(:budget).should be_nil
+      @split.errors[:budget].should be_empty
     end
 
     describe "implementer uniqueness" do
@@ -81,7 +77,7 @@ describe ImplementerSplit do
 
       it "should fail when trying to create two sub-activities with the same provider via Activity nested attribute API" do
         basic_setup_implementer_split
-        attributes = {"name"=>"dsf", "start_date"=>"2010-08-02",
+        attributes = {"name"=>"dsf",
           "project_id"=>"#{@project.id}",
           "implementer_splits_attributes"=>
         {"0"=> {"spend"=>"10",
@@ -92,7 +88,7 @@ describe ImplementerSplit do
           "1"=> {"spend"=>"30",
             "activity_id"=>"#{@activity.id}",
             "organization_mask"=>"#{@organization.id}", "budget"=>"40.0"}
-        }, "description"=>"adfasdf", "end_date"=>"2010-08-04"}
+        }, "description"=>"adfasdf"}
         @activity.reload
         @activity.update_attributes(attributes).should be_false
         @activity.errors.full_messages.should include("Duplicate Implementers")
@@ -100,10 +96,10 @@ describe ImplementerSplit do
 
       it "should enforce uniqueness via ImplementerSplit api" do
         basic_setup_implementer_split
-        @split1 = Factory(:implementer_split, :activity => @activity,
+        @split1 = FactoryGirl.create(:implementer_split, :activity => @activity,
                           :organization => @organization)
         @split1.should_not be_valid
-        @split1.errors.on(:organization_id).should == "must be unique"
+        @split1.errors[:organization_id].should include("must be unique")
       end
     end
   end
@@ -117,47 +113,47 @@ describe ImplementerSplit do
       @split = ImplementerSplit.new(:activity => @activity,
                                     :budget => nil, :spend => nil)
       @split.save.should == false
-      @split.errors.on(:spend).should include(' and/or Budget must be present')
+      @split.errors[:spend].should include(' and/or Budget must be present')
     end
 
     it "should validate Expenditure and/or Budget is present if blank" do
       @split = ImplementerSplit.new(:activity => @activity,
                                     :budget => "", :spend => "")
       @split.save.should == false
-      @split.errors.on(:spend).should include(' and/or Budget must be present')
+      @split.errors[:spend].should include(' and/or Budget must be present')
     end
 
     it "should fail when trying to create a split without spend/budget via Activity API " do
-      attributes = {"name"=>"dsf", "start_date"=>"2010-08-02", "project_id"=>"#{@project.id}",
+      attributes = {"name"=>"dsf", "project_id"=>"#{@project.id}",
         "implementer_splits_attributes"=>
       {"0"=> {"spend"=>"", "budget"=>"",
         "activity_id"=>"#{@activity.id}",
         "organization_mask"=>"#{@organization.id}"},
-      }, "description"=>"adfasdf", "end_date"=>"2010-08-04"}
+      }, "description"=>"adfasdf"}
       @activity.reload
       @activity.update_attributes(attributes).should be_false
-      @activity.implementer_splits[0].errors.on(:spend).should == ' and/or Budget must be present'
+      @activity.implementer_splits[0].errors[:spend].should include(' and/or Budget must be present')
     end
 
     it "should fail when trying to create a split without spend/budget via Activity API " do
-      attributes = {"name"=>"dsf", "start_date"=>"2010-08-02", "project_id"=>"#{@project.id}",
+      attributes = {"name"=>"dsf", "project_id"=>"#{@project.id}",
         "implementer_splits_attributes"=>
       {"0"=> {"spend"=>"", "budget"=>"",
         "activity_id"=>"#{@activity.id}",
         "organization_mask"=>"#{@organization.id}"},
-      }, "description"=>"adfasdf", "end_date"=>"2010-08-04"}
+      }, "description"=>"adfasdf"}
       @activity.reload
       @activity.update_attributes(attributes).should be_false
-      @activity.implementer_splits[0].errors.on(:spend).should == ' and/or Budget must be present'
+      @activity.implementer_splits[0].errors[:spend].should include(' and/or Budget must be present')
     end
 
     it "should only update splits via Activity API if updated_at is set" do
-      attributes = {"name"=>"dsf", "start_date"=>"2010-08-02", "project_id"=>"#{@project.id}",
+      attributes = {"name"=>"dsf", "project_id"=>"#{@project.id}",
         "implementer_splits_attributes"=>
       {"0"=> {"spend"=>"1", "budget"=>"1",
         "activity_id"=>"#{@activity.id}",
         "organization_mask"=>"#{@organization.id}"},
-      }, "description"=>"adfasdf", "end_date"=>"2010-08-04"}
+      }, "description"=>"adfasdf"}
       @activity.reload
       @activity.update_attributes(attributes).should be_true
     end
@@ -199,13 +195,13 @@ describe ImplementerSplit do
   end
 
   it "should return organization_mask as the org id" do
-    org = Factory.build :organization
-    split = Factory.build :implementer_split, :organization => org
+    org = FactoryGirl.build :organization
+    split = FactoryGirl.build :implementer_split, :organization => org
     split.organization_mask.should == org.name
   end
 
   it "should respond to assign_or_create_organization" do
-    Factory.build(:implementer_split).should respond_to(:assign_or_create_organization)
+    FactoryGirl.build(:implementer_split).should respond_to(:assign_or_create_organization)
   end
 
   it "recognizes self-implemented" do
@@ -219,19 +215,19 @@ describe ImplementerSplit do
 
   describe "#possible_double_count?" do
     before :each do
-      @donor        = Factory(:organization, :name => "donor")
-      @organization = Factory(:organization, :name => "self-implementer")
-      user = Factory :user, :organization => @organization
-      @request      = Factory(:data_request, :organization => @organization)
+      @donor        = FactoryGirl.create(:organization, :name => "donor")
+      @organization = FactoryGirl.create(:organization, :name => "self-implementer")
+      user = FactoryGirl.create :user, :organization => @organization
+      @request      = FactoryGirl.create(:data_request, :organization => @organization)
       @response     = @organization.latest_response
-      @project      = Factory(:project, :data_response => @response)
-      @activity     = Factory(:activity, :project => @project,
+      @project      = FactoryGirl.create(:project, :data_response => @response)
+      @activity     = FactoryGirl.create(:activity, :project => @project,
                               :data_response => @response)
     end
 
     context "self implementer" do
       it "does not mark double count" do
-        implementer_split = Factory(:implementer_split, :activity => @activity,
+        implementer_split = FactoryGirl.create(:implementer_split, :activity => @activity,
                                     :organization => @organization)
 
         implementer_split.possible_double_count?.should be_false
@@ -240,8 +236,8 @@ describe ImplementerSplit do
 
     context "non-hrt implementer" do
       it "does not mark double count" do
-        organization2 = Factory(:organization, :raw_type => 'Non-Reporting')
-        implementer_split = Factory(:implementer_split, :activity => @activity,
+        organization2 = FactoryGirl.create(:organization, :raw_type => 'Non-Reporting')
+        implementer_split = FactoryGirl.create(:implementer_split, :activity => @activity,
                                     :organization => organization2)
 
         implementer_split.possible_double_count?.should be_false
@@ -250,16 +246,16 @@ describe ImplementerSplit do
 
     context "another hrt implementer" do
       before :each do
-        organization2 = Factory(:organization, :name => "other-hrt-implementer")
-        u = Factory :user, :organization => organization2
+        organization2 = FactoryGirl.create(:organization, :name => "other-hrt-implementer")
+        u = FactoryGirl.create :user, :organization => organization2
         @response2     = organization2.latest_response
-        project2      = Factory(:project, :data_response => @response2)
-        activity2     = Factory(:activity, :data_response => @response2,
+        project2      = FactoryGirl.create(:project, :data_response => @response2)
+        activity2     = FactoryGirl.create(:activity, :data_response => @response2,
                                 :project => project2)
-        @implementer_split = Factory(:implementer_split,
+        @implementer_split = FactoryGirl.create(:implementer_split,
                                      :activity => @activity,
                                      :organization => organization2)
-        Factory(:implementer_split, :activity => activity2,
+        FactoryGirl.create(:implementer_split, :activity => activity2,
                 :organization => organization2)
       end
       it "marks double counting if other implementer has submitted response" do
@@ -278,18 +274,18 @@ describe ImplementerSplit do
 
   describe "#mark_double_counting" do
     before :each do
-      donor    = Factory(:organization, :name => 'donor')
-      u = Factory :user, :organization => donor
-      @request  = Factory(:data_request, :organization => donor)
+      donor    = FactoryGirl.create(:organization, :name => 'donor')
+      u = FactoryGirl.create :user, :organization => donor
+      @request  = FactoryGirl.create(:data_request, :organization => donor)
       response = donor.latest_response
-      org1     = Factory(:organization, :name => "organization1")
-      org2     = Factory(:organization, :name => "organization2")
-      project  = Factory(:project, :data_response => response)
-      activity = Factory(:activity, :id => 1, :data_response => response,
+      org1     = FactoryGirl.create(:organization, :name => "organization1")
+      org2     = FactoryGirl.create(:organization, :name => "organization2")
+      project  = FactoryGirl.create(:project, :data_response => response)
+      activity = FactoryGirl.create(:activity, :id => 1, :data_response => response,
                          :project => project)
-      split1 = Factory(:implementer_split, :id => 1,
+      split1 = FactoryGirl.create(:implementer_split, :id => 1,
                        :activity => activity, :organization => org1, :double_count => false)
-      split2 = Factory(:implementer_split, :id => 2,
+      split2 = FactoryGirl.create(:implementer_split, :id => 2,
                        :activity => activity, :organization => org2, :double_count => false)
 
       content = File.open('spec/fixtures/activity_overview.xls').read

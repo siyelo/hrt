@@ -3,7 +3,8 @@ module FileBuilder
     attr_accessor :filetype, :row_index, :workbook, :sheet
 
     def initialize
-      Spreadsheet.client_encoding = "UTF-8//IGNORE"
+      # Spreadsheet.client_encoding = "UTF-8//IGNORE"
+      Spreadsheet.client_encoding = "UTF-8"
       @filetype = 'xls'
       @workbook = Spreadsheet::Workbook.new
       @sheet    = workbook.create_worksheet

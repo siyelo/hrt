@@ -1,0 +1,8 @@
+- message ||= "Oops, we couldn't save your changes."
+
+- if resource.errors.any?
+  .errorExplanation#errorExplanation
+    %p= message
+    %ul
+      - resource.errors.full_messages.each do |error|
+        %li= error

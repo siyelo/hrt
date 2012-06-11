@@ -1,5 +1,3 @@
-require 'validators'
-
 class DataRequest < ActiveRecord::Base
   ### Attributes
   attr_accessible :organization_id, :title, :start_date
@@ -10,14 +8,14 @@ class DataRequest < ActiveRecord::Base
   has_many :reports, :dependent => :destroy
 
   ### Validations
-  validates_presence_of :organization_id, :title
+  validates_presence_of :organization_id, :title, :start_date
   validates_date :start_date
 
   ### Callbacks
   after_create :create_data_responses
 
   ### Named scopes
-  named_scope :sorted, { :order => "data_requests.start_date DESC" }
+  scope :sorted, { :order => "data_requests.start_date DESC" }
 
   alias_attribute :name, :title
 

@@ -2,7 +2,7 @@
   var _response_id = "#{@response.id}";
   var _activity_id = "#{outlay.id}";
 
-- f.inputs :class => 'inputs' do
+= f.inputs :class => 'inputs' do
   %li.last
     = render 'shared/outlays/activity_basic_fields', :f => f, :outlay => outlay
 
@@ -26,9 +26,9 @@
 
   %li.last
     %ul.horizontal.section_form.last.connect
-      - f.buttons :class => 'buttons1' do
-        = f.commit_button "Save", :button_html => {:class => "last next js_submit_btn"}
-        = f.commit_button save_and_add_button_text(params[:mode], outlay), :button_html => {:class => "last next js_submit_btn"}
+      = f.actions :class => 'buttons1' do
+        = f.action :submit, :label => "Save", :button_html => {:class => "last next js_submit_btn"}
+        = f.action :submit, :label => save_and_add_button_text(params[:mode], outlay), :button_html => {:class => "next js_submit_btn"}
         %li
           = link_to "Cancel", projects_path, :class => "js_toggle_projects_listing cancel"
         %li

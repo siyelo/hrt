@@ -1,4 +1,3 @@
-- javascript('jquery.address-1.4.js')
 - title("Projects")
 
 - content_for :sub_nav do
@@ -20,7 +19,7 @@
 
   %ul#nav.horizontal
     %li.js_dropdown_menu
-      - link_to '#', :class => 'js_dropdown_trigger dropdown' do
+      = link_to '#', :class => 'js_dropdown_trigger dropdown' do
         = image_tag "new.png"
         Create New...
         = image_tag "icon_dropdown.png"
@@ -31,7 +30,7 @@
         %li= link_to 'Indirect Cost', new_other_cost_path, :"data-type" => 'other_cost', :class => 'js_toggle_other_cost_form js_address'
 
     %li.js_dropdown_menu
-      - link_to '#', :class => 'js_dropdown_trigger dropdown' do
+      = link_to '#', :class => 'js_dropdown_trigger dropdown' do
         Import / Export
         = image_tag "icon_dropdown.png"
 
@@ -40,7 +39,7 @@
         %li= link_to 'Export', export_projects_path
 
     %li
-      - link_to export_workplan_projects_path, :class => 'dropdown dropless' do
+      = link_to export_workplan_projects_path, :class => 'dropdown dropless' do
         Download Workplan
 
       %ul.menu_items{:style => 'display: none'}
@@ -48,13 +47,13 @@
 
     - if current_user.sysadmin?
       %li.js_dropdown_menu#state
-        - link_to '#', :class => 'js_dropdown_trigger dropdown' do
+        = link_to '#', :class => 'js_dropdown_trigger dropdown' do
           = "Status: #{current_response.state_to_name}"
           = image_tag "icon_dropdown.png"
 
         %ul.menu_items{:style => 'display: none'}
-          %li= link_to 'Reject', reject_response_path(@response), :method => :put, :confirm => "Are you sure you want to Reject this response?"
-          %li= link_to 'Accept', accept_response_path(@response), :method => :put, :confirm => "Are you sure you want to Accept this response?"
+          %li= link_to 'Reject', reject_response_path(@response), :method => :put, :data => { :confirm => "Are you sure you want to Reject this response?" }
+          %li= link_to 'Accept', accept_response_path(@response), :method => :put, :data => { :confirm => "Are you sure you want to Accept this response?" }
     %li.right
       = render 'search'
 

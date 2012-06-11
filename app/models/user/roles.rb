@@ -17,6 +17,7 @@ module User::Roles
 
   module InstanceMethods
     def roles=(roles)
+      roles = [roles] if roles.is_a?(String)
       new_roles = roles.collect {|r| r.to_s} # allows symbols to be passed in
       self.roles_mask = (new_roles & ROLES).map { |r| 2**ROLES.index(r) }.sum
     end

@@ -3,12 +3,12 @@
   / js event: .cancel_btn
   - if request.format == "text/javascript"
     = link_to "Close", comments_path, :class => "cancel_btn close"
-  - semantic_form_for @comment, :url => comments_path(:commentable_type => comment.commentable_type, :commentable_id => comment.commentable_id) do |f|
+  = semantic_form_for @comment, :url => comments_path(:commentable_type => comment.commentable_type, :commentable_id => comment.commentable_id) do |f|
     = f.semantic_errors :state
-    - f.inputs do
-      - f.inputs "", :id => "basic", :class => "collapsible" do
+    = f.inputs do
+      = f.inputs "", :id => "basic", :class => "collapsible" do
         = f.input :comment, :label => 'Add Comment', :input_html => {:"data-hint" => 'Type your comment here', :class => "comment-area", :cols => "120", :rows => "3"}
-      - f.buttons do
+      = f.actions do
         / js event: .submit_btn
-        = f.commit_button :button_html => { :class => "js_submit_comment_btn create_alt" }
+        = f.action :submit, :button_html => { :class => "js_submit_comment_btn create_alt" }
         = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => "display: none;"

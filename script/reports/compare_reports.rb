@@ -20,7 +20,7 @@ def run_report(report, name)
     f.puts csv
   end
   table = []
-  FasterCSV.parse(csv, :headers => true) { |row| table << row }
+  CSV.parse(csv, :headers => true) { |row| table << row }
   return table
 end
 

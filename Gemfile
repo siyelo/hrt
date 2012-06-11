@@ -1,76 +1,73 @@
 source 'http://rubygems.org'
 
+gem 'rails', '3.2.6'
+gem 'jquery-rails'
+gem 'jquery-ui-themes'
+gem 'pg'
+gem 'haml'
+gem 'hoptoad_notifier'
+gem 'settingslogic'
+gem 'inherited_resources'
 gem 'acts_as_tree'
 gem 'ar_strip_commas'
-gem 'authlogic'
+gem 'devise'
+gem 'devise-encryptable'
+gem 'awesome_nested_set'
 gem 'aws-s3', :require => 'aws/s3'
-gem 'compass', '=0.10.2'
-gem 'delayed_job', '~>2.0.4'
-gem 'fastercsv'
-gem 'formtastic', '= 1.2.3'
-gem 'haml', '=3.1.2'
-gem 'hoptoad_notifier'
-gem 'inherited_resources', '= 1.0.6'
+gem 'delayed_job_active_record'
+gem 'formtastic'
 gem 'json_pure'
 gem 'money', '~> 3.5'
-gem 'paperclip', '= 2.3.11'
+gem 'paperclip'
 gem 'rack-timeout'
-gem 'rails', '2.3.14'
-gem 'rdoc'
-gem 'sass', '=3.1.4'
-gem 'settingslogic'
 gem 'spreadsheet'
 gem 'SystemTimer', :require => 'system_timer', :platforms => :ruby_18
-gem 'validates_timeliness', '~> 2.3'
+gem 'validates_timeliness'
 gem 'version'
-gem 'will_paginate', '~> 2.3.11'
+gem 'will_paginate'
 gem 'addressable'
 gem 'axlsx'
 
+group :assets do
+  gem 'sass-rails',   '~> 3.2.3'
+  gem 'coffee-rails', '~> 3.2.1'
+  gem 'therubyracer'
+  gem 'uglifier', '>= 1.0.3'
+  gem 'compass-rails'
+  gem 'compass-h5bp'
+end
+
 group :development do
   gem 'annotate'
-  gem 'awesome_print', :require => 'ap'
-  gem 'google_currency', '=1.2.0' # for currency cacher
-  gem 'heroku', '>= 2.1.2'
-  gem 'hirb'
+  gem 'heroku'
   gem 'interactive_editor'
-  gem 'mongrel'
   gem 'open_gem'
   gem 'rails-footnotes'
-  gem 'ruby-debug'
-  gem 'sketches'
-  gem 'slurper', :require => false
-  gem 'sqlite3'
   gem 'taps'
-  gem 'wirble'
+  gem 'quiet_assets'
+  gem 'rb-fsevent', :require => RUBY_PLATFORM.include?('darwin') && 'rb-fsevent'
+  gem 'growl',      :require => RUBY_PLATFORM.include?('darwin') && 'growl'
+  gem 'rb-inotify', :require => RUBY_PLATFORM.include?('linux')  && 'rb-inotify'
+  gem 'libnotify',  :require => RUBY_PLATFORM.include?('linux')  && 'rb-inotify'
 end
 
 group :test, :development do
-  gem 'rcov'
-  gem 'rspec', '1.3.1', :require => 'spec'
-  gem 'rspec-rails', '1.3.3'  # RSpec 1 (1.3.x) is for Rails 2.3.x
+  gem 'rspec'
+  gem 'rspec-rails'
+  gem 'sqlite3'
 end
 
 group :test do
-  gem 'capybara', '0.3.9'     # latest capy fails with "undefined method `fillable_field' for HTML:Module"
-  gem 'selenium-webdriver', '~>0.2.2'
-  gem 'akephalos', :require => false
-  gem 'factory_girl', '1.2.4' # moving it here so not loaded by spork prefork. NB. some specs fail with 1.3.3
-  gem 'cucumber'
-  gem 'cucumber-rails', '0.3.2'
+  gem 'capybara-webkit'
   gem 'database_cleaner'
-  gem 'email_spec'
-  gem 'gherkin', '2.3.7'
-  gem 'guard' , '~> 1.0.3' # avoids 1.1.1 issue: no such file to load -- listen
-  gem 'guard-bundler'
-  gem 'guard-rspec'
+  gem "factory_girl_rails", "~> 3.0"
   gem 'guard-spork'
-  gem 'growl'
-  gem 'launchy'               # So you can do 'Then show me the page'
-  gem 'pickle', '~> 0.4.4'
-  gem 'rb-fsevent' # inject GoFast Juice (TM) into Guard on OSX
-  gem 'pg'
-  gem 'shoulda', '~> 2.11'
-  gem 'spork', '= 0.8.5'
+  gem 'capybara'
+  gem 'launchy'
+  gem 'email_spec'
+  gem 'shoulda-matchers'
   gem 'timecop'
+  gem 'pickle'
+  gem 'cucumber-rails', '~> 1.0', :require => false
+  gem 'cucumber-rails-training-wheels'
 end

@@ -4,7 +4,7 @@ class RemoveTitleFromComments < ActiveRecord::Migration
       if comment.title.present?
         comment.comment = comment.title.to_s + "\n\n" + comment.comment.to_s
       end
-      comment.save(false)
+      comment.save(validate: false)
     end
 
     remove_column :comments, :title

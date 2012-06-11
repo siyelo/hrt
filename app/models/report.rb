@@ -1,7 +1,3 @@
-require 'iconv'
-require 'lib/script_helper'
-require 'lib/private_url'
-
 class Report < ActiveRecord::Base
 
   include ScriptHelper
@@ -57,7 +53,7 @@ class Report < ActiveRecord::Base
 
   def generate_report_for_download(user)
     create_report
-    Notifier.deliver_report_download_notification(user, self)
+    Notifier.report_download_notification(user, self).deliver
   end
   handle_asynchronously :generate_report_for_download
 
@@ -108,8 +104,8 @@ class Report < ActiveRecord::Base
 
   def create_report
     report.data do |content, filetype, mimetype|
-      file_name = "#{RAILS_ROOT}/tmp/#{key}_#{data_request_id}_#{get_date()}.#{filetype}"
-      File.open(file_name, 'w') {|f| f.write(content)}
+      file_name = "#{Rails.root}/tmp/#{key}_#{data_request_id}_#{get_date()}.#{filetype}"
+      File.open(file_name, "w:US-ASCII") {|f| f.write(content)}
 
       FileZipper.zip(file_name) do |zip_file_name|
         self.attachment = File.new(zip_file_name, 'r')

@@ -1,7 +1,7 @@
-require 'app/charts/responses'
+# require 'app/charts/responses'
 
 class Admin::ResponsesController < Admin::BaseController
-  include DataResponse::States
+  include ResponseStates
 
   AVAILABLE_FILTERS = ["Not Yet Started", "Started", "Submitted",
     "Rejected", "Accepted"]
@@ -11,14 +11,14 @@ class Admin::ResponsesController < Admin::BaseController
   def index
     @pie = Charts::Responses::State.new(current_request).google_bar
     scope = scope_responses(params[:filter])
-    scope = scope.scoped(:joins => :organization,
-                         :conditions => ["UPPER(organizations.name) LIKE UPPER(:q)",
-                           {:q => "%#{params[:query]}%"}]) if params[:query]
+    scope = scope.joins(:organization).
+                  where(["UPPER(organizations.name) LIKE UPPER(:q)",
+                        {:q => "%#{params[:query]}%"}]) if params[:query]
 
     @responses = scope.paginate(:page => params[:page], :per_page => 100,
                                 :joins => :organization,
                                 :include => :organization,
-                                :order => "UPPER(organizations.name), id ASC")
+                                :order => "UPPER(organizations.name), data_responses.id ASC")
   end
 
   def new

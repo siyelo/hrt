@@ -21,7 +21,7 @@
         %th.title
           Implementer
           %span
-            - link_to "#", :title => "Direct implementer ('service provider') for this #{klass}. i.e. your own organization or another organization that carried out this work e.g. a NGO, a Health Facility Institution, Government office, or a District.", :class => 'tooltip' do
+            = link_to "#", :title => "Direct implementer ('service provider') for this #{klass}. i.e. your own organization or another organization that carried out this work e.g. a NGO, a Health Facility Institution, Government office, or a District.", :class => 'tooltip' do
               = image_tag "tooltip.png"
         %th
           .right_justified Past Expenditure
@@ -29,7 +29,7 @@
           .right_justified Current Budget
         %th.delete
     %tbody
-      - f.semantic_fields_for :implementer_splits do |ff|
+      = f.semantic_fields_for :implementer_splits do |ff|
         - show_only_errors = @split_errors && ( @splits.size <= 50 || !ff.object.errors.empty?)
         = render 'shared/outlays/implementer_split_fields', :f => ff if (bulk_review || show_only_errors) || outlay.errors.empty?
 
@@ -37,7 +37,7 @@
         - blank_rows.times do
           - f.object.implementer_splits.build unless f.object.implementer_splits.length > 0
           - new_object = f.object.class.reflect_on_association(:implementer_splits).klass.new
-          - f.fields_for(:implementer_splits, new_object) do |builder|
+          = f.fields_for(:implementer_splits, new_object) do |builder|
             = render "shared/outlays/implementer_split_fields", :f => builder
 
       %tr.total

@@ -9,7 +9,7 @@ describe Document do
   end
 
   describe "Validations" do
-    subject { Factory(:document) }
+    subject { FactoryGirl.create(:document) }
     it { should validate_presence_of(:title) }
     it { should validate_uniqueness_of(:title) }
     it { should have_attached_file(:document) }
@@ -26,9 +26,9 @@ describe Document do
 
   describe "Named Scopes" do
     before :each do
-      @public_document = Factory :document, :visibility => 'public'
-      @reporter_document = Factory :document, :visibility => 'reporters'
-      @sysadmin_document = Factory :document, :visibility => 'sysadmins'
+      @public_document = FactoryGirl.create :document, :visibility => 'public'
+      @reporter_document = FactoryGirl.create :document, :visibility => 'reporters'
+      @sysadmin_document = FactoryGirl.create :document, :visibility => 'sysadmins'
     end
 
     it 'returns public and reporter visible documents for reporter scope' do
@@ -47,7 +47,7 @@ describe Document do
 
   describe "#private_document_url" do
     it "sets private url for production environment" do
-      document = Factory.build(:document)
+      document = FactoryGirl.build(:document)
       document.stub(:private_url?).and_return(true)
       document.document.should_receive(:expiring_url)
       document.document.should_not_receive(:url)
@@ -56,7 +56,7 @@ describe Document do
     end
 
     it "sets public url for other than production environment" do
-      document = Factory.build(:document)
+      document = FactoryGirl.build(:document)
       document.stub(:private_url?).and_return(false)
       document.document.should_receive(:url)
       document.document.should_not_receive(:expiring_url)

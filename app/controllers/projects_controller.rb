@@ -1,4 +1,5 @@
 require 'set'
+require 'csv'
 
 class ProjectsController < BaseController
   SORTABLE_COLUMNS = ['name']
@@ -9,32 +10,33 @@ class ProjectsController < BaseController
   before_filter :prevent_activity_manager, :only => [:create, :update, :destroy]
 
   def new
-    @project = @response.projects.new
+    @project = current_response.projects.new
   end
 
   def index
-    scope = @response.projects.scoped({})
-    scope = scope.scoped(:conditions => ["UPPER(name) LIKE UPPER(:q)",
+    scope = current_response.projects
+    scope = scope.where(["UPPER(name) LIKE UPPER(:q)",
                                          {:q => "%#{params[:query]}%"}]) if params[:query]
     @projects = scope.paginate(:page => params[:page], :per_page => 10,
                                :order => "#{sort_column} #{sort_direction}",
                                :include => :activities)
     @comment = Comment.new
-    @comment.commentable = @response
-    @comments = Comment.on_all([@response.id]).roots.paginate :per_page => 20,
-                                                :page => params[:page],
-                                                :order => 'created_at DESC'
-    @project = Project.new(:data_response => @response)
+    @comment.commentable = current_response
+    @comments = Comment.on_all([current_response.id]).where('parent_id IS NULL').
+      paginate :per_page => 20,
+               :page => params[:page],
+               :order => 'created_at DESC'
+    @project = Project.new(:data_response => current_response)
     self.load_inline_forms
   end
 
   def edit
-    @project = @response.projects.find(params[:id])
+    @project = current_response.projects.find(params[:id])
     load_comment_resources(@project)
   end
 
   def create
-    @project = Project.new(params[:project].merge(:data_response => @response))
+    @project = Project.new(params[:project].merge(:data_response => current_response))
     if @project.save
       respond_to do |format|
         format.html do
@@ -52,7 +54,7 @@ class ProjectsController < BaseController
   end
 
   def update
-    @project = @response.projects.find(params[:id])
+    @project = current_response.projects.find(params[:id])
     @project.activities.each { |a| a.name_will_change! } #force save
     if @project.update_attributes(params[:project])
       respond_to do |format|
@@ -71,7 +73,7 @@ class ProjectsController < BaseController
   end
 
   def destroy
-    @project = @response.projects.find(params[:id])
+    @project = current_response.projects.find(params[:id])
     @project.destroy
     flash[:notice] = "Project was successfully destroyed"
     redirect_to projects_url
@@ -80,7 +82,7 @@ class ProjectsController < BaseController
   def import
     begin
       if params[:file].present?
-        @i = Importer.new(@response, params[:file].path)
+        @i = Importer.new(current_response, params[:file].path)
         @projects = @i.projects
         @activities = @i.activities
         @other_costs = @i.other_costs
@@ -88,7 +90,7 @@ class ProjectsController < BaseController
         flash[:error] = 'Please select a file to upload'
         redirect_to projects_url
       end
-    rescue FasterCSV::MalformedCSVError
+    rescue CSV::MalformedCSVError, ArgumentError
       flash[:error] = "There was a problem with your file. Did you use the
                       template provided and save the file as either XLS or CSV?
                       Please post a problem at
@@ -110,10 +112,10 @@ class ProjectsController < BaseController
 
   def export_workplan
     # abt_associates_workplan
-    org_workplan_filename = "#{@response.organization.name.split.join('_').
+    org_workplan_filename = "#{current_response.organization.name.split.join('_').
        gsub(/\W+/, '').downcase.underscore}_workplan"
 
-    report = Reports::Detailed::FunctionalWorkplan.new(@response, nil, 'xls')
+    report = Reports::Detailed::FunctionalWorkplan.new(current_response, nil, 'xls')
     send_report_file(report, org_workplan_filename)
   end
 
@@ -128,7 +130,7 @@ class ProjectsController < BaseController
     end
 
     def begin_of_association_chain
-      @response
+      current_response
     end
 
     #TODO: this should be handled in in model instead
@@ -175,6 +177,6 @@ class ProjectsController < BaseController
       render :json => {:status => 'failed',
                :html => render_to_string(:partial => 'projects/bulk_review',
                  :layout => false,
-                 :locals => {:project => @project, :response => @response})}
+                 :locals => {:project => @project, :response => current_response})}
     end
 end

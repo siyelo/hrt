@@ -12,7 +12,7 @@ class ResponseCloner
       new_response.organization_id = previous_response.organization.id
       new_response.projects = clone_projects(previous_response, new_response)
       new_response.previous_id = previous_response.id
-      new_response.save(false)
+      new_response.save(validate: false)
       new_response.reload
       new_response.other_costs += clone_non_project_other_costs(previous_response, new_response)
       reset_response_state!(new_response)
@@ -22,7 +22,7 @@ class ResponseCloner
   private
   def clone_projects(response, new_response)
     response.projects.map do |previous_project|
-      project = previous_project.clone
+      project = previous_project.dup
       project.previous = previous_project
       project.data_response_id = nil
       project.in_flows = clone_in_flows(previous_project)
@@ -34,7 +34,7 @@ class ResponseCloner
 
   def clone_in_flows(project)
     project.in_flows.map do |previous_in_flow|
-      in_flow = previous_in_flow.clone
+      in_flow = previous_in_flow.dup
       in_flow.project_id = nil
       in_flow.previous = previous_in_flow
       in_flow.spend = 0
@@ -45,7 +45,7 @@ class ResponseCloner
 
   def clone_activities(activities, new_response)
     activities.map do |old_activity|
-      activity = old_activity.clone
+      activity = old_activity.dup
       activity.previous = old_activity
       activity.project_id = nil
       activity.data_response_id = nil
@@ -68,7 +68,7 @@ class ResponseCloner
 
   def clone_implementer_splits(activity)
     activity.implementer_splits.map do |old_split|
-      split = old_split.clone
+      split = old_split.dup
       split.previous = old_split
       split.activity_id = nil
       split.double_count = nil
@@ -80,7 +80,7 @@ class ResponseCloner
 
   def clone_targets(activity)
     activity.targets.map do |old_target|
-      target = old_target.clone
+      target = old_target.dup
       target.activity_id = nil
       target
     end
@@ -88,7 +88,7 @@ class ResponseCloner
 
   def clone_outputs(activity)
     activity.outputs.map do |old_output|
-      output = old_output.clone
+      output = old_output.dup
       output.activity_id = nil
       output
     end
@@ -96,6 +96,6 @@ class ResponseCloner
 
   def reset_response_state!(new_response)
     new_response.state = "unstarted"
-    new_response.save(false)
+    new_response.save(validate: false)
   end
 end

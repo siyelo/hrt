@@ -2,12 +2,12 @@ require 'spec_helper'
 
 shared_examples_for 'an organization controller' do
   it "should allow admin to edit settings of reporting organization" do
-    o = Factory :organization
+    o = FactoryGirl.create :organization
     get :edit, :id => :current
     response.should be_success
   end
   it "should allow admin to edit settings of nonreporting org" do
-    o = Factory :organization, :raw_type => 'Communal FOSA'
+    o = FactoryGirl.create :organization, :raw_type => 'Communal FOSA'
     get :edit, :id => :current
     response.should be_success
   end
@@ -16,9 +16,9 @@ end
 describe OrganizationsController do
   context "as a reporter" do
     before :each do
-      data_request  = Factory(:data_request)
-      organization  = Factory(:organization)
-      reporter       = Factory(:reporter, :organization => organization)
+      data_request  = FactoryGirl.create(:data_request)
+      organization  = FactoryGirl.create(:organization)
+      reporter       = FactoryGirl.create(:reporter, :organization => organization)
       login(reporter)
     end
 
@@ -40,10 +40,10 @@ describe OrganizationsController do
 
   context "as a sysadmin" do
     before :each do
-      data_request  = Factory(:data_request)
-      organization  = Factory(:organization)
-      sysadmin      = Factory(:sysadmin, :organization => organization)
-      login(Factory(:sysadmin))
+      data_request  = FactoryGirl.create(:data_request)
+      organization  = FactoryGirl.create(:organization)
+      sysadmin      = FactoryGirl.create(:sysadmin, :organization => organization)
+      login(FactoryGirl.create(:sysadmin))
     end
 
     it_should_behave_like 'an organization controller'

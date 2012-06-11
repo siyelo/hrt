@@ -1,5 +1,3 @@
-require 'validators'
-
 class Organization < ActiveRecord::Base
   include ActsAsDateChecker
   include Organization::Merger
@@ -17,7 +15,7 @@ class Organization < ActiveRecord::Base
   ### Attributes
   attr_accessible :name, :raw_type, :fosaid, :currency, :contact_name,
     :contact_position, :contact_phone_number, :contact_main_office_phone_number,
-    :contact_office_location, :implementer_type, :funder_type
+    :contact_office_location, :implementer_type, :funder_type, :organization_id
 
 
   ### Associations
@@ -48,11 +46,11 @@ class Organization < ActiveRecord::Base
   before_destroy :check_no_implementer_references
 
   ### Named scopes
-  named_scope :ordered, :order => 'lower(name) ASC, created_at DESC'
-  named_scope :with_type, lambda { |type| {:conditions => ["organizations.raw_type = ?", type]} }
-  named_scope :sorted, { :order => "LOWER(organizations.name) ASC" }
-  named_scope :reporting, :conditions => ['users_count > 0']
-  named_scope :nonreporting, :conditions => ['users_count = 0']
+  scope :ordered, :order => 'lower(name) ASC, created_at DESC'
+  scope :with_type, lambda { |type| {:conditions => ["organizations.raw_type = ?", type]} }
+  scope :sorted, { :order => "LOWER(organizations.name) ASC" }
+  scope :reporting, :conditions => ['users_count > 0']
+  scope :nonreporting, :conditions => ['users_count = 0']
 
   ### Class Methods
 
@@ -113,8 +111,8 @@ class Organization < ActiveRecord::Base
 
   # last login at will return nil on first login, but current will be set
   def current_user_logged_in
-    users.select{ |a,b| a.current_login_at.present? }.max do |a,b|
-      a.current_login_at <=> b.current_login_at
+    users.select{ |a,b| a.current_sign_in_at.present? }.max do |a,b|
+      a.current_sign_in_at <=> b.current_sign_in_at
     end
   end
 
@@ -138,14 +136,14 @@ class Organization < ActiveRecord::Base
 
   def check_no_funder_references
     unless out_flows.reject{ |f| f.self_funded? }.empty?
-      errors.add_to_base "Cannot delete organization with (external) Funder references"
+      errors.add(:base, "Cannot delete organization with (external) Funder references")
       return false
     end
   end
 
   def check_no_implementer_references
     unless implementer_splits.reject{ |s| s.self_implemented? }.empty?
-      errors.add_to_base "Cannot delete organization with (external) Implementer references"
+      errors.add(:base, "Cannot delete organization with (external) Implementer references")
       return false
     end
   end

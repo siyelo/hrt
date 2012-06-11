@@ -3,7 +3,7 @@ class ShortenDataRequestName < ActiveRecord::Migration
     d = DataRequest.first
     if d
       d.title = "FY2010 Workplan and FY2009 Expenditures"
-      d.save(false)
+      d.save(validate: false)
     end
   end
 
@@ -11,7 +11,7 @@ class ShortenDataRequestName < ActiveRecord::Migration
     d = DataRequest.first
     if d
       d.title = "FY2010 Workplan and FY2009 Expenditures - due date September 1"
-      d.save(false)
+      d.save(validate: false)
     end
   end
 end

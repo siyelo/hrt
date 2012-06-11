@@ -4,8 +4,8 @@ class ResponsesController < BaseController
   before_filter :load_response_from_id
 
   def review
-    DataResponse.send(:preload_associations, @response,
-                  [{:projects => :normal_activities}])
+    ActiveRecord::Associations::Preloader.new(@response,
+      [{:projects => :normal_activities}]).run
     @projects = @response.projects
   end
 
@@ -24,7 +24,7 @@ class ResponsesController < BaseController
   def reject
     @response.reject!
     if current_response.organization.users.map{ |u| u.email }.present?
-      Notifier.deliver_response_rejected_notification(@response)
+      Notifier.response_rejected_notification(@response).deliver
     end
     flash[:notice] = "Response was successfully rejected"
     redirect_to projects_path
@@ -33,7 +33,7 @@ class ResponsesController < BaseController
   def accept
     @response.accept!
     if current_response.organization.users.map{ |u| u.email }.present?
-      Notifier.deliver_response_accepted_notification(@response)
+      Notifier.response_accepted_notification(@response).deliver
     end
     flash[:notice] = "Response was successfully accepted"
     redirect_to projects_path
@@ -42,7 +42,7 @@ class ResponsesController < BaseController
   def restart
     @response.restart!
     if current_response.organization.users.map{ |u| u.email }.present?
-      Notifier.deliver_response_restarted_notification(@response)
+      Notifier.response_restarted_notification(@response).deliver
     end
     flash[:notice] = "Response was successfully restarted"
     redirect_to projects_path

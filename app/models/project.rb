@@ -1,5 +1,3 @@
-require 'validators'
-
 class Project < ActiveRecord::Base
   include ActsAsDateChecker
   include BudgetSpendHelper
@@ -46,19 +44,17 @@ class Project < ActiveRecord::Base
   validates_inclusion_of :currency,
     :in => Money::Currency::TABLE.map{|k, v| "#{k.to_s.upcase}"},
     :allow_nil => true, :unless => Proc.new {|p| p.currency.blank?}
+  validates_presence_of :start_date, :end_date
   validates_date :start_date
   validates_date :end_date
-  validates_dates_order :start_date, :end_date,
-    :message => "Start date must come before End date."
   validates_length_of :name, :within => 1..MAX_NAME_LENGTH
-
   validate :has_in_flows?, :if => Proc.new {|model| model.in_flows.reject{ |attrs|
     attrs['organization_id_from'].blank? || attrs.marked_for_destruction? }.empty?}
-
   validate :validate_funder_uniqueness
+  validate :validate_dates_order
 
   ### Attributes
-  attr_accessible :name, :description, :data_response,
+  attr_accessible :name, :description, :data_response, :_destroy,
                   :data_response_id, :activities, :start_date,
                   :end_date, :currency, :budget_type,
                   :activities_attributes, :in_flows_attributes, :in_flows
@@ -67,7 +63,7 @@ class Project < ActiveRecord::Base
   delegate :organization, :to => :data_response, :allow_nil => true #workaround for object creation
 
   ### Named Scopes
-  named_scope :sorted, { :order => "projects.name" }
+  scope :sorted, { :order => "projects.name" }
 
 
   ### Instance methods
@@ -76,13 +72,13 @@ class Project < ActiveRecord::Base
   end
 
   def deep_clone
-    clone = self.clone
+    clone = self.dup
     # has_many's with deep associations
     [:normal_activities, :other_costs].each do |assoc|
       clone.send(assoc) << self.send(assoc).map { |obj| obj.deep_clone }
     end
 
-    clone.in_flows = self.in_flows.collect { |obj| obj.project_id = nil; obj.clone }
+    clone.in_flows = self.in_flows.collect { |obj| obj.project_id = nil; obj.dup }
 
     clone
   end
@@ -104,7 +100,7 @@ class Project < ActiveRecord::Base
   private
 
     def has_in_flows?
-      errors.add_to_base "Project must have at least one Funding Source."
+      errors.add(:base, "Project must have at least one Funding Source.")
     end
 
     def strip_leading_spaces
@@ -131,7 +127,13 @@ class Project < ActiveRecord::Base
     def validate_funder_uniqueness
       funders = in_flows.select{|e| !e.marked_for_destruction? }.map(&:organization_id_from)
       if funders.length != funders.uniq.length
-        errors.add_to_base "Duplicate Project Funding Sources"
+        errors.add(:base, "Duplicate Project Funding Sources")
+      end
+    end
+
+    def validate_dates_order
+      if start_date.present? && end_date.present? && start_date >= end_date
+        errors.add(:start_date, "Start date must come before End date.")
       end
     end
 end

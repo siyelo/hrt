@@ -10,7 +10,8 @@ class Code < ActiveRecord::Base
   attr_writer   :type_string
   attr_accessible :short_display, :long_display, :description, :official_name,
                   :hssp2_stratprog_val, :hssp2_stratobj_val, :sub_account,
-                  :nasa_code, :nha_code, :type_string, :parent_id, :type
+                  :nasa_code, :nha_code, :type_string, :parent_id, :type,
+                  :external_id
 
   def type_string
     @type_string || self[:type]
@@ -27,10 +28,10 @@ class Code < ActiveRecord::Base
   has_many :activities, :through => :code_splits
 
   ### Named scope
-  named_scope :with_type,  lambda { |type| {:conditions => ["codes.type = ?", type]} }
-  named_scope :with_types, lambda { |types| {:conditions => ["codes.type IN (?)", types]} }
-  named_scope :purposes, :conditions => ["codes.type in (?)", PURPOSES]
-  named_scope :ordered_by_short_display, :order => 'short_display ASC'
+  scope :with_type,  lambda { |type| {:conditions => ["codes.type = ?", type]} }
+  scope :with_types, lambda { |types| {:conditions => ["codes.type IN (?)", types]} }
+  scope :purposes, :conditions => ["codes.type in (?)", PURPOSES]
+  scope :ordered_by_short_display, :order => 'short_display ASC'
 
   # is this still needed - especially given it has some complex Mtef/NHa etc logic ??!
   def self.deepest_nesting

@@ -1,5 +1,6 @@
 %head
   - page = "#{yield(:title)} | " if @content_for_title
   %title= "#{page}Health Resource Tracker "
+  = csrf_meta_tag
   = render 'layouts/include_tags'
   = yield(:head)

@@ -3,7 +3,7 @@ class CacheOrganizationUsersCount < ActiveRecord::Migration
     def Organization.readonly_attributes; nil end
     Organization.find(:all).each do |o|
       o.users_count = o.users.length
-      o.save(false)
+      o.save(validate: false)
     end
     load 'app/models/organization.rb'
   end

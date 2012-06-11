@@ -1,4 +1,5 @@
 class StaticPageController < ApplicationController
+
   layout 'promo_landing'
 
   def index

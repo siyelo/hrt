@@ -4,7 +4,7 @@
 
 puts "Loading codes.csv..."
 # Code.delete_all
-# if we do lookups by col id, not name, then FasterCSV
+# if we do lookups by col id, not name, then CSV
 # is more forgiving with (non)/quoted csv's
 $id_col            = 2
 $parent_id_col     = 3
@@ -57,7 +57,7 @@ end
 
 
 i = 0
-FasterCSV.foreach("db/seed_files/codes.csv", :headers => true) do |row|
+CSV.foreach("db/seed_files/codes.csv", :headers => true) do |row|
   begin
     i = i + 1
 

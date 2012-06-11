@@ -1,0 +1,183 @@
+
+/* SHARED HEADER STYLES */
+
+#header, #header_app
+  color: $primary_lighter
+  +pie-clearfix
+
+  #logo
+    color: $primary_dark
+    font-size: 30px
+    float: left
+    font-family: Avenir Black, sans-serif
+    font-weight: normal
+    margin: 0
+    padding: 50px 0 15px
+    text-decoration: none
+    +text-shadow(rgba(0, 0, 0, 0.4), 0, 0, 10px)
+    &:hover
+      color: $mid-blue
+      +text-shadow($light-blue, 0, 0, 15px)
+
+    img
+      float: left
+      position: relative
+      top: -3px
+
+    p
+      color: $org_name
+      font-size: 0.6em
+      letter-spacing: 0.02em
+      padding-left: 55px
+
+  .right
+    margin-top: 13px
+
+  #admin
+    float: right
+    font-family: 'Avenir'
+    width: 250px
+
+    &.login_form_opacity
+      +opacity(0.3)
+
+
+    span
+      color: $nav_font
+      font-size: 11px
+      float: right
+      padding-top: 14px
+      letter-spacing: 1px
+      padding-right: 10px
+      text-transform: uppercase
+      +text-shadow(#111, 0, 1px, 1px)
+
+    ul
+      +horizontal-list
+      border: 1px solid $nav
+      float: right
+      +box-shadow(rgba(255, 255, 255, 0.1), 0, 1px, 0)
+      +border-radius(6px)
+
+      li
+
+        padding: 0
+
+        &:first-child
+          border-right: 1px solid $nav
+          a
+            +border-left-radius
+            border-right: 1px solid $nav
+        &:last-child
+          border-left: 1px solid $nav
+          a
+            +border-right-radius
+            border-left: 1px solid $nav
+
+        a
+          background: $nav
+          color: $nav_font
+          display: inline-block
+          float: left
+          font-size: 11px
+          padding: 11px 12px 12px
+          text-decoration: none
+          +background(linear-gradient($nav_alt, $nav))
+          +text-shadow($nav - #222, 0, 1px, 1px)
+          img
+            margin: 0 2px -2px 0
+          &:hover, &:focus
+            background: $nav
+            color: #fff
+            +text-shadow($nav - #333, 0, 1px, 1px)
+          &.signin
+            text-transform: uppercase
+            img
+              margin-bottom: -5px
+
+    h2
+      color: $light-blue
+      font-size: 1em
+      padding-bottom: 2px
+
+/* SHARED HEADER STYLES end */
+
+
+/* LANDING PAGE HEADER STYLES */
+body.promo.landing
+  #header
+    #logo
+      color: rgba(255, 255, 255, 0.6)
+      font-family: Avenir Black, sans-serif
+      letter-spacing: 1px
+      text-transform: none
+      img
+        margin-right: 10px
+        position: relative
+        top: -12px
+      &:hover, &:focus
+        color: rgba(255, 255, 255, 0.9)
+        +text-shadow(rgba(0, 0, 0, 0.5), 0, 0, 10px)
+    #admin
+      margin-top: 37px
+      position: relative
+      z-index: 5
+      width: auto !important
+      p
+        color: $mid-blue + #111
+        float: right
+        font-size: 13px
+        font-weight: normal
+        padding: 14px 7px 0 0
+        text-align: right
+        +text-shadow($light-blue, 0, 1px, 0)
+      span
+        color: $dark-blue
+        +text-shadow(#ddd, 0, 1px, 1px)
+
+/* LANDING PAGE HEADER STYLES end */
+
+
+/* APP HEADER STYLES */
+
+#header_app
+  background: $primary_dark
+  height: 34px
+
+  .wrapper
+    +pie-clearfix
+
+  /* app logo styles - overriding the shared logo style */
+  #logo
+    height: 25px
+    padding: 7px 0
+    position: absolute
+    width: auto
+
+    p
+      float: left
+      font-family: 'Avenir Black', sans-serif
+      font-size: 12px
+      margin-top: 5px
+      padding: 0
+      text-transform: uppercase
+      +text-shadow($nav - #222, 0, 1px, 1px)
+
+  /* app logo styles end */
+
+  #admin
+    margin-top: 16px
+    p
+      clear: both
+      color: $nav_font
+      float: right
+      font-size: 11px
+      font-weight: normal
+      letter-spacing: 0.6px
+      margin: 5px 11px 0 0
+      +text-shadow($dark-blue, 0, 1px, 0)
+
+/* APP HEADER STYLES end */
+
+
+

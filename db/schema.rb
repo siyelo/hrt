@@ -1,15 +1,17 @@
-# This file is auto-generated from the current state of the database. Instead of editing this file, 
-# please use the migrations feature of Active Record to incrementally modify your database, and
-# then regenerate this schema definition.
+# encoding: UTF-8
+# This file is auto-generated from the current state of the database. Instead
+# of editing this file, please use the migrations feature of Active Record to
+# incrementally modify your database, and then regenerate this schema definition.
 #
-# Note that this schema.rb definition is the authoritative source for your database schema. If you need
-# to create the application database on another system, you should be using db:schema:load, not running
-# all the migrations from scratch. The latter is a flawed and unsustainable approach (the more migrations
+# Note that this schema.rb definition is the authoritative source for your
+# database schema. If you need to create the application database on another
+# system, you should be using db:schema:load, not running all the migrations
+# from scratch. The latter is a flawed and unsustainable approach (the more migrations
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120531122322) do
+ActiveRecord::Schema.define(:version => 20120614133930) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -52,6 +54,7 @@ ActiveRecord::Schema.define(:version => 20120531122322) do
     t.datetime "updated_at"
   end
 
+  add_index "code_splits", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
   add_index "code_splits", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|
@@ -78,8 +81,8 @@ ActiveRecord::Schema.define(:version => 20120531122322) do
     t.integer  "commentable_id"
     t.string   "commentable_type"
     t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
     t.integer  "parent_id"
   end
 
@@ -89,8 +92,8 @@ ActiveRecord::Schema.define(:version => 20120531122322) do
 
   create_table "currencies", :force => true do |t|
     t.float    "rate"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
     t.string   "from"
     t.string   "to"
   end
@@ -98,15 +101,15 @@ ActiveRecord::Schema.define(:version => 20120531122322) do
   create_table "data_requests", :force => true do |t|
     t.integer  "organization_id"
     t.string   "title"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
     t.date     "start_date"
   end
 
   create_table "data_responses", :force => true do |t|
     t.integer  "data_request_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
     t.integer  "organization_id"
     t.string   "state"
     t.integer  "projects_count",  :default => 0
@@ -125,8 +128,9 @@ ActiveRecord::Schema.define(:version => 20120531122322) do
     t.datetime "locked_at"
     t.datetime "failed_at"
     t.string   "locked_by"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
+    t.string   "queue"
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
@@ -137,8 +141,8 @@ ActiveRecord::Schema.define(:version => 20120531122322) do
     t.string   "document_content_type"
     t.integer  "document_file_size"
     t.datetime "document_updated_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",            :null => false
+    t.datetime "updated_at",            :null => false
     t.string   "visibility"
     t.text     "description"
   end
@@ -146,8 +150,8 @@ ActiveRecord::Schema.define(:version => 20120531122322) do
   create_table "funding_flows", :force => true do |t|
     t.integer  "organization_id_from"
     t.integer  "project_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
     t.decimal  "budget"
     t.text     "organization_text"
     t.integer  "self_provider_flag",   :default => 0
@@ -166,16 +170,16 @@ ActiveRecord::Schema.define(:version => 20120531122322) do
     t.integer  "organization_id"
     t.decimal  "spend"
     t.decimal  "budget"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
     t.boolean  "double_count"
     t.integer  "previous_id"
   end
 
   create_table "organizations", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                      :null => false
+    t.datetime "updated_at",                                      :null => false
     t.string   "raw_type"
     t.string   "fosaid"
     t.integer  "users_count",                      :default => 0
@@ -197,8 +201,8 @@ ActiveRecord::Schema.define(:version => 20120531122322) do
   create_table "outputs", :force => true do |t|
     t.integer  "activity_id"
     t.string   "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "projects", :force => true do |t|
@@ -206,8 +210,8 @@ ActiveRecord::Schema.define(:version => 20120531122322) do
     t.text     "description"
     t.date     "start_date"
     t.date     "end_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
     t.string   "currency"
     t.integer  "data_response_id"
     t.string   "budget_type"
@@ -218,8 +222,8 @@ ActiveRecord::Schema.define(:version => 20120531122322) do
 
   create_table "reports", :force => true do |t|
     t.string   "key"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
     t.string   "attachment_file_name"
     t.string   "attachment_content_type"
     t.integer  "attachment_file_size"
@@ -240,31 +244,40 @@ ActiveRecord::Schema.define(:version => 20120531122322) do
   create_table "targets", :force => true do |t|
     t.integer  "activity_id"
     t.string   "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "users", :force => true do |t|
     t.string   "email"
-    t.string   "crypted_password"
+    t.string   "encrypted_password"
     t.string   "password_salt"
-    t.string   "persistence_token"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
     t.integer  "roles_mask"
     t.integer  "organization_id"
     t.text     "text_for_organization"
     t.string   "full_name"
-    t.string   "perishable_token",      :default => "",    :null => false
-    t.boolean  "tips_shown",            :default => true
+    t.boolean  "tips_shown",             :default => true
     t.string   "invite_token"
-    t.boolean  "active",                :default => false
+    t.boolean  "active",                 :default => false
     t.integer  "location_id"
-    t.datetime "current_login_at"
-    t.datetime "last_login_at"
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.string   "remember_token"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",          :default => 0
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
   end
 
+  add_index "users", ["confirmation_token"], :name => "index_users_on_confirmation_token", :unique => true
   add_index "users", ["email"], :name => "index_users_on_email"
-  add_index "users", ["perishable_token"], :name => "index_users_on_perishable_token"
+  add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
 
 end

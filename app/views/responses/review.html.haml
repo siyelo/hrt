@@ -6,7 +6,7 @@
 
 %h1.main_heading Submit Response
 
-= error_messages_for :response, :header_message  => nil, :message => "Oops, we couldn't process your submission."
+= render 'shared/error_messages', :resource => @response, :message => "Oops, we couldn't process your submission."
 
 %ul{:class => "status section_form single wrapped #{flag}"}
   %li
@@ -136,4 +136,4 @@
 //%hr.divider
 %p.submit
   - if @response.submittable?
-    = link_to "Submit", submit_response_path(@response), :method => :put, :confirm => "Are you sure?", :class => "next big"
+    = link_to "Submit", submit_response_path(@response), :method => :put, :data => { :confirm => "Are you sure?" }, :class => "next big"

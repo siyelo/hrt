@@ -4,7 +4,7 @@
 %hr.heading
 %ul.horizontal
   %li
-    - link_to new_admin_user_path, :class => "create_alt" do
+    = link_to new_admin_user_path, :class => "create_alt" do
       = image_tag "new.png"
       Create User
 
@@ -17,7 +17,7 @@
     %p Create one or more users from a CSV file. You can save an Excel spreadsheet as a CSV file through File -> Save As, then select comma separated values (CSV) in the file format box under the file name.
 
     #import_csv
-      -form_tag create_from_file_admin_users_path, :multipart => true do
+      = form_tag create_from_file_admin_users_path, :multipart => true do
         .upbox
           = label_tag :file, "File"
           = file_field_tag :file
@@ -29,7 +29,7 @@
   #filter_help.left
     %p= search_message("users", @users.total_entries, params[:query], admin_users_url)
   #search.push
-    - form_tag admin_users_path, :method => :get do
+    = form_tag admin_users_path, :method => :get do
       = render 'shared/search_form'
 
   = render "admin/users/users", :users => @users, :show_organization => true

@@ -4,7 +4,7 @@
   %li= link_to 'Show all', edit_activity_or_ocost_path(outlay, :mode => params[:mode], :view => 'all'), :class => (params[:view] == 'all' ? 'active create_alt' : 'create_alt')
   - if params["mode"] != "inputs" && params["mode"] != "purposes"
     %li
-      - link_to "#", :class => "create_alt js_upload_btn" do
+      = link_to "#", :class => "create_alt js_upload_btn" do
         = image_tag "new.png"
         Upload
 

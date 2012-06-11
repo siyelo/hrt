@@ -1,6 +1,6 @@
 %h1.main_heading New data request
 
-= error_messages_for :request, :header_message  => nil, :message => "Oops, we couldn't save your changes."
+= render 'shared/error_messages', :resource => @request
 
-- form_for @request, :builder => CustomFormBuilder, :url => admin_requests_path, :html => {:class => 'basic_form js_form'} do |f|
+= form_for @request, :builder => CustomFormBuilder, :url => admin_requests_path, :html => {:class => 'basic_form js_form'} do |f|
   = render 'form', :f => f

@@ -2,7 +2,7 @@
 
 %h1.main_heading Data Requests
 %hr.heading
-- link_to new_admin_request_path, :class => "create_alt" do
+= link_to new_admin_request_path, :class => "create_alt" do
   = image_tag "new.png"
   Create Data Request
 .section_form.single
@@ -22,7 +22,7 @@
           %td.action
             %ul.manage_bar
               %li= link_to "Edit", edit_admin_request_path(request)
-              %li= link_to "Delete", admin_request_path(request), :method => :delete, :confirm => "Are you sure?"
+              %li= link_to "Delete", admin_request_path(request), :method => :delete, :data => { :confirm => "Are you sure?" }
 
 
   = will_paginate @requests

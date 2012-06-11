@@ -10,7 +10,7 @@ class Admin::Reports::DetailedController < Admin::BaseController
     # Data collected for the first request (id 8) is not valid due to changes
     # in the data structure of the application.  Therefore dynamic reports have
     # been disabled to prevent potentially incorrect reports from being generated.
-    render 'not_available' and return if @request.id == 8 && RAILS_ENV != 'test'
+    render 'not_available' and return if @request.id == 8 && Rails.env != 'test'
 
     @response   = current_response
     @reports    = @request.reports.all

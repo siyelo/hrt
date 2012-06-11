@@ -8,7 +8,7 @@ class CustomFormBuilder < ActionView::Helpers::FormBuilder
       error_tag = '<p class="input-errors">' +
         [instance.error_message].join(', ') +
         '</p>'
-      "<div class='input-box'>#{html_tag}#{error_tag}</div>"
+      "<div class='input-box'>#{html_tag}#{error_tag}</div>".html_safe
     end
   end
 
@@ -22,7 +22,8 @@ class CustomFormBuilder < ActionView::Helpers::FormBuilder
           hint = ""
         end
 
-        @template.content_tag(:li, field_label(field_name, *args) + super + hint,
+        @template.content_tag(:li, field_label(field_name, *args) +
+                              super(field_name, *args) + hint,
                               arguements[:wrapper_html])
       end
     end
@@ -43,10 +44,10 @@ class CustomFormBuilder < ActionView::Helpers::FormBuilder
   private
 
   def field_error(field_name)
-    if object.errors.invalid? field_name
+    if object.errors[field_name].present?
       @template.content_tag(:span,
-                            [object.errors.on(field_name)].flatten.first.sub(/^\^/, ''),
-                            :class => 'error_message')
+                            [object.errors[field_name].flatten.first.sub(/^\^/, ''),
+                            :class => 'error_message'])
     else
       ''
     end
@@ -55,8 +56,8 @@ class CustomFormBuilder < ActionView::Helpers::FormBuilder
   def field_label(field_name, *args)
     options = args.extract_options!
     label_options = options[:label_html] || {}
-    abbr = label_options[:required] ? '<abbr title="required">*</abbr>' : ''
-    label("#{field_name}#{abbr}", "#{options[:label]}#{abbr}", label_options)
+    abbr = label_options[:required] ? '<abbr title="required">*</abbr>'.html_safe : ''
+    label("#{field_name}#{abbr}".html_safe, "#{options[:label]}#{abbr}".html_safe, label_options)
   end
 
   def objectify_options(options)

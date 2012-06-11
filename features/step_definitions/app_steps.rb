@@ -15,11 +15,11 @@ Given /^a basic reporter setup with org "([^"]*)"$/ do |org|
 end
 
 Given /^a project$/ do
-  @project = Factory(:project)
+  @project = FactoryGirl.create(:project)
 end
 
 Given /^a reporter "([^"]*)" with email "([^"]*)" and password "([^"]*)"$/ do | name, email, password|
-@user = Factory(:reporter,
+@user = FactoryGirl.create(:reporter,
                 :full_name             => name,
                 :email                 => email,
                 :password              => password,
@@ -27,7 +27,7 @@ Given /^a reporter "([^"]*)" with email "([^"]*)" and password "([^"]*)"$/ do | 
 end
 
 Given /^an activity manager "([^"]*)" with email "([^"]*)" and password "([^"]*)"$/ do | name, email, password|
-@user = Factory(:activity_manager,
+@user = FactoryGirl.create(:activity_manager,
                 :full_name             => name,
                 :email                 => email,
                 :password              => password,
@@ -71,8 +71,8 @@ Given /^I am signed in as a sysadmin$/ do
 end
 
 Given /^a reporter "([^"]*)" in organization "([^"]*)"$/ do |email, org_name|
-  @organization = Factory(:organization, :name => org_name)
-  @user = Factory(:reporter,
+  @organization = FactoryGirl.create(:organization, :name => org_name)
+  @user = FactoryGirl.create(:reporter,
                   :email => email || 'reporter@hrtapp.com',
                   :password => 'password',
                   :password_confirmation => 'password',
@@ -80,8 +80,8 @@ Given /^a reporter "([^"]*)" in organization "([^"]*)"$/ do |email, org_name|
 end
 
 Given /^an activity manager "([^"]*)" in organization "([^"]*)"$/ do |email, org_name|
-  @organization = Factory(:organization, :name => org_name)
-  @user = Factory(:activity_manager,
+  @organization = FactoryGirl.create(:organization, :name => org_name)
+  @user = FactoryGirl.create(:activity_manager,
                   :email                 => email || 'activity_manager@hrtapp.com',
                   :password              => 'password',
                   :password_confirmation => 'password',
@@ -90,8 +90,8 @@ Given /^an activity manager "([^"]*)" in organization "([^"]*)"$/ do |email, org
 end
 
 Given /^a sysadmin "([^"]*)" in organization "([^"]*)"$/ do |email, org_name|
-  @organization = Factory(:organization, :name => org_name)
-  @user = Factory(:admin,
+  @organization = FactoryGirl.create(:organization, :name => org_name)
+  @user = FactoryGirl.create(:admin,
                   :email                 => email || 'sysadmin@hrtapp.com',
                   :password              => 'password',
                   :password_confirmation => 'password',
@@ -116,12 +116,6 @@ end
 Then /^I should see the "([^"]*)" tab is "([^"]*)"/ do |text, class_name|
   steps %Q{
     Then I should see "#{text}" within "li.#{class_name}"
-  }
-end
-
-Then /^I should see the visitors header$/ do
-  steps %Q{
-    And I should see "Sign in" within "div#admin"
   }
 end
 
@@ -160,7 +154,7 @@ end
 
 # band aid fix
 Given /^a data response to "([^"]*)" by "([^"]*)"$/ do |request, org|
-  @response = Factory(:data_response,
+  @response = FactoryGirl.create(:data_response,
                       :data_request => DataRequest.find_by_title(request),
                       :organization => Organization.find_by_name(org))
 end
@@ -360,10 +354,8 @@ Then /^I should receive a xls file(?: "([^"]*)")?/ do |file|
   result
 end
 
-When /^I hover over "([^"]*)"(?: within "([^"]*)")?$/ do |element, selector|
-  with_scope(selector) do
-    page.execute_script("$('#{element}').mouseover();")
-  end
+When /^I hover over "([^"]*)"?$/ do |element|
+  page.execute_script("$('#{element}').mouseover();")
 end
 
 Given /^now is "([^"]*)"$/ do |time|
@@ -379,7 +371,20 @@ When /^I dismiss the js popup$/ do
 end
 
 When /^I refresh the page$/ do
-  visit [ current_path, page.driver.last_request.env['QUERY_STRING'] ].reject(&:blank?).join('?')
+  case Capybara::current_driver
+  when :selenium
+    visit page.driver.browser.current_url
+  when :webkit
+    visit page.driver.browser.current_url
+  when :rack_test
+    visit page.driver.browser.current_url
+  when :racktest
+    visit [ current_path, page.driver.last_request.env['QUERY_STRING'] ].reject(&:blank?).join('?')
+  when :culerity
+    page.driver.browser.refresh
+  else
+    raise "unsupported driver, use rack::test or selenium/webdriver"
+  end
 end
 
 Given /^#{capture_model} state is: "([^"]*)"$/ do |name, state|
@@ -389,12 +394,12 @@ Given /^#{capture_model} state is: "([^"]*)"$/ do |name, state|
 end
 
 When /^a 100% location split exists with activity: "([^"]*)", location: "([^"]*)", spend_percentage: (\d+), budget_percentage: (\d+)$/ do |act_name, loc_name, spend_pc, budget_pc|
-   loc = Factory :location, :short_display => loc_name
+   loc = FactoryGirl.create :location, :short_display => loc_name
    activity = Activity.find_by_name act_name
-   Factory.create :location_spend_split, :code => loc,
+   FactoryGirl.create :location_spend_split, :code => loc,
      :activity => activity, :percentage => spend_pc,
      :cached_amount => activity.total_spend * (spend_pc.to_f/100)
-   Factory.create :location_budget_split, :code => loc,
+   FactoryGirl.create :location_budget_split, :code => loc,
      :activity => activity, :percentage => budget_pc,
      :cached_amount => activity.total_budget * (budget_pc.to_f/100)
 end
@@ -404,12 +409,19 @@ Then /^I should see the title text "([^"]*)"$/ do |title|
 end
 
 When /^a 100% input split exists with activity: "([^"]*)", input: "([^"]*)", spend_percentage: (\d+), budget_percentage: (\d+)$/ do |act_name, input_name, spend_pc, budget_pc|
-   input = Factory :input, :short_display => input_name
+   input = FactoryGirl.create :input, :short_display => input_name
    activity = Activity.find_by_name act_name
-   Factory.create :input_spend_split, :code => input,
+   FactoryGirl.create :input_spend_split, :code => input,
      :activity => activity, :percentage => spend_pc,
      :cached_amount => activity.total_spend * (spend_pc.to_f/100)
-   Factory.create :input_budget_split, :code => input,
+   FactoryGirl.create :input_budget_split, :code => input,
      :activity => activity, :percentage => budget_pc,
      :cached_amount => activity.total_budget * (budget_pc.to_f/100)
 end
+
+Then /^I should see the visitors header$/ do
+  steps %Q{
+    Then I should see "Health Resource Tracker Improving lives through better health policy"
+  }
+end
+

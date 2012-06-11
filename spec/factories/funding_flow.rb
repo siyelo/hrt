@@ -1,14 +1,16 @@
-Factory.define :funding_flow, :class => FundingFlow do |f|
-  f.from                  { Factory(:organization) }
-#  f.project               { Factory(:project) }
-  f.budget                { 90 }
-  f.spend                 { 100 }
-end
+FactoryGirl.define do
+  factory :funding_flow, :class => FundingFlow do |f|
+    f.from                  { FactoryGirl.create(:organization) }
+  #  f.project               { FactoryGirl.create(:project) }
+    f.budget                { 90 }
+    f.spend                 { 100 }
+  end
 
-Factory.define :funding_source, :class => FundingFlow, :parent => :funding_flow do |f|
-end
-Factory.define :in_flow, :class => FundingFlow, :parent => :funding_flow do |f|
-end
+  factory :funding_source, :class => FundingFlow, :parent => :funding_flow do |f|
+  end
+  factory :in_flow, :class => FundingFlow, :parent => :funding_flow do |f|
+  end
 
-Factory.define :implementer, :class => FundingFlow, :parent => :funding_flow do |f|
+  factory :implementer, :class => FundingFlow, :parent => :funding_flow do |f|
+  end
 end

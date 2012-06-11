@@ -15,8 +15,8 @@ describe Reports::ActivitiesController do
 
     before :each do
       controller.stub(:load_activity).and_return activity
-      @req = Factory :data_request
-      @reporter = Factory :reporter
+      @req = FactoryGirl.create :data_request
+      @reporter = FactoryGirl.create :reporter
       login @reporter
     end
 

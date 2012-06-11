@@ -9,7 +9,7 @@ cols = {
 
 i = 0
 rows = []
-FasterCSV.foreach("db/fixes/participant_logins.csv", :headers=>true) do |row|
+CSV.foreach("db/fixes/participant_logins.csv", :headers=>true) do |row|
   begin
     i = i + 1
     a = {}
@@ -31,7 +31,7 @@ user_not_connected_to_org = rows.select {|s| !s[:user].try(:organization)}.colle
 #connecting user to the org
 # first we found org using heuristic name searching
 # Organization.all.collect{|o| o if o.name.include? "National Hospital"}.uniq
-# then saved it w the id and using save(false)
+# then saved it w the id and using save(validate: false)
 
 missing_users         = rows.select {|s| s[:user]==nil}
 orgs_of_missing_users = missing_users.collect{|u| u[:site_organization]}.uniq.collect{|org| {:org => Organization.find_by_name(org), :orig => org} }

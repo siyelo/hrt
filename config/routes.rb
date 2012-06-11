@@ -1,83 +1,123 @@
-ActionController::Routing::Routes.draw do |map|
-  # ROOT
-  map.root :controller => 'static_page', :action => 'index'
+Hrt::Application.routes.draw do
 
-  # LOGIN/LOGOUT
-  map.resource  :user_session
-  map.resource  :registration, :only => [:edit, :update]
-  map.logout    'logout', :controller => 'user_sessions', :action => 'destroy'
-  map.resources :password_resets, :only => [:create, :edit, :update]
+  devise_for :users, controllers: {
+    sessions: 'users/sessions',
+    registrations: 'users/registrations',
+    passwords: 'users/passwords'
+  }
 
-  # PROFILE
-  map.resource :profile, :only => [:edit, :update, :disable_tips],
-    :member => {:disable_tips => :put}
+  resources :invitations, :only => [:edit, :update]
 
-  # STATIC PAGES
-  map.about_page 'about', :controller => 'static_page', :action => 'about'
-
-  map.resources :comments, :only => [:create]
-
-  # ALL USERS
-  map.dashboard 'dashboard', :controller => 'dashboard', :action => :index
-
-  # ADMIN
-  map.namespace :admin do |admin|
-    admin.resources :requests
-    admin.resources :responses, :only => [:index, :new, :create]
-    admin.resources :organizations,
-      :collection => {:duplicate => :get, :remove_duplicate  => :put,
-        :download_template => :get, :create_from_file => :post}
-    admin.resources :reports, :only => [:index],
-      :collection => { :locations => :get, :district_workplan => :get,
-                       :funders => :get  }
-    admin.namespace :reports do |reports|
-      reports.resources :detailed, :only => [:index, :show],
-        :member => { :generate => :get },
-        :collection => { :mark_implementer_splits => :put}
+  root :to => 'static_page#index'
+  resource :profile, :only => [:disable_tips] do
+    member do
+      put :disable_tips
     end
-    admin.resources :documents, :as => :files
-    admin.resources :currencies, :except => [:show]
-    admin.resources :users, :except => [:show],
-      :collection => {:create_from_file => :post, :download_template => :get}
-    admin.resources :codes, :only => [:index, :edit, :update],
-      :collection => {:create_from_file => :post, :download_template => :get}
-    admin.resources :comments
+  end
+  match 'about' => 'static_page#about', :as => :about_page
+  resources :comments, :only => [:create]
+  match 'dashboard' => 'dashboard#index', :as => :dashboard
+  namespace :admin do
+    resources :requests
+    resources :responses, :only => [:index, :new, :create]
+    resources :organizations do
+      collection do
+        get :duplicate
+        put :remove_duplicate
+        get :download_template
+        post :create_from_file
+      end
+    end
+    resources :reports, :only => [:index] do
+      collection do
+        get :locations
+        get :district_workplan
+        get :funders
+      end
+    end
+    namespace :reports do
+      resources :detailed, :only => [:index, :show] do
+        collection do
+          put :mark_implementer_splits
+        end
+        member do
+          get :generate
+        end
+      end
+    end
+    resources :documents, :path => 'files'
+    resources :currencies, :except => [:show]
+    resources :users, :except => [:show] do
+      collection do
+        post :create_from_file
+        get :download_template
+      end
+    end
+    resources :codes, :only => [:index, :edit, :update] do
+      collection do
+        post :create_from_file
+        get :download_template
+      end
+    end
+    resources :comments
   end
 
-  # ACTIVITY MANAGER
-  map.activity_manager_workplan 'activity_manager/workplan', :controller => 'users',
-    :action => :activity_manager_workplan
+  match 'activity_manager/workplan' => 'users#activity_manager_workplan', :as => :activity_manager_workplan
+  resources :responses, :only => [] do
+    member do
+      get :review
+      put :submit
+      put :reject
+      put :accept
+      put :send_data_response
+      put :approve_all_budgets
+    end
+  end
+  resources :projects, :except => [:show] do
+    collection do
+      get :download_template
+      get :export_workplan
+      get :export
+      post :import
+    end
+  end
+  resources :activities, :except => [:index, :show] do
+    member do
+      put :sysadmin_approve
+      put :activity_manager_approve
+    end
+  end
+  resources :other_costs, :except => [:index, :show] do
+    collection do
+      post :create_from_file
+      get :download_template
+    end
+  end
+  resources :organizations, :only => [:index, :edit, :update] do
+    collection do
+      get :export
+    end
+  end
+  resources :documents
+  resources :reports, :only => [:index] do
+    collection do
+      get :inputs
+      get :locations
+    end
+  end
 
-  # REPORTER USER: DATA ENTRY
-  map.resources :responses, :only => [],
-    :member => {:review => :get, :submit => :put,
-      :reject => :put, :accept => :put,
-      :send_data_response => :put, :approve_all_budgets => :put}
-
-  map.resources :projects, :except => [:show],
-    :collection => {:download_template => :get,
-      :export_workplan => :get,
-      :export => :get,
-      :import => :post}
-
-  map.resources :activities, :except => [:index, :show],
-    :member => {:sysadmin_approve => :put, :activity_manager_approve => :put}
-
-  map.resources :other_costs, :except => [:index, :show],
-    :collection => {:create_from_file => :post, :download_template => :get}
-
-  map.resources :organizations, :only => [:index, :edit, :update],
-    :collection => { :export => :get }
-
-
-  map.resources :documents, :as => :files
-
-  map.resources :reports, :only => [:index],
-    :collection => {:inputs => :get, :locations => :get}
-  map.namespace :reports do |reports|
-    reports.resources :activities, :only => [:show],
-      :member => {:inputs => :get, :locations => :get}
-    reports.resources :projects, :only => [:show],
-      :member => { :locations => :get, :inputs => :get }
+  namespace :reports do
+    resources :activities, :only => [:show] do
+      member do
+        get :inputs
+        get :locations
+      end
+    end
+    resources :projects, :only => [:show] do
+      member do
+        get :locations
+        get :inputs
+      end
+    end
   end
 end

@@ -18,7 +18,7 @@ Comment.all.each do |comment|
     user = comment.commentable.organization.users.first rescue nil
     if user
       comment.user = user
-      comment.save(false)
+      comment.save(validate: false)
     else
       comment.destroy
     end

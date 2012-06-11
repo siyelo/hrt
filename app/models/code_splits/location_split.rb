@@ -1,5 +1,5 @@
 class LocationSplit < CodeSplit
-  named_scope :roots, lambda { { :conditions => [
+  scope :roots, lambda { { :conditions => [
     "code_splits.code_id IN (?)",
     Location.roots.map{|c| c.id}] } }
 end

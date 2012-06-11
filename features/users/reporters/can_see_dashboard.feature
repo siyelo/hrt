@@ -8,8 +8,7 @@ Feature: Reporter can see dashboard
       And I am signed in as "reporter@hrtapp.com"
 
   Scenario: See menu tabs when a Data Req is selected
-    Then I should see "Dashboard"
-      And I should see "Home" within the main nav
+    Then I should see "Home" within the main nav
       And I should see "Projects" within the main nav
       And I should see "Reports" within the main nav
       And I should see "Settings" within the main nav

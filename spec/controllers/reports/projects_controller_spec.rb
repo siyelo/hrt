@@ -16,8 +16,8 @@ describe Reports::ProjectsController do
 
     before :each do
       controller.stub(:current_response).and_return current_response
-      @req = Factory :data_request
-      @reporter = Factory :reporter
+      @req = FactoryGirl.create :data_request
+      @reporter = FactoryGirl.create :reporter
       login @reporter
     end
 

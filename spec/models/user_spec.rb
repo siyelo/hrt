@@ -27,48 +27,48 @@ describe User do
     it { should validate_presence_of(:organization_id) }
 
     context "should not validate the presence of a location id if the user is not an activity manager" do
-      subject { Factory(:reporter) }
+      subject { FactoryGirl.create(:reporter) }
       it { should_not validate_presence_of(:location_id)}
     end
 
     context "existing record in db" do
-      subject { Factory(:reporter, :organization => Factory(:organization) ) }
+      subject { FactoryGirl.create(:reporter, :organization => FactoryGirl.create(:organization) ) }
       it { should validate_uniqueness_of(:email).case_insensitive }
     end
 
     it "cannot assign blank role" do
-      user = Factory.build(:reporter, :roles => [])
+      user = FactoryGirl.build(:reporter, :roles => [])
       user.save
-      user.errors.on(:roles).should include('is not included in the list')
+      user.errors[:roles].should include('is not included in the list')
     end
 
     it "cannot assign unexisting role" do
-      user = Factory.build(:reporter, :roles => ['admin123'])
+      user = FactoryGirl.build(:reporter, :roles => ['admin123'])
       user.save
-      user.errors.on(:roles).should include('is not included in the list')
+      user.errors[:roles].should include('is not included in the list')
     end
   end
 
   it "notifies organization it needs to create responses" do
-    u = Factory.build :reporter
+    u = FactoryGirl.build :reporter
     org = u.organization
     u.should_receive(:create_organization_responses).once
-    u.run_callbacks(:after_create)
+    u.save
   end
 
   describe "save and invite" do
     before :each do
-      @sysadmin = Factory(:sysadmin)
+      @sysadmin = FactoryGirl.create(:sysadmin)
 
     end
     it "does not send an invite if the user is not valid" do
-      @user = Factory.build(:reporter, :email => nil, :full_name => nil, :organization => nil)
+      @user = FactoryGirl.build(:reporter, :email => nil, :full_name => nil, :organization => nil)
       @user.save_and_invite(@sysadmin).should be_nil
       User.all.count.should == 1
     end
 
     it "sends an invite if hte user is valid" do
-      @user = Factory.build(:reporter)
+      @user = FactoryGirl.build(:reporter)
       @user.save_and_invite(@sysadmin).should be_true
       User.count.should == 2
     end
@@ -77,27 +77,29 @@ describe User do
   describe "password validations" do
     before :each do
       @user = User.new(:email => 'blah@blah.com', :full_name => 'blah',
-                       :password => "", :password_confirmation => "", :organization => Factory(:organization),
+                       :password => "", :password_confirmation => "", :organization => FactoryGirl.create(:organization),
                        :roles => ['reporter'])
     end
 
     # this is fine provided you send an invitation too!!
     it "should not ask on (admin) creation" do
-      @user.save.should == true
+      @user.save.should == false
+      @user.errors[:password].should include("can't be blank")
+      @user.errors[:password].should include("is too short (minimum is 6 characters)")
     end
 
     it "should reject empty pw on registration" do
       @user.save
       @user.attributes = {"password"=>"", "password_confirmation"=>""}
       @user.activate.should == false
-      @user.errors.on(:password).should == "is too short (minimum is 6 characters)"
+      @user.errors[:password].should include("is too short (minimum is 6 characters)")
     end
 
     it "should reject short pw on registration" do
       @user.save
       @user.password = "123"; @user.password_confirmation = "123"
       @user.activate.should == false
-      @user.errors.on(:password).should == "is too short (minimum is 6 characters)"
+      @user.errors[:password].should include("is too short (minimum is 6 characters)")
     end
 
     it "should accept valid pw on registration" do
@@ -110,20 +112,10 @@ describe User do
       @user.save
       @user.password = "123456"; @user.password_confirmation = "123456"
       @user.activate.should == true
-      @user.password = ""; @user.password_confirmation = ""
+      @user.password = "1"; @user.password_confirmation = "1"
       @user.full_name = "new name"
       @user.save.should == false
-      @user.errors.on(:password_confirmation).should == "is too short (minimum is 6 characters)"
-    end
-
-    it "should not validate on update if not modified" do
-      @user.save
-      @user.password = "123456"; @user.password_confirmation = "123456"
-      @user.activate.should == true
-      @user.reload
-      params = {"full_name"=>"new name", "password"=>"", "password_confirmation"=>"",
-        "email"=>'blah@blah.com', "tips_shown"=>"1"}
-      User.first.update_attributes(params).should == true
+      @user.errors[:password].should include("is too short (minimum is 6 characters)")
     end
 
     it "should reject short pw on update" do
@@ -132,37 +124,32 @@ describe User do
       @user.activate.should == true
       @user.password = "123"; @user.password_confirmation = "123"
       @user.save.should == false
-      @user.errors.on(:password).should == "is too short (minimum is 6 characters)"
+      @user.errors[:password].should include("is too short (minimum is 6 characters)")
     end
   end
 
   describe "passwords using save & invite API" do
     before :each do
       @user = User.new(:email => 'blah@blah.com', :full_name => 'blah',
-                       :password => "", :password_confirmation => "", :organization => Factory(:organization),
+                       :password => "", :password_confirmation => "", :organization => FactoryGirl.create(:organization),
                        :roles => ['reporter'])
-      @user.save_and_invite(Factory :admin)
+      @user.save_and_invite(FactoryGirl.create :admin)
     end
 
     it "should allow (admin) to create a user w/out a password" do
       @user.id.should_not be_nil #was saved
     end
 
-    it "should allow (admin) to update a user before they have registered" do
-      @user.full_name = "bob rob"
-      @user.save.should == true
-    end
-
     it "should NOT allow (user) to accept invitation (go active) w/out a password" do
       @user.activate.should == false
-      @user.errors.on(:password).should == "is too short (minimum is 6 characters)"
+      @user.errors[:password].should include("is too short (minimum is 6 characters)")
     end
 
     it "should NOT allow (user) to accept invitation (go active) with a short password" do
       @user.password = '123'
       @user.password_confirmation = '123'
       @user.activate.should == false
-      @user.errors.on(:password).should == "is too short (minimum is 6 characters)"
+      @user.errors[:password].should include("is too short (minimum is 6 characters)")
     end
 
     it "should allow (user) to accept invitation (go active) with a good password" do
@@ -174,58 +161,58 @@ describe User do
 
   describe "roles" do
     it "is sysadmin when has admin role" do
-      user = Factory(:user, :roles => ['admin'])
+      user = FactoryGirl.create(:user, :roles => ['admin'])
       user.sysadmin?.should be_true
     end
 
     it "is reporter when has reporter role" do
-      user = Factory(:user, :roles => ['reporter'])
+      user = FactoryGirl.create(:user, :roles => ['reporter'])
       user.reporter?.should be_true
     end
 
     it "is activity_manager when has activity_manager role" do
-      user = Factory(:user, :roles => ['activity_manager'])
+      user = FactoryGirl.create(:user, :roles => ['activity_manager'])
       user.activity_manager?.should be_true
     end
 
     it "is admin when roles_mask = 1" do
-      user = Factory(:user, :roles => ['admin'])
+      user = FactoryGirl.create(:user, :roles => ['admin'])
       user.roles.should == ['admin']
       user.roles_mask.should == 1
     end
 
     it "is reporter when roles_mask = 2" do
-      user = Factory(:user, :roles => ['reporter'])
+      user = FactoryGirl.create(:user, :roles => ['reporter'])
       user.roles.should == ['reporter']
       user.roles_mask.should == 2
     end
 
     it "is admin and reporter when roles_mask = 3" do
-      user = Factory(:user, :roles => ['admin', 'reporter'])
+      user = FactoryGirl.create(:user, :roles => ['admin', 'reporter'])
       user.roles.should == ['admin', 'reporter']
       user.roles_mask.should == 3
     end
 
     it "is activity_manager when roles_mask = 4" do
-      user = Factory(:user, :roles => ['activity_manager'])
+      user = FactoryGirl.create(:user, :roles => ['activity_manager'])
       user.roles.should == ['activity_manager']
       user.roles_mask.should == 4
     end
 
     it "is admin and activity_manager when roles_mask = 5" do
-      user = Factory(:user, :roles => ['admin', 'activity_manager'])
+      user = FactoryGirl.create(:user, :roles => ['admin', 'activity_manager'])
       user.roles.should == ['admin', 'activity_manager']
       user.roles_mask.should == 5
     end
 
     it "is reporter and activity_manager when roles_mask = 6" do
-      user = Factory(:user, :roles => ['reporter', 'activity_manager'])
+      user = FactoryGirl.create(:user, :roles => ['reporter', 'activity_manager'])
       user.roles.should == ['reporter', 'activity_manager']
       user.roles_mask.should == 6
     end
 
     it "is admin, reporter and activity_manager when roles_mask = 7" do
-      user = Factory(:user, :roles => ['admin', 'reporter', 'activity_manager'])
+      user = FactoryGirl.create(:user, :roles => ['admin', 'reporter', 'activity_manager'])
       user.roles.should == ['admin', 'reporter', 'activity_manager']
       user.roles_mask.should == 7
     end
@@ -233,14 +220,14 @@ describe User do
 
   describe "roles= can be assigned" do
     it "can assign 1 role" do
-      user = Factory(:reporter)
+      user = FactoryGirl.create(:reporter)
       user.roles = ['admin']
       user.save
       user.reload.roles.should == ['admin']
     end
 
     it "can assign 3 roles" do
-      user = Factory(:reporter)
+      user = FactoryGirl.create(:reporter)
       user.roles = ['admin', 'reporter', 'activity_manager']
       user.save
       user.reload.roles.should == ['admin', 'reporter', 'activity_manager']
@@ -249,9 +236,9 @@ describe User do
 
   describe "role change" do
     it "removed organizations when role is changed from activity_manager to else" do
-      org1 = Factory(:organization)
-      org2 = Factory(:organization)
-      user = Factory(:activity_manager, :organizations => [org1, org2])
+      org1 = FactoryGirl.create(:organization)
+      org2 = FactoryGirl.create(:organization)
+      user = FactoryGirl.create(:activity_manager, :organizations => [org1, org2])
       user.roles = ['reporter']
       user.save
       user.organizations.should be_empty

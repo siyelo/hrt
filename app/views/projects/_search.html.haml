@@ -1,5 +1,5 @@
 #search
-  - form_tag projects_path, :method => :get do
+  = form_tag projects_path, :method => :get do
     #search_box
       = text_field_tag 'query', params[:query], {:size => 40}
     = hidden_field_tag :direction, params[:direction]

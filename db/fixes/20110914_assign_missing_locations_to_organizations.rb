@@ -21,7 +21,7 @@ orgs_without_location.each do |organization|
     if location
       puts "Assigning District: #{location.short_display} to Organization: #{organization.name}"
       organization.location = location
-      organization.save(false)
+      organization.save(validate: false)
     end
   end
 end

@@ -14,7 +14,7 @@
 %hr.heading
 %ul.horizontal
   %li
-    - link_to new_admin_response_path, :class => "create_alt" do
+    = link_to new_admin_response_path, :class => "create_alt" do
       = image_tag "new.png"
       Create Response
 
@@ -25,7 +25,7 @@
 
 .section_form.wrapped.last.topless
   #search.push
-    - form_tag admin_responses_path, :method => :get do
+    = form_tag admin_responses_path, :method => :get do
       = render 'shared/search_form'
 
   #filter_help

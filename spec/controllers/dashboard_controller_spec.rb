@@ -13,9 +13,9 @@ describe DashboardController do
     context role do
       describe "#index" do
         it "renders doshboard" do
-          organization = Factory(:organization)
-          Factory(:data_request, :organization => organization)
-          user = Factory(role, :organization => organization)
+          organization = FactoryGirl.create(:organization)
+          FactoryGirl.create(:data_request, :organization => organization)
+          user = FactoryGirl.create(role, :organization => organization)
           login(user)
 
           dashboard = stub('dashboard', :template => role)
@@ -31,7 +31,7 @@ describe DashboardController do
 
   describe "no request" do
     it "renders no_request template when no request" do
-      sysadmin = Factory(:sysadmin)
+      sysadmin = FactoryGirl.create(:sysadmin)
       login sysadmin
       get :index
       response.should be_success

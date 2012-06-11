@@ -4,7 +4,7 @@
     %p Create one or more organizations from a CSV file. You can save an Excel spreadsheet as a CSV file through File -> Save As, then select comma separated values (CSV) in the file format box under the file name.
 
     #import_csv
-      -form_tag create_from_file_admin_organizations_path, :multipart => true do
+      = form_tag create_from_file_admin_organizations_path, :multipart => true do
         .upbox
           = label_tag :file, "File"
           = file_field_tag :file

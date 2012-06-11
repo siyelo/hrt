@@ -11,8 +11,8 @@ describe Admin::ReportsController do
 
   context "as a reporter" do
     before :each do
-      @req = Factory :data_request
-      @reporter = Factory :reporter
+      @req = FactoryGirl.create :data_request
+      @reporter = FactoryGirl.create :reporter
       login @reporter
     end
 
@@ -25,8 +25,8 @@ describe Admin::ReportsController do
 
   context "as an admin" do
     before :each do
-      @req = Factory :data_request
-      @user = Factory :sysadmin
+      @req = FactoryGirl.create :data_request
+      @user = FactoryGirl.create :sysadmin
       login @user
     end
 
@@ -39,7 +39,7 @@ describe Admin::ReportsController do
     it "downloads xls district report" do
       location = mock_model(Location)
       location.stub(:short_display).and_return('district1')
-      Location.stub(:find).and_return(location)
+      Location.stub(:find_by_short_display).and_return(location)
       get :district_workplan, :id => 1
       response.should be_success
       response.header["Content-Type"].should == "application/vnd.ms-excel"

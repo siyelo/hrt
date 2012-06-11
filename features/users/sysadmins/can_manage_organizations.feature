@@ -126,13 +126,13 @@ Feature: Admin can manage organizations
 
   Scenario: An admin can see an organization's users
     When I follow "Edit" within a link in the 1st row of the table
-    Then I should see "Users" within "h2"
+    Then I should see "Users"
     And I should see "sysadmin@hrtapp.com"
 
   Scenario: admin can see available filters
-    Then I should see "Reporting" within a link in the filters list
-    Then I should see "Non-Reporting" within a link in the filters list
-    And I should see "All" within a link in the filters list
+     Then I should see "Reporting"
+     Then I should see "Non-Reporting"
+     And I should see "All"
 
   Scenario: Sysadmin can filter organizations by type
     Given an organization exists with name: "No user org"

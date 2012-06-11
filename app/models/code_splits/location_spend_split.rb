@@ -1,4 +1,5 @@
-class LocationSpendSplit < LocationSplit; end
+class LocationSpendSplit < LocationSplit
+end
 
 
 # == Schema Information

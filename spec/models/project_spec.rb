@@ -32,7 +32,7 @@ describe Project do
   describe "Callbacks" do
     it "downcases the budget_type" do
       basic_setup_response
-      project = Factory(:project, :data_response => @response,
+      project = FactoryGirl.create(:project, :data_response => @response,
                               :budget_type => "ON")
       project.valid?.should be_true
       project.budget_type.should == "on"
@@ -55,18 +55,19 @@ describe Project do
 
     it "should validate length of name" do
       basic_setup_response
-      @project = Factory.build(:project, :name => nil, :data_response => @response)
+      @project = FactoryGirl.build(:project, :name => nil, :data_response => @response)
       @project.save.should be_false
       # TODO - filter to just one error
-      @project.errors.on(:name).should == ["can't be blank", "is too short (minimum is 1 characters)"]
+      @project.errors[:name].should include("can't be blank")
+      @project.errors[:name].should include("is too short (minimum is 1 characters)")
       @project.name = "1111111111222222222233333333334444444444555555555566666666667777777777"
       @project.save.should be_false
-      @project.errors.on(:name).should == "is too long (maximum is 64 characters)"
+      @project.errors[:name].should include("is too long (maximum is 64 characters)")
     end
 
     it "validates that the budget_type is either on or off" do
       basic_setup_response
-      project = Factory.build(:project, :data_response => @response, :budget_type => nil)
+      project = FactoryGirl.build(:project, :data_response => @response, :budget_type => nil)
       project.valid?.should be_false
       project.budget_type = "on"
       project.valid?.should be_true
@@ -85,9 +86,9 @@ describe Project do
 
     it "should have at least one funder" do
       basic_setup_response
-      @project = Factory.build(:project, :data_response => @response, :in_flows => [])
+      @project = FactoryGirl.build(:project, :data_response => @response, :in_flows => [])
       @project.save.should be_false
-      @project.errors.on(:base).should == "Project must have at least one Funding Source."
+      @project.errors[:base].should include("Project must have at least one Funding Source.")
     end
 
     context "subject" do
@@ -132,13 +133,13 @@ describe Project do
       p = Project.new(
         {"name"=>"Kuraneza", "start_date"=>"2011-08-29", "budget_type"=>"on",
          "in_flows_attributes"=> {"0"=>{"organization_id_from"=>"#{@organization.id}", "spend"=>"1", "budget"=>"1"}},
-         "data_response_id"=>"#{@response.id}", "_destroy"=>"", "currency"=>"RWF", "description"=>"Describe the proje",
+         "data_response_id"=>"#{@response.id}", "currency"=>"RWF", "description"=>"Describe the proje",
          "end_date"=>"2012-08-29",
          "activities_attributes"=>
             {"0"=>{"name"=>"Activity name not more than 64 characters otherwise you will not",
              "data_response_id" => @response.id , "implementer_splits_attributes"=>
-              {"0"=>{"updated_at"=>"", "spend"=>"6000.0", "data_response_id"=>"#{@response.id}",
-                     "organization_mask"=>"#{@organization.id}", "budget"=>"10000.0", "_destroy"=>""}},
+              {"0"=>{"spend"=>"6000.0", "budget"=>"10000.0",
+                     "organization_mask"=>"#{@organization.id}"}},
            "description"=>"Description of activity"}}}
       )
       p.in_flows.should have(1).item
@@ -148,7 +149,7 @@ describe Project do
 
     it "should not save without the optional currency override" do
       basic_setup_response
-      p = Factory.build :project, :currency => "", :data_response => @response
+      p = FactoryGirl.build :project, :currency => "", :data_response => @response
       p.save.should == false
     end
   end
@@ -156,13 +157,13 @@ describe Project do
   describe "#locations" do
     it "returns uniq locations only from district classifications" do
       basic_setup_project
-      activity1 = Factory(:activity, :data_response => @response, :project => @project)
-      activity2 = Factory(:activity, :data_response => @response, :project => @project)
-      location1 = Factory(:location)
-      location2 = Factory(:location)
-      Factory(:location_budget_split, :activity => activity1, :code => location1)
-      Factory(:location_budget_split, :activity => activity1, :code => location2)
-      Factory(:location_budget_split, :activity => activity2, :code => location1)
+      activity1 = FactoryGirl.create(:activity, :data_response => @response, :project => @project)
+      activity2 = FactoryGirl.create(:activity, :data_response => @response, :project => @project)
+      location1 = FactoryGirl.create(:location)
+      location2 = FactoryGirl.create(:location)
+      FactoryGirl.create(:location_budget_split, :activity => activity1, :code => location1)
+      FactoryGirl.create(:location_budget_split, :activity => activity1, :code => location2)
+      FactoryGirl.create(:location_budget_split, :activity => activity2, :code => location1)
       @project.reload
       @project.locations.length.should == 2
       @project.locations.should include(location1)
@@ -173,15 +174,15 @@ describe Project do
   describe "#in_flows_total" do
     it "should return sum of spends/budgets" do
       basic_setup_project
-      @donor1 = Factory :organization;
-      Factory :user, :organization => @donor1
-      @donor2 = Factory :organization
-      Factory :user, :organization => @donor2
+      @donor1 = FactoryGirl.create :organization;
+      FactoryGirl.create :user, :organization => @donor1
+      @donor2 = FactoryGirl.create :organization
+      FactoryGirl.create :user, :organization => @donor2
       @response1     = @donor1.latest_response
       @response2     = @donor2.latest_response
-      @project1      = Factory(:project, :data_response => @response1, :in_flows =>
-        [ Factory.build(:funding_flow, :from => @donor1, :spend => 10, :budget => 20),
-          Factory.build(:funding_flow, :from => @donor2, :spend => 10, :budget => 20)])
+      @project1      = FactoryGirl.create(:project, :data_response => @response1, :in_flows =>
+        [ FactoryGirl.build(:funding_flow, :from => @donor1, :spend => 10, :budget => 20),
+          FactoryGirl.build(:funding_flow, :from => @donor2, :spend => 10, :budget => 20)])
       @project1.in_flows_total_budget.to_f.should == 40
       @project1.in_flows_total_spend.to_f.should == 20
     end

@@ -4,6 +4,6 @@ DataResponse.with_state('rejected').all.each do |data_response|
     puts "  Unapproving activity #{activity.id}"
     activity.approved    = false
     activity.am_approved = false
-    activity.save(false)
+    activity.save(validate: false)
   end
 end

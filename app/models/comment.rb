@@ -16,7 +16,7 @@ class Comment < ActiveRecord::Base
   default_scope :order => 'created_at ASC'
 
   ### Named scopes
-  named_scope :on_all, lambda { |dr_ids|
+  scope :on_all, lambda { |dr_ids|
     { :joins => "LEFT OUTER JOIN projects p ON p.id = comments.commentable_id
                  LEFT OUTER JOIN data_responses dr ON dr.id = comments.commentable_id
                  LEFT OUTER JOIN activities a ON a.id = comments.commentable_id
@@ -36,7 +36,7 @@ class Comment < ActiveRecord::Base
      :order => "created_at DESC" }
   }
 
-  named_scope :limit, lambda { |limit| {:limit => limit} }
+  scope :limit, lambda { |limit| {:limit => limit} }
 
   def self.paginate_for_responses(data_responses, page)
     Comment.on_all(data_responses.map{|r| r.id}).

@@ -7,7 +7,7 @@
     %br
     %p Please note that the file import currently supports files with around 50 rows - if you are having problems with the file upload, please try upload individual projects/activities in separate files.  If you encounter a timeout error, please post a problem at <a href='https://hrtapp.tenderapp.com/kb'>TenderApp</a> and the support team will assist you.
     %br
-    - form_tag(import_projects_path(url_params), :multipart => true) do
+    = form_tag(import_projects_path(url_params), :multipart => true) do
 
       .upbox
         = label_tag :file, "File"

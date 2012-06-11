@@ -8,7 +8,7 @@ end
 
 i = 1
 auto_created_passwords = []
-FasterCSV.foreach("db/fixes/activity_manager_users_sep_10_7th.csv", :headers => true ) do |row|
+CSV.foreach("db/fixes/activity_manager_users_sep_10_7th.csv", :headers => true ) do |row|
   i = i + 1
   org_name      = row[3].try(:strip)
   user_email    = row[2].try(:strip)

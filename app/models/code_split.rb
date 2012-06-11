@@ -24,27 +24,27 @@ class CodeSplit < ActiveRecord::Base
 
   ### Named scopes
 
-  named_scope :with_code_id,
+  scope :with_code_id,
               lambda { |code_id| { :conditions =>
                 ["code_splits.code_id = ?", code_id]} }
-  named_scope :with_code_ids,
+  scope :with_code_ids,
               lambda { |code_ids| { :conditions =>
                 ["code_splits.code_id IN (?)", code_ids]} }
-  named_scope :with_activity,
+  scope :with_activity,
               lambda { |activity_id| { :conditions =>
                 ["code_splits.activity_id = ?", activity_id]} }
-  named_scope :with_activities,
+  scope :with_activities,
               lambda { |activity_ids|{ :conditions =>
                 ["code_splits.activity_id in (?)", activity_ids]} }
-  named_scope :with_type,
+  scope :with_type,
               lambda { |type| { :conditions =>
                 ["code_splits.type = ?", type]} }
-  named_scope :with_types,
+  scope :with_types,
               lambda { |types| { :conditions =>
                 ["code_splits.type IN (?)", types]} }
-  named_scope :sorted, {
+  scope :sorted, {
               :order => "code_splits.cached_amount DESC" }
-  named_scope :with_request,
+  scope :with_request,
               lambda { |request_id| {
                 :joins =>
                   "INNER JOIN activities ON
@@ -100,7 +100,7 @@ class CodeSplit < ActiveRecord::Base
   ### Instance Methods
 
   def percentage=(amount)
-    amount.present? ? write_attribute(:percentage, amount.to_f.round_with_precision(2)) : write_attribute(:percentage, nil)
+    amount.present? ? write_attribute(:percentage, amount.to_f.round(2)) : write_attribute(:percentage, nil)
   end
 
   # Checks if it's a budget code assignment

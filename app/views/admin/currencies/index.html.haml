@@ -4,7 +4,7 @@
 %hr.heading
 %ul.horizontal
   %li
-    - link_to new_admin_currency_path, :class => "create_alt" do
+    = link_to new_admin_currency_path, :class => "create_alt" do
       = image_tag "new.png"
       Create Currency
 
@@ -13,7 +13,7 @@
   #filter_help.left
     %p= search_message("currencies", @currencies.total_entries, params[:query], admin_currencies_url)
   #search.push
-    - form_tag admin_currencies_path, :method => :get do
+    = form_tag admin_currencies_path, :method => :get do
       = render 'shared/search_form'
   %table.standard
     %thead
@@ -34,6 +34,6 @@
           %td
             %ul.manage_bar
               %li= link_to "Edit", edit_admin_currency_path(currency)
-              %li= link_to "x", admin_currency_path(currency), :confirm => "Are you sure you want to delete this currency?", :method => :delete, :class => "right"
+              %li= link_to "x", admin_currency_path(currency), :data => { :confirm => "Are you sure you want to delete this currency?" }, :method => :delete, :class => "right"
 
 = will_paginate @currencies

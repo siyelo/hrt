@@ -1,4 +1,4 @@
-- f.inputs :class => 'inputs' do
+= f.inputs :class => 'inputs' do
   %li.last
     %ul.section_form.first
       = f.input :type_string, :collection => ['ActivityCostCategory', 'Beneficiary', 'Code', 'CostCategory', 'Location', 'Mtef', 'Nasa', 'Nha', 'Nsp', 'OtherCostCode', 'OtherCostType'], :as => :select, :label => 'Type', :required => false, :hint => "Type of code"
@@ -15,5 +15,5 @@
 
   %li.last
     %ul.horizontal.section_form.last.connect
-      - f.buttons :class => 'buttons' do
-        = f.commit_button @code.new_record? ? "Create New Code" : "Update Code", :button_html => {:class => 'next'}
+      = f.actions :class => 'buttons' do
+        = f.action :submit, :label => (@code.new_record? ? "Create New Code" : "Update Code"), :button_html => {:class => 'next'}

@@ -3,9 +3,9 @@ class Location < Code
 
   alias_attribute :name, :short_display
 
-  named_scope :national_level, { :conditions => "lower(codes.short_display) = 'national level'" }
-  named_scope :without_national_level, { :conditions => "lower(codes.short_display) != 'national level'" }
-  named_scope :sorted, { :order => "codes.short_display" }
+  scope :national_level, { :conditions => "lower(codes.short_display) = 'national level'" }
+  scope :without_national_level, { :conditions => "lower(codes.short_display) != 'national level'" }
+  scope :sorted, { :order => "codes.short_display" }
 end
 
 # == Schema Information

@@ -29,15 +29,15 @@ describe Organization do
   end
 
   describe "Validations" do
-    subject { Factory(:organization) }
+    subject { FactoryGirl.create(:organization) }
     it { should validate_presence_of(:name) }
     it { should validate_presence_of(:raw_type) }
     it { should validate_uniqueness_of(:name) }
 
     it "is valid when currency is included in the list" do
-      organization = Factory.build(:organization, :currency => 'USD')
+      organization = FactoryGirl.build(:organization, :currency => 'USD')
       organization.save
-      organization.errors.on(:currency).should be_blank
+      organization.errors[:currency].should be_blank
     end
   end
 
@@ -51,21 +51,21 @@ describe Organization do
 
   describe "named_scopes" do
     it "order organizations by name" do
-      org1 = Factory(:organization, :name => 'Org2')
-      org2 = Factory(:organization, :name => 'Org1')
+      org1 = FactoryGirl.create(:organization, :name => 'Org2')
+      org2 = FactoryGirl.create(:organization, :name => 'Org1')
 
       Organization.ordered.should == [org2, org1]
     end
 
     # integration test
     it "finds all reporting orgs" do
-      user = Factory :user
+      user = FactoryGirl.create :user
       Organization.reporting.should == [user.organization]
     end
 
     # integration test
     it "finds all nonreporting orgs" do
-      organization = Factory(:organization)
+      organization = FactoryGirl.create(:organization)
       Organization.nonreporting.should == [organization]
     end
   end
@@ -84,9 +84,9 @@ describe Organization do
   end
 
   describe "#create_data_responses!" do
-    let(:org_requester) { Factory(:organization) }
-    let(:request) { Factory(:data_request, :organization => org_requester) }
-    let(:user) { Factory :user } # callback does the work
+    let(:org_requester) { FactoryGirl.create(:organization) }
+    let(:request) { FactoryGirl.create(:data_request, :organization => org_requester) }
+    let(:user) { FactoryGirl.create :user } # callback does the work
     let(:organization) { user.organization.reload }
 
     it "creates data_responses for each data_request unless a response exists" do
@@ -104,10 +104,10 @@ describe Organization do
 
   describe "#last logged in user" do
     before :each do
-      @org = Factory.build(:organization)
-      @user = Factory.build(:user,
-                            :last_login_at => DateTime.parse('2009-05-04 02:00:00'),
-                            :current_login_at => DateTime.parse('2009-06-04 02:00:00'))
+      @org = FactoryGirl.build(:organization)
+      @user = FactoryGirl.build(:user,
+                            :last_sign_in_at => DateTime.parse('2009-05-04 02:00:00'),
+                            :current_sign_in_at => DateTime.parse('2009-06-04 02:00:00'))
       @org.users << @user
     end
 
@@ -116,16 +116,16 @@ describe Organization do
     end
 
     it "returns nil when nobody has ever logged in" do
-      @user.last_login_at = nil
-      @user.current_login_at = nil
-      user2 = Factory.build(:user, :organization => @org)
+      @user.last_sign_in_at = nil
+      @user.current_sign_in_at = nil
+      user2 = FactoryGirl.build(:user, :organization => @org)
       @org.users << @user; @org.users << user2
       @org.current_user_logged_in.should be_nil
     end
 
     # authlogic idiosyncracy
     it " returns last logged in as nil on first sign in" do
-      @user.last_login_at = nil
+      @user.last_sign_in_at = nil
       @org.current_user_logged_in.should == @user
     end
   end
@@ -137,7 +137,7 @@ describe Organization do
 
     it "can have many out_flows" do
       @organization.out_flows.should have(0).items
-      Factory(:funding_flow,
+      FactoryGirl.create(:funding_flow,
               :project => @project, :from => @organization)
       @organization.reload
       @organization.out_flows.should have(1).item
@@ -145,7 +145,7 @@ describe Organization do
 
     it "can donate to a project" do
       @organization.donor_for.should have(0).items
-      Factory(:funding_flow,
+      FactoryGirl.create(:funding_flow,
               :project => @project, :from => @organization)
       @organization.reload
       @organization.donor_for.should have(1).item
@@ -154,36 +154,36 @@ describe Organization do
 
   describe "remove duplicate organization" do
     before :each do
-      @organization       = Factory(:organization)
-      Factory(:data_request, :organization => @organization)
-      @target_org         = Factory(:organization, :name => "Target org")
-      @duplicate_org      = Factory(:organization, :name => "Duplicate org")
-      @target_org_user    = Factory(:user, :organization => @target_org)
-      @duplicate_org_user = Factory(:user, :organization => @duplicate_org)
+      @organization       = FactoryGirl.create(:organization)
+      FactoryGirl.create(:data_request, :organization => @organization)
+      @target_org         = FactoryGirl.create(:organization, :name => "Target org")
+      @duplicate_org      = FactoryGirl.create(:organization, :name => "Duplicate org")
+      @target_org_user    = FactoryGirl.create(:user, :organization => @target_org)
+      @duplicate_org_user = FactoryGirl.create(:user, :organization => @duplicate_org)
       @target_response    = @target_org.reload.latest_response
       @duplicate_response = @duplicate_org.reload.latest_response
-      Factory(:data_request, :organization => @organization)
+      FactoryGirl.create(:data_request, :organization => @organization)
       @target_response2    = @target_org.latest_response
       @duplicate_response2 = @duplicate_org.latest_response
     end
 
     it "should use the lower of the two started response states" do
-      @target_org.responses.latest_first.first.accept!
-      @duplicate_org.responses.latest_first.first.start!
+      @target_org.reload.responses.latest_first.first.accept!
+      @duplicate_org.reload.responses.latest_first.first.start!
       Organization.merge_organizations!(@target_org, @duplicate_org)
       @target_org.responses.latest_first.first.state.should == 'started'
     end
 
     it "should use the duplicate response state if target is unstarted" do
-      @target_org.responses.latest_first.first.state = 'unstarted'
-      @duplicate_org.responses.latest_first.first.start!
+      @target_org.reload.responses.latest_first.first.state = 'unstarted'
+      @duplicate_org.reload.responses.latest_first.first.start!
       Organization.merge_organizations!(@target_org, @duplicate_org)
       @target_org.responses.latest_first.first.state.should == 'started'
     end
 
     it "should use the target response state if duplicate is unstarted" do
-      @target_org.responses.latest_first.first.submit!
-      @duplicate_org.responses.latest_first.first.state = 'unstarted'
+      @target_org.reload.responses.latest_first.first.submit!
+      @duplicate_org.reload.responses.latest_first.first.state = 'unstarted'
       Organization.merge_organizations!(@target_org, @duplicate_org)
       @target_org.responses.latest_first.first.state.should == 'submitted'
     end
@@ -203,8 +203,8 @@ describe Organization do
     end
 
     it "moves projects from duplicate to target organization" do
-      project1 = Factory(:project, :data_response => @duplicate_response)
-      project2 = Factory(:project, :data_response => @duplicate_response2)
+      project1 = FactoryGirl.create(:project, :data_response => @duplicate_response)
+      project2 = FactoryGirl.create(:project, :data_response => @duplicate_response2)
 
       Organization.merge_organizations!(@target_org, @duplicate_org)
       all_organizations = Organization.all
@@ -221,11 +221,11 @@ describe Organization do
     end
 
     it "moves activities from duplicate to target organization" do
-      project1 = Factory(:project, :data_response => @duplicate_response)
-      project2 = Factory(:project, :data_response => @duplicate_response2)
-      activity1 = Factory(:activity, :data_response => @duplicate_response,
+      project1 = FactoryGirl.create(:project, :data_response => @duplicate_response)
+      project2 = FactoryGirl.create(:project, :data_response => @duplicate_response2)
+      activity1 = FactoryGirl.create(:activity, :data_response => @duplicate_response,
                           :project => project1)
-      activity2 = Factory(:activity, :data_response => @duplicate_response2,
+      activity2 = FactoryGirl.create(:activity, :data_response => @duplicate_response2,
                           :project => project2)
 
       Organization.merge_organizations!(@target_org, @duplicate_org)
@@ -236,7 +236,7 @@ describe Organization do
     end
 
     it "should move other costs without a project" do
-      oc = Factory(:other_cost_fully_coded, :data_response => @duplicate_response)
+      oc = FactoryGirl.create(:other_cost_fully_coded, :data_response => @duplicate_response)
       Organization.merge_organizations!(@target_org, @duplicate_org)
       @target_response.other_costs.should include(oc)
       oc.reload
@@ -246,8 +246,8 @@ describe Organization do
 
     context "when referenced" do
       before :each do
-        organization  = Factory(:organization, :name => "other org")
-        user = Factory :user, :organization => organization
+        organization  = FactoryGirl.create(:organization, :name => "other org")
+        user = FactoryGirl.create :user, :organization => organization
         data_response = organization.latest_response
         @other_project = Project.new(:data_response => data_response,
                                      :name => "p1",
@@ -260,9 +260,9 @@ describe Organization do
                                        :organization_id_from => @duplicate_org.id,
                                        :budget => 10, :spend => 20])
         @other_project.save!
-        @other_activity = Factory(:activity, :data_response => data_response,
+        @other_activity = FactoryGirl.create(:activity, :data_response => data_response,
                                   :project => @other_project)
-        split = Factory(:implementer_split, :activity => @other_activity,
+        split = FactoryGirl.create(:implementer_split, :activity => @other_activity,
                         :organization => @duplicate_org)
         @other_activity.reload.save #recalculates IS total of activity
       end
@@ -283,16 +283,16 @@ describe Organization do
 
   describe "counter cache" do
     it "caches users count" do
-      o = Factory :organization
+      o = FactoryGirl.create :organization
       o.users_count.should == 0
-      Factory :reporter, :organization => o
+      FactoryGirl.create :reporter, :organization => o
       o.reload.users_count.should == 1
     end
 
     it "should update users count when user is moved to other organization" do
-      o1       = Factory(:organization)
-      o2       = Factory(:organization)
-      reporter = Factory(:reporter, :organization => o1)
+      o1       = FactoryGirl.create(:organization)
+      o2       = FactoryGirl.create(:organization)
+      reporter = FactoryGirl.create(:reporter, :organization => o1)
       reporter.organization.should == o1
       o1.reload.users_count.should == 1
       o2.reload.users_count.should == 0
@@ -307,13 +307,13 @@ describe Organization do
   describe "associations" do
     describe "#organization_managers" do
       before :each do
-        @organization = Factory(:organization)
+        @organization = FactoryGirl.create(:organization)
       end
 
       it "should only return activity managers from the organization passed to it" do
-        u1 = Factory(:reporter, :organization => @organization)
-        u2 = Factory(:sysadmin, :organization => @organization)
-        u3 = Factory(:activity_manager, :organization => @organization)
+        u1 = FactoryGirl.create(:reporter, :organization => @organization)
+        u2 = FactoryGirl.create(:sysadmin, :organization => @organization)
+        u3 = FactoryGirl.create(:activity_manager, :organization => @organization)
         u3.organizations << @organization
         @organization.managers.should include(u3)
         @organization.managers.should_not include(u1)
@@ -321,10 +321,10 @@ describe Organization do
       end
 
       it "should return all activity managers from the organization passed to it" do
-        u1 = Factory(:reporter, :organization => @organization)
-        u2 = Factory(:sysadmin, :organization => @organization)
-        u3 = Factory(:activity_manager, :organization => @organization)
-        u4 = Factory(:activity_manager, :organization => @organization)
+        u1 = FactoryGirl.create(:reporter, :organization => @organization)
+        u2 = FactoryGirl.create(:sysadmin, :organization => @organization)
+        u3 = FactoryGirl.create(:activity_manager, :organization => @organization)
+        u4 = FactoryGirl.create(:activity_manager, :organization => @organization)
         u3.organizations << @organization; u4.organizations << @organization
         @organization.managers.should include(u3)
         @organization.managers.should include(u4)
@@ -333,10 +333,10 @@ describe Organization do
       end
 
       it "should return activity managers that are able to manage the organization even if they aren't part of it" do
-        org = Factory(:organization)
-        u1 = Factory(:reporter, :organization => @organization)
-        u2 = Factory(:sysadmin, :organization => @organization)
-        u3 = Factory(:activity_manager, :organization => org)
+        org = FactoryGirl.create(:organization)
+        u1 = FactoryGirl.create(:reporter, :organization => @organization)
+        u2 = FactoryGirl.create(:sysadmin, :organization => @organization)
+        u3 = FactoryGirl.create(:activity_manager, :organization => org)
         u3.organizations << @organization
         @organization.managers.should include(u3)
         @organization.managers.should_not include(u1)
@@ -348,8 +348,8 @@ describe Organization do
 
   describe "latest_response" do
     before :each do
-      @req = Factory :request
-      @user = Factory :user
+      @req = FactoryGirl.create :request
+      @user = FactoryGirl.create :user
       @org = @user.organization
     end
     it "should return the last data response that was created on this org" do
@@ -365,10 +365,10 @@ describe Organization do
 
   describe "#user_emails" do
     it "should return email addresses of users in the organization, up to the limit" do
-      @req = Factory :request
-      @org = Factory :organization
-      @reporter = Factory :reporter, :email => 'reporter@org.com', :organization => @org
-      @reporter2 = Factory :reporter, :email => 'reporter2@org.com', :organization => @org
+      @req = FactoryGirl.create :request
+      @org = FactoryGirl.create :organization
+      @reporter = FactoryGirl.create :reporter, :email => 'reporter@org.com', :organization => @org
+      @reporter2 = FactoryGirl.create :reporter, :email => 'reporter2@org.com', :organization => @org
       @org.user_emails(1).should == ['reporter@org.com']
     end
   end
@@ -379,17 +379,17 @@ describe Organization do
       @response.submit!
       @organization.latest_response.status.should == "Submitted"
       result = @organization.destroy
-      @organization.errors.on(:base).should == nil
+      @organization.errors[:base].should be_empty
       result.should be_true
     end
 
     it "should allow deletion if they have non-project costs. FIXME: see #19381309" do
       basic_setup_implementer_split
-      oc = Factory(:other_cost_fully_coded, :data_response => @response) # non-project OC
+      oc = FactoryGirl.create(:other_cost_fully_coded, :data_response => @response) # non-project OC
       @response.submit!
       @organization.latest_response.status.should == "Submitted"
       result = @organization.destroy
-      @organization.errors.on(:base).should == nil
+      @organization.errors[:base].should be_empty
       result.should be_true
     end
 
@@ -397,18 +397,18 @@ describe Organization do
       it "should allow deletion when only self-Funder references exist" do
         basic_setup_project
         result = @organization.destroy
-        @organization.errors.on(:base).should == nil
+        @organization.errors[:base].should be_empty
         result.should be_true
       end
 
       it "should not allow deletion when external Funder references exist" do
         basic_setup_project
-        user1 = Factory :user
+        user1 = FactoryGirl.create :user
         org1 = user1.organization
-        proj1 = Factory(:project, :data_response => org1.latest_response)
-        ff1 = Factory(:funding_flow, :project => proj1, :from => @organization)
+        proj1 = FactoryGirl.create(:project, :data_response => org1.latest_response)
+        ff1 = FactoryGirl.create(:funding_flow, :project => proj1, :from => @organization)
         @organization.destroy.should be_false
-        @organization.errors.on(:base).should include "Cannot delete organization with (external) Funder references"
+        @organization.errors[:base].should include("Cannot delete organization with (external) Funder references")
       end
 
       it "should allow deletion when only internal Funder references exist" do
@@ -419,11 +419,11 @@ describe Organization do
       end
 
       def setup_a_project_that_references_funder(funder)
-        user = Factory :user
+        user = FactoryGirl.create :user
         organization = user.organization
         response     = organization.latest_response
         project      = Project.new(:data_response => response,
-                                   :name => "non_factory_project_name_#{rand(100_000_000)}",
+                                   :name => "non_Factory_project_name_#{rand(100_000_000)}",
                                    :budget_type => "on",
                                    :description => "proj descr",
                                    :currency => "USD",
@@ -439,18 +439,18 @@ describe Organization do
         self_funded(@project)
         setup_a_project_that_references_funder(@organization)
         @organization.destroy.should be_false
-        @organization.errors.on(:base).should include "Cannot delete organization with (external) Funder references"
+        @organization.errors[:base].should include("Cannot delete organization with (external) Funder references")
       end
     end
 
     describe "internal vs external Implementer references" do
       it "should not allow deletion when external Implementer references exist (and no Purpose splits exist)" do
         basic_setup_implementer_split # nb: sets up a self-implementer
-        other_org    = Factory(:organization)
-        @implementer_split = Factory(:implementer_split,
+        other_org    = FactoryGirl.create(:organization)
+        @implementer_split = FactoryGirl.create(:implementer_split,
                                      :activity => @activity, :organization => other_org)
         other_org.destroy.should be_false
-        other_org.errors.on(:base).should include "Cannot delete organization with (external) Implementer references"
+        other_org.errors[:base].should include("Cannot delete organization with (external) Implementer references")
       end
 
       it "should allow deletion when only internal Implementer references exist" do
@@ -458,17 +458,17 @@ describe Organization do
         @split.organization = @organization
         @split.save!
         result = @organization.destroy
-        @organization.errors.on(:base).should == nil
+        @organization.errors[:base].should be_empty
         result.should be_true
       end
 
       def setup_an_activity_that_references_implementer(implementer)
-        user = Factory :user
+        user = FactoryGirl.create :user
         organization = user.organization
         data_response = organization.latest_response
-        project      = Factory(:project, :data_response => data_response)
-        activity     = Factory(:activity, :data_response => data_response, :project => project)
-        split = Factory(:implementer_split, :activity => activity,
+        project      = FactoryGirl.create(:project, :data_response => data_response)
+        activity     = FactoryGirl.create(:activity, :data_response => data_response, :project => project)
+        split = FactoryGirl.create(:implementer_split, :activity => activity,
                         :organization => implementer)
         activity.save! #recalculate implementer split total on activity
       end
@@ -477,7 +477,7 @@ describe Organization do
         basic_setup_implementer_split
         setup_an_activity_that_references_implementer(@organization)
         @organization.destroy.should be_false
-        @organization.errors.on(:base).should include "Cannot delete organization with (external) Implementer references"
+        @organization.errors[:base].should include("Cannot delete organization with (external) Implementer references")
       end
     end
   end

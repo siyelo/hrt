@@ -3,25 +3,25 @@
   - if current_user
     %ul
       %li
-        - link_to edit_profile_path do
+        = link_to edit_user_registration_path do
           My Profile
       %li
-        - link_to "http://hrtapp.tenderapp.com/", :target => "_blank" do
+        = link_to "http://hrtapp.tenderapp.com/", :target => "_blank" do
           Help
       %li
-        - link_to logout_path do
+        = link_to destroy_user_session_path, :method => :delete do
           Sign Out
     %p
       = "#{current_user.email}"
 
   - else
-    - form_for UserSession.new, :url => user_session_path, :html => {:class => "login_form"} do |f|
+    = form_for User.new, :url => new_user_session_path, :html => {:id => 'login_form', :class => "login_form"} do |f|
       %ol.inputs
         %li
           = f.label :email
           = f.text_field :email, :tabindex => 1
         %li
-          = f.label :password, "Password #{link_to("(Reset password)", "#", :id => 'password_reset')}"
+          = f.label :password, "Password #{link_to("(Reset password)", "#", :id => 'password_reset')}".html_safe
           = f.password_field :password, :tabindex => 2
         %li
           = f.check_box :remember_me
@@ -31,10 +31,10 @@
         = f.submit "Sign in"
 
 
-    - form_tag password_resets_path, :id => 'new_password_reset', :style => 'display: none;', :class => 'login_form' do
+    = form_for User.new, :url => user_password_path, :html => {:id => 'password_reset_form', :style => 'display: none;', :class => 'login_form'} do |f|
       %ol.inputs
         %li.single
-          = label_tag :email, "Email #{link_to("(Back to Sign in)", "#", :id => 'sign_in')}"
-          = text_field_tag :email
+          = f.label :email, "Email #{link_to("(Back to Sign in)", "#", :id => 'sign_in')}".html_safe
+          = f.text_field :email
       .buttons
-        = submit_tag "Send"
+        = f.submit "Send"

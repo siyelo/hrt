@@ -1,4 +1,4 @@
-- f.inputs :class => 'inputs' do
+= f.inputs :class => 'inputs' do
   %li.last
     %ul.section_form.first
       = render 'projects/basic_fields', :f => f
@@ -15,14 +15,14 @@
 
   %li.last
     %ul.horizontal.section_form.last.connect
-      - f.buttons :class => 'buttons', :style => 'float: none' do
-        = f.commit_button :button_html => {:class => "last next"}
+      = f.actions :class => 'buttons', :style => 'float: none' do
+        = f.action :submit, :button_html => {:class => "last next"}
         %li
           = link_to "Cancel", projects_path, :class => "js_toggle_projects_listing cancel"
 
 - unless @project.new_record?
   .delete_section
-    = link_to "Delete this Project", project_path(@project), :confirm => "Are you sure you want to delete this Project?", :method => :delete, :class => 'delete_action'
+    = link_to "Delete this Project", project_path(@project), :method => :delete, :class => 'delete_action', :data => { :confirm => "Are you sure you want to delete this Project?" }
     %p
       %strong Warning:
       Once you delete a Project, you will lose all data associated with it, and there is no undo.

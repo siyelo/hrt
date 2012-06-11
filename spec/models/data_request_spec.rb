@@ -23,18 +23,20 @@ describe DataRequest do
   end
 
   describe "AliasAttributes" do
-    dr = Factory.build(:data_request, :title => "blar")
-    dr.name.should == "blar"
+    it "assigns name" do
+      dr = FactoryGirl.build(:data_request, :title => "blar")
+      dr.name.should == "blar"
+    end
   end
 
   describe "Callbacks" do
     # after_create :create_data_responses
     it "creates data_responses for each reporting organization after data_request is created" do
-      org1 = Factory(:organization)
-      Factory :user, :organization => org1
-      org2 = Factory(:organization)
-      Factory :user, :organization => org2
-      data_request = Factory.create(:data_request, :organization => org1)
+      org1 = FactoryGirl.create(:organization)
+      FactoryGirl.create :user, :organization => org1
+      org2 = FactoryGirl.create(:organization)
+      FactoryGirl.create :user, :organization => org2
+      data_request = FactoryGirl.create(:data_request, :organization => org1)
       data_request.data_responses.count.should == 2
       organizations = data_request.data_responses.map(&:organization)
 
@@ -43,36 +45,36 @@ describe DataRequest do
     end
 
     it "does not create data_responses for Non-Reporting organizations" do
-      org = Factory(:organization, :raw_type => 'Non-Reporting')
-      Factory(:data_request, :organization => org)
+      org = FactoryGirl.create(:organization, :raw_type => 'Non-Reporting')
+      FactoryGirl.create(:data_request, :organization => org)
 
       org.data_responses.should be_empty
     end
   end
 
   describe "#previous_request" do
-    let(:data_request) { Factory(:data_request, :start_date => "2011-01-01") }
+    let(:data_request) { FactoryGirl.create(:data_request, :start_date => "2011-01-01") }
 
     it "returns nil when no previous request" do
       data_request.previous_request.should be_nil
     end
 
     it "returns the previous request" do
-      previous_request = Factory(:data_request, :start_date => "2010-01-01")
+      previous_request = FactoryGirl.create(:data_request, :start_date => "2010-01-01")
 
       data_request.previous_request.should == previous_request
     end
   end
 
   describe "#next_request" do
-    let(:data_request) { Factory(:data_request, :start_date => "2011-01-01") }
+    let(:data_request) { FactoryGirl.create(:data_request, :start_date => "2011-01-01") }
 
     it "returns nil when no next request" do
       data_request.next_request.should be_nil
     end
 
     it "returns the next request" do
-      next_request = Factory(:data_request, :start_date => "2012-01-01")
+      next_request = FactoryGirl.create(:data_request, :start_date => "2012-01-01")
       data_request.next_request.should == next_request
     end
   end

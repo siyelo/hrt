@@ -35,7 +35,7 @@ Feature: Reporter can enter a code breakdown for each activity
       And an implementer_split exists with budget: "5000000", spend: "6000000", organization: the organization, activity: the activity
       When I follow "Projects"
       And I follow "activity1"
-      #since we used a factory above, need save to refresh cache by saving activity
+      #since we used a FactoryGirl.create above, need save to refresh cache by saving activity
       And I press "Save"
       And I follow "Purposes" within ".section_nav"
       And I fill in "activity[classifications][purpose_budget_split][1]" with "100"
@@ -125,7 +125,7 @@ Feature: Reporter can enter a code breakdown for each activity
       And an implementer_split exists with budget: "5000000", spend: "6000000", organization: the organization, activity: the activity
       When I follow "Projects"
       And I follow "activity1"
-      #since we used a factory above, need save to refresh cache by saving activity
+      #since we used a FactoryGirl.create above, need save to refresh cache by saving activity
       And I press "Save"
       And I follow "Purposes" within ".section_nav"
       Then the "spend_purposes" checkbox should not be checked
@@ -154,7 +154,7 @@ Feature: Reporter can enter a code breakdown for each activity
       And a location exists with short_display: "National", id: 5
       When I follow "Projects"
       And I follow "othercost1"
-      #since we used a factory above, need save to refresh cache by saving activity
+      #since we used a FactoryGirl.create above, need save to refresh cache by saving activity
       And I press "Save"
       And I follow "Locations" within ".section_nav"
       Then the "spend_locations" checkbox should not be checked
@@ -227,7 +227,7 @@ Feature: Reporter can enter a code breakdown for each activity
       And an implementer_split exists with budget: "5000000", spend: "6000000", organization: the organization, activity: the activity
       When I follow "Projects"
       And I follow "activity1"
-      #since we used a factory above, need save to refresh cache by saving activity
+      #since we used a FactoryGirl.create above, need save to refresh cache by saving activity
       And I press "Save"
       And I follow "Inputs" within ".section_nav"
       And I fill in "activity[classifications][input_budget_split][3]" with "99"
@@ -257,7 +257,7 @@ Feature: Reporter can enter a code breakdown for each activity
         And I press "Save & Add Inputs >"
         And I press "Save & Add Targets >"
         And I press "Save & Go to Overview >"
-      Then I should see "data_request1" within "h1"
+      Then I should see "data_request1" within "#projects_listing h1"
 
     Scenario: Reporter can follow Indirect Costs workflow for other cost
       Given an other cost exists with name: "OC1", data_response: the data_response, project: the project
@@ -265,4 +265,4 @@ Feature: Reporter can enter a code breakdown for each activity
         And I follow "OC1"
       When I press "Save & Add Locations >"
         And I press "Save & Go to Overview >"
-      Then I should see "data_request1" within "h1"
+      Then I should see "data_request1" within "#projects_listing h1"

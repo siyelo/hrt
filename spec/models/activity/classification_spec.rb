@@ -15,11 +15,11 @@ describe Activity, "Classification" do
    ].each do |valid_method, klass, amount_field, code_type, all_valid_method|
     describe "#{valid_method}" do
       before :each do
-        @activity = Factory(:activity, :data_response => @response,
+        @activity = FactoryGirl.create(:activity, :data_response => @response,
                            :project => @project)
-        @split = Factory :implementer_split, :activity => @activity,
+        @split = FactoryGirl.create :implementer_split, :activity => @activity,
           amount_field => 100, :organization => @organization
-        @code     = Factory code_type
+        @code     = FactoryGirl.create code_type
         @activity.reload
         @activity.save
       end
@@ -47,7 +47,7 @@ describe Activity, "Classification" do
   describe "budget_classified?" do
     before :each do
       basic_setup_activity
-      @split = Factory :implementer_split, :activity => @activity,
+      @split = FactoryGirl.create :implementer_split, :activity => @activity,
         :spend => 100, :budget => 100, :organization => @organization
       @activity.reload
       @activity.save
@@ -94,7 +94,7 @@ describe Activity, "Classification" do
   describe "spend_classified?" do
     before :each do
       basic_setup_activity
-      @split = Factory :implementer_split, :activity => @activity,
+      @split = FactoryGirl.create :implementer_split, :activity => @activity,
         :spend => 100, :budget => 100, :organization => @organization
       @activity.reload
       @activity.save
@@ -140,7 +140,7 @@ describe Activity, "Classification" do
   describe "classified?" do
     before :each do
       basic_setup_activity
-      @split = Factory :implementer_split, :activity => @activity,
+      @split = FactoryGirl.create :implementer_split, :activity => @activity,
         :spend => 100, :budget => 100, :organization => @organization
       @activity.reload
       @activity.save

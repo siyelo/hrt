@@ -8,5 +8,5 @@ data_request.each do |dr|
   dr.year_3 = true
   dr.year_4 = true
   dr.year_5 = true
-  dr.save(false) # Save without validations
+  dr.save(validate: false) # Save without validations
 end

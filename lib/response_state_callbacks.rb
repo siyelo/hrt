@@ -15,7 +15,7 @@ module ResponseStateCallbacks
            (self.class == Project && (in_flows_total_spend +
                                       in_flows_total_spend) > 0)
           response.state = 'started'
-          response.save(false)
+          response.save(validate: false)
         end
       end
     end
@@ -26,7 +26,7 @@ module ResponseStateCallbacks
         if !response.unstarted? && response.projects.empty? &&
             response.other_costs.without_a_project.empty?
           response.state = 'unstarted'
-          response.save(false)
+          response.save(validate: false)
         end
       end
     end

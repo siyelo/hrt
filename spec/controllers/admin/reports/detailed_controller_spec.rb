@@ -1,6 +1,9 @@
 require 'spec_helper'
 
 describe Admin::Reports::DetailedController do
+
+  include ActionDispatch::TestProcess
+
   before :each do
     login_as_admin
   end
@@ -15,7 +18,7 @@ describe Admin::Reports::DetailedController do
 
     context "file is correct" do
       it "sets flash notice" do
-        file = ActionController::TestUploadedFile.new('spec/fixtures/activity_overview.xls', "application/vnd.ms-excel")
+        file = fixture_file_upload('/activity_overview.xls', "application/vnd.ms-excel")
         ImplementerSplit.should_receive(:mark_double_counting).and_return(true)
         put :mark_implementer_splits, :file => file
         flash[:notice].should == "Your file is being processed, please reload this page in a couple of minutes to see the results"
@@ -24,14 +27,14 @@ describe Admin::Reports::DetailedController do
 
     context "valid format" do
       it "accepts xls format" do
-        file = ActionController::TestUploadedFile.new('spec/fixtures/activity_overview.xls', "application/vnd.ms-excel")
+        file = fixture_file_upload('/activity_overview.xls', "application/vnd.ms-excel")
         ImplementerSplit.should_receive(:mark_double_counting).and_return(true)
         put :mark_implementer_splits, :file => file
         flash[:notice].should == "Your file is being processed, please reload this page in a couple of minutes to see the results"
       end
 
       it "accepts zip format" do
-        file = ActionController::TestUploadedFile.new('spec/fixtures/activity_overview.zip', "application/zip")
+        file = fixture_file_upload('/activity_overview.zip', "application/zip")
         ImplementerSplit.should_receive(:mark_double_counting).and_return(true)
         put :mark_implementer_splits, :file => file
         flash[:notice].should == "Your file is being processed, please reload this page in a couple of minutes to see the results"
@@ -40,7 +43,7 @@ describe Admin::Reports::DetailedController do
 
     context "invalid format" do
       it "does not accept pdf format" do
-        file = ActionController::TestUploadedFile.new('spec/fixtures/activity_overview.pdf', "application/pdf")
+        file = fixture_file_upload('/activity_overview.pdf', "application/pdf")
         put :mark_implementer_splits, :file => file
         flash[:error].should == "Invalid file format. Please select .xls or .zip format."
       end
@@ -49,7 +52,7 @@ describe Admin::Reports::DetailedController do
 
   describe "#generate" do
     it "generates report without delay" do
-      report = Factory(:report, :key => 'activity_overview', :data_request => @data_request)
+      report = FactoryGirl.create(:report, :key => 'activity_overview', :data_request => @data_request)
       Report.stub(:find_or_initialize_by_key_and_data_request_id).and_return(report)
 
       get :generate, :id => 'activity_overview'

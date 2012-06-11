@@ -6,7 +6,7 @@ puts "Changing nil currency to RWF;"
 Organization.find(:all, :conditions => "currency is null OR currency = ''").each_with_index do |org, index|
   puts "=> #{org.name} (#{org.id})"
   org.currency = "RWF"
-  org.save(false)
+  org.save(validate: false)
 end
 
 puts "DONE: updated #{index} organizations"

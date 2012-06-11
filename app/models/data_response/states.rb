@@ -15,7 +15,7 @@ module DataResponse::States
     self.activities.each do |activity|
       activity.approved    = false
       activity.am_approved = false
-      activity.save(false)
+      activity.save(validate: false)
     end
     self.save!
   end
@@ -41,21 +41,16 @@ module DataResponse::States
 
   def state_to_name
     case state
-    when 'unstarted' : 'Not Yet Started'
-    when 'started'   : 'Started'
-    when 'submitted' : 'Submitted'
-    when 'rejected'  : 'Rejected'
-    when 'accepted'  : 'Accepted'
-    end
-  end
-
-  def name_to_state(filter)
-    case filter
-    when 'Not Yet Started' : 'unstarted'
-    when 'Started'         : 'started'
-    when 'Submitted'       : 'submitted'
-    when 'Rejected'        : 'rejected'
-    when 'Accepted'        : 'accepted'
+    when 'unstarted'
+      'Not Yet Started'
+    when 'started'
+      'Started'
+    when 'submitted'
+      'Submitted'
+    when 'rejected'
+      'Rejected'
+    when 'accepted'
+      'Accepted'
     end
   end
 

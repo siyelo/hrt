@@ -20,11 +20,11 @@ class Document < ActiveRecord::Base
   validates_inclusion_of :visibility, :in => VISIBILITY_OPTIONS
 
   ### Named Scopes
-  named_scope :latest_first, {:order => "created_at DESC" }
-  named_scope :limited, {:limit => 5}
-  named_scope :visible_to_reporters, :conditions => ["visibility = ? OR visibility = ?",
+  scope :latest_first, {:order => "created_at DESC" }
+  scope :limited, {:limit => 5}
+  scope :visible_to_reporters, :conditions => ["visibility = ? OR visibility = ?",
                                                      'public', 'reporters']
-  named_scope :visible_to_public, :conditions => ["visibility = ?", 'public']
+  scope :visible_to_public, :conditions => ["visibility = ?", 'public']
 
   def private_document_url
     if private_url?

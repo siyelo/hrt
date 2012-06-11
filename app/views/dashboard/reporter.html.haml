@@ -10,26 +10,26 @@
         -# = link_to image_tag("arrow-small.png"), "#", :class => "arrow"
       %ul
         %li.half
-          - link_to reports_path, :class => "arrow" do
+          = link_to reports_path, :class => "arrow" do
             %h3 Total Expenditure
             %h4
               %span.currency= current_response.currency
               = number_to_currency(current_response.total_spend, :unit => '')
 
         %li.half
-          - link_to reports_path, :class => "arrow" do
+          = link_to reports_path, :class => "arrow" do
             %h3 Total Budget
             %h4
               %span.currency= current_response.currency
               = number_to_currency(current_response.total_budget, :unit => '')
 
         %li.half
-          - link_to projects_path, :class => "arrow" do
+          = link_to projects_path, :class => "arrow" do
             %h3 Response Status
             %h4= current_response.status
 
         %li.half
-          - link_to review_response_path(current_response), :class => "arrow" do
+          = link_to review_response_path(current_response), :class => "arrow" do
             %h3 Status Updated On
             %h4= format_date(current_response.updated_at)
 
@@ -39,19 +39,19 @@
     .section_base.wide.less_spacing
       %ul.welcome_steps
         %li.first
-          - link_to edit_organization_path(:current) do
+          = link_to edit_organization_path(:current) do
             %span.icon= image_tag "icon_welcome1.png", :alt => "Setup Your Organization", :height => "66"
             %span.title 1. Basic Settings
             %span.desc Your Organization's preferences and contact settings
 
         %li
-          - link_to projects_path do
+          = link_to projects_path do
             %span.icon= image_tag "icon_welcome5.png", :alt => "Enter Projects & Activities", :height => "70"
             %span.title 2. Enter Projects & Activities
             %span.desc Define the health projects and activities your organization does
 
         %li.last
-          - link_to submit_response_path(current_response) do
+          = link_to submit_response_path(current_response) do
             %span.icon= image_tag "icon_welcome3.png", :alt => "Submit Response", :height => "70"
             %span.title 3. Submit Response
             %span.desc Submit your data for the requested period

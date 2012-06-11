@@ -12,12 +12,12 @@ Feature: Reporter can reset password
 
   Scenario: Reporter can reset password
     Given I go to the home page
-      And I fill in "Email" with "reporter@hrtapp.com" within "#new_password_reset"
-      And I press "Send" within "#new_password_reset"
+      And I fill in "Email" with "reporter@hrtapp.com" within "#password_reset_form"
+      And I press "Send" within "#password_reset_form"
     Then "reporter@hrtapp.com" should receive an email
 
-    When I open the email with subject "\[Health Resource Tracker\] Password Reset Instructions"
-      And I follow "password_resets" in the email
+    When I open the email with subject "[Health Resource Tracker] Password Reset Instructions"
+      And I follow "Change my password" in the email
       And I fill in "New Password" with "password2"
       And I fill in "Password confirmation" with "password2"
       And I press "Change My Password"

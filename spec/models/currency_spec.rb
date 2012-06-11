@@ -9,7 +9,7 @@ describe Currency do
   end
 
   describe "Validations" do
-    subject { Factory(:currency) }
+    subject { FactoryGirl.create(:currency) }
     it { should validate_uniqueness_of(:from).scoped_to(:to) }
     it { should validate_uniqueness_of(:to).scoped_to(:from) }
     it { should validate_numericality_of(:rate) }
@@ -19,7 +19,7 @@ describe Currency do
 
   describe "update the conversion rate in the money gem" do
     it "will detect the change" do
-      @currency = Factory(:currency, :from => 'BWP', :to => 'ZAR', :rate => 23)
+      @currency = FactoryGirl.create(:currency, :from => 'BWP', :to => 'ZAR', :rate => 23)
       Money.default_bank.get_rate("BWP", "ZAR").should == 23
       @currency.rate = 24; @currency.save
       Money.default_bank.get_rate("BWP", "ZAR").should == 24

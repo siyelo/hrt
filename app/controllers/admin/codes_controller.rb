@@ -11,8 +11,8 @@ class Admin::CodesController < Admin::BaseController
   helper_method :sort_column, :sort_direction
 
   def index
-    scope  = Code.scoped({})
-    scope  = scope.scoped(:conditions => ["UPPER(short_display) LIKE UPPER(:q) OR
+    scope  = Code
+    scope  = scope.where(["UPPER(short_display) LIKE UPPER(:q) OR
                                           UPPER(type) LIKE UPPER(:q) OR
                                           UPPER(description) LIKE UPPER(:q)",
                           {:q => "%#{params[:query]}%"}]) if params[:query]

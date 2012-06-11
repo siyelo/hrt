@@ -7,16 +7,16 @@
   Edit Project
   %span= render 'projects/help'
   %span.right
-    - link_to "#comments", :class => "regular_link" do
+    = link_to "#comments", :class => "regular_link" do
       View Comments
 
 %ul.response-notice
   - @project.validation_errors.each do |error|
     %li= error
 
-= error_messages_for :project,  :header_message  => nil, :message => "Oops, we couldn't save your changes."
+= render 'shared/error_messages', :resource => @project
 
-- semantic_form_for @project, :url => project_path(@project), :html => {:class => "basic_form js_form", :style => "clear: right;"} do |f|
+= semantic_form_for @project, :url => project_path(@project), :html => {:class => "basic_form js_form", :style => "clear: right;"} do |f|
   = render 'form', :f => f
 
 = render 'shared/comments', :comments => @comments

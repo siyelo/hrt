@@ -10,8 +10,8 @@ describe Admin::OrganizationsHelper do
 
     it "should return the correct response for the organization" do
       basic_setup_response
-      org = Factory(:organization)
-      req = Factory(:data_request)
+      org = FactoryGirl.create(:organization)
+      req = FactoryGirl.create(:data_request)
       dr1 = org.latest_response
       OrganizationsHelper.organization_response(org, req).should_not == @response
     end

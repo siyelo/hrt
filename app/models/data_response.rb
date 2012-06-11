@@ -20,7 +20,7 @@ class DataResponse < ActiveRecord::Base
   has_many :comments, :as => :commentable, :dependent => :destroy
   belongs_to :previous, :class_name => 'DataResponse'
 
-  accepts_nested_attributes_for :projects, :other_costs
+  accepts_nested_attributes_for :projects, :other_costs, :allow_destroy => true
 
   ### Validations
   validates_presence_of   :data_request_id, :organization_id
@@ -28,15 +28,15 @@ class DataResponse < ActiveRecord::Base
   validates_inclusion_of  :state, :in => STATES
 
   ### Named scopes
-  named_scope :latest_first, {:order => "data_request_id DESC" }
-  named_scope :unstarted, :conditions => ["state = ?", 'unstarted']
-  named_scope :started,   :conditions => ["state = ?", 'started']
-  named_scope :submitted, :conditions => ["state = ?", 'submitted']
-  named_scope :accepted,  :conditions => ["state = ?", 'accepted']
-  named_scope :rejected,  :conditions => ["state = ?", 'rejected']
-  named_scope :with_request, lambda { |request| {
+  scope :latest_first, {:order => "data_request_id DESC" }
+  scope :unstarted, :conditions => ["state = ?", 'unstarted']
+  scope :started,   :conditions => ["state = ?", 'started']
+  scope :submitted, :conditions => ["state = ?", 'submitted']
+  scope :accepted,  :conditions => ["state = ?", 'accepted']
+  scope :rejected,  :conditions => ["state = ?", 'rejected']
+  scope :with_request, lambda { |request| {
     :conditions => ["data_request_id = ?", request.id] } }
-  named_scope :with_state, lambda { |state| {
+  scope :with_state, lambda { |state| {
     :conditions => ["state = ?", state] } }
 
   ### Delegates
@@ -47,7 +47,7 @@ class DataResponse < ActiveRecord::Base
     :to => :organization
 
   ### Callbacks
-  before_validation_on_create :set_state
+  before_validation :set_state, :on => :create
 
   ### Instance Methods
 

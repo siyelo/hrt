@@ -1,5 +1,5 @@
+require 'csv'
 class Importer
-  include EncodingHelper
 
   attr_accessor :response, :rows, :filename, :projects, :activities,
     :other_costs, :new_splits, :all_projects, :all_activities, :all_splits
@@ -81,7 +81,7 @@ class Importer
     params[:activity_description] = description_for(row['Activity Description'],
                              params[:activity_description], row['Activity Name'])
     params[:split_id]             = row['Id']
-    params[:implementer_name]     = sanitize_encoding(row['Implementer'].try(:strip))
+    params[:implementer_name]     = row['Implementer'].try(:strip)
     params[:spend]                = row["Past Expenditure"]
     params[:budget]               = row["Current Budget"]
     params
@@ -125,7 +125,7 @@ class Importer
       rows = create_hash_from_header(worksheet)
     rescue Ole::Storage::FormatError
       # try import the file as a csv if it is not an spreadsheet
-      rows = FasterCSV.open(filename, {:headers => true, :skip_blanks => true})
+      rows = CSV.open(filename, {:headers => true, :skip_blanks => true})
     end
 
     rows
@@ -149,7 +149,7 @@ class Importer
   end
 
   def name_for(current_row_name, previous_name)
-    name = sanitize_encoding(current_row_name.blank? ? previous_name : current_row_name)
+    name = current_row_name.blank? ? previous_name : current_row_name
     name = name.strip.slice(0..Project::MAX_NAME_LENGTH-1).strip # strip again after truncation in case there are
                                                                  # any trailing spaces
   end
@@ -158,7 +158,7 @@ class Importer
   # from current row are blank
   def description_for(desc, prev_desc, name)
     description = desc.blank? && name.blank? ? prev_desc : desc
-    sanitize_encoding(description).to_s.strip
+    description.to_s.strip
   end
 
   def date_for(date_row, existing_date)
