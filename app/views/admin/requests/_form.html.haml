@@ -1,6 +1,13 @@
+.form_aside.section_form.single
+  %h3 New responses
+  %p A new response will be automatically created for each reporting organization.
+  %br
+  %p The new response will clone projects and activities (without amounts) from the organization's response to the previous request (based on start date).
+
 %fieldset.inputs
   %ol
     %li.last
+      %h2 Basics
       %ul.section_form.first
         = f.text_field :title, :label => 'Title', :hint => 'Descriptive name of the data request'
         = f.hidden_field :organization_id, :value => current_user.organization.id
