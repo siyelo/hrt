@@ -19,6 +19,21 @@ describe DataResponse::ErrorChecker do
     end
   end
 
+  describe "#projects_without_budget_type" do
+    before :each do
+      p = mock :project, :budget_type => nil
+      response.should_receive(:projects).once.and_return([p])
+    end
+
+    it "returns all projects without budget type" do
+      response.projects_without_budget_type.size.should == 1
+    end
+
+    it "fails if there are projects without a budget type" do
+      response.projects_have_budget_types?.should be_false
+    end
+  end
+
   describe "#activities_coded" do
     it "fails if there are no activities" do
       response.should_receive(:normal_activities).and_return []
@@ -61,6 +76,7 @@ describe DataResponse::ErrorChecker do
 
   it "is ready to submit if everything is entered" do
     response.should_receive(:projects_entered?).and_return true
+    response.should_receive(:projects_have_budget_types?).and_return true
     response.should_receive(:projects_have_activities?).and_return true
     response.should_receive(:projects_have_valid_funding_sources?).and_return true
     response.should_receive(:projects_have_other_costs?).and_return true

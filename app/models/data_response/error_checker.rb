@@ -7,6 +7,7 @@ class DataResponse < ActiveRecord::Base
     # TODO: move to presenter
     def load_validation_errors
       errors.add_to_base("Projects are not yet entered.") unless projects_entered?
+      errors.add_to_base("Projects have invalid budget types.") unless projects_have_budget_types?
       errors.add_to_base("Activites are not yet entered.") unless projects_have_activities?
       errors.add_to_base("Activites are not yet classified.") unless activities_coded?
       errors.add_to_base("Projects have invalid funding sources.") unless projects_have_valid_funding_sources?
@@ -21,6 +22,7 @@ class DataResponse < ActiveRecord::Base
 
     def basics_done?
       projects_entered? &&
+        projects_have_budget_types? &&
         projects_have_activities? &&
         projects_have_valid_funding_sources? &&
         implementer_splits_entered? &&
@@ -47,6 +49,17 @@ class DataResponse < ActiveRecord::Base
         p.in_flows.empty? || !p.funding_sources_have_organizations_and_amounts?
       end
     end
+    memoize :projects_with_invalid_funding_sources
+
+    def projects_have_budget_types?
+      projects_without_budget_type.empty?
+    end
+    memoize :projects_have_budget_types?
+
+    def projects_without_budget_type
+      projects.select { |p| p.budget_type.nil? || p.budget_type == "na" }
+    end
+    memoize :projects_without_budget_type
 
     def activities_entered?
       !normal_activities.empty?
