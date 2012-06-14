@@ -39,7 +39,7 @@ ActionController::Routing::Routes.draw do |map|
     admin.resources :currencies, :except => [:show]
     admin.resources :users, :except => [:show],
       :collection => {:create_from_file => :post, :download_template => :get}
-    admin.resources :codes,
+    admin.resources :codes, :only => [:index, :edit, :update],
       :collection => {:create_from_file => :post, :download_template => :get}
     admin.resources :comments
   end

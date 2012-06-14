@@ -4,11 +4,6 @@
 %hr.heading
 %ul.horizontal
   %li
-    - link_to new_admin_code_path, :class => "create_alt" do
-      = image_tag "new.png"
-      Create Code
-
-  %li
     = link_to "File Import", '#', :id => "csv_file", :class => 'create_alt'
 
 #import
@@ -48,6 +43,5 @@
           %td
             %ul.manage_bar
               %li= link_to "Edit", edit_admin_code_path(code)
-              %li= link_to "x", admin_code_path(code), :confirm => "Are you sure you want to delete this code?", :method => :delete, :class => "right"
 
 = will_paginate @codes
