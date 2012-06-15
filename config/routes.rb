@@ -33,6 +33,7 @@ Hrt::Application.routes.draw do
         get :locations
         get :district_workplan
         get :funders
+        get :reporters
       end
     end
     namespace :reports do

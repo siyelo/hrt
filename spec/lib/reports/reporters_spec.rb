@@ -68,4 +68,30 @@ describe Reports::Reporters do
     report.expenditure_colours.should ==
       "{\"0\":{\"color\":\"#3366cc\"},\"1\":{\"color\":\"#dc3912\"}}"
   end
+
+  it "ignores double counts" do
+    organization1 = Factory(:organization, :name => 'organization1')
+    organization2 = Factory(:organization, :name => 'organization2')
+    reporter1     = Factory(:reporter, :organization => organization1)
+    data_request  = Factory(:data_request, :organization => organization1)
+    data_response = organization1.latest_response
+    project1      = Factory(:project, :name => 'project1',
+                            :data_response => data_response)
+    activity1     = Factory(:activity, :name => 'activity1',
+                            :data_response => data_response,
+                            :project => project1)
+    split1        = Factory(:implementer_split, :activity => activity1,
+                            :budget => 100, :spend => 200,
+                            :organization => organization2, :double_count => true)
+    split2        = Factory(:implementer_split, :activity => activity1,
+                            :budget => 100, :spend => 200,
+                            :organization => organization2, :double_count => nil)
+    activity1.reload
+
+    report1 = Reports::Reporters.new(data_request, true)
+    report1.collection.first.total_spend.to_f.should == 400
+
+    report1 = Reports::Reporters.new(data_request, false)
+    report1.collection.first.total_spend.to_f.should == 200
+  end
 end

@@ -2,3 +2,7 @@
 %li= link_to "Funders", '#', :class => "nav-tab", :"data-tab" => 'funders_tab', :"data-report" => 'funders'
 %li= link_to "Locations", '#', :class => "nav-tab", :"data-tab" => 'locations_tab', :"data-report" => 'locations'
 
+%li.right.include_double_count.hidden.dummy
+  = image_tag "ajax-loader.gif", :class => "ajax-loader hidden"
+  = check_box_tag :include_double_count, false
+  = label_tag :include_double_count
