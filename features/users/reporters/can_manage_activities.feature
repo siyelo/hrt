@@ -126,21 +126,3 @@ Feature: Reporter can manage activities
     And I fill in "comment_comment" with "Comment body"
     And I press "Create Comment"
     Then "reporter_1@example.com" should not receive an email
-
-  Scenario: Cannot edit an AM approved activity
-    Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response, am_approved: true
-    When I follow "Projects"
-    And I follow "Activity1"
-    And I fill in "activity_name" with "activity1 edited"
-    And I press "Save"
-    Then the "activity_name" field should not contain "activity1 edited"
-    And I should see "Activity was already approved"
-
-  Scenario: Cannot edit a Sysadmin approved activity
-    Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response, approved: true
-    When I follow "Projects"
-    And I follow "Activity1"
-    And I fill in "activity_name" with "activity1 edited"
-    And I press "Save"
-    Then I should see "we couldn't save your changes."
-    And I should see "Activity was approved by SysAdmin and cannot be changed"

@@ -98,7 +98,7 @@ describe OtherCostsController do
         @data_response = @organization.latest_response
         @project = FactoryGirl.create(:project, :data_response => @data_response)
         @other_cost = FactoryGirl.create :other_cost, :project => @project,
-          :data_response => @data_response, :am_approved => false
+          :data_response => @data_response
         login @user
       end
 
@@ -140,7 +140,7 @@ describe OtherCostsController do
         @data_response = @organization.latest_response
         @project = FactoryGirl.create(:project, :data_response => @data_response)
         @other_cost = FactoryGirl.create :other_cost, :project => @project,
-          :data_response => @data_response, :am_approved => false
+          :data_response => @data_response
       end
 
       it "allows the editing of the organization the reporter is in" do
@@ -181,7 +181,7 @@ describe OtherCostsController do
         @data_response = @organization.latest_response
         @project = FactoryGirl.create(:project, :data_response => @data_response)
         @other_cost = FactoryGirl.create :other_cost, :project => @project,
-          :data_response => @data_response, :am_approved => false
+          :data_response => @data_response
         login @user
       end
 

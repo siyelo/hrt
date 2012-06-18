@@ -12,10 +12,10 @@ class Activity < ActiveRecord::Base
   strip_commas_from_all_numbers
 
   ### Attribute Protection
-  attr_accessible :project_id, :name, :description, :approved, :am_approved,
+  attr_accessible :project_id, :name, :description,
     :beneficiary_ids, :other_beneficiaries, :implementer_splits_attributes,
     :organization_ids, :targets_attributes, :outputs_attributes,
-    :am_approved_date, :user_id, :data_response_id, :planned_for_gor_q1,
+    :user_id, :data_response_id, :planned_for_gor_q1,
     :planned_for_gor_q2, :planned_for_gor_q3, :planned_for_gor_q4
 
   ### Associations
@@ -81,8 +81,6 @@ class Activity < ActiveRecord::Base
 
   ### Validations
   # also see validations in BudgetSpendHelper
-  validate :approved_activity_cannot_be_changed
-  validate :cannot_approve_unclassified_activity
   validate :validate_implementers_uniqueness
   validates_presence_of :name
   validates_presence_of :description
@@ -106,18 +104,12 @@ class Activity < ActiveRecord::Base
                                     ON data_responses.id = activities.data_response_id
                                     INNER JOIN organizations
                                     ON data_responses.organization_id = organizations.id" }
-  scope :manager_approved,     { :conditions => ["am_approved = ?", true] }
   scope :sorted,               { :order => "activities.name ASC" }
 
   ### Class Methods
 
   def self.unclassified
     self.find(:all).select {|a| !a.classified?}
-  end
-
-  def self.approve_all_budgets(ids, user_id)
-    Activity.update_all({:user_id => user_id, :am_approved => true,
-                         :am_approved_date => Time.now}, ["id IN (?)", ids])
   end
 
   ### Instance Methods
@@ -130,10 +122,6 @@ class Activity < ActiveRecord::Base
   def update_attributes(params)
     update_classifications_from_params(params)
     super(params)
-  end
-
-  def am_approved?(user = nil)
-    user && user.sysadmin? ? false : read_attribute(:am_approved)
   end
 
   def to_s
@@ -155,7 +143,7 @@ class Activity < ActiveRecord::Base
     # callback to be run again on save !!
     Activity.skip_callback(:update, :before, :update_all_classified_amount_caches)
     set_classified_amount_cache(type)
-    self.save(validate: false) # save the activity even if it's approved
+    self.save(validate: false)
   end
   handle_asynchronously :update_classified_amount_cache
 
@@ -270,16 +258,6 @@ class Activity < ActiveRecord::Base
       coding_tree.set_cached_amounts!
     end
 
-    def approved_activity_cannot_be_changed
-      message = "Activity was approved by SysAdmin and cannot be changed"
-      errors.add(:base, message) if changed? && approved? && !changed.include?("approved")
-    end
-
-    def cannot_approve_unclassified_activity
-      message = "Cannot approve unclassified #{self.class.to_s.titleize}"
-      errors.add(:base, message) if changed? && !classified? && changed.include?("approved")
-    end
-
     def is_activity?
       self.class.eql?(Activity)
     end
@@ -355,11 +333,8 @@ end
 #  other_beneficiaries :text
 #  data_response_id    :integer         indexed
 #  activity_id         :integer         indexed
-#  approved            :boolean
 #  project_id          :integer
-#  am_approved         :boolean
 #  user_id             :integer
-#  am_approved_date    :date
 #  planned_for_gor_q1  :boolean
 #  planned_for_gor_q2  :boolean
 #  planned_for_gor_q3  :boolean

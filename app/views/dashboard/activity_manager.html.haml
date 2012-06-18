@@ -12,12 +12,12 @@
     %span.large= @dashboard.organizations_count
   %h3.tracked
     %br
-    %span.light Approved Activities
-    %span.large= @dashboard.approved_count
+    %span.light
+    %span.large
   %h3.tracked
     %br
-    %span.light Pending Activities
-    %span.large= @dashboard.pending_count
+    %span.light
+    %span.large
   %h3.tracked.last
     %br
     %span.light Recently Submitted
@@ -38,7 +38,6 @@
     %tr
       %th.am_organization Organization
       %th.am_contacts Contacts
-      %th.am_activities.center Approved Activities
       %th.am_status.center Status
       %th.am_download.center Actions
   %tbody
@@ -56,10 +55,7 @@
           %ul
             - organization.user_emails(2).each do |email|
               %li= mail_to email
-
-        %td.center= link_to "#{response.activities.manager_approved.count}/#{response.activities.count}", projects_path(:response_id => response.id)
         %td.center= link_to response.status, projects_path(:response_id => response.id)
         %td.center= link_to "Download Workplan", export_workplan_projects_path(:response_id => response.id), :class => 'download_workplan'
 
 = render 'comments_and_documents'
-

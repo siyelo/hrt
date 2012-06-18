@@ -93,7 +93,7 @@ describe Reports::Detailed::DistrictWorkplan do
     split4        = FactoryGirl.create(:implementer_split, :activity => activity4,
                             :budget => 100, :spend => 200,
                             :organization => organization4)
-    split4        = Factory(:implementer_split, :activity => activity4,
+    split4        = FactoryGirl.create(:implementer_split, :activity => activity4,
                             :budget => 100, :spend => 200,
                             :organization => organization3)
     activity3.reload

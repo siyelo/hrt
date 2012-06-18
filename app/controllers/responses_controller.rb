@@ -48,22 +48,6 @@ class ResponsesController < BaseController
     redirect_to projects_path
   end
 
-  def approve_all_budgets
-    case params[:type]
-    when 'activities'
-      ids = @response.projects.find(params[:project_id]).normal_activities
-    when 'other_costs'
-      ids = @response.projects.find(params[:project_id]).other_costs
-    when 'other_costs_no_project'
-      ids = @response.other_costs.without_a_project
-    else
-      ids = []
-    end
-
-    Activity.approve_all_budgets(ids.map(&:id), current_user.id)
-    redirect_to projects_path
-  end
-
   private
     # use this if your controller expects :id instead of :response_id
     def load_response_from_id

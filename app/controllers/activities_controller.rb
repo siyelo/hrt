@@ -3,7 +3,6 @@ class ActivitiesController < BaseController
 
   helper_method :sort_column, :sort_direction
   before_filter :confirm_activity_type, :only => [:edit]
-  before_filter :require_admin, :only => [:sysadmin_approve]
   before_filter :prevent_activity_manager, :only => [:create, :update, :destroy]
   before_filter :prevent_browser_cache, :only => [:edit, :update] # firefox misbehaving
 
@@ -33,53 +32,14 @@ class ActivitiesController < BaseController
 
   def update
     @activity = @response.activities.find(params[:id])
-    if !@activity.am_approved?(current_user) &&
-        @activity.update_attributes(params[:activity])
+    if @activity.update_attributes(params[:activity])
         success_flash("updated")
         html_redirect
     else
-      if @activity.am_approved?(current_user)
-        flash[:error] = ("Activity was already approved by #{@activity.user.try(:full_name)} (#{@activity.user.try(:email)}) on #{@activity.am_approved_date}")
-      end
       prepare_classifications(@activity)
       load_comment_resources(@activity)
       paginate_splits(@activity)
       render :action => 'edit'
-    end
-  end
-
-  # call only via Ajax
-  def sysadmin_approve
-    if current_user.sysadmin?
-      @activity = @response.activities.find(params[:id])
-      unless @activity.approved?
-        @activity.attributes = {:user_id => current_user.id, :approved => params[:approve]}
-        if @activity.save
-          status_msg = 'success'
-        else
-          status_msg = @activity.errors.full_messages.join(', ')
-        end
-      end
-      render :json => {:status => status_msg}
-    else
-      render :json => {:status => 'access denied'}
-    end
-  end
-
-  # call only via Ajax
-  # toggles approved status
-  def activity_manager_approve
-    if current_user.sysadmin? || current_user.activity_manager?
-      @activity = @response.activities.find(params[:id])
-      toggle_approved = !@activity.am_approved?
-      date = Time.now
-      date = nil if toggle_approved == false
-      @activity.attributes = {:user_id => current_user.id, :am_approved => toggle_approved,
-        :am_approved_date => date}
-      @activity.save(validate: false)
-      render :json => {:status => 'success'}
-    else
-      render :json => {:status => 'access denied'}
     end
   end
 

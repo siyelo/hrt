@@ -31,13 +31,11 @@ describe Activity do
     it { should allow_mass_assignment_of(:project_id) }
     it { should allow_mass_assignment_of(:beneficiary_ids) }
     it { should allow_mass_assignment_of(:other_beneficiaries) }
-    it { should allow_mass_assignment_of(:approved) }
     it { should allow_mass_assignment_of(:implementer_splits_attributes) }
     it { should allow_mass_assignment_of(:implementer_splits_attributes) }
     it { should allow_mass_assignment_of(:organization_ids) }
     it { should allow_mass_assignment_of(:targets_attributes) }
     it { should allow_mass_assignment_of(:outputs_attributes) }
-    it { should allow_mass_assignment_of(:am_approved_date) }
     it { should allow_mass_assignment_of(:planned_for_gor_q1) }
     it { should allow_mass_assignment_of(:planned_for_gor_q2) }
     it { should allow_mass_assignment_of(:planned_for_gor_q3) }
@@ -50,23 +48,6 @@ describe Activity do
     it { should validate_presence_of(:project_id) }
     it { should ensure_length_of(:name) }
     it { should validate_presence_of(:description) }
-
-    it "cannot be edited once approved" do
-      subject.stub(:approved).and_return(true)
-      subject.stub(:approved?).and_return(true)
-
-      subject.name = "new activity name"
-      subject.save.should == false
-      subject.errors[:base].should include("Activity was approved by SysAdmin and cannot be changed")
-    end
-
-    it "cannot be approved if unclassified" do
-      subject.stub(:classified?).and_return(false)
-
-      subject.approved = true
-      subject.save.should == false
-      subject.errors[:base].should include("Cannot approve unclassified Activity")
-    end
   end
 
   describe "update attributes" do
@@ -270,85 +251,6 @@ describe Activity do
       @activity.locations.length.should == 2
       @activity.locations.should include(location1)
       @activity.locations.should include(location2)
-    end
-  end
-
-  describe "approve all budgets" do
-    it "approves all budgets for activities" do
-      @request      = FactoryGirl.create :data_request
-      @organization = FactoryGirl.create :organization
-      user = FactoryGirl.create :user, :organization => @organization
-      @response     = @organization.latest_response
-      @project      = FactoryGirl.create(:project, :data_response => @response)
-      @activity     = FactoryGirl.create(:activity, :data_response => @response,
-                              :project => @project, :user_id => nil, :am_approved => nil)
-      @activity2    = FactoryGirl.create(:activity, :data_response => @response,
-                              :project => @project, :user_id => nil, :am_approved => nil)
-      activity_manager = FactoryGirl.create(:activity_manager)
-      Activity.approve_all_budgets([@activity.id, @activity2.id], activity_manager.id)
-      @activity.reload
-      @activity2.reload
-      @activity.am_approved.should be_true
-      @activity.user_id.should == activity_manager.id
-      @activity2.am_approved.should be_true
-      @activity2.user_id.should == activity_manager.id
-    end
-  end
-  describe "#am_approved?" do
-    before :each do
-      @activity = FactoryGirl.build(:activity)
-    end
-
-    context "no user" do
-      it "#am_approved? should return true if true" do
-        @activity.am_approved = false
-        @activity.am_approved?.should be_false
-      end
-
-      it "#am_approved? should return false if falase" do
-        @activity.am_approved = true
-        @activity.am_approved?.should be_true
-      end
-    end
-
-    context "sysadmin" do
-      before :each do
-        @user = FactoryGirl.build(:sysadmin)
-      end
-
-      context "am_approved value is false" do
-        it "should return false" do
-          @activity.am_approved = true
-          @activity.am_approved?(@user).should be_false
-        end
-      end
-
-      context "am_approved value is true" do
-        it "should return true" do
-          @activity.am_approved = false
-          @activity.am_approved?(@user).should be_false
-        end
-      end
-    end
-
-    context "reporter" do
-      before :each do
-        @user = FactoryGirl.build(:reporter)
-      end
-
-      context "am_approved value is false" do
-        it "should return false" do
-          @activity.am_approved = false
-          @activity.am_approved?(@user).should be_false
-        end
-      end
-
-      context "am_approved value is true" do
-        it "should return true" do
-          @activity.am_approved = true
-          @activity.am_approved?(@user).should be_true
-        end
-      end
     end
   end
 end

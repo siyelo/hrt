@@ -4,17 +4,6 @@ HrtProjects.init = function () {
   // use click() not toggle() here, as toggle() doesnt
   // work when menu items are also toggling it
 
-  $('.js_am_approve').hide();
-
-  $('.js_project_row').hover(
-    function(e){
-      $(this).find('.js_am_approve').show();
-    },
-    function(e){
-      $(this).find('.js_am_approve').fadeOut(300);
-    }
-  );
-
   $('.js_dropdown_trigger').click(function (e){
     e.preventDefault();
     menu = HrtDropdown.menu($(this));
@@ -44,7 +33,6 @@ HrtProjects.init = function () {
   $('.tooltip_projects').tipsy({gravity: $.fn.tipsy.autoWE, live: true, html: true});
 
   HrtComments.init();
-  Hrt.approveBudget();
 
   $('.js_address').address(function() {
     return 'new_' + $(this).data('type');

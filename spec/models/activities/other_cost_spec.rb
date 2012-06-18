@@ -20,7 +20,6 @@ describe OtherCost do
     it { should allow_mass_assignment_of(:description) }
     it { should allow_mass_assignment_of(:project_id) }
     it { should allow_mass_assignment_of(:beneficiary_ids) }
-    it { should allow_mass_assignment_of(:approved) }
     it { should allow_mass_assignment_of(:organization_ids) }
   end
 

@@ -70,7 +70,6 @@ Hrt::Application.routes.draw do
       put :reject
       put :accept
       put :send_data_response
-      put :approve_all_budgets
     end
   end
   resources :projects, :except => [:show] do
@@ -81,12 +80,7 @@ Hrt::Application.routes.draw do
       post :import
     end
   end
-  resources :activities, :except => [:index, :show] do
-    member do
-      put :sysadmin_approve
-      put :activity_manager_approve
-    end
-  end
+  resources :activities, :except => [:index, :show]
   resources :other_costs, :except => [:index, :show] do
     collection do
       post :create_from_file

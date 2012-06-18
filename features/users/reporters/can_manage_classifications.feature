@@ -193,16 +193,6 @@ Feature: Reporter can enter a code breakdown for each activity
       And the "activity[classifications][purpose_budget_split][1]" field should contain "100"
       And the "activity[classifications][purpose_spend_split][1]" field should contain "100"
 
-    Scenario: Reporter cannot clasify approved Activity
-      Given an activity exists with name: "activity2", data_response: the data_response, project: the project, am_approved: true
-      And an implementer_split exists with budget: "5000000", spend: "6000000", organization: the organization, activity: the activity
-      When I follow "Projects"
-      And I follow "activity2"
-      And I follow "Purposes" within ".section_nav"
-      And I fill in "activity[classifications][purpose_spend_split][1]" with "100"
-      And I press "Save"
-      Then I should see "Activity was already approved "
-
 
     ############
     ### INPUTS

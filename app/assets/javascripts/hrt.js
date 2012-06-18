@@ -78,31 +78,3 @@ Hrt.getFieldsTotal = function (fields) {
 
   return total;
 };
-
-Hrt.approveBudget = function() {
-  $(".js_am_approve").click(function (e) {
-    e.preventDefault();
-    Hrt.approveActivity($(this), 'activity_manager_approve', 'Budget Approved');
-  })
-};
-
-Hrt.approveAsAdmin = function() {
-  $(".js_sysadmin_approve").click(function (e) {
-    e.preventDefault();
-    Hrt.approveActivity($(this), 'sysadmin_approve', 'Admin Approved');
-  })
-};
-
-Hrt.approveActivity = function (element, approval_type, success_text) {
-  var activity_id = element.attr('activity-id');
-
-  element.parent('li').find(".ajax-loader").show();
-  var url = "/activities/" + activity_id + "/" + approval_type
-  $.post(url, {approve: true, "_method": "put",
-      authenticity_token: rails_authenticity_token}, function (data) {
-    element.parent('li').find(".ajax-loader").hide();
-    if (data.status == 'success') {
-      element.parent('li').html('<span>' + success_text + '</span>');
-    }
-  })
-};

@@ -58,8 +58,6 @@ HrtOutlays.init = function () {
   });
 
   HrtForm.numericInputField(".js_implementer_spend, .js_implementer_budget");
-  Hrt.approveBudget();
-  Hrt.approveAsAdmin();
   HrtComments.init();
   Hrt.dynamicUpdateTotalsInit();
   Hrt.storeImplementerPageTotal();

@@ -12,11 +12,6 @@ module DataResponse::States
 
   def reject!
     self.state = 'rejected'
-    self.activities.each do |activity|
-      activity.approved    = false
-      activity.am_approved = false
-      activity.save(validate: false)
-    end
     self.save!
   end
 
