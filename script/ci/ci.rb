@@ -46,7 +46,7 @@ end
 
 def cukes
   setup_cukes
-  run_or_die "bundle exec cucumber features"
+  run_or_die "xvfb-run bundle exec cucumber features"
 end
 
 # main
