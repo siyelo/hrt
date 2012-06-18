@@ -28,7 +28,7 @@
   ### Named Scopes
   scope :sorted, { :joins => "LEFT OUTER JOIN organizations ON
     organizations.id = implementer_splits.organization_id",
-    :order => "LOWER(organizations.name) ASC"}
+    :order => "LOWER(organizations.name) ASC, implementer_splits.id ASC"}
 
   ### Instance methods
 

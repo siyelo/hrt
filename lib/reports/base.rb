@@ -39,11 +39,11 @@ module Reports
     end
 
     def expenditure_chart
-      Charts::Spend.new(collection).google_pie
+      Charts::Spend.new(non_duplicate_collection).google_pie
     end
 
     def budget_chart
-      Charts::Budget.new(collection).google_pie
+      Charts::Budget.new(non_duplicate_collection).google_pie
     end
 
     def chart_links
@@ -97,6 +97,24 @@ module Reports
       element.total_spend
     end
 
+    def non_duplicate_collection
+      non_duplicates = {}
+      collection.each do |element|
+        unless non_duplicates.include? element.name
+          duplicates = collection.select{ |e| e.name == element.name }
+          duplicates.each_with_index do |duplicate, index|
+            name = index == 0 ? duplicate.name : "#{duplicate.name} #{index + 1}"
+            non_duplicates[name] = Reports::Row.new(name,
+                                                    spend_value_method(duplicate),
+                                                    budget_value_method(duplicate),
+                                                    resource_link(duplicate))
+          end
+        end
+      end
+
+      non_duplicates.values.sort
+    end
+
     private
     ###
     # Determines whether it is a budget or spend
@@ -105,33 +123,15 @@ module Reports
     end
 
     def top_budgeters
-      unless @top_budgeters
-        budgeters = Hash.new(0)
-        collection.each do |e|
-          budgeters[e.name] += budget_value_method(e) || 0
-        end
-
-        @top_budgeters = budgeters.map do |e|
-          Reports::Row.new(e[0], 0, e[1])
-        end.sort{ |x, y| y.total_budget <=> x.total_budget }
+      @top_budgeters ||= non_duplicate_collection.sort do |x, y|
+        (y.total_budget || 0) <=> (x.total_budget || 0)
       end
-
-      @top_budgeters
     end
 
     def top_spenders
-      unless @top_spenders
-        spenders = Hash.new(0)
-        collection.each do |e|
-          spenders[e.name] += spend_value_method(e) || 0
-        end
-
-        @top_spenders = spenders.map do |e|
-          Reports::Row.new(e[0], e[1])
-        end.sort{ |x, y| y.total_spend <=> x.total_spend }
+      @top_spenders ||= non_duplicate_collection.sort do |x, y|
+        (y.total_spend || 0) <=> (x.total_spend || 0)
       end
-
-      @top_spenders
     end
 
     def get_colour(name)

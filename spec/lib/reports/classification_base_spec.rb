@@ -47,14 +47,14 @@ describe Reports::ClassificationBase do
   it "should have expenditure pie" do
     Charts::Spend.stub(:new).and_return(mock(:pie, :google_pie => ""))
     Charts::Spend.should_receive(:new).once.with(rows)
-    report.should_receive(:collection).once.and_return rows
+    report.should_receive(:non_duplicate_collection).once.and_return rows
     pie = report.expenditure_chart
   end
 
   it "should have budget pie" do
     Charts::Budget.stub(:new).and_return(mock(:pie, :google_pie => ""))
     Charts::Budget.should_receive(:new).once.with(rows)
-    report.should_receive(:collection).once.and_return rows
+    report.should_receive(:non_duplicate_collection).once.and_return rows
     report.budget_chart
   end
 end
