@@ -14,5 +14,4 @@ module Admin::ResponsesHelper
 
     message.html_safe
   end
-
 end

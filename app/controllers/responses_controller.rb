@@ -13,7 +13,7 @@ class ResponsesController < BaseController
   def submit
     @projects = @response.projects.find(:all, :include => :normal_activities)
     if @response.ready_to_submit?
-      @response.submit!
+      @response.submit!(current_user)
       flash[:notice] = "Successfully submitted. We will review your data and get back to you with any questions. Thank you."
       redirect_to review_response_url(@response)
     else
@@ -23,7 +23,8 @@ class ResponsesController < BaseController
   end
 
   def reject
-    @response.reject!
+    resp = params[:id].present? ? DataResponse.find(params[:id]) : @response
+    resp.reject!(current_user)
     if current_response.organization.users.map(&:email).present?
       Notifier.response_rejected_notification(@response).deliver
     end
@@ -32,7 +33,8 @@ class ResponsesController < BaseController
   end
 
   def accept
-    @response.accept!
+    resp = params[:id].present? ? DataResponse.find(params[:id]) : @response
+    resp.accept!(current_user)
     if current_response.organization.users.map(&:email).present?
       Notifier.response_accepted_notification(@response).deliver
     end

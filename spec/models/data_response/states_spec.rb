@@ -49,6 +49,21 @@ describe DataResponse::States do
     end
   end
 
+  describe "Response Logging" do
+    before :each do
+      request      = FactoryGirl.create :data_request
+      organization = FactoryGirl.create(:organization)
+      @user = FactoryGirl.create :user, :organization => organization
+      @response    = organization.latest_response
+    end
+
+    it "#submit! logs who and when made the state change" do
+      @response.stub(:state).and_return("submitted")
+      @response.submit!(@user)
+      @response.response_state_logs.should_not be_empty
+    end
+  end
+
   describe "State machine" do
     before :each do
       request      = FactoryGirl.create :data_request

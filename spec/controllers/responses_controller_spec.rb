@@ -51,6 +51,7 @@ describe ResponsesController do
       end
 
       it "can reject responses" do
+        DataResponse.should_receive(:find).with('999').and_return(@data_response)
         @data_response.should_receive(:reject!).and_return(true)
         get :reject, id: 999
         flash[:notice].should == "Response was successfully rejected"
@@ -58,6 +59,7 @@ describe ResponsesController do
       end
 
       it "can accept responses" do
+        DataResponse.should_receive(:find).with('999').and_return(@data_response)
         @data_response.should_receive(:accept!).and_return(true)
         get :accept, id: 999
         flash[:notice].should == "Response was successfully accepted"

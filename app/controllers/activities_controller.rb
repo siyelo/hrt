@@ -1,6 +1,9 @@
 class ActivitiesController < OutlaysController
   SORTABLE_COLUMNS = ['projects.name', 'description', 'spend', 'budget']
 
+  helper_method :sort_column, :sort_direction
+  before_filter :confirm_activity_type, only: [:edit]
+  before_filter :prevent_activity_manager, only: [:create, :update, :destroy]
   before_filter :prevent_browser_cache, only: [:edit, :update] # firefox misbehaving
   before_filter :check_response_status, only: [:create, :update, :destroy]
 
