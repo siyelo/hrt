@@ -245,7 +245,7 @@ Feature: Reporter can enter a code breakdown for each activity
       When I press "Save & Add Locations >"
         And I press "Save & Add Purposes >"
         And I press "Save & Add Inputs >"
-        And I press "Save & Add Targets >"
+        And I press "Save & Add Outputs, Targets & Beneficiaries >"
         And I press "Save & Go to Overview >"
       Then I should see "data_request1" within "#projects_listing h1"
 
@@ -254,5 +254,6 @@ Feature: Reporter can enter a code breakdown for each activity
       When I follow "Projects"
         And I follow "OC1"
       When I press "Save & Add Locations >"
+        And I press "Save & Add Inputs >"
         And I press "Save & Go to Overview >"
       Then I should see "data_request1" within "#projects_listing h1"

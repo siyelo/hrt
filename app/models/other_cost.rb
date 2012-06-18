@@ -1,9 +1,6 @@
 class OtherCost < Activity
   include ResponseStateCallbacks
 
-  ### Delegates
-  delegate :currency, :to => :data_response, :allow_nil => true
-
   ### Named Scopes
   scope :without_project, { :conditions => "activities.project_id IS NULL" }
 
@@ -35,17 +32,19 @@ class OtherCost < Activity
 
   # An OCost can be considered classified if the locations are classified
   def classified?
-    location_budget_splits_valid? && location_spend_splits_valid?
+    budget_classified? && spend_classified?
   end
 
   #TODO: remove
   def budget_classified?
-    location_budget_splits_valid?
+    location_budget_splits_valid? &&
+    input_budget_splits_valid?
   end
 
   #TODO: remove
   def spend_classified?
-    location_spend_splits_valid?
+    location_spend_splits_valid? &&
+    input_spend_splits_valid?
   end
 
   def <=>(e)

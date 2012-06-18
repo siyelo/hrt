@@ -15,8 +15,8 @@ describe ActivitiesController do
       context "Requesting /activities using POST" do
         before do
           params = { name: 'title', description: 'descr'}
-          @activity = FactoryGirl.create(:activity, params.merge(data_response: @data_response,
-                                                      project: @project) )
+          @activity = FactoryGirl.create(:activity, params.merge(
+            data_response: @data_response, project: @project) )
           @activity.stub!(:save).and_return(true)
           post :create, activity: params
         end
@@ -26,9 +26,9 @@ describe ActivitiesController do
       context "Requesting /activities/1 using PUT" do
         before do
           params = { name: 'title', description: 'descr'}
-          @activity = FactoryGirl.create(:activity, params.merge(data_response: @data_response,
-                                                      project: @project) )
-          @activity.stub!(:save).and_return(true)
+          @activity = FactoryGirl.create(:activity,
+                params.merge(data_response: @data_response, project: @project))
+            @activity.stub!(:save).and_return(true)
           put :update, { id: @activity.id }.merge(params)
         end
         it_should_behave_like "a protected endpoint"
@@ -36,7 +36,9 @@ describe ActivitiesController do
 
       context "Requesting /activities/1 using DELETE" do
         before do
-          @activity = FactoryGirl.create(:activity, data_response: @data_response, project: @project)
+          @activity = FactoryGirl.create(:activity,
+                                         data_response: @data_response,
+                                         project: @project)
           delete :destroy, id: @activity.id
         end
         it_should_behave_like "a protected endpoint"
@@ -50,7 +52,9 @@ describe ActivitiesController do
         basic_setup_implementer_split_for_controller
         @user.roles = ['activity_manager']; @user.save
         login @user
-        @activity = FactoryGirl.create(:activity, data_response: @data_response, project: @project)
+        @activity = FactoryGirl.create(:activity,
+                                       data_response: @data_response,
+                                       project: @project)
         request.env['HTTP_REFERER'] = edit_activity_path(@activity,
                                         response_id: @activity.response.id)
       end
@@ -128,7 +132,8 @@ describe ActivitiesController do
         @activity.delete
         session[:return_to] = new_activity_url
         post :create,
-          activity: {project_id: '-1', name: "new activity", description: "description",
+          activity: {project_id: '-1', name: "new activity",
+                     description: "description",
                         "implementer_splits_attributes"=>
                           {"0"=> {"spend"=>"2",
                                   "organization_mask"=>"#{@organization.id}",
@@ -167,7 +172,8 @@ describe ActivitiesController do
     describe "with accepted data response" do
       it "fails on create" do
         request.env['HTTP_REFERER'] = projects_url #index
-        controller.stub(:current_response).and_return(mock :response, state: "accepted")
+        controller.stub(:current_response).and_return(
+          mock :response, state: "accepted")
         controller.should_not_receive(:create)
         post :create,
           activity: {project_id: '-1', name: "new activity",
@@ -186,7 +192,8 @@ describe ActivitiesController do
         @project = FactoryGirl.create(:project, data_response: @data_response)
         @activity = FactoryGirl.create(:activity, project: @project,
                             data_response: @data_response)
-        controller.stub(:current_response).and_return(mock :response, state: "submitted")
+        controller.stub(:current_response).and_return(
+          mock :response, state: "submitted")
         controller.should_not_receive(:update)
         put :update, id: @activity.id
         flash[:error].should == "Your entry has already been submitted. If you wish to further edit your entry, please contact a System Administrator"
@@ -198,7 +205,8 @@ describe ActivitiesController do
         @project = FactoryGirl.create(:project, data_response: @data_response)
         @activity = FactoryGirl.create(:activity, project: @project,
                             data_response: @data_response)
-        controller.stub(:current_response).and_return(mock :response, state: "accepted")
+        controller.stub(:current_response).and_return(
+          mock :response, state: "accepted")
         controller.should_not_receive(:destroy)
         delete :destroy, id: @activity.id
         flash[:error].should == "Your entry has already been submitted. If you wish to further edit your entry, please contact a System Administrator"
@@ -224,13 +232,15 @@ describe ActivitiesController do
         activity: {project_id: '-1', name: "new activity",
           description: "description", "data_response_id"=>"#{@data_response.id}",
           "implementer_splits_attributes"=>
-          {"0"=> {"spend"=>"2", "organization_mask"=>"#{@organization.id}", "budget"=>"4"}}}
+          {"0"=> {"spend"=>"2", "organization_mask"=>
+                  "#{@organization.id}", "budget"=>"4"}}}
       response.should be_redirect
       @new_activity = Activity.find_by_name('new activity')
       @new_activity.project.name.should == @new_activity.name
     end
 
-    it "should assign the activity to an existing project if a project exists with the same name as the activity" do
+    it "should assign the activity to an existing project
+        if a project exists with the same name as the activity" do
       put :update, id: @activity.id,
         activity: {name: @project.name, project_id: '-1'}
       @activity.reload
@@ -244,29 +254,29 @@ describe ActivitiesController do
       @activity.description.should == "thedesc"
     end
 
-    it "redirects to the location classifications page when Save & Add Locations is clicked" do
+    it "redirects to location page when Save & Add Locations is clicked" do
       @data_request.save
       put :update, activity: { name: "new name" }, id: @activity.id,
         commit: 'Save & Add Locations >'
       response.should redirect_to edit_activity_path(@project.activities.first, mode: 'locations')
     end
 
-    it "redirects to the purpose classifications page when Save & Add Purposes is clicked" do
+    it "redirects to purpose page when Save & Add Purposes is clicked" do
       @data_request.save
       put :update, activity: { name: "new name" }, id: @activity.id,
         commit: 'Save & Add Purposes >'
       response.should redirect_to edit_activity_path(@project.activities.first, mode: 'purposes')
     end
-    it "redirects to the input classifications page when Save & Add Inputs is clicked" do
+    it "redirects to input page when Save & Add Inputs is clicked" do
       @data_request.save
       put :update, activity: { name: "new name" }, id: @activity.id,
         commit: 'Save & Add Inputs >'
       response.should redirect_to edit_activity_path(@project.activities.first, mode: 'inputs')
     end
-    it "redirects to the output classifications page when Save & Add Targets is clicked" do
+    it "redirects to output page when Save & Add Targets is clicked" do
       @data_request.save
       put :update, activity: { name: "new name" }, id: @activity.id,
-        commit: 'Save & Add Targets >'
+        commit: 'Save & Add Outputs, Targets & Beneficiaries >'
       response.should redirect_to edit_activity_path(@project.activities.first, mode: 'outputs')
     end
   end
@@ -294,7 +304,7 @@ describe ActivitiesController do
       assigns(:splits).total_pages == 1
     end
 
-    it "should not paginate implementer splits when there are errors" do
+    it "should not paginate implementer splits when there'are errors" do
       post :update, id: @activity.id,
         activity: {project_id: @project.id, name: "new activity", description: "description",
           "implementer_splits_attributes"=>

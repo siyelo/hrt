@@ -20,21 +20,4 @@ class BaseController < ApplicationController
       # then just leave it nil (i.e. it will be an "other cost without a project")
       @other_cost.data_response = @response
     end
-
-    def html_redirect
-      outlay = @activity || @other_cost
-      if params[:commit] == "Save & Add Locations >"
-        return redirect_to edit_activity_or_ocost_path(outlay, :mode => 'locations')
-      elsif params[:commit] == "Save & Add Purposes >"
-        return redirect_to edit_activity_or_ocost_path(outlay, :mode => 'purposes')
-      elsif params[:commit] == "Save & Add Inputs >"
-        return redirect_to edit_activity_or_ocost_path(outlay, :mode => 'inputs')
-      elsif params[:commit] == "Save & Add Targets >"
-        return redirect_to edit_activity_or_ocost_path(outlay, :mode => 'outputs')
-      elsif params[:commit] == "Save & Go to Overview >"
-        return redirect_to projects_path
-      else
-        return redirect_to edit_activity_or_ocost_path(outlay, :mode => params[:mode])
-      end
-    end
 end

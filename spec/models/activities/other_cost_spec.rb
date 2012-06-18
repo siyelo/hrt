@@ -46,11 +46,17 @@ describe OtherCost do
       @activity.reload
     end
 
-    it "is classified? when only locations are classified" do
-      @activity.location_budget_splits_valid?.should == true
-      @activity.budget_classified?.should == true
-      @activity.location_spend_splits_valid?.should == true
-      @activity.spend_classified?.should == true
+    it "is not classified when only locations are classified" do
+      @activity.budget_classified?.should be_false
+      @activity.spend_classified?.should be_false
+      @activity.classified?.should be_false
+    end
+
+    it "is classified when inputs and locations are classified" do
+      @activity.stub(:input_budget_splits_valid?) { true }
+      @activity.stub(:input_spend_splits_valid?) { true }
+      @activity.budget_classified?.should be_true
+      @activity.spend_classified?.should be_true
       @activity.classified?.should be_true
     end
 
