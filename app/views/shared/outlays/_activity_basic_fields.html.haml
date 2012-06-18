@@ -15,7 +15,7 @@
       = f.label :project_id, "Project"
       = link_to "#", :title => "The Project which this #{klass} belongs to", :class => 'tooltip' do
         =image_tag"tooltip.png"
-    = f.select :project_id, sorted_project_select(@response, klass), {}, :class => f.object.errors[:project_id] ? "error" : ""
+    = f.select :project_id, sorted_project_select(@response, klass), {}, :class => f.object.errors[:project_id].present? ? "error" : ""
   %li.select.required
     .name
       = f.label :currency, "Currency"
@@ -31,4 +31,4 @@
       %span.required *
       = link_to "#", :title => "A general 1-2 sentence description of the purpose of the #{klass}.", :class => 'tooltip' do
         =image_tag"tooltip.png"
-    = f.text_area :description, :rows => 1, :class => f.object.errors[:description] ? "error" : ""
+    = f.text_area :description, :rows => 1, :class => f.object.errors[:description].present? ? "error" : ""

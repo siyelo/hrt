@@ -12,7 +12,7 @@
 
       %li
         = f.label :email, "Email*"
-        = f.text_field :email, :class =>  f.object.errors[:email] ? 'error' : ''
+        = f.text_field :email, :class =>  f.object.errors[:email].present? ? 'error' : ''
         %p.inline-hints
           Email of the user
 

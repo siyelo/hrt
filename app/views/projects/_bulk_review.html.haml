@@ -36,8 +36,8 @@
               = f.fields_for :in_flows, project.in_flows do |flows|
                 %tr.overflow_fix.fields
                   %td.title= flows.text_field :organization_id_from, :value => flows.object.from.try(:name), :class =>'js_autocomplete'
-                  %td= flows.text_field :spend, :class => 'js_spend no_style', :class => flows.object.errors[:spend] ? "error" : ""
-                  %td= flows.text_field :budget , :class => 'js_budget no_style', :class => flows.object.errors[:budget] ? "error" : ""
+                  %td= flows.text_field :spend, :class => 'js_spend no_style', :class => flows.object.errors[:spend].present? ? "error" : ""
+                  %td= flows.text_field :budget , :class => 'js_budget no_style', :class => flows.object.errors[:budget].present? ? "error" : ""
                   %td.delete= link_to_remove_fields "x", flows, :class => 'delete_row'
 
         -# project_activities will be empty once the Save is pressed

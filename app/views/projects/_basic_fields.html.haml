@@ -8,7 +8,7 @@
       %span.required *
       = link_to "#", :title => "A short name for this project", :class => 'tooltip' do
         = image_tag "tooltip.png"
-    = f.text_field :name, :size => "80", :class => f.object.errors[:name] ? "error" : ""
+    = f.text_field :name, :size => "80", :class => f.object.errors[:name].present? ? "error" : ""
 
   %li#project_start_date_input.string.required
     .name
@@ -16,7 +16,7 @@
       %span.required *
       = link_to "#", :title => "(YYYY-MM-DD) When the Project (and it's related Activities) started.", :class => 'tooltip' do
         = image_tag "tooltip.png"
-    = f.text_field :start_date, :value => formatted_date(f.object.start_date), :class => f.object.errors[:start_date] ? "error date_picker start_date" : "date_picker start_date", :id => "project_start_date_#{project_id}"
+    = f.text_field :start_date, :value => formatted_date(f.object.start_date), :class => f.object.errors[:start_date].present? ? "error date_picker start_date" : "date_picker start_date", :id => "project_start_date_#{project_id}"
 
   %li#project_end_date_input.string.required
     .name
@@ -24,14 +24,14 @@
       %span.required *
       = link_to "#", :title => "(YYYY-MM-DD) The end date for the Project’s implementation.", :class => 'tooltip' do
         = image_tag "tooltip.png"
-    = f.text_field :end_date, :value => formatted_date(f.object.end_date), :class => f.object.errors[:end_date] ? "error date_picker end_date" : "date_picker end_date", :id => "project_end_date_#{project_id}"
+    = f.text_field :end_date, :value => formatted_date(f.object.end_date), :class => f.object.errors[:end_date].present? ? "error date_picker end_date" : "date_picker end_date", :id => "project_end_date_#{project_id}"
 
   %li#project_currency_input.select.required
     .name
       = f.label :currency, "Currency override"
       = link_to "#", :title => "Optionally override the currency for this Project. (Your default is #{@response.currency})", :class => 'tooltip' do
         = image_tag "tooltip.png"
-    = f.select :currency, currency_options_for_select, {:selected => (@project.currency || @response.organization.currency) }, :class => f.object.errors[:currency] ? "error" : ""
+    = f.select :currency, currency_options_for_select, {:selected => (@project.currency || @response.organization.currency) }, :class => f.object.errors[:currency].present? ? "error" : ""
 
   %li#budget_type.select.required
     .name
@@ -41,7 +41,7 @@
     = f.select :budget_type,
       options_for_select([[ "Please Select", nil ], [ "On-budget", "on" ],
       [ "Off-budget", "off" ]], @project.budget_type), {},
-      :class => f.object.errors[:budget_type] ? "error" : ""
+      :class => f.object.errors[:budget_type].present? ? "error" : ""
 
   %br
   %li#project_description_input.text
@@ -49,4 +49,4 @@
       = f.label :description, "Description"
       = link_to "#", :title => "A general 1-2 sentence description of the purpose of the Project.", :class => 'tooltip' do
         = image_tag "tooltip.png"
-    = f.text_area :description, :rows => 2, :class => f.object.errors[:description] ? "error" : ""
+    = f.text_area :description, :rows => 2, :class => f.object.errors[:description].present? ? "error" : ""
