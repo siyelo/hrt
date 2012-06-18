@@ -131,21 +131,8 @@ describe DataResponse do
     end
 
     it "sysadmin unapproves response if it's rejected" do
-      @activity.approved = true
-      @activity.save!
-
       @response.reject!
       @response.reload.state.should == 'rejected'
-      @activity.reload.approved.should be_false
-    end
-
-    it "activity manager unapproves response if it's rejected" do
-      @activity.am_approved = true
-      @activity.save!
-
-      @response.reject!
-      @response.reload.state.should == 'rejected'
-      @activity.reload.am_approved.should be_false
     end
   end
 end

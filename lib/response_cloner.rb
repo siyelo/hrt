@@ -49,9 +49,6 @@ class ResponseCloner
       activity.previous = old_activity
       activity.project_id = nil
       activity.data_response_id = nil
-      activity.approved = nil
-      activity.am_approved = nil
-      activity.am_approved_date = nil
       activity.data_response = new_response
       activity.implementer_splits = clone_implementer_splits(old_activity)
       activity.beneficiaries = old_activity.beneficiaries

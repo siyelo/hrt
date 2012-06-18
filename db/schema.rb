@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120614133930) do
+ActiveRecord::Schema.define(:version => 20120618131531) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -22,11 +22,8 @@ ActiveRecord::Schema.define(:version => 20120614133930) do
     t.text     "other_beneficiaries"
     t.integer  "data_response_id"
     t.integer  "activity_id"
-    t.boolean  "approved"
     t.integer  "project_id"
-    t.boolean  "am_approved"
     t.integer  "user_id"
-    t.date     "am_approved_date"
     t.boolean  "planned_for_gor_q1"
     t.boolean  "planned_for_gor_q2"
     t.boolean  "planned_for_gor_q3"

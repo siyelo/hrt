@@ -39,29 +39,3 @@ Feature: Reporter can manage activities
       Then I should see "Comment body"
         # confirm being on the activity edit form
         And the "Name" field should contain "activity2"
-
-    @javascript
-    Scenario: An admin can approve classified activity and still edit it
-      Given an activity exists with name: "activity1", description: "a1 description", data_response: the data_response, project: the project
-      When I follow "Responses"
-        And I follow "organization2: data_request1"
-        And I follow "activity1"
-        And I follow "Approve (Admin)"
-        And I follow "Approve"
-        And wait a few moments
-        Then I should see "Admin Approved"
-        And I should see "Budget Approved"
-
-      When I fill in "Name" with "activity1 edited"
-      And I press "Save"
-      Then the "Name" field should contain "activity1 edited"
-
-    @javascript
-    Scenario: An admin cannot approve unclassified activity
-      When I follow "Responses"
-        And I follow "organization2: data_request1"
-        And I follow "activity2"
-        And I press "Save"
-        And I follow "Approve (Admin)"
-        And wait a few moments
-      Then I should not see "Admin Approved"

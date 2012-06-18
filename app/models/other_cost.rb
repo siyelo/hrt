@@ -67,11 +67,8 @@ end
 #  other_beneficiaries :text
 #  data_response_id    :integer         indexed
 #  activity_id         :integer         indexed
-#  approved            :boolean
 #  project_id          :integer
-#  am_approved         :boolean
 #  user_id             :integer
-#  am_approved_date    :date
 #  planned_for_gor_q1  :boolean
 #  planned_for_gor_q2  :boolean
 #  planned_for_gor_q3  :boolean

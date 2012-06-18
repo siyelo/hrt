@@ -10,14 +10,6 @@
   = klass == Activity ? "Edit Activity" : "Edit Indirect Cost"
   %span= klass == Activity ? render('activities/help') : render('other_costs/help')
 
-  %ul.horizontal.right
-    %li
-    - if current_user.sysadmin?
-      = render 'shared/outlays/approve_as_admin', :outlay => outlay
-
-    - if current_user.activity_manager?
-      = render 'shared/outlays/approve_budget', :outlay => outlay
-
 = render 'shared/error_messages', :resource => outlay
 
 = semantic_form_for outlay, :url => form_path, :html => {:class => "basic_form js_form"} do |f|

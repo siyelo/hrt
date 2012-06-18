@@ -12,14 +12,6 @@ describe ActivitiesController do
         it_should_behave_like "a protected endpoint"
       end
 
-      context "Requesting /activities/1/approve using POST" do
-        before do
-          @activity = FactoryGirl.create(:activity, :data_response => @data_response, :project => @project)
-          post :sysadmin_approve, :id => @activity.id
-        end
-        it_should_behave_like "a protected endpoint"
-      end
-
       context "Requesting /activities using POST" do
         before do
           params = { :name => 'title', :description =>  'descr'}
@@ -49,18 +41,6 @@ describe ActivitiesController do
         end
         it_should_behave_like "a protected endpoint"
       end
-    end
-  end
-
-  describe "Requesting Activity endpoints as a reporter" do
-    before :each do
-      basic_setup_implementer_split_for_controller
-      login @user
-    end
-
-    it "Requesting /activities/1/sysadmin_approve using POST requires admin to approve an activity" do
-      post :sysadmin_approve, :id => @activity.id
-      flash[:error].should == "You must be an administrator to access that page"
     end
   end
 
@@ -140,7 +120,7 @@ describe ActivitiesController do
         @data_response = @organization.latest_response
         @project = FactoryGirl.create(:project, :data_response => @data_response)
         @activity = FactoryGirl.create :activity, :project => @project,
-          :data_response => @data_response, :am_approved => false
+          :data_response => @data_response
         login @user
       end
 
@@ -177,7 +157,7 @@ describe ActivitiesController do
       @data_response = @organization.latest_response
       @project = FactoryGirl.create(:project, :data_response => @data_response)
       @activity = FactoryGirl.create(:activity, :project => @project,
-                          :data_response => @data_response, :am_approved => false)
+                          :data_response => @data_response)
       @project.reload
       login @user
     end
@@ -213,21 +193,11 @@ describe ActivitiesController do
       @activity.project.name.should == @project.name
     end
 
-    it "should allow a reporter to update an activity if it's not am approved" do
+    it "should allow a reporter to update an activity" do
       put :update, :id => @activity.id,
         :activity => {:description => "thedesc", :project_id => @project.id}
       @activity.reload
       @activity.description.should == "thedesc"
-    end
-
-    it "should not allow a reporter to update a project once it has been am_approved" do
-      @activity.am_approved = true
-      @activity.save
-      put :update, :id => @activity.id,
-        :activity => {:description => "meh", :project_id => @project.id}
-      @activity.reload
-      @activity.description.should_not == "meh"
-      flash[:error].should == "Activity was already approved by #{@activity.user.try(:full_name)} (#{@activity.user.try(:email)}) on #{@activity.am_approved_date}"
     end
 
     it "redirects to the location classifications page when Save & Add Locations is clicked" do
@@ -255,21 +225,6 @@ describe ActivitiesController do
         :commit => 'Save & Add Targets >'
       response.should redirect_to edit_activity_path(@project.activities.first, :mode => 'outputs')
     end
-
-    it "should NOT approve the project as a reporter" do
-      put :activity_manager_approve, :id => @activity.id, :approve => true
-      @activity.reload
-      @activity.am_approved.should be_false
-    end
-
-    it "should approve the project as an activity manager" do
-      manager = FactoryGirl.create :activity_manager, :organization => @organization
-      login manager
-      put :activity_manager_approve, :id => @activity.id, :approve => true
-      @activity.reload
-      @activity.am_approved.should be_true
-      @activity.user.should == manager
-    end
   end
 
   describe "pagination" do
@@ -280,7 +235,7 @@ describe ActivitiesController do
       @data_response = @organization.latest_response
       @project = FactoryGirl.create(:project, :data_response => @data_response)
       @activity = FactoryGirl.create(:activity, :project => @project,
-                          :data_response => @data_response, :am_approved => false)
+                          :data_response => @data_response)
       @project.reload
       login @user
     end
