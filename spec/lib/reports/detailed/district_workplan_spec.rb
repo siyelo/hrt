@@ -56,7 +56,11 @@ describe Reports::Detailed::DistrictWorkplan do
 
     rows[0]["Activity"].should == 'activity1'
     rows[1]["Activity"].should == 'activity2'
-    rows[2]["Activity"].should == 'Total'
+    rows[2]["Activity"].should == nil
+
+    rows[0]["Implementer"].should == 'organization2'
+    rows[1]["Implementer"].should == 'organization2'
+    rows[2]["Implementer"].should == 'Total'
 
     rows[0]["Expenditure (USD)"].should == 200.0
     rows[1]["Expenditure (USD)"].should == 200.0
@@ -65,10 +69,6 @@ describe Reports::Detailed::DistrictWorkplan do
     rows[0]["Budget (USD)"].should == 50.0
     rows[1]["Budget (USD)"].should == 50.0
     rows[2]["Budget (USD)"].should == 100.0
-
-    rows[0]["Implementers"].should == 'organization2'
-    rows[1]["Implementers"].should == 'organization2'
-    rows[2]["Implementers"].should == nil
   end
 
   it "can generate district workplan with more than 1 organization" do
@@ -93,6 +93,9 @@ describe Reports::Detailed::DistrictWorkplan do
     split4        = FactoryGirl.create(:implementer_split, :activity => activity4,
                             :budget => 100, :spend => 200,
                             :organization => organization4)
+    split4        = Factory(:implementer_split, :activity => activity4,
+                            :budget => 100, :spend => 200,
+                            :organization => organization3)
     activity3.reload
     activity4.reload
     classifications1 = { @district1.id => 25, @district2.id => 75 }
@@ -108,11 +111,13 @@ describe Reports::Detailed::DistrictWorkplan do
       @data_request, @district1, 'xls').data
     rows = Spreadsheet.open(StringIO.new(xls)).worksheet(0)
     rows.row(4).to_a.should == ['organization3', 'project2', 'activity3',
-                                 200.0, 50.0, 'organization4']
+                                'organization4', 200.0, 50.0, false, nil]
     rows.row(5).to_a.should == [nil, nil, 'activity4',
-                                 200.0, 50.0, 'organization4']
-    rows.row(6).to_a.should == [nil, nil, 'Total',
-                                 400.0, 100.0, nil]
+                                'organization4', 200.0, 50.0, false, nil]
+    rows.row(6).to_a.should == [nil, nil, nil,
+                                'organization3', 200.0, 50.0, false, nil]
+    rows.row(7).to_a.should == [nil, nil, nil,
+                                'Total', 600.0, 150.0]
   end
 
 end
