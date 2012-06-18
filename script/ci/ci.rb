@@ -33,7 +33,7 @@ end
 
 def specs
   setup_specs
-  run_or_die "bundle exec spec spec"
+  run_or_die "bundle exec rspec spec"
   #run_or_die "spec spec/models/<pick_some_quick_spec>.rb" #debug
 end
 
@@ -46,7 +46,7 @@ end
 
 def cukes
   setup_cukes
-  run_or_die "xvfb-run bundle exec cucumber features"
+  run_or_die "bundle exec cucumber features"
 end
 
 # main
