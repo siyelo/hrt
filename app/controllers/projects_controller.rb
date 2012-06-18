@@ -8,6 +8,7 @@ class ProjectsController < BaseController
   before_filter :strip_commas_from_in_flows, :only => [:create, :update]
   before_filter :prevent_browser_cache, :only => [:index, :edit, :update] # firefox misbehaving
   before_filter :prevent_activity_manager, :only => [:create, :update, :destroy]
+  before_filter :check_response_status, only: [:create, :update, :destroy]
 
   def new
     @project = current_response.projects.new
@@ -120,6 +121,7 @@ class ProjectsController < BaseController
   end
 
   protected
+
 
     def sort_column
       SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "name"

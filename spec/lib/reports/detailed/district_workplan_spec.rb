@@ -2,33 +2,33 @@ require 'spec_helper'
 
 describe Reports::Detailed::DistrictWorkplan do
   before :each do
-    currency = FactoryGirl.create(:currency, :from => 'RWF', :to => 'USD', :rate => 2)
-    organization1 = FactoryGirl.create(:organization, :name => 'organization1', :currency => 'RWF')
-    organization2 = FactoryGirl.create(:organization, :name => 'organization2', :currency => 'RWF')
-    reporter1     = FactoryGirl.create(:reporter, :organization => organization1)
-    @data_request  = FactoryGirl.create(:data_request, :organization => organization1)
+    currency = FactoryGirl.create(:currency, from: 'RWF', to: 'USD', rate: 2)
+    organization1 = FactoryGirl.create(:organization, name: 'organization1', currency: 'RWF')
+    organization2 = FactoryGirl.create(:organization, name: 'organization2', currency: 'RWF')
+    reporter1     = FactoryGirl.create(:reporter, organization: organization1)
+    @data_request  = FactoryGirl.create(:data_request, organization: organization1)
     data_response = organization1.latest_response
-    in_flows      = [FactoryGirl.build(:funding_flow, :from => organization1,
-                      :budget => 100, :spend => 200)]
-    project1      = FactoryGirl.create(:project, :name => 'project1',
-                            :data_response => data_response,
-                            :in_flows => in_flows,
-                            :currency => 'RWF')
-    activity1     = FactoryGirl.create(:activity, :name => 'activity1',
-                            :data_response => data_response,
-                            :project => project1)
-    activity2     = FactoryGirl.create(:activity, :name => 'activity2',
-                            :data_response => data_response,
-                            :project => project1)
+    in_flows      = [FactoryGirl.build(:funding_flow, from: organization1,
+                      budget: 100, spend: 200)]
+    project1      = FactoryGirl.create(:project, name: 'project1',
+                            data_response: data_response,
+                            in_flows: in_flows,
+                            currency: 'RWF')
+    activity1     = FactoryGirl.create(:activity, name: 'activity1',
+                            data_response: data_response,
+                            project: project1)
+    activity2     = FactoryGirl.create(:activity, name: 'activity2',
+                            data_response: data_response,
+                            project: project1)
 
-    split1        = FactoryGirl.create(:implementer_split, :activity => activity1,
-                            :budget => 100, :spend => 200,
-                            :organization => organization2)
-    split2        = FactoryGirl.create(:implementer_split, :activity => activity2,
-                            :budget => 100, :spend => 200,
-                            :organization => organization2)
-    @district1     = FactoryGirl.create(:location, :short_display => 'district1')
-    @district2     = FactoryGirl.create(:location, :short_display => 'district2')
+    split1        = FactoryGirl.create(:implementer_split, activity: activity1,
+                            budget: 100, spend: 200,
+                            organization: organization2)
+    split2        = FactoryGirl.create(:implementer_split, activity: activity2,
+                            budget: 100, spend: 200,
+                            organization: organization2)
+    @district1     = FactoryGirl.create(:location, short_display: 'district1')
+    @district2     = FactoryGirl.create(:location, short_display: 'district2')
     activity1.reload
     activity2.reload
     classifications1 = { @district1.id => 25, @district2.id => 75 }
@@ -72,30 +72,30 @@ describe Reports::Detailed::DistrictWorkplan do
   end
 
   it "can generate district workplan with more than 1 organization" do
-    organization3 = FactoryGirl.create(:organization, :name => 'organization3', :currency => 'RWF')
-    FactoryGirl.create(:reporter, :organization => organization3)
-    organization4 = FactoryGirl.create(:organization, :name => 'organization4', :currency => 'RWF')
+    organization3 = FactoryGirl.create(:organization, name: 'organization3', currency: 'RWF')
+    FactoryGirl.create(:reporter, organization: organization3)
+    organization4 = FactoryGirl.create(:organization, name: 'organization4', currency: 'RWF')
     data_response2 = organization3.latest_response
-    in_flows      = [FactoryGirl.build(:funding_flow, :from => organization3,
-                      :budget => 100, :spend => 200)]
-    project2      = FactoryGirl.create(:project, :name => 'project2',
-                            :data_response => data_response2,
-                            :in_flows => in_flows, :currency => 'RWF')
-    activity3     = FactoryGirl.create(:activity, :name => 'activity3',
-                            :data_response => data_response2,
-                            :project => project2)
-    activity4     = FactoryGirl.create(:activity, :name => 'activity4',
-                            :data_response => data_response2,
-                            :project => project2)
-    split3        = FactoryGirl.create(:implementer_split, :activity => activity3,
-                            :budget => 100, :spend => 200,
-                            :organization => organization4)
-    split4        = FactoryGirl.create(:implementer_split, :activity => activity4,
-                            :budget => 100, :spend => 200,
-                            :organization => organization4)
-    split4        = FactoryGirl.create(:implementer_split, :activity => activity4,
-                            :budget => 100, :spend => 200,
-                            :organization => organization3)
+    in_flows      = [FactoryGirl.build(:funding_flow, from: organization3,
+                      budget: 100, spend: 200)]
+    project2      = FactoryGirl.create(:project, name: 'project2',
+                            data_response: data_response2,
+                            in_flows: in_flows, currency: 'RWF')
+    activity3     = FactoryGirl.create(:activity, name: 'activity3',
+                            data_response: data_response2,
+                            project: project2)
+    activity4     = FactoryGirl.create(:activity, name: 'activity4',
+                            data_response: data_response2,
+                            project: project2)
+    split3        = FactoryGirl.create(:implementer_split, activity: activity3,
+                            budget: 100, spend: 200,
+                            organization: organization4)
+    split4        = FactoryGirl.create(:implementer_split, activity: activity4,
+                            budget: 100, spend: 200,
+                            organization: organization4)
+    split4        = FactoryGirl.create(:implementer_split, activity: activity4,
+                            budget: 100, spend: 200,
+                            organization: organization3)
     activity3.reload
     activity4.reload
     classifications1 = { @district1.id => 25, @district2.id => 75 }

@@ -34,7 +34,7 @@ module UserAuthentication
   def prevent_activity_manager
     if current_user.activity_manager? &&
       !(current_user.sysadmin? || (current_user.reporter? &&
-          current_user.organization.data_responses.include?(current_response)))
+                                   current_user.organization.data_responses.include?(current_response)))
       flash[:error] = "You do not have permission to edit this resource"
       redirect_to :back
     end
@@ -49,4 +49,16 @@ module UserAuthentication
     session[:return_to] = nil
   end
 
+  def check_response_status
+    if uneditable_response? && !current_user.sysadmin?
+      flash[:error] = "Your entry has already been submitted. If you wish to further edit your entry, please contact a System Administrator"
+      redirect_to :back
+    end
+  end
+
+  protected
+
+  def uneditable_response?
+    current_response.state == "accepted" || current_response.state == "submitted"
+  end
 end
