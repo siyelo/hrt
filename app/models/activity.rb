@@ -22,51 +22,51 @@ class Activity < ActiveRecord::Base
   belongs_to :data_response
   belongs_to :project
   belongs_to :user
-  belongs_to :previous, :class_name => 'Activity'
+  belongs_to :previous, class_name: 'Activity'
   has_and_belongs_to_many :beneficiaries # codes representing who benefits from this activity
-  has_many :implementer_splits, :dependent => :delete_all
-  has_many :implementers, :through => :implementer_splits, :source => :organization
-  has_many :purposes, :through => :code_splits,
-    :conditions => ["codes.type in (?)", Code::PURPOSES], :source => :code
-  has_many :code_splits, :dependent => :destroy
-  has_many :comments, :as => :commentable, :dependent => :destroy
+  has_many :implementer_splits, dependent: :delete_all
+  has_many :implementers, through: :implementer_splits, source: :organization
+  has_many :purposes, through: :code_splits,
+    conditions: ["codes.type in (?)", Code::PURPOSES], source: :code
+  has_many :code_splits, dependent: :destroy
+  has_many :comments, as: :commentable, dependent: :destroy
 
   ### TODO: deprecate
   #
-  has_many :purpose_budget_splits, :dependent => :destroy
-  has_many :purpose_spend_splits, :dependent => :destroy
-  has_many :input_budget_splits, :dependent => :destroy
-  has_many :input_spend_splits, :dependent => :destroy
-  has_many :location_budget_splits, :dependent => :destroy
-  has_many :location_spend_splits, :dependent => :destroy
-  has_many :budget_locations, :dependent => :destroy,
-    :class_name => 'LocationBudgetSplit'
-  has_many :spend_locations, :dependent => :destroy,
-    :class_name => 'LocationSpendSplit'
+  has_many :purpose_budget_splits, dependent: :destroy
+  has_many :purpose_spend_splits, dependent: :destroy
+  has_many :input_budget_splits, dependent: :destroy
+  has_many :input_spend_splits, dependent: :destroy
+  has_many :location_budget_splits, dependent: :destroy
+  has_many :location_spend_splits, dependent: :destroy
+  has_many :budget_locations, dependent: :destroy,
+    class_name: 'LocationBudgetSplit'
+  has_many :spend_locations, dependent: :destroy,
+    class_name: 'LocationSpendSplit'
   ###
 
-  has_many :targets, :dependent => :destroy
-  has_many :outputs, :dependent => :destroy
-  has_many :leaf_budget_purposes, :dependent => :destroy,
-    :class_name => 'PurposeBudgetSplit',
-    :conditions => ["code_splits.sum_of_children = 0"]
-  has_many :leaf_spend_purposes, :dependent => :destroy,
-    :class_name => 'PurposeSpendSplit',
-    :conditions => ["code_splits.sum_of_children = 0"]
-  has_many :leaf_budget_inputs, :dependent => :destroy,
-    :class_name => 'InputBudgetSplit',
-    :conditions => ["code_splits.sum_of_children = 0"]
-  has_many :leaf_spend_inputs, :dependent => :destroy,
-    :class_name => 'InputSpendSplit',
-    :conditions => ["code_splits.sum_of_children = 0"]
+  has_many :targets, dependent: :destroy
+  has_many :outputs, dependent: :destroy
+  has_many :leaf_budget_purposes, dependent: :destroy,
+    class_name: 'PurposeBudgetSplit',
+    conditions: ["code_splits.sum_of_children = 0"]
+  has_many :leaf_spend_purposes, dependent: :destroy,
+    class_name: 'PurposeSpendSplit',
+    conditions: ["code_splits.sum_of_children = 0"]
+  has_many :leaf_budget_inputs, dependent: :destroy,
+    class_name: 'InputBudgetSplit',
+    conditions: ["code_splits.sum_of_children = 0"]
+  has_many :leaf_spend_inputs, dependent: :destroy,
+    class_name: 'InputSpendSplit',
+    conditions: ["code_splits.sum_of_children = 0"]
 
   ### Nested attributes
-  accepts_nested_attributes_for :implementer_splits, :allow_destroy => true,
-    :reject_if => Proc.new { |attrs| attrs['organization_mask'].blank? }
-  accepts_nested_attributes_for :targets, :allow_destroy => true,
-    :reject_if => Proc.new { |attrs| attrs['description'].blank? }
-  accepts_nested_attributes_for :outputs, :allow_destroy => true,
-    :reject_if => Proc.new { |attrs| attrs['description'].blank? }
+  accepts_nested_attributes_for :implementer_splits, allow_destroy: true,
+    reject_if: Proc.new { |attrs| attrs['organization_mask'].blank? }
+  accepts_nested_attributes_for :targets, allow_destroy: true,
+    reject_if: Proc.new { |attrs| attrs['description'].blank? }
+  accepts_nested_attributes_for :outputs, allow_destroy: true,
+    reject_if: Proc.new { |attrs| attrs['description'].blank? }
 
   ### Callbacks
   before_validation :strip_input_fields
@@ -75,36 +75,36 @@ class Activity < ActiveRecord::Base
   before_update     :update_all_classified_amount_caches
 
   ### Delegates
-  delegate :currency, :to => :project, :allow_nil => true
-  delegate :data_request, :to => :data_response
-  delegate :organization, :to => :data_response
+  delegate :currency, to: :project, allow_nil: true
+  delegate :data_request, to: :data_response
+  delegate :organization, to: :data_response
 
   ### Validations
   # also see validations in BudgetSpendHelper
   validate :validate_implementers_uniqueness
   validates_presence_of :name
   validates_presence_of :description
-  validates_presence_of :project_id, :if => :is_activity?,
-    :unless => Proc.new{ |a| a.project && a.project.new_record? }
+  validates_presence_of :project_id, if: :is_activity?,
+    unless: Proc.new{ |a| a.project && a.project.new_record? }
   validates_presence_of :data_response_id
-  validates_length_of :name, :within => 3..MAX_NAME_LENGTH
+  validates_length_of :name, within: 3..MAX_NAME_LENGTH
 
   ### Scopes
-  scope :roots,                { :conditions => "activities.type IS NULL" }
-  scope :greatest_first,       { :order => "activities.budget DESC" }
-  scope :with_type,         lambda { |type| {:conditions =>
+  scope :roots,                { conditions: "activities.type IS NULL" }
+  scope :greatest_first,       { order: "activities.budget DESC" }
+  scope :with_type,         lambda { |type| {conditions:
                                              ["activities.type = ?", type]} }
   scope :with_request, lambda {|request| {
-              :select => 'DISTINCT activities.*',
-              :joins => 'INNER JOIN data_responses ON
+              select: 'DISTINCT activities.*',
+              joins: 'INNER JOIN data_responses ON
                          data_responses.id = activities.data_response_id',
-              :conditions => ['data_responses.data_request_id = ?', request.id]}}
-  scope :without_a_project,    { :conditions => "project_id IS NULL" }
-  scope :with_organization,    { :joins => "INNER JOIN data_responses
+              conditions: ['data_responses.data_request_id = ?', request.id]}}
+  scope :without_a_project,    { conditions: "project_id IS NULL" }
+  scope :with_organization,    { joins: "INNER JOIN data_responses
                                     ON data_responses.id = activities.data_response_id
                                     INNER JOIN organizations
                                     ON data_responses.organization_id = organizations.id" }
-  scope :sorted,               { :order => "activities.name ASC" }
+  scope :sorted,               { order: "activities.name ASC" }
 
   ### Class Methods
 
@@ -189,7 +189,7 @@ class Activity < ActiveRecord::Base
 
   def locations
     code_splits.with_types(['LocationBudgetSplit', 'LocationSpendSplit']).
-      find(:all, :include => :code).map{|ca| ca.code }.uniq
+      find(:all, include: :code).map{|ca| ca.code }.uniq
   end
 
   def implementer_splits_total(amount_method)
@@ -283,10 +283,10 @@ class Activity < ActiveRecord::Base
       if project_id == AUTOCREATE
         project = data_response.projects.find_by_name(name)
         unless project
-          self_funder = FundingFlow.new(:from => self.organization)
-          project = Project.new(:name => name, :start_date => Time.now,
-            :end_date => Time.now + 1.year, :data_response => data_response,
-            :in_flows => [self_funder])
+          self_funder = FundingFlow.new(from: self.organization)
+          project = Project.new(name: name, start_date: Time.now,
+            end_date: Time.now + 1.year, data_response: data_response,
+            in_flows: [self_funder])
           project.save(validate: false)
         end
         self.project = project

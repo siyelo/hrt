@@ -6,9 +6,44 @@ describe ProjectsController do
   describe "as a reporter" do
     before :each do
       @organization = FactoryGirl.create :organization, :name => "Reporter Org"
+      @data_request = FactoryGirl.create :data_request, :organization => @organization
       @user = FactoryGirl.create(:reporter, :organization => @organization)
-      @organization = @user.organization
       login @user
+    end
+
+    it "create a project when the data_response is accepted" do
+      request.env['HTTP_REFERER'] = projects_url
+      controller.stub(:current_response).and_return(mock :response, state: "submitted")
+      controller.should_not_receive(:create)
+      post :create,
+        :project => {:name => "new project", :description => "new description",
+                     :start_date => "2010-01-01", :end_date => "2010-12-31",
+                     :budget_type => "on", :currency => "USD",
+                     :in_flows_attributes => { "0" =>
+                                               {:organization_id_from => @organization.id,
+                                                :budget => 10, :spend => 20}}}
+      flash[:error].should == "Your entry has already been submitted. If you wish to further edit your entry, please contact a System Administrator"
+      response.should redirect_to(request.env['HTTP_REFERER'])
+    end
+
+    it "update a project when the data_response is accepted" do
+      request.env['HTTP_REFERER'] = projects_url
+      @project = FactoryGirl.create(:project, :data_response => @organization.latest_response)
+      controller.stub(:current_response).and_return(mock :response, state: "accepted")
+      controller.should_not_receive(:update)
+      put :update, :id => @project.id
+      flash[:error].should == "Your entry has already been submitted. If you wish to further edit your entry, please contact a System Administrator"
+      response.should redirect_to(request.env['HTTP_REFERER'])
+    end
+
+    it "destroy a project when the data_response is accepted" do
+      request.env['HTTP_REFERER'] = projects_url
+      @project = FactoryGirl.create(:project, :data_response => @organization.latest_response)
+      controller.stub(:current_response).and_return(mock :response, state: "submitted")
+      controller.should_not_receive(:destroy)
+      delete :destroy, :id => @project.id
+      flash[:error].should == "Your entry has already been submitted. If you wish to further edit your entry, please contact a System Administrator"
+      response.should redirect_to(request.env['HTTP_REFERER'])
     end
 
     it "redirects to the projects index after create" do
@@ -17,10 +52,10 @@ describe ProjectsController do
       @data_response = @organization.latest_response
       post :create,
         :project => {:name => "new project", :description => "new description",
-        :start_date => "2010-01-01", :end_date => "2010-12-31", :budget_type => "on",
-        :currency => "USD",
-        :in_flows_attributes => { "0" => {:organization_id_from => @organization.id,
-          :budget => 10, :spend => 20}}}
+                     :start_date => "2010-01-01", :end_date => "2010-12-31", :budget_type => "on",
+                     :currency => "USD",
+                     :in_flows_attributes => { "0" => {:organization_id_from => @organization.id,
+                                                       :budget => 10, :spend => 20}}}
       response.should redirect_to projects_path
     end
 
@@ -34,10 +69,10 @@ describe ProjectsController do
       it "should create a new in-flow (eg. self implementer)" do
         post :create,
           :project => {:name => "new project", :description => "new description",
-          :start_date => "2010-01-01", :end_date => "2010-12-31", :budget_type => "on",
-          :currency => "USD",
-          :in_flows_attributes => { "0" => {:organization_id_from => @organization.id,
-            :budget => 10, :spend => 20}}}
+                       :start_date => "2010-01-01", :end_date => "2010-12-31", :budget_type => "on",
+                       :currency => "USD",
+                       :in_flows_attributes => { "0" => {:organization_id_from => @organization.id,
+                                                         :budget => 10, :spend => 20}}}
         project = Project.find_by_name('new project')
         project.should_not be_nil
         project.in_flows.should have(1).funder
@@ -47,10 +82,10 @@ describe ProjectsController do
       it "should create a new from-org when new name given in in-flows" do
         post :create,
           :project => {:name => "new project", :description => "new description",
-          :start_date => "2010-01-01", :end_date => "2010-12-31", :budget_type => "on",
-          :currency => "USD",
-          :in_flows_attributes => { "0" => {:organization_id_from => "a new org plox k thx",
-            :budget => 10, :spend => 20}}}
+                       :start_date => "2010-01-01", :end_date => "2010-12-31", :budget_type => "on",
+                       :currency => "USD",
+                       :in_flows_attributes => { "0" => {:organization_id_from => "a new org plox k thx",
+                                                         :budget => 10, :spend => 20}}}
         project = Project.find_by_name('new project')
         project.should_not be_nil
         project.in_flows.should have(1).funder
@@ -139,6 +174,7 @@ describe ProjectsController do
         @project = FactoryGirl.create(:project, :data_response => @data_response)
       end
 
+
       it "allows the editing of the organization the reporter is in" do
         login @user
 
@@ -182,10 +218,10 @@ describe ProjectsController do
           :project => { :name => "new project", :budget_type => "on",
                         :description => "description", :start_date => "09-12-2012",
                         :end_date => "09-12-2013", :currency => "USD",
-            "in_flows_attributes"=>{"0"=>{
-              "organization_id_from"=>"#{@organization.id}",
-             "spend"=>"120.0", "budget"=>"130.0"}}
-          }
+                        "in_flows_attributes"=>{"0"=>{
+                          "organization_id_from"=>"#{@organization.id}",
+                          "spend"=>"120.0", "budget"=>"130.0"}}
+        }
 
         flash[:error].should_not == "You do not have permission to edit this project"
         flash[:notice].should == "Project successfully created"

@@ -79,8 +79,8 @@ describe Activity do
       before :each do
         basic_setup_implementer_split
         @implementer2 = FactoryGirl.create :organization
-        @split2 = FactoryGirl.create :implementer_split, :activity => @activity,
-          :organization => @implementer2
+        @split2 = FactoryGirl.create :implementer_split, activity: @activity,
+          organization: @implementer2
       end
 
       it "should validate duplicate implementer splits when saving nested attr" do
@@ -134,20 +134,20 @@ describe Activity do
   end
 
     it "returns organization name" do
-      @organization = FactoryGirl.create(:organization, :name => "Organization1")
-      user = FactoryGirl.create :user, :organization => @organization
-      @request      = FactoryGirl.create(:data_request, :organization => @organization)
+      @organization = FactoryGirl.create(:organization, name: "Organization1")
+      user = FactoryGirl.create :user, organization: @organization
+      @request      = FactoryGirl.create(:data_request, organization: @organization)
       @response     = @organization.latest_response
-      @project      = FactoryGirl.create(:project, :data_response => @response)
-      @activity     = FactoryGirl.create(:activity, :data_response => @response, :project => @project)
+      @project      = FactoryGirl.create(:project, data_response: @response)
+      @activity     = FactoryGirl.create(:activity, data_response: @response, project: @project)
       @activity.organization_name.should == "Organization1"
     end
 
   describe "gets budget and spend from sub activities" do
     before :each do
       basic_setup_activity
-      @split = FactoryGirl.create :implementer_split, :activity => @activity,
-        :spend => 10, :budget => 25, :organization => @organization
+      @split = FactoryGirl.create :implementer_split, activity: @activity,
+        spend: 10, budget: 25, organization: @organization
       @activity.reload; @activity.save;
     end
 
@@ -167,8 +167,8 @@ describe Activity do
 
     describe "works with more than one sub activity" do
       before :each do
-        @split1 = FactoryGirl.create :implementer_split, :activity => @activity,
-          :spend => 100, :budget => 125, :organization => FactoryGirl.create(:organization)
+        @split1 = FactoryGirl.create :implementer_split, activity: @activity,
+          spend: 100, budget: 125, organization: FactoryGirl.create(:organization)
         @activity.reload; @activity.save;
       end
 
@@ -203,7 +203,7 @@ describe Activity do
     end
 
     it "should clone associated code assignments" do
-      @ca = FactoryGirl.create(:code_split, :activity => @activity)
+      @ca = FactoryGirl.create(:code_split, activity: @activity)
       save_and_deep_clone
       @clone.code_splits.count.should == 1
       @clone.code_splits[0].code.should == @ca.code
@@ -222,15 +222,15 @@ describe Activity do
   describe "purposes" do
     it "should return only those codes designated as Purpose codes" do
       basic_setup_activity
-      @purpose1    = FactoryGirl.create(:purpose, :short_display => 'purp1')
-      @purpose2    = FactoryGirl.create(:mtef_code, :short_display => 'purp2')
-      @input       = FactoryGirl.create(:input, :short_display => 'input')
-      FactoryGirl.create(:purpose_budget_split, :activity => @activity,
-              :code => @purpose1, :cached_amount => 5)
-      FactoryGirl.create(:purpose_budget_split, :activity => @activity,
-              :code => @purpose2, :cached_amount => 15)
-      FactoryGirl.create(:input_budget_split, :activity => @activity,
-              :code => @input, :cached_amount => 5)
+      @purpose1    = FactoryGirl.create(:purpose, short_display: 'purp1')
+      @purpose2    = FactoryGirl.create(:mtef_code, short_display: 'purp2')
+      @input       = FactoryGirl.create(:input, short_display: 'input')
+      FactoryGirl.create(:purpose_budget_split, activity: @activity,
+              code: @purpose1, cached_amount: 5)
+      FactoryGirl.create(:purpose_budget_split, activity: @activity,
+              code: @purpose2, cached_amount: 15)
+      FactoryGirl.create(:input_budget_split, activity: @activity,
+              code: @input, cached_amount: 5)
       @activity.purposes.should == [@purpose1, @purpose2]
     end
   end
@@ -242,11 +242,11 @@ describe Activity do
       location2 = FactoryGirl.create(:location)
       location3 = FactoryGirl.create(:location)
       location4 = FactoryGirl.create(:location)
-      FactoryGirl.create(:location_budget_split, :activity => @activity, :code => location1)
-      FactoryGirl.create(:location_budget_split, :activity => @activity, :code => location2)
-      FactoryGirl.create(:location_spend_split, :activity => @activity, :code => location2)
-      FactoryGirl.create(:purpose_budget_split, :activity => @activity, :code => location3)
-      FactoryGirl.create(:purpose_spend_split, :activity => @activity, :code => location4)
+      FactoryGirl.create(:location_budget_split, activity: @activity, code: location1)
+      FactoryGirl.create(:location_budget_split, activity: @activity, code: location2)
+      FactoryGirl.create(:location_spend_split, activity: @activity, code: location2)
+      FactoryGirl.create(:purpose_budget_split, activity: @activity, code: location3)
+      FactoryGirl.create(:purpose_spend_split, activity: @activity, code: location4)
 
       @activity.locations.length.should == 2
       @activity.locations.should include(location1)

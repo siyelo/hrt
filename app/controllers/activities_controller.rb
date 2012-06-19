@@ -2,9 +2,10 @@ class ActivitiesController < BaseController
   SORTABLE_COLUMNS = ['projects.name', 'description', 'spend', 'budget']
 
   helper_method :sort_column, :sort_direction
-  before_filter :confirm_activity_type, :only => [:edit]
-  before_filter :prevent_activity_manager, :only => [:create, :update, :destroy]
-  before_filter :prevent_browser_cache, :only => [:edit, :update] # firefox misbehaving
+  before_filter :confirm_activity_type, only: [:edit]
+  before_filter :prevent_activity_manager, only: [:create, :update, :destroy]
+  before_filter :prevent_browser_cache, only: [:edit, :update] # firefox misbehaving
+  before_filter :check_response_status, only: [:create, :update, :destroy]
 
   def new
     self.load_activity_new
@@ -26,7 +27,7 @@ class ActivitiesController < BaseController
       html_redirect
     else
       paginate_splits(@activity)
-      render :action => 'new'
+      render action: 'new'
     end
   end
 
@@ -39,7 +40,7 @@ class ActivitiesController < BaseController
       prepare_classifications(@activity)
       load_comment_resources(@activity)
       paginate_splits(@activity)
-      render :action => 'edit'
+      render action: 'edit'
     end
   end
 
@@ -92,7 +93,7 @@ class ActivitiesController < BaseController
     # run validations on the models independently of any save action
     # useful if you want to show (existing) errors without having to save the form first.
     def load_validation_errors(resource)
-      resource.implementer_splits.find(:all, :include => :organization).each {|is| is.valid?}
+      resource.implementer_splits.find(:all, include: :organization).each {|is| is.valid?}
       resource.valid?
     end
 

@@ -43,7 +43,7 @@ module ResponseSession
         if current_user && current_response &&
             (current_user.sysadmin? || current_user.activity_manager?) &&
             !(params[:controller].include?('admin') || params[:controller] == 'dashboard')
-          @url_options = { :response_id => current_response.id }
+          @url_options = { response_id: current_response.id }
         end
       end
 
@@ -73,7 +73,7 @@ module ResponseSession
           DataResponse.find_by_id(response_id)
         elsif current_user.activity_manager?
           # scope by the organizations the AM has access to
-          DataResponse.find_by_id(response_id, :conditions => ["organization_id in (?)",
+          DataResponse.find_by_id(response_id, conditions: ["organization_id in (?)",
            [current_user.organization.id] + current_user.organizations.map{|o| o.id}])
         else
           current_user.data_responses.find_by_id(response_id)

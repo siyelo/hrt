@@ -9,26 +9,26 @@ class Project < ActiveRecord::Base
   strip_commas_from_all_numbers
 
   ### Associations
-  belongs_to :data_response, :counter_cache => true
-  belongs_to :previous, :class_name => 'Project'
-  has_one :organization, :through => :data_response
-  has_many :activities, :dependent => :destroy
-  has_many :other_costs, :dependent => :destroy
-  has_many :normal_activities, :class_name => "Activity",
-           :conditions => [ "activities.type IS NULL"], :dependent => :destroy
-  has_many :funding_flows, :dependent => :destroy
+  belongs_to :data_response, counter_cache: true
+  belongs_to :previous, class_name: 'Project'
+  has_one :organization, through: :data_response
+  has_many :activities, dependent: :destroy
+  has_many :other_costs, dependent: :destroy
+  has_many :normal_activities, class_name: "Activity",
+           conditions: [ "activities.type IS NULL"], dependent: :destroy
+  has_many :funding_flows, dependent: :destroy
 
   #FIXME - cant initialize nested in_flows because of the :conditions statement
-  has_many :in_flows, :class_name => "FundingFlow"
-  has_many :out_flows, :class_name => "FundingFlow",
-           :conditions => [ 'organization_id_from = #{organization.id}' ]
-  has_many :comments, :as => :commentable, :dependent => :destroy
-  has_many :implementer_splits, :through => :activities
+  has_many :in_flows, class_name: "FundingFlow"
+  has_many :out_flows, class_name: "FundingFlow",
+           conditions: [ 'organization_id_from = #{organization.id}' ]
+  has_many :comments, as: :commentable, dependent: :destroy
+  has_many :implementer_splits, through: :activities
 
   # Nested attributes
-  accepts_nested_attributes_for :in_flows, :allow_destroy => true,
-    :reject_if => Proc.new { |attrs| attrs['organization_id_from'].blank? }
-  accepts_nested_attributes_for :activities, :allow_destroy => true
+  accepts_nested_attributes_for :in_flows, allow_destroy: true,
+    reject_if: Proc.new { |attrs| attrs['organization_id_from'].blank? }
+  accepts_nested_attributes_for :activities, allow_destroy: true
 
   ### Callbacks
   # also check lib/response_state_callbacks
@@ -38,17 +38,17 @@ class Project < ActiveRecord::Base
   before_validation :downcase_budget_type
 
   ### Validations
-  validates_uniqueness_of :name, :scope => :data_response_id
+  validates_uniqueness_of :name, scope: :data_response_id
   validates_presence_of :name, :data_response_id, :currency
-  validates_inclusion_of :budget_type, :in => ["on", "off", "na"]
+  validates_inclusion_of :budget_type, in: ["on", "off", "na"]
   validates_inclusion_of :currency,
-    :in => Money::Currency::TABLE.map{|k, v| "#{k.to_s.upcase}"},
-    :allow_nil => true, :unless => Proc.new {|p| p.currency.blank?}
+    in: Money::Currency::TABLE.map{|k, v| "#{k.to_s.upcase}"},
+    allow_nil: true, unless: Proc.new {|p| p.currency.blank?}
   validates_presence_of :start_date, :end_date
   validates_date :start_date
   validates_date :end_date
-  validates_length_of :name, :within => 1..MAX_NAME_LENGTH
-  validate :has_in_flows?, :if => Proc.new {|model| model.in_flows.reject{ |attrs|
+  validates_length_of :name, within: 1..MAX_NAME_LENGTH
+  validate :has_in_flows?, if: Proc.new {|model| model.in_flows.reject{ |attrs|
     attrs['organization_id_from'].blank? || attrs.marked_for_destruction? }.empty?}
   validate :validate_funder_uniqueness
   validate :validate_dates_order
@@ -60,10 +60,10 @@ class Project < ActiveRecord::Base
                   :activities_attributes, :in_flows_attributes, :in_flows
 
   ### Delegates
-  delegate :organization, :to => :data_response, :allow_nil => true #workaround for object creation
+  delegate :organization, to: :data_response, allow_nil: true #workaround for object creation
 
   ### Named Scopes
-  scope :sorted, { :order => "projects.name" }
+  scope :sorted, { order: "projects.name" }
 
 
   ### Instance methods
