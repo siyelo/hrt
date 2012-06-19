@@ -135,5 +135,4 @@
 
 //%hr.divider
 %p.submit
-  - if @response.submittable?
-    = link_to "Submit", submit_response_path(@response), :method => :put, :data => { :confirm => "Are you sure?" }, :class => "next big"
+  = link_to "Submit", submit_response_path(@response), :method => :put, :data => { :confirm => "Are you sure?" }, :class => "next big"
