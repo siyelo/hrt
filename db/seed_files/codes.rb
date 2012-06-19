@@ -1,3 +1,4 @@
+require 'csv'
 # seed code values
 #
 # Expected Columns
