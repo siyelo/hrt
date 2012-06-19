@@ -260,7 +260,7 @@ module ApplicationHelper
   end
 
   def current_organization_name
-    if current_user.sysadmin? &&
+    if current_user.manager_or_sysadmin? &&
       !(params[:controller].include?('admin') || params[:controller] == 'dashboard')
       current_response.organization.name
     else

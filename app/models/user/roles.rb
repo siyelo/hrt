@@ -34,7 +34,18 @@ module User::Roles
       role?('reporter') || sysadmin?
     end
 
+    # deprecated
     def activity_manager?
+      manager?
+    end
+
+    # True if a user has the 'activity' manager role
+    # Inclusive of sysadmins too
+    def manager?
+      manager_or_sysadmin?
+    end
+
+    def manager_or_sysadmin?
       role?('activity_manager') || sysadmin?
     end
 
