@@ -17,7 +17,7 @@ module UserAuthentication
   end
 
   def require_activity_manager
-    unless current_user && current_user.activity_manager?
+    unless current_user && current_user.activity_manager? #includes sysadmins
       store_location
       flash[:error] = "You must be an activity manager to access that page"
       redirect_to root_url

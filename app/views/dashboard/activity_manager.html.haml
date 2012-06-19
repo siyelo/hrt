@@ -3,60 +3,52 @@
 %h1.main_heading
   = current_request.name
 
-%h2
-  Organizations I Manage
-.section_base.less_spacing
-  %h3.tracked
-    %br
-    %span.light Total Organizations
-    %span.large= @dashboard.organizations_count
-  %h3.tracked
-    %br
-    %span.light
-    %span.large
-  %h3.tracked
-    %br
-    %span.light
-    %span.large
-  %h3.tracked.last
-    %br
-    %span.light Recently Submitted
-    - unless @dashboard.recent_responses.empty?
-      %ul.recently_submitted
-        - @dashboard.recent_responses.each do |r|
-          %li= link_to r.organization.name, projects_path(:response_id => r.id)
-    - else
-      %span.none No responses submitted recently
+.full
+  .main#admin-summary
+    %h2
+      Organizations I Manage
+      = link_to "Download Combined Workplan", activity_manager_workplan_path, :class => 'dropdown dropless right heading_button'
+    .section_base.less_spacing
+      %table.standard.am_organizations
+        %thead
+          %tr
+            %th.am_organization Organization
+            %th.am_contacts Contacts
+            %th.am_status.center Status
+            %th.am_download.center Actions
+        %tbody
+          - @dashboard.organizations.each do |organization|
+            - response = organization.data_responses.detect { |dr| dr.data_request_id == current_request.id }
+            %tr
+              %td.title= link_to organization.name, projects_path(:response_id => response.id)
+              %td
+                %ul
+                  %li
+                    = organization.contact_name
+                    %span= "(#{organization.contact_position})" if organization.contact_position.present?
+                  %li
+                    = organization.contact_phone_number.presence || organization.contact_main_office_phone_number
+                %ul
+                  - organization.user_emails(2).each do |email|
+                    %li= mail_to email
+              %td.center= link_to response.status, projects_path(:response_id => response.id)
+              %td.center= link_to "Download Workplan", export_workplan_projects_path(:response_id => response.id), :class => 'download_workplan'
 
-
-%h2.overflow_hidden
-  = link_to "Download Combined Workplan", activity_manager_workplan_path, :class => 'dropdown dropless right heading_button'
-  Organizations List
-
-%table.standard.am_organizations
-  %thead
-    %tr
-      %th.am_organization Organization
-      %th.am_contacts Contacts
-      %th.am_status.center Status
-      %th.am_download.center Actions
-  %tbody
-    - @dashboard.organizations.each do |organization|
-      - response = organization.data_responses.detect { |dr| dr.data_request_id == current_request.id }
-      - if response
-        %tr
-          %td.title= link_to organization.name, projects_path(:response_id => response.id)
-          %td
-            %ul
-              %li
-                = organization.contact_name
-                %span= "(#{organization.contact_position})" if organization.contact_position.present?
-              %li
-                = organization.contact_phone_number.presence || organization.contact_main_office_phone_number
-            %ul
-              - organization.user_emails(2).each do |email|
-                %li= mail_to email
-          %td.center= link_to response.status, projects_path(:response_id => response.id)
-          %td.center= link_to "Download Workplan", export_workplan_projects_path(:response_id => response.id), :class => 'download_workplan'
+  .sidebar#admin-submission
+    %h2 Latest Submissions
+    .section_base.wide.less_spacing
+      %table.data.slim
+        %tbody
+          - if @dashboard.recent_responses.present?
+            - @dashboard.recent_responses.each do |response|
+              %tr
+                %td
+                  = link_to response.organization.name, projects_path(:response_id => response.id)
+                  .hint= format_date(response.updated_at)
+                %td
+                  =link_to "Accept", accept_response_path(response), class: "create_inline"
+                  =link_to "Reject", reject_response_path(response), class: "create_inline"
+          - else
+            %p.nothing No responses have been submitted yet.
 
 = render 'comments_and_documents'
