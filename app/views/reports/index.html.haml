@@ -7,7 +7,11 @@
   = render('shared/reports_sub_nav')
 
 %h1.main_heading
-  Organization Overview
+  .left
+    Organization Overview
+    %a{:href => "javascript:window.print()", :id => "print-page"}
+      = image_tag "icon_print.png", :alt => "Print This Page", :title => "Print This Page"
+    
   .request_nav.right
     = render '/shared/request_nav'
 
