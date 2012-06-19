@@ -52,7 +52,8 @@
           = image_tag "icon_dropdown.png"
 
         %ul.menu_items{:style => 'display: none'}
-          %li= link_to 'Reject', reject_response_path(@response), :method => :put, :data => { :confirm => "Are you sure you want to Reject this response?" }
+          - unless @response.rejected?
+            %li= link_to 'Reject', reject_response_path(@response), :method => :put, :data => { :confirm => "Are you sure you want to Reject this response?" }
           %li= link_to 'Accept', accept_response_path(@response), :method => :put, :data => { :confirm => "Are you sure you want to Accept this response?" }
     %li.right
       = render 'search'
