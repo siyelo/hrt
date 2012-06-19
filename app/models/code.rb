@@ -13,6 +13,9 @@ class Code < ActiveRecord::Base
                   :nasa_code, :nha_code, :type_string, :parent_id, :type,
                   :external_id
 
+  ### Validations
+  validates :short_display, presence: true
+
   def type_string
     @type_string || self[:type]
   end

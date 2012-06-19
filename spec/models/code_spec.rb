@@ -24,6 +24,10 @@ describe Code do
     it { should have_many(:activities) }
   end
 
+  describe "Validations" do
+    it { should validate_presence_of(:short_display) }
+  end
+
   describe "named scopes" do
     it "filter codes by type" do
       mtef     = FactoryGirl.create(:mtef_code)
