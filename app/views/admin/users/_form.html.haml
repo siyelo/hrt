@@ -19,12 +19,12 @@
   %li.last
     %h3 Roles
     %ul.section_form
-      = f.input :roles, :label => "Assign roles to this user", :required => false, :as => :select, :collection => User::ROLES.map{|u| [u.humanize, u]}, :input_html => {:multiple => :multiple, :class => 'chzn-select'}, :include_blank => false, :wrapper_html => {:class => 'roles'}, :error_class => 'input-errors'
+      = f.input :roles, :label => "Assign roles to this user", :required => false, :as => :select, :collection => User::ROLES.map{|u| [u.humanize, u]}, :input_html => {:multiple => :multiple, :class => 'chzn-select'}, :include_blank => false, :wrapper_html => {:class => 'roles'}
 
   %li.js_manage_orgs.last
     %h3 Organizations to Manage
     %ul.section_form.last
-      = f.input :organizations, :label => "Assign organizations to this Activity Manager", :required => false, :as => :select, :collection => Organization.with_users, :input_html => {:class => 'multiselect'}, :wrapper_html => {:class => 'organizations', :style => 'visibility: hidden;'}, :error_class => 'input-errors'
+      = f.input :organizations, :label => "Assign organizations to this Activity Manager", :required => false, :as => :select, :collection => Organization.with_users, :input_html => {:class => 'multiselect'}, :wrapper_html => {:class => 'organizations', :style => 'visibility: hidden;'}
 
   %li.last
     %ul.horizontal.section_form.last.connect
