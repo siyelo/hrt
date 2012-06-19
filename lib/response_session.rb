@@ -31,7 +31,8 @@ module ResponseSession
           with_request(current_request).first
       end
 
-      response ? response.id : current_user.organization.data_responses.last.id
+      response ||= current_user.organization.data_responses.last
+      response ? response.id : nil
     end
 
     private
