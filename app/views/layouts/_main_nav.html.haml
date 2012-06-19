@@ -3,7 +3,7 @@
   .wrapper
     %ul
       %li.home_tab{:class => ( controller.class == DashboardController ? 'active' : nil)}
-        - if current_user.sysadmin? && !is_admin_controller
+        - if (current_user.sysadmin? && !is_admin_controller) || current_user.activity_manager?
           %a{:href => dashboard_path(:response_id => current_user_response_for_current_request)}
             %span Home
         - else
