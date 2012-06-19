@@ -40,13 +40,14 @@ end
 # http://blog.kabisa.nl/2010/05/24/headless-cucumbers-and-capybaras-with-selenium-and-hudson/
 # and http://markgandolfo.com/2010/07/01/hudson-ci-server-running-cucumber-in-headless-mode-xvfb
 def setup_cukes
-  ENV['RAILS_ENV'] = 'cucumber'
   ENV['DISPLAY'] = ":0.0"
 end
 
 def cukes
   setup_cukes
-  run_or_die "xvfb-run bundle exec cucumber features"
+  # run only non @javascript cukes
+  run_or_die "cucumber features --tags ~@javascript --require features"
+  # run_or_die "xvfb-run bundle exec cucumber features"
 end
 
 # main
