@@ -11,13 +11,9 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 //= require jquery
-//= require jquery-ui
 //= require jquery_ujs
-//= require jquery.validateClassificationTree
-//= require 'jquery.collapsibleCheckboxTree'
-//= require 'jquery.tipsy'
-//= require 'jquery.tools'
-//= require 'jquery.address-1.4'
+//= require jquery-ui
+//= require 'vendor'
 //= require 'hrt'
 //= require 'hrt.form'
 //= require 'hrt.nested_forms'
@@ -204,6 +200,9 @@ $(function () {
       minLength: 2
     });
   });
+
+  // jquery multiselect
+  $(".multiselect").multiselect();
 
   // Scope javascript by page id
   var id = $('body').attr("id");

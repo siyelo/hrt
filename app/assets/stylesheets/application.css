@@ -10,5 +10,6 @@
  *
  *= require_self
  *= require jquery-ui/ui-lightness
+ *= require vendor
  *= require ./screen
 */

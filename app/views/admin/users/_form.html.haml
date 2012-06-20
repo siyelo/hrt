@@ -19,7 +19,7 @@
   %li.last
     %h3 Roles
     %ul.section_form
-      = f.input :roles, :label => "Assign roles to this user", :required => false, :as => :select, :collection => User::ROLES.map{|u| [u.humanize, u]}, :input_html => {:multiple => :multiple, :class => 'chzn-select'}, :include_blank => false, :wrapper_html => {:class => 'roles'}
+      = f.input :roles, :label => "Assign roles to this user", :required => false, :as => :select, :collection => User::ROLES.map{|u| [u.humanize, u]}, :input_html => {:multiple => :multiple, :class => 'multiselect'}, :include_blank => false, :wrapper_html => {:class => 'roles'}
 
   %li.js_manage_orgs.last
     %h3 Organizations to Manage
