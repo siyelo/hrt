@@ -14,7 +14,7 @@
         %div.tab1{:style => 'display: block'}
           = render 'shared/outlays/classification', :outlay => outlay
 
-  - elsif params[:mode].nil?
+  - elsif params[:mode].nil? || params[:mode] == 'implementers'
     %li.implementer_splits.last
       %ul.section_form.topless.wrapped.last
         = render 'shared/outlays/implementers', :f => f, :outlay => outlay, :blank_rows => 3, :bulk_review => false

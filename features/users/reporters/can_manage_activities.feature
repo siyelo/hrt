@@ -49,7 +49,7 @@ Feature: Reporter can manage activities
     Given an activity exists with project: the project, name: "existing activity", description: "existing description", data_response: the data_response
     When I follow "Projects"
     And I follow "existing activity"
-    And I follow "Targets, Outputs & Beneficiaries"
+    And I follow "5 Outputs, Targets & Beneficiaries"
     And I follow "Add Target"
     And I fill in "target_field" with "Target description"
     And I follow "Add Output"

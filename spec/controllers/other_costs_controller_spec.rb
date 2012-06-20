@@ -40,7 +40,7 @@ describe OtherCostsController do
     it "redirects to the output classifications page when Save & Add Targets is clicked" do
       @data_request.save
       put :update, :other_cost => { :name => "prewprew" }, :id => @other_cost.id,
-        :commit => 'Save & Add Targets >', :response_id => @data_response.id
+        :commit => 'Save & Add Outputs, Targets & Beneficiaries >', :response_id => @data_response.id
       response.should redirect_to edit_other_cost_path(@project.other_costs.first, :mode => 'outputs')
     end
 

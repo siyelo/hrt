@@ -27,6 +27,8 @@ Feature: Reporter can manage Indirect Costs
     And I should see "other_cost2"
     And I should not see "other_cost1"
     When I follow "other_cost2"
+    Then I should see "2 Locations"
+    Then I should see "3 Inputs"
     And I follow "Delete this Indirect Cost"
     Then I should see "Indirect Cost was successfully destroyed"
     And I should not see "other_cost1"
