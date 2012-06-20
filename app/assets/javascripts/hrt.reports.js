@@ -19,11 +19,14 @@ HrtReports.tabInit = function () {
   });
   $('#include_double_count').change(function (e) {
     e.preventDefault();
+    var doubleCount = $(this).is(':checked');
     var activeTab = $('#tabs-container').find('.active');
     var tabName = activeTab.data('tab');
     var report  = activeTab.data('report');
+
+    activeTab.data('double-count', doubleCount.toString());
     $('.include_double_count .ajax-loader').removeClass('hidden');
-    HrtReports.loadTab(tabName, report, $(this).is(':checked'));
+    HrtReports.loadTab(tabName, report, doubleCount);
   });
 };
 
@@ -55,7 +58,12 @@ HrtReports.loadPieCharts = function (tabName) {
 };
 
 HrtReports.hideDoubleCountCheckbox = function () {
-  if ($('#tabs-container').find('.active').data('report') == 'reporters') {
+  var report = $('#tabs-container').find('.active').data('report');
+  var activeTab = $('#tabs-container').find('.active');
+  var doubleCount = activeTab.data('double-count') === 'true'
+  $('#include_double_count').attr('checked', doubleCount);
+
+  if (report === 'reporters' || report === 'locations') {
     $('.include_double_count').removeClass('hidden');
   } else {
     $('.include_double_count').addClass('hidden');
