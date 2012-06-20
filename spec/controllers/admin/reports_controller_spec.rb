@@ -36,6 +36,20 @@ describe Admin::ReportsController do
       assigns[:report].should_not be_nil
     end
 
+    it "should render reporter report without double counts" do
+      get :reporters, :double_count => 'true'
+      response.should be_success
+      assigns[:report].include_double_count.should be_true
+      assigns[:report].should_not be_nil
+    end
+
+    it "should render reporter report with double counts" do
+      get :reporters, :double_count => 'false'
+      response.should be_success
+      assigns[:report].include_double_count.should be_false
+      assigns[:report].should_not be_nil
+    end
+
     it "downloads xls district report" do
       location = mock_model(Location)
       location.stub(:short_display).and_return('district1')
