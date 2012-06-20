@@ -86,10 +86,10 @@ class Reports::Detailed::ClassificationSplit
     activity = implementer_split.activity
     base_row = []
     if @is_budget
-      activity_amount = activity.total_budget          || 0
+      activity_amount = activity.total_budget    || 0
       split_amount    = implementer_split.budget || 0
     else
-      activity_amount = activity.total_spend           || 0
+      activity_amount = activity.total_spend     || 0
       split_amount    = implementer_split.spend  || 0
     end
 
@@ -155,7 +155,7 @@ class Reports::Detailed::ClassificationSplit
     end
 
     # create dummy if the classification type doesnt exist for the
-    # given activity/other cost e.g. OtherCosts dont have Purposes/Inputs
+    # given activity/other cost e.g. OtherCosts dont have Purposes
     if total_percentage != 100
       dummy_code = Code.new(:short_display => "Not classified - #{activity.type}")
       klass = classification_class(@classification_association)
