@@ -49,7 +49,7 @@ Develop on a local feature branch, make a pull request via GitHub.
 ## License
 
 HRT - Health Resource Tracker
-Copyright (C) 2011 USAID
+Copyright (C) 2011 Abt Associates Inc.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
