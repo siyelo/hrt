@@ -4,6 +4,7 @@ require_relative '../charts/base'
 class Reports::DistrictSplit < Reports::TopBase
   include CurrencyNumberHelper
   include ActionView::Helpers::NumberHelper
+  include ImplementerSplitRatio
 
   attr_accessor :request, :locations, :include_double_count
 
@@ -107,7 +108,7 @@ class Reports::DistrictSplit < Reports::TopBase
 
     collection.each do |e|
       method_name = method_from_class(e.klass.to_s)
-      ratio = include_double_count ? 1.0 : ratios[e.activity_id][method_name]
+      ratio = include_double_count ? 1.0 : ratios[e.activity_id.to_i][method_name]
       result[e.district][method_name] += ratio *
         universal_currency_converter(e.amount.to_f, e.amount_currency, 'USD')
     end
@@ -129,7 +130,7 @@ class Reports::DistrictSplit < Reports::TopBase
 
     @ratios = {}
     code_splits.map(&:activity_id).uniq.each do |activity_id|
-      @ratios[activity_id] = Hash.new(0)
+      @ratios[activity_id.to_i] = Hash.new(0)
     end
 
     implementer_splits = ImplementerSplit.joins(:activity => :data_response).
@@ -144,25 +145,12 @@ class Reports::DistrictSplit < Reports::TopBase
     grouped_implementer_splits.each do |activity_id, all_splits|
       nondouble_splits = all_splits.select{|is| !is.double_count }
 
+      activity_id = activity_id.to_i
       @ratios[activity_id] ||= Hash.new(0) # activity_id that is not classified
       @ratios[activity_id][:budget] = budget_ratio(all_splits, nondouble_splits)
       @ratios[activity_id][:spend] = spend_ratio(all_splits, nondouble_splits)
     end
 
     @ratios
-  end
-
-  def budget_ratio(all_splits, nondouble_splits)
-    ratio = splits_sum(nondouble_splits, :budget) / splits_sum(all_splits, :budget)
-    ratio.nan? ? 1.0 : ratio
-  end
-
-  def spend_ratio(all_splits, nondouble_splits)
-    ratio = splits_sum(nondouble_splits, :spend) / splits_sum(all_splits, :spend)
-    ratio.nan? ? 1.0 : ratio
-  end
-
-  def splits_sum(splits, amount_type)
-    splits.map{|s| s.send(amount_type).to_f}.sum
   end
 end
