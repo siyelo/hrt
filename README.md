@@ -13,7 +13,7 @@ This app tracks resource flows in the health sector from their many sources to t
       url = git@github.com:siyelo/hrt2.git
 
     [remote "staging"]
-      url = git@heroku.com:hrt-staging.git
+      url = git@heroku.com:hrtstaging.git
       fetch = +refs/heads/*:refs/remotes/staging/*
 
     [remote "production"]
