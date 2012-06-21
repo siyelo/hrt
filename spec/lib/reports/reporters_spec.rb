@@ -70,20 +70,20 @@ describe Reports::Reporters do
   end
 
   it "ignores double counts" do
-    organization1 = Factory(:organization, :name => 'organization1')
-    organization2 = Factory(:organization, :name => 'organization2')
-    reporter1     = Factory(:reporter, :organization => organization1)
-    data_request  = Factory(:data_request, :organization => organization1)
+    organization1 = FactoryGirl.create(:organization, :name => 'organization1')
+    organization2 = FactoryGirl.create(:organization, :name => 'organization2')
+    reporter1     = FactoryGirl.create(:reporter, :organization => organization1)
+    data_request  = FactoryGirl.create(:data_request, :organization => organization1)
     data_response = organization1.latest_response
-    project1      = Factory(:project, :name => 'project1',
+    project1      = FactoryGirl.create(:project, :name => 'project1',
                             :data_response => data_response)
-    activity1     = Factory(:activity, :name => 'activity1',
+    activity1     = FactoryGirl.create(:activity, :name => 'activity1',
                             :data_response => data_response,
                             :project => project1)
-    split1        = Factory(:implementer_split, :activity => activity1,
+    split1        = FactoryGirl.create(:implementer_split, :activity => activity1,
                             :budget => 100, :spend => 200,
                             :organization => organization2, :double_count => true)
-    split2        = Factory(:implementer_split, :activity => activity1,
+    split2        = FactoryGirl.create(:implementer_split, :activity => activity1,
                             :budget => 100, :spend => 200,
                             :organization => organization2, :double_count => nil)
     activity1.reload

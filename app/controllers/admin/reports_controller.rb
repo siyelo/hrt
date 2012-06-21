@@ -1,4 +1,5 @@
 class Admin::ReportsController < Admin::BaseController
+
   def index
     @report = Reports::Reporters.new(current_response.data_request)
   end
@@ -10,7 +11,8 @@ class Admin::ReportsController < Admin::BaseController
   end
 
   def locations
-    @report = Reports::DistrictSplit.new(current_request)
+    double_count = params[:double_count] == 'true' ? true : false
+    @report = Reports::DistrictSplit.new(current_request, double_count)
     render :partial => '/reports/shared/report_data', :layout => false
   end
 
