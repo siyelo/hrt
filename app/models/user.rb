@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   include User::Upload
   include User::Roles
+  include PrivateUrl # gives private_url?
 
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable, :lockable, :timeoutable,
@@ -11,7 +12,7 @@ class User < ActiveRecord::Base
   ### Attributes
   attr_accessible :full_name, :email, :organization_id, :organization,
                   :password, :password_confirmation, :roles, :tips_shown,
-                  :organization_ids, :location_id
+                  :organization_ids, :location_id, :workplan
 
   ### Associations
   has_many :comments, :dependent => :destroy
@@ -32,7 +33,18 @@ class User < ActiveRecord::Base
   delegate :responses, :to => :organization # instead of deprecated data_response
   delegate :latest_response, :to => :organization # find the last response in the org
 
+  ### Attachments
+  has_attached_file :workplan, Settings.paperclip_workplan.to_options
+
   ### Instance Methods
+
+  def workplan_private_url
+    if private_url?
+      workplan.expiring_url(3600)
+    else
+      workplan.url
+    end
+  end
 
   def deliver_password_reset_instructions!
     reset_perishable_token!

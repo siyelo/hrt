@@ -26,12 +26,23 @@ development:
     #   bucket: us.assets.dev.hrtapp.com
     #   <<: *access_keys
     # s3_permissions: authenticated-read
-
+  paperclip_workplan:
+    # LOCAL CONFIG:
+    storage: :filesystem
+    # S3 CONFIG:
+    #storage: :s3
+    #path: "workplans/:workplan/:user_id.:extension"
+    #s3_credentials:
+      #bucket: us.assets.dev.hrtapp.com
+      #<<: *access_keys
+    #s3_permissions: authenticated-read
 test:
   <<: *defaults
   paperclip_report:
     storage: :filesystem
   paperclip_document:
+    storage: :filesystem
+  paperclip_workplan:
     storage: :filesystem
 
 cucumber:
@@ -40,12 +51,16 @@ cucumber:
     storage: :filesystem
   paperclip_document:
     storage: :filesystem
+  paperclip_workplan:
+    storage: :filesystem
 
 profiling:
   <<: *defaults
   paperclip_report:
     storage: :filesystem
   paperclip_document:
+    storage: :filesystem
+  paperclip_workplan:
     storage: :filesystem
 
 staging:
@@ -64,6 +79,13 @@ staging:
       bucket: us.assets.staging.hrtapp.com
       <<: *access_keys
     s3_permissions: authenticated-read
+  paperclip_workplan:
+    storage: :s3
+    path: "workplans/:user_id.:extension"
+    s3_credentials:
+      bucket: us.assets.staging.hrtapp.com
+      <<: *access_keys
+    s3_permissions: authenticated-read
 
 production:
   <<: *defaults
@@ -78,6 +100,13 @@ production:
   paperclip_document:
     storage: :s3
     path: "documents/:attachment/:document_file_name.:extension"
+    s3_credentials:
+      bucket: us.assets.hrtapp.com
+      <<: *access_keys
+    s3_permissions: authenticated-read
+  paperclip_workplan:
+    storage: :s3
+    path: "workplans/:user_id.:extension"
     s3_credentials:
       bucket: us.assets.hrtapp.com
       <<: *access_keys
