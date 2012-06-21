@@ -43,19 +43,20 @@
   %tbody
     - @dashboard.organizations.each do |organization|
       - response = organization.data_responses.detect { |dr| dr.data_request_id == current_request.id }
-      %tr
-        %td.title= link_to organization.name, projects_path(:response_id => response.id)
-        %td
-          %ul
-            %li
-              = organization.contact_name
-              %span= "(#{organization.contact_position})" if organization.contact_position.present?
-            %li
-              = organization.contact_phone_number.presence || organization.contact_main_office_phone_number
-          %ul
-            - organization.user_emails(2).each do |email|
-              %li= mail_to email
-        %td.center= link_to response.status, projects_path(:response_id => response.id)
-        %td.center= link_to "Download Workplan", export_workplan_projects_path(:response_id => response.id), :class => 'download_workplan'
+      - if response
+        %tr
+          %td.title= link_to organization.name, projects_path(:response_id => response.id)
+          %td
+            %ul
+              %li
+                = organization.contact_name
+                %span= "(#{organization.contact_position})" if organization.contact_position.present?
+              %li
+                = organization.contact_phone_number.presence || organization.contact_main_office_phone_number
+            %ul
+              - organization.user_emails(2).each do |email|
+                %li= mail_to email
+          %td.center= link_to response.status, projects_path(:response_id => response.id)
+          %td.center= link_to "Download Workplan", export_workplan_projects_path(:response_id => response.id), :class => 'download_workplan'
 
 = render 'comments_and_documents'
