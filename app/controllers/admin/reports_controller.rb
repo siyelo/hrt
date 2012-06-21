@@ -1,23 +1,21 @@
 class Admin::ReportsController < Admin::BaseController
 
-  before_filter :check_double_count
-
   def index
     @report = Reports::Reporters.new(current_response.data_request)
   end
 
   def reporters
-    @report = Reports::Reporters.new(current_response.data_request, @double_count)
+    @report = Reports::Reporters.new(current_response.data_request, double_count)
     render :partial => '/reports/shared/report_data', :layout => false
   end
 
   def locations
-    @report = Reports::DistrictSplit.new(current_request, @double_count)
+    @report = Reports::DistrictSplit.new(current_request, double_count)
     render :partial => '/reports/shared/report_data', :layout => false
   end
 
   def funders
-    @report = Reports::Funders.new(current_response.data_request, @double_count)
+    @report = Reports::Funders.new(current_response.data_request, double_count)
     render :partial => '/reports/shared/report_data', :layout => false
   end
 
@@ -32,7 +30,7 @@ class Admin::ReportsController < Admin::BaseController
   end
 
   private
-  def check_double_count
-    @double_count = params[:double_count] == 'true' ? true : false
+  def double_count
+    params[:double_count] == 'true' ? true : false
   end
 end
