@@ -1,0 +1,93 @@
+@media print
+
+  // Global s tyle overrides
+  
+  *
+    background: transparent !important
+    color: black !important // Black prints faster
+    text-shadow: none !important
+    filter: none !important
+    -ms-filter: none !important
+  a
+    text-decoration: none
+    &:visited
+      text-decoration: none
+  //a[href]:after
+  //  content: " [" attr(href) "]"
+  //abbr[title]:after
+  //  content: " [" attr(title) "]"
+  //.ir a:after, a[href^="javascript:"]:after, a[href^="#"]:after
+  //  content: ""  /* Don't show links for images, or javascript/internal links */
+  pre, blockquote
+    border: 1px solid #999
+    page-break-inside: avoid
+  thead
+    display: table-header-group
+  tr
+    page-break-inside: avoid
+  img
+    page-break-inside: avoid
+    max-width: 100% !important
+  @page
+    margin: .5cm
+  p, h2, h3
+    orphans: 3
+    widows: 3
+  h2, h3
+    page-break-after: avoid
+
+
+  // Application specific styles  
+  
+  *
+    font-family: Arial, sans-serif
+    font-size: 10pt
+    line-height: 1.5
+  #header_app, #main-nav, #sub-nav, #footer, .arrow-nav, #search, .button-bar, .pagination, #print-page, .tooltip-S, .include_double_count
+    display: none !important
+    
+  .section_overlap
+    
+  h1
+    font-size: 18pt
+  h2
+    font-size: 14pt
+  h3
+    font-size: 12pt
+  h4
+    font-size: 11pt
+  h5
+    font-size: 10pt
+  table
+    border-collapse: collapse
+    //border: 1px solid #ccc
+    width: 100%
+    tr.summary td
+      font-weight: bold
+    td, th
+      border-top: 1px solid #ddd
+      font-size: 10pt
+      padding: 5px
+      text-align: right
+      &:first-child
+        text-align: left
+  .reports_summary
+    border-top: 1px solid #ccc
+    border-bottom: 1px solid #ccc
+    margin: 10pt 0 15pt
+  .breadcrumb, #tabs-container, .section_nav
+    overflow: hidden
+    padding-left: 0
+    li
+      color: #999 !important
+      display: inline
+      float: left
+      margin-right: 10pt
+      .active, &.selected a
+        font-weight: bold
+        text-decoration: underline
+  .full h2, .first-half, .second-half, .summary_col
+    margin: 0
+    padding: 0
+  .summary_col
+    padding: 5px 0 5px 3%

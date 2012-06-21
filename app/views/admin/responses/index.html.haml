@@ -8,11 +8,16 @@
 - title("Responses")
 
 %h1.main_heading
-  Responses
+  .left
+    Responses
+    %a{:href => "javascript:window.print()", :id => "print-page"}
+      = image_tag "icon_print.png", :alt => "Print This Page", :title => "Print This Page"
+
   .request_nav.right
     = render '/shared/request_nav'
+    
 %hr.heading
-%ul.horizontal
+%ul.horizontal.button-bar
   %li
     = link_to new_admin_response_path, :class => "create_alt" do
       = image_tag "new.png"
