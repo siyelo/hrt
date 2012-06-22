@@ -63,8 +63,14 @@ Hrt::Application.routes.draw do
     resources :comments
   end
 
-  match 'activity_manager/workplan' => 'users#activity_manager_workplan', as: :activity_manager_workplan
-  resources :responses, only: [] do
+  resources :workplans  do
+    collection do
+      get :download
+      get :generate
+    end
+  end
+
+  resources :responses, :only => [] do
     member do
       get :review
       put :submit

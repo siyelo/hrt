@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120620094938) do
+ActiveRecord::Schema.define(:version => 20120621095535) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -138,8 +138,8 @@ ActiveRecord::Schema.define(:version => 20120620094938) do
     t.string   "document_content_type"
     t.integer  "document_file_size"
     t.datetime "document_updated_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",            :null => false
+    t.datetime "updated_at",            :null => false
     t.string   "visibility"
     t.text     "description"
   end
@@ -231,8 +231,8 @@ ActiveRecord::Schema.define(:version => 20120620094938) do
   create_table "response_state_logs", :force => true do |t|
     t.integer  "data_response_id"
     t.integer  "user_id"
-    t.datetime "created_at",          :null => false
-    t.datetime "updated_at",          :null => false
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
   end
 
   create_table "sessions", :force => true do |t|
@@ -278,6 +278,10 @@ ActiveRecord::Schema.define(:version => 20120620094938) do
     t.integer  "sign_in_count",          :default => 0
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
+    t.string   "workplan_file_name"
+    t.string   "workplan_content_type"
+    t.integer  "workplan_file_size"
+    t.datetime "workplan_updated_at"
   end
 
   add_index "users", ["confirmation_token"], :name => "index_users_on_confirmation_token", :unique => true

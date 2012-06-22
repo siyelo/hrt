@@ -7,7 +7,7 @@
   .main#admin-summary
     %h2
       Organizations I Manage
-      = link_to "Download Combined Workplan", activity_manager_workplan_path, :class => 'dropdown dropless right heading_button'
+
     .section_base.less_spacing
       %table.standard.am_organizations
         %thead
@@ -43,6 +43,18 @@
                       %li= name
                       %li= date
                 %td.center.download= link_to '', export_workplan_projects_path(:response_id => response.id), id: 'download_workplan', class: 'download'
+
+  .sidebar
+    %h2= "Combined Workplan (#{pluralize(current_user.organizations.count, 'organization')})"
+    .section_base.wide.less_spacing
+      %table.data.slim
+        %tbody
+          %tr
+            %td
+              = link_to "Download", download_workplans_path
+              - if current_user.workplan
+                ="(updated #{distance_of_time_in_words_to_now(current_user.workplan_updated_at)} ago)" if current_user.workplan_updated_at
+              = link_to image_tag("icon_regenerate.png"), generate_workplans_path, :title => 'Regenerate workplan', class: 'right'
 
   .sidebar#admin-submission
     %h2 Latest Submissions
