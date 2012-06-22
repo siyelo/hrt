@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'spec_helper'
 
 describe Reports::Detailed::DynamicQuery do
@@ -37,6 +38,13 @@ describe Reports::Detailed::DynamicQuery do
         @nsp.move_to_child_of(@mtef)
         @code1.move_to_child_of(@nsp)
         @activity.reload;@activity.save
+      end
+
+      it "generates and zips correctly" do
+        @project.name = "projéct"
+        @project.save!
+        @report = Report.find_or_create_by_key_and_data_request_id('budget_dynamic_query', @request.id)
+        @report.generate_report
       end
 
       it "should return a 1 funder, 1 implementer report" do
