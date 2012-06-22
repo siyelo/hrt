@@ -25,7 +25,8 @@ class Report < ActiveRecord::Base
     'spend_implementer_beneficiary',
     'budget_dynamic_query',
     'spend_dynamic_query',
-    'funding_source_query'
+    'funding_source_query',
+    'export_response_status'
   ]
 
   ### Attributes
@@ -97,6 +98,8 @@ class Report < ActiveRecord::Base
       Reports::Detailed::DynamicQuery.new(data_request, :spend, 'xml')
     when 'funding_source_query'
       Reports::Detailed::FundingSource.new(data_request, 'xls')
+    when 'export_response_status'
+      Reports::Detailed::ExportResponseStatus.new('xls')
     else
       raise "Invalid report request '#{self.key}'"
     end

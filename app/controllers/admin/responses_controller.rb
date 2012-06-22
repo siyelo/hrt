@@ -44,6 +44,12 @@ class Admin::ResponsesController < Admin::BaseController
     redirect_to admin_responses_path
   end
 
+  def export
+    @report = Report.find_or_create_by_key_and_data_request_id('export_response_status', current_request.id)
+    @report.generate_report
+    redirect_to @report.private_url
+  end
+
   private
 
   # show reporting orgs by default.
