@@ -19,7 +19,7 @@ Hrt::Application.routes.draw do
   match 'dashboard' => 'dashboard#index', as: :dashboard
   namespace :admin do
     resources :requests
-    resources :responses, only: [:index, :new, :create]
+    resources :responses, only: [:index, :new, :create, :destroy]
     resources :organizations do
       collection do
         get :duplicate

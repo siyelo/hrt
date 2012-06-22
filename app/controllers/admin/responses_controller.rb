@@ -36,6 +36,14 @@ class Admin::ResponsesController < Admin::BaseController
     end
   end
 
+  def destroy
+    @data_response = DataResponse.find(params[:id])
+
+    @data_response.destroy_asynchronously
+    flash[:notice] = "#{@data_response.title} scheduled for deletion"
+    redirect_to admin_responses_path
+  end
+
   private
 
   # show reporting orgs by default.
