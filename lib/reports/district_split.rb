@@ -130,7 +130,7 @@ class Reports::DistrictSplit < Reports::TopBase
 
     @ratios = {}
     code_splits.map(&:activity_id).uniq.each do |activity_id|
-      @ratios[activity_id.to_i] = Hash.new(0)
+      @ratios[activity_id.to_i] = Hash.new(1)
     end
 
     implementer_splits = ImplementerSplit.joins(:activity => :data_response).
@@ -146,7 +146,7 @@ class Reports::DistrictSplit < Reports::TopBase
       nondouble_splits = all_splits.select{|is| !is.double_count }
 
       activity_id = activity_id.to_i
-      @ratios[activity_id] ||= Hash.new(0) # activity_id that is not classified
+      @ratios[activity_id] ||= Hash.new(1) # activity_id that is not classified
       @ratios[activity_id][:budget] = budget_ratio(all_splits, nondouble_splits)
       @ratios[activity_id][:spend] = spend_ratio(all_splits, nondouble_splits)
     end

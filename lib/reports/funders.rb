@@ -43,7 +43,7 @@ module Reports
 
       @ratios = {}
       rows.map(&:project_id).uniq.each do |project_id|
-        @ratios[project_id.to_i] = Hash.new(0)
+        @ratios[project_id.to_i] = Hash.new(1)
       end
 
       implementer_splits = ImplementerSplit.
@@ -60,7 +60,7 @@ module Reports
         nondouble_splits = all_splits.select{|is| !is.double_count }
 
         project_id = project_id.to_i
-        @ratios[project_id] ||= Hash.new(0)
+        @ratios[project_id] ||= Hash.new(1)
         @ratios[project_id][:budget] = budget_ratio(all_splits, nondouble_splits)
         @ratios[project_id][:spend] = spend_ratio(all_splits, nondouble_splits)
       end
