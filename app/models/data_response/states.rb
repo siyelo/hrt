@@ -10,28 +10,24 @@ module DataResponse::States
     end
   end
 
-  def reject!
-    self.state = 'rejected'
-    self.save!
+  def start!(user)
+    change_state_with_logs(user, "started")
   end
 
-  def start!
-    self.state = 'started'
-    self.save!
+  def accept!(user)
+    change_state_with_logs(user, "accepted")
   end
 
-  def restart!
-    start!
+  def submit!(user)
+    change_state_with_logs(user, "submitted")
   end
 
-  def accept!
-    self.state = 'accepted'
-    self.save!
+  def reject!(user)
+    change_state_with_logs(user, "rejected")
   end
 
-  def submit!
-    self.state = 'submitted'
-    self.save!
+  def restart!(user)
+    start!(user)
   end
 
   def state_to_name
@@ -63,5 +59,13 @@ module DataResponse::States
     else
       lower_state(target_state, duplicate_state)
     end
+  end
+
+  private
+
+  def change_state_with_logs(user, state)
+    self.state = state
+    self.response_state_logs.new(user: user)
+    self.save
   end
 end

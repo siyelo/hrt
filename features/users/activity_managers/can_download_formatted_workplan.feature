@@ -13,7 +13,6 @@ Feature: User can download formatted workplan
       And organization "reporter_org" is one of the activity_manager's organizations
       And I am signed in as "activity_manager@hrtapp.com"
 
-
   Scenario: Activity manager can download workplan
     When I follow "reporter_org"
       And I follow "Download Workplan"
@@ -21,7 +20,7 @@ Feature: User can download formatted workplan
 
 
   Scenario: Activity manager can quick-download workplan from AM Dashboard page
-    When I follow "Download Workplan"
+    When I follow "download_workplan"
     Then I should receive a xls file
 
 

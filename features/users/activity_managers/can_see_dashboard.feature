@@ -12,6 +12,5 @@ Feature: Activity Manager can see dashboard
 
   Scenario: See dashboard
     Then I should see "Organizations I Manage"
-      And I should see "Total Organizations 0"
       And I should see "There are no comments posted in the last 6 months."
       And I should see "There are no files available for download."

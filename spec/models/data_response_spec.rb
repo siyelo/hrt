@@ -6,6 +6,7 @@ describe DataResponse do
     it { should belong_to(:data_request) }
     it { should belong_to(:previous) }
     it { should have_many(:activities) }
+    it { should have_many(:response_state_logs) }
     it { should have_many(:other_costs).dependent(:destroy) }
     it { should have_many(:projects).dependent(:destroy) }
     it { should have_many(:implementer_splits) } # delegate destroy to project -> activity
@@ -37,9 +38,9 @@ describe DataResponse do
 
   describe "#name" do
     it "returns data_response name" do
-      request      = FactoryGirl.create(:data_request, :title => 'Data Request 1')
+      request      = FactoryGirl.create(:data_request, title: 'Data Request 1')
       organization = FactoryGirl.create :organization
-      FactoryGirl.create :user, :organization => organization
+      FactoryGirl.create :user, organization: organization
       response     = organization.latest_response
       response.name.should == organization.name
     end
@@ -52,16 +53,16 @@ describe DataResponse do
 
     context "same currency" do
       it "returns total" do
-        project      = FactoryGirl.create(:project, :data_response => @response)
-        @activity    = FactoryGirl.create(:activity, :data_response => @response, :project => project)
-        split1       = FactoryGirl.create(:implementer_split, :activity => @activity,
-                               :budget => 200, :spend => 100, :organization => FactoryGirl.create(:organization))
-        @oc1         = FactoryGirl.create(:other_cost, :data_response => @response, :project => project)
-        split2       = FactoryGirl.create(:implementer_split, :activity => @activity,
-                               :budget => 200, :spend => 100, :organization => FactoryGirl.create(:organization))
-        @oc2         = FactoryGirl.create(:other_cost, :data_response => @response)
-        split3       = FactoryGirl.create(:implementer_split, :activity => @activity,
-                               :budget => 200, :spend => 100, :organization => FactoryGirl.create(:organization))
+        project      = FactoryGirl.create(:project, data_response: @response)
+        @activity    = FactoryGirl.create(:activity, data_response: @response, project: project)
+        split1       = FactoryGirl.create(:implementer_split, activity: @activity,
+                               budget: 200, spend: 100, organization: FactoryGirl.create(:organization))
+        @oc1         = FactoryGirl.create(:other_cost, data_response: @response, project: project)
+        split2       = FactoryGirl.create(:implementer_split, activity: @activity,
+                               budget: 200, spend: 100, organization: FactoryGirl.create(:organization))
+        @oc2         = FactoryGirl.create(:other_cost, data_response: @response)
+        split3       = FactoryGirl.create(:implementer_split, activity: @activity,
+                               budget: 200, spend: 100, organization: FactoryGirl.create(:organization))
         @activity.reload; @activity.save;
         @oc1.reload; @oc1.save;
         @oc2.reload; @oc2.save;
@@ -74,16 +75,16 @@ describe DataResponse do
       it "returns total" do
         Money.default_bank.add_rate(:RWF, :USD, 0.5)
         Money.default_bank.add_rate(:USD, :RWF,  2)
-        project      = FactoryGirl.create(:project, :data_response => @response, :currency => 'RWF')
-        @activity1   = FactoryGirl.create(:activity, :data_response => @response, :project => project)
-        split1        = FactoryGirl.create(:implementer_split, :activity => @activity1,
-                               :budget => 200, :spend => 100, :organization => FactoryGirl.create(:organization))
-        @other_cost1  = FactoryGirl.create(:other_cost, :data_response => @response, :project => project)
-        split2        = FactoryGirl.create(:implementer_split, :activity => @other_cost1,
-                               :budget => 200, :spend => 100, :organization => FactoryGirl.create(:organization))
-        @other_cost2 = FactoryGirl.create(:other_cost, :data_response => @response)
-        split        = FactoryGirl.create(:implementer_split, :activity => @other_cost2,
-                               :budget => 200, :spend => 100, :organization => FactoryGirl.create(:organization))
+        project      = FactoryGirl.create(:project, data_response: @response, currency: 'RWF')
+        @activity1   = FactoryGirl.create(:activity, data_response: @response, project: project)
+        split1        = FactoryGirl.create(:implementer_split, activity: @activity1,
+                               budget: 200, spend: 100, organization: FactoryGirl.create(:organization))
+        @other_cost1  = FactoryGirl.create(:other_cost, data_response: @response, project: project)
+        split2        = FactoryGirl.create(:implementer_split, activity: @other_cost1,
+                               budget: 200, spend: 100, organization: FactoryGirl.create(:organization))
+        @other_cost2 = FactoryGirl.create(:other_cost, data_response: @response)
+        split        = FactoryGirl.create(:implementer_split, activity: @other_cost2,
+                               budget: 200, spend: 100, organization: FactoryGirl.create(:organization))
         @activity1.reload; @activity1.save;
         @other_cost1.reload; @other_cost1.save;
         @other_cost2.reload; @other_cost2.save;
@@ -95,10 +96,10 @@ describe DataResponse do
 
   describe "by_state" do
     before :each do
-      user = FactoryGirl.create :user
-      @response_org = user.organization
-      @request1     = FactoryGirl.create(:data_request, :organization => @response_org)
-      @request2     = FactoryGirl.create(:data_request, :organization => @response_org)
+      @user = FactoryGirl.create :user
+      @response_org = @user.organization
+      @request1     = FactoryGirl.create(:data_request, organization: @response_org)
+      @request2     = FactoryGirl.create(:data_request, organization: @response_org)
       @response1    = @request1.reload.data_responses[0]
       @response2    = @request2.reload.data_responses[0]
     end
@@ -109,14 +110,14 @@ describe DataResponse do
       DataResponse.with_request(@request1).with_state('rejected').should be_empty
       DataResponse.with_request(@request2).with_state('rejected').should be_empty
 
-      @response1.start!
+      @response1.start!(@user)
 
       DataResponse.with_request(@request1).with_state('started').should == [@response1]
       DataResponse.with_request(@request2).with_state('started').should be_empty
       DataResponse.with_request(@request1).with_state('rejected').should be_empty
       DataResponse.with_request(@request2).with_state('rejected').should be_empty
 
-      @response2.reject!
+      @response2.reject!(@user)
 
       DataResponse.with_request(@request1).with_state('started').should == [@response1]
       DataResponse.with_request(@request2).with_state('started').should be_empty
@@ -131,7 +132,7 @@ describe DataResponse do
     end
 
     it "sysadmin unapproves response if it's rejected" do
-      @response.reject!
+      @response.reject!(@user)
       @response.reload.state.should == 'rejected'
     end
   end

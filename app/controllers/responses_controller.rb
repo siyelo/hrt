@@ -1,6 +1,7 @@
 class ResponsesController < BaseController
   before_filter :require_user
-  before_filter :require_admin, :only => [:restart, :reject, :accept]
+  before_filter :require_admin, :only => [:restart]
+  before_filter :require_activity_manager, :only => [:reject, :accept] #includes sysadmin
   before_filter :load_response_from_id
 
   def review
@@ -12,7 +13,7 @@ class ResponsesController < BaseController
   def submit
     @projects = @response.projects.find(:all, :include => :normal_activities)
     if @response.ready_to_submit?
-      @response.submit!
+      @response.submit!(current_user)
       flash[:notice] = "Successfully submitted. We will review your data and get back to you with any questions. Thank you."
       redirect_to review_response_url(@response)
     else
@@ -22,30 +23,23 @@ class ResponsesController < BaseController
   end
 
   def reject
-    @response.reject!
-    if current_response.organization.users.map{ |u| u.email }.present?
+    resp = params[:id].present? ? DataResponse.find(params[:id]) : @response
+    resp.reject!(current_user)
+    if current_response.organization.users.map(&:email).present?
       Notifier.response_rejected_notification(@response).deliver
     end
     flash[:notice] = "Response was successfully rejected"
-    redirect_to projects_path
+    redirect_to :back
   end
 
   def accept
-    @response.accept!
-    if current_response.organization.users.map{ |u| u.email }.present?
+    resp = params[:id].present? ? DataResponse.find(params[:id]) : @response
+    resp.accept!(current_user)
+    if current_response.organization.users.map(&:email).present?
       Notifier.response_accepted_notification(@response).deliver
     end
     flash[:notice] = "Response was successfully accepted"
-    redirect_to projects_path
-  end
-
-  def restart
-    @response.restart!
-    if current_response.organization.users.map{ |u| u.email }.present?
-      Notifier.response_restarted_notification(@response).deliver
-    end
-    flash[:notice] = "Response was successfully restarted"
-    redirect_to projects_path
+    redirect_to :back
   end
 
   private

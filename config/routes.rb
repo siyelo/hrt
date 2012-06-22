@@ -6,20 +6,20 @@ Hrt::Application.routes.draw do
     passwords: 'users/passwords'
   }
 
-  resources :invitations, :only => [:edit, :update]
+  resources :invitations, only: [:edit, :update]
 
-  root :to => 'static_page#index'
-  resource :profile, :only => [:disable_tips] do
+  root to: 'static_page#index'
+  resource :profile, only: [:disable_tips] do
     member do
       put :disable_tips
     end
   end
-  match 'about' => 'static_page#about', :as => :about_page
+  match 'about' => 'static_page#about', as: :about_page
   resources :comments, :only => [:create]
-  match 'dashboard' => 'dashboard#index', :as => :dashboard
+  match 'dashboard' => 'dashboard#index', as: :dashboard
   namespace :admin do
     resources :requests
-    resources :responses, :only => [:index, :new, :create]
+    resources :responses, only: [:index, :new, :create]
     resources :organizations do
       collection do
         get :duplicate
@@ -28,7 +28,7 @@ Hrt::Application.routes.draw do
         post :create_from_file
       end
     end
-    resources :reports, :only => [:index] do
+    resources :reports, only: [:index] do
       collection do
         get :locations
         get :district_workplan
@@ -37,7 +37,7 @@ Hrt::Application.routes.draw do
       end
     end
     namespace :reports do
-      resources :detailed, :only => [:index, :show] do
+      resources :detailed, only: [:index, :show] do
         collection do
           put :mark_implementer_splits
         end
@@ -46,15 +46,15 @@ Hrt::Application.routes.draw do
         end
       end
     end
-    resources :documents, :path => 'files'
-    resources :currencies, :except => [:show]
-    resources :users, :except => [:show] do
+    resources :documents, path: 'files'
+    resources :currencies, except: [:show]
+    resources :users, except: [:show] do
       collection do
         post :create_from_file
         get :download_template
       end
     end
-    resources :codes, :only => [:index, :edit, :update] do
+    resources :codes, only: [:index, :edit, :update] do
       collection do
         post :create_from_file
         get :download_template
@@ -63,17 +63,17 @@ Hrt::Application.routes.draw do
     resources :comments
   end
 
-  match 'activity_manager/workplan' => 'users#activity_manager_workplan', :as => :activity_manager_workplan
-  resources :responses, :only => [] do
+  match 'activity_manager/workplan' => 'users#activity_manager_workplan', as: :activity_manager_workplan
+  resources :responses, only: [] do
     member do
       get :review
       put :submit
-      put :reject
-      put :accept
       put :send_data_response
+      get :reject
+      get :accept
     end
   end
-  resources :projects, :except => [:show] do
+  resources :projects, except: [:show] do
     collection do
       get :download_template
       get :export_workplan
@@ -81,20 +81,20 @@ Hrt::Application.routes.draw do
       post :import
     end
   end
-  resources :activities, :except => [:index, :show]
-  resources :other_costs, :except => [:index, :show] do
+  resources :activities, except: [:index, :show]
+  resources :other_costs, except: [:index, :show] do
     collection do
       post :create_from_file
       get :download_template
     end
   end
-  resources :organizations, :only => [:index, :edit, :update] do
+  resources :organizations, only: [:index, :edit, :update] do
     collection do
       get :export
     end
   end
   resources :documents
-  resources :reports, :only => [:index] do
+  resources :reports, only: [:index] do
     collection do
       get :inputs
       get :locations
@@ -102,13 +102,13 @@ Hrt::Application.routes.draw do
   end
 
   namespace :reports do
-    resources :activities, :only => [:show] do
+    resources :activities, only: [:show] do
       member do
         get :inputs
         get :locations
       end
     end
-    resources :projects, :only => [:show] do
+    resources :projects, only: [:show] do
       member do
         get :locations
         get :inputs

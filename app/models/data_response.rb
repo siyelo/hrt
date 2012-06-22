@@ -11,43 +11,44 @@ class DataResponse < ActiveRecord::Base
   ### Associations
   belongs_to :organization
   belongs_to :data_request
-  has_many :projects, :dependent => :destroy
+  has_many :projects, dependent: :destroy
   has_many :activities #leave it to projects to destroy activities
-  has_many :normal_activities, :class_name => "Activity",
-           :conditions => [ "activities.type IS NULL"]
-  has_many :other_costs, :dependent => :destroy
-  has_many :implementer_splits, :through => :activities
-  has_many :comments, :as => :commentable, :dependent => :destroy
-  belongs_to :previous, :class_name => 'DataResponse'
+  has_many :response_state_logs
+  has_many :normal_activities, class_name: "Activity",
+           conditions: [ "activities.type IS NULL"]
+  has_many :other_costs, dependent: :destroy
+  has_many :implementer_splits, through: :activities
+  has_many :comments, as: :commentable, dependent: :destroy
+  belongs_to :previous, class_name: 'DataResponse'
 
-  accepts_nested_attributes_for :projects, :other_costs, :allow_destroy => true
+  accepts_nested_attributes_for :projects, :other_costs, allow_destroy: true
 
   ### Validations
   validates_presence_of   :data_request_id, :organization_id
-  validates_uniqueness_of :data_request_id, :scope => :organization_id
-  validates_inclusion_of  :state, :in => STATES
+  validates_uniqueness_of :data_request_id, scope: :organization_id
+  validates_inclusion_of  :state, in: STATES
 
   ### Named scopes
-  scope :latest_first, {:order => "data_request_id DESC" }
-  scope :unstarted, :conditions => ["state = ?", 'unstarted']
-  scope :started,   :conditions => ["state = ?", 'started']
-  scope :submitted, :conditions => ["state = ?", 'submitted']
-  scope :accepted,  :conditions => ["state = ?", 'accepted']
-  scope :rejected,  :conditions => ["state = ?", 'rejected']
+  scope :latest_first, {order: "data_request_id DESC" }
+  scope :unstarted, conditions: ["state = ?", 'unstarted']
+  scope :started,   conditions: ["state = ?", 'started']
+  scope :submitted, conditions: ["state = ?", 'submitted']
+  scope :accepted,  conditions: ["state = ?", 'accepted']
+  scope :rejected,  conditions: ["state = ?", 'rejected']
   scope :with_request, lambda { |request| {
-    :conditions => ["data_request_id = ?", request.id] } }
+    conditions: ["data_request_id = ?", request.id] } }
   scope :with_state, lambda { |state| {
-    :conditions => ["state = ?", state] } }
+    conditions: ["state = ?", state] } }
 
   ### Delegates
-  delegate :name, :to => :organization
-  delegate :title, :to => :data_request
+  delegate :name, to: :organization
+  delegate :title, to: :data_request
   delegate :currency, :contact_name, :contact_position, :contact_phone_number,
     :contact_main_office_phone_number, :contact_office_location,
-    :to => :organization
+    to: :organization
 
   ### Callbacks
-  before_validation :set_state, :on => :create
+  before_validation :set_state, on: :create
 
   ### Instance Methods
 
