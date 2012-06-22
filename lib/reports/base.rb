@@ -8,6 +8,7 @@ module Reports
     include CurrencyNumberHelper
     include Rails.application.routes.url_helpers
     include ChartColours
+    include ReportExporter
     attr_accessor :resource
 
     def initialize(resource)

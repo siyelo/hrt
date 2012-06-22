@@ -105,4 +105,19 @@ describe Reports::Funders do
       org2_row.total_spend.should == 400
     end
   end
+
+  describe "report export" do
+    it "can export the report in xls format" do
+      report = Reports::Funders.new(@data_request, false)
+      data = FileParser.parse(report.to_xls, 'xls')
+
+      data[0]["Name"].should == "organization1"
+      data[0]["Budget (USD)"].should == 100.0
+      data[0]["Expenditure (USD)"].should == 200.0
+
+      data[1]["Name"].should == "organization2"
+      data[1]["Budget (USD)"].should == 200.0
+      data[1]["Expenditure (USD)"].should == 400.0
+    end
+  end
 end

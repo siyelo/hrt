@@ -54,7 +54,7 @@ module Reports
         where(['data_request_id = ? AND spend > 0', request.id]).
         group('activities.project_id, implementer_splits.double_count')
 
-      grouped_implementer_splits = implementer_splits.group_by{|is| is.project_id}
+      grouped_implementer_splits = implementer_splits.group_by(&:project_id)
 
       grouped_implementer_splits.each do |project_id, all_splits|
         nondouble_splits = all_splits.select{|is| !is.double_count }

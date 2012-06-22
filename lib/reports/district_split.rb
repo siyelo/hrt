@@ -34,14 +34,21 @@ class Reports::DistrictSplit < Reports::TopBase
     elements = super
     national = elements.detect{ |element| element.name == "National Level" }
     other    = elements.select{ |element| element.name != "National Level" }
-    [national] + other
+
+    collection = []
+    collection << national if national
+    other.each do |element|
+      collection << element
+    end
+
+    collection
   end
 
   private
   def amounts_by_districts
     unless @amounts
       national  = locations.detect{|l| l.short_display == 'National Level' }
-      districts = locations.select{|l| l != national}
+      districts = locations.select{|l| l.short_display != 'National Level' }
 
       @amounts = []
 

@@ -1,70 +1,75 @@
 require 'spec_helper'
 
 describe Admin::ReportsController do
-  context "as a visitor" do
-    describe "#index" do
-      before :each do get :index end
-      it { should redirect_to(root_url) }
-      it { should set_the_flash.to("You must be an administrator to access that page") }
-    end
-  end
 
-  context "as a reporter" do
+  describe "user permissions" do
     before :each do
-      @req = FactoryGirl.create :data_request
-      @reporter = FactoryGirl.create :reporter
-      login @reporter
+      login # login as reporter
     end
 
-    describe "#index" do
-      before :each do get :index end
-      it { should redirect_to(root_url) }
-      it { should set_the_flash.to("You must be an administrator to access that page") }
-    end
+    it_should_require_sysadmin_for :index, :reporters, :funders, :locations,
+                                   :district_workplan
   end
 
-  context "as an admin" do
+  describe "actions" do
     before :each do
       @req = FactoryGirl.create :data_request
       @user = FactoryGirl.create :sysadmin
       login @user
     end
 
-    it "should render index report" do
-      get :index
-      response.should be_success
-      assigns[:report].should_not be_nil
+    describe "index" do
+      it "should render index report" do
+        get :index
+        response.should be_success
+        assigns[:report].should_not be_nil
+      end
     end
 
-    it "should render reporter report without double counts" do
-      get :reporters, :double_count => 'true'
-      response.should be_success
-      assigns[:report].include_double_count.should be_true
-      assigns[:report].should_not be_nil
+    [:reporters, :funders, :locations].each do |report_type|
+      describe "#{report_type}" do
+        it "should render #{report_type} report with double counts" do
+          get report_type, :double_count => 'false'
+          response.should be_success
+          assigns[:report].include_double_count.should be_false
+          assigns[:report].should_not be_nil
+        end
+
+        it "should render #{report_type} report without double counts" do
+          get report_type, :double_count => 'true'
+          response.should be_success
+          assigns[:report].include_double_count.should be_true
+          assigns[:report].should_not be_nil
+        end
+
+        it "can download #{report_type} report" do
+          get report_type, double_count: 'true', format: 'xls'
+          response.should be_success
+          assigns[:report].include_double_count.should be_true
+          response.header["Content-Type"].should == "application/vnd.ms-excel"
+          response.header["Content-Disposition"].should ==
+            "attachment; filename=#{report_type}.xls"
+        end
+      end
     end
 
-    it "should render reporter report with double counts" do
-      get :reporters, :double_count => 'false'
-      response.should be_success
-      assigns[:report].include_double_count.should be_false
-      assigns[:report].should_not be_nil
-    end
+    describe "district_workplan" do
+      it "downloads xls district report" do
+        location = mock_model(Location)
+        location.stub(:short_display).and_return('district1')
+        Location.stub(:find_by_short_display).and_return(location)
+        get :district_workplan, :id => 1
+        response.should be_success
+        response.header["Content-Type"].should == "application/vnd.ms-excel"
+        response.header["Content-Disposition"].should ==
+          "attachment; filename=district1_district_workplan.xls"
+      end
 
-    it "downloads xls district report" do
-      location = mock_model(Location)
-      location.stub(:short_display).and_return('district1')
-      Location.stub(:find_by_short_display).and_return(location)
-      get :district_workplan, :id => 1
-      response.should be_success
-      response.header["Content-Type"].should == "application/vnd.ms-excel"
-      response.header["Content-Disposition"].should ==
-        "attachment; filename=district1_district_workplan.xls"
-    end
-
-    it "downloads xls district report" do
-      Location.stub(:find).and_return(nil)
-      get :district_workplan, :id => 1
-      response.should redirect_to(locations_admin_reports_path)
+      it "downloads xls district report" do
+        Location.stub(:find).and_return(nil)
+        get :district_workplan, :id => 1
+        response.should redirect_to(locations_admin_reports_path)
+      end
     end
   end
 end

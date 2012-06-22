@@ -9,8 +9,10 @@
 %h1.main_heading
   .left
     Reports Overview
-    %a{:href => "javascript:window.print()", :id => "print-page"}
+    = link_to "javascript:window.print()", :id => "print-page" do
       = image_tag "icon_print.png", :alt => "Print This Page", :title => "Print This Page"
+    = link_to "#", :id => "export-report" do
+      = image_tag "icon_excel.png", :alt => "Export This Report", :title => "Export This Report"
 
   .request_nav.right
     = render '/shared/request_nav'
@@ -21,13 +23,13 @@
     = render :partial => 'admin/reports/shared/tabs'
 
 #charts_tables
-  .reporters_tab{:"data-loaded" => 'true', :"data-url" => reporters_admin_reports_path, :"data-chart" => 'column'}
+  .reporters_tab{:"data-loaded" => 'true', :"data-url" => reporters_admin_reports_path(:response_id => current_response.id), :"data-chart" => 'column'}
     = render '/reports/shared/report_data'
-  .funders_tab{:"data-loaded" => 'false', :"data-url" => funders_admin_reports_path, :"data-chart" => 'column', :style => 'display: none;'}
+  .funders_tab{:"data-loaded" => 'false', :"data-url" => funders_admin_reports_path(:response_id => current_response.id), :"data-chart" => 'column', :style => 'display: none;'}
     = image_tag "ajax-loader.gif", :class => "ajax-loader"
   .progress_tab{:"data-loaded" => 'false', :"data-url" => 'TODO', :"data-chart" => 'column', :style => 'display: none;'}
     = image_tag "ajax-loader.gif", :class => "ajax-loader"
-  .locations_tab.download{:"data-loaded" => 'false', :"data-url" => locations_admin_reports_path, :"data-chart" => 'column', :style => 'display: none;'}
+  .locations_tab.download{:"data-loaded" => 'false', :"data-url" => locations_admin_reports_path(:response_id => current_response.id), :"data-chart" => 'column', :style => 'display: none;'}
     = image_tag "ajax-loader.gif", :class => "ajax-loader"
   .purposes_tab{:"data-loaded" => 'false', :"data-url" => 'TODO', :"data-chart" => 'column', :style => 'display: none;'}
     = image_tag "ajax-loader.gif", :class => "ajax-loader"

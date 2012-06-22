@@ -94,4 +94,31 @@ describe Reports::Reporters do
     report1 = Reports::Reporters.new(data_request, false)
     report1.collection.first.total_spend.to_f.should == 200
   end
+
+  describe "report export" do
+    it "can export the report in xls format" do
+      organization1 = FactoryGirl.create(:organization, :name => 'organization1')
+      reporter1     = FactoryGirl.create(:reporter, :organization => organization1)
+      data_request  = FactoryGirl.create(:data_request, :organization => organization1)
+      data_response = organization1.latest_response
+      project1      = FactoryGirl.create(:project, :name => 'project1',
+                              :data_response => data_response)
+      split1        = FactoryGirl.create(:implementer_split,
+                              :budget => 100, :spend => 200,
+                              :organization => organization1)
+      activity1     = FactoryGirl.create(:activity, :name => 'activity1',
+                              :implementer_splits => [split1],
+                              :data_response => data_response,
+                              :project => project1)
+
+      report = Reports::Reporters.new(data_request, true)
+      # report.collection.first.total_spend.to_f.should == 400
+
+      data = FileParser.parse(report.to_xls, 'xls')
+
+      data[0]["Name"].should == "organization1"
+      data[0]["Budget (USD)"].should == 100.0
+      data[0]["Expenditure (USD)"].should == 200.0
+    end
+  end
 end

@@ -6,17 +6,17 @@ class Admin::ReportsController < Admin::BaseController
 
   def reporters
     @report = Reports::Reporters.new(current_response.data_request, double_count)
-    render :partial => '/reports/shared/report_data', :layout => false
+    render_report
   end
 
   def locations
     @report = Reports::DistrictSplit.new(current_request, double_count)
-    render :partial => '/reports/shared/report_data', :layout => false
+    render_report
   end
 
   def funders
     @report = Reports::Funders.new(current_response.data_request, double_count)
-    render :partial => '/reports/shared/report_data', :layout => false
+    render_report
   end
 
   def district_workplan
@@ -32,5 +32,16 @@ class Admin::ReportsController < Admin::BaseController
   private
   def double_count
     params[:double_count] == 'true' ? true : false
+  end
+
+  def render_report
+    respond_to do |format|
+      format.html do
+        render :partial => '/reports/shared/report_data', :layout => false
+      end
+      format.xls do
+        send_file(@report.to_xls, "#{params[:action]}.xls", 'application/vnd.ms-excel')
+      end
+    end
   end
 end
