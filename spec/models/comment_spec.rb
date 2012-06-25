@@ -34,8 +34,7 @@ describe Comment do
 
       Timecop.freeze(Date.parse("2010-09-01"))
 
-      response_comment       = FactoryGirl.create(:comment, :commentable => response,
-                                       :user => reporter, :created_at => "2010-08-01")
+      response_comment       = FactoryGirl.create(:comment, :commentable => response, :user => reporter, :created_at => "2010-08-01")
       project_comment        =  FactoryGirl.create(:comment, :commentable => project,
                                        :user => reporter, :created_at => "2010-08-01")
       activity_comment       =  FactoryGirl.create(:comment, :commentable => activity,

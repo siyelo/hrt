@@ -41,8 +41,7 @@ class DataResponse < ActiveRecord::Base
     conditions: ["state = ?", state] } }
 
   ### Delegates
-  delegate :name, to: :organization
-  delegate :title, to: :data_request
+  delegate :name, :to => :organization
   delegate :currency, :contact_name, :contact_position, :contact_phone_number,
     :contact_main_office_phone_number, :contact_office_location,
     to: :organization
@@ -60,6 +59,10 @@ class DataResponse < ActiveRecord::Base
     self.destroy
   end
   handle_asynchronously :destroy_asynchronously
+
+  def title
+    "#{name}: #{request.title}"
+  end
 
   private
     def set_state

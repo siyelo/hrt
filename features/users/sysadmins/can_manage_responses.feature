@@ -32,7 +32,7 @@ Feature: Admin can manage data responses
         When I follow "Accept" within "#state"
       Then I should see "Response was successfully accepted"
         And I should see "Status: Accepted" within "#state"
-      When "reporter1@hrtapp.com" open the email with subject "Your FY2010-11 Expenditures and FY2011-12 Budget response is Accepted"
+      When "reporter1@hrtapp.com" open the email with subject "Your UNDP: FY2010-11 Expenditures and FY2011-12 Budget response is Accepted"
       Then I should see "Your submission has been reviewed and accepted." in the email body
 
     Scenario: SysAdmin can reject response
@@ -44,7 +44,7 @@ Feature: Admin can manage data responses
         When I follow "Reject" within "#state"
       Then I should see "Response was successfully rejected"
         And I should see "Status: Rejected" within "#state"
-      When "reporter1@hrtapp.com" open the email with subject "Your FY2010-11 Expenditures and FY2011-12 Budget response is Rejected"
+      When "reporter1@hrtapp.com" open the email with subject "Your UNDP: FY2010-11 Expenditures and FY2011-12 Budget response is Rejected"
       Then I should see "We have reviewed your submission and noted some issues that you need to correct" in the email body
 
   Scenario: can create response
