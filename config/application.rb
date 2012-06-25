@@ -51,6 +51,6 @@ module Hrt
     config.assets.initialize_on_precompile = false
 
     # config.assets.precompile << /(^[^_]|\/[^_])[^\/]*/
-    # config.assets.precompile += ['polyfills.js']
+    config.assets.precompile += ['print.css']
   end
 end
