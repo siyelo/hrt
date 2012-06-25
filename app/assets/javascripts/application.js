@@ -74,6 +74,21 @@ var admin_reports_index = {
   }
 }
 
+var admin_codes_index = {
+  run: function () {
+    $('.collapsed').live('click', function (e) {
+      element = $(this)
+      if (element.text() == "+") {
+        element.html("-");
+      } else {
+        element.html("+");
+      }
+      theElement = "#" + element.attr("id") + "_act"
+      $(theElement).slideToggle();
+    });
+  }
+}
+
 var admin_responses_index = {
   run: function () {
     HrtCharts.drawBarChart('response_chart', _responses, 900, 150);

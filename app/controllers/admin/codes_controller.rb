@@ -1,4 +1,5 @@
 require 'set'
+
 class Admin::CodesController < Admin::BaseController
 
   ### Constants
@@ -11,13 +12,15 @@ class Admin::CodesController < Admin::BaseController
   helper_method :sort_column, :sort_direction
 
   def index
-    scope  = Code
-    scope  = scope.where(["UPPER(short_display) LIKE UPPER(:q) OR
-                                          UPPER(type) LIKE UPPER(:q) OR
-                                          UPPER(description) LIKE UPPER(:q)",
-                          {:q => "%#{params[:query]}%"}]) if params[:query]
-    @codes = scope.paginate(:page => params[:page], :per_page => 10,
-                    :order => "#{sort_column} #{sort_direction}")
+    scope = scoped_codes
+    if params[:query].present? || params[:sort].present?
+      @codes  = scope.where(["UPPER(short_display) LIKE UPPER(:q) OR
+                                            UPPER(type) LIKE UPPER(:q) OR
+                                            UPPER(description) LIKE UPPER(:q)",
+                                            {q: "%#{params[:query]}%"}])
+    else
+      @codes = scope.order("short_display").roots
+    end
   end
 
   def update
@@ -37,7 +40,7 @@ class Admin::CodesController < Admin::BaseController
   def create_from_file
     begin
       if params[:file].present?
-        doc = FileParser.parse(params[:file].open.read, 'csv', {:headers => true})
+        doc = FileParser.parse(params[:file].open.read, 'csv', {headers: true})
         if doc.headers.to_set == Code::FILE_UPLOAD_COLUMNS.to_set
           saved, errors = Code.create_from_file(doc)
           flash[:notice] = "Created #{saved} of #{saved + errors} codes successfully"
@@ -63,5 +66,13 @@ class Admin::CodesController < Admin::BaseController
 
     def sort_direction
       %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+    end
+
+    def scoped_codes
+      if params[:filter].present? && params[:filter] != "All"
+        Code.with_types("Code::#{params[:filter].upcase}".constantize)
+      else
+        Code
+      end
     end
 end

@@ -2,6 +2,8 @@ class Code < ActiveRecord::Base
 
   ### Constants
   PURPOSES            = %w[Mtef Nha Nasa Nsp]
+  INPUTS              = %w[CostCategory]
+  LOCATIONS           = %w[Location]
   FILE_UPLOAD_COLUMNS = %w[short_display long_display description type
    external_id parent_short_display hssp2_stratprog_val hssp2_stratobj_val
    official_name sub_account nha_code nasa_code]
@@ -34,7 +36,6 @@ class Code < ActiveRecord::Base
   scope :with_type,  lambda { |type| {:conditions => ["codes.type = ?", type]} }
   scope :with_types, lambda { |types| {:conditions => ["codes.type IN (?)", types]} }
   scope :purposes, :conditions => ["codes.type in (?)", PURPOSES]
-  scope :ordered_by_short_display, :order => 'short_display ASC'
 
   # is this still needed - especially given it has some complex Mtef/NHa etc logic ??!
   def self.deepest_nesting
