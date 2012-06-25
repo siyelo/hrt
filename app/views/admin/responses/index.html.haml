@@ -15,7 +15,7 @@
 
   .request_nav.right
     = render '/shared/request_nav'
-    
+
 %hr.heading
 %ul.horizontal.button-bar
   %li
@@ -45,6 +45,7 @@
           %th Status
           %th Action By
           %th Action Date
+          %th &nbsp;
       %tbody
         = render :partial => 'response', :collection => @responses
 

@@ -7,3 +7,6 @@
   %td= response.status
   %td= last_change.user.name if last_change
   %td= last_change.created_at.strftime("%d-%m-%Y") if last_change
+  %td
+    %ul.manage_bar
+      %li= link_to "x", admin_response_path(response), method: :delete, :data => { :confirm => "Are you sure you want to DELETE this data response? There is no undo." }

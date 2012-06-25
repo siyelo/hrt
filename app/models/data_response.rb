@@ -56,6 +56,11 @@ class DataResponse < ActiveRecord::Base
     self.data_request
   end
 
+  def destroy_asynchronously
+    self.destroy
+  end
+  handle_asynchronously :destroy_asynchronously
+
   private
     def set_state
       self.state = 'unstarted'

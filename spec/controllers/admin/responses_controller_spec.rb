@@ -96,5 +96,19 @@ describe Admin::ResponsesController do
         response.should render_template(:new)
       end
     end
+
+    describe "#destroy" do
+      before :each do
+        @org = FactoryGirl.create(:organization)
+        @data_request = FactoryGirl.create(:data_request, organization: @org)
+        @data_response = @data_request.reload.data_responses[0]
+      end
+
+      it "can destroy a data response" do
+        post :destroy, id: @data_response.id
+        flash[:notice].should == "#{@data_response.title} scheduled for deletion"
+        response.should redirect_to admin_responses_path
+      end
+    end
   end
 end
