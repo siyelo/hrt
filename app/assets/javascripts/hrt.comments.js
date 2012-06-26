@@ -40,13 +40,14 @@ HrtComments.init = function () {
     ajaxLoader.show();
 
     $.post(HrtForm.buildJsonUrl(form.attr('action')), form.serialize(),
-      function (data, status, response) {
+        function (data, status, response) {
       ajaxLoader.hide();
       element.removeClass('disabled');
 
       if (response.status === 206) {
         form.replaceWith(data.html)
       } else {
+        form.find("p.input-errors").remove();
         if (form.find('#comment_parent_id').length) {
           // comment reply
           block = element.parents('li.comment_item:first');

@@ -1,0 +1,7 @@
+var element = $('#edit_project_' + <%= @project.id %>);
+var form = element.parents('form');
+var activity_box = element.parents('.activity_box');
+var ajaxLoader = element.next('.ajax-loader');
+activity_box.html('<%= j(render 'shared/saved_ok', :object => @project) %>');
+ajaxLoader.hide();
+activity_box.html('<%= j(render 'projects/bulk_review', :project => @project, :response => current_response) %>');

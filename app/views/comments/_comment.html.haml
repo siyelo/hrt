@@ -17,8 +17,8 @@
   %p.comment= comment.comment
 
   .js_reply_box.comments_input.reply{:style => 'display: none; !important'}
-    = render 'comments/reply_form', :comment => Comment.new(:parent_id => comment.id), :parent => comment
+    = render :partial => 'comments/reply_form', :handlers => :haml, :formats => :html, :locals => {:comment => Comment.new(:parent_id => comment.id), :parent => comment}
 
   - if comment.children.present?
     %ul
-      = render :partial => 'comments/comment.html.haml', :collection => comment.children
+      = render :partial => 'comments/comment', :handlers => :haml, :formats => :html, :collection => comment.children

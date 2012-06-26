@@ -128,28 +128,9 @@ HrtProjects.import = function () {
   });
 
   $('.save_btn').live('click', function (e) {
-    e.preventDefault();
+    // e.preventDefault();
     var element = $(this);
-    var form = element.parents('form');
     var ajaxLoader = element.next('.ajax-loader');
-    var activity_box = element.parents('.activity_box');
-
     ajaxLoader.show();
-
-    $.post(HrtForm.buildUrl(form.attr('action')), form.serialize(), function (data) {
-      activity_box.html(data.html);
-      ajaxLoader.hide();
-      if (data.status == 'success') {
-         activity_box.find('.saved_tick').show();
-         activity_box.find('.saved_tick').removeClass('js_unsaved');
-         activity_box.find('.saved_tick').addClass('js_saved');
-
-         activity_box.find('.main').toggle();
-         HrtForm.toggleCollapsed(activity_box.find('.main'), activity_box.find('.header span'));
-
-         $('.js_unsaved:first').parents('.activity_box').find('.main').toggle();
-         HrtForm.toggleCollapsed($('.js_unsaved:first').parents('.activity_box').find('.main'), $('.js_unsaved:first').parents('.activity_box').find('.header span'));
-       }
-    });
   });
 };
