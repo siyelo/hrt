@@ -52,16 +52,13 @@ class Admin::OrganizationsController < Admin::BaseController
   def destroy
     @organization = Organization.find(params[:id])
 
-    # when on fix duplicate organizations page then redirect to :back
-    # otherwise redirect to admin organizatoins index  page
-    url = request.env['HTTP_REFERER'].to_s.match(/duplicate/) ?
-      duplicate_admin_organizations_url : admin_organizations_url
-
     if @organization.destroy
-      render_notice("Organization was successfully destroyed.", url)
+      flash[:notice] = "Organization was successfully destroyed."
     else
-      render_error("You cannot delete an organization that has (external) data referencing it.", url)
+      flash[:error] = "You cannot delete an organization that has (external) data referencing it."
     end
+
+    redirect_to admin_organizations_url
   end
 
   def duplicate
@@ -128,7 +125,7 @@ class Admin::OrganizationsController < Admin::BaseController
           redirect_to path
         end
         format.js do
-          render :json => {:message => message}.to_json, :status => :partial_content
+          render :remove_duplicate_error, :locals => { message: message }
         end
       end
     end
@@ -140,7 +137,7 @@ class Admin::OrganizationsController < Admin::BaseController
           redirect_to path
         end
         format.js do
-          render :json => {:message => message}.to_json
+          render :remove_duplicate_notice, :locals => { message: message }
         end
       end
     end

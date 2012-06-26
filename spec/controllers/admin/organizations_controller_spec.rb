@@ -44,68 +44,23 @@ describe Admin::OrganizationsController do
   end
 
   describe "#destroy" do
-    context "when organization has data, but no external references" do
-      before :each do
-        basic_setup_implementer_split_for_controller
-        @organization.stub!(:destroy).and_return(true)
-        Organization.stub(:find).and_return @organization
-      end
-
-      it "sets flash notice" do
-        delete :destroy, :id => @organization.id
-        flash[:notice].should == "Organization was successfully destroyed."
-      end
-
-      it "redirects to the duplicate_admin_organizations_path" do
-        request.env['HTTP_REFERER'] = 'http://localhost:3000/admin/organizations/duplicate'
-        delete :destroy, :id => @organization.id
-        response.should redirect_to(duplicate_admin_organizations_path)
-      end
-
-      it "returns proper json" do
-        delete :destroy, :id => @organization.id, :format => "js"
-        response.body.should == '{"message":"Organization was successfully destroyed."}'
-      end
-
-      it "does not js redirect" do
-        delete :destroy, :id => @organization.id, :format => "js"
-        response.should_not be_redirect
-      end
+    before :each do
+      basic_setup_implementer_split_for_controller
+      Organization.should_receive(:find).and_return @organization
     end
 
+    it "sets flash notice" do
+      @organization.should_receive(:destroy).and_return(true)
+      delete :destroy, :id => @organization.id
+      flash[:notice].should == "Organization was successfully destroyed."
+      response.should redirect_to(admin_organizations_url)
+    end
 
-    context "when organization has references" do
-      before :each do
-        basic_setup_implementer_split_for_controller # will have a data_request
-        @organization.stub!(:destroy).and_return(false)
-        Organization.stub(:find).and_return @organization
-      end
-
-      it "sets flash notice" do
-        delete :destroy, :id => @organization.id
-        flash[:error].should == "You cannot delete an organization that has (external) data referencing it."
-      end
-
-      it "redirects to the duplicate_admin_organizations_path" do
-        request.env['HTTP_REFERER'] = 'http://localhost:3000/admin/organizations/duplicate'
-        delete :destroy, :id => @organization.id
-        response.should redirect_to(duplicate_admin_organizations_path)
-      end
-
-      it "returns proper json when request is with js format" do
-        delete :destroy, :id => @organization.id, :format => "js"
-        response.body.should == '{"message":"You cannot delete an organization that has (external) data referencing it."}'
-      end
-
-      it "does not redirect with js" do
-        delete :destroy, :id => @organization.id, :format => "js"
-        response.should_not be_redirect
-      end
-
-      it "sets status to :partial_content with js" do
-        delete :destroy, :id => @organization.id, :format => "js"
-        response.status.should == 206
-      end
+    it "sets flash errror" do
+      @organization.should_receive(:destroy).and_return(false)
+      delete :destroy, :id => @organization.id
+      flash[:error].should == "You cannot delete an organization that has (external) data referencing it."
+      response.should redirect_to(admin_organizations_url)
     end
   end
 
@@ -136,13 +91,6 @@ describe Admin::OrganizationsController do
         response.should redirect_to(duplicate_admin_organizations_path)
         flash[:error].should == "Duplicate or target organizations not selected."
       end
-
-      it "returns proper json" do
-        put :remove_duplicate, :format => 'js'
-        response.body.should == '{"message":"Duplicate or target organizations not selected."}'
-        response.should_not be_redirect
-        response.status.should == 206
-      end
     end
 
     context "ids are the same " do
@@ -150,13 +98,6 @@ describe Admin::OrganizationsController do
         put :remove_duplicate, :duplicate_organization_id => 1, :target_organization_id => 1
         response.should redirect_to(duplicate_admin_organizations_path)
         flash[:error].should == "Same organizations for duplicate and target selected."
-      end
-
-      it "returns proper json" do
-        put :remove_duplicate, :format => 'js', :duplicate_organization_id => 1, :target_organization_id => 1
-        response.body.should == '{"message":"Same organizations for duplicate and target selected."}'
-        response.should_not be_redirect
-        response.status.should == 206
       end
     end
 
@@ -175,10 +116,10 @@ describe Admin::OrganizationsController do
         flash[:notice].should == "Organizations successfully merged."
       end
 
-      it "responds OK (json)" do
+      it "responds OK (js)" do
         put :remove_duplicate, :format => 'js', :duplicate_organization_id => dupe.id,
           :target_organization_id => target.id
-        response.body.should == '{"message":"Organizations successfully merged."}'
+        response.should render_template('remove_duplicate_notice')
         response.should_not be_redirect
         response.status.should == 200
       end

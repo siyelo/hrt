@@ -1,7 +1,7 @@
 - @project = project
 - project_activities = @activities ? @activities.find_all{|a| a.project == project} : @project.activities
 
-.activity_box
+.activity_box{:id => dom_id(@project)}
   .header.section_nav
     %span.indicator.collapsed
     - if project.valid? && project_activities.select{|a| !a.errors.empty?}.empty?
@@ -15,7 +15,7 @@
 
     = render 'shared/error_messages', :resource => @project
 
-    = semantic_form_for project, :namespace => form_namespace(project), :url => create_or_edit_project_path(project, @response), :html => {:class => "condensed_form basic_form bulk_edit_form"} do |f|
+    = semantic_form_for project, :namespace => form_namespace(project), :url => create_or_edit_project_path(project, @response), :remote => true, :html => {:class => "condensed_form basic_form bulk_edit_form"} do |f|
       = f.inputs :class => 'inputs_condensed' do
 
         .project_heading Project

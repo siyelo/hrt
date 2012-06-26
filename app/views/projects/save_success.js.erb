@@ -1,0 +1,11 @@
+var element = $('#edit_project_' + <%= @project.id %>);
+var form = element.parents('form');
+var activity_box = element.parents('.activity_box');
+var ajaxLoader = element.next('.ajax-loader');
+activity_box.html('<%= j(render 'shared/saved_ok', :object => @project) %>');
+ajaxLoader.hide();
+activity_box.find('.saved_tick').removeClass('hidden').removeClass('js_unsaved').addClass('js_saved');
+activity_box.find('.main').toggle();
+HrtForm.toggleCollapsed(activity_box.find('.main'), activity_box.find('.header span'));
+$('.js_unsaved:first').parents('.activity_box').find('.main').toggle();
+HrtForm.toggleCollapsed($('.js_unsaved:first').parents('.activity_box').find('.main'), $('.js_unsaved:first').parents('.activity_box').find('.header span'));

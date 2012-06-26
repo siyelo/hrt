@@ -44,12 +44,12 @@ class ProjectsController < BaseController
           flash[:notice] = "Project successfully created";
           redirect_to projects_path
         end
-        format.js   { js_redirect_success }
+        format.js { render :save_success }
       end
     else
       respond_to do |format|
         format.html { render :action => 'new' }
-        format.js   { js_redirect_failed }
+        format.js { render :save_failed }
       end
     end
   end
@@ -63,12 +63,12 @@ class ProjectsController < BaseController
           flash[:notice] = "Project successfully updated";
           redirect_to edit_project_url(@project)
         }
-        format.js { js_redirect_success }
+        format.js { render :save_success }
       end
     else
       respond_to do |format|
         format.html {load_comment_resources(@project); render :action => 'edit'}
-        format.js { js_redirect_failed }
+        format.js { render :save_failed }
       end
     end
   end
@@ -166,19 +166,5 @@ class ProjectsController < BaseController
     def load_inline_forms
       self.load_activity_new
       self.load_other_cost_new
-    end
-
-    def js_redirect_success
-      render :json => {:status => 'success',
-               :html => render_to_string(:partial => 'shared/saved_ok',
-                 :layout => false,
-                 :locals => {:object => @project})}
-    end
-
-    def js_redirect_failed
-      render :json => {:status => 'failed',
-               :html => render_to_string(:partial => 'projects/bulk_review',
-                 :layout => false,
-                 :locals => {:project => @project, :response => current_response})}
     end
 end
