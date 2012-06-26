@@ -9,40 +9,31 @@
       Organizations I Manage
 
     .section_base.less_spacing
-      %table.standard.am_organizations
-        %thead
-          %tr
-            %th.am_organization Organization
-            %th.am_contacts Contacts
-            %th.am_status Status
-            %th.center Workplan
+      %table.data.fixed.am_organizations
         %tbody
           - @dashboard.organizations.each do |organization|
             - response = organization.data_responses.detect { |dr| dr.data_request_id == current_request.id }
             - if response
-              - if response.response_state_logs.last
-                - name = response.response_state_logs.last.user.name
-                - date = response.response_state_logs.last.created_at.strftime("%d-%m-%Y")
               %tr
-                %td.title= link_to organization.name, projects_path(:response_id => response.id)
+                %td.title.wrap-45= link_to organization.name, projects_path(:response_id => response.id)
                 %td
                   %ul
                     %li
                       = organization.contact_name
-                      %span= "(#{organization.contact_position})" if organization.contact_position.present?
-                    %li
+                      %br
+                      %span= organization.contact_position if organization.contact_position.present?
+                      =link_to '(more)', '#', class: 'contact_expander'
+                    %li.hidden
                       = organization.contact_phone_number.presence || organization.contact_main_office_phone_number
-                  %ul
-                    - organization.user_emails(2).each do |email|
-                      %li= mail_to email
-                %td
-                  %ul
-                    %li= link_to response.status, projects_path(:response_id => response.id)
-                  - if name
-                    %ul
-                      %li= name
-                      %li= date
-                %td.center.download= link_to '', export_workplan_projects_path(:response_id => response.id), id: 'download_workplan', class: 'download'
+                      %br
+                      - organization.user_emails(2).each do |email|
+                        =mail_to email
+                        %br
+                %td.wrap-8
+                  %ul.horizontal
+                    //%li= link_to , projects_path(:response_id => response.id)
+                    %li.right= link_to response.state, "#", :class => "tooltip-S response_status #{response.state}", :title => response_log_tooltip(response)
+                    %li.right= link_to '', export_workplan_projects_path(:response_id => response.id), id: 'download_workplan', class: 'download big tooltip-S', :title => "Download Workplan"
 
   .sidebar
     %h2= "Combined Workplan (#{pluralize(current_user.organizations.count, 'organization')})"

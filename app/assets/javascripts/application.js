@@ -27,6 +27,7 @@
 //= require 'hrt.users'
 //= require 'hrt.reports'
 //= require 'hrt.landing_page'
+//= require 'hrt.dashboard'
 
 
 
@@ -125,6 +126,12 @@ var admin_users_new = admin_users_create = admin_users_edit =
 var promo_landing = {
   run: function () {
     HrtLandingPage.init()
+  }
+};
+
+var dashboard_index ={
+  run: function () {
+    HrtDashboard.init()
   }
 };
 

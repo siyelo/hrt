@@ -364,3 +364,19 @@ body.login .buttons li:last-child
   top: 5px
   &:hover, &:focus
     opacity: 1
+
+.response_status
+  display: inline-block
+  height: 20px
+  width: 20px
+  
+  &.accepted
+    +replace-text("icon-accepted.png")
+  &.rejected
+    +replace-text("icon-rejected.png")
+  &.submitted
+    +replace-text("icon-submitted.png")
+  &.started
+    +replace-text("icon-started.png")
+  &.unstarted
+    +replace-text("icon-notyetstarted.png")

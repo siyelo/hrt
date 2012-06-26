@@ -114,6 +114,8 @@ table.rounded
 table.data
   color: $primary_dark
   width: 100%
+  &.fixed
+    table-layout: fixed
 
   th
     background: $primary_dark
@@ -168,6 +170,8 @@ table.data
 
     &.wrap-3
       width: 1%
+    &.wrap-8
+      width: 8%
     &.wrap-10
       width: 10%
     &.wrap-12
@@ -180,6 +184,8 @@ table.data
       width: 30%
     &.wrap-40
       width: 40%
+    &.wrap-45
+      width: 45%
     &.wrap-50
       width: 50%
     &.wrap-60
@@ -342,16 +348,25 @@ tr.filler2 th, tr.filler2 td
     padding: 5px
 
   td
-    padding: 5px
+    vertical-align: top
+    padding: 10px 5px 5px
   ul
-    &:first-child
-      margin-bottom: 8px !important
     li
       margin: 2px 8px 4px 0
-      font-size: 11px
+      font-size: 12px
+      span, a
+        border: none !important
+        font-size: 11px
 
       span
         color: #49637D
+  .right a
+    border: none !important
+  .contact
+    width: 80%
+    white-space: nowrap
+    overflow: hidden
+    text-overflow: ellipsis
 
 // Simple table
 
@@ -580,4 +595,3 @@ td.download
   a
     background: image_url("icon_download.png") no-repeat left center
     padding-left: 20px
-
