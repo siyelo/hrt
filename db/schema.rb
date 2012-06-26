@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120625102916) do
+ActiveRecord::Schema.define(:version => 20120626103842) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -188,6 +188,7 @@ ActiveRecord::Schema.define(:version => 20120625102916) do
     t.string   "contact_office_location"
     t.string   "implementer_type"
     t.string   "funder_type"
+    t.integer  "fy_start_month"
   end
 
   create_table "organizations_managers", :id => false, :force => true do |t|

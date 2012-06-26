@@ -9,8 +9,8 @@ Feature: Reporter can manage data response
     And I follow "Settings"
 
   Scenario: Reporter can edit settings
-    When I select "Euro (EUR)" from "Default Currency"
-      And I select "Government" from "Raw Type"
+    When I select "Euro (EUR)" from "organization_currency"
+      And I select "Government" from "organization_raw_type"
       And I should not see "Fosaid"
       And I press "Update organization"
       Then I should see "Settings were successfully updated"

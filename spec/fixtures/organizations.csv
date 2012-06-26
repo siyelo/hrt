@@ -1,5 +1,5 @@
-name,raw_type,fosaid,currency
-csv_org1,Ngo,111,USD
-csv_org2,Ngo,222,USD
-csv_org3,Donor,333,USD
-csv_org4,Donor,444,USD
+name,raw_type,fosaid,currency,fy_start_month
+csv_org1,Ngo,111,USD, January
+csv_org2,Ngo,222,USD, February
+csv_org3,Donor,333,USD, March
+csv_org4,Donor,444,USD, December

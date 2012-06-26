@@ -3,24 +3,24 @@ module OrganizationsHelper
     organization.data_responses.detect { |dr| dr.data_request == data_request }
   end
 
-  def input_options(label = nil, hint = nil, required = true, label_class = 'indented', wrapper_class = 'input-wrapper')
-    return  :label => label, :hint => hint,
-            :label_html => { :class => label_class, :required => required },
-            :wrapper_html => { :class => wrapper_class }
+  def input_options(label = nil, hint = nil, required = false, label_class = 'indented', wrapper_class = 'input-wrapper')
+    return  {label: label, hint: hint,
+            label_html: { class: label_class, required: required },
+            wrapper_html: { class: wrapper_class }}
   end
 
   def input_date(value, label = nil, hint = nil, required = true, label_class = 'indented', wrapper_class = 'input-wrapper')
-    return :value => formatted_date(value), :class => "date_picker",
-      :label => label, :required => required,
-      :hint => hint, :label_html => { :class => label_class },
-      :wrapper_html => { :class => wrapper_class }
+    return {value: formatted_date(value), class: "date_picker",
+      label: label, required: required,
+      hint: hint, label_html: { class: label_class },
+      wrapper_html: { class: wrapper_class }}
   end
 
-  def select_options(label = nil, hint = nil, label_class = 'indented', wrapper_class = 'input-wrapper', input_class = 'string required')
-    return :label => label, :hint => hint,
-      :label_html => { :class => label_class },
-      :wrapper_html => { :class => wrapper_class },
-      :input_html => { :class => input_class }
+  def select_options(label = nil, hint = nil, required = true, label_class = 'indented', wrapper_class = 'input-wrapper', input_class = 'string required')
+    return {label: label, hint: hint,
+      label_html: { class: label_class, required: true},
+      wrapper_html: { class: wrapper_class },
+      input_html: { class: input_class }}
   end
 
   def name_hint
@@ -67,5 +67,9 @@ module OrganizationsHelper
 
   def office_location_hint
     "The geographic location of the office."
+  end
+
+  def start_month_hint
+    "The month in which your organization's fiscal year starts."
   end
 end

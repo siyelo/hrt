@@ -13,6 +13,7 @@ describe Organization do
     it { should allow_mass_assignment_of(:contact_phone_number) }
     it { should allow_mass_assignment_of(:contact_main_office_phone_number) }
     it { should allow_mass_assignment_of(:contact_office_location) }
+    it { should allow_mass_assignment_of(:fy_start_month) }
   end
 
   describe "Associations" do
@@ -33,20 +34,12 @@ describe Organization do
     it { should validate_presence_of(:name) }
     it { should validate_presence_of(:raw_type) }
     it { should validate_uniqueness_of(:name) }
-
+    it { should ensure_inclusion_of(:fy_start_month).in_range(1..12) }
     it "is valid when currency is included in the list" do
       organization = FactoryGirl.build(:organization, currency: 'USD')
       organization.save
       organization.errors[:currency].should be_blank
     end
-  end
-
-  describe "custom date validations" do
-    it { should allow_mass_assignment_of(:contact_name) }
-    it { should allow_mass_assignment_of(:contact_position) }
-    it { should allow_mass_assignment_of(:contact_phone_number) }
-    it { should allow_mass_assignment_of(:contact_main_office_phone_number) }
-    it { should allow_mass_assignment_of(:contact_office_location) }
   end
 
   describe "named_scopes" do
