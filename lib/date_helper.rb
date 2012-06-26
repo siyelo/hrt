@@ -7,4 +7,8 @@ module DateHelper
       Date.strptime(date_string.gsub('/', '-'), '%d-%m-%Y') rescue date_string
     end
   end
+
+  def self.month_options_for_select
+    Date::MONTHNAMES.each_with_index.collect{ |month, index| [month, index] }
+  end
 end

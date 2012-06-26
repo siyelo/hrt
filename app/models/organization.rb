@@ -10,12 +10,13 @@ class Organization < ActiveRecord::Base
     'Military Hospital', 'MoH unit', 'Multilateral', 'National Hospital',
     'Non-Reporting', 'Other ministries', 'Parastatal', 'Prison Clinic',
     'RBC institutions']
-  FILE_UPLOAD_COLUMNS = %w[name raw_type fosaid currency]
+  FILE_UPLOAD_COLUMNS = %w[name raw_type fosaid currency fy_start_month]
 
   ### Attributes
   attr_accessible :name, :raw_type, :fosaid, :currency, :contact_name,
     :contact_position, :contact_phone_number, :contact_main_office_phone_number,
-    :contact_office_location, :implementer_type, :funder_type, :organization_id
+    :contact_office_location, :implementer_type, :funder_type, :organization_id,
+    :fy_start_month
 
 
   ### Associations
@@ -39,7 +40,8 @@ class Organization < ActiveRecord::Base
   ### Validations
   validates_presence_of :name, :raw_type, :currency
   validates_uniqueness_of :name
-  validates_inclusion_of :currency, :in => Money::Currency::TABLE.map{|k, v| "#{k.to_s.upcase}"}
+  validates_inclusion_of :currency, in: Money::Currency::TABLE.map{|k, v| "#{k.to_s.upcase}"}
+  validates_inclusion_of :fy_start_month, in: 1..12
 
   ### Callbacks
   before_destroy :check_no_funder_references
@@ -63,6 +65,7 @@ class Organization < ActiveRecord::Base
       saved, errors = 0, 0
       doc.each do |row|
         attributes = row.to_hash
+        attributes["fy_start_month"] = Date.parse(attributes["fy_start_month"]).month
         organization = Organization.new(attributes)
         organization.save ? (saved += 1) : (errors += 1)
       end
