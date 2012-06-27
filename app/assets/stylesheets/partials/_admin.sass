@@ -305,6 +305,17 @@ body.app #content .tabs
     &:nth-child(5) a, &:nth-child(6) a
       border-bottom: none
 
-.download td a
+.download td a, .download, td.download a
   background: image_url("icon_download.png") no-repeat left center
   padding-left: 20px
+  &.big
+    background: image_url("icon-download.png") no-repeat left center
+    border-bottom: none !important
+    display: inline-block
+    height: 20px
+    opacity: .8
+    padding-left: 0
+    text-decoration: none
+    width: 20px
+    &:hover, &:focus
+      opacity: 1
