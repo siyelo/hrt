@@ -107,11 +107,12 @@ class Report < ActiveRecord::Base
 
   def create_report
     report.data do |content, filetype, mimetype|
-      file_name = "#{Rails.root}/tmp/#{key}_#{data_request_id}_#{get_date()}.#{filetype}"
-      File.open(file_name, "w:UTF-8") {|f| f.write(content.force_encoding('UTF-8'))}
+      folder = "#{Rails.root}/tmp/"
+      file_name = "#{key}_#{data_request_id}_#{get_date()}.#{filetype}"
+      File.open(folder + file_name, "w:UTF-8") {|f| f.write(content.force_encoding('UTF-8'))}
 
-      FileZipper.zip(file_name) do |zip_file_name|
-        self.attachment = File.new(zip_file_name, 'r')
+      FileZipper.zip(folder, file_name) do |zip_file_path|
+        self.attachment = File.new(zip_file_path, 'r')
         self.save
       end
     end

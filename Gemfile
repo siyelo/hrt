@@ -27,6 +27,7 @@ gem 'version'
 gem 'will_paginate'
 gem 'addressable'
 gem 'axlsx'
+gem 'rubyzip'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

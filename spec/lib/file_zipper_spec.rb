@@ -7,10 +7,11 @@ describe FileZipper do
   end
 
   it "can create a temporary zip file" do
-    tmp_file_name = "#{Rails.root}/tmp/tmpfile.txt"
-    File.open(tmp_file_name, 'w') { |f| f.puts 'test' }
+    tmp_file_name = "tmpfile.txt"
+    tmp_folder = "#{Rails.root}/tmp/"
+    File.open(tmp_folder + tmp_file_name, 'w') { |f| f.puts 'test' }
     zip_file_name = nil
-    FileZipper.zip(tmp_file_name) do |filename|
+    FileZipper.zip(tmp_folder, tmp_file_name) do |filename|
       zip_file_name = filename
       File.exists?(filename).should be_true
     end
