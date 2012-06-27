@@ -6,14 +6,16 @@ module FileZipper
     output = %x(#{cmd})
   end
 
-  def zip(file_name)
-    zip_file_name = "#{file_name}.zip"
-    cmd = "zip -j -9 #{zip_file_name} #{file_name}"
-    output = %x(#{cmd})
+  def zip(folder, file_name)
+    zip_file_path = "#{folder + file_name}.zip"
 
-    yield(zip_file_name)
+    Zip::ZipFile.open(zip_file_path, Zip::ZipFile::CREATE) do |zipfile|
+        zipfile.add(file_name, folder + '/' + file_name)
+    end
 
-    File.delete(file_name) if file_name
-    File.delete(zip_file_name) if zip_file_name
+    yield(zip_file_path)
+
+    File.delete(folder + file_name) if file_name
+    File.delete(zip_file_path) if zip_file_path
   end
 end

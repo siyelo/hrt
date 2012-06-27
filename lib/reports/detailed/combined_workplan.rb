@@ -17,11 +17,12 @@ class Reports::Detailed::CombinedWorkplan
     workplan = Reports::Detailed::FunctionalWorkplan.new(
       response, user.organizations, filetype)
     workplan.data do |content, filetype, mimetype|
-      file_name = "#{Rails.root}/tmp/combined_workplan.#{filetype}"
-      File.open(file_name, "w:US-ASCII") {|f| f.write(content)}
+      folder = "#{Rails.root}/tmp/"
+      file_name = "combined_workplan.#{filetype}"
+      File.open(folder + file_name, "w:UTF-8") {|f| f.write(content.force_encoding('UTF-8'))}
 
-      FileZipper.zip(file_name) do |zip_file_name|
-        user.workplan = File.new(zip_file_name, 'r')
+      FileZipper.zip(folder, file_name) do |zip_file_path|
+        user.workplan = File.new(zip_file_path, 'r')
         user.save
       end
     end
