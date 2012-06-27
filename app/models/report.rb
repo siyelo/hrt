@@ -1,7 +1,7 @@
 class Report < ActiveRecord::Base
 
   include ScriptHelper
-  include PrivateUrl # gives private_url?
+  include AttachmentHelper
 
   ### Associations
   belongs_to :data_request
@@ -33,7 +33,8 @@ class Report < ActiveRecord::Base
   attr_accessible :key, :attachment, :data_request_id
 
   ### Attachments
-  has_attached_file :attachment, Settings.paperclip_report.to_options
+  has_attached_file :attachment, path:
+    AttachmentHelper.attachment_path("report/:attachment/:data_request_id/:key.:extension")
 
   ### Validations
   validates_presence_of :key, :data_request_id

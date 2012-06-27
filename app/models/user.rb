@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
   include User::Upload
   include User::Roles
-  include PrivateUrl # gives private_url?
+  include AttachmentHelper # gives private_url?
 
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable, :lockable, :timeoutable,
@@ -34,7 +34,8 @@ class User < ActiveRecord::Base
   delegate :latest_response, :to => :organization # find the last response in the org
 
   ### Attachments
-  has_attached_file :workplan, Settings.paperclip_workplan.to_options
+  has_attached_file :workplan, path:
+    AttachmentHelper.attachment_path("workplans/:user_id.:extension")
 
   ### Instance Methods
 
