@@ -15,7 +15,7 @@
       = f.label :project_id, "Project"
       = link_to "#", :title => "The Project which this #{klass} belongs to", :class => 'tooltip' do
         =image_tag"tooltip.png"
-    = f.select :project_id, sorted_project_select(@response, klass), {}, :class => f.object.errors[:project_id].present? ? "error" : ""
+    = f.select :project_id, options_for_select(sorted_project_select(@response, klass), params[:project_id].present? ? params[:project_id] : nil), {}, :class => f.object.errors[:project_id].present? ? "error" : ""
   %li.select.required
     .name
       = f.label :currency, "Currency"
