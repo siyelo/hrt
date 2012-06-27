@@ -19,12 +19,13 @@
                 %td
                   %ul
                     %li
-                      = organization.contact_name
-                      %br
-                      %span= organization.contact_position if organization.contact_position.present?
+                      = organization.contact_name || 'No contact person'
+                      - if organization.contact_position.present?
+                        %br
+                        %span= organization.contact_position
                       =link_to '(more)', '#', class: 'contact_expander'
                     %li.hidden
-                      = organization.contact_phone_number.presence || organization.contact_main_office_phone_number
+                      = organization.contact_phone_number.presence || organization.contact_main_office_phone_number || 'No contact number'
                       %br
                       - organization.user_emails(2).each do |email|
                         =mail_to email
@@ -42,10 +43,12 @@
         %tbody
           %tr
             %td
-              = link_to "Download", download_workplans_path
-              - if current_user.workplan
+              - if current_user.workplan_file_name
+                = link_to "Download", download_workplans_path
                 ="(updated #{distance_of_time_in_words_to_now(current_user.workplan_updated_at)} ago)" if current_user.workplan_updated_at
-              = link_to image_tag("icon_regenerate.png"), generate_workplans_path, :title => 'Regenerate workplan', class: 'right'
+                = link_to image_tag("icon_regenerate.png"), generate_workplans_path, :title => 'Regenerate workplan', class: 'right'
+              - else
+                = link_to "Generate", generate_workplans_path
 
   .sidebar#admin-submission
     %h2 Latest Submissions
