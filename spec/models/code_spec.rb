@@ -50,7 +50,6 @@ describe Code do
       nasa_code          = FactoryGirl.create(:nasa_code)
       nsp_code           = FactoryGirl.create(:nsp_code)
       cost_category_code = FactoryGirl.create(:cost_category_code)
-      other_cost_code    = FactoryGirl.create(:other_cost_code)
       location           = FactoryGirl.create(:location)
       beneficiary        = FactoryGirl.create(:beneficiary)
       hssp_strat_prog    = FactoryGirl.create(:hssp_strat_prog)

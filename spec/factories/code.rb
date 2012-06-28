@@ -28,9 +28,6 @@ FactoryGirl.define do
   factory :cost_category_code, :parent => :input do |f|
   end
 
-  factory :other_cost_code, :class => OtherCostCode, :parent => :code do |f|
-  end
-
   factory :location, :class => Location, :parent => :code do |f|
   end
 

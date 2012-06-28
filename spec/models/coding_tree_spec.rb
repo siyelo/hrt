@@ -375,13 +375,6 @@ describe CodingTree do
         basic_setup_other_cost
       end
 
-      it "returns codes for other cost activity and 'PurposeBudgetSplit' type" do
-        OtherCostCode.stub(:roots).and_return(@fake_codes)
-
-        ct = CodingTree.new(@other_cost, PurposeBudgetSplit)
-        ct.root_codes.should == @fake_codes
-      end
-
       it "returns codes for other cost activity and 'InputBudgetSplit' type" do
         CostCategory.stub(:roots).and_return(@fake_codes)
 
@@ -394,13 +387,6 @@ describe CodingTree do
         Location.stub_chain(:without_national_level, :sorted, :all).and_return([])
 
         ct = CodingTree.new(@other_cost, LocationBudgetSplit)
-        ct.root_codes.should == @fake_codes
-      end
-
-      it "returns codes for other cost activity and 'PurposeSpendSplit' type" do
-        OtherCostCode.stub(:roots).and_return(@fake_codes)
-
-        ct = CodingTree.new(@other_cost, PurposeSpendSplit)
         ct.root_codes.should == @fake_codes
       end
 
