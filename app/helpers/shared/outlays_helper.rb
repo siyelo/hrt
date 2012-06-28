@@ -17,9 +17,9 @@ module Shared::OutlaysHelper
     list = response.projects.sort_by{ |p| p.name }.collect do |u|
       [ truncate(u.name, :length => length), u.id ]
     end
-    list = list.insert(0,["<Automatically create a project for me>", -1])
-    list = list.insert(1,["<No project>", nil]) if klass == "OtherCost"
-    [['Select a project...', '']] + list
+    list = list.insert(0,["Not project-specific", nil]) if klass == "OtherCost"
+    list = list.insert(1,["<Automatically create a project for me>", -1])
+    list
   end
 
   def tab_class(tab)
