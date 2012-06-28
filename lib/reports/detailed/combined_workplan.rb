@@ -1,4 +1,6 @@
 class Reports::Detailed::CombinedWorkplan
+  include Rails.application.routes.url_helpers
+
   attr_accessor :response, :user, :filetype
 
   def initialize(response, user, filetype)
@@ -9,7 +11,7 @@ class Reports::Detailed::CombinedWorkplan
 
   def generate_workplan_for_download
     generate_workplan
-    Notifier.workplan_download_notification(user).deliver
+    Notifier.report_download_notification(user, download_workplans_url).deliver
   end
   handle_asynchronously :generate_workplan_for_download
 
@@ -19,9 +21,7 @@ class Reports::Detailed::CombinedWorkplan
     workplan.data do |content, filetype, mimetype|
       folder = "#{Rails.root}/tmp/"
       file_name = "combined_workplan.#{filetype}"
-      File.open(folder + file_name, "w:UTF-8") {|f| f.write(content.force_encoding('UTF-8'))}
-
-      FileZipper.zip(folder, file_name) do |zip_file_path|
+      FileZipper.zip_content(folder, file_name, content) do |zip_file_path|
         user.workplan = File.new(zip_file_path, 'r')
         user.save
       end

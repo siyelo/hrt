@@ -25,6 +25,7 @@ class Reports::Detailed::DynamicQuery
         ]},
         { :organization => :data_responses } ]
     @builder = FileBuilder.new(filetype)
+    @show_double_count = true
   end
 
   def data(&block)
@@ -66,7 +67,7 @@ class Reports::Detailed::DynamicQuery
     row << 'Location Split %'
     row << 'Name of District'
     row << 'Total Amount ($)'
-    row << 'Actual Double Count'
+    row << 'Actual Double Count' if @show_double_count
     row << 'Implementer Split ID'
     row
   end
@@ -148,7 +149,7 @@ class Reports::Detailed::DynamicQuery
                                                              ( (purpose_classification.percentage || 0) /100 ) *
                                                              ( (district_classification.percentage || 0) / 100)
           # don't use double_count?, we need to display if the value is nil
-          district_row << implementer_split.double_count
+          district_row << implementer_split.double_count if @show_double_count
           district_row << implementer_split.id
           builder.add_row(district_row)
         end

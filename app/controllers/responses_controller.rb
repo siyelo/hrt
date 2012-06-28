@@ -1,4 +1,6 @@
 class ResponsesController < BaseController
+  include FileSender
+
   before_filter :require_user
   before_filter :require_admin, :only => [:restart]
   before_filter :require_activity_manager, :only => [:reject, :accept] #includes sysadmin
@@ -42,9 +44,21 @@ class ResponsesController < BaseController
     redirect_to :back
   end
 
+  def download_overview
+    type = params[:type]
+    if type == 'budget' || type == 'spend'
+      report = Reports::Detailed::ResponseOverview.new(current_response, type, 'xls')
+      send_report_file(report, "Response Overview - #{type}")
+    end
+  end
+
   private
     # use this if your controller expects :id instead of :response_id
     def load_response_from_id
       find_response(params[:id])
+    end
+
+    def generate_overview_report(amount_type)
+      report.generate_report_for_download(current_user)
     end
 end

@@ -15,7 +15,7 @@
       .tooltip-S.left{:title=>@report.name}= @report.name.first(41) + '...'
     - else
       = @report.name
-  
+
     %a{:href => "javascript:window.print()", :id => "print-page"}
       = image_tag "icon_print.png", :alt => "Print This Page", :title => "Print This Page"
 
@@ -27,6 +27,7 @@
 .section_overlap
   %ul.section_nav#tabs-container
     = render '/reports/shared/project_tabs'
+    = render 'reports/shared/response_overview'
 
 #charts_tables
   .activities_tab{:"data-loaded" => 'true'}

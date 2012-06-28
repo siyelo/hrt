@@ -14,3 +14,22 @@ var HrtDropdown = {
     menu_element.removeClass('persist');
   }
 };
+
+HrtDropdown.init = function () {
+  $('.js_dropdown_trigger').click(function (e){
+    e.preventDefault();
+    menu = HrtDropdown.menu($(this));
+    if (!menu.is('.persist')) {
+      HrtDropdown.toggle_on(menu);
+    } else {
+      HrtDropdown.toggle_off(menu);
+    };
+  });
+
+  $('.js_dropdown_menu .menu_items a').click(function (e){
+    menu = HrtDropdown.menu($(this));
+    HrtDropdown.toggle_off(menu);
+    $(this).click; // continue with desired click action
+  });
+};
+
