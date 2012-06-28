@@ -23,7 +23,9 @@ class ProjectsController < BaseController
                                :include => :activities)
     @comment = Comment.new
     @comment.commentable = current_response
-    @comments = Comment.on_all([current_response.id]).where('parent_id IS NULL').
+    @comments = Comment.on_all([current_response.id]).
+                  order('created_at ASC').where('parent_id IS NULL').
+
       paginate :per_page => 20,
                :page => params[:page],
                :order => 'created_at DESC'

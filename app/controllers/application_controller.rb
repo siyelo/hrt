@@ -47,10 +47,8 @@ class ApplicationController < ActionController::Base
     def load_comment_resources(resource)
       @comment = Comment.new
       @comment.commentable = resource
-      @comments = resource.comments.find(:all,
-         :order => 'created_at DESC',
-         :conditions => ['parent_id is NULL AND created_at > ?', DateTime.now - 6.months],
-         :include => :user)
+      @comments = resource.comments.order('created_at ASC').
+        where('parent_id IS NULL').includes(:user)
     end
 
     def load_klasses(field = :id) #TODO: deprecate id field - use only :mode

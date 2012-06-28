@@ -5,7 +5,7 @@ class DashboardController < ApplicationController
 
   def index
     if current_request
-      @dashboard = Dashboard.new(current_user, current_response, current_request, params)
+      @dashboard = Dashboard.new(current_user, current_response, current_request)
       render @dashboard.template
     else
       render 'no_request'

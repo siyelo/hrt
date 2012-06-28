@@ -80,6 +80,9 @@
     padding: 5px 10px 5px 0
     width: auto
     +border-bottom-radius
+  .input-errors
+    display: inline-block
+    min-width: 20%
   .buttons ol li
     border: none
     .delete_btn
@@ -93,6 +96,8 @@
       width: 95%
     h2
       font-size: 12px
+    textarea
+      max-width: 90%
   .big_gravatar
     float: left
     margin: 12px 10px 0 0
@@ -108,7 +113,22 @@
         width: 98%
         &:first-child
           border-top: 1px solid $primary_border
-
+    .edit_form
+      form
+        padding-bottom: 0
+      .inputs li
+        margin-bottom: 0
+  .input-errors
+    display: inline-block
+    min-width: 20%
+  .single_comment
+    &:hover, &:focus
+      .comment-actions
+        display: block
+    .removed
+      color: #999
+      font-style: italic
+      padding: 10px 10px 10px 18px
   .author
     background: $filler
     border-bottom: 1px solid $lightest-blue
@@ -152,6 +172,12 @@
     padding: 0 0 10px 18px
     width: 70%
 
+  .comment-actions
+    display: none
+    float: right
+    margin-right: 7px
+    width: auto
+
 // MAIN COMMENTS end //
 .plain
   margin-top: 10px
@@ -166,5 +192,4 @@
   #comment_comment_input, .commit
     margin-bottom: 5px
 .section_form .comment-area
-  height: 100px
   width: 99%

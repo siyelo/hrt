@@ -44,22 +44,3 @@ Feature: Reporter can manage projects
       |            | 2010-01-02 | Oops, we couldn't save your changes. | Start date can't be blank             |
       | 123        | 2010-01-02 | Oops, we couldn't save your changes. | Start date is not a valid date        |
       | 2010-05-05 | 2010-01-02 | Oops, we couldn't save your changes. | Start date must come before End date. |
-
-
-  Scenario: A reporter can create comments for a workplan (response) and see errors
-    When I follow "Projects"
-    And I press "Create Comment"
-    Then I should see "You cannot create blank comment."
-    When I fill in "Comment" with "Comment body"
-    And I press "Create Comment"
-    Then I should see "Comment body"
-
-  Scenario: A reporter can create comments for a project
-    Given a project exists with name: "project1", data_response: the data_response
-    When I follow "Projects"
-    And I follow "project1"
-    And I press "Create Comment"
-    Then I should see "You cannot create blank comment."
-    When I fill in "Comment" with "Comment body"
-    And I press "Create Comment"
-    Then I should see "Comment body"

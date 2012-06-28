@@ -15,15 +15,9 @@
                 == #{time_ago_in_words(comment.created_at)} ago
               .right
                 - comment_title = truncate(model_name(comment.commentable), :length => 40)
-                %span= link_to comment_title, commentable_path(comment, current_user)
+                %span= link_to comment_title, commentable_url(comment)
             %p= truncate(comment.comment, :length => 300)
-    - if current_user.sysadmin?
-      .view-all= link_to "view all", admin_comments_path
 - else
   .section_base.wide
     %p.nothing
       There are no comments posted in the last 6 months.
-      - if current_user.sysadmin?
-        Click
-        =link_to "here", admin_comments_path
-        to view all comments

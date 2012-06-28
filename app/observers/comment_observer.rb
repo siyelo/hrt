@@ -8,6 +8,6 @@ class CommentObserver < ActiveRecord::Observer
     users = comment.parent_id? ?
       comment.ancestors.map(&:user) : comment.commentable.organization.users
     users = users.reject{|u| u == comment.user} # reject commenter
-    users
+    users.uniq
   end
 end

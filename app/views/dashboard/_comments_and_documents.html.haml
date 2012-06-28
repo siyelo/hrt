@@ -2,6 +2,5 @@
 .full
   .main
     = render 'comments', :comments => @dashboard.comments
-    = will_paginate @dashboard.comments
   .sidebar#documents
     = render 'documents'

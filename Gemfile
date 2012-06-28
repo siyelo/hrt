@@ -41,8 +41,6 @@ end
 group :development do
   gem 'annotate'
   gem 'heroku'
-  gem 'interactive_editor'
-  gem 'open_gem'
   gem 'rails-footnotes'
   gem 'taps'
   gem 'quiet_assets'
@@ -65,7 +63,7 @@ group :test do
   gem "factory_girl_rails", "~> 3.0"
   gem 'guard-spork'
   gem 'capybara'
-  gem 'launchy'
+  gem 'launchy', "= 2.1.0"
   gem 'email_spec'
   gem 'shoulda-matchers'
   gem 'timecop'

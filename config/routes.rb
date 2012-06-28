@@ -15,7 +15,7 @@ Hrt::Application.routes.draw do
     end
   end
   match 'about' => 'static_page#about', as: :about_page
-  resources :comments, :only => [:create]
+  resources :comments, :only => [:edit, :create, :update, :destroy]
   match 'dashboard' => 'dashboard#index', as: :dashboard
   namespace :admin do
     resources :requests
@@ -64,7 +64,6 @@ Hrt::Application.routes.draw do
         get :download_template
       end
     end
-    resources :comments
   end
 
   resources :workplans  do

@@ -1,10 +1,9 @@
 class Dashboard::Reporter
-  attr_accessor :reporter, :current_response, :params
+  attr_accessor :reporter, :current_response
 
-  def initialize(reporter, current_response, params)
+  def initialize(reporter, current_response)
     @reporter         = reporter
     @current_response = current_response
-    @params           = params
     @report           = Reports::Organization.new(current_response)
   end
 
@@ -13,7 +12,7 @@ class Dashboard::Reporter
   end
 
   def comments
-    @comments ||= Comment.paginate_for_responses([current_response], params[:page])
+    @comments ||= Comment.published.recent_comments([current_response])
   end
 
   def documents

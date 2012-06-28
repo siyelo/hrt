@@ -1,12 +1,11 @@
 class Dashboard::Sysadmin
   include ActionView::Helpers::NumberHelper
 
-  attr_accessor :sysadmin, :current_request, :params
+  attr_accessor :sysadmin, :current_request
 
-  def initialize(sysadmin, current_request, params)
+  def initialize(sysadmin, current_request)
     @sysadmin        = sysadmin
     @current_request = current_request
-    @params          = params
   end
 
   def template
@@ -48,18 +47,17 @@ class Dashboard::Sysadmin
   end
 
   def comments
-    @comments ||= Comment.paginate_for_responses(
-      current_request.data_responses, params[:page])
+    @comments ||= Comment.published.recent_comments(current_request.data_responses)
   end
 
   def documents
     @documents ||= Document.latest_first.limited
   end
-  
+
   def reporting_organizations
     Organization.reporting.count
   end
-  
+
   def total_users
     User.count
   end
