@@ -29,6 +29,13 @@ class Reports::DistrictSplit < Reports::TopBase
     Charts::Budget.new(collection).google_column
   end
 
+  def non_duplicate_collection
+    elements = super
+    national = elements.detect{ |element| element.name == "National Level" }
+    other    = elements.select{ |element| element.name != "National Level" }
+    [national] + other
+  end
+
   private
   def amounts_by_districts
     unless @amounts
