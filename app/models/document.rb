@@ -1,6 +1,5 @@
 class Document < ActiveRecord::Base
-
-  include PrivateUrl # gives private_url?
+  include AttachmentHelper # gives private_url?
 
   ### Constants
   VISIBILITY_OPTIONS = %w[sysadmins reporters public]
@@ -9,7 +8,8 @@ class Document < ActiveRecord::Base
   attr_accessible :title, :document, :visibility, :description
 
   ### Attachments
-  has_attached_file :document, Settings.paperclip_document.to_options
+  has_attached_file :document, path:
+    AttachmentHelper.attachment_path("documents/:attachment/:document_file_name.:extension")
 
   ### Validations
   validates_presence_of :title
