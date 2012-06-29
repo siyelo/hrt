@@ -85,7 +85,7 @@ class CodingTree
   def root_codes
     case @coding_klass.to_s
     when 'PurposeBudgetSplit', 'PurposeSpendSplit'
-      @activity.class.to_s == "OtherCost" ? OtherCostCode.roots : Code.purposes.roots
+      Code.purposes.roots
     when 'InputBudgetSplit', 'InputSpendSplit'
       CostCategory.roots
     when 'LocationBudgetSplit', 'LocationSpendSplit'
@@ -188,7 +188,7 @@ class CodingTree
     def all_codes
       @all_codes ||= case @coding_klass.to_s
       when 'PurposeBudgetSplit', 'PurposeSpendSplit'
-        @activity.class.to_s == "OtherCost" ? OtherCostCode.all : Code.all
+        Code.all
       when 'InputBudgetSplit', 'InputSpendSplit'
         CostCategory.all
       when 'LocationBudgetSplit', 'LocationSpendSplit'
