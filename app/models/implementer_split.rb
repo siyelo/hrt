@@ -81,7 +81,18 @@
       rows = FileParser.parse(content, 'xls')
 
       rows.map do |row|
-        hash[row['Implementer Split ID'].to_s] = row['Actual Double-Count?']
+        double_count = row['Actual Double-Count?']
+        double_count = double_count.value if double_count.respond_to?(:value)
+        double_count = case double_count.to_s.downcase
+        when 'true'
+          true
+        when 'false'
+          false
+        else
+          nil
+        end
+
+        hash[row['Implementer Split ID'].to_s] = double_count
       end
 
       ImplementerSplit.find(:all, :conditions => ["id IN (?)", hash.keys]).each do |split|
@@ -98,7 +109,6 @@
         errors.add(:organization_mask, "can't be blank")
       end
     end
-
 end
 
 

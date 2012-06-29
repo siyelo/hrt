@@ -2,8 +2,11 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe FileZipper do
   it "can unzip a zip file" do
-    attachment = FileZipper.unzip("#{Rails.root}/spec/fixtures/activity_overview.zip")
-    attachment.should == File.open("#{Rails.root}/spec/fixtures/activity_overview.xls").read
+    content = FileZipper.unzip("#{Rails.root}/spec/fixtures/activity_overview.zip")
+    rows = FileParser.parse(content, 'xls')
+    rows.length.should == 2
+    rows[0]["Activity"].should == "activity1"
+    rows[1]["Activity"].should == "activity2"
   end
 
   it "can create a temporary zip file" do

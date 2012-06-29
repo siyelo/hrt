@@ -2,21 +2,6 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe ImplementerSplit do
 
-  # converts array of hashes to array of arrays
-  # [{:column1 => 1}, {:column1 => 2}] => [[:column1], [1], [2]]
-  def set_double_counts(rows, value)
-    rows.each{ |row| row['Actual Double-Count?'] = value }
-
-    table = []
-    table << rows[0].keys
-    table += rows.map{|h| h.values}
-
-    builder = FileBuilder.new('xls')
-    table.each { |row| builder.add_row(row) }
-    builder.data
-  end
-
-
   describe "Associations:" do
     it { should belong_to :activity }
     it { should belong_to :organization }
@@ -283,40 +268,43 @@ describe ImplementerSplit do
       project  = FactoryGirl.create(:project, :data_response => response)
       activity = FactoryGirl.create(:activity, :id => 1, :data_response => response,
                          :project => project)
-      split1 = FactoryGirl.create(:implementer_split, :id => 1,
+      @split1 = FactoryGirl.create(:implementer_split, :id => 1,
                        :activity => activity, :organization => org1, :double_count => false)
-      split2 = FactoryGirl.create(:implementer_split, :id => 2,
+      @split2 = FactoryGirl.create(:implementer_split, :id => 2,
                        :activity => activity, :organization => org2, :double_count => false)
 
-      content = File.open('spec/fixtures/activity_overview.xls').read
-      @rows = FileParser.parse(content, 'xls')
     end
 
-    it "marks double counting from file" do
-      xls = set_double_counts(@rows, true)
-      double_count_marker = ImplementerSplit.mark_double_counting(xls)
+    it "marks double counting from file that has text" do
+      content = File.open('spec/fixtures/double_count_mark_text.xls').read
+      ImplementerSplit.mark_double_counting(content)
 
-      splits = ImplementerSplit.all
-      splits[0].double_count.should be_true
-      splits[1].double_count.should be_true
+      @split1.reload.double_count.should be_true
+      @split2.reload.double_count.should be_false
     end
 
-    it "reset double-count marks when nil" do
-      xls = set_double_counts(@rows, nil)
-      double_count_marker = ImplementerSplit.mark_double_counting(xls)
+    it "marks double counting from file that has number values" do
+      content = File.open('spec/fixtures/double_count_mark_number.xls').read
+      ImplementerSplit.mark_double_counting(content)
 
-      splits = ImplementerSplit.all
-      splits[0].double_count.should be_nil
-      splits[1].double_count.should be_nil
+      @split1.reload.double_count.should be_true
+      @split2.reload.double_count.should be_false
+    end
+
+    it "marks double counting from file that has mixed values" do
+      content = File.open('spec/fixtures/double_count_mark_value.xls').read
+      ImplementerSplit.mark_double_counting(content)
+
+      @split1.reload.double_count.should be_true
+      @split2.reload.double_count.should be_false
     end
 
     it "reset double-count marks when empty string" do
-      xls = set_double_counts(@rows, '')
-      double_count_marker = ImplementerSplit.mark_double_counting(xls)
+      content = File.open('spec/fixtures/double_count_reset.xls').read
+      ImplementerSplit.mark_double_counting(content)
 
-      splits = ImplementerSplit.all
-      splits[0].double_count.should be_nil
-      splits[1].double_count.should be_nil
+      @split1.reload.double_count.should be_nil
+      @split2.reload.double_count.should be_nil
     end
   end
 end

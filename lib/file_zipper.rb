@@ -2,8 +2,11 @@ module FileZipper
   extend self
 
   def unzip(file_path)
-    cmd = "unzip -p #{file_path}"
-    output = %x(#{cmd})
+    output = nil
+    Zip::ZipFile.open(file_path) do |files|
+      output = files.first.get_input_stream.read.force_encoding("ASCII-8BIT")
+    end
+    output
   end
 
   def zip(folder, file_name)
