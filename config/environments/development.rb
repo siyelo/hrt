@@ -35,11 +35,9 @@ Hrt::Application.configure do
   # Expands the lines which load the assets
   config.assets.debug = true
 
-  config.action_mailer.default_url_options             = { :host => 'localhost:3000' }
+  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
 
-  class ActionMailer::Base
-   def perform_delivery_file(mail)
-     File.open("#{Rails.root}/tmp/mails/#{mail.to} - #{mail.subject}.eml", 'w') { |f| f.write(mail) }
-   end
-  end
+  # mailcatcher
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = { :address => "localhost", :port => 1025 }
 end

@@ -17,7 +17,7 @@ class Notifier < ActionMailer::Base
     @full_name = user.full_name
     @org = user.organization
     @invite_token = user.invite_token
-    @follow_me = "#{edit_invitation_url(user.invite_token)}"
+    @invitation_url = "#{edit_invitation_url(user.invite_token)}"
     @sys_admin_org = inviter.organization ? "(#{inviter.organization.try(:name)})" : ''
     @inviter_name = inviter.full_name ||= inviter.email
 
@@ -38,13 +38,6 @@ class Notifier < ActionMailer::Base
     mail(
       subject: "Your #{response.title} response is Accepted",
       to: response.organization.users.map(&:email)
-    )
-  end
-
-  def response_restarted_notification(response)
-    mail(
-      subject: "Your #{response.title} response is Restarted",
-      to: response.organization.users.mapmap(&:email)
     )
   end
 

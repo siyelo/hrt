@@ -78,7 +78,7 @@ Tests/TDD - before every commit, and after every fetch, is your friend.
 
   IN_MEMORY_DB=1 rspec spec
 
-Develop on a local feature branch (as per: http://reinh.com/blog/2009/03/02/a-git-workflow-for-agile-teams.html). Let Greg / the mailing list know if you have any questions.
+Develop on a local feature branch (as per: http://reinh.com/blog/2009/03/02/a-git-workflow-for-agile-teams.html).
 
 #### Git
 

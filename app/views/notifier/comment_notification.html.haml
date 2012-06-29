@@ -1,0 +1,14 @@
+%p Hello,
+
+%p== #{@comment.user.name} <#{@comment.user.email}> has made a new comment on the #{@comment.commentable.name} #{@comment.commentable.class.to_s.titleize}:
+
+%p= @comment.comment
+
+%p To view/respond to it, please visit the url below:
+
+- if @comment.commentable.is_a?(DataResponse)
+  %p= link_to projects_url, projects_url
+- else
+  %p= link_to activity_url(@comment.commentable), activity_url(@comment.commentable)
+
+= render 'signature'

@@ -1,0 +1,13 @@
+%p== Hi #{@full_name},
+
+%p== You have been invited by #{@inviter_name} #{@sys_admin_org} to the Health Resource Tracker for the Organization: #{@org}
+
+%p The Health Resource Tracker (HRT) is a great web-based tool for managing your regular reporting requirements to the Ministry Of Health, including NHA, NASA, AOP, and several others.
+
+%p Follow the link below to create your profile:
+
+%p= link_to @invitation_url, @invitation_url
+
+%p The Health Resource Tracker is great for teams too. After you create your profile, you can add other members of your Organization by following "Settings -> Users".
+
+= render 'signature'
