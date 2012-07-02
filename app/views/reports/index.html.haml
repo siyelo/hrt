@@ -9,9 +9,6 @@
 %h1.main_heading
   .left
     Organization Overview
-    %a{:href => "javascript:window.print()", :id => "print-page"}
-      = image_tag "icon_print.png", :alt => "Print This Page", :title => "Print This Page"
-
   .request_nav.right
     = render '/shared/request_nav'
 
@@ -20,6 +17,9 @@
 .section_overlap
   %ul.section_nav#tabs-container
     = render :partial => 'reports/shared/tabs'
+    %li.right
+      = link_to "Print This Page", "javascript:window.print()", :id => "print-page", :class => "icon print"
+
     = render 'reports/shared/response_overview'
 
 #charts_tables

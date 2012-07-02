@@ -147,8 +147,10 @@ a.remove_nested
       opacity: 1
 
 .section_nav
-  .dropdown
-    margin: 5px 0px 5px !important
+  .dropdown, .create_alt, .icon
+    margin: 5px 0px !important
+    vertical-align: middle
+  
 
 .next
   border: 1px solid $green - #191919
@@ -347,14 +349,13 @@ body.login .buttons li:last-child
       display: inline-block
       font-size: 12px
       padding: 12px
-      
+
 .icon
   border: 1px solid $light-blue
   display: inline-block
   height: 25px
   padding: 0 !important
   text-indent: -9999em
-  vertical-align: middle
   width: 30px
   +border-radius(2px)
   &:hover, &:focus
@@ -373,15 +374,6 @@ body.login .buttons li:last-child
   width: 12px
   &:hover, &:focus
     opacity: 0.6
-
-#print-page, #export-report
-  display: inline-block
-  margin-left: 2px
-  opacity: .7
-  position: relative
-  top: 5px
-  &:hover, &:focus
-    opacity: 1
 
 .response_status
   display: inline-block
