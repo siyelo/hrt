@@ -54,13 +54,3 @@ Feature: Reporter can manage Indirect Costs
     And I fill in "other_cost[implementer_splits_attributes][0][budget]" with "19"
     And I press "Save"
     Then I should see "Indirect Cost was successfully created"
-
-  Scenario: A reporter can create comments for an other cost and see comment errors
-    Given an other cost exists with project: the project, description: "OtherCost1 description", data_response: the data_response
-    When I follow "Projects"
-    And I follow "OtherCost1 description"
-    And I press "Create Comment"
-    Then I should see "You cannot create blank comment."
-    When I fill in "Comment" with "Comment body"
-    And I press "Create Comment"
-    Then I should see "Comment body"

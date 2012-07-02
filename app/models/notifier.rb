@@ -3,6 +3,7 @@ class Notifier < ActionMailer::Base
   #default_url_options[:host] = "resourcetracking.heroku.com"
   FROM = "HRT Notifier <hrt-do-not-reply@hrtapp.com>"
   default from: FROM, date: Time.now
+  helper :commentable
 
   def comment_notification(comment, users)
     @comment = comment

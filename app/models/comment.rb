@@ -1,5 +1,7 @@
 class Comment < ActiveRecord::Base
 
+  REMOVED_MESSAGE = "This comment has been removed by sysadmin."
+
   acts_as_tree :order => 'created_at DESC'
 
   ### Attributes
@@ -12,17 +14,13 @@ class Comment < ActiveRecord::Base
   belongs_to :user
   belongs_to :commentable, :polymorphic => true
 
-  ### Scopes
-  default_scope :order => 'created_at ASC'
-
   ### Named scopes
   scope :on_all, lambda { |dr_ids|
     { :joins => "LEFT OUTER JOIN projects p ON p.id = comments.commentable_id
                  LEFT OUTER JOIN data_responses dr ON dr.id = comments.commentable_id
                  LEFT OUTER JOIN activities a ON a.id = comments.commentable_id
                  LEFT OUTER JOIN activities oc ON oc.id = comments.commentable_id ",
-      :conditions => ["comments.created_at > :start_date
-                        AND ((comments.commentable_type = 'DataResponse'
+      :conditions => ["(comments.commentable_type = 'DataResponse'
                           AND dr.id IN (:drs))
                         OR (comments.commentable_type = 'Project'
                           AND p.data_response_id IN (:drs))
@@ -31,18 +29,15 @@ class Comment < ActiveRecord::Base
                           AND a.data_response_id IN (:drs))
                         OR (comments.commentable_type = 'Activity'
                           AND oc.type = 'OtherCost'
-                          AND oc.data_response_id IN (:drs)))",
-                       {:drs => dr_ids, :start_date => DateTime.now - 6.months}],
-     :order => "created_at DESC" }
+                          AND oc.data_response_id IN (:drs))",
+                       {:drs => dr_ids}],
+     :order => "comments.created_at DESC" }
   }
+  scope :published, where(removed: false)
+  scope :removed, where(removed: true)
 
-  scope :limit, lambda { |limit| {:limit => limit} }
-
-  def self.paginate_for_responses(data_responses, page)
-    Comment.on_all(data_responses.map{|r| r.id}).
-      paginate :per_page => 25, :page => page,
-               :order => 'created_at DESC',
-               :include => [:user, :commentable]
+  def self.recent_comments(data_responses)
+    Comment.on_all(data_responses.map{|r| r.id}).limit(10)
   end
 end
 

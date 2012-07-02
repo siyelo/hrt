@@ -106,61 +106,6 @@ HrtForm.validateDates = function (startDate, endDate) {
   endDate.live('change', checkDates);
 };
 
-
-HrtForm.initDemoText = function (elements) {
-  elements.each(function(){
-    var element = $(this);
-    var demo_text = element.attr('data-hint');
-
-    if (demo_text != null) {
-      element.attr('title', demo_text);
-      if (element.val() == '' || element.val() == demo_text) {
-        element.val( demo_text );
-        element.addClass('input_hint');
-      }
-    }
-  });
-};
-
-
-HrtForm.focusDemoText = function (elements) {
-  elements.live('focus', function(){
-    var element = $(this);
-    var demo_text = element.attr('data-hint');
-    if (demo_text != null) {
-      if (element.val() == demo_text) {
-        element.val('');
-        element.removeClass('input_hint');
-      }
-    }
-  });
-};
-
-HrtForm.removeDemoText = function (elements) {
-  elements.each(function () {
-    var element = $(this);
-    var demo_text = element.attr('data-hint');
-    if (demo_text != null) {
-      if (element.val() == demo_text) {
-        element.val('');
-      }
-    }
-  });
-};
-
-HrtForm.blurDemoText = function (elements) {
-  elements.live('blur', function(){
-    var element = $(this);
-    var demo_text = element.attr('data-hint');
-    if (demo_text != null) {
-      if (element.val() == '') {
-        element.val( demo_text );
-        element.addClass('input_hint');
-      }
-    }
-  });
-};
-
 HrtForm.hideAll = function() {
   $('#activity_project_id').val(-1);
   $('#other_cost_project_id').val('');

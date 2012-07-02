@@ -107,22 +107,3 @@ Feature: Reporter can manage activities
     And I follow "existing activity"
     And I fill in "activity[implementer_splits_attributes][0][spend]" with "99"
     And I fill in "activity[implementer_splits_attributes][1][spend]" with "100"
-
-  Scenario: A reporter can create comments for a Activity
-    Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response
-    When I follow "Projects"
-    And I follow "Activity1 description"
-    And I press "Create Comment"
-    Then I should see "You cannot create blank comment."
-    When I fill in "Comment" with "Comment body"
-    And I press "Create Comment"
-    Then I should see "Comment body"
-
-  Scenario: Does not email users when a comment is made by a reporter
-    Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response
-    And no emails have been sent
-    When I follow "Projects"
-    And I follow "Activity1 description"
-    And I fill in "comment_comment" with "Comment body"
-    And I press "Create Comment"
-    Then "reporter_1@example.com" should not receive an email

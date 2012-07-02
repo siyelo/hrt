@@ -22,46 +22,40 @@ describe Comment do
   end
 
   describe "Named scopes" do
-    it "returns all comment in the last 6 monts" do
-      request      = FactoryGirl.create :data_request
-      organization = FactoryGirl.create :organization
-      FactoryGirl.create :user, :organization => organization
-      response     = organization.latest_response
-      project      = FactoryGirl.create(:project, :data_response => response)
-      activity     = FactoryGirl.create(:activity, :data_response => response, :project => project)
-      other_cost   = FactoryGirl.create(:other_cost, :data_response => response, :project => project)
-      reporter     = FactoryGirl.create(:reporter, :organization => organization)
+    it "returns all comment" do
+      request       = FactoryGirl.create :data_request
+      organization1 = FactoryGirl.create :organization
+      organization2 = FactoryGirl.create :organization
+      FactoryGirl.create :user, :organization => organization1
+      FactoryGirl.create :user, :organization => organization2
+      response1     = organization1.latest_response
+      response2     = organization2.latest_response
 
-      Timecop.freeze(Date.parse("2010-09-01"))
+      project       = FactoryGirl.create(:project, data_response: response1)
+      activity      = FactoryGirl.create(:activity, data_response: response1,
+                                         project: project)
+      other_cost    = FactoryGirl.create(:other_cost, data_response: response1,
+                                         project: project)
+      reporter      = FactoryGirl.create(:reporter, organization: organization1)
 
-      response_comment       = FactoryGirl.create(:comment, :commentable => response, :user => reporter, :created_at => "2010-08-01")
-      project_comment        =  FactoryGirl.create(:comment, :commentable => project,
-                                       :user => reporter, :created_at => "2010-08-01")
-      activity_comment       =  FactoryGirl.create(:comment, :commentable => activity,
-                                       :user => reporter, :created_at => "2010-08-01")
-      other_cost_comment     = FactoryGirl.create(:comment, :commentable => other_cost,
-                                       :user => reporter, :created_at => "2010-08-01")
+      response_comment       = FactoryGirl.create(:comment,
+                                commentable: response1, user: reporter)
+      project_comment        =  FactoryGirl.create(:comment,
+                                 commentable: project, user: reporter)
+      activity_comment       =  FactoryGirl.create(:comment,
+                                 commentable: activity, user: reporter)
+      other_cost_comment     = FactoryGirl.create(:comment,
+                                 commentable: other_cost, user: reporter)
+      old_response_comment   = FactoryGirl.create(:comment,
+                                 commentable: response2, user: reporter)
 
-      old_response_comment   = FactoryGirl.create(:comment, :commentable => response,
-                                       :user => reporter, :created_at => "2010-02-01")
-      old_project_comment    = FactoryGirl.create(:comment, :commentable => project,
-                                       :user => reporter, :created_at => "2010-02-01")
-      old_activity_comment   = FactoryGirl.create(:comment, :commentable => activity,
-                                       :user => reporter, :created_at => "2010-02-01")
-      old_other_cost_comment = FactoryGirl.create(:comment, :commentable => other_cost,
-                                       :user => reporter, :created_at => "2010-02-01")
-
-      comments = Comment.on_all([response.id])
+      comments = Comment.on_all([response1.id])
 
       comments.should include(response_comment)
       comments.should include(project_comment)
       comments.should include(activity_comment)
       comments.should include(other_cost_comment)
-
       comments.should_not include(old_response_comment)
-      comments.should_not include(old_project_comment)
-      comments.should_not include(old_activity_comment)
-      comments.should_not include(old_other_cost_comment)
     end
   end
 end

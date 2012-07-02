@@ -29,13 +29,3 @@ Feature: Reporter can manage activities
         And I press "Save"
       Then the "Name" field should contain "activity2 edited"
         And the "Description" field should contain "activity2 description edited"
-
-    Scenario: An admin can create comments for an activity
-      When I follow "Responses"
-        And I follow "organization2: data_request1"
-        And I follow "activity2"
-        And I fill in "Comment" with "Comment body"
-        And I press "Create Comment"
-      Then I should see "Comment body"
-        # confirm being on the activity edit form
-        And the "Name" field should contain "activity2"

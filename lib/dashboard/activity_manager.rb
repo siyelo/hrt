@@ -1,11 +1,10 @@
 class Dashboard::ActivityManager
-  attr_accessor :activity_manager, :current_response, :current_request, :params
+  attr_accessor :activity_manager, :current_response, :current_request
 
-  def initialize(activity_manager, current_response, current_request, params)
+  def initialize(activity_manager, current_response, current_request)
     @activity_manager = activity_manager
     @current_response = current_response
     @current_request  = current_request
-    @params           = params
   end
 
   def template
@@ -35,7 +34,7 @@ class Dashboard::ActivityManager
   end
 
   def comments
-    @comments ||= Comment.paginate_for_responses(data_responses, params[:page])
+    @comments ||= Comment.published.recent_comments(data_responses)
   end
 
   def documents

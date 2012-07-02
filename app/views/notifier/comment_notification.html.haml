@@ -6,9 +6,6 @@
 
 %p To view/respond to it, please visit the url below:
 
-- if @comment.commentable.is_a?(DataResponse)
-  %p= link_to projects_url, projects_url
-- else
-  %p= link_to activity_url(@comment.commentable), activity_url(@comment.commentable)
+= link_to (url = commentable_url(@comment)), url
 
 = render 'signature'

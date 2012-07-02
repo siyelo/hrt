@@ -1,23 +1,31 @@
 %li.comment_item.section_form.wide.topless.last
-  %h4.author.horizontal
-    = image_tag comment.user.gravatar
-    %span.name= mail_to comment.user.email, comment.user.name
-    %span.time= "#{time_ago_in_words(comment.created_at)} ago"
-    = link_to '#', :class => 'js_reply add_row right' do
-      Reply
+  .js_single_comment.single_comment
+    - if comment.removed?
+      %p.removed= Comment::REMOVED_MESSAGE
+    - else
+      %h4.author.horizontal
+        = image_tag comment.user.gravatar
+        %span.name= mail_to comment.user.email, comment.user.name
+        %span.time= "#{time_ago_in_words(comment.created_at)} ago"
+        = link_to '#', :class => 'js_reply add_row right' do
+          Reply
 
-    - if params[:controller] == 'projects' && params[:action] == 'index'
-      %span.org
+        - if params[:controller] == 'projects' && params[:action] == 'index'
+          %span.org
 
-        - if comment.commentable.is_a?(DataResponse)
-          = model_name(comment.commentable)
-        - else
-          = link_to model_name(comment.commentable), commentable_path(comment, current_user)
+            - if comment.commentable.is_a?(DataResponse)
+              = model_name(comment.commentable)
+            - else
+              = link_to model_name(comment.commentable), commentable_url(comment)
+      - if current_user.sysadmin?
+        %p.comment.comment-actions
+          = link_to 'Edit', '#', class: 'js_edit_comment create_inline', :"data-url" => edit_comment_url(comment)
+          = link_to 'Remove', '#', class: 'js_remove_comment create_inline', :"data-url" => comment_url(comment)
+      %p.comment.js_comment{id: dom_id(comment)}= comment.comment
+      
 
-  %p.comment= comment.comment
-
-  .js_reply_box.comments_input.reply{:style => 'display: none; !important'}
-    = render :partial => 'comments/reply_form', :handlers => :haml, :formats => :html, :locals => {:comment => Comment.new(:parent_id => comment.id), :parent => comment}
+      .js_reply_box.comments_input.reply{:style => 'display: none; !important'}
+        = render :partial => 'comments/reply_form', :handlers => :haml, :formats => :html, :locals => {:comment => Comment.new(:parent_id => comment.id), :parent => comment}
 
   - if comment.children.present?
     %ul
