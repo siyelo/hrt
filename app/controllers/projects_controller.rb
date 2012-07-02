@@ -24,11 +24,7 @@ class ProjectsController < BaseController
     @comment = Comment.new
     @comment.commentable = current_response
     @comments = Comment.on_all([current_response.id]).
-                  order('created_at ASC').where('parent_id IS NULL').
-
-      paginate :per_page => 20,
-               :page => params[:page],
-               :order => 'created_at DESC'
+                  order('created_at DESC').where('parent_id IS NULL')
     @project = Project.new(:data_response => current_response)
     self.load_inline_forms
   end
