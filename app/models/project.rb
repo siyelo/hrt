@@ -40,7 +40,8 @@ class Project < ActiveRecord::Base
   ### Validations
   validates_uniqueness_of :name, scope: :data_response_id
   validates_presence_of :name, :data_response_id, :currency
-  validates_inclusion_of :budget_type, in: ["on", "off", "na"]
+  validates_inclusion_of :budget_type, in: ["on", "off", "na"],
+                         message: "is not selected"
   validates_inclusion_of :currency,
     in: Money::Currency::TABLE.map{|k, v| "#{k.to_s.upcase}"},
     allow_nil: true, unless: Proc.new {|p| p.currency.blank?}
