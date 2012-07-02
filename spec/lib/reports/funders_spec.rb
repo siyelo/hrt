@@ -1,65 +1,108 @@
 require 'spec_helper'
 
 describe Reports::Funders do
-  let(:funding_flow1) { mock :response,
-    :spend => 100, :budget => 20,
-    :org_name => "org1", :amount_currency => 'USD'}
-  let(:funding_flow2) { mock :response,
-    :spend => 400, :budget => 40,
-    :org_name => 'org1', :amount_currency => 'USD' }
-  let(:funding_flow3) { mock :response,
-    :spend => 300, :budget => 60,
-    :org_name => "org2", :amount_currency => "RWF"}
-  let(:funding_flows) { [funding_flow1, funding_flow2, funding_flow3] }
-  let(:rows) { [ Reports::Row.new("two", 400.0, 40.0),
-                 Reports::Row.new("three", 300.0, 60.0) ] }
+  let(:organization1) { FactoryGirl.create(:organization, :name => 'organization1') }
+  let(:organization2) { FactoryGirl.create(:organization, :name => 'organization2') }
 
-  let(:request) { mock :request, :title => "Yaw"}
-  let(:report) { Reports::Funders.new(request) }
-
-  it "has a name" do
-    request.should_receive(:name).and_return request.title
-    report.name.should == 'Yaw'
+  before :each do
+    #currency = FactoryGirl.create(:currency, :from => 'USD', :to => 'RWF', :rate => 2)
+    reporter     = FactoryGirl.create(:reporter, :organization => organization1)
+    @data_request  = FactoryGirl.create(:data_request, :organization => organization1)
+    @data_response = organization1.latest_response
+    in_flows1     = [FactoryGirl.build(:funding_flow, :from => organization1,
+                      :budget => 100, :spend => 200)]
+    in_flows2     = [FactoryGirl.build(:funding_flow, :from => organization2,
+                      :budget => 200, :spend => 400)]
+    @project1      = FactoryGirl.create(:project, :name => 'project1',
+                            :data_response => @data_response,
+                            :in_flows => in_flows1)
+    @project2      = FactoryGirl.create(:project, :name => 'project2', #:currency => 'USD',
+                            :data_response => @data_response,
+                            :in_flows => in_flows2)
   end
 
-  it "has a currency" do
-    report.currency.should == 'USD'
+  context "when implementer splits exist" do
+    before :each do
+      split11       = FactoryGirl.build(:implementer_split,
+                              :budget => 100, :spend => 200,
+                              :double_count => false,
+                              :organization => organization1)
+      split12       = FactoryGirl.build(:implementer_split,
+                              :budget => 100, :spend => 200,
+                              :double_count => true,
+                              :organization => organization2)
+      split21       = FactoryGirl.build(:implementer_split,
+                              :budget => 200, :spend => 400,
+                              :double_count => false,
+                              :organization => organization1)
+      split22       = FactoryGirl.build(:implementer_split,
+                              :budget => 600, :spend => 1200,
+                              :double_count => true,
+                              :organization => organization2)
+      activity1     = FactoryGirl.create(:activity, :name => 'activity1',
+                              :data_response => @data_response,
+                              :implementer_splits => [split11, split12],
+                              :project => @project1)
+      activity2     = FactoryGirl.create(:activity, :name => 'activity2',
+                              :data_response => @data_response,
+                              :implementer_splits => [split21, split22],
+                              :project => @project2)
+    end
+
+    it "generates report with double counts" do
+      report = Reports::Funders.new(@data_request, true)
+      collection = report.collection
+      org1_row = collection.detect{ |row| row.name == organization1.name }
+      org2_row = collection.detect{ |row| row.name == organization2.name }
+
+      org1_row.total_budget.should == 100
+      org1_row.total_spend.should == 200
+
+      org2_row.total_budget.should == 200
+      org2_row.total_spend.should == 400
+    end
+
+    it "generates report without double counts" do
+      report = Reports::Funders.new(@data_request, false)
+      collection = report.collection
+      org1_row = collection.detect{ |row| row.name == organization1.name }
+      org2_row = collection.detect{ |row| row.name == organization2.name }
+
+      # 50% double counts
+      org1_row.total_budget.should == 50
+      org1_row.total_spend.should == 100
+
+      # 75% double counts
+      org2_row.total_budget.should == 50
+      org2_row.total_spend.should == 100
+    end
   end
 
-  it "#collection is made up of funding_flows embedded in Report:Rows (joins duplicate orgs)" do
-    report.should_receive(:rows).once.and_return funding_flows
-    rows = report.collection
-    rows.size.should == 2
-    rows.first.class.should == Reports::Row
-    rows.first.total_spend.should == BigDecimal.new("500")
-    rows.first.total_budget.should == BigDecimal.new("60")
-  end
+  context "when implementer splits does not exist" do
+    it "generates report with double counts" do
+      report = Reports::Funders.new(@data_request, true)
+      collection = report.collection
+      org1_row = collection.detect{ |row| row.name == organization1.name }
+      org2_row = collection.detect{ |row| row.name == organization2.name }
 
-  it "orders the spend chart" do
-    expected = rows
-    Charts::Spend.should_receive(:new).once.with(expected).
-      and_return(mock(:column, :google_column => ""))
-    report.should_receive(:create_rows).once.and_return rows
-    report.expenditure_chart
-  end
+      org1_row.total_budget.should == 100
+      org1_row.total_spend.should == 200
 
-  it "orders the budget chart" do
-    expected = rows.reverse
-    Charts::Budget.should_receive(:new).once.with(expected).
-      and_return(mock(:column, :google_column => ""))
-    report.should_receive(:create_rows).once.and_return rows
-    report.budget_chart
-  end
+      org2_row.total_budget.should == 200
+      org2_row.total_spend.should == 400
+    end
 
-  it "#total_spend" do
-    report.should_receive(:direct_rate).twice.and_return 0.5
-    report.should_receive(:rows).once.and_return funding_flows
-    report.total_spend.should == 650
-  end
+    it "generates report without double counts" do
+      report = Reports::Funders.new(@data_request, false)
+      collection = report.collection
+      org1_row = collection.detect{ |row| row.name == organization1.name }
+      org2_row = collection.detect{ |row| row.name == organization2.name }
 
-  it "#total_budget" do
-    report.should_receive(:direct_rate).twice.and_return 0.5
-    report.should_receive(:rows).once.and_return funding_flows
-    report.total_budget.should == 90
+      org1_row.total_budget.should == 100
+      org1_row.total_spend.should == 200
+
+      org2_row.total_budget.should == 200
+      org2_row.total_spend.should == 400
+    end
   end
 end

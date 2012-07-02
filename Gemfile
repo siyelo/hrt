@@ -39,6 +39,7 @@ group :assets do
 end
 
 group :development do
+  gem 'thin'
   gem 'annotate'
   gem 'heroku'
   gem 'interactive_editor'

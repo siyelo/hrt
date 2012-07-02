@@ -5,7 +5,7 @@ describe Reports::DistrictSplit do
     #currency = FactoryGirl.create(:currency, :from => 'USD', :to => 'RWF', :rate => 2)
     organization1 = FactoryGirl.create(:organization, :name => 'organization1')
     organization2 = FactoryGirl.create(:organization, :name => 'organization2')
-    reporter1     = FactoryGirl.create(:reporter, :organization => organization1)
+    reporter2     = FactoryGirl.create(:reporter, :organization => organization1)
     @data_request  = FactoryGirl.create(:data_request, :organization => organization1)
     data_response = organization1.latest_response
     in_flows1     = [FactoryGirl.build(:funding_flow, :from => organization1,

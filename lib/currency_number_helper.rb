@@ -8,6 +8,7 @@ module CurrencyNumberHelper
     amount = 0 if amount.nil?
     amount * currency_rate(from, to)
   end
+  alias :ucc :universal_currency_converter
 
   private
 

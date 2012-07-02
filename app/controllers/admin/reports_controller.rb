@@ -5,19 +5,17 @@ class Admin::ReportsController < Admin::BaseController
   end
 
   def reporters
-    double_count = params[:double_count] == 'true' ? true : false
     @report = Reports::Reporters.new(current_response.data_request, double_count)
     render :partial => '/reports/shared/report_data', :layout => false
   end
 
   def locations
-    double_count = params[:double_count] == 'true' ? true : false
     @report = Reports::DistrictSplit.new(current_request, double_count)
     render :partial => '/reports/shared/report_data', :layout => false
   end
 
   def funders
-    @report = Reports::Funders.new(current_response.data_request)
+    @report = Reports::Funders.new(current_response.data_request, double_count)
     render :partial => '/reports/shared/report_data', :layout => false
   end
 
@@ -29,5 +27,10 @@ class Admin::ReportsController < Admin::BaseController
     else
       redirect_to locations_admin_reports_path
     end
+  end
+
+  private
+  def double_count
+    params[:double_count] == 'true' ? true : false
   end
 end
