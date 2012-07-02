@@ -9,15 +9,25 @@ Feature: Reporter can import/export workplans
     And I am signed in as "reporter@hrtapp.com"
     And I follow "Projects"
 
-  Scenario: Reporter can upload activities
+  Scenario: Reporter can see Organization not found error and import workplan
     When I attach the file "spec/fixtures/activities.csv" to "File" within ".activities_upload_box"
     And I press "Import" within ".activities_upload_box"
-    And I should see "Import: Review & Save"
-    And I should see the title text "Cannot find organization 'non_existing_implementer'"
+    Then I should see "Import: Review & Save"
+      And I should see the title text "Cannot find organization 'non_existing_implementer'"
     When I press "Save Project"
-    And I follow "Projects"
-    And I follow "activity1"
+      And I follow "Projects"
+      And I follow "activity1"
     Then the "activity_implementer_splits_attributes_0_organization_mask" field should contain "non_existing_implementer"
+
+  Scenario: Reporter can see Budget Type error and import workplan
+    When I attach the file "spec/fixtures/activities_no_budget.csv" to "File" within ".activities_upload_box"
+      And I press "Import" within ".activities_upload_box"
+    Then I should see "Budget type is not selected"
+    When I select "On-budget" from "On Budget?"
+      And I press "Save Project"
+      And I follow "Projects"
+      And I follow "project1"
+    Then the "On Budget?" field should contain "on"
 
   Scenario: Reporter can see error if no csv file is not attached for upload
     When I press "Import" within ".activities_upload_box"
