@@ -28,11 +28,27 @@ HrtReports.tabInit = function () {
     $('.include_double_count .ajax-loader').removeClass('hidden');
     HrtReports.loadTab(tabName, report, doubleCount);
   });
+
+  $('#export-report').click(function (e) {
+    e.preventDefault();
+    var tab = $('#charts_tables .' + $('.nav-tab.active').data('tab'));
+    var url = tab.data('url').split('?').join('.xls?') +
+              '&double_count=' + $('#include_double_count').is(':checked')
+    window.location = url;
+  });
 };
 
 HrtReports.loadTab = function (tabName, report, include_double_count) {
   var tab = $('#charts_tables .' + tabName);
-  tab.load(tab.data('url') + '?double_count=' + include_double_count, function() {
+
+  url = tab.data('url')
+  if (url.indexOf('?') > -1) {
+    url += '&double_count=' + include_double_count
+  } else {
+    url += '?double_count=' + include_double_count
+  }
+
+  tab.load(url, function() {
     if (tab.data('chart') == 'column') {
       HrtReports.loadColumnCharts(tabName);
     } else {

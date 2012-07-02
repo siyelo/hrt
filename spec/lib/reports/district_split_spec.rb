@@ -72,4 +72,19 @@ describe Reports::DistrictSplit do
     collection[1].total_budget.to_f.should == 205.0 # district2 (100*75% + 200*65%)
     collection[1].total_spend.to_f.should  == 340.0 # district2 (200*50% + 400*60%)
   end
+
+  describe "report export" do
+    it "can export the report in xls format" do
+      report = Reports::DistrictSplit.new(@data_request, false)
+      data = FileParser.parse(report.to_xls, 'xls')
+
+      data[0]["Name"].should == "district1"
+      data[0]["Budget (USD)"].should == 95.0
+      data[0]["Expenditure (USD)"].should == 260.0
+
+      data[1]["Name"].should == "district2"
+      data[1]["Budget (USD)"].should == 205.0
+      data[1]["Expenditure (USD)"].should == 340.0
+    end
+  end
 end
