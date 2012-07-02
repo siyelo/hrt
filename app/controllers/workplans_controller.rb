@@ -3,7 +3,7 @@ class WorkplansController < ApplicationController
   before_filter :require_activity_manager
 
   def download
-    if current_user.workplan.exists?
+    if current_user.workplan_file_name
       redirect_to current_user.workplan_private_url
     else
       generate_workplan
@@ -19,7 +19,8 @@ class WorkplansController < ApplicationController
 
   private
   def generate_workplan
-    report = Reports::Detailed::CombinedWorkplan.new(current_response, current_user, 'xls')
+    report = Reports::Detailed::CombinedWorkplan.new(
+      current_response, current_user, 'xls')
     report.generate_workplan_for_download
   end
 end

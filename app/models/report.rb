@@ -1,5 +1,5 @@
 class Report < ActiveRecord::Base
-
+  include Rails.application.routes.url_helpers
   include ScriptHelper
   include AttachmentHelper
 
@@ -55,7 +55,7 @@ class Report < ActiveRecord::Base
 
   def generate_report_for_download(user)
     create_report
-    Notifier.report_download_notification(user, self).deliver
+    Notifier.report_download_notification(user, admin_reports_detailed_url(self)).deliver
   end
   handle_asynchronously :generate_report_for_download
 
@@ -110,9 +110,8 @@ class Report < ActiveRecord::Base
     report.data do |content, filetype, mimetype|
       folder = "#{Rails.root}/tmp/"
       file_name = "#{key}_#{data_request_id}_#{get_date()}.#{filetype}"
-      File.open(folder + file_name, "w:UTF-8") {|f| f.write(content.force_encoding('UTF-8'))}
 
-      FileZipper.zip(folder, file_name) do |zip_file_path|
+      FileZipper.zip_content(folder, file_name, content) do |zip_file_path|
         self.attachment = File.new(zip_file_path, 'r')
         self.save
       end

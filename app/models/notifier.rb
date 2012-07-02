@@ -41,17 +41,17 @@ class Notifier < ActionMailer::Base
     )
   end
 
-  def report_download_notification(user, report)
-    @report = report
+  def response_restarted_notification(response)
     mail(
-      subject: "Download link for your report",
-      to: user.email
+      subject: "Your #{response.title} response is Restarted",
+      to: response.organization.users.mapmap(&:email)
     )
   end
 
-  def workplan_download_notification(user)
+  def report_download_notification(user, report_path)
+    @report_path = report_path
     mail(
-      subject: "Download link for your workplan",
+      subject: "Download link for your report",
       to: user.email
     )
   end

@@ -137,6 +137,8 @@ var dashboard_index ={
 
 // DOM LOAD
 $(function () {
+  HrtDropdown.init();
+
   // prevent going to top when tooltip clicked
   $('.tooltip').live('click', function (e) {
     if ($(this).attr('href') === '#') {

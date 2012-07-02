@@ -25,7 +25,7 @@ describe WorkplansController do
       flash[:notice].should == "We are generating your combined workplan and will send you an email (at #{@user.email}) when it is ready."
 
       unread_emails_for(@user.email).size.should == 1
-      open_email(@user.email).body.should include('We have generated the combined workplan for you')
+      open_email(@user.email).body.should include('We have generated the report for you')
     end
   end
 
