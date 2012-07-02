@@ -6,14 +6,10 @@ namespace :db do
     Dir[File.join(Rails.root, 'db', 'fixtures', Rails.env, '*.rb')].sort.each { |fixture| "Loading #{fixture}\n"; load fixture }
   end
 
-  # this fixture file no long exists
-  #task :populate_users => :environment do
-  #  puts "Populating users in environment #{Rails.env}"
-  #  load File.join(Rails.root, 'db', 'fixtures', '04_users.rb')
-  #end
 
   desc "Resets user passwords for current environment."
   task :password_reset => :environment do
+    Rails.env = "development"
     puts "Reseting user passwords for environment #{Rails.env}"
     password = 'si@yelo'
     User.all.each{|u| u.password = password; u.password_confirmation = password; u.save}
