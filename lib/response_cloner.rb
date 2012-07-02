@@ -14,7 +14,9 @@ class ResponseCloner
       new_response.previous_id = previous_response.id
       new_response.save(validate: false)
       new_response.reload
-      new_response.other_costs += clone_non_project_other_costs(previous_response, new_response)
+      clone_non_project_other_costs(previous_response, new_response).each do |npic|
+        npic.save(validate: false)
+      end
       reset_response_state!(new_response)
     end
   end
