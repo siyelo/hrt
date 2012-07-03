@@ -15,7 +15,9 @@ module Reports
     # We have to use report::Rows here because funding flows dont respond
     # to total spend or budget or name
     def collection
-      @collection ||= create_rows.sort{ |x,y| y.total_spend <=> x.total_spend }
+      @collection ||= mark_duplicates(create_rows).
+        sort{ |x,y| y.total_spend <=> x.total_spend }
+      @collection
     end
 
     def total_spend

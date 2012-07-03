@@ -4,8 +4,9 @@ require_relative '../charts/base'
 module Reports
   class Organization < Reports::Base
     def collection
-      @collection ||= (@resource.projects + @resource.other_costs.without_project).
-        sort{ |a, b| a.name.downcase <=> b.name.downcase }
+      @collection ||= mark_duplicates((@resource.projects +
+        @resource.other_costs.without_project).
+        sort{ |a, b| a.name.downcase <=> b.name.downcase })
     end
 
     def resource_link(element)

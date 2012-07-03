@@ -15,7 +15,7 @@ class Reports::DistrictSplit < Reports::TopBase
   end
 
   def collection
-    amounts_by_districts
+    mark_duplicates(amounts_by_districts)
   end
 
   def resource_link(element)
@@ -23,25 +23,25 @@ class Reports::DistrictSplit < Reports::TopBase
   end
 
   def expenditure_chart
-    Charts::Spend.new(collection).google_column
+    Charts::Spend.new(amounts_by_districts).google_column
   end
 
   def budget_chart
-    Charts::Budget.new(collection).google_column
+    Charts::Budget.new(amounts_by_districts).google_column
   end
 
-  def non_duplicate_collection
-    elements = super
-    national = elements.detect{ |element| element.name == "National Level" }
-    other    = elements.select{ |element| element.name != "National Level" }
+  def mark_duplicates(amounts_by_districts)
+    collection = super(amounts_by_districts)
+    national = collection.detect{ |element| element.name == "National Level" }
+    other    = collection.select{ |element| element.name != "National Level" }
 
-    collection = []
-    collection << national if national
+    ordered_collection = []
+    ordered_collection << national if national
     other.each do |element|
-      collection << element
+      ordered_collection << element
     end
 
-    collection
+    ordered_collection
   end
 
   private

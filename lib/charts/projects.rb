@@ -4,13 +4,13 @@ module Charts
   module Projects
     class Spend < Charts::Base
       def self.value_method
-        :converted_spend
+        :total_spend
       end
     end
 
     class Budget < Charts::Base
       def self.value_method
-        :converted_budget
+        :total_budget
       end
     end
   end
