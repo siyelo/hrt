@@ -46,7 +46,7 @@ describe Reports::Project do
     activity2 = mock :activity, :name => 'activity', :total_spend => 6, :total_budget => 10
     activities2 = [activity, activity1, activity2]
     project.stub_chain(:activities, :sorted).and_return activities2
-    report.non_duplicate_collection.map(&:name).should == ["activity", "activity 2", "activity1"]
+    report.collection.map(&:name).should == ["activity", "activity 2", "activity1"]
   end
 
   it "does not combines activities with the same name" do

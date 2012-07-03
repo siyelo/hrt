@@ -40,11 +40,11 @@ module Reports
     end
 
     def expenditure_chart
-      Charts::Spend.new(non_duplicate_collection).google_pie
+      Charts::Spend.new(collection).google_pie
     end
 
     def budget_chart
-      Charts::Budget.new(non_duplicate_collection).google_pie
+      Charts::Budget.new(collection).google_pie
     end
 
     def chart_links
@@ -98,7 +98,7 @@ module Reports
       element.total_spend
     end
 
-    def non_duplicate_collection
+    def mark_duplicates(collection)
       non_duplicates = {}
       collection.each do |element|
         unless non_duplicates.include? element.name
@@ -124,15 +124,13 @@ module Reports
     end
 
     def top_budgeters
-      @top_budgeters ||= non_duplicate_collection.sort do |x, y|
-        (y.total_budget || 0) <=> (x.total_budget || 0)
-      end
+      @top_budgeters ||= collection.
+        sort { |x, y| (y.total_budget || 0) <=> (x.total_budget || 0) }
     end
 
     def top_spenders
-      @top_spenders ||= non_duplicate_collection.sort do |x, y|
-        (y.total_spend || 0) <=> (x.total_spend || 0)
-      end
+      @top_spenders ||= collection.
+        sort { |x, y| (y.total_spend || 0) <=> (x.total_spend || 0) }
     end
 
     def get_colour(name)

@@ -19,6 +19,7 @@ describe Reports::Organization do
     response.stub_chain(:other_costs, :without_project).and_return othercosts
     unsorted = projects + othercosts
     sorted = [othercost, project, project1, othercost1]
+    report.should_receive(:mark_duplicates).with(sorted).and_return(sorted)
     report.collection.should == sorted
   end
 

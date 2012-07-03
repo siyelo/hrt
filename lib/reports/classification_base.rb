@@ -5,7 +5,7 @@ require_relative '../charts/base'
 module Reports
   class ClassificationBase < Reports::Base
     def collection
-      @collection ||= rounded(rows_with_unclassified)
+      @collection ||= mark_duplicates(rounded(rows_with_unclassified))
     end
 
     def totals_equals_rows?

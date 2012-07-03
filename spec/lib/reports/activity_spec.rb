@@ -7,14 +7,15 @@ describe Reports::Activity do
                             :organization_name => 'aa_implementer',
                             :spend => 5, :budget => 10 }
   let(:implementer_split2) { mock :implementer_split,
-                             :organization_name => 'zz_implementer',
-                             :spend => 5, :budget => 10 }
+                            :organization_name => 'zz_implementer',
+                            :spend => 5, :budget => 10 }
   let(:implementer_splits) { [implementer_split, implementer_split2] }
   let(:report) { Reports::Activity.new(activity) }
 
   it 'returns all activities and other costs for current Project sorted by name' do
     implementer_splits = [implementer_split, implementer_split2]
     activity.stub_chain(:implementer_splits, :sorted, :find).and_return implementer_splits
+    report.should_receive(:mark_duplicates).with(implementer_splits).and_return(implementer_splits)
     report.collection.should == implementer_splits
   end
 

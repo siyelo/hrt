@@ -4,7 +4,7 @@ require 'active_support/core_ext/float'
 module Reports
   class Project < Reports::Base
     def collection
-      @resource.activities.sorted
+      mark_duplicates(@resource.activities.sorted)
     end
 
     def resource_link(element)

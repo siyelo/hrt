@@ -3,7 +3,7 @@ module ReportExporter
   def to_xls
     builder = FileBuilder.new('xls')
     builder.add_row(build_header)
-    non_duplicate_collection.each do |report_row|
+    collection.each do |report_row|
       row = build_row(report_row)
       builder.add_row(row)
     end
