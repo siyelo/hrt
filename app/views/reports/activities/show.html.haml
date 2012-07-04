@@ -19,13 +19,8 @@
 
   - if @report.name.length >= 44
     .tooltip-S.left{:title=>@report.name}= @report.name.first(41) + '...'
-    %a{:href => "javascript:window.print()", :id => "print-page"}
-      = image_tag "icon_print.png", :alt => "Print This Page", :title => "Print This Page"
-
   - else
     = @report.name
-    %a{:href => "javascript:window.print()", :id => "print-page"}
-      = image_tag "icon_print.png", :alt => "Print This Page", :title => "Print This Page"
 
   .request_nav.right
     = render '/shared/request_nav', :disable => true
@@ -35,10 +30,12 @@
 .section_overlap
   %ul.section_nav#tabs-container
     = render '/reports/shared/activity_tabs'
-    = render 'reports/shared/response_overview'
+    %li.right
+      = link_to "Export", "#", :id => "export-report", :class => "create_alt monochrome"
+      = link_to "Print This Page", "javascript:window.print()", :id => "print-page", :class => "icon print"
 
 #charts_tables
-  .implementers_tab{:"data-loaded" => 'true'}
+  .implementers_tab{:"data-loaded" => 'true', :"data-url" => implementers_reports_activity_path(@report.resource)}
     = render '/reports/shared/report_data'
   .locations_tab{:"data-loaded" => 'false', :"data-url" => locations_reports_activity_path(@report.resource), :style => 'display: none;'}
     = image_tag "ajax-loader.gif", :class => "ajax-loader"

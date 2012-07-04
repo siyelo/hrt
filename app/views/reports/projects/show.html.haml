@@ -16,9 +16,6 @@
     - else
       = @report.name
 
-    %a{:href => "javascript:window.print()", :id => "print-page"}
-      = image_tag "icon_print.png", :alt => "Print This Page", :title => "Print This Page"
-
   .request_nav.right
     = render '/shared/request_nav', :disable => true
 
@@ -27,10 +24,12 @@
 .section_overlap
   %ul.section_nav#tabs-container
     = render '/reports/shared/project_tabs'
-    = render 'reports/shared/response_overview'
+    %li.right
+      = link_to "Export", "#", :id => "export-report", :class => "create_alt monochrome"
+      = link_to "Print This Page", "javascript:window.print()", :id => "print-page", :class => "icon print"
 
 #charts_tables
-  .activities_tab{:"data-loaded" => 'true'}
+  .activities_tab{:"data-loaded" => 'true', :"data-url" => activities_reports_project_path(@report.resource)}
     = render '/reports/shared/report_data'
   .locations_tab{:"data-loaded" => 'false', :"data-url" => locations_reports_project_path(@report.resource), :style => 'display: none;'}
     = image_tag "ajax-loader.gif", :class => "ajax-loader"

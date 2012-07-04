@@ -12,6 +12,7 @@ describe Reports::ProjectsController do
   context "as a reporter" do
     let(:project) { mock :project }
     let(:projects) { mock :assoc, :find => project }
+    let(:report) { mock :report, to_xls: [], name: 'speccin' }
     let(:current_response) { mock :response, :projects => projects }
 
     before :each do
@@ -37,6 +38,15 @@ describe Reports::ProjectsController do
     it "should initialize an org inputs presenter" do
       Reports::ProjectInputs.should_receive(:new).with(project).and_return mock(:report)
       get :inputs, :id => 1
+    end
+
+    it "allows exporting of activities report" do
+      Reports::Project.should_receive(:new).with(project).and_return report
+      get :activities, format: 'xls', id: 1
+      response.should be_success
+      response.header["Content-Type"].should == "application/vnd.ms-excel"
+      response.header["Content-Disposition"].should ==
+        "attachment; filename=speccin-activities.xls"
     end
   end
 end

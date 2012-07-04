@@ -1,19 +1,26 @@
-class Reports::ProjectsController < BaseController
+class Reports::ProjectsController < ReportsBaseController
 
   def show
-    @project = current_response.projects.find(params[:id])
-    @report  = Reports::Project.new(@project)
+    @report  = Reports::Project.new(load_project)
+  end
+
+  def activities
+    show
+    render_report
   end
 
   def locations
-    @project = current_response.projects.find(params[:id])
-    @report = Reports::ProjectLocations.new(@project)
-    render :partial => '/reports/shared/report_data', :layout => false
+    @report = Reports::ProjectLocations.new(load_project)
+    render_report
   end
 
   def inputs
-    @project = current_response.projects.find(params[:id])
-    @report = Reports::ProjectInputs.new(@project)
-    render :partial => '/reports/shared/report_data', :layout => false
+    @report = Reports::ProjectInputs.new(load_project)
+    render_report
+  end
+
+  private
+  def load_project
+    current_response.projects.find(params[:id])
   end
 end
