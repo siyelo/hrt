@@ -17,7 +17,6 @@ describe Nha do
       # forth level
       nasa = FactoryGirl.create(:nasa_code, :short_display => 'nasa')
       nasa.move_to_child_of(nsp)
-
       Nha.roots_with_level.should == [[1, nha.id], [2, nsp.id], [3, nasa.id]]
     end
   end

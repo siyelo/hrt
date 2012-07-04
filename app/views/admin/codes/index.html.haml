@@ -19,29 +19,19 @@
 
       = link_to "Download template", download_template_admin_codes_path
 
-.section_form.single.connect
-  #filter_help.left
-    %p= search_message("codes", @codes.total_entries, params[:query], admin_codes_path)
+.section_overlap
+  %ul.section_nav
+    - ["All", "Purposes", "Inputs", "Locations"].each do |filter|
+      - css_class = "selected" if params[:filter] == filter || (filter == 'All' && params[:filter].blank?)
+      %li{class: css_class}
+        = link_to filter, admin_codes_path({sort: params[:sort], direction: params[:direction], query: params[:query], filter: filter})
+
+.section_form.single.connect.topless
   #search.push
-    = form_tag admin_codes_path, :method => :get do
+    = form_tag admin_codes_path, method: :get do
       = render 'shared/search_form'
 
-  %table.standard
-    %thead
-      %tr
-        %th= sortable "short_display"
-        %th= sortable "type"
-        %th= sortable "description"
-        %th
+  %ul.activity_tree
+    - @codes.each do |code|
+      = render 'code_row', code: code
 
-    %tbody
-      - @codes.each do |code|
-        %tr{:class => cycle("even", "odd")}
-          %td= code.short_display
-          %td= code.type
-          %td= code.description
-          %td
-            %ul.manage_bar
-              %li= link_to "Edit", edit_admin_code_path(code)
-
-= will_paginate @codes

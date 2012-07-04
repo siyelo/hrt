@@ -283,6 +283,7 @@ ul.activity_tree
     margin-bottom: 0 !important
     padding-bottom: 0 !important
     position: relative
+    +pie-clearfix
     &:hover
       background: $primary_lighter + #050505
       color: $primary_dark
@@ -394,6 +395,11 @@ ul.activity_tree
     cursor: default
     &.expanded, &.collapsed
       cursor: pointer
+      
+  .code-label
+    display: inline-block
+    font-size: 12px
+    margin: 7px 0 7px 4px
 
 .coding_total
   color: $primary

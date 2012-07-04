@@ -1,0 +1,11 @@
+%li
+  - unless code.leaf?
+    %span.collapsed{id: code.id} +
+  - else
+    %span
+  %div.clearfix
+    = link_to code.short_display, edit_admin_code_path(code), :class => "code-label"
+  - unless code.leaf?
+    %ul{id: "#{ code.id }_act", style: "display: none"}
+      - code.children.each do |child|
+        = render 'code_row', code: child

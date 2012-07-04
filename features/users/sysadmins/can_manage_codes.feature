@@ -11,7 +11,7 @@ Feature: Admin can manage codes
     Scenario: Admin can CRUD codes
       Given a code exists with short_display: "code1", long_display: "code1 long", official_name: "code1 official name", description: "code1 description", type: "Mtef"
       When I follow "Codes"
-        And I follow "Edit"
+        And I follow "code1"
       When I fill in "Short display" with "code2"
         And I fill in "Long display" with "code2 long"
         And I fill in "Official name" with "code2 official name"
@@ -53,46 +53,3 @@ Feature: Admin can manage codes
 
       When I follow "Download template"
       Then I should see "short_display,long_display,description,type,external_id,parent_short_display,hssp2_stratprog_val,hssp2_stratobj_val,official_name,sub_account,nha_code,nasa_code"
-
-    Scenario Outline: An admin can filter codes
-      Given a mtef_code exists with short_display: "code1", description: "code1 desc"
-        And a nha_code exists with short_display: "code2", description: "code2 desc"
-      When I follow "Codes"
-        And I fill in "query" with "<first>"
-        And I press "Search"
-      Then I should see "Found 1 codes matching <first>"
-        And I should see "<first>"
-        And I should not see "<second>"
-        And I fill in "query" with "<second>"
-        And I press "Search"
-        And I should see "Found 1 codes matching <second>"
-        And I should see "<second>"
-        And I should not see "<first>"
-
-        Examples:
-            | first      | second     |
-            | code1      | code2      |
-            | code2      | code1      |
-            | code1 desc | code2 desc |
-            | code2 desc | code1 desc |
-            | Nha        | Mtef       |
-            | Mtef       | Nha        |
-
-
-    Scenario Outline: An admin can sort codes
-      Given a mtef_code exists with short_display: "code1", description: "code1 desc"
-        And a nha_code exists with short_display: "code2", description: "code2 desc"
-      When I follow "Codes"
-        And I follow "<column_name>"
-      Then column "<column>" row "1" should have text "<text1>"
-        And column "<column>" row "2" should have text "<text2>"
-
-      When I follow "<column_name>"
-      Then column "<column>" row "1" should have text "<text2>"
-        And column "<column>" row "2" should have text "<text1>"
-
-        Examples:
-           | column_name   | column | text1      | text2      |
-           | Short Display | 1      | code2      | code1      |
-           | Type          | 2      | Mtef       | Nha        |
-           | Description   | 3      | code1 desc | code2 desc |
