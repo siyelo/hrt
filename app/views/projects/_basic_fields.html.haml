@@ -14,7 +14,7 @@
     .name
       = f.label :start_date, "Start date", :value => project_id
       %span.required *
-      = link_to "#", :title => "(YYYY-MM-DD) When the Project (and it's related Activities) started.", :class => 'tooltip' do
+      = link_to "#", :title => "The start of your project. Often, this might align with your fiscal year, however if your project spans several years, you can enter those dates instead.", :class => 'tooltip' do
         = image_tag "tooltip.png"
     = f.text_field :start_date, :value => formatted_date(f.object.start_date), :class => f.object.errors[:start_date].present? ? "error date_picker start_date" : "date_picker start_date", :id => "project_start_date_#{project_id}"
 
@@ -22,7 +22,7 @@
     .name
       = f.label :end_date, "End date", :value => project_id
       %span.required *
-      = link_to "#", :title => "(YYYY-MM-DD) The end date for the Project’s implementation.", :class => 'tooltip' do
+      = link_to "#", :title => "The end of your project. Often, this might align with your fiscal year, however if your project spans several years, you can enter those dates instead.", :class => 'tooltip' do
         = image_tag "tooltip.png"
     = f.text_field :end_date, :value => formatted_date(f.object.end_date), :class => f.object.errors[:end_date].present? ? "error date_picker end_date" : "date_picker end_date", :id => "project_end_date_#{project_id}"
 
