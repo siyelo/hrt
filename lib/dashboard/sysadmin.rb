@@ -22,6 +22,10 @@ class Dashboard::Sysadmin
     @accepted_count ||= current_request.data_responses.accepted.count
   end
 
+  def rejected_count
+    @rejected_count ||= current_request.data_responses.rejected.count
+  end
+
   def started_count
     @started_count ||= current_request.data_responses.started.count
   end
@@ -42,8 +46,16 @@ class Dashboard::Sysadmin
     calculate_percent(not_yet_started_count)
   end
 
-  def pending_approval
-    current_request.data_responses.submitted.count
+  def submitted_percent
+    calculate_percent(submitted)
+  end
+
+  def rejected_percent
+    calculate_percent(rejected_count)
+  end
+
+  def submitted
+    @submitted ||= current_request.data_responses.submitted.count
   end
 
   def comments
