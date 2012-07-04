@@ -27,12 +27,3 @@
         = render 'double_report_row', :title => 'Implementer Beneficiary', :budget_key => 'budget_implementer_beneficiary', :spend_key => 'spend_implementer_beneficiary'
         = render 'dqr_report_row', :title => 'Dynamic Query', :budget_key => 'budget_dynamic_query', :spend_key => 'spend_dynamic_query'
         = render 'single_report_row', :title => 'Funding Source Query', :key => 'funding_source_query'
-
-  %li.section_form.last.connect.topless
-    %h2 Mark Double Counting
-    .section_base
-      %ul.admin_reports
-        = form_tag mark_implementer_splits_admin_reports_detailed_index_path, :method => :put, :multipart => true do
-          = file_field_tag :file
-          = submit_tag :upload, :value => "Upload"
-          %span.hint Mark duplicates in Activity Overview Report and upload the CSV file
