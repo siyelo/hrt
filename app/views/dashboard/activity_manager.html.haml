@@ -33,7 +33,8 @@
                 %td.wrap-8
                   %ul.horizontal
                     //%li= link_to , projects_path(:response_id => response.id)
-                    %li.right= link_to response.state, "#", :class => "tooltip-S response_status #{response.state}", :title => response_log_tooltip(response)
+                    %li.right
+                      %span{:class => "tooltip-S response_status #{response.state}", :title => response_log_tooltip(response)}
                     %li.right= link_to '', export_workplan_projects_path(:response_id => response.id), id: 'download_workplan', class: 'download big tooltip-S', :title => "Download Workplan"
 
   .sidebar

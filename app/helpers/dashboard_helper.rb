@@ -18,7 +18,7 @@ module DashboardHelper
   end
 
   def response_log_tooltip(data_response)
-    tip = "Response status: #{data_response.status}"
+    tip = data_response.status
     if data_response.response_state_logs.last
       log_name = data_response.response_state_logs.last.user.name
       log_date = data_response.response_state_logs.last.created_at.strftime("%d-%m-%Y")

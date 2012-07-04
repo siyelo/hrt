@@ -4,8 +4,6 @@ HrtProjects.init = function () {
   // use click() not toggle() here, as toggle() doesnt
   // work when menu items are also toggling it
 
-  HrtDropdown.init();
-
   $('.js_upload_btn').click(function (e) {
     e.preventDefault();
     $(this).parents('tbody').find('.upload_box').slideToggle();
