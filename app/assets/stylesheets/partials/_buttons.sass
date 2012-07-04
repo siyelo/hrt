@@ -347,6 +347,20 @@ body.login .buttons li:last-child
       display: inline-block
       font-size: 12px
       padding: 12px
+      
+.icon
+  border: 1px solid $light-blue
+  display: inline-block
+  height: 25px
+  padding: 0 !important
+  text-indent: -9999em
+  vertical-align: middle
+  width: 30px
+  +border-radius(2px)
+  &:hover, &:focus
+    border: 1px solid $primary
+  &.print
+    +background(image_url("icon_print.png") no-repeat center, linear-gradient(#f8f8f8, #e8e8e8))
 
 .delete_inline
   display: inline-block

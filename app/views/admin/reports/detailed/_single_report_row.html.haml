@@ -1,6 +1,6 @@
 - rep = @report_map[key]
 
-%tr
+%tr.connect
   %td= title
   %td{:colspan => '2'}
     - if rep
@@ -9,3 +9,6 @@
       .hint= "(updated #{distance_of_time_in_words_to_now(rep.attachment_updated_at)} ago)" if rep.attachment_updated_at
     - else
       = link_to "Generate combined (Expenditures and Budgets)", generate_admin_reports_detailed_path(key)
+
+
+          
