@@ -1,19 +1,18 @@
 - budget_rep = @report_map[budget_key]
 - spend_rep = @report_map[spend_key]
-- hint = "This report will be downloaded as a zipped XML file and can be opened in Excel.  To do this, open Excel, click File > Open and select the XML file from where you unzipped it."
 
 %tr
   %td= title
   %td
     - if spend_rep
-      = link_to "Export", admin_reports_detailed_path(spend_rep), :title => hint, :class => "tooltip-S sml_btn"
+      = link_to "Export", admin_reports_detailed_path(spend_rep), :class => "tooltip-S sml_btn"
       .regenerate= link_to image_tag("icon_regenerate.png"), generate_admin_reports_detailed_path(spend_key), :title => 'Regenerate report'
       .hint= "(updated #{distance_of_time_in_words_to_now(spend_rep.attachment_updated_at)} ago)" if spend_rep.attachment_updated_at
     -else
       = link_to "Generate", generate_admin_reports_detailed_path(spend_key)
   %td
     - if budget_rep
-      = link_to "Export", admin_reports_detailed_path(budget_rep), :title => hint, :class => "tooltip-S sml_btn"
+      = link_to "Export", admin_reports_detailed_path(budget_rep), :class => "tooltip-S sml_btn"
       .regenerate= link_to image_tag("icon_regenerate.png"), generate_admin_reports_detailed_path(budget_key), :title => 'Regenerate report'
       .hint= "(updated #{distance_of_time_in_words_to_now(budget_rep.attachment_updated_at)} ago)" if budget_rep.attachment_updated_at
     -else

@@ -3,7 +3,7 @@ module FileBuilder
     attr_accessor :filetype, :workbook
 
     def initialize
-      @filetype = 'xml'
+      @filetype = 'xls'
       @workbook = []
     end
 
