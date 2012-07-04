@@ -1,25 +1,26 @@
 - klass = outlay.class
-- form_path = klass == Activity ? activity_path(outlay, :mode => params[:mode]) : other_cost_path(outlay, :mode => params[:mode])
+- form_path = klass == Activity ? activity_path(outlay, mode: params[:mode]) : other_cost_path(outlay, mode: params[:mode])
 
 - content_for :sub_nav do
-  = render :partial => 'shared/sub_nav_projects'
+  = render partial: 'shared/sub_nav_projects'
 
-= render '/shared/outlays/uncoded_overlay', :outlay => outlay
+- if !current_user.sysadmin? && !outlay.classified?
+  = render '/shared/outlays/uncoded_overlay', outlay: outlay
 
 %h1.main_heading
   = klass == Activity ? "Edit Activity" : "Edit Indirect Cost"
   %span= klass == Activity ? render('activities/help') : render('other_costs/help')
 
-= render 'shared/error_messages', :resource => outlay
+= render 'shared/error_messages', resource: outlay
 
-= semantic_form_for outlay, :url => form_path, :html => {:class => "basic_form js_form"} do |f|
-  = render '/shared/outlays/form', :f => f, :outlay => outlay
+= semantic_form_for outlay, url: form_path, html: {class: "basic_form js_form"} do |f|
+  = render '/shared/outlays/form', f: f, outlay: outlay
 
 - unless outlay.new_record?
   .delete_section
-    = link_to "Delete this #{outlay.human_name}", form_path, :data => { :confirm => "Are you sure you want to delete this #{outlay.human_name}?" }, :method => :delete, :class => 'delete_action'
+    = link_to "Delete this #{outlay.human_name}", form_path, data: { confirm: "Are you sure you want to delete this #{outlay.human_name}?" }, method: :delete, class: 'delete_action'
     %p
       %strong Warning:
       ="Once you delete an #{outlay.human_name}, you will lose all data associated with it. There is no undo."
 
-= render 'shared/comments', :comments => @comments
+= render 'shared/comments', comments: @comments

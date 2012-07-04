@@ -2,34 +2,34 @@
   var _response_id = "#{@response.id}";
   var _activity_id = "#{outlay.id}";
 
-= f.inputs :class => 'inputs' do
+= f.inputs class: 'inputs' do
   %li.last
-    = render 'shared/outlays/activity_basic_fields', :f => f, :outlay => outlay
+    = render 'shared/outlays/activity_basic_fields', f: f, outlay: outlay
 
-  %li.last= render 'shared/outlays/tab_nav', :outlay => outlay
+  %li.last= render 'shared/outlays/tab_nav', outlay: outlay
 
   - if ['locations', 'purposes', 'inputs'].include? params[:mode]
     #classification.section_form.topless.wrapped.last
       #activity_classification
-        %div.tab1{:style => 'display: block'}
-          = render 'shared/outlays/classification', :outlay => outlay
+        %div.tab1{style: 'display: block'}
+          = render 'shared/outlays/classification', outlay: outlay
 
   - elsif params[:mode].nil? || params[:mode] == 'implementers'
     %li.implementer_splits.last
       %ul.section_form.topless.wrapped.last
-        = render 'shared/outlays/implementers', :f => f, :outlay => outlay, :blank_rows => 3, :bulk_review => false
+        = render 'shared/outlays/implementers', f: f, outlay: outlay, blank_rows: 3, bulk_review: false
 
   - elsif params[:mode] == 'outputs'
     %li.implementer_splits.last
       %ul.section_form.topless.wrapped.last
-        = render 'shared/outlays/outputs_targets_benefs', :f => f, :outlay => outlay
+        = render 'shared/outlays/outputs_targets_benefs', f: f, outlay: outlay
 
   %li.last
     %ul.horizontal.section_form.last.connect
-      = f.actions :class => 'buttons1' do
-        = f.action :submit, :label => "Save", :button_html => {:class => "last next js_submit_btn"}
-        = f.action :submit, :label => save_and_add_button_text(params[:mode], outlay), :button_html => {:class => "next js_submit_btn"}
+      = f.actions class: 'buttons1' do
+        = f.action :submit, label: "Save", button_html: {class: "last next js_submit_btn"}
+        = f.action :submit, label: save_and_add_button_text(params[:mode], outlay), button_html: {class: "next js_submit_btn"}
         %li
-          = link_to "Cancel", projects_path, :class => "js_toggle_projects_listing cancel"
+          = link_to "Cancel", projects_path, class: "js_toggle_projects_listing cancel"
         %li
-          = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'
+          = image_tag "ajax-loader.gif", class: "ajax-loader", style: 'display: none;'

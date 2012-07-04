@@ -34,15 +34,15 @@ class OutlaysController < BaseController
   end
 
   def on_implementers_page?
-    params[:mode].blank?
+    params[:mode].blank? || params[:mode] == 'implementers'
   end
 
   def prepare_edit(outlay)
-    warn_if_not_classified(outlay) unless current_user.sysadmin?
+    warn_if_not_classified(outlay)
     prepare_classifications(outlay)
     load_comment_resources(outlay)
     load_validation_errors(outlay) if on_implementers_page?
-    paginate_splits(outlay)
+    paginate_splits(outlay) if on_implementers_page?
   end
 
   def save_outlay(outlay)

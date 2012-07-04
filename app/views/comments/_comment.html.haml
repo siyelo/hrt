@@ -22,7 +22,7 @@
           = link_to 'Edit', '#', class: 'js_edit_comment create_inline', :"data-url" => edit_comment_url(comment)
           = link_to 'Remove', '#', class: 'js_remove_comment create_inline', :"data-url" => comment_url(comment)
       %p.comment.js_comment{id: dom_id(comment)}= comment.comment
-      
+
 
       .js_reply_box.comments_input.reply{:style => 'display: none; !important'}
         = render :partial => 'comments/reply_form', :handlers => :haml, :formats => :html, :locals => {:comment => Comment.new(:parent_id => comment.id), :parent => comment}
