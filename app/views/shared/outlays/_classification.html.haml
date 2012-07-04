@@ -1,10 +1,12 @@
-%ul.horizontal.button-bar
-  %li= link_to 'Show mine', edit_activity_or_ocost_path(outlay, :mode => params[:mode], :view => 'my'), :class => (params[:view] == 'my' ? 'active create_alt' : 'create_alt')
+- @outlay_klass = outlay.class.to_s.underscore
 
-  %li= link_to 'Show all', edit_activity_or_ocost_path(outlay, :mode => params[:mode], :view => 'all'), :class => (params[:view] == 'all' ? 'active create_alt' : 'create_alt')
+%ul.horizontal.button-bar
+  %li= link_to 'Show mine', edit_activity_or_ocost_path(outlay, mode: params[:mode], view: 'my'), class: (params[:view] == 'my' ? 'active create_alt' : 'create_alt')
+
+  %li= link_to 'Show all', edit_activity_or_ocost_path(outlay, mode: params[:mode], view: 'all'), class: (params[:view] == 'all' ? 'active create_alt' : 'create_alt')
   - if params["mode"] != "inputs" && params["mode"] != "purposes"
     %li
-      = link_to "#", :class => "create_alt js_upload_btn" do
+      = link_to "#", class: "create_alt js_upload_btn" do
         = image_tag "new.png"
         Upload
 
@@ -15,18 +17,18 @@
   %p#expl
     %span.spend
       %span Past Expenditure%
-      = link_to image_tag("tooltip.png"), "#", :title => heading_hint, :class => 'tooltip'
+      = link_to image_tag("tooltip.png"), "#", title: heading_hint, class: 'tooltip'
       - alt_txt = "Copy across Expenditure classifications to Budget classifications"
-      = link_to image_tag("icon_s2b.png", :alt => alt_txt, :title => alt_txt, :class => "click"), '#', :id => 'js_spend_to_budget'
+      = link_to image_tag("icon_s2b.png", alt: alt_txt, title: alt_txt, class: "click"), '#', id: 'js_spend_to_budget'
     %span.budget
       - alt_txt = "Copy across Budget classifications to Expenditure classifications"
-      = link_to image_tag("icon_b2s.png", :alt => alt_txt, :title => alt_txt, :class => "click"), '#', :id => 'js_budget_to_spend'
+      = link_to image_tag("icon_b2s.png", alt: alt_txt, title: alt_txt, class: "click"), '#', id: 'js_budget_to_spend'
       %span Current Budget%
-      = link_to image_tag("tooltip.png"), "#", :title => heading_hint, :class => 'tooltip right'
+      = link_to image_tag("tooltip.png"), "#", title: heading_hint, class: 'tooltip right'
 
-  %ul.activity_tree{:activity_budget => outlay.total_budget, :activity_spend => outlay.total_spend, :activity_currency => outlay.currency}
+  %ul.activity_tree{activity_budget: outlay.total_budget, activity_spend: outlay.total_spend, activity_currency: outlay.currency}
     - @budget_coding_tree.root_codes.each do |code|
-      = render 'shared/outlays/code_row', :code => code, :margin => 0, :outlay => outlay
+      = render 'shared/outlays/code_row', code: code, margin: 0, outlay: outlay
 
   .coding_total.right
     %p.value.left.js_total_spend

@@ -44,6 +44,7 @@ group :development do
   gem 'rails-footnotes'
   gem 'taps'
   gem 'quiet_assets'
+  gem 'rails-footnotes'
   gem 'rb-fsevent', :require => RUBY_PLATFORM.include?('darwin') && 'rb-fsevent'
   gem 'growl',      :require => RUBY_PLATFORM.include?('darwin') && 'growl'
   gem 'rb-inotify', :require => RUBY_PLATFORM.include?('linux')  && 'rb-inotify'

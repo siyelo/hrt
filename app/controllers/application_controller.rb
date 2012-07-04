@@ -77,7 +77,7 @@ class ApplicationController < ActionController::Base
     end
 
     def warn_if_not_classified(outlay)
-      if !outlay.classified?
+      if !current_user.sysadmin? && !outlay.classified?
         if flash[:warning].blank? && ( session['flash'].blank? ||
           session['warning'].present? && session['warning'][:notice].blank? )
           flash.now[:warning] = "This #{outlay.human_name} has not been fully classified.
