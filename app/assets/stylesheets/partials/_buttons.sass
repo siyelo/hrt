@@ -56,6 +56,16 @@ a.remove_nested
       outline: none
       position: relative
       top: 1px
+    &.monochrome
+      margin: 5px 0px
+      vertical-align: middle
+      font-weight: normal
+      color: #425160
+      &:hover, &:focus
+        background: #eee
+        border: 1px solid $primary
+        +background(linear-gradient(#f8f8f8, #e8e8e8))
+        +text-shadow(#fff, 0, 0, 1px)
 
   &.dropdown
     background: #eee
@@ -89,6 +99,17 @@ a.remove_nested
     &.heading_button
       margin: -5px 0px 0px 0px
       font-family: sans-serif
+
+    &.monochrome
+      margin: 5px 0px
+      vertical-align: middle
+      font-weight: normal
+      color: #425160
+      &:hover, &:focus
+        background: #eee
+        border: 1px solid $primary
+        +background(linear-gradient(#f8f8f8, #e8e8e8))
+        +text-shadow(#fff, 0, 0, 1px)
 
   &.create_inline
     background: #eee
@@ -150,7 +171,6 @@ a.remove_nested
   .dropdown, .create_alt, .icon
     margin: 5px 0px !important
     vertical-align: middle
-  
 
 .next
   border: 1px solid $green - #191919

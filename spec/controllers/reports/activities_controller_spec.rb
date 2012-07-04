@@ -11,6 +11,7 @@ describe Reports::ActivitiesController do
 
   context "as a reporter" do
     let(:activity) { mock :activity }
+    let(:report) { mock :report, to_xls: [], name: 'speccin' }
     let(:current_response) { mock :response }
 
     before :each do
@@ -36,6 +37,15 @@ describe Reports::ActivitiesController do
     it "should initialize an inputs presenter" do
       Reports::ActivityInputs.should_receive(:new).with(activity).and_return mock(:report)
       get :inputs, :id => 1
+    end
+
+    it "allows exporting of implementers report" do
+      Reports::Activity.should_receive(:new).with(activity).and_return report
+      get :implementers, format: 'xls', id: 1
+      response.should be_success
+      response.header["Content-Type"].should == "application/vnd.ms-excel"
+      response.header["Content-Disposition"].should ==
+        "attachment; filename=speccin-implementers.xls"
     end
   end
 end

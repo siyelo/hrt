@@ -108,18 +108,21 @@ Hrt::Application.routes.draw do
     collection do
       get :inputs
       get :locations
+      get :projects
     end
   end
 
   namespace :reports do
     resources :activities, only: [:show] do
       member do
+        get :implementers
         get :inputs
         get :locations
       end
     end
     resources :projects, only: [:show] do
       member do
+        get :activities
         get :locations
         get :inputs
       end

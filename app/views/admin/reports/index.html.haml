@@ -18,9 +18,9 @@
   %ul.section_nav#tabs-container
     = render :partial => 'admin/reports/shared/tabs'
     %li.right
-      = link_to "Export", "#", :id => "export-report", :class => "create_alt"
+      = link_to "Export", "#", :id => "export-report", :class => "create_alt monochrome"
       = link_to "Print This Page", "javascript:window.print()", :id => "print-page", :class => "icon print"
-      
+
     %li.right.include_double_count.hidden.dummy
       = image_tag "ajax-loader.gif", :class => "ajax-loader hidden"
       = check_box_tag :include_double_count, false

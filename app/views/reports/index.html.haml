@@ -18,12 +18,21 @@
   %ul.section_nav#tabs-container
     = render :partial => 'reports/shared/tabs'
     %li.right
+      = link_to "Export", "#", :id => "export-report", :class => "create_alt monochrome"
       = link_to "Print This Page", "javascript:window.print()", :id => "print-page", :class => "icon print"
-
-    = render 'reports/shared/response_overview'
+    %li.right
+      %ul#nav.horizontal
+        %li.js_dropdown_menu
+          = link_to '#', class: 'js_dropdown_trigger dropdown monochrome' do
+            Detailed Report
+            = image_tag "icon_dropdown.png"
+          %ul.menu_items{style: 'display: none'}
+            %li
+              =link_to 'Expenditure', download_overview_response_path(@report.resource, type: 'spend')
+            %li= link_to 'Budget', download_overview_response_path(@report.resource, type: 'budget')
 
 #charts_tables
-  .projects_tab{:"data-loaded" => 'true'}
+  .projects_tab{:"data-loaded" => 'true', :"data-url" => projects_reports_path}
     = render '/reports/shared/report_data'
   .locations_tab{:"data-loaded" => 'false', :"data-url" => locations_reports_path, :style => 'display: none;'}
     = image_tag "ajax-loader.gif", :class => "ajax-loader"

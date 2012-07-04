@@ -28,6 +28,8 @@ describe ReportsController do
   end
 
   context "as a reporter" do
+    let(:report) { mock :report, to_xls: [], name: 'speccin' }
+
     before :each do
       @req = FactoryGirl.create :data_request
       @reporter = FactoryGirl.create :reporter
@@ -35,7 +37,7 @@ describe ReportsController do
     end
 
     it "should render index" do
-      Reports::Organization.should_receive(:new).with(current_response).and_return mock(:report)
+      Reports::Organization.should_receive(:new).with(current_response).and_return report
       get :index
       response.should be_success
       assigns[:report].should_not be_nil
@@ -43,13 +45,40 @@ describe ReportsController do
     end
 
     it "should initialize an org location presenter" do
-      Reports::OrganizationLocations.should_receive(:new).with(current_response).and_return mock(:report)
+      Reports::OrganizationLocations.should_receive(:new).with(current_response).and_return report
       get :locations
     end
 
     it "should initialize an org inputs presenter" do
-      Reports::OrganizationInputs.should_receive(:new).with(current_response).and_return mock(:report)
+      Reports::OrganizationInputs.should_receive(:new).with(current_response).and_return report
       get :inputs
+    end
+
+    it "allows exporting of project report" do
+      Reports::Organization.should_receive(:new).with(current_response).and_return report
+      get :projects, format: 'xls'
+      response.should be_success
+      response.header["Content-Type"].should == "application/vnd.ms-excel"
+      response.header["Content-Disposition"].should ==
+        "attachment; filename=speccin-projects.xls"
+    end
+
+    it "allows exporting of locations report" do
+      Reports::OrganizationLocations.should_receive(:new).with(current_response).and_return report
+      get :locations, format: 'xls'
+      response.should be_success
+      response.header["Content-Type"].should == "application/vnd.ms-excel"
+      response.header["Content-Disposition"].should ==
+        "attachment; filename=speccin-locations.xls"
+    end
+
+    it "allows exporting of inputs report" do
+      Reports::OrganizationInputs.should_receive(:new).with(current_response).and_return report
+      get :inputs, format: 'xls'
+      response.should be_success
+      response.header["Content-Type"].should == "application/vnd.ms-excel"
+      response.header["Content-Disposition"].should ==
+        "attachment; filename=speccin-inputs.xls"
     end
   end
 end

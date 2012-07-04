@@ -1,16 +1,21 @@
-class Reports::ActivitiesController < BaseController
+class Reports::ActivitiesController < ReportsBaseController
   def show
     @report  = Reports::Activity.new(load_activity)
   end
 
+  def implementers
+    show
+    render_report
+  end
+
   def locations
     @report = Reports::ActivityLocations.new(load_activity)
-    render :partial => '/reports/shared/report_data', :layout => false
+    render_report
   end
 
   def inputs
     @report = Reports::ActivityInputs.new(load_activity)
-    render :partial => '/reports/shared/report_data', :layout => false
+    render_report
   end
 
   private
