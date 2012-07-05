@@ -26,7 +26,7 @@
     = render '/reports/shared/project_tabs'
     %li.right
       = link_to "Export", "#", :id => "export-report", :class => "create_alt monochrome"
-      = link_to "Print This Page", "javascript:window.print()", :id => "print-page", :class => "icon print"
+      = link_to "Print This Page", "javascript:window.print()", :id => "print-page", :class => "icon print", :title => "Print this page"
 
 #charts_tables
   .activities_tab{:"data-loaded" => 'true', :"data-url" => activities_reports_project_path(@report.resource)}

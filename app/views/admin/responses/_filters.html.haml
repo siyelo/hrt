@@ -5,6 +5,4 @@
       %li{:class => css_class}
         = link_to filter, {:sort => params[:sort], :direction => params[:direction], :query => params[:query], :filter => filter}
     %li.right
-      = link_to "Print This Page", "javascript:window.print()", :id => "print-page", :class => "icon print"
-
-
+      = link_to "Print This Page", "javascript:window.print()", :id => "print-page", :class => "icon print", :title => "Print this page"

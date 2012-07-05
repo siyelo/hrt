@@ -32,7 +32,7 @@
     = render '/reports/shared/activity_tabs'
     %li.right
       = link_to "Export", "#", :id => "export-report", :class => "create_alt monochrome"
-      = link_to "Print This Page", "javascript:window.print()", :id => "print-page", :class => "icon print"
+      = link_to "Print This Page", "javascript:window.print()", :id => "print-page", :class => "icon print", :title => "Print this page"
 
 #charts_tables
   .implementers_tab{:"data-loaded" => 'true', :"data-url" => implementers_reports_activity_path(@report.resource)}
