@@ -6,7 +6,7 @@ This app tracks resource flows in the health sector from their many sources to t
 
 ### Git config
 
-    #.git/config
+    # .git/config
 
     [remote "origin"]
       fetch = +refs/heads/*:refs/remotes/origin/*
@@ -17,7 +17,7 @@ This app tracks resource flows in the health sector from their many sources to t
       fetch = +refs/heads/*:refs/remotes/staging/*
 
     [remote "production"]
-      url = git@heroku.com:resourcetracking.git
+      url = git@heroku.com:hrtprod.git
       fetch = +refs/heads/*:refs/remotes/production/*
 
 ### rbenv/RVM

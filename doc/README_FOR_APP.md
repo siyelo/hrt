@@ -93,12 +93,11 @@ We follow Nvie.com's 'git workflow'.
 Configure git
 
   # Heroku Prod remote
-  [remote "heroku_production"]
-    url = git@heroku.com:resourcetracking.git
+  [remote "production"]
+    url = git@heroku.com:hrtprod.git
     fetch = +refs/heads/*:refs/remotes/production/*
 
-git push heroku_production master
-
+git push production master
 
 ### Release naming
 

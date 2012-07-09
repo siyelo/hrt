@@ -1,6 +1,5 @@
 # app/models/notifier.rb
 class Notifier < ActionMailer::Base
-  #default_url_options[:host] = "resourcetracking.heroku.com"
   FROM = "HRT Notifier <hrt-do-not-reply@hrtapp.com>"
   default from: FROM
   helper :commentable

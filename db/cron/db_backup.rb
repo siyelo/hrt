@@ -7,9 +7,9 @@
 # Usage:
 #   db_backup.rb HEROKU_APP DIR
 # E.g.
-#  backup.rb resourcetracking /backups
+#  backup.rb hrtprod /backups
 # or in crontab 7am & 11pm daily
-#  0 7,23 * * * db_backup.rb resourcetracking ~/hrt_backups
+#  0 7,23 * * * db_backup.rb hrtprod ~/hrt_backups
 
 require File.join(File.dirname(__FILE__), '../../lib/', 'script_helper')
 

@@ -35,7 +35,7 @@ module Reports::Detailed::Helpers
   end
 
   def activity_url(activity)
-    "https://resourcetracking.heroku.com/responses/#{activity.data_response.id}/activities/#{activity.id}/edit"
+    Rails.application.routes.url_helpers.edit_activity_url(activity, :response_id => activity.data_response.id)
   end
 
   def activity_total_method(amount_type)
