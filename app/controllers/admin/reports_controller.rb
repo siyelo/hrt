@@ -31,7 +31,11 @@ class Admin::ReportsController < Admin::BaseController
 
   private
   def double_count
-    params[:double_count] == 'true' ? true : false
+    @double_count || params[:double_count] == 'true' ? true : false
+  end
+
+  def double_counts_suffix
+    double_count ? "double_counts_included" : "double_counts_excluded"
   end
 
   def render_report
@@ -40,7 +44,7 @@ class Admin::ReportsController < Admin::BaseController
         render :partial => '/reports/shared/report_data', :layout => false
       end
       format.xls do
-        send_file(@report.to_xls, "#{params[:action]}.xls", 'application/vnd.ms-excel')
+        send_file(@report.to_xls, "#{params[:action]}_#{double_counts_suffix}.xls", 'application/vnd.ms-excel')
       end
     end
   end

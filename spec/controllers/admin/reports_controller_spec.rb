@@ -42,13 +42,22 @@ describe Admin::ReportsController do
           assigns[:report].should_not be_nil
         end
 
-        it "can download #{report_type} report" do
+        it "can download #{report_type} report with double counts included" do
           get report_type, double_count: 'true', format: 'xls'
           response.should be_success
           assigns[:report].include_double_count.should be_true
           response.header["Content-Type"].should == "application/vnd.ms-excel"
           response.header["Content-Disposition"].should ==
-            "attachment; filename=#{report_type}.xls"
+            "attachment; filename=#{report_type}_double_counts_included.xls"
+        end
+
+        it "can download #{report_type} report" do
+          get report_type, double_count: 'false', format: 'xls'
+          response.should be_success
+          assigns[:report].include_double_count.should be_false
+          response.header["Content-Type"].should == "application/vnd.ms-excel"
+          response.header["Content-Disposition"].should ==
+            "attachment; filename=#{report_type}_double_counts_excluded.xls"
         end
       end
     end
