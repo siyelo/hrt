@@ -40,19 +40,19 @@
       %ul.welcome_steps
         %li.first
           = link_to edit_organization_path(:current) do
-            %span.icon= image_tag "icon_welcome1.png", :alt => "Setup Your Organization", :height => "66"
+            %span.icons= image_tag "icon_welcome1.png", :alt => "Setup Your Organization", :height => "66"
             %span.title 1. Basic Settings
             %span.desc Your Organization's preferences and contact settings
 
         %li
           = link_to projects_path do
-            %span.icon= image_tag "icon_welcome5.png", :alt => "Enter Projects & Activities", :height => "70"
+            %span.icons= image_tag "icon_welcome5.png", :alt => "Enter Projects & Activities", :height => "70"
             %span.title 2. Enter Projects & Activities
             %span.desc Define the health projects and activities your organization does
 
         %li.last
           = link_to submit_response_path(current_response) do
-            %span.icon= image_tag "icon_welcome3.png", :alt => "Submit Response", :height => "70"
+            %span.icons= image_tag "icon_welcome3.png", :alt => "Submit Response", :height => "70"
             %span.title 3. Submit Response
             %span.desc Submit your data for the requested period
 
