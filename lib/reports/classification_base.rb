@@ -9,17 +9,17 @@ module Reports
     end
 
     def totals_equals_rows?
-      total_budget == rows_budget && total_spend == rows_spend
+      remaining_spend + remaining_budget == 0.00
     end
 
     protected
 
     def rows_budget
-      rows.inject(0){ |sum, e| sum + (e.total_budget.round(2) || 0) }
+      rows.inject(0){ |sum, e| sum + (e.total_budget || 0) }
     end
 
     def rows_spend
-      rows.inject(0){ |sum, e| sum + (e.total_spend.round(2) || 0) }
+      rows.inject(0){ |sum, e| sum + (e.total_spend || 0) }
     end
 
     def rows
@@ -80,7 +80,9 @@ module Reports
     # activities() and splits()
     def codings
       ( activities.map { |a| splits(a, :spend) } +
-        activities.map { |a| splits(a, :budget) }).flatten
+        activities.map { |a| splits(a, :budget) }).flatten.select do |c|
+          c.cached_amount && c.cached_amount > 0.0
+        end
     end
 
     def remaining_spend

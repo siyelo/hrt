@@ -10,11 +10,11 @@ describe Reports::ClassificationBase do
   describe "rounding" do
     let(:rows) { [ Reports::Row.new("L1", 45.009, 15.001)] }
 
-    it "rounds row(classification amounts) before comparing with totals" do
+    it "does not round row(classification amounts) before comparing with totals" do
       report.should_receive(:rows).twice.and_return rows
-      report.should_receive(:total_spend).and_return 45.01
-      report.should_receive(:total_budget).and_return 15.0
-      report.totals_equals_rows?.should be_true
+      report.should_receive(:total_spend).and_return 45.008
+      report.should_receive(:total_budget).and_return 15.00
+      report.totals_equals_rows?.should be_false
     end
   end
 
