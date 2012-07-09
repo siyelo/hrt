@@ -3,8 +3,7 @@
     %tr
       %th= sortable "full_name"
       %th= sortable "email"
-      - if show_organization
-        %th.org= sortable "organizations.name", "Organization"
+      %th.org= sortable "organizations.name", "Organization"
       %th.login= sortable "current_sign_in_at", "Last login"
       %th= sortable "roles_mask", "Role"
       %th.invitation= sortable "invite_token", "Invitation"
@@ -16,8 +15,7 @@
       %tr{:class => cycle("even", "odd")}
         %td= link_to_if current_user.sysadmin?, "#{user.full_name}", edit_admin_user_path(user)
         %td= mail_to user.email
-        - if show_organization
-          %td= user.organization.try(:name)
+        %td= user.organization.try(:name)
         %td= last_signin_for(user)
         %td= user.roles.map{|role| role.humanize}.join(', ')
         %td= user.invite_token.nil? ? "No pending" : "1 pending"

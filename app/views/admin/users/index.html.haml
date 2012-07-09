@@ -32,6 +32,6 @@
     = form_tag admin_users_path, :method => :get do
       = render 'shared/search_form'
 
-  = render "admin/users/users", :users => @users, :show_organization => true
+  = render "admin/users/users", :users => @users
 
 = will_paginate @users

@@ -1,7 +1,4 @@
 class OrganizationsController < BaseController
-  SORTABLE_COLUMNS = ['email', 'full_name', 'current_sign_in_at']
-
-  helper_method :sort_column, :sort_direction
 
   before_filter :load_organization_details, :only => [:edit, :update]
 
@@ -45,16 +42,8 @@ class OrganizationsController < BaseController
   private
     def load_organization_details
       @organization = @response.organization
-      @activity_managers = @organization.managers
-      @users = @organization.users.order("#{sort_column} #{sort_direction}")
-    end
-
-    def sort_column
-      SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "full_name"
-    end
-
-    def sort_direction
-      %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+      @activity_managers = @organization.managers.includes(:organization)
+      @users = @organization.users.includes(:organization).order("full_name ASC")
     end
 end
 
