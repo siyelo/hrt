@@ -3,8 +3,7 @@ class OrganizationsController < BaseController
 
   helper_method :sort_column, :sort_direction
 
-  before_filter :load_organization, :only => [:edit, :update]
-  before_filter :load_users, :only => [:edit, :update]
+  before_filter :load_organization_details, :only => [:edit, :update]
 
   def index
     organizations = Organization.find(:all,
@@ -44,12 +43,10 @@ class OrganizationsController < BaseController
   end
 
   private
-    def load_organization
+    def load_organization_details
       @organization = @response.organization
-    end
-
-    def load_users
-      @users = @organization.users.find(:all, :order => "#{sort_column} #{sort_direction}")
+      @activity_managers = @organization.managers
+      @users = @organization.users.order("#{sort_column} #{sort_direction}")
     end
 
     def sort_column

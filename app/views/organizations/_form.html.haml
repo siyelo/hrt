@@ -1,4 +1,3 @@
-- activity_managers = @organization.managers
 = render '/organizations/help_sidebar'
 
 %fieldset.inputs
@@ -46,32 +45,3 @@
     %p
       %strong Warning:
       Once you delete an Organization, you will lose all data associated with it, and there is no undo.
-
-%h2 Users
-.section_form
-  - if @users && !@users.empty?
-    = render 'admin/users/users', users: @users, show_organization: false
-  - else
-    %p There are no users in this organization
-
-%h2 Activity Managers:
-.section_form
-  - unless activity_managers.empty?
-    = render 'admin/users/users', users: activity_managers, show_organization: false
-  - else
-    %p There are no Activity Managers for this organization
-
-- if current_user.sysadmin?
-  %h2 Funder For:
-  .section_form
-    - if !@organization.out_flows.empty? &&
-      = render 'organizations/funder_for', org: @organization
-    - else
-      %p There are no projects referencing this organization as the funder
-
-  %h2 Implementer For:
-  .section_form
-    - if !@organization.implementer_splits.empty?
-      = render 'organizations/implementer_for', org: @organization
-    - else
-      %p There are no activities referencing this organization as the implementer

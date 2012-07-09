@@ -22,7 +22,7 @@ class Organization < ActiveRecord::Base
   ### Associations
   has_many :users # people in this organization
   has_and_belongs_to_many :managers, :join_table => "organizations_managers",
-    :class_name => "User" # activity managers
+    :class_name => "User", :order => 'users.full_name ASC' # activity managers
   has_many :data_requests # never cascade destroy this!
   has_many :data_responses, :dependent => :destroy
   has_many :dr_activities, :through => :data_responses, :source => :activities

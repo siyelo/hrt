@@ -1,0 +1,8 @@
+%br
+
+%h2 Users
+.section_form
+  - if @users && @users.present?
+    = render 'admin/users/users', users: @users, show_organization: false
+  - else
+    %p There are no users in this organization
