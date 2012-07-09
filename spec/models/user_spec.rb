@@ -81,28 +81,20 @@ describe User do
                        :roles => ['reporter'])
     end
 
-    # this is fine provided you send an invitation too!!
-    it "should not ask on (admin) creation" do
+    it "should reject empty password on registration" do
       @user.save.should == false
       @user.errors[:password].should include("can't be blank")
-      @user.errors[:password].should include("is too short (minimum is 6 characters)")
+      @user.password = 'pass'
     end
 
-    it "should reject empty pw on registration" do
-      @user.save
-      @user.attributes = {"password"=>"", "password_confirmation"=>""}
-      @user.activate.should == false
-      @user.errors[:password].should include("is too short (minimum is 6 characters)")
-    end
-
-    it "should reject short pw on registration" do
+    it "should reject short password on registration" do
       @user.save
       @user.password = "123"; @user.password_confirmation = "123"
       @user.activate.should == false
       @user.errors[:password].should include("is too short (minimum is 6 characters)")
     end
 
-    it "should accept valid pw on registration" do
+    it "should accept valid password on registration" do
       @user.save
       @user.password = "123456"; @user.password_confirmation = "123456"
       @user.activate.should == true
@@ -118,7 +110,7 @@ describe User do
       @user.errors[:password].should include("is too short (minimum is 6 characters)")
     end
 
-    it "should reject short pw on update" do
+    it "should reject short password on update" do
       @user.save
       @user.password = "123456"; @user.password_confirmation = "123456"
       @user.activate.should == true
@@ -141,8 +133,10 @@ describe User do
     end
 
     it "should NOT allow (user) to accept invitation (go active) w/out a password" do
+      @user.password = ''
+      @user.password_confirmation = ''
       @user.activate.should == false
-      @user.errors[:password].should include("is too short (minimum is 6 characters)")
+      @user.errors[:password].should include("can't be blank")
     end
 
     it "should NOT allow (user) to accept invitation (go active) with a short password" do

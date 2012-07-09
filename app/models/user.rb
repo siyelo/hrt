@@ -22,9 +22,7 @@ class User < ActiveRecord::Base
   belongs_to :location
 
   ### Validations
-  # AuthLogic handles email uniqueness validation
-  validates_presence_of :full_name, :email, :organization_id
-  validates_length_of :password, :minimum => 6, :if => :password_required?
+  validates_presence_of :full_name, :organization_id
 
   ### Callbacks
   after_create :create_organization_responses
@@ -70,21 +68,16 @@ class User < ActiveRecord::Base
   end
 
   def activate
+    @skip_password = false
     self.active = true
     self.invite_token = nil
     self.save
   end
 
-  def only_password_errors?
-    errors.size == errors[:password].size +
-      errors[:password_confirmation].size
-  end
-
   def save_and_invite(inviter)
-    self.valid? ## We need to call self.valid?
-    if only_password_errors?
-      self.invite_token = generate_token
-      self.save(validate: false)
+    @skip_password = true
+    self.invite_token = generate_token
+    if self.save
       send_user_invitation(inviter)
     end
   end
@@ -105,35 +98,18 @@ class User < ActiveRecord::Base
 
   protected
 
-  # admin create user ||
-  #   - encrypted_password -> nil
-  #   password.blank?
-  # admin edit user ||
-  # user edit themself
-  # user accepts invitation
-  #   -> enforce password required
-  #   - encrypted_password -> nil
-
-  # when user is not in database don't require
-
-
-  # devise method override
   def password_required?
-    (!persisted? || !password.nil? || !password_confirmation.nil?)# &&
-      # (password.blank? || password_confirmation.blank? || encrypted_password.nil?)
+    !@skip_password && super # method defined in devise gem
   end
-
-  # allow user to be created without a password
-  # allow user to be updated without a password
-  # but dont allow them to go active with an empty password
-  # def require_password?
-  #   self.active? && (!self.password.blank? || self.crypted_password.nil?)
-  # end
 
   private
 
   def create_organization_responses
     organization.create_data_responses!
+  end
+
+  def only_password_errors?
+    errors.size == errors[:password].size + errors[:password_confirmation].size
   end
 
 end
