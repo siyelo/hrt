@@ -13,7 +13,8 @@ class InvitationsController < ApplicationController
     @user.attributes = params[:user]
     if @user.activate
       flash[:notice] = "Thank you for registering with the Health Resource Tracker!"
-      redirect_to root_url
+      sign_in(@user)
+      redirect_to dashboard_path
     else
       render :edit
     end

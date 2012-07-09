@@ -31,6 +31,27 @@ Feature: Admin can manage users
     And I should not see "pink.panter1"
     And I should not see "pink.panter2"
 
+  Scenario: SysAdmin can invite user and user can accept invitation
+    When I follow "Users"
+      And I follow "Create User"
+      And I select "organization1" from "Organization"
+      And I fill in "Email" with "pink.panter1@hrtapp.com"
+      And I fill in "Full name" with "Pink Panter"
+      And I select "Reporter" from "Assign roles to this user"
+      And I press "Create New User"
+    Then I should see "User was successfully created"
+      And "pink.panter1@hrtapp.com" should receive an email
+    And I follow "Sign Out"
+    Then I should see "Signed out successfully"
+
+    # login with other user
+    When I open the email with subject "[Health Resource Tracker] You have been invited to HRT"
+      And I follow "invitations" in the email
+      And I fill in "Password" with "password" within "#invitation_form"
+      And I fill in "Password confirmation" with "password" within "#invitation_form"
+      And I press "Save" within "#invitation_form"
+    Then I should be on the dashboard page
+
 
   Scenario: Admin can see last login
     Given now is "01-01-2011 21:30:00 +0000"

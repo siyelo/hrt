@@ -6,4 +6,5 @@
         = image_tag "rwanda-coat-of-arms-med.png"
         Rwanda
 
-    = render :partial => '/layouts/login_nav'
+    - if params[:controller] != 'invitations'
+      = render :partial => '/layouts/login_nav'

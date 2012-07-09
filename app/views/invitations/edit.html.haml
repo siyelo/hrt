@@ -6,10 +6,10 @@
     %br Health Resource Tracker
   %h3 Please select a password
 
-  = semantic_form_for @user, :url => invitation_url(params[:id]) do |f|
+  = semantic_form_for @user, namespace: 'invitation', url: invitation_url(params[:id]), html: {id: 'invitation_form'} do |f|
     = f.inputs do
       %ul
-        = f.input :password, :value => nil
+        = f.input :password, :input_html => { :value => nil }
         = f.input :password_confirmation
 
     = f.actions do
