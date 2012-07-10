@@ -1,5 +1,5 @@
 module ScriptHelper
-  DEFAULT_PRODUCTION_APP = 'resourcetracking'
+  DEFAULT_PRODUCTION_APP = 'hrtprod'
 
   def run(cmd)
     puts "=> "+ cmd + "\n"
