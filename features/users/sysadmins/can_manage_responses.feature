@@ -55,4 +55,4 @@ Feature: Admin can manage data responses
      And I select "FY2010-11 Expenditures and FY2011-12 Budget" from "Request"
      And I press "Save"
     Then I should see "Response was successfully created"
-    And I should see "MegaCorp: FY2010-11 Expenditures and FY2011-12 Budget"
+     And I should see "MegaCorp: FY2010-11 Expenditures and FY2011-12 Budget"

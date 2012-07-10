@@ -4,5 +4,5 @@
 
 %h2 New currency information
 .section_base
-  = semantic_form_for [:admin, @currency], :html => {:class => 'basic_form js_form'} do |f|
+  = form_for [:admin, @currency], builder: CustomFormBuilder, :html => {:class => 'basic_form js_form'} do |f|
     = render 'form', :f => f

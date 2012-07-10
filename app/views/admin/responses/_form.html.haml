@@ -2,10 +2,9 @@
   %ol.section_form.single.connect
     %li
       %ul
-        = f.input :organization_id, :label => "Organization", :as => :select, :collection => Organization.ordered, :hint => "The organization to create the response for"
-        = f.input :data_request_id, :label => "Request", :as => :select, :collection => DataRequest.sorted, :hint => "The request to respond to"
+        = f.select :organization_id, options_from_collection_for_select(Organization.ordered, 'id', 'name'), label: 'Organization', hint: 'The organization to create the response for'
+        = f.select :data_request_id, options_from_collection_for_select(DataRequest.sorted, 'id', 'name'), label: 'Request', hint: 'The request to respond to'
     %li.last
-      %fieldset.buttons.push-12
-        %ol
-          = f.actions :class => 'buttons', :style => 'float: none' do
-            = f.action :submit, :label => "Save", :button_html => {:class => "last next"}
+      %ul.horizontal.section_form.last.connect
+        %fieldset.buttons.push-12
+          = f.submit "Save", class: 'next update'
