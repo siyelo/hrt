@@ -1,35 +1,30 @@
--button_label = @user.new_record? ? "Create New User" : "Update User"
-= f.inputs :class => 'inputs' do
-  %li.last
-    %h3 User details
-    %ul.section_form
-      = f.input :organization_id, :label => "Organization", :as => :select, :collection => Organization.ordered, :hint => "The organization this user is associated with"
-      %li
-        = f.label :full_name, "Full name"
-        = f.text_field :full_name
-        %p.inline-hints
-          Full name of the user
+%fieldset.inputs
+  %ol
+    %li.last
+      %h3 User details
+      %ul.section_form
+        %li
+          = f.collection_select :organization_id, Organization.ordered, :id, :name, {hint: "The organization this user is associated with"}, {label: "Organization"}
+        %li
+          = f.text_field :full_name, hint: "Full name of the user"
+        %li
+          = f.text_field :email, hint: "Email of the user"
 
-      %li
-        = f.label :email, "Email*"
-        = f.text_field :email, :class =>  f.object.errors[:email].present? ? 'error' : ''
-        %p.inline-hints
-          Email of the user
 
-  %li.last
-    %h3 Roles
-    %ul.section_form
-      = f.input :roles, :label => "Assign roles to this user", :required => false, :as => :select, :collection => User::ROLES.map{|u| [u.humanize, u]}, :input_html => {:multiple => :multiple, :class => 'multiselect'}, :include_blank => false, :wrapper_html => {:class => 'roles'}
+    %li.last
+      %h3 Roles
+      %ul.section_form
+        = f.select :roles, User::ROLES.map{|u| [u.humanize, u]}, {}, {multiple: true, class: 'multiselect', :label => "Assign roles to this user", wrapper_html: {:class => 'roles'}}
+    -#     = f.input :roles, :required => false, :as => :select, :collection => User::ROLES.map{|u| [u.humanize, u]}, :input_html => {:multiple => :multiple, :class => 'multiselect'}, :include_blank => false, :wrapper_html => {:class => 'roles'}
 
-  %li.js_manage_orgs.last
-    %h3 Organizations to Manage
-    %ul.section_form.last
-      = f.input :organizations, :label => "Assign organizations to this Activity Manager", :required => false, :as => :select, :collection => Organization.with_users, :input_html => {:class => 'multiselect'}, :wrapper_html => {:class => 'organizations', :style => 'visibility: hidden;'}
+    %li.js_manage_orgs.last
+      %h3 Organizations to Manage
+      %ul.section_form.last
+        = f.select :organization_ids, Organization.with_users.map{|o| [o.name, o.id]}, {}, {multiple: true, :label => "Assign organizations to this Activity Manager", :class => 'multiselect', :wrapper_html => {:class => 'organizations', :style => 'visibility: hidden;'}}
 
-  %li.last
-    %ul.horizontal.section_form.last.connect
-      = f.actions :class => 'buttons' do
-        = f.action :submit, :label => button_label, :button_html => {:class => "next"}
+    %li.last
+      %ul.section_form
+        = f.submit @user.new_record? ? "Create New User" : "Update User", :class => "next update"
 
 - unless @user.new_record?
   .delete_section
