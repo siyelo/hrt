@@ -1,8 +1,8 @@
 - title "Change Your Password"
 
-.sign_in_form.center
+.sign_in_form.center.invite
 
-  %h2 Change Password
+  %h2.welcome Change Password
 
   = semantic_form_for(resource, :as => resource_name, :namespace => 'password_reset', :url => password_path(resource_name), :html => { :method => :put }) do |f|
     = f.inputs do
@@ -11,4 +11,3 @@
       = f.input :password_confirmation
     = f.actions do
       = f.action :submit, :label => "Change My Password", :button_html => {:class => "create_alt"}
-

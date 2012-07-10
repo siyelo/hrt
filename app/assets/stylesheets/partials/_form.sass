@@ -885,10 +885,18 @@ p.input-hints
     font-family: Avenir, Arial, sans-serif
     margin-bottom: 15px
     text-transform: none
-
+  input[type=text], input[type=password], input[type=email]
+    border: 1px solid $primary_dark
+    font-size: 12px
+    opacity: 0.8
+    padding: 7px
+    &:hover, &:focus
+      border: 1px solid $primary_dark - #111 !important
+      opacity: 0.8
   label
     color: $primary_light !important
     display: block
+    font-size: 12px
     margin-bottom: 3px
     +text-shadow(rgba(0, 0, 0, 0.2), 0, 1px, 0)
   input
@@ -897,11 +905,15 @@ p.input-hints
     width: 126px
     
   &.invite
-    h2.welcome
+    h2.welcome, a
       color: $primary_light
     .input-errors
       padding: 5px 0 5px 5px !important
       width: 137px
+    a
+      font-size: 12px
+  .input-box
+    margin-bottom: 15px
       
 
 .reports_summary

@@ -1,0 +1,16 @@
+- title "Change Your Password"
+
+.sign_in_form.center.invite
+
+  %h2.welcome Forgot your password?
+
+  = form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post }) do |f|
+    %div
+      = f.label :email
+      = f.email_field :email
+
+    %div
+      %br
+      = f.submit "Reset password", :class => "create_alt"
+
+  = render :partial => "devise/shared/links"
