@@ -105,24 +105,24 @@ describe DataResponse do
     end
 
     it "returns responses by states" do
-      DataResponse.with_request(@request1).with_state('started').should be_empty
-      DataResponse.with_request(@request2).with_state('started').should be_empty
-      DataResponse.with_request(@request1).with_state('rejected').should be_empty
-      DataResponse.with_request(@request2).with_state('rejected').should be_empty
+      DataResponse.with_request(@request1.id).with_state('started').should be_empty
+      DataResponse.with_request(@request2.id).with_state('started').should be_empty
+      DataResponse.with_request(@request1.id).with_state('rejected').should be_empty
+      DataResponse.with_request(@request2.id).with_state('rejected').should be_empty
 
       @response1.start!(@user)
 
-      DataResponse.with_request(@request1).with_state('started').should == [@response1]
-      DataResponse.with_request(@request2).with_state('started').should be_empty
-      DataResponse.with_request(@request1).with_state('rejected').should be_empty
-      DataResponse.with_request(@request2).with_state('rejected').should be_empty
+      DataResponse.with_request(@request1.id).with_state('started').should == [@response1]
+      DataResponse.with_request(@request2.id).with_state('started').should be_empty
+      DataResponse.with_request(@request1.id).with_state('rejected').should be_empty
+      DataResponse.with_request(@request2.id).with_state('rejected').should be_empty
 
       @response2.reject!(@user)
 
-      DataResponse.with_request(@request1).with_state('started').should == [@response1]
-      DataResponse.with_request(@request2).with_state('started').should be_empty
-      DataResponse.with_request(@request1).with_state('rejected').should be_empty
-      DataResponse.with_request(@request2).with_state('rejected').should == [@response2]
+      DataResponse.with_request(@request1.id).with_state('started').should == [@response1]
+      DataResponse.with_request(@request2.id).with_state('started').should be_empty
+      DataResponse.with_request(@request1.id).with_state('rejected').should be_empty
+      DataResponse.with_request(@request2.id).with_state('rejected').should == [@response2]
     end
   end
 

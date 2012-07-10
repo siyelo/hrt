@@ -43,8 +43,8 @@
         %td= link_to @target.implementer_splits.length, edit_admin_organization_path(@target)
         %td= @duplicate.implementer_splits.length + @target.implementer_splits.length
       - DataRequest.all.each do |request|
-        - duplicate_state = @duplicate.responses.with_request(request)[0].try(:state)
-        - target_state = @target.responses.with_request(request)[0].try(:state)
+        - duplicate_state = @duplicate.responses.with_request(request.id)[0].try(:state)
+        - target_state = @target.responses.with_request(request.id)[0].try(:state)
         %tr
           %td= request.name
           %td= duplicate_state || 'N/A'

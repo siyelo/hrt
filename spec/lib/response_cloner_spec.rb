@@ -40,7 +40,7 @@ describe ResponseCloner do
   it "should clone a single response" do
     @new_request = FactoryGirl.create :data_request #clones previous response
 
-    new_response = @organization.data_responses.with_request(@new_request).first
+    new_response = @organization.data_responses.with_request(@new_request.id).first
     project = new_response.projects.first
     activity = project.activities.first
 
@@ -119,7 +119,7 @@ describe ResponseCloner do
     current_activity2.save #recalculate implementer split total on activity
     @new_request      = FactoryGirl.create :data_request
 
-    new_response2     = organization2.data_responses.with_request(@new_request).first
+    new_response2     = organization2.data_responses.with_request(@new_request.id).first
 
     project2 = new_response2.projects.first
     activity2 = new_response2.projects.first.activities.first
