@@ -28,7 +28,7 @@ module ResponseSession
     def current_user_response_for_current_request
       if current_request
         response = current_user.organization.data_responses.
-          with_request(current_request).first
+          with_request(current_request.id).first
       end
 
       response ||= current_user.organization.data_responses.last

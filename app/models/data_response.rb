@@ -35,8 +35,8 @@ class DataResponse < ActiveRecord::Base
   scope :submitted, conditions: ["state = ?", 'submitted']
   scope :accepted,  conditions: ["state = ?", 'accepted']
   scope :rejected,  conditions: ["state = ?", 'rejected']
-  scope :with_request, lambda { |request| {
-    conditions: ["data_request_id = ?", request.id] } }
+  scope :with_request, lambda { |request_id| {
+    conditions: ["data_request_id = ?", request_id] } }
   scope :with_state, lambda { |state| {
     conditions: ["state = ?", state] } }
 

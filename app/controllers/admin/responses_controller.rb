@@ -56,12 +56,12 @@ class Admin::ResponsesController < Admin::BaseController
   def scope_responses(filter)
     case filter
     when 'All'
-      DataResponse.with_request(current_request)
+      DataResponse.with_request(current_request.id)
     else
       if allowed_filter?(filter)
-        DataResponse.with_request(current_request).with_state([name_to_state(filter)])
+        DataResponse.with_request(current_request.id).with_state([name_to_state(filter)])
       else
-        DataResponse.with_request current_request
+        DataResponse.with_request(current_request.id)
       end
     end
   end

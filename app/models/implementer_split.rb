@@ -15,9 +15,11 @@
   validates_uniqueness_of :organization_id, :scope => :activity_id,
     :message => "must be unique", :unless => Proc.new { |m| m.new_record? }
   validates_numericality_of :spend, :greater_than => 0,
-    :if => Proc.new { |is| is.spend.present? && (!is.budget.present? || is.budget == 0) }
+    :if => Proc.new { |is| is.spend.present? && (!is.budget.present? ||
+                                                 is.budget == 0) }
   validates_numericality_of :budget, :greater_than => 0,
-    :if => Proc.new { |is| is.budget.present? && (!is.spend.present? || is.spend == 0) }
+    :if => Proc.new { |is| is.budget.present? && (!is.spend.present? ||
+                                                  is.spend == 0) }
   validates_presence_of :spend, :message => " and/or Budget must be present",
     :if => lambda { |is| (!((is.budget || 0) > 0)) && (!((is.spend || 0) > 0)) }
   validate :validate_organization_presence
@@ -48,11 +50,13 @@
   end
 
   def budget=(amount)
-    write_attribute(:budget, NumberHelper.is_number?(amount) ? amount.to_f.round(2) : amount)
+    num = NumberHelper.is_number?(amount) ? amount.to_f.round(2) : amount
+    write_attribute(:budget, num)
   end
 
   def spend=(amount)
-    write_attribute(:spend, NumberHelper.is_number?(amount) ? amount.to_f.round(2) : amount)
+    num = NumberHelper.is_number?(amount) ? amount.to_f.round(2) : amount
+    write_attribute(:spend, num)
   end
 
   def self_implemented?
@@ -60,19 +64,23 @@
   end
 
   def possible_double_count?
-    reporting_org         = activity.organization
-    reporting_response    = activity.data_response
-    implementing_org      = organization
-    # needed for old data request
-    if implementing_org
+    if organization # needed for old data request
+      reporting_response = activity.data_response
       implementing_response = organization.data_responses.
-        detect{|r| r.data_request_id = reporting_response.data_request_id }
+        with_request(reporting_response.data_request_id).first
+      check_double_count(implementing_response, reporting_response)
+    else
+      return false
     end
+  end
+
+  def check_double_count(implementing_response, reporting_response)
+    reporting_org         = reporting_response.organization
+    implementing_org      = organization
 
     implementing_org && implementing_org != reporting_org &&
       implementing_org.reporting? && implementing_response &&
-      implementing_response.accepted? &&
-      reporting_response.projects_count > 0
+      implementing_response.accepted?
   end
 
   class << self

@@ -1,15 +1,14 @@
 class Reports::Detailed::DistrictWorkplan
   include CurrencyNumberHelper
 
-  attr_accessor :request, :district, :activities, :builder
+  attr_accessor :request, :district, :activities, :builder, :data_responses
 
   def initialize(request, district, filetype)
     @request    = request
     @district   = district
     @activities = ::Activity.find :all,
-      :select => 'DISTINCT activities.*,
-                  organizations.name AS organization_name',
-      :include => [:data_response, :project,
+      :select => 'DISTINCT activities.*, organizations.name AS org_name',
+      :include => [{:data_response => [:data_request, :organization]}, :project,
                    {:implementer_splits => :organization},
                    :location_budget_splits, :location_spend_splits],
       :joins => [{:data_response => :organization}, :code_splits],
@@ -18,6 +17,7 @@ class Reports::Detailed::DistrictWorkplan
                       district.id, request.id],
       :order => 'organizations.name ASC'
     @builder = FileBuilder.new(filetype)
+    @data_responses = @activities.map{ |a| a.data_response }
   end
 
   def data(&block)
@@ -35,15 +35,15 @@ class Reports::Detailed::DistrictWorkplan
 
     builder.add_row(header)
     activities.each do |activity|
-      activity.implementer_splits.each do |implementer|
-        if previous_organization && previous_organization != activity.organization_name
+      activity.implementer_splits.each do |implementer_split|
+        if previous_organization && previous_organization != activity.org_name
           builder.add_row(total_row(spend_total, budget_total))
           spend_total  = 0
           budget_total = 0
         end
 
-        spend_amount  = spend_district_amount(activity, implementer)
-        budget_amount = budget_district_amount(activity, implementer)
+        spend_amount  = spend_district_amount(activity, implementer_split)
+        budget_amount = budget_district_amount(activity, implementer_split)
 
         spend_total  += spend_amount
         budget_total += budget_amount
@@ -51,16 +51,17 @@ class Reports::Detailed::DistrictWorkplan
         row << organization_name(activity, previous_organization)
         row << project_name(activity, previous_project)
         row << activity_name(activity, previous_activity)
-        row << implementer.name
+        row << implementer_split.name
         row << spend_amount
         row << budget_amount
-        row << implementer.possible_double_count?
-        row << implementer.double_count
+        row << possible_double_count?(activity, implementer_split)
+        #row << ''
+        row << implementer_split.double_count
         builder.add_row(row)
 
         previous_activity = activity
         previous_project = activity.project
-        previous_organization = activity.organization_name
+        previous_organization = activity.org_name
       end
     end
 
@@ -72,29 +73,29 @@ class Reports::Detailed::DistrictWorkplan
      "Budget (USD)", 'Possible Duplicate?', "Actual Duplicate?" ]
   end
 
-  def spend_district_amount(activity, implementer)
+  def spend_district_amount(activity, implementer_split)
     ca = activity.location_spend_splits.detect { |ca| ca.code_id == district.id }
     amount = ca ? universal_currency_converter(ca.cached_amount, activity.currency, "USD") : 0
-    (amount * implementer_spend_ratio(activity, implementer))
+    (amount * implementer_spend_ratio(activity, implementer_split))
   end
 
-  def budget_district_amount(activity, implementer)
+  def budget_district_amount(activity, implementer_split)
     ca = activity.location_budget_splits.detect { |ca| ca.code_id == district.id }
     amount = ca ? universal_currency_converter(ca.cached_amount, activity.currency, "USD") : 0
-    (amount * implementer_budget_ratio(activity, implementer))
+    (amount * implementer_budget_ratio(activity, implementer_split))
   end
 
-  def implementer_spend_ratio(activity, implementer)
+  def implementer_spend_ratio(activity, implementer_split)
     if activity.total_spend > 0
-      (implementer.spend || 0) / activity.total_spend
+      (implementer_split.spend || 0) / activity.total_spend
     else
       0
     end
   end
 
-  def implementer_budget_ratio(activity, implementer)
+  def implementer_budget_ratio(activity, implementer_split)
     if activity.total_budget > 0
-      (implementer.budget || 0) / activity.total_budget
+      (implementer_split.budget || 0) / activity.total_budget
     else
       0
     end
@@ -105,8 +106,8 @@ class Reports::Detailed::DistrictWorkplan
   end
 
   def organization_name(activity, previous_organization)
-    if previous_organization != activity.organization_name
-      activity.organization_name.presence || 'N/A'
+    if previous_organization != activity.org_name
+      activity.org_name.presence || 'N/A'
     else
       nil
     end
@@ -126,5 +127,16 @@ class Reports::Detailed::DistrictWorkplan
     else
       nil
     end
+  end
+
+  def possible_double_count?(activity, implementer_split)
+    reporting_response = activity.data_response
+    if implementer_split.organization # needed for old data request
+      implementing_response = data_responses.detect do |dr|
+        dr.data_request_id == reporting_response.data_request_id
+      end
+    end
+
+    implementer_split.check_double_count(implementing_response, reporting_response)
   end
 end
