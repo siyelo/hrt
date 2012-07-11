@@ -32,16 +32,7 @@ class Reports::DistrictSplit < Reports::TopBase
 
   def mark_duplicates(amounts_by_districts)
     collection = super(amounts_by_districts)
-    national = collection.detect{ |element| element.name == "National Level" }
-    other    = collection.select{ |element| element.name != "National Level" }
-
-    ordered_collection = []
-    ordered_collection << national if national
-    other.each do |element|
-      ordered_collection << element
-    end
-
-    ordered_collection
+    order_collection(collection)
   end
 
   private
@@ -60,6 +51,16 @@ class Reports::DistrictSplit < Reports::TopBase
     end
 
     @amounts
+  end
+
+  def order_collection(collection)
+    national = collection.detect{ |element| element.name == "National Level" }
+    other    = collection.select{ |element| element.name != "National Level" }
+
+    ordered_collection = []
+    ordered_collection << national if national
+    other.each { |element| ordered_collection << element }
+    ordered_collection
   end
 
   def total_budget
@@ -122,14 +123,6 @@ class Reports::DistrictSplit < Reports::TopBase
 
     result
   end
-
-  def top_spenders
-    national = [amounts_by_districts[0]]
-    others = amounts_by_districts.drop(1)
-    others.sort!{ |x, y| y.total_spend <=> x.total_spend }
-    national + others
-  end
-
 
   private
   def ratios

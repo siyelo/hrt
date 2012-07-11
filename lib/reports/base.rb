@@ -124,13 +124,15 @@ module Reports
     end
 
     def top_budgeters
-      @top_budgeters ||= collection.
-        sort { |x, y| (y.total_budget || 0) <=> (x.total_budget || 0) }
+      @top_budgeters ||= collection.sort do |x, y|
+        (y.total_budget || 0) <=> (x.total_budget || 0)
+      end
     end
 
     def top_spenders
-      @top_spenders ||= collection.
-        sort { |x, y| (y.total_spend || 0) <=> (x.total_spend || 0) }
+      @top_spenders ||= collection.sort do |x, y|
+        (y.total_spend || 0) <=> (x.total_spend || 0)
+      end
     end
 
     def get_colour(name)
