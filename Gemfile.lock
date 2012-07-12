@@ -183,6 +183,7 @@ GEM
     multi_json (1.3.6)
     multi_xml (0.5.1)
     netrc (0.7.4)
+    newrelic_rpm (3.3.4.1)
     nokogiri (1.5.4)
     orm_adapter (0.0.7)
     paperclip (3.0.4)
@@ -342,6 +343,7 @@ DEPENDENCIES
   launchy (= 2.1.0)
   libnotify
   money (~> 3.5)
+  newrelic_rpm
   paperclip
   pg
   pickle

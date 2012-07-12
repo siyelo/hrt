@@ -28,6 +28,7 @@ gem 'will_paginate'
 gem 'addressable'
 gem 'axlsx'
 gem 'rubyzip'
+gem 'newrelic_rpm'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
