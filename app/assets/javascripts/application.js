@@ -86,6 +86,19 @@ var admin_codes_index = {
       theElement = "#" + element.attr("id") + "_act"
       $(theElement).slideToggle();
     });
+
+    $('.clearfix').live('click', function (e) {
+      element = $(this)
+      id = element.attr('id')
+      button = $("#" + id + ".clearfix")
+      if (button.text() != "+") {
+        button.html("-");
+      } else {
+        button.html("+");
+      }
+      theElement = "#" + element.attr("id") + "_act"
+      $(theElement).slideToggle();
+    });
   }
 }
 

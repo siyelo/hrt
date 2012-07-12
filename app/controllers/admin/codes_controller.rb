@@ -12,6 +12,7 @@ class Admin::CodesController < Admin::BaseController
   helper_method :sort_column, :sort_direction
 
   def index
+    params[:filter] = "Locations" unless params[:filter].present?
     scope = scoped_codes
     if params[:query].present? || params[:sort].present?
       @codes  = scope.where(["UPPER(short_display) LIKE UPPER(:q) OR
@@ -37,27 +38,6 @@ class Admin::CodesController < Admin::BaseController
     send_report_file(report, 'codes_template')
   end
 
-  def create_from_file
-    begin
-      if params[:file].present?
-        doc = FileParser.parse(params[:file].open.read, 'csv', {headers: true})
-        if doc.headers.to_set == Code::FILE_UPLOAD_COLUMNS.to_set
-          saved, errors = Code.create_from_file(doc)
-          flash[:notice] = "Created #{saved} of #{saved + errors} codes successfully"
-        else
-          flash[:error] = 'Wrong fields mapping. Please download the CSV template'
-        end
-      else
-        flash[:error] = 'Please select a file to upload'
-      end
-
-      redirect_to admin_codes_url
-    rescue
-      flash[:error] = "There was a problem with your file. Did you use the template and save it after making changes as a CSV file instead of an Excel file? Please post a problem at <a href='https://hrtapp.tenderapp.com/kb'>TenderApp</a> if you can't figure out what's wrong.."
-      redirect_to admin_codes_url
-    end
-  end
-
   private
 
     def sort_column
@@ -69,10 +49,6 @@ class Admin::CodesController < Admin::BaseController
     end
 
     def scoped_codes
-      if params[:filter].present? && params[:filter] != "All"
-        Code.with_types("Code::#{params[:filter].upcase}".constantize)
-      else
-        Code
-      end
+      Code.with_types("Code::#{params[:filter].upcase}".constantize)
     end
 end
