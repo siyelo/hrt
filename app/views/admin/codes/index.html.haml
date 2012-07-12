@@ -2,26 +2,10 @@
 
 %h1.main_heading Codes
 %hr.heading
-%ul.horizontal.button-bar
-  %li
-    = link_to "File Import", '#', :id => "csv_file", :class => 'create_alt'
-
-#import
-  %h3.title_bar Import a CSV file
-  .section_base
-    %p Create one or more codes from a CSV file. You can save an Excel spreadsheet as a CSV file through File -> Save As, then select comma separated values (CSV) in the file format box under the file name.
-
-    #import_csv
-      = form_tag create_from_file_admin_codes_path, :multipart => true do
-        = label_tag :file, "File"
-        = file_field_tag :file
-        = submit_tag "Upload and Import", :class => 'small_submit_button'
-
-      = link_to "Download template", download_template_admin_codes_path
 
 .section_overlap
   %ul.section_nav
-    - ["All", "Purposes", "Inputs", "Locations"].each do |filter|
+    - ["Locations", "Purposes", "Inputs"].each do |filter|
       - css_class = "selected" if params[:filter] == filter || (filter == 'All' && params[:filter].blank?)
       %li{class: css_class}
         = link_to filter, admin_codes_path({sort: params[:sort], direction: params[:direction], query: params[:query], filter: filter})
