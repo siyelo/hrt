@@ -4,7 +4,7 @@ module FileZipper
   def unzip(file_path)
     output = nil
     Zip::ZipFile.open(file_path) do |files|
-      output = files.first.get_input_stream.read.force_encoding("ASCII-8BIT")
+      output = files.first.get_input_stream.read.force_encoding("UTF-8")
     end
     output
   end
