@@ -111,11 +111,11 @@ describe Reports::Detailed::DistrictWorkplan do
       @data_request, @district1, 'xls').data
     rows = Spreadsheet.open(StringIO.new(xls)).worksheet(0)
     rows.row(4).to_a.should == ['organization3', 'project2', 'activity3',
-                                'organization4', 200.0, 50.0, false, false]
+                                'organization4', 200.0, 50.0, false, nil]
     rows.row(5).to_a.should == [nil, nil, 'activity4',
-                                'organization4', 200.0, 50.0, false, false]
+                                'organization4', 200.0, 50.0, false, nil]
     rows.row(6).to_a.should == [nil, nil, nil,
-                                'organization3', 200.0, 50.0, false, false]
+                                'organization3', 200.0, 50.0, false, nil]
     rows.row(7).to_a.should == [nil, nil, nil,
                                 'Total', 600.0, 150.0]
   end

@@ -55,7 +55,7 @@ class Reports::Detailed::DistrictWorkplan
         row << spend_amount
         row << budget_amount
         row << possible_double_count?(activity, implementer_split)
-        row << implementer_split.double_count?
+        row << implementer_split.double_count
         builder.add_row(row)
 
         previous_activity = activity
