@@ -87,7 +87,7 @@ class User < ActiveRecord::Base
   end
 
   def gravatar(size = 22)
-    "http://gravatar.com/avatar/#{Digest::MD5.hexdigest(email.downcase)}.png?s=#{size}&d=mm"
+    "https://gravatar.com/avatar/#{Digest::MD5.hexdigest(email.downcase)}.png?s=#{size}&d=mm"
   end
 
   # authlogic only updates last_login after youve signed in the 2nd time
