@@ -1,7 +1,7 @@
 -# asynchronous google analytics: mathiasbynens.be/notes/async-analytics-snippet
 - unless Settings.google_account_id.blank?
   :javascript
-   var _gaq = _gaq || [];
+    var _gaq = _gaq || [];
     _gaq.push(['_setAccount', '#{Settings.google_account_id}']);
     _gaq.push(['_setDomainName', 'hrtapp.com']);
     _gaq.push(['_trackPageview']);
