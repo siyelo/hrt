@@ -52,7 +52,7 @@ HrtComments.init = function () {
 
     if (confirm('Are you sure?')) {
       $.post(removeCommentLink.data('url'), {"_method": "delete"}, function (data) {
-        commentWrapper.html($('<p/>').attr({class: "removed"}).text(data.html));
+        commentWrapper.html($('<p/>').attr('class', "removed").text(data.html));
       });
     }
   });

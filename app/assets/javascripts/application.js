@@ -122,7 +122,7 @@ var projects_index = {
 
 var projects_import = {
   run: function () {
-    HrtProjects.import();
+    HrtProjects.importInit();
   }
 }
 

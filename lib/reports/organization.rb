@@ -20,7 +20,7 @@ module Reports
     def chart_links
       elements = Hash.new("")
       collection.each do |c|
-        elements[c.try(:name).to_s.downcase.capitalize] = resource_link(c)
+        elements[c.try(:name).to_s.downcase.capitalize] = c.link_path
       end
       elements.to_json
     end

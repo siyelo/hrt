@@ -79,7 +79,7 @@ HrtReports.hideDoubleCountCheckbox = function () {
   var doubleCount = activeTab.data('double-count') === 'true'
   $('#include_double_count').attr('checked', doubleCount);
 
-  if (['reporters', 'funders', 'locations'].indexOf(report) >= 0) {
+  if( $.inArray(report, ['reporters', 'funders', 'locations']) >= 0 ) {
     $('.include_double_count').removeClass('hidden');
   } else {
     $('.include_double_count').addClass('hidden');

@@ -89,7 +89,7 @@ HrtProjects.init = function () {
 };
 
 
-HrtProjects.import = function () {
+HrtProjects.importInit = function () {
   $('.activity_box .header').live('click', function (e) {
     e.preventDefault();
     var activity_box = $(this).parents('.activity_box');

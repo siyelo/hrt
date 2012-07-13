@@ -38,6 +38,14 @@ HrtCharts.drawPieChart = function (element, data_rows, series, width, height, li
   if (typeof(data_rows) === "undefined") {
     return;
   }
+  var countMembers = function (obj) {
+    var count = 0;
+    for (member in obj) {
+        if (obj.hasOwnProperty(member)) { count++; }
+    }
+    return count;
+  };
+
   var data = new google.visualization.DataTable();
   data.addColumn('string', data_rows.names.column1);
   data.addColumn('number', data_rows.names.column2);
@@ -54,7 +62,7 @@ HrtCharts.drawPieChart = function (element, data_rows, series, width, height, li
              sliceVisibilityThreshold: 1/30
   });
   google.visualization.events.addListener(chart, 'select', function () {
-    if ( Object.keys(links).length > 0 ) {
+    if ( countMembers(links) > 0 ) {
       var element = data.getValue(chart.getSelection()[0].row, 0);
       var link = "http://" + location.host + links[element];
       window.location.href = link;
