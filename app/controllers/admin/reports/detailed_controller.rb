@@ -36,7 +36,7 @@ class Admin::Reports::DetailedController < Admin::BaseController
         if is_zip?(file)
           attachment = FileZipper.unzip(file.path)
         else
-          attachment = file.open.read
+          attachment = file.open.read.force_encoding("ASCII-8BIT")
         end
         ImplementerSplit.mark_double_counting(attachment)
         flash[:notice] = 'Your file is being processed, please reload this page in a couple of minutes to see the results'
