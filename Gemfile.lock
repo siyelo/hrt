@@ -32,6 +32,9 @@ GEM
     acts_as_tree (1.1.0)
       activerecord (>= 3.0.0)
     addressable (2.2.8)
+    airbrake (3.0.9)
+      activesupport
+      builder
     annotate (2.4.0)
     ar_strip_commas (0.1.0)
     arel (3.0.2)
@@ -146,9 +149,6 @@ GEM
     heroku-api (0.2.5)
       excon (~> 0.14.0)
     hike (1.2.1)
-    hoptoad_notifier (2.4.11)
-      activesupport
-      builder
     httparty (0.8.3)
       multi_json (~> 1.0)
       multi_xml
@@ -311,6 +311,7 @@ DEPENDENCIES
   SystemTimer
   acts_as_tree
   addressable
+  airbrake
   annotate
   ar_strip_commas
   awesome_nested_set
@@ -335,7 +336,6 @@ DEPENDENCIES
   guard-spork
   haml
   heroku
-  hoptoad_notifier
   inherited_resources
   jquery-rails
   jquery-ui-themes
