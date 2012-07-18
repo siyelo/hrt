@@ -241,6 +241,12 @@ $(function () {
   // jquery multiselect
   $(".multiselect").multiselect();
 
+  // print pages
+  $('#print-page').click(function (e) {
+    e.preventDefault();
+    window.print();
+  });
+
   // Scope javascript by page id
   var id = $('body').attr("id");
   if (id) {
