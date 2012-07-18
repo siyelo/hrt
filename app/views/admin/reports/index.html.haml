@@ -19,7 +19,7 @@
     = render :partial => 'admin/reports/shared/tabs'
     %li.right
       = link_to "Export", "#", :id => "export-report", :class => "create_alt monochrome"
-      = link_to "Print This Page", "javascript:window.print()", :id => "print-page", :class => "icon print", :title => 'Print this page'
+      = render 'shared/print_icon'
 
     %li.right.include_double_count.hidden.dummy
       = image_tag "ajax-loader.gif", :class => "ajax-loader hidden"

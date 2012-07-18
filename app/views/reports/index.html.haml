@@ -19,7 +19,8 @@
     = render :partial => 'reports/shared/tabs'
     %li.right
       = link_to "Export", "#", :id => "export-report", :class => "create_alt monochrome"
-      = link_to "Print This Page", "", :id => "print-page", :class => "icon print", :title => "Print this page"
+      = render 'shared/print_icon'
+
     %li.right
       %ul#nav.horizontal
         %li.js_dropdown_menu
