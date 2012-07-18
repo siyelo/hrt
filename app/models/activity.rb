@@ -6,7 +6,6 @@ class Activity < ActiveRecord::Base
 
   ### Constants
   MAX_NAME_LENGTH = 64
-  AUTOCREATE = -1
 
   ### ClassLevel Method Invocations
   strip_commas_from_all_numbers
@@ -70,7 +69,6 @@ class Activity < ActiveRecord::Base
 
   ### Callbacks
   before_validation :strip_input_fields
-  before_save       :auto_create_project
   after_destroy     :restart_response_if_all_activities_removed
   before_update     :update_all_classified_amount_caches
 
@@ -276,20 +274,6 @@ class Activity < ActiveRecord::Base
       when 'InputSpendSplit' then :input_spend_splits_valid
       when 'LocationSpendSplit' then :location_spend_splits_valid
       else raise "Unknown type #{type}".to_yaml
-      end
-    end
-
-    def auto_create_project
-      if project_id == AUTOCREATE
-        project = data_response.projects.find_by_name(name)
-        unless project
-          self_funder = FundingFlow.new(from: self.organization)
-          project = Project.new(name: name, start_date: Time.now,
-            end_date: Time.now + 1.year, data_response: data_response,
-            in_flows: [self_funder])
-          project.save(validate: false)
-        end
-        self.project = project
       end
     end
 

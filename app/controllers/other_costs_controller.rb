@@ -31,10 +31,6 @@ class OtherCostsController < OutlaysController
 
   def success_flash(action)
     flash[:notice] = "Indirect Cost was successfully #{action}."
-    if params[:other_cost][:project_id] == Activity::AUTOCREATE
-      flash[:notice] += "  <a href=#{edit_project_path(@other_cost.project)}>Click here</a>
-                         to enter the funding sources for the automatically created project."
-    end
   end
 
   def sort_column

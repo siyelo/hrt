@@ -61,32 +61,6 @@ describe OtherCostsController do
       flash[:notice].should == "Indirect Cost was successfully updated."
       response.should redirect_to(edit_other_cost_path(@other_cost.id))
     end
-
-    it "should allow a project to be created automatically on update" do
-      #if the project_id is -1 then the controller should create a new project
-      put :update, :id => @other_cost.id, :response_id => @data_response.id,
-          :other_cost => {:project_id => '-1', :name => @other_cost.name}
-      @other_cost.reload
-      @other_cost.project.name.should == @other_cost.name
-    end
-
-    it "should allow a project to be created automatically on create" do
-      #if the project_id is -1 then the controller should create a new project with name
-      post :create, :response_id => @data_response.id, :other_cost => {:project_id => '-1',
-         :name => "new other_cost", :description => "description",
-         "implementer_splits_attributes"=>
-           {"0"=> {"spend"=>"2",
-             "organization_mask"=>"#{@organization.id}", "budget"=>"4"}}}
-      @new_other_cost = Activity.find_by_name('new other_cost')
-      @new_other_cost.project.name.should == @new_other_cost.name
-    end
-
-    it "should assign the activity to an existing project if a project exists with the same name as the activity" do
-      put :update, :id => @other_cost.id, :response_id => @data_response.id,
-          :other_cost => {:name => @project.name, :project_id => '-1'}
-      @other_cost.reload
-      @other_cost.project.name.should == @project.name
-    end
   end
 
   describe "Permissions" do

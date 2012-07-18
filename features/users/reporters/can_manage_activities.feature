@@ -28,22 +28,6 @@ Feature: Reporter can manage activities
     And I follow "Delete this Activity"
     Then I should see "Activity was successfully destroyed"
 
-  Scenario: Reported can create activity with automatically created project
-    When I follow "Add Activities now"
-    And I fill in "activity_name" with "activity1"
-    And I fill in "activity_description" with "activity1 description"
-    And I select "<Automatically create a project for me>" from "Project"
-    # self org should already be selected
-    And I fill in "activity[implementer_splits_attributes][0][spend]" with "99"
-    And I fill in "activity[implementer_splits_attributes][0][budget]" with "19"
-    And I press "Save"
-    Then I should see "Activity was successfully created. Click here to enter the funding sources for the automatically created project."
-    When I fill in "Name" with "activity2"
-    And I fill in "Description" with "activity2 description"
-    And I select "<Automatically create a project for me>" from "Project"
-    And I press "Save"
-    Then I should see "Activity was successfully updated. Click here to enter the funding sources for the automatically created project."
-
   @javascript
   Scenario: Reporter can add targets & outputs
     Given an activity exists with project: the project, name: "existing activity", description: "existing description", data_response: the data_response
