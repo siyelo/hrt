@@ -34,7 +34,7 @@ describe Organization do
     it { should validate_presence_of(:name) }
     it { should validate_presence_of(:raw_type) }
     it { should validate_uniqueness_of(:name) }
-    it { should ensure_inclusion_of(:fy_start_month).in_range(1..12) }
+    it { should ensure_inclusion_of(:fy_start_month).in_range(1..12).with_message(/can't be blank/) }
     it "is valid when currency is included in the list" do
       organization = FactoryGirl.build(:organization, currency: 'USD')
       organization.save

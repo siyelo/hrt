@@ -41,7 +41,7 @@ class Organization < ActiveRecord::Base
   validates_presence_of :name, :raw_type, :currency
   validates_uniqueness_of :name
   validates_inclusion_of :currency, in: Money::Currency::TABLE.map{|k, v| "#{k.to_s.upcase}"}
-  validates_inclusion_of :fy_start_month, in: 1..12
+  validates_inclusion_of :fy_start_month, in: 1..12, message: "can't be blank."
 
   ### Callbacks
   before_destroy :check_no_funder_references
