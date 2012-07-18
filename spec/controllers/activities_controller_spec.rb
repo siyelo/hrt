@@ -214,39 +214,6 @@ describe ActivitiesController do
       end
     end
 
-    it "should allow a project to be created automatically on update" do
-      #if the project_id is -1 then the controller should create a new project with name, start date and end date equal to that of the activity
-      put :update, id: @activity.id,
-        activity: {project_id: '-1', name: @activity.name}
-      @activity.reload
-      @activity.project.name.should == @activity.name
-      @activity.project.in_flows.count.should == 1
-      @activity.project.in_flows.first.budget.should be_nil
-      @activity.project.in_flows.first.spend.should be_nil
-      @activity.project.in_flows.first.valid?.should == false
-    end
-
-    it "should allow a project to be created automatically on create" do
-      #if the project_id is -1 then the controller should create a new project with name, start date and end date equal to that of the activity
-      post :create,
-        activity: {project_id: '-1', name: "new activity",
-          description: "description", "data_response_id"=>"#{@data_response.id}",
-          "implementer_splits_attributes"=>
-          {"0"=> {"spend"=>"2", "organization_mask"=>
-                  "#{@organization.id}", "budget"=>"4"}}}
-      response.should be_redirect
-      @new_activity = Activity.find_by_name('new activity')
-      @new_activity.project.name.should == @new_activity.name
-    end
-
-    it "should assign the activity to an existing project
-        if a project exists with the same name as the activity" do
-      put :update, id: @activity.id,
-        activity: {name: @project.name, project_id: '-1'}
-      @activity.reload
-      @activity.project.name.should == @project.name
-    end
-
     it "should allow a reporter to update an activity if it's not am approved" do
       put :update, id: @activity.id,
         activity: {description: "thedesc", project_id: @project.id}

@@ -7,9 +7,6 @@ class BaseController < ApplicationController
     def load_activity_new
       @activity = Activity.new(:data_response_id => @response.id)
       @activity.project = @response.projects.find_by_id(params[:project_id]) if params[:project_id]
-      # if you cant find an existing project with given params
-      # then set it to -1 (i.e. Create a project for me)
-      @activity.project_id = Activity::AUTOCREATE unless @activity.project
     end
 
     # other_cost/new endpoint
