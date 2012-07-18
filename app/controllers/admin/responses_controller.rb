@@ -10,7 +10,7 @@ class Admin::ResponsesController < Admin::BaseController
 
   def index
     @pie = Charts::Responses::State.new(current_request).google_bar
-    scope = scope_responses(params[:filter])
+    scope = scope_responses(params[:filter]).includes(:response_state_logs, :data_request)
     scope = scope.joins(:organization).
                   where(["UPPER(organizations.name) LIKE UPPER(:q)",
                         {:q => "%#{params[:query]}%"}]) if params[:query]
