@@ -28,7 +28,7 @@ gem 'addressable'
 gem 'axlsx'
 gem 'rubyzip'
 gem 'newrelic_rpm'
-gem 'airbrake'
+gem 'airbrake', '3.1.1'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
@@ -45,7 +45,6 @@ group :development do
   gem 'rails-footnotes'
   gem 'taps'
   gem 'quiet_assets'
-  gem 'rails-footnotes'
   gem 'rb-fsevent', :require => RUBY_PLATFORM.include?('darwin') && 'rb-fsevent'
   gem 'growl',      :require => RUBY_PLATFORM.include?('darwin') && 'growl'
   gem 'rb-inotify', :require => RUBY_PLATFORM.include?('linux')  && 'rb-inotify'
