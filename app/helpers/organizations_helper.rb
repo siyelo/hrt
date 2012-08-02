@@ -18,7 +18,7 @@ module OrganizationsHelper
 
   def select_options(label = nil, hint = nil, required = true, label_class = 'indented', wrapper_class = 'input-wrapper', input_class = 'string required')
     return {label: label, hint: hint,
-      label_html: { class: label_class, required: true},
+      label_html: { class: label_class, required: required},
       wrapper_html: { class: wrapper_class },
       input_html: { class: input_class }}
   end

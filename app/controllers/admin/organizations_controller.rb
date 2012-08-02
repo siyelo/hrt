@@ -12,11 +12,12 @@ class Admin::OrganizationsController < Admin::BaseController
 
   def index
     scope = scope_organizations(params[:filter])
-    scope = scope.where(["UPPER(organizations.name) LIKE UPPER(:q) OR
-                                          UPPER(organizations.raw_type) LIKE UPPER(:q) OR
-                                          UPPER(organizations.fosaid) LIKE UPPER(:q)",
-                                          {:q => "%#{params[:query]}%"}]) if params[:query]
-
+    if params[:query]
+      scope = scope.where(["UPPER(organizations.name) LIKE UPPER(:q) OR
+                            UPPER(organizations.raw_type) LIKE UPPER(:q) OR
+                            UPPER(organizations.fosaid) LIKE UPPER(:q)",
+                            {:q => "%#{params[:query]}%"}])
+    end
     @organizations = scope.paginate(:page => params[:page], :per_page => 100,
                     :include => :users,
                     :order => "#{sort_column_query} #{sort_direction}, id ASC")
