@@ -43,7 +43,7 @@ Hrt::Application.routes.draw do
     namespace :reports do
       resources :detailed, only: [:index, :show] do
         collection do
-          put :mark_implementer_splits
+          put :mark_double_counts
         end
         member do
           get :generate

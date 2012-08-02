@@ -1,0 +1,9 @@
+%tr.hidden
+  %td{:colspan => "100"}
+    .double-count
+      %ul.admin_reports
+        %span.hint.left= "Mark double counts in the #{report_name.to_s.titleize} and upload the XLS file"
+        .right
+          = form_tag mark_double_counts_admin_reports_detailed_index_path(:report => report_name), :method => :put, :multipart => true do
+            = file_field_tag :file
+            = submit_tag :upload, :value => "Upload", :class => "create_alt"

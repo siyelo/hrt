@@ -74,6 +74,26 @@ var admin_reports_index = {
   }
 }
 
+var admin_reports_detailed_index = {
+  run: function () {
+    $('.mark_double_counts').click(function (e) {
+      var element = $(this);
+      var parent_tr = element.parents('tr:first')
+      var double_count_tr = parent_tr.next('tr');
+
+      if (double_count_tr.hasClass('hidden')) {
+        double_count_tr.removeClass('hidden');
+        element.addClass('hovered');
+        parent_tr.addClass('connect');
+      } else {
+        double_count_tr.addClass('hidden');
+        element.removeClass('hovered');
+        parent_tr.removeClass('connect');
+      }
+    });
+  }
+}
+
 var admin_codes_index = {
   run: function () {
     $('.collapsed').live('click', function (e) {

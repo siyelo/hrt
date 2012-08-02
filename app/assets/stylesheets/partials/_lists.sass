@@ -60,7 +60,7 @@ ul.manage_bar
       +border-radius(2px)
       +background(linear-gradient(#f8f8f8, #e8e8e8))
       +text-shadow(#fff, 0, 0, 1px)
-      &:hover, &:focus
+      &:hover, &:focus, &.hovered
         background: $orange
         border: 1px solid $orange - #111
         color: #fff
@@ -70,6 +70,8 @@ ul.manage_bar
         outline: none
         position: relative
         top: 1px
+      &.mark_double_counts
+        margin-right: 10px
 
 .welcome_steps
   clear: both
@@ -395,7 +397,7 @@ ul.activity_tree
     cursor: default
     &.expanded, &.collapsed
       cursor: pointer
-      
+
   .code-label
     display: inline-block
     font-size: 12px

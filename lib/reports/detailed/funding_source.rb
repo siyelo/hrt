@@ -36,7 +36,9 @@ class Reports::Detailed::FundingSource
       row << 'On/Off Budget'
       row << 'Disbursement Received'
       row << 'Planned Disbursement'
+      row << 'Funding Flow ID'
       row << 'Possible Funder Double-Count?'
+      row << 'Actual Funder Double-Count?'
       row
     end
 
@@ -49,7 +51,10 @@ class Reports::Detailed::FundingSource
       row << project_budget_type(in_flow.project)
       row << universal_currency_converter(in_flow.spend, in_flow_currency, "USD")
       row << universal_currency_converter(in_flow.budget, in_flow_currency, "USD")
+      row << in_flow.id
       row << in_flow.possible_double_count?
+      # don't use double_count?, we need to display if the value is nil
+      row << in_flow.double_count
       builder.add_row(row)
     end
 end

@@ -230,4 +230,48 @@ describe FundingFlow do
       funding_flow.possible_double_count?.should be_false
     end
   end
+
+  describe "#mark_double_counting" do
+    before :each do
+      basic_setup_project
+      from1 = FactoryGirl.create(:organization, name: 'Organization 1')
+      from2 = FactoryGirl.create(:organization, name: 'Organization 2')
+      @funding_flow1 = FactoryGirl.create(:funding_flow, project: @project,
+                                          from: from1, id: 11111)
+      @funding_flow2 = FactoryGirl.create(:funding_flow, project: @project,
+                                          from: from2, id: 22222)
+    end
+
+    it "marks double counting from file that has text" do
+      content = File.open('spec/fixtures/funder_double_count_mark_text.xls').read
+      FundingFlow.mark_double_counting(content)
+
+      @funding_flow1.reload.double_count.should be_true
+      @funding_flow2.reload.double_count.should be_false
+    end
+
+    it "marks double counting from file that has number values" do
+      content = File.open('spec/fixtures/funder_double_count_mark_number.xls').read
+      FundingFlow.mark_double_counting(content)
+
+      @funding_flow1.reload.double_count.should be_true
+      @funding_flow2.reload.double_count.should be_false
+    end
+
+    it "marks double counting from file that has mixed values" do
+      content = File.open('spec/fixtures/funder_double_count_mark_value.xls').read
+      FundingFlow.mark_double_counting(content)
+
+      @funding_flow1.reload.double_count.should be_true
+      @funding_flow2.reload.double_count.should be_false
+    end
+
+    it "reset double-count marks when empty string" do
+      content = File.open('spec/fixtures/funder_double_count_reset.xls').read
+      FundingFlow.mark_double_counting(content)
+
+      @funding_flow1.reload.double_count.should be_nil
+      @funding_flow2.reload.double_count.should be_nil
+    end
+  end
 end

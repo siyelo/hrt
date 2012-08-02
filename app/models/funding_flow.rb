@@ -94,6 +94,34 @@ class FundingFlow < ActiveRecord::Base
       from_response && from_response.accepted?
   end
 
+  class << self
+    def mark_double_counting(content)
+      hash = {}
+      rows = FileParser.parse(content, 'xls')
+
+      rows.map do |row|
+        double_count = row['Actual Funder Double-Count?']
+        double_count = double_count.value if double_count.respond_to?(:value)
+        double_count = case double_count.to_s.downcase
+        when 'true'
+          true
+        when 'false'
+          false
+        else
+          nil
+        end
+
+        hash[row['Funding Flow ID'].to_s] = double_count
+      end
+
+      FundingFlow.find(:all, :conditions => ["id IN (?)", hash.keys]).each do |ff|
+        ff.double_count = hash[ff.id.to_s]
+        ff.save(validate: false)
+      end
+    end
+    handle_asynchronously :mark_double_counting
+  end
+
   ### validation helpers
 
   # potential candidate for removal if these

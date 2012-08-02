@@ -31,6 +31,7 @@ describe Reports::Detailed::FundingSource do
       table[0]['Planned Disbursement'].should == 90.00
       table[0]['Disbursement Received'].should == 100.00
       table[0]['Possible Funder Double-Count?'].should == false
+      table[0]['Funding Flow ID'].should == @project.in_flows.first.id
     end
 
     context "multiflow reports" do

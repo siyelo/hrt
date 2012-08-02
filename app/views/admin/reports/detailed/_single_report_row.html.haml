@@ -1,7 +1,12 @@
 - rep = @report_map[key]
 
-%tr.connect
-  %td= title
+%tr
+  %td
+    = title
+    .right
+      %ul.manage_bar
+        %li
+          = link_to("Mark Double Counts", "#", class: 'mark_double_counts')
   %td{:colspan => '2'}
     - if rep
       = link_to "Export combined (Expenditures and Budgets)", admin_reports_detailed_path(rep), :title => 'Excel report', :class => "sml_btn"
@@ -9,6 +14,3 @@
       .hint= "(updated #{distance_of_time_in_words_to_now(rep.attachment_updated_at)} ago)" if rep.attachment_updated_at
     - else
       = link_to "Generate combined (Expenditures and Budgets)", generate_admin_reports_detailed_path(key)
-
-
-          

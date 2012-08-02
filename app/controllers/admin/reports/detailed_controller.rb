@@ -28,17 +28,24 @@ class Admin::Reports::DetailedController < Admin::BaseController
     redirect_to url
   end
 
-  def mark_implementer_splits
+  def mark_double_counts
     file = params[:file]
-
-    if file
+    report = params[:report]
+    if file && report
       if valid_format?(file)
         if is_zip?(file)
           attachment = FileZipper.unzip(file.path)
         else
           attachment = file.open.read.force_encoding("ASCII-8BIT")
         end
-        ImplementerSplit.mark_double_counting(attachment)
+
+        case report
+        when "funding_source"
+          FundingFlow.mark_double_counting(attachment)
+        when "activity_overview"
+          ImplementerSplit.mark_double_counting(attachment)
+        end
+
         flash[:notice] = 'Your file is being processed, please reload this page in a couple of minutes to see the results'
       else
         flash[:error] = 'Invalid file format. Please select .xls or .zip format.'
