@@ -182,4 +182,52 @@ describe FundingFlow do
       funding_flow.data_response.should == @response
     end
   end
+
+  describe "possible double count" do
+    before :each do
+      basic_setup_project
+      @from = FactoryGirl.create(:organization, :name => 'Organization 1')
+      @to   = @project.organization
+    end
+
+    it "should return true if not self funded & funding organization
+        has accepted response" do
+      from_user = FactoryGirl.create(:user, organization: @from)
+      funding_flow = FactoryGirl.create(:funding_flow,
+                                        :project => @project, :from => @from)
+      @from.data_responses.last.accept!(User.last)
+      @from.reload
+
+      funding_flow.self_funded?.should be_false
+      @from.data_responses.last.accepted?.should be_true
+      funding_flow.possible_double_count?.should be_true
+    end
+
+    it "should return false if funder isn't reporting" do
+      funding_flow = FactoryGirl.create(:funding_flow,
+                                        :project => @project, :from => @from)
+      @from.reporting?.should be_false
+      funding_flow.possible_double_count?.should be_false
+    end
+
+    it "should return false if funding org's response isn't accepted" do
+      from_user = FactoryGirl.create(:user, organization: @from)
+      funding_flow = FactoryGirl.create(:funding_flow, :project => @project,
+                                        :from => @from)
+
+      @from.data_responses.last.accepted?.should be_false
+      funding_flow.possible_double_count?.should be_false
+    end
+
+    it "should return false if funding flow is self-funded" do
+      to_user = FactoryGirl.create(:user, organization: @to)
+      funding_flow = FactoryGirl.create(:funding_flow, :project => @project,
+                                        :from => @to)
+      @to.data_responses.last.accept!(User.last)
+      @to.reload
+
+      funding_flow.self_funded?.should be_true
+      funding_flow.possible_double_count?.should be_false
+    end
+  end
 end

@@ -30,6 +30,7 @@ describe Reports::Detailed::FundingSource do
       table[0]['On/Off Budget'].should == 'on'
       table[0]['Planned Disbursement'].should == 90.00
       table[0]['Disbursement Received'].should == 100.00
+      table[0]['Possible Funder Double-Count?'].should == false
     end
 
     context "multiflow reports" do

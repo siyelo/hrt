@@ -82,6 +82,18 @@ class FundingFlow < ActiveRecord::Base
     self.organization == self.from
   end
 
+  def possible_double_count?
+    data_request_id = project.data_response.data_request_id
+    from_response = from.data_responses.with_request(data_request_id).first
+
+    check_double_count(from_response) || false
+  end
+
+  def check_double_count(from_response)
+    from && !self_funded? && from.reporting? &&
+      from_response && from_response.accepted?
+  end
+
   ### validation helpers
 
   # potential candidate for removal if these
