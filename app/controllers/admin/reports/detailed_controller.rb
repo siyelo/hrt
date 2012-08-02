@@ -29,23 +29,12 @@ class Admin::Reports::DetailedController < Admin::BaseController
   end
 
   def mark_double_counts
-    file = params[:file]
+    file   = params[:file]
     report = params[:report]
+
     if file && report
-      if valid_format?(file)
-        if is_zip?(file)
-          attachment = FileZipper.unzip(file.path)
-        else
-          attachment = file.open.read.force_encoding("ASCII-8BIT")
-        end
-
-        case report
-        when "funding_source"
-          FundingFlow.mark_double_counting(attachment)
-        when "activity_overview"
-          ImplementerSplit.mark_double_counting(attachment)
-        end
-
+      if FileReader.valid_format?(file)
+        read_file_and_mark_double_counts(file, report)
         flash[:notice] = 'Your file is being processed, please reload this page in a couple of minutes to see the results'
       else
         flash[:error] = 'Invalid file format. Please select .xls or .zip format.'
@@ -58,12 +47,14 @@ class Admin::Reports::DetailedController < Admin::BaseController
   end
 
   def generate
-    ### Commented out lines allow reports to be generated locally (increase the timeout first)
-    # @report = Report.find_or_initialize_by_key_and_data_request_id(params[:id], current_request.id)
+    ### Generate reports without delay (increase the timeout first)
+    # @report = Report.find_or_initialize_by_key_and_data_request_id(
+    #   params[:id], current_request.id)
     # @report.generate_report
     # redirect_to @report.private_url
 
-    @report = Report.find_or_create_by_key_and_data_request_id(params[:id], current_request.id)
+    @report = Report.find_or_create_by_key_and_data_request_id(
+      params[:id], current_request.id)
     @report.generate_report_for_download(current_user)
     flash[:notice] = "We are generating your report and will send you an email (at #{current_user.email}) when it is ready."
     redirect_to admin_reports_detailed_index_path
@@ -71,12 +62,14 @@ class Admin::Reports::DetailedController < Admin::BaseController
 
   protected
 
-  def is_zip?(file)
-    File.extname(file.original_filename) == ".zip"
-  end
-
-  def valid_format?(file)
-    ['.xls', '.zip'].include?(File.extname(file.original_filename))
+  def read_file_and_mark_double_counts(file, report)
+    attachment = FileReader.read(file)
+    case report
+    when "funding_source"
+      FundingFlow.mark_double_counting(attachment)
+    when "activity_overview"
+      ImplementerSplit.mark_double_counting(attachment)
+    end
   end
 
   def find_report
