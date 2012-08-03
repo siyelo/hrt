@@ -4,6 +4,7 @@ class DataResponse < ActiveRecord::Base
   include DataResponse::States
   include DataResponse::Totaller
   include DataResponse::ErrorChecker
+  include AttachmentHelper
 
   ### Attributes
   attr_accessible :data_request_id, :organization_id
@@ -49,7 +50,31 @@ class DataResponse < ActiveRecord::Base
   ### Callbacks
   before_validation :set_state, on: :create
 
+  ### Attachments
+  has_attached_file :expenditure_overview, path:
+    AttachmentHelper.attachment_path(
+      "response_overview/:id/expenditure.:extension")
+  has_attached_file :budget_overview, path:
+    AttachmentHelper.attachment_path(
+      "response_overview/:id/budget.:extension")
+
   ### Instance Methods
+
+  def private_expenditure_overview_url
+    if private_url?
+      expenditure_overview.expiring_url(3600)
+    else
+      expenditure_overview.url
+    end
+  end
+
+  def private_budget_overview_url
+    if private_url?
+      budget_overview.expiring_url(3600)
+    else
+      budget_overview.url
+    end
+  end
 
   def request
     self.data_request

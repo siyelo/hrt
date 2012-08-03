@@ -80,6 +80,7 @@ Hrt::Application.routes.draw do
       put :send_data_response
       get :reject
       get :accept
+      get :generate_overview
       get :download_overview
     end
   end

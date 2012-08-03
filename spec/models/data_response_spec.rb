@@ -136,4 +136,27 @@ describe DataResponse do
       @response.reload.state.should == 'rejected'
     end
   end
+
+
+  describe "private urls" do
+    before :each do
+      basic_setup_activity
+    end
+
+    it "sets private url for production environment" do
+      @response.stub(:private_url?).and_return(true)
+      @response.expenditure_overview.should_receive(:expiring_url)
+      @response.expenditure_overview.should_not_receive(:url)
+
+      @response.private_expenditure_overview_url
+    end
+
+    it "sets public url for other than production environment" do
+      @response.stub(:private_url?).and_return(false)
+      @response.expenditure_overview.should_receive(:url)
+      @response.expenditure_overview.should_not_receive(:expiring_url)
+
+      @response.private_expenditure_overview_url
+    end
+  end
 end

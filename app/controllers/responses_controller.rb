@@ -25,8 +25,7 @@ class ResponsesController < BaseController
   end
 
   def reject
-    resp = params[:id].present? ? DataResponse.find(params[:id]) : @response
-    resp.reject!(current_user)
+    @response.reject!(current_user)
     if current_response.organization.users.map(&:email).present?
       Notifier.response_rejected_notification(@response).deliver
     end
@@ -35,8 +34,7 @@ class ResponsesController < BaseController
   end
 
   def accept
-    resp = params[:id].present? ? DataResponse.find(params[:id]) : @response
-    resp.accept!(current_user)
+    @response.accept!(current_user)
     if current_response.organization.users.map(&:email).present?
       Notifier.response_accepted_notification(@response).deliver
     end
@@ -44,21 +42,42 @@ class ResponsesController < BaseController
     redirect_to :back
   end
 
+  def generate_overview
+    type = params[:type]
+    if type == 'budget' || type == 'spend'
+      report = Reports::Detailed::ResponseOverview.new(@response, type, 'xls')
+      report.generate_report_for_download(current_user)
+
+      flash[:notice] = "The report is being generated. A download link will be sent to #{current_user.email} when the report is ready."
+      redirect_to reports_path
+    else
+      flash[:error] = "Report could not be generated. Please try again."
+      redirect_to reports_path
+    end
+  end
+
   def download_overview
     type = params[:type]
     if type == 'budget' || type == 'spend'
-      report = Reports::Detailed::ResponseOverview.new(current_response, type, 'xls')
-      send_report_file(report, "Response Overview - #{type}")
+      download_overview_report
+    else
+      flash[:error] = "Report could not be downloaded. Please try again."
+      redirect_to reports_path
     end
   end
 
   private
     # use this if your controller expects :id instead of :response_id
     def load_response_from_id
-      find_response(params[:id])
+      @response = find_response(params[:id])
     end
 
-    def generate_overview_report(amount_type)
-      report.generate_report_for_download(current_user)
+    def download_overview_report
+      amount_type = params[:type] == 'budget' ? 'budget' : 'expenditure'
+      if @response.send("#{amount_type}_overview_file_name")
+        redirect_to @response.send("private_#{amount_type}_overview_url")
+      else
+        generate_overview
+      end
     end
 end

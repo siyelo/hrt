@@ -29,8 +29,8 @@
             = image_tag "icon_dropdown.png"
           %ul.menu_items{style: 'display: none'}
             %li
-              =link_to 'Expenditure', download_overview_response_path(@report.resource, type: 'spend')
-            %li= link_to 'Budget', download_overview_response_path(@report.resource, type: 'budget')
+              =link_to 'Expenditure', generate_overview_response_path(@report.resource, type: 'spend')
+            %li= link_to 'Budget', generate_overview_response_path(@report.resource, type: 'budget')
 
 #charts_tables
   .projects_tab{:"data-loaded" => 'true', :"data-url" => projects_reports_path}

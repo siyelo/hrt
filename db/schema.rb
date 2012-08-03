@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120802105808) do
+ActiveRecord::Schema.define(:version => 20120803112644) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -106,12 +106,20 @@ ActiveRecord::Schema.define(:version => 20120802105808) do
 
   create_table "data_responses", :force => true do |t|
     t.integer  "data_request_id"
-    t.datetime "created_at",                     :null => false
-    t.datetime "updated_at",                     :null => false
+    t.datetime "created_at",                                       :null => false
+    t.datetime "updated_at",                                       :null => false
     t.integer  "organization_id"
     t.string   "state"
-    t.integer  "projects_count",  :default => 0
+    t.integer  "projects_count",                    :default => 0
     t.integer  "previous_id"
+    t.string   "expenditure_overview_file_name"
+    t.string   "expenditure_overview_content_type"
+    t.integer  "expenditure_overview_file_size"
+    t.datetime "expenditure_overview_updated_at"
+    t.string   "budget_overview_file_name"
+    t.string   "budget_overview_content_type"
+    t.integer  "budget_overview_file_size"
+    t.datetime "budget_overview_updated_at"
   end
 
   add_index "data_responses", ["data_request_id"], :name => "index_data_responses_on_data_request_id"

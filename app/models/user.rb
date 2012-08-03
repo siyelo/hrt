@@ -33,7 +33,7 @@ class User < ActiveRecord::Base
 
   ### Attachments
   has_attached_file :workplan, path:
-    AttachmentHelper.attachment_path("workplans/:user_id/combined_workplan.:extension")
+    AttachmentHelper.attachment_path("workplans/:id/combined_workplan.:extension")
 
   ### Instance Methods
 

@@ -1,5 +1,6 @@
 class Reports::Detailed::ResponseOverview < Reports::Detailed::DynamicQuery
-  attr_accessor :builder, :response
+  include Rails.application.routes.url_helpers
+  attr_accessor :builder, :response, :amount_type
 
   def initialize(response, amount_type, filetype)
     @deepest_nesting = Code.deepest_nesting
@@ -22,5 +23,24 @@ class Reports::Detailed::ResponseOverview < Reports::Detailed::DynamicQuery
         { organization: :data_responses } ]
     @builder = FileBuilder.new(filetype)
     @show_double_count = false
+  end
+
+  def generate_report_for_download(user)
+    generate_report
+    Notifier.report_download_notification(user,
+      download_overview_response_url(response, type: amount_type)).deliver
+  end
+  handle_asynchronously :generate_report_for_download
+
+  def generate_report
+    data do |content, filetype, mimetype|
+      folder = "#{Rails.root}/tmp/"
+      file_name = "#{response.id}_#{amount_type}.#{filetype}"
+      type = amount_type == 'budget' ? 'budget' : 'expenditure'
+      FileZipper.zip_content(folder, file_name, content) do |zip_file_path|
+        response.send("#{type}_overview=", File.new(zip_file_path, 'r'))
+        response.save
+      end
+    end
   end
 end
