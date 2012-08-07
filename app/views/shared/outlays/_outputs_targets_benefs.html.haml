@@ -29,15 +29,19 @@
       = link_to image_tag("tooltip.png"), "#", :title => hint, :class => 'tooltip'
     %fieldset.section_form.last
       %ol.planned_dates_boxes
+        %label
+          %strong Current Year:
         %li
           = f.check_box :planned_for_gor_q1, :class => 'left'
-          = f.label :planned_for_gor_q1, next_fy_q1(@response)
+          = f.label :planned_for_gor_q1, "July - September"
         %li
           = f.check_box :planned_for_gor_q2, :class => 'left'
-          = f.label :planned_for_gor_q2, next_fy_q2(@response)
+          = f.label :planned_for_gor_q2, "October - December"
+        %label
+          %strong Following Year:
         %li
           = f.check_box :planned_for_gor_q3, :class => 'left'
-          = f.label :planned_for_gor_q3, next_fy_q3(@response)
+          = f.label :planned_for_gor_q3, "January - March"
         %li
           = f.check_box :planned_for_gor_q4, :class => 'left'
-          = f.label :planned_for_gor_q4, next_fy_q4(@response)
+          = f.label :planned_for_gor_q4, "April - June"
