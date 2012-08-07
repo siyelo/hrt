@@ -124,15 +124,27 @@ module Reports
     end
 
     def top_budgeters
-      @top_budgeters ||= collection.sort do |x, y|
+      @top_budgeters ||=  budgeters_by_name_desc.sort do |x, y|
         (y.total_budget || 0) <=> (x.total_budget || 0)
       end
     end
 
     def top_spenders
-      @top_spenders ||= collection.sort do |x, y|
+      @top_spenders ||= spenders_by_name_desc.sort do |x, y|
         (y.total_spend || 0) <=> (x.total_spend || 0)
       end
+    end
+
+    def budgeters_by_name_desc
+      @budgeters_by_name_desc ||= collection.select do |x|
+        x.total_budget > 0
+      end.sort_by{|x| x.name}.reverse
+    end
+
+    def spenders_by_name_desc
+      @spenders_by_name_desc ||= collection.select do |x|
+        x.total_spend > 0
+      end.sort_by{|x| x.name}.reverse
     end
 
     def get_colour(name)
@@ -143,7 +155,7 @@ module Reports
     def assign_colours
       top_budget = top_budgeters[0..14].map{ |row| row.name }
       top_spend = top_spenders[0..14].map{ |row| row.name }
-      top_all = (top_spend + top_budget).uniq!
+      top_all = (top_spend + top_budget).uniq
       colours = {}
       top_all.each_with_index do |name, index|
         colours[name] = AVAILABLE_COLOURS[index]

@@ -113,7 +113,7 @@ module Charts
     end
 
     def sort_by_values_desc
-      @data.sort_by{ |k,v| v }.reverse
+      sort_by_name.reverse.sort { |x, y| (y[1] || 0) <=> (x[1] || 0) }
     end
 
     def sort_by_name
