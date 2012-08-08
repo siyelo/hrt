@@ -10,7 +10,7 @@ This app tracks resource flows in the health sector from their many sources to t
 
     [remote "origin"]
       fetch = +refs/heads/*:refs/remotes/origin/*
-      url = git@github.com:siyelo/hrt2.git
+      url = git@github.com:siyelo/hrt.git
 
     [remote "staging"]
       url = git@heroku.com:hrtstaging.git
@@ -63,3 +63,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+## Legacy Code
+
+For pre v2.0 code, see https://github.com/siyelo/hrtv1
