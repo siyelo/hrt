@@ -16,7 +16,8 @@ describe ResponseCloner do
                           :end_date => "2011-01-01",
                           :currency => "USD",
                           :in_flows_attributes => [:organization_id_from => other_org.id,
-                                                   :budget => 10, :spend => 20])
+                                                   :budget => 10, :spend => 20,
+                                                   :double_count => true])
     @current_project.save!
     current_oc_without_project = FactoryGirl.create(:other_cost, :project => nil,
                                          :data_response => @current_response)
@@ -51,15 +52,14 @@ describe ResponseCloner do
     new_response.previous.should == @current_response
     project.previous.should == @current_project
     activity.previous.should == @current_activity
-    project.in_flows.first.previous.should ==
-      @current_project.in_flows.first
-    activity.implementer_splits.first.previous.should ==
-      @current_split
+    project.in_flows.first.previous.should == @current_project.in_flows.first
+    activity.implementer_splits.first.previous.should == @current_split
 
     #it clones and zeroes out in_flows
     project.in_flows.count.should == 1
     project.in_flows_total_spend.should == 0
     project.in_flows_total_budget.should == 0
+    project.in_flows.first.double_count.should == nil
 
     #it clones & zeroes out projects
     project.budget_type.should == "on"

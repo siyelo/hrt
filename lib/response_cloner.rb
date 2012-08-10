@@ -41,6 +41,7 @@ class ResponseCloner
       in_flow.previous = previous_in_flow
       in_flow.spend = 0
       in_flow.budget = 0
+      in_flow.double_count = nil
       in_flow
     end
   end

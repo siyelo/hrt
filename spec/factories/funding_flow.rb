@@ -4,6 +4,7 @@ FactoryGirl.define do
   #  f.project               { FactoryGirl.create(:project) }
     f.budget                { 90 }
     f.spend                 { 100 }
+    f.double_count          { false }
   end
 
   factory :funding_source, :class => FundingFlow, :parent => :funding_flow do |f|
