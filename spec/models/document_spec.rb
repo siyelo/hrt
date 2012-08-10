@@ -14,7 +14,7 @@ describe Document do
     it { should validate_uniqueness_of(:title) }
     it { should have_attached_file(:document) }
     it { should validate_attachment_presence(:document) }
-    it { should validate_attachment_size(:document).less_than(10.megabytes) }
+    it { should validate_attachment_size(:document).less_than(50.megabytes) }
     it "should allow valid values for visibility" do
       Document::VISIBILITY_OPTIONS.each do |v|
         should allow_value(v).for(:visibility)

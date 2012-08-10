@@ -15,8 +15,8 @@ class Document < ActiveRecord::Base
   validates_presence_of :title
   validates_uniqueness_of :title
   validates_attachment_presence :document
-  validates_attachment_size :document, :less_than => 10.megabytes,
-                            :message => "must be less than 10MB"
+  validates_attachment_size :document, :less_than => 50.megabytes,
+                            :message => "must be less than 50MB"
   validates_inclusion_of :visibility, :in => VISIBILITY_OPTIONS
 
   ### Named Scopes
