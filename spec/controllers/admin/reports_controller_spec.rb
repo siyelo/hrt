@@ -71,7 +71,7 @@ describe Admin::ReportsController do
         response.should be_success
         response.header["Content-Type"].should == "application/vnd.ms-excel"
         response.header["Content-Disposition"].should ==
-          "attachment; filename=district1_district_workplan.xls"
+          "attachment; filename=district1_district_workplan_without_double_counts.xls"
       end
 
       it "downloads xls district report" do

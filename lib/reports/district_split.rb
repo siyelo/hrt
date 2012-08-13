@@ -19,7 +19,8 @@ class Reports::DistrictSplit < Reports::TopBase
   end
 
   def resource_link(element)
-    district_workplan_admin_reports_path(:district => element.name)
+    district_workplan_admin_reports_path(:district => element.name,
+                                         :double_count => include_double_count)
   end
 
   def expenditure_chart
