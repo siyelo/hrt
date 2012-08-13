@@ -42,8 +42,8 @@ class Reports::Detailed::DistrictWorkplan
         spend_total  = 0
         budget_total = 0
       end
-      spend = universal_currency_converter(activity.total_spend, activity.currency, 'USD')
-      budget = universal_currency_converter(activity.total_budget, activity.currency, 'USD')
+      spend = spend_district_amount(activity)
+      budget = budget_district_amount(activity)
       spend_total  += spend
       budget_total += budget
 
@@ -64,11 +64,25 @@ class Reports::Detailed::DistrictWorkplan
 
   def header
     ["Partner", "Project", "Activity", "Implementer", "Expenditure (USD)",
-     "Budget (USD)", 'Possible Duplicate?', "Actual Duplicate?" ]
+     "Budget (USD)"]
   end
 
   def total_row(spend_total, budget_total)
     [nil, nil, nil, 'Total', spend_total, budget_total]
+  end
+
+  def spend_district_amount(activity)
+    ca = activity.location_spend_splits.detect { |ca| ca.code_id == district.id }
+    amount = ca ? universal_currency_converter(ca.cached_amount, activity.currency, "USD") : 0
+
+    amount
+  end
+
+  def budget_district_amount(activity)
+    ca = activity.location_budget_splits.detect { |ca| ca.code_id == district.id }
+    amount = ca ? universal_currency_converter(ca.cached_amount, activity.currency, "USD") : 0
+
+    amount
   end
 
   def organization_name(activity, previous_organization)
