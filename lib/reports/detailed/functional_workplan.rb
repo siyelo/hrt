@@ -26,19 +26,21 @@ class Reports::Detailed::FunctionalWorkplan
     @organizations.each do |organization|
       org_response = organization.responses.find(:first,
                       :conditions => "data_request_id = #{@response.request.id}")
-      row = []
-      row << organization.name
-      if org_response.projects.empty? && org_response.other_costs.without_project.empty?
-        builder.add_row(row)
+      if org_response
         row = []
-      else
-        unless org_response.projects.empty?
-          build_project_rows(row, org_response)
+        row << organization.name
+        if org_response.projects.empty? && org_response.other_costs.without_project.empty?
+          builder.add_row(row)
           row = []
-        end
+        else
+          unless org_response.projects.empty?
+            build_project_rows(row, org_response)
+            row = []
+          end
 
-        unless org_response.other_costs.without_project.empty?
-          build_other_cost_without_project_rows(row, org_response)
+          unless org_response.other_costs.without_project.empty?
+            build_other_cost_without_project_rows(row, org_response)
+          end
         end
       end
     end
