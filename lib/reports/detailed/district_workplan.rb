@@ -3,9 +3,10 @@ class Reports::Detailed::DistrictWorkplan
 
   attr_accessor :request, :district, :activities, :builder, :data_responses
 
-  def initialize(request, district, filetype)
+  def initialize(request, district, include_double_count, filetype)
     @request    = request
     @district   = district
+    @include_double_count = include_double_count
     @activities = ::Activity.find :all,
       :select => 'DISTINCT activities.*, organizations.name AS org_name',
       :include => [{:data_response => [:data_request, :organization]}, :project,
@@ -64,7 +65,7 @@ class Reports::Detailed::DistrictWorkplan
 
   def header
     ["Partner", "Project", "Activity", "Implementer", "Expenditure (USD)",
-     "Budget (USD)"]
+     "Budget (USD)", 'Possible Duplicate?', "Actual Duplicate?" ]
   end
 
   def total_row(spend_total, budget_total)
@@ -74,6 +75,9 @@ class Reports::Detailed::DistrictWorkplan
   def spend_district_amount(activity)
     ca = activity.location_spend_splits.detect { |ca| ca.code_id == district.id }
     amount = ca ? universal_currency_converter(ca.cached_amount, activity.currency, "USD") : 0
+    unless @include_double_count
+      amount = amount * spend_double_count_ratio(activity)
+    end
 
     amount
   end
@@ -81,8 +85,38 @@ class Reports::Detailed::DistrictWorkplan
   def budget_district_amount(activity)
     ca = activity.location_budget_splits.detect { |ca| ca.code_id == district.id }
     amount = ca ? universal_currency_converter(ca.cached_amount, activity.currency, "USD") : 0
+    unless @include_double_count
+      amount = amount * budget_double_count_ratio(activity)
+    end
 
     amount
+  end
+
+  def double_count_ratio(activity, amount_type)
+    double_counts = activity.implementer_splits.select do |is|
+      is.double_count == true
+    end
+
+    if double_counts.empty?
+      ratio = 1
+    else
+      double_count_amount = double_counts.inject(0) do |sum, is|
+        sum + (is.send(amount_type) || 0)
+      end
+      total_amount = activity.send("total_#{amount_type}")
+      total_amount = total_amount == 0 ? 1 : total_amount
+      ratio = double_count_amount / total_amount
+    end
+
+    ratio
+  end
+
+  def budget_double_count_ratio(activity)
+    double_count_ratio(activity, "budget")
+  end
+
+  def spend_double_count_ratio(activity)
+    double_count_ratio(activity, "spend")
   end
 
   def organization_name(activity, previous_organization)
