@@ -2,8 +2,8 @@
   %thead
     %tr.head
       %th Name
-      %th.align= "Expenditure (#{@report.unit})"
-      %th.align= "Budget (#{@report.unit})"
+      %th.align= "#{@report.expenditure_title} (#{@report.unit})"
+      %th.align= "#{@report.budget_title} (#{@report.unit})"
 
   %tbody
     - @report.collection.each do |e|

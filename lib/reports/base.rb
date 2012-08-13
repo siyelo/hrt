@@ -23,6 +23,14 @@ module Reports
       @resource.currency
     end
 
+    def expenditure_title
+      "Expenditure"
+    end
+
+    def budget_title
+      "Budget"
+    end
+
     def total_spend
       @total_spend ||= @resource.total_spend
     end

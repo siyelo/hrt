@@ -10,6 +10,14 @@ module Reports
       super(request)
     end
 
+    def expenditure_title
+      "Disbursements Received"
+    end
+
+    def budget_title
+      "Planned Disbursements"
+    end
+
     private
     def rows
       funders = FundingFlow.select("organizations.name AS org_name,

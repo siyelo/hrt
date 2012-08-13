@@ -10,11 +10,15 @@
 .section_form.topless.wrapped.last
   .full
     .first-half
-      %h2 Expenditure Summary
+      %h2
+        = @report.expenditure_title
+        Summary
       .code_spent.bordered
 
     .second-half
-      %h2 Budget Summary
+      %h2
+        = @report.budget_title
+        Summary
       .code_budget.bordered
 
   #report-data
