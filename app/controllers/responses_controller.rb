@@ -15,6 +15,10 @@ class ResponsesController < BaseController
   def submit
     @projects = @response.projects.find(:all, :include => :normal_activities)
     if @response.ready_to_submit?
+      if current_response.organization.users.select{|u| u.activity_manager?}.
+        map(&:email).present?
+        Notifier.response_submitted_notification(@response).deliver
+      end
       @response.submit!(current_user)
       flash[:notice] = "Successfully submitted. We will review your data and get back to you with any questions. Thank you."
       redirect_to review_response_url(@response)

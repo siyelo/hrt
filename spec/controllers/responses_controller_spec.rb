@@ -18,6 +18,7 @@ describe ResponsesController do
       @data_response.stub(:ready_to_submit?).and_return(true)
       @data_response.stub_chain(:projects, :find).and_return([])
 
+
       user.stub_chain(:data_responses, :find_by_id).and_return(@data_response)
       user.stub_chain(:organization, :data_responses, :latest_first, :first).and_return(@data_response)
       current_user = controller.stub!(:current_user).and_return(user)
@@ -26,11 +27,33 @@ describe ResponsesController do
     it "can submit a response" do
       @data_response.stub(:state).and_return('started')
       @data_response.should_receive(:submit!).and_return(true)
+      @data_response.stub_chain(:organization, :users).and_return([])
+
+      Notifier.should_not_receive(:response_submitted_notification)
 
       put :submit, :id => 1
 
       response.should redirect_to(review_response_url(@data_response))
       flash[:notice].should == 'Successfully submitted. We will review your data and get back to you with any questions. Thank you.'
+    end
+
+    it "notifies activity managers of response submission" do
+      @data_response.stub(:state).and_return('started')
+      @data_response.stub(:title).and_return("kaplow")
+      @data_response.should_receive(:submit!).and_return(true)
+
+      activity_manager = mock_model(User, id: 13,
+                                    email: "little_rascal@socute.com")
+      activity_manager.stub(:activity_manager?).and_return(true)
+      @data_response.stub_chain(:organization, :users).and_return([activity_manager])
+      Notifier.should_receive(:response_submitted_notification).
+        with(@data_response).and_return(double("mailer", deliver: true))
+
+      put :submit, :id => 1
+
+      response.should redirect_to(review_response_url(@data_response))
+      flash[:notice].should == 'Successfully submitted. We will review your data and get back to you with any questions. Thank you.'
+
     end
   end
 

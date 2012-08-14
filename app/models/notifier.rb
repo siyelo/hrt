@@ -34,6 +34,14 @@ class Notifier < ActionMailer::Base
     )
   end
 
+  def response_submitted_notification(response)
+    @response = response
+    mail(
+      subject: "Your #{response.title} response is Submitted",
+      to: response.organization.users.select{|u| u.activity_manager?}.map(&:email)
+    )
+  end
+
   def response_accepted_notification(response)
     mail(
       subject: "Your #{response.title} response is Accepted",
