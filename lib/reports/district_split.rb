@@ -103,9 +103,10 @@ class Reports::DistrictSplit < Reports::TopBase
   end
 
   def district_amounts(district)
-    spend  = amount_by_district[district.short_display][:spend]
-    budget = amount_by_district[district.short_display][:budget]
-    Reports::Row.new(district.short_display,
+    district_name = district.short_display
+    spend  = amount_by_district[district_name][:spend]
+    budget = amount_by_district[district_name][:budget]
+    Reports::Row.new(district_name,
                      spend.to_f.round(2),
                      budget.to_f.round(2))
   end
@@ -113,12 +114,13 @@ class Reports::DistrictSplit < Reports::TopBase
   def map_data(collection)
     result = {}
     locations.each { |location| result[location.short_display] ||= Hash.new(0) }
-
     collection.each do |e|
       method_name = method_from_class(e.klass.to_s)
       ratio = include_double_count ? 1.0 : ratios[e.activity_id.to_i][method_name]
-      result[e.district][method_name] += ratio *
-        universal_currency_converter(e.amount.to_f, e.amount_currency, 'USD')
+      if result[e.district]
+        result[e.district][method_name] += ratio *
+          universal_currency_converter(e.amount.to_f, e.amount_currency, 'USD')
+      end
     end
 
     result

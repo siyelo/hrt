@@ -5,7 +5,7 @@
 
 .section_overlap
   %ul.section_nav
-    - ["Locations", "Purposes", "Inputs"].each do |filter|
+    - ["Locations", "Purposes", "Inputs", "Beneficiaries"].each do |filter|
       - css_class = "selected" if params[:filter] == filter || (filter == 'All' && params[:filter].blank?)
       %li{class: css_class}
         = link_to filter, admin_codes_path({sort: params[:sort], direction: params[:direction], query: params[:query], filter: filter})

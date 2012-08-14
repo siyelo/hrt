@@ -1,7 +1,7 @@
 = f.inputs :class => 'inputs' do
   %li.last
     %ul.section_form.first
-      = f.input :type_string, :collection => ['ActivityCostCategory', 'Beneficiary', 'Code', 'CostCategory', 'Location', 'Mtef', 'Nasa', 'Nha', 'Nsp', 'OtherCostCode', 'OtherCostType'], :as => :select, :label => 'Type', :required => false, :hint => "Type of code"
+      = f.input :type_string, :collection => ['Beneficiary', 'Code', 'CostCategory', 'Location', 'Mtef', 'Nasa', 'Nha', 'Nsp'], :as => :select, :label => 'Type', :required => false, :hint => "Type of code"
       = f.input :parent, :collection => Code.all, :as => :select, :required => false, :hint => "The code this one falls underneath"
       = f.input :short_display, :required => false, :hint => "Short text detailing the code"
       = f.input :long_display, :required => false, :hint => "Text detailing the code"
@@ -9,9 +9,6 @@
       = f.input :official_name, :required => false, :hint => "The name officially used for this code"
       = f.input :hssp2_stratprog_val, :required => false, :hint => "The strategic program this code should be included under."
       = f.input :hssp2_stratobj_val, :required => false, :hint => "The strategic objective this code should be included under."
-      -# = f.input :sub_account, :required => false, :hint => "What this code pertains to"
-      -# = f.input :nasa_code, :required => false, :hint => "The corresponding NASA code"
-      -# = f.input :nha_code, :required => false, :hint => "The corresponding NHA code"
 
   %li.last
     %ul.horizontal.section_form.last.connect

@@ -4,6 +4,7 @@ class Code < ActiveRecord::Base
   PURPOSES            = %w[Mtef Nha Nasa Nsp]
   INPUTS              = %w[CostCategory]
   LOCATIONS           = %w[Location]
+  BENEFICIARIES       = %w[Beneficiary]
   FILE_UPLOAD_COLUMNS = %w[short_display long_display description type
    external_id parent_short_display hssp2_stratprog_val hssp2_stratobj_val
    official_name sub_account nha_code nasa_code]
