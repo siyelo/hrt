@@ -16,7 +16,7 @@ class Organization < ActiveRecord::Base
   attr_accessible :name, :raw_type, :fosaid, :currency, :contact_name,
     :contact_position, :contact_phone_number, :contact_main_office_phone_number,
     :contact_office_location, :implementer_type, :funder_type, :organization_id,
-    :fy_start_month
+    :fy_start_month, :decomissioned
 
 
   ### Associations
@@ -53,6 +53,7 @@ class Organization < ActiveRecord::Base
   scope :sorted, { :order => "LOWER(organizations.name) ASC" }
   scope :reporting, :conditions => ['users_count > 0']
   scope :nonreporting, :conditions => ['users_count = 0']
+  scope :active, where(["decomissioned = ?", false])
 
   ### Class Methods
 

@@ -3,7 +3,7 @@ class OrganizationsController < BaseController
   before_filter :load_organization_details, :only => [:edit, :update]
 
   def index
-    organizations = Organization.find(:all,
+    organizations = Organization.active.find(:all,
       :order => 'UPPER(name)', :limit => 100,
       :conditions => ["UPPER(organizations.name) LIKE UPPER(?)",
                       "%#{params[:term]}%"])

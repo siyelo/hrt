@@ -2,31 +2,32 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Organization do
   describe "Attributes" do
+    it { should allow_mass_assignment_of(:contact_main_office_phone_number) }
+    it { should allow_mass_assignment_of(:contact_name) }
+    it { should allow_mass_assignment_of(:contact_office_location) }
+    it { should allow_mass_assignment_of(:contact_phone_number) }
+    it { should allow_mass_assignment_of(:contact_position) }
+    it { should allow_mass_assignment_of(:currency) }
+    it { should allow_mass_assignment_of(:decomissioned) }
+    it { should allow_mass_assignment_of(:fosaid) }
+    it { should allow_mass_assignment_of(:funder_type) }
+    it { should allow_mass_assignment_of(:fy_start_month) }
+    it { should allow_mass_assignment_of(:implementer_type) }
     it { should allow_mass_assignment_of(:name) }
     it { should allow_mass_assignment_of(:raw_type) }
-    it { should allow_mass_assignment_of(:implementer_type) }
-    it { should allow_mass_assignment_of(:funder_type) }
-    it { should allow_mass_assignment_of(:fosaid) }
-    it { should allow_mass_assignment_of(:currency) }
-    it { should allow_mass_assignment_of(:contact_name) }
-    it { should allow_mass_assignment_of(:contact_position) }
-    it { should allow_mass_assignment_of(:contact_phone_number) }
-    it { should allow_mass_assignment_of(:contact_main_office_phone_number) }
-    it { should allow_mass_assignment_of(:contact_office_location) }
-    it { should allow_mass_assignment_of(:fy_start_month) }
   end
 
   describe "Associations" do
+    it { should have_and_belong_to_many(:managers) }
     it { should have_many(:activities) }
-    it { should have_many(:users) }
     it { should have_many(:data_requests) }
     it { should have_many(:data_responses).dependent(:destroy) }
-    it { should have_many(:projects) }
-    it { should have_many(:dr_activities) }
-    it { should have_many(:out_flows) }
     it { should have_many(:donor_for) }
+    it { should have_many(:dr_activities) }
     it { should have_many(:implementer_splits) }
-    it { should have_and_belong_to_many :managers }
+    it { should have_many(:out_flows) }
+    it { should have_many(:projects) }
+    it { should have_many(:users) }
   end
 
   describe "Validations" do
@@ -59,6 +60,12 @@ describe Organization do
     it "finds all nonreporting orgs" do
       organization = FactoryGirl.create(:organization)
       Organization.nonreporting.should == [organization]
+    end
+
+    it "#active only returns organizations that aren't decomissioned" do
+      org1 = FactoryGirl.create(:organization, name: 'Org1', decomissioned: false)
+      org2 = FactoryGirl.create(:organization, name: 'Org2', decomissioned: true)
+      Organization.active.should == [org1]
     end
   end
 

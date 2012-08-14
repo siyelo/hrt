@@ -17,6 +17,10 @@
           { include_blank: true }, select_options('Default Currency', currency_hint)
         = f.select :fy_start_month, options_for_select(DateHelper.month_options_for_select, f.object.fy_start_month),
           {}, select_options('Start of Fiscal Year', start_month_hint, false)
+        = f.check_box :decomissioned, :label => "Decomissioned?",
+          required: false,
+          hint: "If checked, the organization will not be an option when selecting funders/implementers",
+          wrapper_html: {class: 'input-wrapper'}, label_html: {class: 'indented'}
 
     %li.last
       %h2 Contact Details
