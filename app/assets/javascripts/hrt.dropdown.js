@@ -24,6 +24,12 @@ HrtDropdown.init = function () {
     } else {
       HrtDropdown.toggle_off(menu);
     };
+    e.stopPropagation();
+  });
+
+  $(document).click(function(e) {
+    menu = HrtDropdown.menu($(this));
+    HrtDropdown.toggle_off(menu);
   });
 
   $('.js_dropdown_menu .menu_items a').click(function (e){
