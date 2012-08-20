@@ -18,8 +18,8 @@
     - activities.each do |activity|
       %tr
         %td= friendly_name(activity, 64)
-        %td= check_box_tag "", "", activity.locations_classified?
+        %td= check_box_tag "", "", activity.locations_classified?, disabled: true
         - unless other_costs
-          %td= check_box_tag "", "", activity.purposes_classified?
-          %td= check_box_tag "", "", activity.input_spend_splits_valid? && activity.input_budget_splits_valid?
+          %td= check_box_tag "", "", activity.purposes_classified?, disabled: true
+          %td= check_box_tag "", "", activity.input_spend_splits_valid? && activity.input_budget_splits_valid?, disabled: true
         %td= link_to 'Classify', link_to_unclassified(activity)

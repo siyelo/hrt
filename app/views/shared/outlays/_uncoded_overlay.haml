@@ -27,15 +27,15 @@
       %tr
         %td Past Expenditure
         %td
-          = check_box_tag "spend_locations", "", outlay.location_spend_splits_valid?
+          = check_box_tag "spend_locations", "", outlay.location_spend_splits_valid?, disabled: true
         - unless is_other_cost
-          %td=check_box_tag "spend_purposes", "", outlay.purpose_spend_splits_valid?
-        %td= check_box_tag "spend_inputs", "", outlay.input_spend_splits_valid?
+          %td=check_box_tag "spend_purposes", "", outlay.purpose_spend_splits_valid?, disabled: true
+        %td= check_box_tag "spend_inputs", "", outlay.input_spend_splits_valid?, disabled: true
 
       %tr
         %td Current Budget
         %td
-          = check_box_tag "budget_locations", "", outlay.location_budget_splits_valid?
+          = check_box_tag "budget_locations", "", outlay.location_budget_splits_valid?, disabled: true
         - unless is_other_cost
-          %td= check_box_tag "budget_purposes", "", outlay.purpose_budget_splits_valid?
-        %td= check_box_tag "budget_inputs", "", outlay.input_budget_splits_valid?
+          %td= check_box_tag "budget_purposes", "", outlay.purpose_budget_splits_valid?, disabled: true
+        %td= check_box_tag "budget_inputs", "", outlay.input_budget_splits_valid?, disabled: true
