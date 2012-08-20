@@ -14,7 +14,7 @@
           - @dashboard.organizations.each do |organization|
             - response = organization.data_responses.detect { |dr| dr.data_request_id == current_request.id }
             - if response
-              %tr
+              %tr.org_row{'data-link' => projects_path(:response_id => response.id)}
                 %td.title.wrap-45= link_to organization.name, projects_path(:response_id => response.id)
                 %td
                   %ul
@@ -32,7 +32,6 @@
                         %br
                 %td.wrap-8
                   %ul.horizontal
-                    //%li= link_to , projects_path(:response_id => response.id)
                     %li.right
                       %span{:class => "tooltip-S response_status #{response.state}", :title => response_log_tooltip(response)}
                     %li.right= link_to '', export_workplan_projects_path(:response_id => response.id), id: 'download_workplan', class: 'download big tooltip-S', :title => "Download Workplan"
