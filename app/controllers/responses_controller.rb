@@ -33,8 +33,7 @@ class ResponsesController < BaseController
     if current_response.organization.users.map(&:email).present?
       Notifier.response_rejected_notification(@response).deliver
     end
-    flash[:notice] = "Response was successfully rejected"
-    redirect_to :back
+    render nothing: true
   end
 
   def accept

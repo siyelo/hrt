@@ -28,6 +28,7 @@
 //= require 'hrt.reports'
 //= require 'hrt.landing_page'
 //= require 'hrt.dashboard'
+//= require 'hrt.responses'
 
 
 

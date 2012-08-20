@@ -60,52 +60,55 @@ HrtComments.init = function () {
   // remove demo text when submiting comment
   $('.js_submit_comment_btn').live('click', function (e) {
     e.preventDefault();
-    var element = $(this);
-    if (element.hasClass('disabled')) {
-      return;
-    }
+    HrtComments.submit($(this));
+  });
+};
 
-    var form    = element.parents('form');
-    var block;
-    var ajaxLoader = element.parent('li').nextAll('.js_ajax_loader').find('img');
+HrtComments.submit = function(element) {
+  if (element.hasClass('disabled')) {
+    return;
+  }
 
-    element.addClass('disabled');
-    ajaxLoader.show();
+  var form    = element.parents('form');
+  var block;
+  var ajaxLoader = element.parent('li').nextAll('.js_ajax_loader').find('img');
 
-    $.post(HrtForm.buildJsonUrl(form.attr('action')), form.serialize(),
-        function (data, status, response) {
-      ajaxLoader.hide();
-      element.removeClass('disabled');
+  element.addClass('disabled');
+  ajaxLoader.show();
 
-      if (response.status === 206) {
-        form.replaceWith(data.html)
-      } else {
-        form.find("p.input-errors").remove();
-        liElement = form.parents('li:first');
+  $.post(HrtForm.buildJsonUrl(form.attr('action')), form.serialize(),
+      function (data, status, response) {
+    ajaxLoader.hide();
+    element.removeClass('disabled');
 
-        if (form.find('#comment_parent_id').length) {
-          // comment reply
-          block = element.parents('li.comment_item:first');
+    if (response.status === 206) {
+      form.replaceWith(data.html)
+    } else {
+      form.find("p.input-errors").remove();
+      liElement = form.parents('li:first');
 
-          if (block.find('ul').length) {
-            block.find('ul').prepend(data.html);
-          } else {
-            block.append($('<ul/>').prepend(data.html));
-          }
+      if (form.find('#comment_parent_id').length) {
+        // comment reply
+        block = element.parents('li.comment_item:first');
+
+        if (block.find('ul').length) {
+          block.find('ul').prepend(data.html);
         } else {
-          if (liElement.hasClass('comment_item')) {
-            liElement.replaceWith(data.html);
-          } else {
-            // root comment
-            block = $('ul.js_comments_list');
-            block.prepend(data.html);
-          }
+          block.append($('<ul/>').prepend(data.html));
+        }
+      } else {
+        if (liElement.hasClass('comment_item')) {
+          liElement.replaceWith(data.html);
+        } else {
+          // root comment
+          block = $('ul.js_comments_list');
+          block.prepend(data.html);
         }
       }
+    }
 
-      removeInlineErrors(form);
-      form.find('textarea').val(''); // reset comment value to blank
-      form.find('.js_cancel_reply').trigger('click'); // close comment block
-    });
+    form.find('.inline-errors').remove(); // remove inline error if present
+    form.find('textarea').val(''); // reset comment value to blank
+    form.find('.js_cancel_reply').trigger('click'); // close comment block
   });
 };

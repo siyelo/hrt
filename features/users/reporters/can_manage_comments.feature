@@ -23,7 +23,7 @@ Feature: Reporter can see comments
     @javascript
     Scenario: Reporter can comment on a response
       When I follow "Projects"
-        And I fill in "Add Comment" with "response_comment"
+      And I fill in "comment[comment]" with "response_comment"
         And I press "Comment"
       Then I should see "response_comment"
         And I should not see "Edit" within ".comments_list"
@@ -36,7 +36,7 @@ Feature: Reporter can see comments
     Scenario: Reporter can comment on a project
       When I follow "Projects"
         And I follow "project1"
-        And I fill in "Add Comment" with "project_comment"
+        And I fill in "comment[comment]" with "project_comment"
         And I press "Comment"
       Then I should see "project_comment"
         And I should not see "Edit" within ".comments_list"
@@ -49,7 +49,7 @@ Feature: Reporter can see comments
     Scenario: Reporter can comment on an activity
       When I follow "Projects"
         And I follow "activity1"
-        And I fill in "Add Comment" with "activity_comment"
+        And I fill in "comment[comment]" with "activity_comment"
         And I press "Comment"
       Then I should see "activity_comment"
         And I should not see "Edit" within ".comments_list"
@@ -65,7 +65,7 @@ Feature: Reporter can see comments
         And no emails have been sent
       When I follow "Projects"
         And I follow "project1"
-        And I fill in "Add Comment" with "project_comment_reply"
+        And I fill in "comment[comment]" with "project_comment_reply"
         And I press "Comment"
       Then I should see "project_comment_reply"
         And "reporter@hrtapp.com" should not receive an email

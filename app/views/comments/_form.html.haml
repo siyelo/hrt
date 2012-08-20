@@ -1,3 +1,7 @@
+- comment_placeholder ||= 'Type your comment here'
+- comment_button      ||= comment.new_record? ? 'Comment' : 'Save'
+- button_class        ||= 'js_submit_comment_btn'
+
 / js event: .form_box, .new_form, .edit_form
 .edit-comment.connect.js_form_box{:class => "form_box #{(comment.new_record? ? 'new_form' : 'edit_form')}"}
   / js event: .cancel_btn
@@ -9,10 +13,10 @@
       = f.inputs "", :id => "basic", :class => "collapsible" do
         = f.input :commentable_type, input_html: { value: comment.commentable_type }, as: :hidden
         = f.input :commentable_id, input_html: { value: comment.commentable_id}, as: :hidden
-        = f.input :comment, :label => comment.new_record? ? 'Add Comment' : 'Edit Comment', :input_html => {:placeholder => 'Type your comment here', :class => "comment-area", :cols => "120", :rows => "3"}
+        = f.input :comment, :label => false, :input_html => {:placeholder => comment_placeholder, :class => "comment-area", :cols => "120", :rows => "3"}
       = f.actions do
         / js event: .submit_btn
-        = f.action :submit, :label => comment.new_record? ? 'Comment' : 'Save', :button_html => { :class => "js_submit_comment_btn create_alt push-8" }
+        = f.action :submit, :label => comment_button, :button_html => { :class => "#{button_class} create_alt push-8" }
         - unless comment.new_record?
           %li.left= link_to 'Cancel', '#', class: 'js_cancel_edit_comment cancel'
         %li.left.js_ajax_loader= image_tag "ajax-loader.gif", :class => "ajax-loader", :style => "display: none;"

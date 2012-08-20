@@ -77,8 +77,7 @@ describe ResponsesController do
         controller.should_receive(:load_response_from_id).and_return(@data_response)
         @data_response.should_receive(:reject!).and_return(true)
         get :reject, id: 999
-        flash[:notice].should == "Response was successfully rejected"
-        response.should redirect_to(dashboard_path(response_id: @data_response.id))
+        response.should be_success
       end
 
       it "can accept responses" do

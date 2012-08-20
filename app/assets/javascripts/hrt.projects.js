@@ -18,6 +18,30 @@ HrtProjects.init = function () {
 
   HrtComments.init();
 
+  $('.js_reject_button').click(function (e) {
+    e.preventDefault();
+    var element = $(this);
+    if (element.hasClass('disabled')) {
+      return;
+    }
+
+    var form = element.parents('form');
+    var ajaxLoader = element.parent('li').nextAll('.js_ajax_loader').find('img');
+    var formArray = form.serializeArray();
+
+    element.addClass('disabled');
+    ajaxLoader.show();
+
+    for (index = 0; index < formArray.length; ++index) {
+      if (formArray[index].name == "comment[comment]") {
+        formArray[index].value = 'Response rejected: ' + formArray[index].value;
+        break
+      }
+    };
+
+    HrtResponses.rejectAndComment(form, formArray, $('#reject_link').data('response_id'));
+  });
+
   $('.js_address').address(function() {
     return 'new_' + $(this).data('type');
   });

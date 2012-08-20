@@ -3,6 +3,8 @@
 %h1.main_heading
   = current_request.name
 
+= render 'projects/rejection_reason', comment: @dashboard.comment
+
 .full
   .main#admin-summary
     %h2
@@ -62,8 +64,8 @@
                   = link_to response.organization.name, projects_path(:response_id => response.id)
                   .hint= format_date(response.updated_at)
                 %td
-                  =link_to "Accept", accept_response_path(response), class: "create_inline"
-                  =link_to "Reject", reject_response_path(response), class: "create_inline"
+                  = link_to "Accept", accept_response_path(response), class: "create_inline"
+                  = link_to 'Reject', '#', rel: '#rejection_reason', class: 'create_inline overlay js_reject_link', 'data-link' => reject_response_path(response), 'data-response_id' => response.id
           - else
             %p.nothing No responses have been submitted yet.
 

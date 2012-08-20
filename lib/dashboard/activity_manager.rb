@@ -33,6 +33,10 @@ class Dashboard::ActivityManager
     @organizations ||= activity_manager.organizations
   end
 
+  def comment
+    @comment ||= Comment.new
+  end
+
   def comments
     @comments ||= Comment.published.recent_comments(data_responses)
   end

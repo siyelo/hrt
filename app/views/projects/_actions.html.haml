@@ -6,7 +6,7 @@
 
     %ul.menu_items{:style => 'display: none'}
       - unless @response.rejected?
-        %li= link_to 'Reject', reject_response_path(@response), :method => :get, :data => { :confirm => "Are you sure you want to Reject this response?" }
+        %li= link_to 'Reject', '#', rel: '#rejection_reason', class: 'overlay', id: 'reject_link', 'data-response_id' => @response.id
       - unless @response.accepted?
         %li= link_to 'Accept', accept_response_path(@response), :method => :get, :data => { :confirm => "Are you sure you want to Accept this response?" }
 - else

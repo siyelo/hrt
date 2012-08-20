@@ -1,0 +1,6 @@
+#rejection_reason.simple_overlay
+  %h2 Reason for rejection
+  .section_form.last.connect.comments_input
+    .big_gravatar
+      = image_tag current_user.gravatar(60)
+    = render 'comments/form', comment: comment, comment_placeholder: 'Add reason for rejection', comment_button: 'Reject', button_class: 'js_reject_button'

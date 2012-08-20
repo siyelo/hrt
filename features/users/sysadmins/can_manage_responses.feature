@@ -35,15 +35,19 @@ Feature: Admin can manage data responses
       When "reporter1@hrtapp.com" open the email with subject "Your UNDP: FY2010-11 Expenditures and FY2011-12 Budget response is Accepted"
       Then I should see "Your submission has been reviewed and accepted." in the email body
 
+    @javascript
     Scenario: SysAdmin can reject response
       Given the data_response state is: "submitted"
       When I follow "Responses"
         And I follow "Submitted"
         And I follow "UNDP: FY2010-11 Expenditures"
       Then I should see "Status: Submitted" within "#state"
-        When I follow "Reject" within "#state"
-      Then I should see "Response was successfully rejected"
-        And I should see "Status: Rejected" within "#state"
+      When I follow "Reject" within "#state"
+        And I fill in "comment[comment]" with "Rejection reason" within ".simple_overlay"
+        And I press "Reject"
+      Then wait a few moments
+      Then I should see "Status: Rejected" within "#state"
+        And I should see "Response rejected: Rejection reason"
       When "reporter1@hrtapp.com" open the email with subject "Your UNDP: FY2010-11 Expenditures and FY2011-12 Budget response is Rejected"
       Then I should see "We have reviewed your submission and noted some issues that you need to correct" in the email body
 

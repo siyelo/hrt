@@ -51,6 +51,8 @@
     %li.right
       = render 'search'
 
+  = render 'rejection_reason', comment: @comment
+
   #import_export_box
     = render 'activities_import', :project => nil, :can_export => @response.activities.present?
 
