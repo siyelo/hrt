@@ -1,0 +1,16 @@
+- if current_user.activity_manager?
+  %li.js_dropdown_menu#state
+    = link_to '#', :class => 'js_dropdown_trigger dropdown' do
+      = "Status: #{current_response.state_to_name}"
+      = image_tag "icon_dropdown.png"
+
+    %ul.menu_items{:style => 'display: none'}
+      - unless @response.rejected?
+        %li= link_to 'Reject', reject_response_path(@response), :method => :get, :data => { :confirm => "Are you sure you want to Reject this response?" }
+      - unless @response.accepted?
+        %li= link_to 'Accept', accept_response_path(@response), :method => :get, :data => { :confirm => "Are you sure you want to Accept this response?" }
+- else
+  %li
+    = link_to '#', :class => 'dropdown dropless' do
+      = "Status: #{current_response.state_to_name}"
+
