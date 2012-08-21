@@ -56,7 +56,6 @@ group :test, :development do
   gem 'rspec-rails'
   gem 'sqlite3'
   gem 'debugger'
-  gem 'thin'
 end
 
 group :test do
