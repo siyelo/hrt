@@ -1,15 +1,9 @@
-/ %thead
-/   %tr
-/     %th Title
-/     %th.manage Last modified
-
 %tbody
   - documents.each do |document|
     %tr{:class => cycle("even", "odd")}
       %td
-        - if document.description.present?
-          = link_to "?", "#", :title => document.description, :class => 'tooltip typo right'
-        = link_to(document.title, document.private_document_url, :class => 'title')
-
-        .hint= document.updated_at.strftime("%b %d, %Y")
-        
+        %span.right
+          = distance_of_time_in_words(document.updated_at.strftime("%b %d, %Y"), Time.now)
+          ago
+        = image_tag('document1.png')
+        = link_to(document.title, document.private_document_url, :class => 'title tooltip', title: document.description)
