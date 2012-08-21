@@ -1,0 +1,9 @@
+-title "Sign Out"
+
+.sign_in_form.center.invite
+  %h3.welcome
+    Sign out of Health Resource Tracker?
+  .app
+    = link_to destroy_user_session_path, :method => :delete, :class => 'create_alt' do
+      Sign Out
+  %p You can always sign back in at any time

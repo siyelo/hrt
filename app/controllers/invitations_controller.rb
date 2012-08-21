@@ -10,13 +10,18 @@ class InvitationsController < ApplicationController
   end
 
   def update
-    @user.attributes = params[:user]
-    if @user.activate
-      flash[:notice] = "Thank you for registering with the Health Resource Tracker!"
-      sign_in(@user)
-      redirect_to dashboard_path
+    if @user
+      @user.attributes = params[:user]
+      if @user.activate
+        flash[:notice] = "Thank you for registering with the Health Resource Tracker!"
+        sign_in(@user)
+        redirect_to dashboard_path
+      else
+        render :edit
+      end
     else
-      render :edit
+      flash[:error] = "Sorry, the invitation is no longer valid."
+      redirect_to root_url
     end
   end
 

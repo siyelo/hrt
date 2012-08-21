@@ -19,4 +19,10 @@ class StaticPageController < ApplicationController
 
   def about
   end
+
+  def sign_out
+    unless current_user
+      redirect_to root_path
+    end
+  end
 end

@@ -6,6 +6,7 @@ Hrt::Application.routes.draw do
     passwords: 'users/passwords'
   }
 
+  match 'users/sign_out' => 'static_page#sign_out'
   resources :invitations, only: [:edit, :update]
 
   root to: 'static_page#index'
