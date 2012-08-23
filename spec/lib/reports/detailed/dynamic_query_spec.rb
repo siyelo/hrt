@@ -11,6 +11,10 @@ describe Reports::Detailed::DynamicQuery do
     context "simple reports" do
       before :each do
         basic_setup_response
+        @organization.funder_type = 'Funder Type'
+        @organization.implementer_type = 'Implementer Type'
+        @organization.raw_type = 'Raw Type'
+        @organization.save
         @response.state = 'accepted'
         @response.save
         in_flows = [FactoryGirl.build(:funding_flow, :from => @organization,
@@ -53,7 +57,11 @@ describe Reports::Detailed::DynamicQuery do
         table = run_report
         table[0]['Data Source'].should == @organization.name
         table[0]['Funding Source'].should == @organization.name
+        table[0]['Funder Type'].should == 'Funder Type'
+        table[0]['Funder Raw Type'].should == 'Raw Type'
         table[0]['Implementer'].should == @is.organization.name
+        table[0]['Implementer Type'].should == 'Implementer Type'
+        table[0]['Implementer Raw Type'].should == 'Raw Type'
         table[0]['Project'].should == @project.name
         table[0]['On/Off Budget'].should == 'on'
         table[0]['Description of Project'].should == @project.description

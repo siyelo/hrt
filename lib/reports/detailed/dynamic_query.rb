@@ -47,7 +47,11 @@ class Reports::Detailed::DynamicQuery
 
     row << 'Data Source'
     row << 'Funding Source'
+    row << 'Funder Type'
+    row << 'Funder Raw Type'
     row << 'Implementer'
+    row << 'Implementer Type'
+    row << 'Implementer Raw Type'
     row << 'Project'
     row << 'On/Off Budget'
     row << 'Description of Project'
@@ -99,7 +103,11 @@ class Reports::Detailed::DynamicQuery
     base_row = []
     base_row << activity.organization.try(:name)
     base_row << in_flow.from.try(:name)
+    base_row << in_flow.from.try(:funder_type)
+    base_row << in_flow.from.try(:raw_type)
     base_row << implementer_split.organization.try(:name)
+    base_row << implementer_split.organization.try(:implementer_type)
+    base_row << implementer_split.organization.try(:raw_type)
     base_row << activity.project.try(:name)
     base_row << project_budget_type(activity.project)
     base_row << activity.project.try(:description)
