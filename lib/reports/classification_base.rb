@@ -9,7 +9,7 @@ module Reports
     end
 
     def totals_equals_rows?
-      remaining_spend + remaining_budget == 0.00
+      (remaining_spend + remaining_budget).round(2) == 0.00
     end
 
     protected
