@@ -2,10 +2,10 @@
   .wrapper
 
     %ul.right
-      %li
-        %a{:href => '/'}
-          = image_tag "rwanda-coat-of-arms-small.png", :class => "left"
-          %span.country Rwanda
+      //%li
+      //  %a{:href => '/'}
+      //    = image_tag "rwanda-coat-of-arms-small.png", :class => "left"
+      //    %span.country Rwanda
       %li= link_to image_tag("usaid.jpg"), 'http://www.usaid.gov/', :target => '_blank'
       %li= link_to image_tag("hs2020.jpg"), 'http://www.hs2020.org/', :target => '_blank'
       - unless Rails.env == 'production'
