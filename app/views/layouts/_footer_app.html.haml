@@ -1,14 +1,22 @@
 #footer
   .wrapper
-
-    %ul.right
-      //%li
-      //  %a{:href => '/'}
-      //    = image_tag "rwanda-coat-of-arms-small.png", :class => "left"
-      //    %span.country Rwanda
-      %li= link_to image_tag("usaid.jpg"), 'http://www.usaid.gov/', :target => '_blank'
-      %li= link_to image_tag("hs2020.jpg"), 'http://www.hs2020.org/', :target => '_blank'
+    = image_tag "rwanda-coat-of-arms-big.png", :class => "left"
+    %p.left.country
+      Rwanda Health Resource Tracker
+      %br
       - unless Rails.env == 'production'
-        %li.version= "v#{Version.current}"
+        %span.left.version= "v#{Version.current}"
+    
+    
+    // Older version of the footer, including the USAID and HS2020 logos.
+    //%ul.right
+    //%li
+    //  %a{:href => '/'}
+    //    = image_tag "rwanda-coat-of-arms-small.png", :class => "left"
+    //    %span.country Rwanda
+    //%li= link_to image_tag("usaid.jpg"), 'http://www.usaid.gov/', :target => '_blank'
+    //%li= link_to image_tag("hs2020.jpg"), 'http://www.hs2020.org/', :target => '_blank'
+    //- unless Rails.env == 'production'
+    //  %li.version= "v#{Version.current}"
 
   = render :partial => 'layouts/ga'
