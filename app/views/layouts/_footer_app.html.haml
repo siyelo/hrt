@@ -1,12 +1,10 @@
 #footer
   .wrapper
-    = image_tag "rwanda-coat-of-arms-big.png", :class => "left"
+    //= image_tag "rwanda-coat-of-arms-big.png", :class => "left"
     %p.left.country
-      Rwanda Health Resource Tracker
-      %br
       - unless Rails.env == 'production'
         %span.left.version= "v#{Version.current}"
-    
+      Rwanda Health Resource Tracker
     
     // Older version of the footer, including the USAID and HS2020 logos.
     //%ul.right
