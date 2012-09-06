@@ -17,6 +17,7 @@ db/reports/*.csv
 db/reports/ufs/*.csv
 config/database.yml
 log/*.log
+tmp/**/*
 tmp/*
 public/stylesheets/compiled/*
 public/system/*
