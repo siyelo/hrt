@@ -28,7 +28,7 @@ gem 'addressable'
 gem 'axlsx'
 gem 'rubyzip'
 gem 'newrelic_rpm'
-gem 'airbrake', '3.1.1'
+gem 'airbrake', '3.1.2'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
