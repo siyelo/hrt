@@ -83,7 +83,7 @@ class Reports::Detailed::FunctionalWorkplan
     row << klass
     row << universal_currency_converter(activity.total_spend, activity.currency, 'USD')
     row << universal_currency_converter(activity.total_budget, activity.currency, 'USD')
-    row << activity.implementer_splits.map{|is| is.organization.name}.join(', ')
+    row << activity.implementer_splits.map{|is| is.organization_name}.join(', ')
     row << activity.targets.map{ |e| e.description }.join(', ')
     row << activity.outputs.map{ |e| e.description }.join(', ')
     row << activity.beneficiaries.map{ |e| e.short_display }.join(', ')
