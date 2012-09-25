@@ -1,11 +1,11 @@
 %li
   - unless code.leaf?
-    %span.collapsed{id: code.id} +
-    %div.clearfix{id: code.id}
+    %div.js_code_row.clearfix{id: code.id}
+      %span.js_icon.collapsed +
       = link_to code.short_display, edit_admin_code_path(code), :class => "code-label"
   - else
-    %span
     %div.clearfix
+      %span
       = link_to code.short_display, edit_admin_code_path(code), :class => "code-label"
 
   - unless code.leaf?

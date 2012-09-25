@@ -97,28 +97,19 @@ var admin_reports_detailed_index = {
 
 var admin_codes_index = {
   run: function () {
-    $('.collapsed').live('click', function (e) {
-      element = $(this)
-      if (element.text() == "+") {
-        element.html("-");
-      } else {
-        element.html("+");
-      }
-      theElement = "#" + element.attr("id") + "_act"
-      $(theElement).slideToggle();
-    });
+    $('.js_code_row').live('click', function (e) {
+      var element = $(this);
+      var icon = element.find('span.js_icon:first');
 
-    $('.clearfix').live('click', function (e) {
-      element = $(this)
-      id = element.attr('id')
-      button = $("#" + id + ".clearfix")
-      if (button.text() != "+") {
-        button.html("-");
+      // change +/- icon
+      if (icon.text() === "+") {
+        icon.html("-");
       } else {
-        button.html("+");
+        icon.html("+");
       }
-      theElement = "#" + element.attr("id") + "_act"
-      $(theElement).slideToggle();
+
+      // collapse-expand children codes
+      $("#" + element.attr("id") + "_act").slideToggle();
     });
   }
 }
