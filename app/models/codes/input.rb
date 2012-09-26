@@ -1,4 +1,4 @@
-class CostCategory < Code
+class Input < Code
 end
 
 # == Schema Information

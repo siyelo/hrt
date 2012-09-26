@@ -17,7 +17,7 @@ class Reports::Detailed::ClassificationSplit
                                   when :purpose
                                     Code.deepest_nesting
                                   when :input
-                                    CostCategory.deepest_nesting
+                                    Input.deepest_nesting
                                   else
                                     1
                                   end

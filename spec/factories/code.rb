@@ -21,7 +21,7 @@ FactoryGirl.define do
   factory :purpose, :parent => :nha_code do |f|
   end
 
-  factory :input, :class => CostCategory, :parent => :code do |f|
+  factory :input, :class => Input, :parent => :code do |f|
   end
 
   # todo - deprecate

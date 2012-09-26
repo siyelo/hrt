@@ -87,7 +87,7 @@ class CodingTree
     when 'PurposeBudgetSplit', 'PurposeSpendSplit'
       Code.purposes.roots
     when 'InputBudgetSplit', 'InputSpendSplit'
-      CostCategory.roots
+      Input.roots
     when 'LocationBudgetSplit', 'LocationSpendSplit'
       Location.national_level + Location.without_national_level.sorted.all
     else
@@ -190,7 +190,7 @@ class CodingTree
       when 'PurposeBudgetSplit', 'PurposeSpendSplit'
         Code.all
       when 'InputBudgetSplit', 'InputSpendSplit'
-        CostCategory.all
+        Input.all
       when 'LocationBudgetSplit', 'LocationSpendSplit'
         Location.all
       else

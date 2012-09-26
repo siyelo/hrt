@@ -333,7 +333,7 @@ describe CodingTree do
       end
 
       it "returns codes for simple activity and 'InputBudgetSplit' type" do
-        CostCategory.stub(:roots).and_return(@fake_codes)
+        Input.stub(:roots).and_return(@fake_codes)
 
         ct = CodingTree.new(@activity, InputBudgetSplit)
         ct.root_codes.should == @fake_codes
@@ -355,7 +355,7 @@ describe CodingTree do
       end
 
       it "returns codes for simple activity and 'InputSpendSplit' type" do
-        CostCategory.stub(:roots).and_return(@fake_codes)
+        Input.stub(:roots).and_return(@fake_codes)
 
         ct = CodingTree.new(@activity, InputSpendSplit)
         ct.root_codes.should == @fake_codes
@@ -376,7 +376,7 @@ describe CodingTree do
       end
 
       it "returns codes for other cost activity and 'InputBudgetSplit' type" do
-        CostCategory.stub(:roots).and_return(@fake_codes)
+        Input.stub(:roots).and_return(@fake_codes)
 
         ct = CodingTree.new(@other_cost, InputBudgetSplit)
         ct.root_codes.should == @fake_codes
@@ -391,7 +391,7 @@ describe CodingTree do
       end
 
       it "returns codes for other cost activity and 'InputSpendSplit' type" do
-        CostCategory.stub(:roots).and_return(@fake_codes)
+        Input.stub(:roots).and_return(@fake_codes)
 
         ct = CodingTree.new(@other_cost, InputSpendSplit)
         ct.root_codes.should == @fake_codes

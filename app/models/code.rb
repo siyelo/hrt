@@ -2,7 +2,7 @@ class Code < ActiveRecord::Base
 
   ### Constants
   PURPOSES            = %w[Mtef Nha Nasa Nsp]
-  INPUTS              = %w[CostCategory]
+  INPUTS              = %w[Input]
   LOCATIONS           = %w[Location]
   BENEFICIARIES       = %w[Beneficiary]
   FILE_UPLOAD_COLUMNS = %w[short_display long_display description type

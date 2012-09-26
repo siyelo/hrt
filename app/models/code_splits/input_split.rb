@@ -1,7 +1,7 @@
 class InputSplit < CodeSplit
   scope :roots, lambda { { :conditions => [
     "code_splits.code_id IN (?)",
-    CostCategory.roots.map{|c| c.id}] } }
+    Input.roots.map{|c| c.id}] } }
 
 end
 

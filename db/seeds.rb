@@ -6,9 +6,7 @@ puts "\n\nLoading seeds..."
 
 load 'db/seed_files/codes.rb'
 
-load 'db/seed_files/cost_categories.rb'
-
-load 'db/seed_files/other_cost_codes.rb'
+load 'db/seed_files/inputs.rb'
 
 load 'db/seed_files/beneficiaries.rb'
 
