@@ -23,6 +23,11 @@ class Code < ActiveRecord::Base
     @type_string || self[:type]
   end
 
+  def self.last_version
+    version = maximum(:version)
+    where(version: version)
+  end
+
   ### Callbacks
   before_save :assign_type
 

@@ -55,9 +55,4 @@ module Shared::OutlaysHelper
       Shared::OutlaysHelper::INDIRECT_COST_TABS
     end
   end
-
-  def last_version_beneficiaries
-    last_version = Beneficiary.maximum(:version)
-    Beneficiary.with_version(last_version)
-  end
 end

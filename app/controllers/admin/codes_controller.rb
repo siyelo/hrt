@@ -20,7 +20,7 @@ class Admin::CodesController < Admin::BaseController
                                             UPPER(description) LIKE UPPER(:q)",
                                             {q: "%#{params[:query]}%"}])
     else
-      @codes = scope.order("short_display").roots
+      @codes = scope.order("id ASC").roots
     end
   end
 
@@ -50,7 +50,6 @@ class Admin::CodesController < Admin::BaseController
 
     def scoped_codes
       code_types = "Code::#{params[:filter].upcase}".constantize
-      last_version = Code.with_types(code_types).maximum(:version)
-      Code.with_types(code_types).with_version(last_version)
+      Code.with_types(code_types).last_version
     end
 end
