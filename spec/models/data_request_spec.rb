@@ -50,6 +50,19 @@ describe DataRequest do
 
       org.data_responses.should be_empty
     end
+
+    it "assigns code type versions on create" do
+      FactoryGirl.create(:location, version: 1)
+      FactoryGirl.create(:mtef_code, version: 2)
+      FactoryGirl.create(:input, version: 3)
+      FactoryGirl.create(:beneficiary, version: 4)
+
+      data_request = FactoryGirl.create(:data_request)
+      data_request.locations_version.should == 1
+      data_request.purposes_version.should == 2
+      data_request.inputs_version.should == 3
+      data_request.beneficiaries_version.should == 4
+    end
   end
 
   describe "#previous_request" do

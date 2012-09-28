@@ -62,6 +62,7 @@ class CodingTree
   def initialize(activity, coding_klass)
     @activity     = activity
     @coding_klass = coding_klass
+    @data_request = activity.data_request
   end
 
   def roots
@@ -85,12 +86,12 @@ class CodingTree
   def root_codes
     case @coding_klass.to_s
     when 'PurposeBudgetSplit', 'PurposeSpendSplit'
-      Code.purposes.last_version.roots
+      Code.purposes.with_version(@data_request.purposes_version).roots
     when 'InputBudgetSplit', 'InputSpendSplit'
-      Input.last_version.roots
+      Input.with_version(@data_request.inputs_version).roots
     when 'LocationBudgetSplit', 'LocationSpendSplit'
-      Location.last_version.national_level +
-        Location.last_version.without_national_level.sorted.all
+      Location.with_version(@data_request.locations_version).national_level +
+        Location.with_version(@data_request.locations_version).without_national_level.sorted.all
     else
       raise "Invalid coding_klass #{@coding_klass.to_s}".to_yaml
     end

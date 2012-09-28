@@ -15,9 +15,9 @@ class Reports::Detailed::ClassificationSplit
                                     classification_type)
     @code_deepest_nesting       = case classification_type
                                   when :purpose
-                                    Code.purposes.last_version.deepest_nesting
+                                    Code.purposes.with_version(request.purposes_version).deepest_nesting
                                   when :input
-                                    Input.last_version.deepest_nesting
+                                    Input.with_version(request.inputs_version).deepest_nesting
                                   else
                                     1
                                   end

@@ -19,15 +19,6 @@ class Code < ActiveRecord::Base
   ### Validations
   validates :short_display, presence: true
 
-  def type_string
-    @type_string || self[:type]
-  end
-
-  def self.last_version
-    version = maximum(:version)
-    where(version: version)
-  end
-
   ### Callbacks
   before_save :assign_type
 
@@ -61,14 +52,6 @@ class Code < ActiveRecord::Base
     a
   end
 
-  def name
-    short_display
-  end
-
-  def to_s
-    short_display
-  end
-
   def self.create_from_file(doc)
     saved, errors = 0, 0
     doc.each do |row|
@@ -80,6 +63,26 @@ class Code < ActiveRecord::Base
       code.save ? (saved += 1) : (errors += 1)
     end
     return saved, errors
+  end
+
+  def self.last_version
+    maximum(:version)
+  end
+
+  def self.with_last_version
+    where(version: last_version)
+  end
+
+  def name
+    short_display
+  end
+
+  def to_s
+    short_display
+  end
+
+  def type_string
+    @type_string || self[:type]
   end
 
   private

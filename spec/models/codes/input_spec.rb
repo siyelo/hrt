@@ -6,9 +6,9 @@ describe Input do
     FactoryGirl.create(:location, version: 3) # test code filtering
 
     code1 = FactoryGirl.create(:input, version: 1)
-    Input.last_version.should == [code1]
+    Input.with_last_version.should == [code1]
 
     code2 = FactoryGirl.create(:input, version: 2)
-    Input.last_version.should == [code2]
+    Input.with_last_version.should == [code2]
   end
 end

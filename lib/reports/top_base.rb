@@ -46,8 +46,6 @@ module Reports
 
     def max_percentage
       return 0 if collection.blank?
-      max_spend = (top_spenders[0].total_spend / total_spend) * 100
-      max_budget = (top_budgeters[0].total_budget / total_budget) * 100
       max_spend > max_budget ? max_spend : max_budget
     end
 
@@ -81,6 +79,16 @@ module Reports
           universal_currency_converter(e.budget.to_f, currency, 'USD')
         result
       end
+    end
+
+    def max_spend
+      return 0 if top_spenders.blank?
+      (top_spenders[0].total_spend / total_spend) * 100
+    end
+
+    def max_budget
+      return 0 if top_budgeters.blank?
+      (top_budgeters[0].total_budget / total_budget) * 100
     end
   end
 end

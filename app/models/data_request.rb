@@ -12,6 +12,7 @@ class DataRequest < ActiveRecord::Base
   validates_date :start_date
 
   ### Callbacks
+  before_create :set_code_type_versions
   after_create :create_data_responses
 
   ### Named scopes
@@ -41,6 +42,12 @@ class DataRequest < ActiveRecord::Base
   handle_asynchronously :destroy_and_clean_response_references
 
   private
+  def set_code_type_versions
+    self.locations_version     = Location.last_version
+    self.purposes_version      = Code.purposes.last_version
+    self.inputs_version        = Input.last_version
+    self.beneficiaries_version = Beneficiary.last_version
+  end
 
   def create_data_responses
     transaction do
