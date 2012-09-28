@@ -322,10 +322,14 @@ ul.activity_tree
       &.expanded
         background: #fff
         color: red
+        position: relative
+        top: 9px
         +border-radius(10px)
       &.collapsed
         background: #fff
         color: green
+        position: relative
+        top: 9px
         +border-radius(10px)
 
     ul
@@ -339,6 +343,8 @@ ul.activity_tree
   .clearfix
     border-bottom: $primary_border3 1px solid
     border-left: $primary_border3 1px solid
+    .collapsed, .expanded
+      position: static
 
   .values
     margin-right: 5px

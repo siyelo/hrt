@@ -34,9 +34,10 @@ class Code < ActiveRecord::Base
   has_many :activities, :through => :code_splits
 
   ### Named scope
-  scope :with_type,  lambda { |type| {:conditions => ["codes.type = ?", type]} }
-  scope :with_types, lambda { |types| {:conditions => ["codes.type IN (?)", types]} }
-  scope :purposes, :conditions => ["codes.type in (?)", PURPOSES]
+  scope :with_type,  lambda { |type| where(["codes.type = ?", type]) }
+  scope :with_types, lambda { |types| where(["codes.type IN (?)", types]) }
+  scope :with_version, lambda { |version| where(version: version) }
+  scope :purposes, where(["codes.type in (?)", PURPOSES])
 
   # is this still needed - especially given it has some complex Mtef/NHa etc logic ??!
   def self.deepest_nesting

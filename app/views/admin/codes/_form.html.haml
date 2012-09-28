@@ -2,7 +2,7 @@
   %li.last
     %ul.section_form.first
       = f.input :type_string, :collection => ['Beneficiary', 'Code', 'Input', 'Location', 'Mtef', 'Nasa', 'Nha', 'Nsp'], :as => :select, :label => 'Type', :required => false, :hint => "Type of code"
-      = f.input :parent, :collection => Code.all, :as => :select, :required => false, :hint => "The code this one falls underneath"
+      = f.input :parent, :collection => Code.with_type(@code.type).with_version(@code.version).all, :as => :select, :required => false, :hint => "The code this one falls underneath"
       = f.input :short_display, :required => false, :hint => "Short text detailing the code"
       = f.input :long_display, :required => false, :hint => "Text detailing the code"
       = f.input :description, :required => false, :hint => "Text detailing the specifics of this code"

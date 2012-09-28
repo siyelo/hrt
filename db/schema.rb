@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120926144014) do
+ActiveRecord::Schema.define(:version => 20120927091946) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -71,6 +71,7 @@ ActiveRecord::Schema.define(:version => 20120926144014) do
     t.string   "sub_account"
     t.string   "nha_code"
     t.string   "nasa_code"
+    t.integer  "version"
   end
 
   create_table "comments", :force => true do |t|

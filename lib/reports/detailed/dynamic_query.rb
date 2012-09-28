@@ -6,7 +6,8 @@ class Reports::Detailed::DynamicQuery
   attr_accessor :builder
 
   def initialize(request, amount_type, filetype)
-    @deepest_nesting = Code.deepest_nesting
+    last_version = Code.purposes.maximum(:version)
+    @deepest_nesting = Code.purposes.with_version(last_version).deepest_nesting
     @amount_type = amount_type
     @implementer_splits = ImplementerSplit.find :all,
       :joins => { :activity => :data_response },

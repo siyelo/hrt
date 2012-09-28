@@ -49,6 +49,8 @@ class Admin::CodesController < Admin::BaseController
     end
 
     def scoped_codes
-      Code.with_types("Code::#{params[:filter].upcase}".constantize)
+      code_types = "Code::#{params[:filter].upcase}".constantize
+      last_version = Code.with_types(code_types).maximum(:version)
+      Code.with_types(code_types).with_version(last_version)
     end
 end

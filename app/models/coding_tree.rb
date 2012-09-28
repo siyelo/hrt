@@ -85,11 +85,15 @@ class CodingTree
   def root_codes
     case @coding_klass.to_s
     when 'PurposeBudgetSplit', 'PurposeSpendSplit'
-      Code.purposes.roots
+      last_version = Code.purposes.maximum(:version)
+      Code.purposes.with_version(last_version).roots
     when 'InputBudgetSplit', 'InputSpendSplit'
-      Input.roots
+      last_version = Input.maximum(:version)
+      Input.with_version(last_version).roots
     when 'LocationBudgetSplit', 'LocationSpendSplit'
-      Location.national_level + Location.without_national_level.sorted.all
+      last_version = Location.maximum(:version)
+      Location.with_version(last_version).national_level +
+        Location.with_version(last_version).without_national_level.sorted.all
     else
       raise "Invalid coding_klass #{@coding_klass.to_s}".to_yaml
     end

@@ -326,7 +326,8 @@ describe CodingTree do
       end
 
       it "returns codes for simple activity and 'PurposeBudgetSplit' type" do
-        Code.stub_chain(:purposes, :roots).and_return(@fake_codes)
+        Code.stub_chain(:purposes, :maximum)
+        Code.stub_chain(:purposes, :with_version, :roots).and_return(@fake_codes)
 
         ct = CodingTree.new(@activity, PurposeBudgetSplit)
         ct.root_codes.should == @fake_codes
@@ -348,7 +349,8 @@ describe CodingTree do
       end
 
       it "returns codes for simple activity and 'PurposeSpendSplit' type" do
-        Code.stub_chain(:purposes, :roots).and_return(@fake_codes)
+        Code.stub_chain(:purposes, :maximum)
+        Code.stub_chain(:purposes, :with_version, :roots).and_return(@fake_codes)
 
         ct = CodingTree.new(@activity, PurposeSpendSplit)
         ct.root_codes.should == @fake_codes

@@ -17,6 +17,7 @@ describe Code do
     it { should allow_mass_assignment_of(:parent_id) }
     it { should allow_mass_assignment_of(:official_name) }
     it { should allow_mass_assignment_of(:external_id) }
+    it { should_not allow_mass_assignment_of(:version) }
   end
 
   describe "Associations" do
