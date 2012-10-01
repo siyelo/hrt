@@ -28,7 +28,7 @@ describe Reports::Detailed::DynamicQuery do
         @activity = FactoryGirl.create :activity, :project => @project,
           :data_response => @response, :description => "desc"
         @is = FactoryGirl.create :implementer_split, :activity => @activity, :organization => @organization, :budget => 100
-        @mtef = FactoryGirl.create :mtef_code, :short_display => "sub_prog_name"
+        @mtef = FactoryGirl.create :purpose, :short_display => "sub_prog_name"
         @nsp = FactoryGirl.create :nsp_code, :short_display => "Nsp_code"
         @cost_categorization = FactoryGirl.create :input_budget_split,
           :percentage => 100, :activity => @activity, :code => @code1
@@ -185,7 +185,7 @@ describe Reports::Detailed::DynamicQuery do
           :data_response => @response, :description => "desc"
         @is = FactoryGirl.create :implementer_split, :activity => @activity,
           :organization => @organization, :budget => 100
-        @mtef = FactoryGirl.create :mtef_code, :short_display => "sub_prog_name"
+        @mtef = FactoryGirl.create :purpose, :short_display => "sub_prog_name"
 
         #creating dummy tree
         @mtef.move_to_child_of(@root_code)
@@ -819,7 +819,7 @@ describe Reports::Detailed::DynamicQuery do
           :data_response => @response, :description => "desc"
         @is = FactoryGirl.create :implementer_split, :activity => @activity,
           :organization => @organization, :budget => 100
-        @mtef = FactoryGirl.create :mtef_code, :short_display => "sub_prog_name"
+        @mtef = FactoryGirl.create :purpose, :short_display => "sub_prog_name"
 
         #creating dummy tree
         @mtef.move_to_child_of(@root_code)
@@ -1063,7 +1063,7 @@ describe Reports::Detailed::DynamicQuery do
           :data_response => @response, :description => "desc"
         @is = FactoryGirl.create :implementer_split, :activity => @activity,
           :organization => @organization, :budget => 100
-        @mtef = FactoryGirl.create :mtef_code, :short_display => "sub_prog_name"
+        @mtef = FactoryGirl.create :purpose, :short_display => "sub_prog_name"
 
         #creating dummy tree
         @mtef.move_to_child_of(@root_code)
@@ -1261,7 +1261,7 @@ describe Reports::Detailed::DynamicQuery do
           :currency => 'RWF'
         @root_code = FactoryGirl.create :code
         @code1 = FactoryGirl.create :code, :official_name => "root"
-        @mtef = FactoryGirl.create :mtef_code, :short_display => "sub_prog_name"
+        @mtef = FactoryGirl.create :purpose, :short_display => "sub_prog_name"
         @nsp = FactoryGirl.create :nsp_code, :short_display => "Nsp_code"
 
         #creating dummy tree
@@ -1352,7 +1352,7 @@ describe Reports::Detailed::DynamicQuery do
         @is = FactoryGirl.create :implementer_split, :activity => @activity,
           :organization => @organization, :budget => 100
         @root_code = FactoryGirl.create :code
-        @mtef = FactoryGirl.create :mtef_code, :short_display => "sub_prog_name"
+        @mtef = FactoryGirl.create :purpose, :short_display => "sub_prog_name"
         @code1 = FactoryGirl.create :code, :official_name => "root"
         @nsp = FactoryGirl.create :nsp_code, :short_display => "Nsp_code"
 
@@ -1550,7 +1550,7 @@ describe Reports::Detailed::DynamicQuery do
           :data_response => @response, :description => "desc"
         @is = FactoryGirl.create :implementer_split, :activity => @activity,
           :organization => @organization, :budget => 100
-        @mtef = FactoryGirl.create :mtef_code, :short_display => "sub_prog_name"
+        @mtef = FactoryGirl.create :purpose, :short_display => "sub_prog_name"
         @nsp = FactoryGirl.create :nsp_code, :short_display => "Nsp_code"
         @cost_categorization = FactoryGirl.create :input_budget_split,
           :percentage => 100, :activity => @activity, :code => @code1
@@ -1617,7 +1617,7 @@ describe Reports::Detailed::DynamicQuery do
           :data_response => @response, :description => "desc"
         @is = FactoryGirl.create :implementer_split, :activity => @activity,
           :organization => @organization, :spend => 100
-        @mtef = FactoryGirl.create :mtef_code, :short_display => "sub_prog_name"
+        @mtef = FactoryGirl.create :purpose, :short_display => "sub_prog_name"
         @nsp = FactoryGirl.create :nsp_code, :short_display => "Nsp_code"
         @cost_categorization = FactoryGirl.create :input_spend_split,
           :percentage => 100, :activity => @activity, :code => @code1

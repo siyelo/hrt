@@ -7,7 +7,7 @@ FactoryGirl.define do
   end
 
   factory :purpose_budget_split, :class => PurposeBudgetSplit, :parent => :code_split do |f|
-    f.code            { FactoryGirl.create :mtef_code }
+    f.code            { FactoryGirl.create :purpose }
   end
 
   factory :location_budget_split, :class => LocationBudgetSplit, :parent => :code_split do |f|
@@ -19,7 +19,7 @@ FactoryGirl.define do
   end
 
   factory :purpose_spend_split, :class => PurposeSpendSplit, :parent => :code_split do |f|
-    f.code            { FactoryGirl.create :mtef_code }
+    f.code            { FactoryGirl.create :purpose }
   end
 
   factory :location_spend_split, :class => LocationSpendSplit, :parent => :code_split do |f|
@@ -31,7 +31,7 @@ FactoryGirl.define do
   end
 
   factory :budget_purpose, :class => PurposeBudgetSplit, :parent => :code_split do |f|
-    f.code            { FactoryGirl.create :mtef_code }
+    f.code            { FactoryGirl.create :purpose }
   end
 
   factory :budget_location, :class => LocationBudgetSplit, :parent => :code_split do |f|
@@ -43,7 +43,7 @@ FactoryGirl.define do
   end
 
   factory :spend_purpose, :class => PurposeSpendSplit, :parent => :code_split do |f|
-    f.code            { FactoryGirl.create :mtef_code }
+    f.code            { FactoryGirl.create :purpose }
   end
 
   factory :spend_location, :class => LocationSpendSplit, :parent => :code_split do |f|

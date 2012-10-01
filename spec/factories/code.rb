@@ -5,20 +5,7 @@ FactoryGirl.define do
     f.sequence(:long_display)    { |i| "long_display_#{i}" }
   end
 
-  factory :mtef_code, :class => Mtef, :parent => :code do |f|
-  end
-
-  factory :nha_code, :class => Nha, :parent => :code do |f|
-  end
-
-  factory :nasa_code, :class => Nasa, :parent => :code do |f|
-  end
-
-  factory :nsp_code, :class => Nsp, :parent => :code do |f|
-  end
-
-  # could use any of the mtef/nha/nasa/nsp here
-  factory :purpose, :parent => :nha_code do |f|
+  factory :purpose, :class => Purpose, :parent => :code do |f|
   end
 
   factory :input, :class => Input, :parent => :code do |f|

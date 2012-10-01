@@ -34,8 +34,7 @@ describe Report do
 
   describe "#generate_report" do
     before :each do
-      mtef_code          = FactoryGirl.create(:mtef_code)
-      nsp_code           = FactoryGirl.create(:nsp_code)
+      purpose            = FactoryGirl.create(:purpose)
       cost_category_code = FactoryGirl.create(:cost_category_code)
       location           = FactoryGirl.create(:location)
       @request           = FactoryGirl.create :data_request
@@ -48,7 +47,7 @@ describe Report do
       @split2            = FactoryGirl.create(:implementer_split, :activity => @activity,
                             :organization => @organization, :budget => 10, :spend => 10)
       FactoryGirl.create(:purpose_budget_split, :activity => @activity,
-              :percentage => 100, :code => mtef_code)
+              :percentage => 100, :code => purpose)
       FactoryGirl.create(:location_budget_split, :activity => @activity,
               :percentage => 100, :code => location)
       FactoryGirl.create(:input_budget_split, :activity => @activity,

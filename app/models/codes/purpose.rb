@@ -1,5 +1,4 @@
-class Nasa < Code
-  include NamedScopes::Roots # overrides 'roots' method from awesome_nested_set
+class Purpose < Code
 end
 
 # == Schema Information

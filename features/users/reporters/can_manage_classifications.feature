@@ -20,8 +20,8 @@ Feature: Reporter can enter a code breakdown for each activity
 
     # level 1
     Given a basic reporter setup
-    Given a mtef_code "mtef1" exists with id: 1, short_display: "mtef1"
-      And a mtef_code "mtef2" exists with id: 2, short_display: "mtef2"
+    Given a purpose "purpose1" exists with id: 1, short_display: "purpose1"
+      And a purpose "purpose2" exists with id: 2, short_display: "purpose2"
       And a cost_category_code exists with id: 3, short_display: "cost_category1"
       And a project exists with name: "Project", data_response: the data_response
       And I am signed in as "reporter@hrtapp.com"
@@ -49,8 +49,8 @@ Feature: Reporter can enter a code breakdown for each activity
 
     Scenario: Reporter can classify Purposes for activity (second level)
       Given an activity exists with name: "activity1", data_response: the data_response, project: the project
-      And a mtef_code "mtef11" exists with id: 11, short_display: "mtef11", parent: mtef_code "mtef1"
-      And a mtef_code "mtef12" exists with id: 12, short_display: "mtef12", parent: mtef_code "mtef1"
+      And a purpose "purpose11" exists with id: 11, short_display: "purpose11", parent: purpose "purpose1"
+      And a purpose "purpose12" exists with id: 12, short_display: "purpose12", parent: purpose "purpose1"
       When I follow "Projects"
       And I follow "activity1"
       And I follow "Purposes" within ".section_nav"
@@ -68,10 +68,10 @@ Feature: Reporter can enter a code breakdown for each activity
 
     Scenario: Reporter can classify Purposes for activity (third level)
       Given an activity exists with name: "activity1", data_response: the data_response, project: the project
-      And a mtef_code "mtef11" exists with id: 11, short_display: "mtef11", parent: mtef_code "mtef1"
-      And a mtef_code "mtef12" exists with id: 12, short_display: "mtef12", parent: mtef_code "mtef1"
-      And a mtef_code "mtef111" exists with id: 111, short_display: "mtef111", parent: mtef_code "mtef11"
-      And a mtef_code "mtef112" exists with id: 112, short_display: "mtef112", parent: mtef_code "mtef11"
+      And a purpose "purpose11" exists with id: 11, short_display: "purpose11", parent: purpose "purpose1"
+      And a purpose "purpose12" exists with id: 12, short_display: "purpose12", parent: purpose "purpose1"
+      And a purpose "purpose111" exists with id: 111, short_display: "purpose111", parent: purpose "purpose11"
+      And a purpose "purpose112" exists with id: 112, short_display: "purpose112", parent: purpose "purpose11"
       When I follow "Projects"
       And I follow "activity1"
       And I follow "Purposes" within ".section_nav"
@@ -91,10 +91,10 @@ Feature: Reporter can enter a code breakdown for each activity
     # @javascript
     Scenario: Reporter can classify Purposes for activity (third level)
       Given an activity exists with name: "activity1", data_response: the data_response, project: the project
-      And a mtef_code "mtef11" exists with id: 11, short_display: "mtef11", parent: mtef_code "mtef1"
-      And a mtef_code "mtef12" exists with id: 12, short_display: "mtef12", parent: mtef_code "mtef1"
-      And a mtef_code "mtef111" exists with id: 111, short_display: "mtef111", parent: mtef_code "mtef11"
-      And a mtef_code "mtef112" exists with id: 112, short_display: "mtef112", parent: mtef_code "mtef11"
+      And a purpose "purpose11" exists with id: 11, short_display: "purpose11", parent: purpose "purpose1"
+      And a purpose "purpose12" exists with id: 12, short_display: "purpose12", parent: purpose "purpose1"
+      And a purpose "purpose111" exists with id: 111, short_display: "purpose111", parent: purpose "purpose11"
+      And a purpose "purpose112" exists with id: 112, short_display: "purpose112", parent: purpose "purpose11"
       And I follow "Projects"
       And I follow "activity1"
       And I follow "Purposes" within ".section_nav"

@@ -1,7 +1,7 @@
 class Code < ActiveRecord::Base
 
   ### Constants
-  PURPOSES            = %w[Mtef Nha Nasa Nsp]
+  PURPOSES            = %w[Purpose]
   INPUTS              = %w[Input]
   LOCATIONS           = %w[Location]
   BENEFICIARIES       = %w[Beneficiary]
@@ -35,7 +35,6 @@ class Code < ActiveRecord::Base
   scope :with_version, lambda { |version| where(version: version) }
   scope :purposes, where(["codes.type in (?)", PURPOSES])
 
-  # is this still needed - especially given it has some complex Mtef/NHa etc logic ??!
   def self.deepest_nesting
     levels = self.roots_with_level.collect{|a| a[0]}
     levels.present? ? (levels.max + 1) : 0

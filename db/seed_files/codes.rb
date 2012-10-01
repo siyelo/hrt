@@ -71,8 +71,10 @@ CSV.foreach("db/seed_files/codes.csv", :headers => true) do |row|
         klass_string = row[$type_col]
       end
     end
-    klass_string = "Nha" if klass_string.downcase == "nhanasa"
 
+    if ["nhanasa", "mtef", "nasa", "nha", "nsp"].include?(klass_string.downcase)
+      klass_string = "Purpose"
+    end
 
     #check if code exists with the type in the sheet and with the external id
     #if not, check if Code.find_by_external_id with same conditions you use for parent

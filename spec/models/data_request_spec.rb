@@ -53,7 +53,7 @@ describe DataRequest do
 
     it "assigns code type versions on create" do
       FactoryGirl.create(:location, version: 1)
-      FactoryGirl.create(:mtef_code, version: 2)
+      FactoryGirl.create(:purpose, version: 2)
       FactoryGirl.create(:input, version: 3)
       FactoryGirl.create(:beneficiary, version: 4)
 

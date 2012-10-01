@@ -3,10 +3,7 @@ Feature: Visitor can see homepage
   As a visitor
   I want to be able to see a landing page
 
-  Background:
-
-
-    Scenario: See heading and login
-      When I go to the home page
-      Then I should see the visitors header
-        And I should see the common footer
+  Scenario: See heading and login
+    When I go to the home page
+    Then I should see the visitors header
+      And I should see the common footer
