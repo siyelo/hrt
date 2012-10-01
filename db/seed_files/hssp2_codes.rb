@@ -47,7 +47,10 @@ CSV.foreach("db/seed_files/hssp2_codes.csv", :headers=>true) do |row|
     c.official_name = row[class_col]
     c.hssp2_stratprog_val = row[stratprog_col]
     c.hssp2_stratobj_val = row[stratobj_col]
-    c.type          = "Nha" if c.type.downcase == "nhanasa"
+
+    if ["nhanasa", "mtef", "nasa", "nha", "nsp"].include?(c.type.downcase)
+      klass_string = "Purpose"
+    end
 
     #print "."
     puts "on code #{c.external_id}"

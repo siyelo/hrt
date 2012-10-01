@@ -6,8 +6,8 @@ describe Activity, "Classification" do
     basic_setup_project
   end
 
-  [['purpose_budget_splits_valid?', PurposeBudgetSplit, :budget, :mtef_code, 'purposes_classified?'],
-   ['purpose_spend_splits_valid?', PurposeSpendSplit, :spend, :mtef_code, 'purposes_classified?'],
+  [['purpose_budget_splits_valid?', PurposeBudgetSplit, :budget, :purpose, 'purposes_classified?'],
+   ['purpose_spend_splits_valid?', PurposeSpendSplit, :spend, :purpose, 'purposes_classified?'],
    ['location_budget_splits_valid?', LocationBudgetSplit, :budget, :location, 'locations_classified?'],
    ['location_spend_splits_valid?', LocationSpendSplit, :spend,  :location, 'locations_classified?'],
    ['input_budget_splits_valid?', InputBudgetSplit, :budget, :cost_category_code, 'inputs_classified?'],

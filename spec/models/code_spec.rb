@@ -31,32 +31,29 @@ describe Code do
 
   describe "named scopes" do
     it "filter codes by type" do
-      mtef     = FactoryGirl.create(:mtef_code)
+      purpose  = FactoryGirl.create(:purpose)
       location = FactoryGirl.create(:location)
 
-      Code.with_type('Mtef').should == [mtef]
+      Code.with_type('Purpose').should == [purpose]
       Code.with_type('Location').should == [location]
     end
 
     it "filter codes by types" do
-      mtef     = FactoryGirl.create(:mtef_code)
+      purpose  = FactoryGirl.create(:purpose)
       location = FactoryGirl.create(:location)
 
-      Code.with_types(['Mtef', 'Location']).should == [mtef, location]
+      Code.with_types(['Purpose', 'Location']).should == [purpose, location]
     end
 
     it "filter codes by activity root types" do
-      mtef               = FactoryGirl.create(:mtef_code)
-      nha_code           = FactoryGirl.create(:nha_code)
-      nasa_code          = FactoryGirl.create(:nasa_code)
-      nsp_code           = FactoryGirl.create(:nsp_code)
+      purpose            = FactoryGirl.create(:purpose)
       cost_category_code = FactoryGirl.create(:cost_category_code)
       location           = FactoryGirl.create(:location)
       beneficiary        = FactoryGirl.create(:beneficiary)
       hssp_strat_prog    = FactoryGirl.create(:hssp_strat_prog)
       hssp_strat_obj     = FactoryGirl.create(:hssp_strat_obj)
 
-      Code.purposes.should == [mtef, nha_code, nasa_code, nsp_code]
+      Code.purposes.should == [purpose]
     end
   end
 
@@ -80,25 +77,13 @@ describe Code do
   describe "roots with level" do
     it "returns roots with level" do
       # first level
-      mtef = FactoryGirl.create(:mtef_code, :short_display => 'mtef')
+      purpose1 = FactoryGirl.create(:purpose, :short_display => 'purpose1')
 
       # second level
-      nha = FactoryGirl.create(:nha_code, :short_display => 'nha')
-      nha.move_to_child_of(mtef)
+      purpose11 = FactoryGirl.create(:purpose, :short_display => 'purpose11')
+      purpose11.move_to_child_of(purpose1)
 
-      # third level
-      nsp = FactoryGirl.create(:nsp_code, :short_display => 'nsp')
-      nsp.move_to_child_of(nha)
-
-      # forth level
-      nasa = FactoryGirl.create(:nasa_code, :short_display => 'nasa')
-      nasa.move_to_child_of(nsp)
-
-      Code.roots_with_level.should == [[0, mtef.id], [1, nha.id], [2, nsp.id], [3, nasa.id]]
-      Mtef.roots_with_level.should == [[0, mtef.id], [1, nha.id], [2, nsp.id], [3, nasa.id]]
-      Nha.roots_with_level.should == [[1, nha.id], [2, nsp.id], [3, nasa.id]]
-      Nsp.roots_with_level.should == [[1, nsp.id], [2, nasa.id]]
-      Nasa.roots_with_level.should == [[1, nasa.id]]
+      Code.roots_with_level.should == [[0, purpose1.id], [1, purpose11.id]]
     end
   end
 

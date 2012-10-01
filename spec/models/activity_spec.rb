@@ -223,7 +223,7 @@ describe Activity do
     it "should return only those codes designated as Purpose codes" do
       basic_setup_activity
       @purpose1    = FactoryGirl.create(:purpose, short_display: 'purp1')
-      @purpose2    = FactoryGirl.create(:mtef_code, short_display: 'purp2')
+      @purpose2    = FactoryGirl.create(:purpose, short_display: 'purp2')
       @input       = FactoryGirl.create(:input, short_display: 'input')
       FactoryGirl.create(:purpose_budget_split, activity: @activity,
               code: @purpose1, cached_amount: 5)

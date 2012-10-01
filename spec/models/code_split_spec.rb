@@ -14,7 +14,7 @@ describe CodeSplit do
 
     it "should not allow same code to be assigned twice to an activity" do
       basic_setup_activity
-      code = FactoryGirl.create(:mtef_code, :short_display => 'code1')
+      code = FactoryGirl.create(:purpose, :short_display => 'code1')
       PurposeBudgetSplit.update_classifications(@activity, { code.id => 5, code.id => 6  })
       code.code_splits.first.percentage.should == 6
     end
@@ -111,7 +111,7 @@ describe CodeSplit do
       activity = FactoryGirl.create(:activity, :data_response => @response, :project => @project)
       split    = FactoryGirl.create(:implementer_split, :activity => activity,
                          :budget => 100, :spend => 200, :organization => @organization)
-      code     = FactoryGirl.create(:mtef_code, :short_display => 'code1')
+      code     = FactoryGirl.create(:purpose, :short_display => 'code1')
       activity.reload
       activity.save # get new cached implementer split total
       # at time of writing you must call one of the 'bulk' update APIs for classifications to have their cached amounts
@@ -163,8 +163,8 @@ describe CodeSplit do
 
       context "when submitting non empty classifications" do
         before :each do
-          @code1 = FactoryGirl.create(:mtef_code)
-          @code2 = FactoryGirl.create(:mtef_code)
+          @code1 = FactoryGirl.create(:purpose)
+          @code2 = FactoryGirl.create(:purpose)
         end
 
         context "when submitting percentages <= 100" do
@@ -194,8 +194,8 @@ describe CodeSplit do
     context "when classifications exist" do
       context "when submitting classifications" do
         before :each do
-          @code1 = FactoryGirl.create(:mtef_code)
-          @code2 = FactoryGirl.create(:mtef_code)
+          @code1 = FactoryGirl.create(:purpose)
+          @code2 = FactoryGirl.create(:purpose)
         end
 
         context "when submitting percentages" do
