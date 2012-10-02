@@ -1,0 +1,10 @@
+= render :partial => 'admin/shared/codes_menu'
+
+.section_form.single.connect.topless
+  #search.push
+    = form_tag admin_beneficiaries_path, method: :get do
+      = render 'shared/search_form'
+
+  %ul.activity_tree
+    - @beneficiaries.each do |beneficiary|
+      = render 'row', beneficiary: beneficiary

@@ -65,6 +65,7 @@ Hrt::Application.routes.draw do
         get :download_template
       end
     end
+    resources :beneficiaries, only: [:index, :edit, :update]
   end
 
   resources :workplans  do

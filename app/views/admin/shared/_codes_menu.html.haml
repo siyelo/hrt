@@ -10,14 +10,4 @@
       %li{class: css_class}
         = link_to filter, admin_codes_path({sort: params[:sort], direction: params[:direction], query: params[:query], filter: filter})
     %li{class: params[:controller] == 'admin/beneficiaries' ? "selected" : nil}
-      = link_to "Beneficiary", admin_beneficiaries_path({sort: params[:sort], direction: params[:direction], query: params[:query]})
-
-.section_form.single.connect.topless
-  #search.push
-    = form_tag admin_codes_path, method: :get do
-      = render 'shared/search_form'
-
-  -# %ul.activity_tree
-  -#   - @codes.each do |code|
-  -#     = render 'code_row', code: code
-
+      = link_to "Beneficiary", admin_beneficiaries_path({query: params[:query]})

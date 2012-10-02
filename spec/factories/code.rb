@@ -14,6 +14,4 @@ FactoryGirl.define do
   factory :location, :class => Location, :parent => :code do |f|
   end
 
-  factory :beneficiary, :class => Beneficiary, :parent => :code do |f|
-  end
 end
