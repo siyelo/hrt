@@ -11,19 +11,9 @@ FactoryGirl.define do
   factory :input, :class => Input, :parent => :code do |f|
   end
 
-  # todo - deprecate
-  factory :cost_category_code, :parent => :input do |f|
-  end
-
   factory :location, :class => Location, :parent => :code do |f|
   end
 
   factory :beneficiary, :class => Beneficiary, :parent => :code do |f|
-  end
-
-  factory :hssp_strat_prog, :class => HsspStratProg, :parent => :code do |f|
-  end
-
-  factory :hssp_strat_obj, :class => HsspStratObj, :parent => :code do |f|
   end
 end

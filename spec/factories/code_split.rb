@@ -39,7 +39,7 @@ FactoryGirl.define do
   end
 
   factory :budget_input, :class => InputBudgetSplit, :parent => :code_split do |f|
-    f.code            { FactoryGirl.create :cost_category_code }
+    f.code            { FactoryGirl.create :input }
   end
 
   factory :spend_purpose, :class => PurposeSpendSplit, :parent => :code_split do |f|
@@ -51,6 +51,6 @@ FactoryGirl.define do
   end
 
   factory :spend_input, :class => InputSpendSplit, :parent => :code_split do |f|
-    f.code            { FactoryGirl.create :cost_category_code }
+    f.code            { FactoryGirl.create :input }
   end
 end

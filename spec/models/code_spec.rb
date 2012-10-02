@@ -46,12 +46,10 @@ describe Code do
     end
 
     it "filter codes by activity root types" do
-      purpose            = FactoryGirl.create(:purpose)
-      cost_category_code = FactoryGirl.create(:cost_category_code)
-      location           = FactoryGirl.create(:location)
-      beneficiary        = FactoryGirl.create(:beneficiary)
-      hssp_strat_prog    = FactoryGirl.create(:hssp_strat_prog)
-      hssp_strat_obj     = FactoryGirl.create(:hssp_strat_obj)
+      purpose     = FactoryGirl.create(:purpose)
+      input       = FactoryGirl.create(:input)
+      location    = FactoryGirl.create(:location)
+      beneficiary = FactoryGirl.create(:beneficiary)
 
       Code.purposes.should == [purpose]
     end
