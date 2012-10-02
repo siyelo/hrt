@@ -139,8 +139,8 @@ class Reports::Detailed::DynamicQuery
         codes = self_and_ancestors(purpose_classification.code).reverse
         add_codes_to_row(purpose_row, codes, @deepest_nesting, :short_display)
 
-        purpose_row << mtef_name(purpose_classification.code)
-        purpose_row << nsp_name(purpose_classification.code)
+        purpose_row << (purpose_classification.code.mtef_code.presence || 'N/A')
+        purpose_row << (purpose_classification.code.nsp_code.presence || 'N/A')
 
         fake_district = is_fake?(activity.send("location_#{@amount_type}_splits").first.code)
         build_incomplete_classificiation(activity, "location_#{@amount_type}_splits")
@@ -174,20 +174,6 @@ class Reports::Detailed::DynamicQuery
     end
 
     return codes
-  end
-
-  def mtef_name(code)
-    codes = self_and_ancestors(code)
-
-    mtef = codes.detect { |a| a.type == "Mtef" && !a.root? }
-    mtef ? mtef.short_display : 'N/A'
-  end
-
-  def nsp_name(code)
-    codes = self_and_ancestors(code)
-
-    nsp = codes.detect { |a| a.type == "Nsp" }
-    nsp ? nsp.short_display : 'N/A'
   end
 
   def build_fake_classifications(activity)

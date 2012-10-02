@@ -1,3 +1,11 @@
+# define old STI models
+class Mtef < Code; end
+class Nsp  < Code; end
+class Nasa < Code; end
+class Nha  < Code; end
+class HsspStratProg < Code; end
+class HsspStratObj < Code; end
+
 class AddVersionToCodes < ActiveRecord::Migration
 
   def change

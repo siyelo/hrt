@@ -28,8 +28,8 @@ describe Reports::Detailed::DynamicQuery do
         @activity = FactoryGirl.create :activity, :project => @project,
           :data_response => @response, :description => "desc"
         @is = FactoryGirl.create :implementer_split, :activity => @activity, :organization => @organization, :budget => 100
-        @mtef = FactoryGirl.create :purpose, :short_display => "sub_prog_name"
-        @nsp = FactoryGirl.create :nsp_code, :short_display => "Nsp_code"
+        @purpose1 = FactoryGirl.create :purpose, :short_display => "Mtef Purpose"
+        @purpose2 = FactoryGirl.create :purpose, :short_display => "Nsp Purpose"
         @cost_categorization = FactoryGirl.create :input_budget_split,
           :percentage => 100, :activity => @activity, :code => @code1
         @budget_purpose = FactoryGirl.create :budget_purpose, :percentage => 100,
@@ -38,9 +38,9 @@ describe Reports::Detailed::DynamicQuery do
           :percentage => 100, :activity => @activity, :code => @code1
 
         #creating dummy tree
-        @mtef.move_to_child_of(@root_code)
-        @nsp.move_to_child_of(@mtef)
-        @code1.move_to_child_of(@nsp)
+        @purpose1.move_to_child_of(@root_code)
+        @purpose2.move_to_child_of(@purpose1)
+        @code1.move_to_child_of(@purpose2)
         @activity.reload;@activity.save
       end
 
@@ -73,8 +73,8 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Input'].should == @cost_categorization.code.short_display
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 100.0
-        table[0]['MTEF Code'].should == "sub_prog_name"
-        table[0]['NSP Code'].should == "Nsp_code"
+        table[0]['MTEF Code'].should == "N/A"
+        table[0]['NSP Code'].should == "N/A"
         table[0]['Location Split Total %'].should == 100.0
         table[0]['Location Split %'].should == 100.0
         table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
@@ -98,8 +98,8 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Input'].should == @cost_categorization.code.short_display
         table[0]['Purpose Split Total %'].should == 66.67
         table[0]['Purpose Split %'].should == 100.0
-        table[0]['MTEF Code'].should == "sub_prog_name"
-        table[0]['NSP Code'].should == "Nsp_code"
+        table[0]['MTEF Code'].should == "N/A"
+        table[0]['NSP Code'].should == "N/A"
         table[0]['Location Split Total %'].should == 66.67
         table[0]['Location Split %'].should == 100.0
         table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
@@ -116,8 +116,8 @@ describe Reports::Detailed::DynamicQuery do
         table[1]['Input'].should == @cost_categorization.code.short_display
         table[1]['Purpose Split Total %'].should == 33.33
         table[1]['Purpose Split %'].should == 100.0
-        table[1]['MTEF Code'].should == "sub_prog_name"
-        table[1]['NSP Code'].should == 'Nsp_code'
+        table[1]['MTEF Code'].should == "N/A"
+        table[1]['NSP Code'].should == 'N/A'
         table[1]['Location Split Total %'].should == 33.33
         table[1]['Location Split %'].should == 100.0
         table[1]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
@@ -141,8 +141,8 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Input'].should == @cost_categorization.code.short_display
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 100.0
-        table[0]['MTEF Code'].should == "sub_prog_name"
-        table[0]['NSP Code'].should == "Nsp_code"
+        table[0]['MTEF Code'].should == "N/A"
+        table[0]['NSP Code'].should == "N/A"
         table[0]['Location Split Total %'].should == 100.0
         table[0]['Location Split %'].should == 100.0
         table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
@@ -159,8 +159,8 @@ describe Reports::Detailed::DynamicQuery do
         table[1]['Input'].should == @cost_categorization.code.short_display
         table[1]['Purpose Split Total %'].should == 100.0
         table[1]['Purpose Split %'].should == 100.0
-        table[1]['MTEF Code'].should == "sub_prog_name"
-        table[1]['NSP Code'].should == "Nsp_code"
+        table[1]['MTEF Code'].should == "N/A"
+        table[1]['NSP Code'].should == "N/A"
         table[1]['Location Split Total %'].should == 100.0
         table[1]['Location Split %'].should == 100.0
         table[1]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
@@ -185,11 +185,11 @@ describe Reports::Detailed::DynamicQuery do
           :data_response => @response, :description => "desc"
         @is = FactoryGirl.create :implementer_split, :activity => @activity,
           :organization => @organization, :budget => 100
-        @mtef = FactoryGirl.create :purpose, :short_display => "sub_prog_name"
+        @purpose1 = FactoryGirl.create :purpose, :short_display => "Mtef Purpose"
 
         #creating dummy tree
-        @mtef.move_to_child_of(@root_code)
-        @code1.move_to_child_of(@mtef)
+        @purpose1.move_to_child_of(@root_code)
+        @code1.move_to_child_of(@purpose1)
         @activity.reload;@activity.save
       end
 
@@ -213,7 +213,7 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Input'].should == @cost_categorization.code.short_display
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 100.0
-        table[0]['MTEF Code'].should == "sub_prog_name"
+        table[0]['MTEF Code'].should == "N/A"
         table[0]['NSP Code'].should == "N/A"
         table[0]['Location Split Total %'].should == 100.0
         table[0]['Location Split %'].should == 100.0
@@ -231,7 +231,7 @@ describe Reports::Detailed::DynamicQuery do
         table[1]['Input'].should == @cost_categorization.code.short_display
         table[1]['Purpose Split Total %'].should == 100.0
         table[1]['Purpose Split %'].should == 100.0
-        table[1]['MTEF Code'].should == "sub_prog_name"
+        table[1]['MTEF Code'].should == "N/A"
         table[1]['NSP Code'].should == "N/A"
         table[1]['Location Split Total %'].should == 100.0
         table[1]['Location Split %'].should == 100.0
@@ -260,7 +260,7 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Input'].should == @cost_categorization.code.short_display
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 80.0
-        table[0]['MTEF Code'].should == "sub_prog_name"
+        table[0]['MTEF Code'].should == "N/A"
         table[0]['NSP Code'].should == "N/A"
         table[0]['Location Split Total %'].should == 100.0
         table[0]['Location Split %'].should == 100.0
@@ -278,7 +278,7 @@ describe Reports::Detailed::DynamicQuery do
         table[1]['Input'].should == @cost_categorization.code.short_display
         table[1]['Purpose Split Total %'].should == 100.0
         table[1]['Purpose Split %'].should == 20.0
-        table[1]['MTEF Code'].should == "sub_prog_name"
+        table[1]['MTEF Code'].should == "N/A"
         table[1]['NSP Code'].should == "N/A"
         table[1]['Location Split Total %'].should == 100.0
         table[1]['Location Split %'].should == 100.0
@@ -307,7 +307,7 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Input'].should == @cost_categorization.code.short_display
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 100.0
-        table[0]['MTEF Code'].should == "sub_prog_name"
+        table[0]['MTEF Code'].should == "N/A"
         table[0]['NSP Code'].should == "N/A"
         table[0]['Location Split Total %'].should == 100.0
         table[0]['Location Split %'].should == 70.0
@@ -325,7 +325,7 @@ describe Reports::Detailed::DynamicQuery do
         table[1]['Input'].should == @cost_categorization.code.short_display
         table[1]['Purpose Split Total %'].should == 100.0
         table[1]['Purpose Split %'].should == 100.0
-        table[1]['MTEF Code'].should == "sub_prog_name"
+        table[1]['MTEF Code'].should == "N/A"
         table[1]['NSP Code'].should == "N/A"
         table[1]['Location Split Total %'].should == 100.0
         table[1]['Location Split %'].should == 30.0
@@ -359,7 +359,7 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Input'].should == @cost_categorization.code.short_display
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 80.0
-        table[0]['MTEF Code'].should == "sub_prog_name"
+        table[0]['MTEF Code'].should == "N/A"
         table[0]['NSP Code'].should == "N/A"
         table[0]['Location Split Total %'].should == 100.0
         table[0]['Location Split %'].should == 70.0
@@ -377,7 +377,7 @@ describe Reports::Detailed::DynamicQuery do
         table[1]['Input'].should == @cost_categorization.code.short_display
         table[1]['Purpose Split Total %'].should == 100.0
         table[1]['Purpose Split %'].should == 80.0
-        table[1]['MTEF Code'].should == "sub_prog_name"
+        table[1]['MTEF Code'].should == "N/A"
         table[1]['NSP Code'].should == "N/A"
         table[1]['Location Split Total %'].should == 100.0
         table[1]['Location Split %'].should == 30.0
@@ -395,7 +395,7 @@ describe Reports::Detailed::DynamicQuery do
         table[2]['Input'].should == @cost_categorization.code.short_display
         table[2]['Purpose Split Total %'].should == 100.0
         table[2]['Purpose Split %'].should == 20.0
-        table[2]['MTEF Code'].should == "sub_prog_name"
+        table[2]['MTEF Code'].should == "N/A"
         table[2]['NSP Code'].should == "N/A"
         table[2]['Location Split Total %'].should == 100.0
         table[2]['Location Split %'].should == 70.0
@@ -413,7 +413,7 @@ describe Reports::Detailed::DynamicQuery do
         table[3]['Input'].should == @cost_categorization.code.short_display
         table[3]['Purpose Split Total %'].should == 100.0
         table[3]['Purpose Split %'].should == 20.0
-        table[3]['MTEF Code'].should == "sub_prog_name"
+        table[3]['MTEF Code'].should == "N/A"
         table[3]['NSP Code'].should == "N/A"
         table[3]['Location Split Total %'].should == 100.0
         table[3]['Location Split %'].should == 30.0
@@ -431,7 +431,7 @@ describe Reports::Detailed::DynamicQuery do
         table[4]['Input'].should == @cost_categorization.code.short_display
         table[4]['Purpose Split Total %'].should == 100.0
         table[4]['Purpose Split %'].should == 80.0
-        table[4]['MTEF Code'].should == "sub_prog_name"
+        table[4]['MTEF Code'].should == "N/A"
         table[4]['NSP Code'].should == "N/A"
         table[4]['Location Split Total %'].should == 100.0
         table[4]['Location Split %'].should == 70.0
@@ -449,7 +449,7 @@ describe Reports::Detailed::DynamicQuery do
         table[5]['Input'].should == @cost_categorization.code.short_display
         table[5]['Purpose Split Total %'].should == 100.0
         table[5]['Purpose Split %'].should == 80.0
-        table[5]['MTEF Code'].should == "sub_prog_name"
+        table[5]['MTEF Code'].should == "N/A"
         table[5]['NSP Code'].should == "N/A"
         table[5]['Location Split Total %'].should == 100.0
         table[5]['Location Split %'].should == 30.0
@@ -467,7 +467,7 @@ describe Reports::Detailed::DynamicQuery do
         table[6]['Input'].should == @cost_categorization.code.short_display
         table[6]['Purpose Split Total %'].should == 100.0
         table[6]['Purpose Split %'].should == 20.0
-        table[6]['MTEF Code'].should == "sub_prog_name"
+        table[6]['MTEF Code'].should == "N/A"
         table[6]['NSP Code'].should == "N/A"
         table[6]['Location Split Total %'].should == 100.0
         table[6]['Location Split %'].should == 70.0
@@ -485,7 +485,7 @@ describe Reports::Detailed::DynamicQuery do
         table[7]['Input'].should == @cost_categorization.code.short_display
         table[7]['Purpose Split Total %'].should == 100.0
         table[7]['Purpose Split %'].should == 20.0
-        table[7]['MTEF Code'].should == "sub_prog_name"
+        table[7]['MTEF Code'].should == "N/A"
         table[7]['NSP Code'].should == "N/A"
         table[7]['Location Split Total %'].should == 100.0
         table[7]['Location Split %'].should == 30.0
@@ -523,7 +523,7 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Input'].should == @cost_categorization.code.short_display
         table[0]['Purpose Split Total %'].should == 66.67
         table[0]['Purpose Split %'].should == 80.0
-        table[0]['MTEF Code'].should == "sub_prog_name"
+        table[0]['MTEF Code'].should == "N/A"
         table[0]['NSP Code'].should == "N/A"
         table[0]['Location Split Total %'].should == 66.67
         table[0]['Location Split %'].should == 70.0
@@ -541,7 +541,7 @@ describe Reports::Detailed::DynamicQuery do
         table[1]['Input'].should == @cost_categorization.code.short_display
         table[1]['Purpose Split Total %'].should == 66.67
         table[1]['Purpose Split %'].should == 80.0
-        table[1]['MTEF Code'].should == "sub_prog_name"
+        table[1]['MTEF Code'].should == "N/A"
         table[1]['NSP Code'].should == "N/A"
         table[1]['Location Split Total %'].should == 66.67
         table[1]['Location Split %'].should == 30.0
@@ -559,7 +559,7 @@ describe Reports::Detailed::DynamicQuery do
         table[2]['Input'].should == @cost_categorization.code.short_display
         table[2]['Purpose Split Total %'].should == 66.67
         table[2]['Purpose Split %'].should == 20.0
-        table[2]['MTEF Code'].should == "sub_prog_name"
+        table[2]['MTEF Code'].should == "N/A"
         table[2]['NSP Code'].should == "N/A"
         table[2]['Location Split Total %'].should == 66.67
         table[2]['Location Split %'].should == 70.0
@@ -577,7 +577,7 @@ describe Reports::Detailed::DynamicQuery do
         table[3]['Input'].should == @cost_categorization.code.short_display
         table[3]['Purpose Split Total %'].should == 66.67
         table[3]['Purpose Split %'].should == 20.0
-        table[3]['MTEF Code'].should == "sub_prog_name"
+        table[3]['MTEF Code'].should == "N/A"
         table[3]['NSP Code'].should == "N/A"
         table[3]['Location Split Total %'].should == 66.67
         table[3]['Location Split %'].should == 30.0
@@ -595,7 +595,7 @@ describe Reports::Detailed::DynamicQuery do
         table[4]['Input'].should == @cost_categorization.code.short_display
         table[4]['Purpose Split Total %'].should == 66.67
         table[4]['Purpose Split %'].should == 80.0
-        table[4]['MTEF Code'].should == "sub_prog_name"
+        table[4]['MTEF Code'].should == "N/A"
         table[4]['NSP Code'].should == "N/A"
         table[4]['Location Split Total %'].should == 66.67
         table[4]['Location Split %'].should == 70.0
@@ -613,7 +613,7 @@ describe Reports::Detailed::DynamicQuery do
         table[5]['Input'].should == @cost_categorization.code.short_display
         table[5]['Purpose Split Total %'].should == 66.67
         table[5]['Purpose Split %'].should == 80.0
-        table[5]['MTEF Code'].should == "sub_prog_name"
+        table[5]['MTEF Code'].should == "N/A"
         table[5]['NSP Code'].should == "N/A"
         table[5]['Location Split Total %'].should == 66.67
         table[5]['Location Split %'].should == 30.0
@@ -631,7 +631,7 @@ describe Reports::Detailed::DynamicQuery do
         table[6]['Input'].should == @cost_categorization.code.short_display
         table[6]['Purpose Split Total %'].should == 66.67
         table[6]['Purpose Split %'].should == 20.0
-        table[6]['MTEF Code'].should == "sub_prog_name"
+        table[6]['MTEF Code'].should == "N/A"
         table[6]['NSP Code'].should == "N/A"
         table[6]['Location Split Total %'].should == 66.67
         table[6]['Location Split %'].should == 70.0
@@ -649,7 +649,7 @@ describe Reports::Detailed::DynamicQuery do
         table[7]['Input'].should == @cost_categorization.code.short_display
         table[7]['Purpose Split Total %'].should == 66.67
         table[7]['Purpose Split %'].should == 20.0
-        table[7]['MTEF Code'].should == "sub_prog_name"
+        table[7]['MTEF Code'].should == "N/A"
         table[7]['NSP Code'].should == "N/A"
         table[7]['Location Split Total %'].should == 66.67
         table[7]['Location Split %'].should == 30.0
@@ -667,7 +667,7 @@ describe Reports::Detailed::DynamicQuery do
         table[8]['Input'].should == @cost_categorization.code.short_display
         table[8]['Purpose Split Total %'].should == 33.33
         table[8]['Purpose Split %'].should == 80.0
-        table[8]['MTEF Code'].should == "sub_prog_name"
+        table[8]['MTEF Code'].should == "N/A"
         table[8]['NSP Code'].should == "N/A"
         table[8]['Location Split Total %'].should == 33.33
         table[8]['Location Split %'].should == 70.0
@@ -685,7 +685,7 @@ describe Reports::Detailed::DynamicQuery do
         table[9]['Input'].should == @cost_categorization.code.short_display
         table[9]['Purpose Split Total %'].should == 33.33
         table[9]['Purpose Split %'].should == 80.0
-        table[9]['MTEF Code'].should == "sub_prog_name"
+        table[9]['MTEF Code'].should == "N/A"
         table[9]['NSP Code'].should == "N/A"
         table[9]['Location Split Total %'].should == 33.33
         table[9]['Location Split %'].should == 30.0
@@ -703,7 +703,7 @@ describe Reports::Detailed::DynamicQuery do
         table[10]['Input'].should == @cost_categorization.code.short_display
         table[10]['Purpose Split Total %'].should == 33.33
         table[10]['Purpose Split %'].should == 20.0
-        table[10]['MTEF Code'].should == "sub_prog_name"
+        table[10]['MTEF Code'].should == "N/A"
         table[10]['NSP Code'].should == "N/A"
         table[10]['Location Split Total %'].should == 33.33
         table[10]['Location Split %'].should == 70.0
@@ -721,7 +721,7 @@ describe Reports::Detailed::DynamicQuery do
         table[11]['Input'].should == @cost_categorization.code.short_display
         table[11]['Purpose Split Total %'].should == 33.33
         table[11]['Purpose Split %'].should == 20.0
-        table[11]['MTEF Code'].should == "sub_prog_name"
+        table[11]['MTEF Code'].should == "N/A"
         table[11]['NSP Code'].should == "N/A"
         table[11]['Location Split Total %'].should == 33.33
         table[11]['Location Split %'].should == 30.0
@@ -739,7 +739,7 @@ describe Reports::Detailed::DynamicQuery do
         table[12]['Input'].should == @cost_categorization.code.short_display
         table[12]['Purpose Split Total %'].should == 33.33
         table[12]['Purpose Split %'].should == 80.0
-        table[12]['MTEF Code'].should == "sub_prog_name"
+        table[12]['MTEF Code'].should == "N/A"
         table[12]['NSP Code'].should == "N/A"
         table[12]['Location Split Total %'].should == 33.33
         table[12]['Location Split %'].should == 70.0
@@ -757,7 +757,7 @@ describe Reports::Detailed::DynamicQuery do
         table[13]['Input'].should == @cost_categorization.code.short_display
         table[13]['Purpose Split Total %'].should == 33.33
         table[13]['Purpose Split %'].should == 80.0
-        table[13]['MTEF Code'].should == "sub_prog_name"
+        table[13]['MTEF Code'].should == "N/A"
         table[13]['NSP Code'].should == "N/A"
         table[13]['Location Split Total %'].should == 33.33
         table[13]['Location Split %'].should == 30.0
@@ -775,7 +775,7 @@ describe Reports::Detailed::DynamicQuery do
         table[14]['Input'].should == @cost_categorization.code.short_display
         table[14]['Purpose Split Total %'].should == 33.33
         table[14]['Purpose Split %'].should == 20.0
-        table[14]['MTEF Code'].should == "sub_prog_name"
+        table[14]['MTEF Code'].should == "N/A"
         table[14]['NSP Code'].should == "N/A"
         table[14]['Location Split Total %'].should == 33.33
         table[14]['Location Split %'].should == 70.0
@@ -793,7 +793,7 @@ describe Reports::Detailed::DynamicQuery do
         table[15]['Input'].should == @cost_categorization.code.short_display
         table[15]['Purpose Split Total %'].should == 33.33
         table[15]['Purpose Split %'].should == 20.0
-        table[15]['MTEF Code'].should == "sub_prog_name"
+        table[15]['MTEF Code'].should == "N/A"
         table[15]['NSP Code'].should == "N/A"
         table[15]['Location Split Total %'].should == 33.33
         table[15]['Location Split %'].should == 30.0
@@ -819,11 +819,11 @@ describe Reports::Detailed::DynamicQuery do
           :data_response => @response, :description => "desc"
         @is = FactoryGirl.create :implementer_split, :activity => @activity,
           :organization => @organization, :budget => 100
-        @mtef = FactoryGirl.create :purpose, :short_display => "sub_prog_name"
+        @purpose1 = FactoryGirl.create :purpose, :short_display => "Mtef Purpose"
 
         #creating dummy tree
-        @mtef.move_to_child_of(@root_code)
-        @code1.move_to_child_of(@mtef)
+        @purpose1.move_to_child_of(@root_code)
+        @code1.move_to_child_of(@purpose1)
         @activity.reload;@activity.save
       end
 
@@ -852,7 +852,7 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Input'].should == 'N/A'
         table[0]['Purpose Split Total %'].should == 66.67
         table[0]['Purpose Split %'].should == 80.0
-        table[0]['MTEF Code'].should == "sub_prog_name"
+        table[0]['MTEF Code'].should == "N/A"
         table[0]['NSP Code'].should == "N/A"
         table[0]['Location Split Total %'].should == 66.67
         table[0]['Location Split %'].should == 70.0
@@ -870,7 +870,7 @@ describe Reports::Detailed::DynamicQuery do
         table[1]['Input'].should == 'N/A'
         table[1]['Purpose Split Total %'].should == 66.67
         table[1]['Purpose Split %'].should == 80.0
-        table[1]['MTEF Code'].should == "sub_prog_name"
+        table[1]['MTEF Code'].should == "N/A"
         table[1]['NSP Code'].should == "N/A"
         table[1]['Location Split Total %'].should == 66.67
         table[1]['Location Split %'].should == 30.0
@@ -888,7 +888,7 @@ describe Reports::Detailed::DynamicQuery do
         table[2]['Input'].should == 'N/A'
         table[2]['Purpose Split Total %'].should == 66.67
         table[2]['Purpose Split %'].should == 20.0
-        table[2]['MTEF Code'].should == "sub_prog_name"
+        table[2]['MTEF Code'].should == "N/A"
         table[2]['NSP Code'].should == "N/A"
         table[2]['Location Split Total %'].should == 66.67
         table[2]['Location Split %'].should == 70.0
@@ -906,7 +906,7 @@ describe Reports::Detailed::DynamicQuery do
         table[3]['Input'].should == 'N/A'
         table[3]['Purpose Split Total %'].should == 66.67
         table[3]['Purpose Split %'].should == 20.0
-        table[3]['MTEF Code'].should == "sub_prog_name"
+        table[3]['MTEF Code'].should == "N/A"
         table[3]['NSP Code'].should == "N/A"
         table[3]['Location Split Total %'].should == 66.67
         table[3]['Location Split %'].should == 30.0
@@ -924,7 +924,7 @@ describe Reports::Detailed::DynamicQuery do
         table[4]['Input'].should == 'N/A'
         table[4]['Purpose Split Total %'].should == 33.33
         table[4]['Purpose Split %'].should == 80.0
-        table[4]['MTEF Code'].should == "sub_prog_name"
+        table[4]['MTEF Code'].should == "N/A"
         table[4]['NSP Code'].should == "N/A"
         table[4]['Location Split Total %'].should == 33.33
         table[4]['Location Split %'].should == 70.0
@@ -942,7 +942,7 @@ describe Reports::Detailed::DynamicQuery do
         table[5]['Input'].should == 'N/A'
         table[5]['Purpose Split Total %'].should == 33.33
         table[5]['Purpose Split %'].should == 80.0
-        table[5]['MTEF Code'].should == "sub_prog_name"
+        table[5]['MTEF Code'].should == "N/A"
         table[5]['NSP Code'].should == "N/A"
         table[5]['Location Split Total %'].should == 33.33
         table[5]['Location Split %'].should == 30.0
@@ -960,7 +960,7 @@ describe Reports::Detailed::DynamicQuery do
         table[6]['Input'].should == 'N/A'
         table[6]['Purpose Split Total %'].should == 33.33
         table[6]['Purpose Split %'].should == 20.0
-        table[6]['MTEF Code'].should == "sub_prog_name"
+        table[6]['MTEF Code'].should == "N/A"
         table[6]['NSP Code'].should == "N/A"
         table[6]['Location Split Total %'].should == 33.33
         table[6]['Location Split %'].should == 70.0
@@ -978,7 +978,7 @@ describe Reports::Detailed::DynamicQuery do
         table[7]['Input'].should == 'N/A'
         table[7]['Purpose Split Total %'].should == 33.33
         table[7]['Purpose Split %'].should == 20.0
-        table[7]['MTEF Code'].should == "sub_prog_name"
+        table[7]['MTEF Code'].should == "N/A"
         table[7]['NSP Code'].should == "N/A"
         table[7]['Location Split Total %'].should == 33.33
         table[7]['Location Split %'].should == 30.0
@@ -1038,7 +1038,7 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Input'].should == @cost_categorization.code.short_display
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 100.0
-        table[0]['MTEF Code'].should == "sub_prog_name"
+        table[0]['MTEF Code'].should == "N/A"
         table[0]['NSP Code'].should == "N/A"
         table[0]['Location Split Total %'].should == 'N/A'
         table[0]['Location Split %'].should == 'N/A'
@@ -1063,11 +1063,11 @@ describe Reports::Detailed::DynamicQuery do
           :data_response => @response, :description => "desc"
         @is = FactoryGirl.create :implementer_split, :activity => @activity,
           :organization => @organization, :budget => 100
-        @mtef = FactoryGirl.create :purpose, :short_display => "sub_prog_name"
+        @purpose1 = FactoryGirl.create :purpose, :short_display => "Mtef Purpose"
 
         #creating dummy tree
-        @mtef.move_to_child_of(@root_code)
-        @code1.move_to_child_of(@mtef)
+        @purpose1.move_to_child_of(@root_code)
+        @code1.move_to_child_of(@purpose1)
         @activity.reload;@activity.save
       end
 
@@ -1105,7 +1105,7 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Input'].should == @cost_categorization.code.short_display
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 80.0
-        table[0]['MTEF Code'].should == "sub_prog_name"
+        table[0]['MTEF Code'].should == "N/A"
         table[0]['NSP Code'].should == "N/A"
         table[0]['Location Split Total %'].should == 100.0
         table[0]['Location Split %'].should == 70.0
@@ -1123,7 +1123,7 @@ describe Reports::Detailed::DynamicQuery do
         table[1]['Input'].should == @cost_categorization.code.short_display
         table[1]['Purpose Split Total %'].should == 100.0
         table[1]['Purpose Split %'].should == 80.0
-        table[1]['MTEF Code'].should == "sub_prog_name"
+        table[1]['MTEF Code'].should == "N/A"
         table[1]['NSP Code'].should == "N/A"
         table[1]['Location Split Total %'].should == 100.0
         table[1]['Location Split %'].should == 30.0
@@ -1141,7 +1141,7 @@ describe Reports::Detailed::DynamicQuery do
         table[2]['Input'].should == @cost_categorization.code.short_display
         table[2]['Purpose Split Total %'].should == 100.0
         table[2]['Purpose Split %'].should == 20.0
-        table[2]['MTEF Code'].should == "sub_prog_name"
+        table[2]['MTEF Code'].should == "N/A"
         table[2]['NSP Code'].should == "N/A"
         table[2]['Location Split Total %'].should == 100.0
         table[2]['Location Split %'].should == 70.0
@@ -1159,7 +1159,7 @@ describe Reports::Detailed::DynamicQuery do
         table[3]['Input'].should == @cost_categorization.code.short_display
         table[3]['Purpose Split Total %'].should == 100.0
         table[3]['Purpose Split %'].should == 20.0
-        table[3]['MTEF Code'].should == "sub_prog_name"
+        table[3]['MTEF Code'].should == "N/A"
         table[3]['NSP Code'].should == "N/A"
         table[3]['Location Split Total %'].should == 100.0
         table[3]['Location Split %'].should == 30.0
@@ -1177,7 +1177,7 @@ describe Reports::Detailed::DynamicQuery do
         table[4]['Input'].should == @cost_categorization.code.short_display
         table[4]['Purpose Split Total %'].should == 100.0
         table[4]['Purpose Split %'].should == 80.0
-        table[4]['MTEF Code'].should == "sub_prog_name"
+        table[4]['MTEF Code'].should == "N/A"
         table[4]['NSP Code'].should == "N/A"
         table[4]['Location Split Total %'].should == 100.0
         table[4]['Location Split %'].should == 70.0
@@ -1195,7 +1195,7 @@ describe Reports::Detailed::DynamicQuery do
         table[5]['Input'].should == @cost_categorization.code.short_display
         table[5]['Purpose Split Total %'].should == 100.0
         table[5]['Purpose Split %'].should == 80.0
-        table[5]['MTEF Code'].should == "sub_prog_name"
+        table[5]['MTEF Code'].should == "N/A"
         table[5]['NSP Code'].should == "N/A"
         table[5]['Location Split Total %'].should == 100.0
         table[5]['Location Split %'].should == 30.0
@@ -1213,7 +1213,7 @@ describe Reports::Detailed::DynamicQuery do
         table[6]['Input'].should == @cost_categorization.code.short_display
         table[6]['Purpose Split Total %'].should == 100.0
         table[6]['Purpose Split %'].should == 20.0
-        table[6]['MTEF Code'].should == "sub_prog_name"
+        table[6]['MTEF Code'].should == "N/A"
         table[6]['NSP Code'].should == "N/A"
         table[6]['Location Split Total %'].should == 100.0
         table[6]['Location Split %'].should == 70.0
@@ -1231,7 +1231,7 @@ describe Reports::Detailed::DynamicQuery do
         table[7]['Input'].should == @cost_categorization.code.short_display
         table[7]['Purpose Split Total %'].should == 100.0
         table[7]['Purpose Split %'].should == 20.0
-        table[7]['MTEF Code'].should == "sub_prog_name"
+        table[7]['MTEF Code'].should == "N/A"
         table[7]['NSP Code'].should == "N/A"
         table[7]['Location Split Total %'].should == 100.0
         table[7]['Location Split %'].should == 30.0
@@ -1261,13 +1261,13 @@ describe Reports::Detailed::DynamicQuery do
           :currency => 'RWF'
         @root_code = FactoryGirl.create :code
         @code1 = FactoryGirl.create :code, :official_name => "root"
-        @mtef = FactoryGirl.create :purpose, :short_display => "sub_prog_name"
-        @nsp = FactoryGirl.create :nsp_code, :short_display => "Nsp_code"
+        @purpose1 = FactoryGirl.create :purpose, :short_display => "Mtef Purpose"
+        @purpose2 = FactoryGirl.create :purpose, :short_display => "Nsp Purpose"
 
         #creating dummy tree
-        @mtef.move_to_child_of(@root_code)
-        @nsp.move_to_child_of(@mtef)
-        @code1.move_to_child_of(@nsp)
+        @purpose1.move_to_child_of(@root_code)
+        @purpose2.move_to_child_of(@purpose1)
+        @code1.move_to_child_of(@purpose2)
       end
 
       it "should convert amounts to USD" do
@@ -1294,8 +1294,8 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Input'].should == @cost_categorization.code.short_display
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 100.0
-        table[0]['MTEF Code'].should == "sub_prog_name"
-        table[0]['NSP Code'].should == "Nsp_code"
+        table[0]['MTEF Code'].should == "N/A"
+        table[0]['NSP Code'].should == "N/A"
         table[0]['Location Split Total %'].should == 100.0
         table[0]['Location Split %'].should == 100.0
         table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
@@ -1326,8 +1326,8 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Input'].should == @cost_categorization.code.short_display
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 100.0
-        table[0]['MTEF Code'].should == "sub_prog_name"
-        table[0]['NSP Code'].should == "Nsp_code"
+        table[0]['MTEF Code'].should == "N/A"
+        table[0]['NSP Code'].should == "N/A"
         table[0]['Location Split Total %'].should == 100.0
         table[0]['Location Split %'].should == 100.0
         table[0]['Name of District'].should == @other_cost.locations.map(&:short_display).join(",")
@@ -1352,14 +1352,14 @@ describe Reports::Detailed::DynamicQuery do
         @is = FactoryGirl.create :implementer_split, :activity => @activity,
           :organization => @organization, :budget => 100
         @root_code = FactoryGirl.create :code
-        @mtef = FactoryGirl.create :purpose, :short_display => "sub_prog_name"
+        @purpose1 = FactoryGirl.create :purpose, :short_display => "Mtef Purpose"
         @code1 = FactoryGirl.create :code, :official_name => "root"
-        @nsp = FactoryGirl.create :nsp_code, :short_display => "Nsp_code"
+        @purpose2 = FactoryGirl.create :purpose, :short_display => "Nsp Purpose"
 
         #creating dummy tree
-        @mtef.move_to_child_of(@root_code)
-        @nsp.move_to_child_of(@mtef)
-        @code1.move_to_child_of(@nsp)
+        @purpose1.move_to_child_of(@root_code)
+        @purpose2.move_to_child_of(@purpose1)
+        @code1.move_to_child_of(@purpose2)
         @activity.reload;@activity.save
       end
 
@@ -1382,8 +1382,8 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Input'].should == @cost_categorization.code.short_display
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 90.0
-        table[0]['MTEF Code'].should == "sub_prog_name"
-        table[0]['NSP Code'].should == "Nsp_code"
+        table[0]['MTEF Code'].should == "N/A"
+        table[0]['NSP Code'].should == "N/A"
         table[0]['Location Split Total %'].should == 100.0
         table[0]['Location Split %'].should == 100.0
         table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
@@ -1428,8 +1428,8 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Input'].should == @cost_categorization.code.short_display
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 100.0
-        table[0]['MTEF Code'].should == "sub_prog_name"
-        table[0]['NSP Code'].should == "Nsp_code"
+        table[0]['MTEF Code'].should == "N/A"
+        table[0]['NSP Code'].should == "N/A"
         table[0]['Location Split Total %'].should == 100.0
         table[0]['Location Split %'].should == 100.0
         table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
@@ -1446,8 +1446,8 @@ describe Reports::Detailed::DynamicQuery do
         table[1]['Input'].should == "Not Classified"
         table[1]['Purpose Split Total %'].should == 100.0
         table[1]['Purpose Split %'].should == 100.0
-        table[1]['MTEF Code'].should == "sub_prog_name"
-        table[1]['NSP Code'].should == "Nsp_code"
+        table[1]['MTEF Code'].should == "N/A"
+        table[1]['NSP Code'].should == "N/A"
         table[1]['Location Split Total %'].should == 100.0
         table[1]['Location Split %'].should == 100.0
         table[1]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
@@ -1474,8 +1474,8 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Input'].should == @cost_categorization.code.short_display
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 100.0
-        table[0]['MTEF Code'].should == "sub_prog_name"
-        table[0]['NSP Code'].should == "Nsp_code"
+        table[0]['MTEF Code'].should == "N/A"
+        table[0]['NSP Code'].should == "N/A"
         table[0]['Location Split Total %'].should == 100.0
         table[0]['Location Split %'].should == 85.0
         table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
@@ -1492,8 +1492,8 @@ describe Reports::Detailed::DynamicQuery do
         table[1]['Input'].should == @cost_categorization.code.short_display
         table[1]['Purpose Split Total %'].should == 100.0
         table[1]['Purpose Split %'].should == 100.0
-        table[1]['MTEF Code'].should == "sub_prog_name"
-        table[1]['NSP Code'].should == "Nsp_code"
+        table[1]['MTEF Code'].should == "N/A"
+        table[1]['NSP Code'].should == "N/A"
         table[1]['Location Split Total %'].should == 100.0
         table[1]['Location Split %'].should == 15.0
         table[1]['Name of District'].should == "Not Classified"
@@ -1521,8 +1521,8 @@ describe Reports::Detailed::DynamicQuery do
           table[0]['Input'].should == @cost_categorization.code.short_display
           table[0]['Purpose Split Total %'].should == 100.0
           table[0]['Purpose Split %'].should == 100.0
-          table[0]['MTEF Code'].should == "sub_prog_name"
-          table[0]['NSP Code'].should == "Nsp_code"
+          table[0]['MTEF Code'].should == "N/A"
+          table[0]['NSP Code'].should == "N/A"
           table[0]['Location Split Total %'].should == 100.0
           table[0]['Location Split %'].should == 100.0
           table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
@@ -1550,8 +1550,8 @@ describe Reports::Detailed::DynamicQuery do
           :data_response => @response, :description => "desc"
         @is = FactoryGirl.create :implementer_split, :activity => @activity,
           :organization => @organization, :budget => 100
-        @mtef = FactoryGirl.create :purpose, :short_display => "sub_prog_name"
-        @nsp = FactoryGirl.create :nsp_code, :short_display => "Nsp_code"
+        @purpose1 = FactoryGirl.create :purpose, :short_display => "Mtef Purpose"
+        @purpose2 = FactoryGirl.create :purpose, :short_display => "Nsp Purpose"
         @cost_categorization = FactoryGirl.create :input_budget_split,
           :percentage => 100, :activity => @activity, :code => @code1
         @budget_purpose = FactoryGirl.create :budget_purpose, :percentage => 100,
@@ -1560,9 +1560,9 @@ describe Reports::Detailed::DynamicQuery do
           :percentage => 100, :activity => @activity, :code => @code1
 
         #creating dummy tree
-        @mtef.move_to_child_of(@root_code)
-        @nsp.move_to_child_of(@mtef)
-        @code1.move_to_child_of(@nsp)
+        @purpose1.move_to_child_of(@root_code)
+        @purpose2.move_to_child_of(@purpose1)
+        @code1.move_to_child_of(@purpose2)
         @activity.reload;@activity.save
       end
 
@@ -1578,8 +1578,8 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Input'].should == @cost_categorization.code.short_display
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 100.0
-        table[0]['MTEF Code'].should == "sub_prog_name"
-        table[0]['NSP Code'].should == "Nsp_code"
+        table[0]['MTEF Code'].should == "N/A"
+        table[0]['NSP Code'].should == "N/A"
         table[0]['Location Split Total %'].should == 100.0
         table[0]['Location Split %'].should == 100.0
         table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
@@ -1617,8 +1617,8 @@ describe Reports::Detailed::DynamicQuery do
           :data_response => @response, :description => "desc"
         @is = FactoryGirl.create :implementer_split, :activity => @activity,
           :organization => @organization, :spend => 100
-        @mtef = FactoryGirl.create :purpose, :short_display => "sub_prog_name"
-        @nsp = FactoryGirl.create :nsp_code, :short_display => "Nsp_code"
+        @purpose1 = FactoryGirl.create :purpose, :short_display => "Mtef Purpose"
+        @purpose2 = FactoryGirl.create :purpose, :short_display => "Nsp Purpose"
         @cost_categorization = FactoryGirl.create :input_spend_split,
           :percentage => 100, :activity => @activity, :code => @code1
         @spend_purpose = FactoryGirl.create :spend_purpose, :percentage => 100,
@@ -1627,9 +1627,9 @@ describe Reports::Detailed::DynamicQuery do
           :percentage => 100, :activity => @activity, :code => @code1
 
         #creating dummy tree
-        @mtef.move_to_child_of(@root_code)
-        @nsp.move_to_child_of(@mtef)
-        @code1.move_to_child_of(@nsp)
+        @purpose1.move_to_child_of(@root_code)
+        @purpose2.move_to_child_of(@purpose1)
+        @code1.move_to_child_of(@purpose2)
         @activity.reload;@activity.save
       end
 
@@ -1645,8 +1645,8 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Input'].should == @cost_categorization.code.short_display
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 100.0
-        table[0]['MTEF Code'].should == "sub_prog_name"
-        table[0]['NSP Code'].should == "Nsp_code"
+        table[0]['MTEF Code'].should == "N/A"
+        table[0]['NSP Code'].should == "N/A"
         table[0]['Location Split Total %'].should == 100.0
         table[0]['Location Split %'].should == 100.0
         table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")

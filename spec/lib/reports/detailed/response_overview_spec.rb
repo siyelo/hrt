@@ -58,8 +58,8 @@ describe Reports::Detailed::ResponseOverview do
       table[0]['Input'].should == @cost_categorization.code.short_display
       table[0]['Purpose Split Total %'].should == 100.0
       table[0]['Purpose Split %'].should == 100.0
-      table[0]['MTEF Code'].should == "purpose1"
-      table[0]['NSP Code'].should == "purpose2"
+      table[0]['MTEF Code'].should == "N/A"
+      table[0]['NSP Code'].should == "N/A"
       table[0]['Location Split Total %'].should == 100.0
       table[0]['Location Split %'].should == 100.0
       table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
