@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require 'spec_helper'
 
 describe Report do
   describe "Attributes" do
@@ -35,7 +35,7 @@ describe Report do
   describe "#generate_report" do
     before :each do
       purpose            = FactoryGirl.create(:purpose)
-      cost_category_code = FactoryGirl.create(:cost_category_code)
+      input              = FactoryGirl.create(:input)
       location           = FactoryGirl.create(:location)
       @request           = FactoryGirl.create :data_request
       @organization      = FactoryGirl.create(:organization)
@@ -51,7 +51,7 @@ describe Report do
       FactoryGirl.create(:location_budget_split, :activity => @activity,
               :percentage => 100, :code => location)
       FactoryGirl.create(:input_budget_split, :activity => @activity,
-              :percentage => 100, :code => cost_category_code)
+              :percentage => 100, :code => input)
     end
 
 

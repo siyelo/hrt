@@ -22,7 +22,7 @@ Feature: Reporter can enter a code breakdown for each activity
     Given a basic reporter setup
     Given a purpose "purpose1" exists with id: 1, short_display: "purpose1"
       And a purpose "purpose2" exists with id: 2, short_display: "purpose2"
-      And a cost_category_code exists with id: 3, short_display: "cost_category1"
+      And a input exists with id: 3, short_display: "cost_category1"
       And a project exists with name: "Project", data_response: the data_response
       And I am signed in as "reporter@hrtapp.com"
 

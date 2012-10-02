@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121001115530) do
+ActiveRecord::Schema.define(:version => 20121002083510) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -38,6 +38,16 @@ ActiveRecord::Schema.define(:version => 20121001115530) do
   create_table "activities_beneficiaries", :id => false, :force => true do |t|
     t.integer "activity_id"
     t.integer "beneficiary_id"
+  end
+
+  create_table "activities_locations", :id => false, :force => true do |t|
+    t.integer "activity_id"
+    t.integer "location_id"
+  end
+
+  create_table "activities_projects", :id => false, :force => true do |t|
+    t.integer "project_id"
+    t.integer "activity_id"
   end
 
   create_table "code_splits", :force => true do |t|
@@ -79,8 +89,8 @@ ActiveRecord::Schema.define(:version => 20121001115530) do
     t.integer  "commentable_id"
     t.string   "commentable_type"
     t.integer  "user_id"
-    t.datetime "created_at",                          :null => false
-    t.datetime "updated_at",                          :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "parent_id"
     t.boolean  "removed",          :default => false
   end
@@ -91,17 +101,27 @@ ActiveRecord::Schema.define(:version => 20121001115530) do
 
   create_table "currencies", :force => true do |t|
     t.float    "rate"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "from"
     t.string   "to"
   end
 
+  create_table "data_elements", :force => true do |t|
+    t.integer "data_response_id"
+    t.integer "data_elementable_id"
+    t.string  "data_elementable_type"
+  end
+
+  add_index "data_elements", ["data_elementable_id"], :name => "index_data_elements_on_data_elementable_id"
+  add_index "data_elements", ["data_elementable_type"], :name => "index_data_elements_on_data_elementable_type"
+  add_index "data_elements", ["data_response_id"], :name => "index_data_elements_on_data_response_id"
+
   create_table "data_requests", :force => true do |t|
     t.integer  "organization_id"
     t.string   "title"
-    t.datetime "created_at",            :null => false
-    t.datetime "updated_at",            :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.date     "start_date"
     t.integer  "locations_version"
     t.integer  "purposes_version"
@@ -111,8 +131,8 @@ ActiveRecord::Schema.define(:version => 20121001115530) do
 
   create_table "data_responses", :force => true do |t|
     t.integer  "data_request_id"
-    t.datetime "created_at",                                       :null => false
-    t.datetime "updated_at",                                       :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "organization_id"
     t.string   "state"
     t.integer  "projects_count",                    :default => 0
@@ -139,8 +159,8 @@ ActiveRecord::Schema.define(:version => 20121001115530) do
     t.datetime "locked_at"
     t.datetime "failed_at"
     t.string   "locked_by"
-    t.datetime "created_at",                :null => false
-    t.datetime "updated_at",                :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "queue"
   end
 
@@ -158,11 +178,20 @@ ActiveRecord::Schema.define(:version => 20121001115530) do
     t.text     "description"
   end
 
+  create_table "field_helps", :force => true do |t|
+    t.string   "attribute_name"
+    t.string   "short"
+    t.text     "long"
+    t.integer  "model_help_id"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
   create_table "funding_flows", :force => true do |t|
     t.integer  "organization_id_from"
     t.integer  "project_id"
-    t.datetime "created_at",                          :null => false
-    t.datetime "updated_at",                          :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.decimal  "budget"
     t.text     "organization_text"
     t.integer  "self_provider_flag",   :default => 0
@@ -177,21 +206,47 @@ ActiveRecord::Schema.define(:version => 20121001115530) do
   add_index "funding_flows", ["project_id"], :name => "index_funding_flows_on_project_id"
   add_index "funding_flows", ["self_provider_flag"], :name => "index_funding_flows_on_self_provider_flag"
 
+  create_table "help_requests", :force => true do |t|
+    t.string   "email"
+    t.text     "message"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "implementer_splits", :force => true do |t|
     t.integer  "activity_id"
     t.integer  "organization_id"
     t.decimal  "spend"
     t.decimal  "budget"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.boolean  "double_count"
     t.integer  "previous_id"
   end
 
+  create_table "locations_organizations", :id => false, :force => true do |t|
+    t.integer "location_id"
+    t.integer "organization_id"
+  end
+
+  create_table "locations_projects", :id => false, :force => true do |t|
+    t.integer "location_id"
+    t.integer "project_id"
+  end
+
+  create_table "model_helps", :force => true do |t|
+    t.string   "model_name"
+    t.string   "short"
+    t.text     "long"
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+    t.integer  "comments_count", :default => 0
+  end
+
   create_table "organizations", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at",                                          :null => false
-    t.datetime "updated_at",                                          :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "raw_type"
     t.string   "fosaid"
     t.integer  "users_count",                      :default => 0
@@ -215,8 +270,8 @@ ActiveRecord::Schema.define(:version => 20121001115530) do
   create_table "outputs", :force => true do |t|
     t.integer  "activity_id"
     t.string   "description"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "projects", :force => true do |t|
@@ -224,8 +279,8 @@ ActiveRecord::Schema.define(:version => 20121001115530) do
     t.text     "description"
     t.date     "start_date"
     t.date     "end_date"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "currency"
     t.integer  "data_response_id"
     t.string   "budget_type"
@@ -236,8 +291,8 @@ ActiveRecord::Schema.define(:version => 20121001115530) do
 
   create_table "reports", :force => true do |t|
     t.string   "key"
-    t.datetime "created_at",              :null => false
-    t.datetime "updated_at",              :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "attachment_file_name"
     t.string   "attachment_content_type"
     t.integer  "attachment_file_size"
@@ -265,16 +320,16 @@ ActiveRecord::Schema.define(:version => 20121001115530) do
   create_table "targets", :force => true do |t|
     t.integer  "activity_id"
     t.string   "description"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "users", :force => true do |t|
     t.string   "email"
     t.string   "encrypted_password"
     t.string   "password_salt"
-    t.datetime "created_at",                                :null => false
-    t.datetime "updated_at",                                :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "roles_mask"
     t.integer  "organization_id"
     t.text     "text_for_organization"
@@ -302,7 +357,6 @@ ActiveRecord::Schema.define(:version => 20121001115530) do
   end
 
   add_index "users", ["confirmation_token"], :name => "index_users_on_confirmation_token", :unique => true
-  add_index "users", ["email"], :name => "index_users_on_email"
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
 
 end

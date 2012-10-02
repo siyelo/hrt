@@ -10,8 +10,8 @@ describe Activity, "Classification" do
    ['purpose_spend_splits_valid?', PurposeSpendSplit, :spend, :purpose, 'purposes_classified?'],
    ['location_budget_splits_valid?', LocationBudgetSplit, :budget, :location, 'locations_classified?'],
    ['location_spend_splits_valid?', LocationSpendSplit, :spend,  :location, 'locations_classified?'],
-   ['input_budget_splits_valid?', InputBudgetSplit, :budget, :cost_category_code, 'inputs_classified?'],
-   ['input_spend_splits_valid?', InputSpendSplit, :spend,  :cost_category_code, 'inputs_classified?']
+   ['input_budget_splits_valid?', InputBudgetSplit, :budget, :input, 'inputs_classified?'],
+   ['input_spend_splits_valid?', InputSpendSplit, :spend,  :input, 'inputs_classified?']
    ].each do |valid_method, klass, amount_field, code_type, all_valid_method|
     describe "#{valid_method}" do
       before :each do
