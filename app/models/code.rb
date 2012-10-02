@@ -1,4 +1,5 @@
 class Code < ActiveRecord::Base
+  extend CodeVersion
 
   ### Constants
   PURPOSES            = %w[Purpose]
@@ -62,14 +63,6 @@ class Code < ActiveRecord::Base
       code.save ? (saved += 1) : (errors += 1)
     end
     return saved, errors
-  end
-
-  def self.last_version
-    maximum(:version)
-  end
-
-  def self.with_last_version
-    where(version: last_version)
   end
 
   def name
