@@ -20,7 +20,7 @@ class AddMtefCodeAndNspCodeToCodes < ActiveRecord::Migration
     Nasa.reset_column_information
     Nha.reset_column_information
 
-    Code.where(["codes.type IN (?)", %w[Mtef Nsp Nasa Nha]]).each do |purpose|
+    Code.all.each do |purpose|
       codes = purpose.self_and_ancestors.reverse
 
       mtef = codes.detect { |a| a.type == "Mtef" && !a.root? }
