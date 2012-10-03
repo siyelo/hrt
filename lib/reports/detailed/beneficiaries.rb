@@ -81,11 +81,11 @@ class Reports::Detailed::Beneficiaries
 
     # fake output if none
     beneficiaries = activity.beneficiaries.presence ||
-      [Beneficiary.new(:description => 'n/a')]
+      [Beneficiary.new(:name => 'N/A')]
     beneficiaries.each do |beneficiary|
       row = base_row.dup
       amount_by_ratio = split_amount * (1.0 / beneficiaries.length)
-      row << beneficiary.short_display
+      row << beneficiary.name
       row << amount_by_ratio * rate
 
       row << implementer_split.possible_double_count?

@@ -9,7 +9,7 @@ Feature: Admin can manage codes
       And I am signed in as "admin@hrtapp.com"
 
     Scenario: Admin can edit codes
-      Given a code exists with short_display: "code1", long_display: "code1 long", official_name: "code1 official name", description: "code1 description", type: "Purpose"
+      Given a purpose exists with short_display: "code1", long_display: "code1 long", official_name: "code1 official name", description: "code1 description", type: "Purpose"
       When I follow "Codes"
         And I follow "Purposes"
         And I follow "code1"

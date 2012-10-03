@@ -5,6 +5,10 @@ class Nasa < Code; end
 class Nha  < Code; end
 class HsspStratProg < Code; end
 class HsspStratObj < Code; end
+class Beneficiary < Code; end
+class Input < Code; end
+class Purpose < Code; end
+class Location < Code; end
 
 class AddMtefCodeAndNspCodeToCodes < ActiveRecord::Migration
   def change
@@ -14,7 +18,6 @@ class AddMtefCodeAndNspCodeToCodes < ActiveRecord::Migration
     Mtef.reset_column_information
     Nsp.reset_column_information
     Code.where(["codes.type IN (?)", %w[Mtef Nsp Nasa Nha]]).each do |purpose|
-      print "#{purpose.id} "
       codes = purpose.ancestors
 
       mtef = codes.detect { |a| a.type == "Mtef" && !a.root? }

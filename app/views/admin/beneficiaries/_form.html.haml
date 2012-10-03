@@ -1,0 +1,9 @@
+= f.inputs :class => 'inputs' do
+  %li.last
+    %ul.section_form.first
+      = f.input :name, :required => false, :hint => "Name of the beneficiary"
+
+  %li.last
+    %ul.horizontal.section_form.last.connect
+      = f.actions :class => 'buttons' do
+        = f.action :submit, :label => (@beneficiary.new_record? ? "Create New Beneficiary" : "Update Beneficiary"), :button_html => {:class => 'next'}

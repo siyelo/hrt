@@ -7,7 +7,7 @@ describe "Sysadmins" do
   end
 
   it "can edit beneficiaries" do
-    beneficiary = FactoryGirl.create(:beneficiary, name: 'Sex workers')
+    FactoryGirl.create(:beneficiary, name: 'Sex workers')
 
     click_link "Codes"
     click_link "Beneficiaries"
@@ -17,5 +17,21 @@ describe "Sysadmins" do
     page.should have_content("Beneficiary was successfully updated")
   end
 
-  it "can search beneficiaries"
+  it "can search beneficiaries" do
+    FactoryGirl.create(:beneficiary, name: 'Sex workers')
+    FactoryGirl.create(:beneficiary, name: 'Young children (1-4 years)')
+
+    click_link "Codes"
+    click_link "Beneficiaries"
+
+    page.should have_content('Sex workers')
+    page.should have_content('Young children (1-4 years)')
+
+    fill_in "query", with: "young"
+    click_button("Search")
+
+    page.should_not have_content('Sex workers')
+    page.should have_content('Young children (1-4 years)')
+
+  end
 end

@@ -10,4 +10,4 @@
       %li{class: css_class}
         = link_to filter, admin_codes_path({sort: params[:sort], direction: params[:direction], query: params[:query], filter: filter})
     %li{class: params[:controller] == 'admin/beneficiaries' ? "selected" : nil}
-      = link_to "Beneficiary", admin_beneficiaries_path({query: params[:query]})
+      = link_to "Beneficiaries", admin_beneficiaries_path({query: params[:query]})

@@ -5,6 +5,10 @@ class Nasa < Code; end
 class Nha  < Code; end
 class HsspStratProg < Code; end
 class HsspStratObj < Code; end
+class Beneficiary < Code; end
+class Input < Code; end
+class Purpose < Code; end
+class Location < Code; end
 
 class AddVersionToCodes < ActiveRecord::Migration
 

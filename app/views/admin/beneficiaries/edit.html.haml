@@ -1,0 +1,8 @@
+- title("Edit Beneficiary")
+
+%h1.main_heading Edit Beneficiary
+
+= render 'shared/error_messages', :resource => @beneficiary
+
+= semantic_form_for @beneficiary, :url => admin_beneficiary_path(@beneficiary), :html => {:method => :put, :class => "basic_form js_form"} do |f|
+  = render 'form', :f => f

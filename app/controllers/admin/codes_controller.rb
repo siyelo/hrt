@@ -12,16 +12,16 @@ class Admin::CodesController < Admin::BaseController
   helper_method :sort_column, :sort_direction
 
   def index
-    # params[:filter] = "Locations" unless params[:filter].present?
-    # scope = scoped_codes
-    # if params[:query].present? || params[:sort].present?
-    #   @codes  = scope.where(["UPPER(short_display) LIKE UPPER(:q) OR
-    #                                         UPPER(type) LIKE UPPER(:q) OR
-    #                                         UPPER(description) LIKE UPPER(:q)",
-    #                                         {q: "%#{params[:query]}%"}])
-    # else
-    #   @codes = scope.order("id ASC").roots
-    # end
+    params[:filter] = "Locations" unless params[:filter].present?
+    scope = scoped_codes
+    if params[:query].present? || params[:sort].present?
+      @codes  = scope.where(["UPPER(short_display) LIKE UPPER(:q) OR
+                                            UPPER(type) LIKE UPPER(:q) OR
+                                            UPPER(description) LIKE UPPER(:q)",
+                                            {q: "%#{params[:query]}%"}])
+    else
+      @codes = scope.order("id ASC").roots
+    end
   end
 
   def update
