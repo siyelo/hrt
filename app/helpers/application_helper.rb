@@ -28,9 +28,13 @@ module ApplicationHelper
     parent = 'admin'
     active =  current_controller_with_nesting?(parent, tab)
     unless active
-      if tab == 'reports'
+      case tab
+      when 'reports'
         active = current_controller_with_nesting?('admin', 'reports') ||
           current_controller_with_nesting?('admin', 'documents')
+      when 'codes'
+        active = current_controller_with_nesting?('admin', 'codes') ||
+          current_controller_with_nesting?('admin', 'beneficiaries')
       end
     end
     content_tag(:li, :class => ('active' if active)) do

@@ -5,13 +5,5 @@ class CreateBeneficiaries < ActiveRecord::Migration
       t.integer :version
       t.timestamps
     end
-
-    Code.where(['raw_type = ?', 'Beneficiary']).each do |code|
-      beneficiary = Beneficiary.new
-      beneficiary.name = code.short_display
-      beneficiary.version = code.version
-
-      beneficiary.save!
-    end
   end
 end

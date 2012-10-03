@@ -36,8 +36,8 @@ describe Reports::Detailed::Beneficiaries do
                              :data_response => @response1,
                              :implementer_splits => impl_splits)
 
-        beneficiary1 = FactoryGirl.create(:beneficiary, :short_display => 'beneficiary1')
-        beneficiary2 = FactoryGirl.create(:beneficiary, :short_display => 'beneficiary2')
+        beneficiary1 = FactoryGirl.create(:beneficiary, :name => 'beneficiary1')
+        beneficiary2 = FactoryGirl.create(:beneficiary, :name => 'beneficiary2')
         @activity1.beneficiaries << [beneficiary1, beneficiary2]
         @response1.state = 'accepted'; @response1.save!
       end
