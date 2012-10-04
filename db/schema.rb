@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121004084703) do
+ActiveRecord::Schema.define(:version => 20121004115045) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -196,6 +196,18 @@ ActiveRecord::Schema.define(:version => 20121004084703) do
     t.datetime "updated_at"
     t.boolean  "double_count"
     t.integer  "previous_id"
+  end
+
+  create_table "inputs", :force => true do |t|
+    t.integer  "parent_id"
+    t.integer  "lft"
+    t.integer  "rgt"
+    t.string   "name"
+    t.text     "description"
+    t.string   "external_id"
+    t.integer  "version"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "locations", :force => true do |t|

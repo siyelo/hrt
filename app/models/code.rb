@@ -1,5 +1,6 @@
 class Code < ActiveRecord::Base
   extend CodeVersion
+  extend TreeHelpers
 
   ### Constants
   PURPOSES            = %w[Purpose]
@@ -35,35 +36,6 @@ class Code < ActiveRecord::Base
   scope :with_types, lambda { |types| where(["codes.type IN (?)", types]) }
   scope :with_version, lambda { |version| where(version: version) }
   scope :purposes, where(["codes.type in (?)", PURPOSES])
-
-  def self.deepest_nesting
-    levels = self.roots_with_level.collect{|a| a[0]}
-    levels.present? ? (levels.max + 1) : 0
-  end
-
-  # can be removed if we refactor self.deepest_nesting
-  def self.roots_with_level
-    a = []
-    self.roots.each do |root|
-      self.each_with_level(root.self_and_descendants) do |code, level|
-        a << [level, code.id]
-      end
-    end
-    a
-  end
-
-  def self.create_from_file(doc)
-    saved, errors = 0, 0
-    doc.each do |row|
-      attributes = row.to_hash
-      parent_short_display = attributes.delete('parent_short_display')
-      parent = parent_short_display ? Code.find_by_short_display(attributes.delete('short_display')) : nil
-      attributes.merge!(:parent_id => parent.id) if parent
-      code = Code.new(attributes)
-      code.save ? (saved += 1) : (errors += 1)
-    end
-    return saved, errors
-  end
 
   def name
     short_display
