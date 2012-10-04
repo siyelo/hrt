@@ -1,3 +1,10 @@
+class Code < ActiveRecord::Base
+  extend CodeVersion
+  extend TreeHelpers
+
+  acts_as_nested_set
+end
+
 Code.update_all({:type => "OldBeneficiary"}, {:type => "Beneficiary"})
 
 class OldBeneficiary < Code

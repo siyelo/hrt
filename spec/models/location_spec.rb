@@ -8,6 +8,7 @@ describe Location do
   describe "Validations" do
     it { should validate_presence_of(:name) }
     it { should validate_presence_of(:version) }
+    it { should_not allow_mass_assignment_of(:version) }
   end
 
   describe "Assocations" do

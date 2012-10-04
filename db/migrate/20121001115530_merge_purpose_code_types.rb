@@ -1,3 +1,10 @@
+class Code < ActiveRecord::Base
+  extend CodeVersion
+  extend TreeHelpers
+
+  acts_as_nested_set
+end
+
 class MergePurposeCodeTypes < ActiveRecord::Migration
   def up
     Code.reset_column_information

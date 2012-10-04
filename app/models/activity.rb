@@ -25,8 +25,6 @@ class Activity < ActiveRecord::Base
   has_and_belongs_to_many :beneficiaries # codes representing who benefits from this activity
   has_many :implementer_splits, dependent: :delete_all
   has_many :implementers, through: :implementer_splits, source: :organization
-  has_many :purposes, through: :code_splits,
-    conditions: ["codes.type in (?)", Code::PURPOSES], source: :code
   has_many :code_splits, dependent: :destroy
   has_many :comments, as: :commentable, dependent: :destroy
 

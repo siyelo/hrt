@@ -5,6 +5,10 @@ describe Input do
   describe "Attributes" do
     it { should allow_mass_assignment_of(:name) }
     it { should allow_mass_assignment_of(:description) }
+    it { should_not allow_mass_assignment_of(:version) }
+    it { should_not allow_mass_assignment_of(:parent_id) }
+    it { should_not allow_mass_assignment_of(:lft) }
+    it { should_not allow_mass_assignment_of(:rgt) }
   end
 
   describe "Validations" do

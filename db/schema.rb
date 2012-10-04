@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121004115045) do
+ActiveRecord::Schema.define(:version => 20121004143118) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -62,35 +62,13 @@ ActiveRecord::Schema.define(:version => 20121004115045) do
   add_index "code_splits", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
   add_index "code_splits", ["code_id"], :name => "index_code_assignments_on_code_id"
 
-  create_table "codes", :force => true do |t|
-    t.integer  "parent_id"
-    t.integer  "lft"
-    t.integer  "rgt"
-    t.string   "short_display"
-    t.string   "long_display"
-    t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "type"
-    t.string   "external_id"
-    t.string   "hssp2_stratprog_val"
-    t.string   "hssp2_stratobj_val"
-    t.string   "official_name"
-    t.string   "sub_account"
-    t.string   "nha_code"
-    t.string   "nasa_code"
-    t.integer  "version"
-    t.string   "mtef_code"
-    t.string   "nsp_code"
-  end
-
   create_table "comments", :force => true do |t|
     t.text     "comment",          :default => ""
     t.integer  "commentable_id"
     t.string   "commentable_type"
     t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
     t.integer  "parent_id"
     t.boolean  "removed",          :default => false
   end
@@ -101,8 +79,8 @@ ActiveRecord::Schema.define(:version => 20121004115045) do
 
   create_table "currencies", :force => true do |t|
     t.float    "rate"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
     t.string   "from"
     t.string   "to"
   end
@@ -110,8 +88,8 @@ ActiveRecord::Schema.define(:version => 20121004115045) do
   create_table "data_requests", :force => true do |t|
     t.integer  "organization_id"
     t.string   "title"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",            :null => false
+    t.datetime "updated_at",            :null => false
     t.date     "start_date"
     t.integer  "locations_version"
     t.integer  "purposes_version"
@@ -121,8 +99,8 @@ ActiveRecord::Schema.define(:version => 20121004115045) do
 
   create_table "data_responses", :force => true do |t|
     t.integer  "data_request_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                       :null => false
+    t.datetime "updated_at",                                       :null => false
     t.integer  "organization_id"
     t.string   "state"
     t.integer  "projects_count",                    :default => 0
@@ -149,8 +127,8 @@ ActiveRecord::Schema.define(:version => 20121004115045) do
     t.datetime "locked_at"
     t.datetime "failed_at"
     t.string   "locked_by"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
     t.string   "queue"
   end
 
@@ -171,8 +149,8 @@ ActiveRecord::Schema.define(:version => 20121004115045) do
   create_table "funding_flows", :force => true do |t|
     t.integer  "organization_id_from"
     t.integer  "project_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
     t.decimal  "budget"
     t.text     "organization_text"
     t.integer  "self_provider_flag",   :default => 0
@@ -192,8 +170,8 @@ ActiveRecord::Schema.define(:version => 20121004115045) do
     t.integer  "organization_id"
     t.decimal  "spend"
     t.decimal  "budget"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
     t.boolean  "double_count"
     t.integer  "previous_id"
   end
@@ -204,7 +182,6 @@ ActiveRecord::Schema.define(:version => 20121004115045) do
     t.integer  "rgt"
     t.string   "name"
     t.text     "description"
-    t.string   "external_id"
     t.integer  "version"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
@@ -219,8 +196,8 @@ ActiveRecord::Schema.define(:version => 20121004115045) do
 
   create_table "organizations", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                          :null => false
+    t.datetime "updated_at",                                          :null => false
     t.string   "raw_type"
     t.string   "fosaid"
     t.integer  "users_count",                      :default => 0
@@ -244,8 +221,8 @@ ActiveRecord::Schema.define(:version => 20121004115045) do
   create_table "outputs", :force => true do |t|
     t.integer  "activity_id"
     t.string   "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "projects", :force => true do |t|
@@ -253,8 +230,8 @@ ActiveRecord::Schema.define(:version => 20121004115045) do
     t.text     "description"
     t.date     "start_date"
     t.date     "end_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
     t.string   "currency"
     t.integer  "data_response_id"
     t.string   "budget_type"
@@ -263,10 +240,29 @@ ActiveRecord::Schema.define(:version => 20121004115045) do
 
   add_index "projects", ["data_response_id"], :name => "index_projects_on_data_response_id"
 
+  create_table "purposes", :force => true do |t|
+    t.integer  "parent_id"
+    t.integer  "lft"
+    t.integer  "rgt"
+    t.string   "name"
+    t.text     "description"
+    t.integer  "version"
+    t.string   "official_name"
+    t.string   "sub_account"
+    t.string   "mtef_code"
+    t.string   "nsp_code"
+    t.string   "nasa_code"
+    t.string   "nha_code"
+    t.string   "hssp2_stratprog_val"
+    t.string   "hssp2_stratobj_val"
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
+  end
+
   create_table "reports", :force => true do |t|
     t.string   "key"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
     t.string   "attachment_file_name"
     t.string   "attachment_content_type"
     t.integer  "attachment_file_size"
@@ -294,16 +290,16 @@ ActiveRecord::Schema.define(:version => 20121004115045) do
   create_table "targets", :force => true do |t|
     t.integer  "activity_id"
     t.string   "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "users", :force => true do |t|
     t.string   "email"
     t.string   "encrypted_password"
     t.string   "password_salt"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
     t.integer  "roles_mask"
     t.integer  "organization_id"
     t.text     "text_for_organization"
@@ -331,6 +327,7 @@ ActiveRecord::Schema.define(:version => 20121004115045) do
   end
 
   add_index "users", ["confirmation_token"], :name => "index_users_on_confirmation_token", :unique => true
+  add_index "users", ["email"], :name => "index_users_on_email"
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
 
 end

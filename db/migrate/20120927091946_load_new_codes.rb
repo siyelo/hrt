@@ -1,3 +1,10 @@
+class Code < ActiveRecord::Base
+  extend CodeVersion
+  extend TreeHelpers
+
+  acts_as_nested_set
+end
+
 class LoadNewCodes < ActiveRecord::Migration
   def up
     Input.reset_column_information

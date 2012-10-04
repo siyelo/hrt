@@ -1,3 +1,10 @@
+class Code < ActiveRecord::Base
+  extend CodeVersion
+  extend TreeHelpers
+
+  acts_as_nested_set
+end
+
 Code.update_all({:type => "OldLocation"}, {:type => "Location"})
 
 class OldLocation < Code; end
