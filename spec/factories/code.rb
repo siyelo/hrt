@@ -11,7 +11,4 @@ FactoryGirl.define do
   factory :input, :class => Input, :parent => :code do |f|
   end
 
-  factory :location, :class => Location, :parent => :code do |f|
-  end
-
 end

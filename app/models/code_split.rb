@@ -9,7 +9,7 @@ class CodeSplit < ActiveRecord::Base
 
   ### Associations
   belongs_to :activity
-  belongs_to :code
+  belongs_to :code, polymorphic: true
 
   ### Validations
   validates_presence_of :activity_id, :code_id
