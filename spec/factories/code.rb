@@ -7,8 +7,4 @@ FactoryGirl.define do
 
   factory :purpose, :class => Purpose, :parent => :code do |f|
   end
-
-  factory :input, :class => Input, :parent => :code do |f|
-  end
-
 end
