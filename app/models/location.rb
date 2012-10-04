@@ -10,6 +10,7 @@ class Location < ActiveRecord::Base
 
   # Associations
   has_many :code_splits, as: :code, dependent: :destroy
+  # has_many :activities, :through => :code_splits
 
   ### Scopes
   scope :national_level, { :conditions => "lower(locations.name) = 'national level'" }

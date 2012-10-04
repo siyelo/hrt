@@ -1,3 +1,10 @@
+class Code < ActiveRecord::Base
+  extend CodeVersion
+  extend TreeHelpers
+
+  acts_as_nested_set
+end
+
 # define old STI models
 class Mtef < Code; end
 class Nsp  < Code; end

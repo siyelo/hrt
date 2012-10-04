@@ -1,3 +1,15 @@
+class Code < ActiveRecord::Base
+  extend CodeVersion
+  extend TreeHelpers
+
+  acts_as_nested_set
+end
+
+Object.send(:remove_const, "Input") if defined?(Input)
+Object.send(:remove_const, "Purpose") if defined?(Purpose)
+Object.send(:remove_const, "Location") if defined?(Location)
+Object.send(:remove_const, "Beneficiary") if defined?(Beneficiary)
+
 # define old STI models
 class Mtef < Code; end
 class Nsp  < Code; end

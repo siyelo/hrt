@@ -1,3 +1,12 @@
+class Code < ActiveRecord::Base
+  extend CodeVersion
+  extend TreeHelpers
+
+  has_many :code_splits, as: :code, dependent: :destroy
+
+  acts_as_nested_set
+end
+
 Code.update_all({:type => "OldInput"}, {:type => "Input"})
 
 class OldInput < Code;

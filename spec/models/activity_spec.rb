@@ -219,22 +219,6 @@ describe Activity do
     end
   end
 
-  describe "purposes" do
-    it "should return only those codes designated as Purpose codes" do
-      basic_setup_activity
-      @purpose1    = FactoryGirl.create(:purpose, short_display: 'purp1')
-      @purpose2    = FactoryGirl.create(:purpose, short_display: 'purp2')
-      @input       = FactoryGirl.create(:input, short_display: 'input')
-      FactoryGirl.create(:purpose_budget_split, activity: @activity,
-              code: @purpose1, cached_amount: 5)
-      FactoryGirl.create(:purpose_budget_split, activity: @activity,
-              code: @purpose2, cached_amount: 15)
-      FactoryGirl.create(:input_budget_split, activity: @activity,
-              code: @input, cached_amount: 5)
-      @activity.purposes.should == [@purpose1, @purpose2]
-    end
-  end
-
   describe "#locations" do
     it "returns uniq locations only from district classifications" do
       basic_setup_activity
