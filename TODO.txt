@@ -1,0 +1,15 @@
+Remove Code STI
+  - generate model Purpose
+  - generate model Input
+  - generate model Location
+  - add code_type to code_splits
+  - write datafix for re-linking code_splits to new codes (Purposes, Inputs, Locations)
+  - remove all associations to old codes
+  - delete codes table
+  - add admin for locations
+  - add admin for purposes
+  - add admin for inputs
+  - review all classification views
+  - review all reports
+  - review activity validations
+  - make all specs pass

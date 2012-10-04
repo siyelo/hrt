@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121003081120) do
+ActiveRecord::Schema.define(:version => 20121004084703) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -56,6 +56,7 @@ ActiveRecord::Schema.define(:version => 20121003081120) do
     t.decimal  "sum_of_children", :default => 0.0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "code_type"
   end
 
   add_index "code_splits", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
@@ -195,6 +196,13 @@ ActiveRecord::Schema.define(:version => 20121003081120) do
     t.datetime "updated_at"
     t.boolean  "double_count"
     t.integer  "previous_id"
+  end
+
+  create_table "locations", :force => true do |t|
+    t.string   "name"
+    t.integer  "version"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "organizations", :force => true do |t|
