@@ -1,10 +1,11 @@
 class Users::SessionsController < Devise::SessionsController
 
+  # GET /users/sign_in
   def new
     redirect_to root_path
   end
 
-  # POST /resource/sign_in
+  # POST /users/sign_in
   def create
     if resource = warden.authenticate(auth_options)
       sign_in(resource_name, resource)
