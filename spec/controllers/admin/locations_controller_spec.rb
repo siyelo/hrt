@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Admin::BeneficiariesController do
+describe Admin::LocationsController do
   describe "user permissions" do
     before :each do
       login # login as reporter

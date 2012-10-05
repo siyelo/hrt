@@ -17,7 +17,7 @@
         = build_admin_nav_tab('users', admin_users_path)
         = build_admin_nav_tab('currencies', admin_currencies_path)
         = build_admin_nav_tab('requests', admin_requests_path)
-        = build_admin_nav_tab('codes', admin_codes_path)
+        = build_admin_nav_tab('codes', admin_locations_path)
       - else
         %li{:class => ([ProjectsController, ActivitiesController, OtherCostsController, ResponsesController].include?(controller.class) ? "active" : nil)}
           = link_to 'Projects & Activities', projects_path

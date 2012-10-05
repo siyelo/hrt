@@ -1,0 +1,8 @@
+- title("Edit Location")
+
+%h1.main_heading Edit Location
+
+= render 'shared/error_messages', :resource => @location
+
+= semantic_form_for @location, :url => admin_location_path(@location), :html => {:method => :put, :class => "basic_form js_form"} do |f|
+  = render 'form', :f => f
