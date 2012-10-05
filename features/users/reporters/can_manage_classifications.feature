@@ -20,9 +20,9 @@ Feature: Reporter can enter a code breakdown for each activity
 
     # level 1
     Given a basic reporter setup
-    Given a purpose "purpose1" exists with id: 1, short_display: "purpose1"
-      And a purpose "purpose2" exists with id: 2, short_display: "purpose2"
-      And a input exists with id: 3, short_display: "cost_category1"
+    Given a purpose "purpose1" exists with id: 1, name: "purpose1"
+      And a purpose "purpose2" exists with id: 2, name: "purpose2"
+      And a input exists with id: 3, name: "cost_category1"
       And a project exists with name: "Project", data_response: the data_response
       And I am signed in as "reporter@hrtapp.com"
 
@@ -49,8 +49,8 @@ Feature: Reporter can enter a code breakdown for each activity
 
     Scenario: Reporter can classify Purposes for activity (second level)
       Given an activity exists with name: "activity1", data_response: the data_response, project: the project
-      And a purpose "purpose11" exists with id: 11, short_display: "purpose11", parent: purpose "purpose1"
-      And a purpose "purpose12" exists with id: 12, short_display: "purpose12", parent: purpose "purpose1"
+      And a purpose "purpose11" exists with id: 11, name: "purpose11", parent: purpose "purpose1"
+      And a purpose "purpose12" exists with id: 12, name: "purpose12", parent: purpose "purpose1"
       When I follow "Projects"
       And I follow "activity1"
       And I follow "Purposes" within ".section_nav"
@@ -68,10 +68,10 @@ Feature: Reporter can enter a code breakdown for each activity
 
     Scenario: Reporter can classify Purposes for activity (third level)
       Given an activity exists with name: "activity1", data_response: the data_response, project: the project
-      And a purpose "purpose11" exists with id: 11, short_display: "purpose11", parent: purpose "purpose1"
-      And a purpose "purpose12" exists with id: 12, short_display: "purpose12", parent: purpose "purpose1"
-      And a purpose "purpose111" exists with id: 111, short_display: "purpose111", parent: purpose "purpose11"
-      And a purpose "purpose112" exists with id: 112, short_display: "purpose112", parent: purpose "purpose11"
+      And a purpose "purpose11" exists with id: 11, name: "purpose11", parent: purpose "purpose1"
+      And a purpose "purpose12" exists with id: 12, name: "purpose12", parent: purpose "purpose1"
+      And a purpose "purpose111" exists with id: 111, name: "purpose111", parent: purpose "purpose11"
+      And a purpose "purpose112" exists with id: 112, name: "purpose112", parent: purpose "purpose11"
       When I follow "Projects"
       And I follow "activity1"
       And I follow "Purposes" within ".section_nav"
@@ -91,10 +91,10 @@ Feature: Reporter can enter a code breakdown for each activity
     # @javascript
     Scenario: Reporter can classify Purposes for activity (third level)
       Given an activity exists with name: "activity1", data_response: the data_response, project: the project
-      And a purpose "purpose11" exists with id: 11, short_display: "purpose11", parent: purpose "purpose1"
-      And a purpose "purpose12" exists with id: 12, short_display: "purpose12", parent: purpose "purpose1"
-      And a purpose "purpose111" exists with id: 111, short_display: "purpose111", parent: purpose "purpose11"
-      And a purpose "purpose112" exists with id: 112, short_display: "purpose112", parent: purpose "purpose11"
+      And a purpose "purpose11" exists with id: 11, name: "purpose11", parent: purpose "purpose1"
+      And a purpose "purpose12" exists with id: 12, name: "purpose12", parent: purpose "purpose1"
+      And a purpose "purpose111" exists with id: 111, name: "purpose111", parent: purpose "purpose11"
+      And a purpose "purpose112" exists with id: 112, name: "purpose112", parent: purpose "purpose11"
       And I follow "Projects"
       And I follow "activity1"
       And I follow "Purposes" within ".section_nav"
@@ -151,7 +151,7 @@ Feature: Reporter can enter a code breakdown for each activity
     Scenario: Reporter classify Locations for other cost
       Given an other cost exists with name: "othercost1", data_response: the data_response, project: the project
       And an implementer_split exists with budget: "5000000", spend: "6000000", organization: the organization, activity: the other_cost
-      And a location exists with short_display: "National", id: 5
+      And a location exists with name: "National", id: 5
       When I follow "Projects"
       And I follow "othercost1"
       #since we used a FactoryGirl.create above, need save to refresh cache by saving activity

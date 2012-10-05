@@ -8,7 +8,7 @@ Feature: Admin can manage organizations
     Given an organization exists with name: "org1", raw_type: "Donor", fosaid: "111"
     And a data_request exists with title: "Req1", organization: the organization
     And an admin exists with email: "sysadmin@hrtapp.com", organization: the organization
-    And a location exists with short_display: "All"
+    And a location exists with name: "All"
     Given now is "01-06-2011 21:30:00 +0000"
     And an organization exists with name: "org2", raw_type: "Ngo", fosaid: "222"
     And a reporter exists with email: "org2_user@hrtapp.com", organization: the organization

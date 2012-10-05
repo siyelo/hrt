@@ -148,7 +148,7 @@ Then /^the "([^"]*)" field(?: within "([^"]*)")? should equal "([^"]*)"$/ do |fi
 end
 
 def field_id(code_name)
-  code = Code.find_by_short_display(code_name)
+  code = Code.find_by_name(code_name)
   return "activity_updates_#{code.id}_percentage"
 end
 
@@ -214,7 +214,7 @@ end
 
 Given /^location "([^"]*)" for activity "([^"]*)"$/ do |location_name, activity_name|
   activity = Activity.find_by_name(activity_name)
-  location = Location.find_by_short_display(location_name)
+  location = Location.find_by_name(location_name)
   activity.locations << location
 end
 
@@ -394,7 +394,7 @@ Given /^#{capture_model} state is: "([^"]*)"$/ do |name, state|
 end
 
 When /^a 100% location split exists with activity: "([^"]*)", location: "([^"]*)", spend_percentage: (\d+), budget_percentage: (\d+)$/ do |act_name, loc_name, spend_pc, budget_pc|
-   loc = FactoryGirl.create :location, :short_display => loc_name
+   loc = FactoryGirl.create :location, :name => loc_name
    activity = Activity.find_by_name act_name
    FactoryGirl.create :location_spend_split, :code => loc,
      :activity => activity, :percentage => spend_pc,
@@ -409,7 +409,7 @@ Then /^I should see the title text "([^"]*)"$/ do |title|
 end
 
 When /^a 100% input split exists with activity: "([^"]*)", input: "([^"]*)", spend_percentage: (\d+), budget_percentage: (\d+)$/ do |act_name, input_name, spend_pc, budget_pc|
-   input = FactoryGirl.create :input, :short_display => input_name
+   input = FactoryGirl.create :input, :name => input_name
    activity = Activity.find_by_name act_name
    FactoryGirl.create :input_spend_split, :code => input,
      :activity => activity, :percentage => spend_pc,

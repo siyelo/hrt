@@ -4,7 +4,7 @@ Feature: Reporter can see project overview report
   I want to be able to see an overview report
 
   Background:
-    Given a location exists with short_display: "Some Loc"
+    Given a location exists with name: "Some Loc"
     And a basic reporter setup
     And a project exists with data_response: the data_response, name: "project1"
     And a activity_fully_coded exists with data_response: the data_response, project: the project, name: "activity1"

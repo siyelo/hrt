@@ -5,11 +5,11 @@
 
 #  ct = CodingTree.new(activity, coding_type)
 #
-#  p ct.roots[0].code.short_display
+#  p ct.roots[0].code.name
 #  p ct.roots[0].ca.cached_amount
-#  p ct.roots[0].children[0].code.short_display
-#  p ct.roots[0].children[0].children[0].code.short_display
-#  p ct.roots[0].children[0].children[0].children[0].code.short_display
+#  p ct.roots[0].children[0].code.name
+#  p ct.roots[0].children[0].children[0].code.name
+#  p ct.roots[0].children[0].children[0].children[0].code.name
 
 class CodingTree
   PURPOSE_SPLIT_CLASSES  = ['PurposeBudgetSplit', 'PurposeSpendSplit']
