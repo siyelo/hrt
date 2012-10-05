@@ -42,8 +42,8 @@ describe Reports::DistrictSplit do
                             :data_response => data_response,
                             :implementer_splits => [split21, split22],
                             :project => project2)
-    district1     = FactoryGirl.create(:location, :short_display => 'district1')
-    district2     = FactoryGirl.create(:location, :short_display => 'district2')
+    district1     = FactoryGirl.create(:location, :name => 'district1')
+    district2     = FactoryGirl.create(:location, :name => 'district2')
 
     classifications1 = { district1.id => 25, district2.id => 75 } #budget
     LocationBudgetSplit.update_classifications(activity1, classifications1)

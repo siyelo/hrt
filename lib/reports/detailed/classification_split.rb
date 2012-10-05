@@ -199,25 +199,11 @@ class Reports::Detailed::ClassificationSplit
     Activity.reflect_on_association(classification_association).klass
   end
 
-  def cached_self_and_ancestors(code)
-    codes = []
-    codes << code
-
-    unless code.is_a?(Location)
-      while code.parent_id.present?
-        code = codes_cache[code.parent_id]
-        codes << code
-      end
-    end
-
-    codes
-  end
-
   def add_codes_to_row(row, codes, deepest_nesting, attr)
     deepest_nesting.times do |i|
       code = codes[i]
       if code
-        row << codes_cache[code.id].try(attr)
+        row << code.try(attr)
       else
         row << nil
       end

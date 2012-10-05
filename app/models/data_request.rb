@@ -11,10 +11,6 @@ class DataRequest < ActiveRecord::Base
   validates :organization_id, presence: true
   validates :title, presence: true
   validates :start_date, presence: true
-  validates :locations_version, presence: true
-  validates :purposes_version, presence: true
-  validates :inputs_version, presence: true
-  validates :beneficiaries_version, presence: true
   validates_date :start_date
 
   ### Callbacks

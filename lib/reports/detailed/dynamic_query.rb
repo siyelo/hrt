@@ -136,7 +136,7 @@ class Reports::Detailed::DynamicQuery
         purpose_row << purpose_classification.code.name
 
         # purpose tree
-        codes = self_and_ancestors(purpose_classification.code).reverse
+        codes = cached_self_and_ancestors(purpose_classification.code).reverse
         add_codes_to_row(purpose_row, codes, @deepest_nesting, :name)
 
         purpose_row << (purpose_classification.code.mtef_code.presence || 'N/A')
@@ -163,17 +163,6 @@ class Reports::Detailed::DynamicQuery
         end
       end
     end
-  end
-
-  def self_and_ancestors(code)
-    codes = [code]
-
-    while code.parent_id.present?
-      code = codes_cache[code.parent_id]
-      codes << code
-    end
-
-    return codes
   end
 
   def build_fake_classifications(activity)
@@ -250,7 +239,7 @@ class Reports::Detailed::DynamicQuery
     deepest_nesting.times do |i|
       code = codes[i]
       if code
-        row << codes_cache[code.id].try(attr)
+        row << code.try(attr)
       else
         row << nil
       end

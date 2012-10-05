@@ -20,10 +20,17 @@ describe DataRequest do
     it { should_not allow_value('').for(:start_date) }
     it { should_not allow_value('2010-13-01').for(:start_date) }
     it { should_not allow_value('2010-12-41').for(:start_date) }
-    it { should validate_presence_of(:locations_version) }
-    it { should validate_presence_of(:purposes_version) }
-    it { should validate_presence_of(:inputs_version) }
-    it { should validate_presence_of(:beneficiaries_version) }
+  end
+
+  describe "Callbacks" do
+
+    it "sets code type versions" do
+      request = FactoryGirl.create(:request)
+      request.locations_version.should == 1
+      request.purposes_version.should == 1
+      request.inputs_version.should == 1
+      request.beneficiaries_version.should == 1
+    end
   end
 
   describe "AliasAttributes" do
