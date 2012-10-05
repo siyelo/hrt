@@ -91,13 +91,14 @@ class Reports::DistrictSplit < Reports::TopBase
       :select => 'code_splits.type AS klass,
                   code_splits.activity_id,
                   code_splits.cached_amount AS amount,
-                  codes.name AS district,
+                  locations.name AS district,
                   COALESCE(projects.currency, organizations.currency) AS amount_currency',
-      :joins => 'INNER JOIN "codes" ON "codes".id = "code_splits".code_id
-                 INNER JOIN "activities" ON "activities".id = "code_splits".activity_id
-                 LEFT OUTER JOIN "projects" ON "projects".id = "activities".project_id
-                 INNER JOIN "data_responses" ON "data_responses".id = "activities".data_response_id
-                 INNER JOIN "organizations" ON "organizations".id = "data_responses".organization_id',
+      :joins => "INNER JOIN locations ON locations.id = code_splits.code_id
+                   AND code_splits.code_type = 'Location'
+                 INNER JOIN activities ON activities.id = code_splits.activity_id
+                 LEFT OUTER JOIN projects ON projects.id = activities.project_id
+                 INNER JOIN data_responses ON data_responses.id = activities.data_response_id
+                 INNER JOIN organizations ON organizations.id = data_responses.organization_id",
       :conditions => ["data_responses.data_request_id = ? AND
                   code_splits.type IN
                   ('LocationBudgetSplit', 'LocationSpendSplit')", request.id]

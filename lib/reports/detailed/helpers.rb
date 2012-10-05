@@ -9,7 +9,7 @@ module Reports::Detailed::Helpers
     @codes_cache = {}
     [Purpose, Input, Location].each do |code_klass|
       code_klass.all.each do |code|
-        @codes_cache[code.id] = code
+        @codes_cache["#{code.id}#{code_klass.to_s}"] = code
       end
     end
 
@@ -52,4 +52,18 @@ module Reports::Detailed::Helpers
       "N/A"
     end
   end
+
+  def cached_self_and_ancestors(code)
+    codes = [code]
+
+    return codes if code.is_a?(Location)
+
+    while code.parent_id.present?
+      code = codes_cache["#{code.parent_id}#{code.class.to_s}"]
+      codes << code
+    end
+
+    codes
+  end
+
 end

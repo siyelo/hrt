@@ -12,6 +12,10 @@
 #  p ct.roots[0].children[0].children[0].children[0].code.short_display
 
 class CodingTree
+  PURPOSE_SPLIT_CLASSES  = ['PurposeBudgetSplit', 'PurposeSpendSplit']
+  INPUT_SPLIT_CLASSES    = 'InputBudgetSplit', 'InputSpendSplit'
+  LOCATION_SPLIT_CLASSES = ['LocationBudgetSplit', 'LocationSpendSplit']
+
   class Tree
     def initialize(object)
       @object = object
@@ -84,12 +88,11 @@ class CodingTree
   end
 
   def root_codes
-    case @coding_klass.to_s
-    when 'PurposeBudgetSplit', 'PurposeSpendSplit'
+    if PURPOSE_SPLIT_CLASSES.include?(@coding_klass.to_s)
       Purpose.with_version(@data_request.purposes_version).roots
-    when 'InputBudgetSplit', 'InputSpendSplit'
+    elsif INPUT_SPLIT_CLASSES.include?(@coding_klass.to_s)
       Input.with_version(@data_request.inputs_version).roots
-    when 'LocationBudgetSplit', 'LocationSpendSplit'
+    elsif LOCATION_SPLIT_CLASSES.include?(@coding_klass.to_s)
       Location.with_version(@data_request.locations_version).national_level +
         Location.with_version(@data_request.locations_version).without_national_level.sorted.all
     else
@@ -180,7 +183,9 @@ class CodingTree
         if code_assignment
           node = Tree.new({:ca => code_assignment, :code => code})
           root.children << node
-          build_subtree(node, cached_children(code)) unless code.leaf?
+          unless LOCATION_SPLIT_CLASSES.include?(@coding_klass.to_s)
+            build_subtree(node, cached_children(code)) unless code.leaf?
+          end
         end
       end
     end
@@ -190,15 +195,14 @@ class CodingTree
     end
 
     def all_codes
-      @all_codes ||= case @coding_klass.to_s
-      when 'PurposeBudgetSplit', 'PurposeSpendSplit'
-        Purpose.all
-      when 'InputBudgetSplit', 'InputSpendSplit'
-        Input.all
-      when 'LocationBudgetSplit', 'LocationSpendSplit'
-        Location.all
-      else
-        raise "Invalid coding_klass #{@coding_klass.to_s}".to_yaml
-      end
+      @all_codes ||= if PURPOSE_SPLIT_CLASSES.include?(@coding_klass.to_s)
+                       Purpose.all
+                     elsif INPUT_SPLIT_CLASSES.include?(@coding_klass.to_s)
+                       Input.all
+                     elsif LOCATION_SPLIT_CLASSES.include?(@coding_klass.to_s)
+                       Location.all
+                     else
+                       raise "Invalid coding_klass #{@coding_klass.to_s}".to_yaml
+                     end
     end
 end

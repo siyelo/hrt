@@ -8,7 +8,6 @@ describe Activity do
     it { should have_and_belong_to_many :beneficiaries }
     it { should have_many(:implementer_splits).dependent(:delete_all) }
     it { should have_many(:implementers) }
-    it { should have_many(:purposes) }
     it { should have_many(:code_splits).dependent(:destroy) }
     it { should have_many(:comments).dependent(:destroy) }
     it { should have_many(:purpose_spend_splits).dependent(:destroy) }
