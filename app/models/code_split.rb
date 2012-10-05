@@ -24,12 +24,8 @@ class CodeSplit < ActiveRecord::Base
 
   ### Named scopes
 
-  scope :with_code_id,
-              lambda { |code_id| { :conditions =>
-                ["code_splits.code_id = ?", code_id]} }
-  scope :with_code_ids,
-              lambda { |code_ids| { :conditions =>
-                ["code_splits.code_id IN (?)", code_ids]} }
+  scope :with_code,
+              lambda { |code| where(code_id: code.id, code_type: code.class) }
   scope :with_activity,
               lambda { |activity_id| { :conditions =>
                 ["code_splits.activity_id = ?", activity_id]} }
@@ -78,7 +74,7 @@ class CodeSplit < ActiveRecord::Base
         # initialize new code assignment if it does not exist
         ca = self.new(:activity => activity, :code => code) unless ca
         ca.percentage = value
-        ca.save!
+        ca.save
       end
     end
 

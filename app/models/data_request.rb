@@ -8,11 +8,17 @@ class DataRequest < ActiveRecord::Base
   has_many :reports, :dependent => :destroy
 
   ### Validations
-  validates_presence_of :organization_id, :title, :start_date
+  validates :organization_id, presence: true
+  validates :title, presence: true
+  validates :start_date, presence: true
+  validates :locations_version, presence: true
+  validates :purposes_version, presence: true
+  validates :inputs_version, presence: true
+  validates :beneficiaries_version, presence: true
   validates_date :start_date
 
   ### Callbacks
-  before_create :set_code_type_versions
+  before_validation :set_code_type_versions, on: :create
   after_create :create_data_responses
 
   ### Named scopes
@@ -43,10 +49,10 @@ class DataRequest < ActiveRecord::Base
 
   private
   def set_code_type_versions
-    self.locations_version     = Location.last_version
-    self.purposes_version      = Purpose.last_version
-    self.inputs_version        = Input.last_version
-    self.beneficiaries_version = Beneficiary.last_version
+    self.locations_version     = Location.last_version    || 1
+    self.purposes_version      = Purpose.last_version     || 1
+    self.inputs_version        = Input.last_version       || 1
+    self.beneficiaries_version = Beneficiary.last_version || 1
   end
 
   def create_data_responses

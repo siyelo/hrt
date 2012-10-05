@@ -157,7 +157,7 @@ class Reports::Detailed::ClassificationSplit
     # create dummy if the classification type doesnt exist for the
     # given activity/other cost e.g. OtherCosts dont have Purposes
     if total_percentage != 100
-      dummy_code = @classification_type.constantize.send(:new, :name => "Not classified - #{activity.type}")
+      dummy_code = @classification_type.constantize.new(:name => "Not classified - #{activity.type}")
       klass = classification_class(@classification_association)
       classifications << klass.new(:code => dummy_code,
                                    :percentage => 100 - total_percentage)

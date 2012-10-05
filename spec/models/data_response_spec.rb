@@ -1,20 +1,10 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe DataResponse do
-  describe "Associations" do
-    it { should belong_to(:organization) }
-    it { should belong_to(:data_request) }
-    it { should belong_to(:previous) }
-    it { should have_many(:activities) }
-    it { should have_many(:response_state_logs) }
-    it { should have_many(:other_costs).dependent(:destroy) }
-    it { should have_many(:projects).dependent(:destroy) }
-    it { should have_many(:implementer_splits) } # delegate destroy to project -> activity
-    it { should have_many(:comments).dependent(:destroy) }
+  describe "Attributes" do
+    it { should allow_mass_assignment_of(:organization_id) }
+    it { should allow_mass_assignment_of(:data_request_id) }
   end
-
-  it { should allow_mass_assignment_of(:organization_id) }
-  it { should allow_mass_assignment_of(:data_request_id) }
 
   describe "Validations" do
     subject { basic_setup_response; @response }
@@ -34,6 +24,18 @@ describe DataResponse do
       @response.valid?
       @response.errors[:state].should include('is not included in the list')
     end
+  end
+
+  describe "Associations" do
+    it { should belong_to(:organization) }
+    it { should belong_to(:data_request) }
+    it { should belong_to(:previous) }
+    it { should have_many(:activities) }
+    it { should have_many(:response_state_logs) }
+    it { should have_many(:other_costs).dependent(:destroy) }
+    it { should have_many(:projects).dependent(:destroy) }
+    it { should have_many(:implementer_splits) } # delegate destroy to project -> activity
+    it { should have_many(:comments).dependent(:destroy) }
   end
 
   describe "#name" do
