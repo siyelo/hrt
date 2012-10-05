@@ -4,7 +4,7 @@ Feature: Reporter can see location report
   I want to be able to see a location report
 
   Background:
-    Given a location exists with short_display: "Some Loc"
+    Given a location exists with name: "Some Loc"
       And an organization exists with name: "Organization1"
       And a data_request exists with title: "dr1", organization: the organization
       And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
