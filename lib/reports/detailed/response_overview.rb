@@ -3,7 +3,7 @@ class Reports::Detailed::ResponseOverview < Reports::Detailed::DynamicQuery
   attr_accessor :builder, :response, :amount_type
 
   def initialize(response, amount_type, filetype)
-    @deepest_nesting = Code.purposes.with_version(response.request.purposes_version).deepest_nesting
+    @deepest_nesting = Purpose.with_version(response.request.purposes_version).deepest_nesting
     @amount_type = amount_type
     @response = response
     @implementer_splits = ImplementerSplit.find :all,
