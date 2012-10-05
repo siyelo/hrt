@@ -1,0 +1,9 @@
+= f.inputs :class => 'inputs' do
+  %li.last
+    %ul.section_form.first
+      = f.input :name, :required => false, :hint => "Name of the purpose"
+
+  %li.last
+    %ul.horizontal.section_form.last.connect
+      = f.actions :class => 'buttons' do
+        = f.action :submit, :label => (@purpose.new_record? ? "Create New Purpose" : "Update Purpose"), :button_html => {:class => 'next'}

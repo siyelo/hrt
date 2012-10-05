@@ -95,7 +95,7 @@ var admin_reports_detailed_index = {
   }
 }
 
-var admin_codes_index = {
+var admin_purposes_index = admin_inputs_index = {
   run: function () {
     $('.js_code_row').live('click', function (e) {
       var element = $(this);
