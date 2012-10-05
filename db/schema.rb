@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121004143118) do
+ActiveRecord::Schema.define(:version => 20121005144423) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -60,6 +60,7 @@ ActiveRecord::Schema.define(:version => 20121004143118) do
   end
 
   add_index "code_splits", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
+  add_index "code_splits", ["code_id", "code_type"], :name => "index_code_splits_on_code_id_and_code_type"
   add_index "code_splits", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "comments", :force => true do |t|
