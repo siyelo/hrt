@@ -1,0 +1,8 @@
+- title("Edit Input")
+
+%h1.main_heading Edit Input
+
+= render 'shared/error_messages', :resource => @input
+
+= semantic_form_for @input, :url => admin_input_path(@input), :html => {:method => :put, :class => "basic_form js_form"} do |f|
+  = render 'form', :f => f

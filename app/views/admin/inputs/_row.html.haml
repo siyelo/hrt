@@ -1,0 +1,14 @@
+%li
+  - unless input.leaf?
+    %div.js_code_row.clearfix{id: input.id}
+      %span.js_icon.collapsed +
+      = link_to input.name, edit_admin_input_path(input), :class => "code-label"
+  - else
+    %div.clearfix
+      %span
+      = link_to input.name, edit_admin_input_path(input), :class => "code-label"
+
+  - unless input.leaf?
+    %ul{id: "#{ input.id }_act", style: "display: none"}
+      - input.children.each do |child|
+        = render 'row', input: child

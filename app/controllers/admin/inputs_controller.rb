@@ -1,13 +1,13 @@
-class Admin::PurposesController < Admin::BaseController
+class Admin::InputsController < Admin::BaseController
 
   ### Inherited Resources
   inherit_resources
 
   def index
-    @purposes = Purpose.with_last_version.order("id ASC")
+    @inputs = Input.with_last_version.order("id ASC")
 
     if params[:query].present?
-      @purposes = @purposes.where(["UPPER(name) LIKE UPPER(:q) OR
+      @inputs = @inputs.where(["UPPER(name) LIKE UPPER(:q) OR
                                    UPPER(description) LIKE UPPER(:q)",
                               {q: "%#{params[:query]}%"}])
     end
@@ -16,8 +16,8 @@ class Admin::PurposesController < Admin::BaseController
   def update
     update! do |success, failure|
       success.html do
-        flash[:notice] = "Purpose was successfully updated"
-        redirect_to edit_admin_purpose_url(resource)
+        flash[:notice] = "Input was successfully updated"
+        redirect_to edit_admin_input_url(resource)
       end
     end
   end
