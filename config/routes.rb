@@ -61,6 +61,7 @@ Hrt::Application.routes.draw do
     end
     resources :beneficiaries, only: [:index, :edit, :update]
     resources :locations, only: [:index, :edit, :update]
+    resources :purposes, only: [:index, :edit, :update]
     resources :codes, only: [:index, :edit, :update] do
       collection do
         post :create_from_file

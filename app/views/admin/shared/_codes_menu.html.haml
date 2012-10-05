@@ -7,7 +7,9 @@
   %ul.section_nav
     %li{class: params[:controller] == 'admin/locations' ? "selected" : nil}
       = link_to "Locations", admin_locations_path({query: params[:query]})
-    - ["Purposes", "Inputs"].each do |filter|
+    %li{class: params[:controller] == 'admin/purposes' ? "selected" : nil}
+      = link_to "Purposes", admin_purposes_path({query: params[:query]})
+    - ["Inputs"].each do |filter|
       - css_class = "selected" if params[:filter] == filter || (filter == 'All' && params[:filter].blank?)
       %li{class: css_class}
         = link_to filter, admin_codes_path({sort: params[:sort], direction: params[:direction], query: params[:query], filter: filter})

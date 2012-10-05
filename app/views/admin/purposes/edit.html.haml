@@ -1,0 +1,8 @@
+- title("Edit Purpose")
+
+%h1.main_heading Edit Purpose
+
+= render 'shared/error_messages', :resource => @purpose
+
+= semantic_form_for @purpose, :url => admin_purpose_path(@purpose), :html => {:method => :put, :class => "basic_form js_form"} do |f|
+  = render 'form', :f => f

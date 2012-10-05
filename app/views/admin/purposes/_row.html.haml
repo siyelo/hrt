@@ -1,0 +1,14 @@
+%li
+  - unless purpose.leaf?
+    %div.js_code_row.clearfix{id: purpose.id}
+      %span.js_icon.collapsed +
+      = link_to purpose.name, edit_admin_purpose_path(purpose), :class => "code-label"
+  - else
+    %div.clearfix
+      %span
+      = link_to purpose.name, edit_admin_purpose_path(purpose), :class => "code-label"
+
+  - unless purpose.leaf?
+    %ul{id: "#{ purpose.id }_act", style: "display: none"}
+      - purpose.children.each do |child|
+        = render 'row', purpose: child

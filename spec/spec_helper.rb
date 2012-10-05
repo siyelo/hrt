@@ -76,6 +76,13 @@ Spork.prefork do
       DatabaseCleaner.clean
       Timecop.return
     end
+
+    config.after(:each, :type => :request) do |example|
+      if ENV.include?('SHOW_ME_THE_PAGE')
+        save_and_open_page if example.failed?
+      end
+    end
+
   end
 end
 

@@ -22,6 +22,7 @@ describe "Sysadmins" do
     FactoryGirl.create(:location, name: 'Burera')
 
     click_link "Codes"
+    click_link "Locations"
 
     page.should have_content('Bugesera')
     page.should have_content('Burera')
