@@ -2,6 +2,10 @@ class LocationSplit < CodeSplit
   scope :roots, lambda { { :conditions => [
     "code_splits.code_id IN (?)",
     Location.roots.map{|c| c.id}] } }
+
+  def self.update_classifications(activity, classifications)
+    super(activity, Location, classifications)
+  end
 end
 
 

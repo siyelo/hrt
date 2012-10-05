@@ -1,4 +1,4 @@
-class PurposeSpendSplit < CodeSplit
+class PurposeSpendSplit < PurposeSplit
 end
 
 

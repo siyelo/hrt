@@ -19,28 +19,28 @@ describe CodingTree do
     #                   - code2221
 
     # first level
-    @code1    = FactoryGirl.create(:code, :short_display => 'code1')
-    @code2    = FactoryGirl.create(:code, :short_display => 'code2')
+    @code1    = FactoryGirl.create(:purpose, :name => 'code1')
+    @code2    = FactoryGirl.create(:purpose, :name => 'code2')
 
     # second level
-    @code11    = FactoryGirl.create(:code, :short_display => 'code11')
-    @code12    = FactoryGirl.create(:code, :short_display => 'code12')
-    @code21    = FactoryGirl.create(:code, :short_display => 'code21')
-    @code22    = FactoryGirl.create(:code, :short_display => 'code22')
+    @code11    = FactoryGirl.create(:purpose, :name => 'code11')
+    @code12    = FactoryGirl.create(:purpose, :name => 'code12')
+    @code21    = FactoryGirl.create(:purpose, :name => 'code21')
+    @code22    = FactoryGirl.create(:purpose, :name => 'code22')
     @code11.move_to_child_of(@code1)
     @code12.move_to_child_of(@code1)
     @code21.move_to_child_of(@code2)
     @code22.move_to_child_of(@code2)
 
     # third level
-    @code111   = FactoryGirl.create(:code, :short_display => 'code111')
-    @code112   = FactoryGirl.create(:code, :short_display => 'code112')
-    @code121   = FactoryGirl.create(:code, :short_display => 'code121')
-    @code122   = FactoryGirl.create(:code, :short_display => 'code122')
-    @code211   = FactoryGirl.create(:code, :short_display => 'code211')
-    @code212   = FactoryGirl.create(:code, :short_display => 'code212')
-    @code221   = FactoryGirl.create(:code, :short_display => 'code221')
-    @code222   = FactoryGirl.create(:code, :short_display => 'code222')
+    @code111   = FactoryGirl.create(:purpose, :name => 'code111')
+    @code112   = FactoryGirl.create(:purpose, :name => 'code112')
+    @code121   = FactoryGirl.create(:purpose, :name => 'code121')
+    @code122   = FactoryGirl.create(:purpose, :name => 'code122')
+    @code211   = FactoryGirl.create(:purpose, :name => 'code211')
+    @code212   = FactoryGirl.create(:purpose, :name => 'code212')
+    @code221   = FactoryGirl.create(:purpose, :name => 'code221')
+    @code222   = FactoryGirl.create(:purpose, :name => 'code222')
     @code111.move_to_child_of(@code11)
     @code112.move_to_child_of(@code11)
     @code121.move_to_child_of(@code12)
@@ -51,9 +51,9 @@ describe CodingTree do
     @code222.move_to_child_of(@code22)
 
     # fourth level
-    @code1221   = FactoryGirl.create(:code, :short_display => 'code1221')
+    @code1221   = FactoryGirl.create(:purpose, :name => 'code1221')
     @code1221.move_to_child_of(@code122)
-    @code2221   = FactoryGirl.create(:code, :short_display => 'code2221')
+    @code2221   = FactoryGirl.create(:purpose, :name => 'code2221')
     @code2221.move_to_child_of(@code222)
 
     basic_setup_project
@@ -326,8 +326,8 @@ describe CodingTree do
       end
 
       it "returns codes for simple activity and 'PurposeBudgetSplit' type" do
-        Code.stub_chain(:purposes, :maximum)
-        Code.stub_chain(:purposes, :with_version, :roots).and_return(@fake_codes)
+        Purpose.stub(:maximum)
+        Purpose.stub_chain(:with_version, :roots).and_return(@fake_codes)
 
         ct = CodingTree.new(@activity, PurposeBudgetSplit)
         ct.root_codes.should == @fake_codes
@@ -349,8 +349,8 @@ describe CodingTree do
       end
 
       it "returns codes for simple activity and 'PurposeSpendSplit' type" do
-        Code.stub_chain(:purposes, :maximum)
-        Code.stub_chain(:purposes, :with_version, :roots).and_return(@fake_codes)
+        Purpose.stub(:maximum)
+        Purpose.stub_chain(:with_version, :roots).and_return(@fake_codes)
 
         ct = CodingTree.new(@activity, PurposeSpendSplit)
         ct.root_codes.should == @fake_codes

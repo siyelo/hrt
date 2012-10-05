@@ -23,24 +23,26 @@ describe Reports::Detailed::DynamicQuery do
           :name => 'project',
           :in_flows => in_flows
         @project.save!
-        @root_code = FactoryGirl.create :code
-        @code1 = FactoryGirl.create :code, :official_name => "root"
+        @root_code = FactoryGirl.create :purpose
+        @purpose_code1  = FactoryGirl.create :purpose, :official_name => "root"
+        @input_code1    = FactoryGirl.create :input
+        @location_code1 = FactoryGirl.create :location
         @activity = FactoryGirl.create :activity, :project => @project,
           :data_response => @response, :description => "desc"
         @is = FactoryGirl.create :implementer_split, :activity => @activity, :organization => @organization, :budget => 100
-        @purpose1 = FactoryGirl.create :purpose, :short_display => "Mtef Purpose"
-        @purpose2 = FactoryGirl.create :purpose, :short_display => "Nsp Purpose"
+        @purpose1 = FactoryGirl.create :purpose, :name => "Mtef Purpose"
+        @purpose2 = FactoryGirl.create :purpose, :name => "Nsp Purpose"
         @cost_categorization = FactoryGirl.create :input_budget_split,
-          :percentage => 100, :activity => @activity, :code => @code1
+          :percentage => 100, :activity => @activity, :code => @input_code1
         @budget_purpose = FactoryGirl.create :budget_purpose, :percentage => 100,
-          :activity => @activity, :code => @code1
+          :activity => @activity, :code => @purpose_code1
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 100, :activity => @activity, :code => @code1
+          :percentage => 100, :activity => @activity, :code => @location_code1
 
         #creating dummy tree
         @purpose1.move_to_child_of(@root_code)
         @purpose2.move_to_child_of(@purpose1)
-        @code1.move_to_child_of(@purpose2)
+        @purpose_code1.move_to_child_of(@purpose2)
         @activity.reload;@activity.save
       end
 
@@ -70,14 +72,14 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Targets'].should == nil
         table[0]['Input Split Total %'].should == 100.0
         table[0]['Input Split %'].should == 100.0
-        table[0]['Input'].should == @cost_categorization.code.short_display
+        table[0]['Input'].should == @cost_categorization.code.name
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 100.0
         table[0]['MTEF Code'].should == "N/A"
         table[0]['NSP Code'].should == "N/A"
         table[0]['Location Split Total %'].should == 100.0
         table[0]['Location Split %'].should == 100.0
-        table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
+        table[0]['Name of District'].should == @activity.locations.map(&:name).join(",")
         table[0]['Total Amount ($)'].round(2).should == 100.00
         table[0]['Actual Double Count'].should == @is.double_count
       end
@@ -95,14 +97,14 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Targets'].should == nil
         table[0]['Input Split Total %'].should == 66.67
         table[0]['Input Split %'].should == 100.0
-        table[0]['Input'].should == @cost_categorization.code.short_display
+        table[0]['Input'].should == @cost_categorization.code.name
         table[0]['Purpose Split Total %'].should == 66.67
         table[0]['Purpose Split %'].should == 100.0
         table[0]['MTEF Code'].should == "N/A"
         table[0]['NSP Code'].should == "N/A"
         table[0]['Location Split Total %'].should == 66.67
         table[0]['Location Split %'].should == 100.0
-        table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
+        table[0]['Name of District'].should == @activity.locations.map(&:name).join(",")
         table[0]['Total Amount ($)'].round(2).should == 66.67
         table[0]['Actual Double Count'].should == @is.double_count
 
@@ -113,14 +115,14 @@ describe Reports::Detailed::DynamicQuery do
         table[1]['Targets'].should == nil
         table[1]['Input Split Total %'].should == 33.33
         table[1]['Input Split %'].should == 100.0
-        table[1]['Input'].should == @cost_categorization.code.short_display
+        table[1]['Input'].should == @cost_categorization.code.name
         table[1]['Purpose Split Total %'].should == 33.33
         table[1]['Purpose Split %'].should == 100.0
         table[1]['MTEF Code'].should == "N/A"
         table[1]['NSP Code'].should == 'N/A'
         table[1]['Location Split Total %'].should == 33.33
         table[1]['Location Split %'].should == 100.0
-        table[1]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
+        table[1]['Name of District'].should == @activity.locations.map(&:name).join(",")
         table[1]['Total Amount ($)'].round(2).should == 33.33
         table[1]['Actual Double Count'].should == @is.double_count
       end
@@ -138,14 +140,14 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Targets'].should == nil
         table[0]['Input Split Total %'].should == 100.0
         table[0]['Input Split %'].should == 100.0
-        table[0]['Input'].should == @cost_categorization.code.short_display
+        table[0]['Input'].should == @cost_categorization.code.name
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 100.0
         table[0]['MTEF Code'].should == "N/A"
         table[0]['NSP Code'].should == "N/A"
         table[0]['Location Split Total %'].should == 100.0
         table[0]['Location Split %'].should == 100.0
-        table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
+        table[0]['Name of District'].should == @activity.locations.map(&:name).join(",")
         table[0]['Total Amount ($)'].round(2).should == 100.00
         table[0]['Actual Double Count'].should == @is.double_count
 
@@ -156,14 +158,14 @@ describe Reports::Detailed::DynamicQuery do
         table[1]['Targets'].should == nil
         table[1]['Input Split Total %'].should == 100.0
         table[1]['Input Split %'].should == 100.0
-        table[1]['Input'].should == @cost_categorization.code.short_display
+        table[1]['Input'].should == @cost_categorization.code.name
         table[1]['Purpose Split Total %'].should == 100.0
         table[1]['Purpose Split %'].should == 100.0
         table[1]['MTEF Code'].should == "N/A"
         table[1]['NSP Code'].should == "N/A"
         table[1]['Location Split Total %'].should == 100.0
         table[1]['Location Split %'].should == 100.0
-        table[1]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
+        table[1]['Name of District'].should == @activity.locations.map(&:name).join(",")
         table[1]['Total Amount ($)'].round(2).should == 100.00
         table[1]['Actual Double Count'].should == @is.double_count
       end
@@ -179,8 +181,10 @@ describe Reports::Detailed::DynamicQuery do
         @project = FactoryGirl.create :project, :data_response => @response,
           :name => 'project',
           :in_flows => in_flows
-        @root_code = FactoryGirl.create :code
-        @code1 = FactoryGirl.create :code, :official_name => "root"
+        @root_code = FactoryGirl.create :purpose
+        @purpose_code1 = FactoryGirl.create :purpose, :official_name => "root"
+        @input_code1 = FactoryGirl.create :input, :official_name => "root"
+        @location_code1 = FactoryGirl.create :location, :official_name => "root"
         @activity = FactoryGirl.create :activity, :project => @project,
           :data_response => @response, :description => "desc"
         @is = FactoryGirl.create :implementer_split, :activity => @activity,
@@ -189,19 +193,19 @@ describe Reports::Detailed::DynamicQuery do
 
         #creating dummy tree
         @purpose1.move_to_child_of(@root_code)
-        @code1.move_to_child_of(@purpose1)
+        @purpose_code1.move_to_child_of(@purpose1)
         @activity.reload;@activity.save
       end
 
       it "should adjust the total amounts as per codings (2 cost categorys splits)" do
         @cost_categorization = FactoryGirl.create :input_budget_split,
-          :percentage => 25, :activity => @activity, :code => @code1
+          :percentage => 25, :activity => @activity, :code => @input_code1
         @cost_categorization1 = FactoryGirl.create :input_budget_split,
-          :percentage => 75, :activity => @activity, :code => @code1
+          :percentage => 75, :activity => @activity, :code => @input_code1
         @budget_purpose = FactoryGirl.create :budget_purpose, :percentage => 100,
-          :activity => @activity, :code => @code1
+          :activity => @activity, :code => @purpose_code1
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 100, :activity => @activity, :code => @code1
+          :percentage => 100, :activity => @activity, :code => @location_code1
         table = run_report
         table[0]['Funding Source'].should == @organization.name
         table[0]['Data Source'].should == @organization.name

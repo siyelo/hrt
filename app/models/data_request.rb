@@ -44,7 +44,7 @@ class DataRequest < ActiveRecord::Base
   private
   def set_code_type_versions
     self.locations_version     = Location.last_version
-    self.purposes_version      = Code.purposes.last_version
+    self.purposes_version      = Purpose.last_version
     self.inputs_version        = Input.last_version
     self.beneficiaries_version = Beneficiary.last_version
   end

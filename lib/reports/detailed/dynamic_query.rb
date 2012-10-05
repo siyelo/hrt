@@ -6,7 +6,7 @@ class Reports::Detailed::DynamicQuery
   attr_accessor :builder
 
   def initialize(request, amount_type, filetype)
-    @deepest_nesting = Code.purposes.with_version(request.purposes_version).deepest_nesting
+    @deepest_nesting = Purpose.with_version(request.purposes_version).deepest_nesting
     @amount_type = amount_type
     @implementer_splits = ImplementerSplit.find :all,
       :joins => { :activity => :data_response },
@@ -124,7 +124,7 @@ class Reports::Detailed::DynamicQuery
       fake_purpose = is_fake?(activity.send("leaf_#{@amount_type}_purposes").first.code)
 
       input_row << ( fake_input ? 'N/A' : input_classification.percentage )
-      input_row << input_classification.code.short_display
+      input_row << input_classification.code.name
       build_incomplete_classificiation(activity, "leaf_#{@amount_type}_purposes")
       input_row << funder_ratio(activity.send("leaf_#{@amount_type}_purposes"), in_flow_ratio, fake_purpose)
 
@@ -133,11 +133,11 @@ class Reports::Detailed::DynamicQuery
 
         purpose_row << ( fake_purpose ? 'N/A' : purpose_classification.percentage.to_f.round(2) )
 
-        purpose_row << purpose_classification.code.short_display
+        purpose_row << purpose_classification.code.name
 
         # purpose tree
         codes = self_and_ancestors(purpose_classification.code).reverse
-        add_codes_to_row(purpose_row, codes, @deepest_nesting, :short_display)
+        add_codes_to_row(purpose_row, codes, @deepest_nesting, :name)
 
         purpose_row << (purpose_classification.code.mtef_code.presence || 'N/A')
         purpose_row << (purpose_classification.code.nsp_code.presence || 'N/A')
@@ -149,7 +149,7 @@ class Reports::Detailed::DynamicQuery
         activity.send("location_#{@amount_type}_splits").reject{|ca| ca.percentage.nil?}.sort{|a,b| b.percentage <=> a.percentage}.each do |district_classification|
           district_row = purpose_row.dup
           district_row << ( fake_district ? 'N/A' : district_classification.percentage.to_f.round(2) )
-          district_row << district_classification.code.short_display
+          district_row << district_classification.code.name
           district_row << in_flow_ratio *
                               ( universal_currency_converter(implementer_split.send(@amount_type),
                                                              @currency, 'USD') || 0 ) *
@@ -219,7 +219,7 @@ class Reports::Detailed::DynamicQuery
   end
 
   def fake_code(value = "N/A")
-    @fake_code ||= Code.new(:short_display => value, :hssp2_stratprog_val => value,
+    @fake_code ||= Purpose.new(:name => value, :hssp2_stratprog_val => value,
                             :hssp2_stratobj_val => value)
   end
 

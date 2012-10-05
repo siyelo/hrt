@@ -29,9 +29,9 @@ describe Reports::Detailed::ClassificationSplit do
         @code1_name            = "#{classification_type}1"
         @code2_name            = "#{classification_type}2"
         code1                  = FactoryGirl.create(classification_type,
-                                         :short_display => @code1_name)
+                                         :name => @code1_name)
         code2                  = FactoryGirl.create(classification_type,
-                                         :short_display => @code2_name)
+                                         :name => @code2_name)
         @classification_name   = classification_type.to_s.capitalize
         # implementer splits
         organization2 = FactoryGirl.create(:organization, :name => 'organization2')
@@ -59,13 +59,13 @@ describe Reports::Detailed::ClassificationSplit do
         # Classifications
         classifications = { code1.id => 25, code2.id => 75 }
         if classification_type == :purpose
-          PurposeBudgetSplit.update_classifications(@activity1, classifications)
+          PurposeBudgetSplit.update_classifications(@activity1,  classifications)
         elsif classification_type == :input
-          InputBudgetSplit.update_classifications(@activity1, classifications)
+          InputBudgetSplit.update_classifications(@activity1,  classifications)
           InputBudgetSplit.update_classifications(@other_cost1, classifications)
         elsif classification_type == :location
-          LocationBudgetSplit.update_classifications(@activity1, classifications)
-          LocationBudgetSplit.update_classifications(@other_cost1, classifications)
+          LocationBudgetSplit.update_classifications(@activity1,  classifications)
+          LocationBudgetSplit.update_classifications(@other_cost1,  classifications)
         else
           raise "Invalid type #{classification_type}".to_yaml
         end

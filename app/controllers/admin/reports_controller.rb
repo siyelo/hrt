@@ -20,14 +20,14 @@ class Admin::ReportsController < Admin::BaseController
   end
 
   def district_workplan
-    district = Location.find_by_short_display(params[:district])
+    district = Location.find_by_name(params[:district])
     double_count = params[:double_count] == 'true' ? true : false
     if district
       report = Reports::Detailed::DistrictWorkplan.new(
         current_request, district, double_count, 'xls')
       dc_string = double_count ? '_with_double_counts' : '_without_double_counts'
       send_report_file(report,
-        "#{district.short_display}_district_workplan#{dc_string}")
+        "#{district.name}_district_workplan#{dc_string}")
     else
       redirect_to locations_admin_reports_path
     end
