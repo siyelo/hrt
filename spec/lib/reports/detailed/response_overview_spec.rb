@@ -19,13 +19,13 @@ describe Reports::Detailed::ResponseOverview do
         :name => 'project',
         :in_flows => in_flows
       @project.save!
-      @root_code = FactoryGirl.create :code
-      @code1 = FactoryGirl.create :code, :official_name => "root"
+      @root_code = FactoryGirl.create :purpose
+      @code1 = FactoryGirl.create :purpose, :official_name => "root"
       @activity = FactoryGirl.create :activity, :project => @project,
         :data_response => @response, :description => "desc"
       @is = FactoryGirl.create :implementer_split, :activity => @activity, :organization => @organization, :budget => 100, :double_count => true
-      @purpose1 = FactoryGirl.create :purpose, :short_display => "purpose1"
-      @purpose2 = FactoryGirl.create :purpose, :short_display => "purpose2"
+      @purpose1 = FactoryGirl.create :purpose, :name => "purpose1"
+      @purpose2 = FactoryGirl.create :purpose, :name => "purpose2"
       @cost_categorization = FactoryGirl.create :input_budget_split,
         :percentage => 100, :activity => @activity, :code => @code1
       @budget_purpose = FactoryGirl.create :budget_purpose, :percentage => 100,
@@ -55,14 +55,14 @@ describe Reports::Detailed::ResponseOverview do
       table[0]['Targets'].should == nil
       table[0]['Input Split Total %'].should == 100.0
       table[0]['Input Split %'].should == 100.0
-      table[0]['Input'].should == @cost_categorization.code.short_display
+      table[0]['Input'].should == @cost_categorization.code.name
       table[0]['Purpose Split Total %'].should == 100.0
       table[0]['Purpose Split %'].should == 100.0
-      table[0]['MTEF Code'].should == "N/A"
+      table[0]['MTEF Code'].should == "Human Resources For Health"
       table[0]['NSP Code'].should == "N/A"
       table[0]['Location Split Total %'].should == 100.0
       table[0]['Location Split %'].should == 100.0
-      table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
+      table[0]['Name of District'].should == @activity.locations.map(&:name).join(",")
       table[0]['Total Amount ($)'].round(2).should == 100.00
       table[0]['Actual Double Count'].should_not == true
     end
