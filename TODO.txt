@@ -5,12 +5,14 @@ Remove Code STI
   + add code_type to code_splits
   + write datafix for re-linking code_splits to new codes (Purposes, Inputs, Locations)
   + remove all associations to old codes
-  - delete codes table
-  - add admin for locations
-  - add admin for purposes
-  - add admin for inputs
+  + delete codes table
+  + add admin for locations
+  + add admin for purposes
+  + add admin for inputs
+  - fix admin/codes active menu
+  - make all specs pass
+    - fix cached codes
+  - add table index for code_id and code_type
   - review all classification views
   - review all reports
   - review activity validations
-  - make all specs pass
-  - add table index for code_id and code_type
