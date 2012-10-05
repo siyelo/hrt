@@ -10,13 +10,13 @@ class Reports::Detailed::ClassificationSplit
 
   def initialize(request, amount_type, classification_type, filetype)
     @amount_type                = amount_type
-    @classification_type        = classification_type
+    @classification_type        = classification_type.to_s.capitalize
     @classification_association = classification_association(amount_type,
                                     classification_type)
     @code_deepest_nesting       = case classification_type
-                                  when :purpose
-                                    Code.purposes.with_version(request.purposes_version).deepest_nesting
-                                  when :input
+                                  when 'Purpose'
+                                    Purpose.with_version(request.purposes_version).deepest_nesting
+                                  when 'Input'
                                     Input.with_version(request.inputs_version).deepest_nesting
                                   else
                                     1
@@ -55,7 +55,7 @@ class Reports::Detailed::ClassificationSplit
   def build_header
     row = []
 
-    classification_name = @classification_type.to_s.capitalize
+    classification_name = @classification_type
     amount_name         = @amount_type.to_s.capitalize
 
     row << 'Organization'
@@ -122,8 +122,8 @@ class Reports::Detailed::ClassificationSplit
         percentage = classification.percentage || 0
         row = base_row.dup
 
-        row << classification.code.short_display
-        row << classification.code.type
+        row << classification.code.name
+        row << classification.code.class.name
         row << percentage
         row << total_percentage
         row << percentage * split_amount / 100
@@ -134,9 +134,9 @@ class Reports::Detailed::ClassificationSplit
         unless classification.new_record? # not a dummy
           codes = classification.code ?
             cached_self_and_ancestors(classification.code) : []
-          add_codes_to_row(row, codes.reverse, @code_deepest_nesting, :short_display)
+          add_codes_to_row(row, codes.reverse, @code_deepest_nesting, :name)
         else
-          row << classification.code.short_display
+          row << classification.code.name
         end
 
         builder.add_row(row)
@@ -157,7 +157,7 @@ class Reports::Detailed::ClassificationSplit
     # create dummy if the classification type doesnt exist for the
     # given activity/other cost e.g. OtherCosts dont have Purposes
     if total_percentage != 100
-      dummy_code = Code.new(:short_display => "Not classified - #{activity.type}")
+      dummy_code = @classification_type.constantize.send(:new, :name => "Not classified - #{activity.type}")
       klass = classification_class(@classification_association)
       classifications << klass.new(:code => dummy_code,
                                    :percentage => 100 - total_percentage)
@@ -203,9 +203,11 @@ class Reports::Detailed::ClassificationSplit
     codes = []
     codes << code
 
-    while code.parent_id.present?
-      code = codes_cache[code.parent_id]
-      codes << code
+    unless code.is_a?(Location)
+      while code.parent_id.present?
+        code = codes_cache[code.parent_id]
+        codes << code
+      end
     end
 
     codes

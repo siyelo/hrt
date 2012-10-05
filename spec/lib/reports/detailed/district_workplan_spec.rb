@@ -27,8 +27,10 @@ describe Reports::Detailed::DistrictWorkplan do
     split2        = FactoryGirl.create(:implementer_split, activity: activity2,
                             budget: 100, spend: 200,
                             organization: organization2)
-    @district1     = FactoryGirl.create(:location, short_display: 'district1')
-    @district2     = FactoryGirl.create(:location, short_display: 'district2')
+    @district1     = FactoryGirl.create(:location, name: 'district1')
+    @district2     = FactoryGirl.create(:location, name: 'district2')
+    activity1.stub_chain(:data_request, :locations_version).and_return(1)
+    activity2.stub_chain(:data_request, :locations_version).and_return(1)
     activity1.reload
     activity2.reload
     classifications1 = { @district1.id => 25, @district2.id => 75 }
@@ -105,6 +107,9 @@ describe Reports::Detailed::DistrictWorkplan do
                          budget: 100, spend: 200, organization: organization4)
       FactoryGirl.create(:implementer_split, activity: activity4,
                          budget: 100, spend: 200, organization: organization3)
+
+      activity3.stub_chain(:data_request, :locations_version).and_return(1)
+      activity4.stub_chain(:data_request, :locations_version).and_return(1)
       activity3.reload
       activity4.reload
 

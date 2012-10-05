@@ -86,7 +86,7 @@ class CodingTree
   def root_codes
     case @coding_klass.to_s
     when 'PurposeBudgetSplit', 'PurposeSpendSplit'
-      Code.purposes.with_version(@data_request.purposes_version).roots
+      Purpose.with_version(@data_request.purposes_version).roots
     when 'InputBudgetSplit', 'InputSpendSplit'
       Input.with_version(@data_request.inputs_version).roots
     when 'LocationBudgetSplit', 'LocationSpendSplit'
@@ -110,6 +110,7 @@ class CodingTree
   end
 
   def cached_children(code)
+    return [] if code.is_a? Location
     all_codes.select{|c| c.parent_id == code.id}
   end
 
@@ -119,6 +120,7 @@ class CodingTree
       max           = 0 if max.nil?
       cached_amount = 0
       descendants   = false
+
       root_codes.each do |code|
         ca = @coding_klass.with_activity(activity).with_code_id(code.id).first
         children = cached_children(code)
@@ -190,7 +192,7 @@ class CodingTree
     def all_codes
       @all_codes ||= case @coding_klass.to_s
       when 'PurposeBudgetSplit', 'PurposeSpendSplit'
-        Code.all
+        Purpose.all
       when 'InputBudgetSplit', 'InputSpendSplit'
         Input.all
       when 'LocationBudgetSplit', 'LocationSpendSplit'

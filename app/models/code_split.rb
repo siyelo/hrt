@@ -62,10 +62,10 @@ class CodeSplit < ActiveRecord::Base
   # particularly because its trying to be responsible
   # for updating the activity's _valid? cache fields with
   # update_classified_amount_cache()
-  def self.update_classifications(activity, classifications)
+  def self.update_classifications(activity, code_type_class,  classifications)
     present_ids = []
     assignments = self.with_activity(activity.id)
-    codes       = Code.find(classifications.keys)
+    codes       = code_type_class.find(classifications.keys)
 
     classifications.each_pair do |code_id, value|
       code = codes.detect{|code| code.id == code_id.to_i}
@@ -78,14 +78,14 @@ class CodeSplit < ActiveRecord::Base
         # initialize new code assignment if it does not exist
         ca = self.new(:activity => activity, :code => code) unless ca
         ca.percentage = value
-        ca.save
+        ca.save!
       end
     end
 
     # SQL deletion, faster than deleting records individually
     if present_ids.present?
-      self.delete_all(["activity_id = ? AND code_id NOT IN (?)",
-                                 activity.id, present_ids])
+      self.delete_all(["activity_id = ? AND code_id NOT IN (?) AND code_type <> ?",
+                                 activity.id, present_ids, code_type_class.name])
     else
       self.delete_all(["activity_id = ?", activity.id])
     end

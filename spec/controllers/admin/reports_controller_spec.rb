@@ -65,8 +65,8 @@ describe Admin::ReportsController do
     describe "district_workplan" do
       it "downloads xls district report" do
         location = mock_model(Location)
-        location.stub(:short_display).and_return('district1')
-        Location.stub(:find_by_short_display).and_return(location)
+        location.stub(:name).and_return('district1')
+        Location.stub(:find_by_name).and_return(location)
         get :district_workplan, :id => 1
         response.should be_success
         response.header["Content-Type"].should == "application/vnd.ms-excel"

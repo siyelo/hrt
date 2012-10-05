@@ -3,6 +3,9 @@ class InputSplit < CodeSplit
     "code_splits.code_id IN (?)",
     Input.roots.map{|c| c.id}] } }
 
+  def self.update_classifications(activity, classifications)
+    super(activity, Input, classifications)
+  end
 end
 
 

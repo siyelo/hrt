@@ -7,8 +7,10 @@ module Reports::Detailed::Helpers
     return @codes_cache if @codes_cache
 
     @codes_cache = {}
-    Code.all.each do |code|
-      @codes_cache[code.id] = code
+    [Purpose, Input, Location].each do |code_klass|
+      code_klass.all.each do |code|
+        @codes_cache[code.id] = code
+      end
     end
 
     return @codes_cache

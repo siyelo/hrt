@@ -10,7 +10,7 @@ class Reports::DistrictSplit < Reports::TopBase
 
   def initialize(request, include_double_count = false)
     @request = request
-    @locations = Location.find(:all, :order => 'short_display ASC')
+    @locations = Location.find(:all, :order => 'name ASC')
     @include_double_count = include_double_count
   end
 
@@ -39,8 +39,8 @@ class Reports::DistrictSplit < Reports::TopBase
   private
   def amounts_by_districts
     unless @amounts
-      national  = locations.detect{|l| l.short_display == 'National Level' }
-      districts = locations.select{|l| l.short_display != 'National Level' }
+      national  = locations.detect{|l| l.name == 'National Level' }
+      districts = locations.select{|l| l.name != 'National Level' }
 
       @amounts = []
 
@@ -91,7 +91,7 @@ class Reports::DistrictSplit < Reports::TopBase
       :select => 'code_splits.type AS klass,
                   code_splits.activity_id,
                   code_splits.cached_amount AS amount,
-                  codes.short_display AS district,
+                  codes.name AS district,
                   COALESCE(projects.currency, organizations.currency) AS amount_currency',
       :joins => 'INNER JOIN "codes" ON "codes".id = "code_splits".code_id
                  INNER JOIN "activities" ON "activities".id = "code_splits".activity_id
@@ -104,7 +104,7 @@ class Reports::DistrictSplit < Reports::TopBase
   end
 
   def district_amounts(district)
-    district_name = district.short_display
+    district_name = district.name
     spend  = amount_by_district[district_name][:spend]
     budget = amount_by_district[district_name][:budget]
     Reports::Row.new(district_name,
@@ -114,7 +114,7 @@ class Reports::DistrictSplit < Reports::TopBase
 
   def map_data(collection)
     result = {}
-    locations.each { |location| result[location.short_display] ||= Hash.new(0) }
+    locations.each { |location| result[location.name] ||= Hash.new(0) }
     collection.each do |e|
       method_name = method_from_class(e.klass.to_s)
       ratio = include_double_count ? 1.0 : ratios[e.activity_id.to_i][method_name]
