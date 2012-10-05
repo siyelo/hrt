@@ -4,7 +4,7 @@ class Admin::BeneficiariesController < Admin::BaseController
   inherit_resources
 
   def index
-    @beneficiaries = Beneficiary.order("id ASC")
+    @beneficiaries = Beneficiary.with_last_version.order("id ASC")
 
     if params[:query].present?
       @beneficiaries = @beneficiaries.where(["UPPER(name) LIKE UPPER(:q)",

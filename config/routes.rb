@@ -59,15 +59,10 @@ Hrt::Application.routes.draw do
         get :download_template
       end
     end
-    resources :beneficiaries, only: [:index, :edit, :update]
     resources :locations, only: [:index, :edit, :update]
     resources :purposes, only: [:index, :edit, :update]
-    resources :codes, only: [:index, :edit, :update] do
-      collection do
-        post :create_from_file
-        get :download_template
-      end
-    end
+    resources :inputs, only: [:index, :edit, :update]
+    resources :beneficiaries, only: [:index, :edit, :update]
   end
 
   resources :workplans  do

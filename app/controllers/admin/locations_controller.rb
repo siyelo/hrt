@@ -4,7 +4,7 @@ class Admin::LocationsController < Admin::BaseController
   inherit_resources
 
   def index
-    @locations = Location.order("name ASC")
+    @locations = Location.with_last_version.order("name ASC")
 
     if params[:query].present?
       @locations = @locations.where(["UPPER(name) LIKE UPPER(:q)",
