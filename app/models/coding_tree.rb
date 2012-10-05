@@ -122,7 +122,7 @@ class CodingTree
       descendants   = false
 
       root_codes.each do |code|
-        ca = @coding_klass.with_activity(activity).with_code_id(code.id).first
+        ca = @coding_klass.with_activity(activity).with_code(code).first
         children = cached_children(code)
         if ca
           if ca.percentage.present? && ca.percentage > 0

@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :code_split, :class => CodeSplit do |f|
-    f.code                 { FactoryGirl.create :code }
+    f.code                 { FactoryGirl.create :purpose }
     f.cached_amount        { 1000 }
     f.percentage           { 100 }
     f.sum_of_children      { 0 } # db default value - used in specs
