@@ -33,7 +33,9 @@ module ApplicationHelper
         active = current_controller_with_nesting?('admin', 'reports') ||
           current_controller_with_nesting?('admin', 'documents')
       when 'codes'
-        active = current_controller_with_nesting?('admin', 'codes') ||
+        active = current_controller_with_nesting?('admin', 'locations') ||
+          current_controller_with_nesting?('admin', 'purposes') ||
+          current_controller_with_nesting?('admin', 'inputs') ||
           current_controller_with_nesting?('admin', 'beneficiaries')
       end
     end
