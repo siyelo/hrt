@@ -80,8 +80,8 @@ class CodeSplit < ActiveRecord::Base
 
     # SQL deletion, faster than deleting records individually
     if present_ids.present?
-      self.delete_all(["activity_id = ? AND code_id NOT IN (?) AND code_type <> ?",
-                                 activity.id, present_ids, code_type_class.name])
+      self.delete_all(["activity_id = ? AND code_type = ? AND code_id NOT IN (?)",
+                                 activity.id, code_type_class.name, present_ids])
     else
       self.delete_all(["activity_id = ?", activity.id])
     end

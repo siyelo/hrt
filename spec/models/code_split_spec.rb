@@ -133,79 +133,81 @@ describe CodeSplit do
     end
 
     context "when classifications does not exist" do
-      context "when submitting empty classifications" do
-        it "does not saves anything" do
-          classifications = {}
-          coding_type     = 'PurposeBudgetSplit'
-          PurposeBudgetSplit.update_classifications(@activity, classifications)
-          PurposeBudgetSplit.count.should == 0
-        end
+      let(:purpose1) { FactoryGirl.create(:purpose) }
+      let(:purpose2) { FactoryGirl.create(:purpose) }
+
+      it "creates code splits" do
+        classifications = { purpose1.id => 100, purpose2.id => 20 }
+        PurposeBudgetSplit.update_classifications(@activity, classifications)
+        PurposeBudgetSplit.count.should == 2
+        assignments = PurposeBudgetSplit.all
+        assignments.detect{|ca| ca.code_id == purpose1.id}.percentage.should == 100
+        assignments.detect{|ca| ca.code_id == purpose2.id}.percentage.should == 20
       end
 
-      context "when submitting non empty classifications" do
-        before :each do
-          @purpose1 = FactoryGirl.create(:purpose)
-          @purpose2 = FactoryGirl.create(:purpose)
-        end
+      it "does not create anything" do
+        classifications = {}
+        coding_type     = 'PurposeBudgetSplit'
+        PurposeBudgetSplit.update_classifications(@activity, classifications)
+        PurposeBudgetSplit.count.should == 0
+      end
 
-        context "when submitting percentages <= 100" do
-          it "creates code assignments" do
-            classifications = { @purpose1.id => 100, @purpose2.id => 20 }
-            PurposeBudgetSplit.update_classifications(@activity, classifications)
-            PurposeBudgetSplit.count.should == 2
-            assignments = PurposeBudgetSplit.all
-            assignments.detect{|ca| ca.code_id == @purpose1.id}.percentage.should == 100
-            assignments.detect{|ca| ca.code_id == @purpose2.id}.percentage.should == 20
-          end
-        end
+      it "rejects invalid percentage amounts" do
+        classifications = { purpose1.id => 100, purpose2.id => 101 }
+        PurposeBudgetSplit.update_classifications(@activity, classifications)
 
-        context "when submitting percentages > 100" do
-          it "creates code assignments" do
-            classifications = { @purpose1.id => 100, @purpose2.id => 101 }
-            PurposeBudgetSplit.update_classifications(@activity, classifications)
-
-            PurposeBudgetSplit.count.should == 1
-            assignments = PurposeBudgetSplit.all
-            assignments.detect{|ca| ca.code_id == @purpose1.id}.percentage.should == 100
-          end
-        end
+        PurposeBudgetSplit.count.should == 1
+        assignments = PurposeBudgetSplit.all
+        assignments.detect{|ca| ca.code_id == purpose1.id}.percentage.should == 100
       end
     end
 
     context "when classifications exist" do
-      context "when submitting classifications" do
-        before :each do
-          @purpose1 = FactoryGirl.create(:purpose)
-          @purpose2 = FactoryGirl.create(:purpose)
-        end
+      let(:purpose1) { FactoryGirl.create(:purpose) }
+      let(:purpose2) { FactoryGirl.create(:purpose) }
 
-        context "when submitting percentages" do
-          it "creates code assignments" do
-            FactoryGirl.create(:purpose_budget_split, :activity => @activity,
-                    :code => @purpose1, :percentage => 10)
-            FactoryGirl.create(:purpose_budget_split, :activity => @activity, :code => @purpose2)
-            PurposeBudgetSplit.count.should == 2
+      it "creates code splits" do
+        FactoryGirl.create(:purpose_budget_split, :activity => @activity,
+                           :code => purpose1, :percentage => 10)
+        FactoryGirl.create(:purpose_budget_split, :activity => @activity,
+                           :code => purpose2)
+        PurposeBudgetSplit.count.should == 2
 
-            # when submitting existing classifications, it updates them
-            classifications = { @purpose1.id => 11, @purpose2.id => 22 }
-            PurposeBudgetSplit.update_classifications(@activity, classifications)
+        # when submitting existing classifications, it updates them
+        classifications = { purpose1.id => 11, purpose2.id => 22 }
+        PurposeBudgetSplit.update_classifications(@activity, classifications)
 
-            PurposeBudgetSplit.count.should == 2
-            assignments = CodeSplit.all
-            assignments.detect{|ca| ca.code_id == @purpose1.id}.percentage.should == 11
-            assignments.detect{|ca| ca.code_id == @purpose2.id}.percentage.should == 22
-          end
+        PurposeBudgetSplit.count.should == 2
+        assignments = CodeSplit.all
+        assignments.detect{|ca| ca.code_id == purpose1.id}.percentage.should == 11
+        assignments.detect{|ca| ca.code_id == purpose2.id}.percentage.should == 22
+      end
 
-          it "rounds percentages off to two decimal places" do
-            @cb = FactoryGirl.create(:purpose_budget_split, :activity => @activity, :code => @purpose1, :percentage => 57.344656)
-            @cb.percentage.to_f.should == 57.34
-          end
+      it "deletes old code splits" do
+        FactoryGirl.create(:purpose_budget_split, :activity => @activity,
+                           :code => purpose1, :percentage => 10)
 
-          it "rounds percentages off to two decimal places" do
-            @cb = FactoryGirl.create(:purpose_spend_split, :activity => @activity, :code => @purpose1, :percentage => 52.7388)
-            @cb.percentage.to_f.should == 52.74
-          end
-        end
+        PurposeBudgetSplit.update_classifications(@activity, {purpose1.id => 10})
+        PurposeBudgetSplit.count.should == 1
+        PurposeBudgetSplit.first.percentage.should == 10
+
+        FactoryGirl.create(:purpose_budget_split, :activity => @activity,
+                           :code => purpose2, :percentage => 20)
+        PurposeBudgetSplit.update_classifications(@activity, {purpose2.id => 20})
+        PurposeBudgetSplit.count.should == 1
+        PurposeBudgetSplit.first.percentage.should == 20
+      end
+
+      it "rounds percentages off to two decimal places" do
+        cb = FactoryGirl.create(:purpose_budget_split, :activity => @activity,
+                                :code => purpose1, :percentage => 57.344656)
+        cb.percentage.to_f.should == 57.34
+      end
+
+      it "rounds percentages off to two decimal places" do
+        cb = FactoryGirl.create(:purpose_spend_split, :activity => @activity,
+                                :code => purpose1, :percentage => 52.7388)
+        cb.percentage.to_f.should == 52.74
       end
     end
   end
