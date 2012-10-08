@@ -1,8 +1,20 @@
+Location.reset_column_information
+CodeSplit.reset_column_information
+InputSplit.reset_column_information
+LocationSplit.reset_column_information
+PurposeSplit.reset_column_information
+InputBudgetSplit.reset_column_information
+InputSpendSplit.reset_column_information
+LocationBudgetSplit.reset_column_information
+LocationSpendSplit.reset_column_information
+PurposeBudgetSplit.reset_column_information
+PurposeSpendSplit.reset_column_information
+
 class Code < ActiveRecord::Base
   extend CodeVersion
   extend TreeHelpers
 
-  has_many :code_splits, as: :code, dependent: :destroy
+  has_many :code_splits
 
   acts_as_nested_set
 end
@@ -28,8 +40,6 @@ class Location < ActiveRecord::Base
   scope :without_national_level, { :conditions => "lower(locations.name) != 'national level'" }
   scope :sorted, { :order => "locations.name" }
 end
-
-Location.reset_column_information
 
 OldLocation.transaction do
   old_locations = OldLocation.all
