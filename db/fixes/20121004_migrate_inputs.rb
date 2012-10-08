@@ -1,8 +1,20 @@
+Input.reset_column_information
+CodeSplit.reset_column_information
+InputSplit.reset_column_information
+LocationSplit.reset_column_information
+PurposeSplit.reset_column_information
+InputBudgetSplit.reset_column_information
+InputSpendSplit.reset_column_information
+LocationBudgetSplit.reset_column_information
+LocationSpendSplit.reset_column_information
+PurposeBudgetSplit.reset_column_information
+PurposeSpendSplit.reset_column_information
+
 class Code < ActiveRecord::Base
   extend CodeVersion
   extend TreeHelpers
 
-  has_many :code_splits, as: :code, dependent: :destroy
+  has_many :code_splits
 
   acts_as_nested_set
 end
@@ -31,8 +43,6 @@ class Input < ActiveRecord::Base
   # don't move acts_as_nested_set up, it creates attr_protected/accessible conflicts
   acts_as_nested_set
 end
-
-Input.reset_column_information
 
 def migrate_input(old_input, parent)
   input = Input.new
