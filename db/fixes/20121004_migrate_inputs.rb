@@ -1,3 +1,15 @@
+class LocationSplit < CodeSplit; end
+class LocationBudgetSplit < LocationSplit; end
+class LocationSpendSplit < LocationSplit; end
+
+class InputSplit < CodeSplit; end
+class InputBudgetSplit < InputSplit; end
+class InputSpendSplit < InputSplit; end
+
+class PurposeSplit < CodeSplit; end
+class PurposeBudgetSplit < PurposeSplit; end
+class PurposeSpendSplit < PurposeSplit; end
+
 Input.reset_column_information
 CodeSplit.reset_column_information
 InputSplit.reset_column_information
@@ -9,6 +21,7 @@ LocationBudgetSplit.reset_column_information
 LocationSpendSplit.reset_column_information
 PurposeBudgetSplit.reset_column_information
 PurposeSpendSplit.reset_column_information
+
 
 class Code < ActiveRecord::Base
   extend CodeVersion

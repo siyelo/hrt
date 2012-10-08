@@ -134,11 +134,11 @@ class Activity < ActiveRecord::Base
   end
 
   # asynchronously update classification tree cached amounts
-  def update_classified_amount_cache(type)
+  def update_classified_amount_cache(code_type, amount_type)
     # disable update_all_classified_amount_caches
     # callback to be run again on save !!
     Activity.skip_callback(:update, :before, :update_all_classified_amount_caches)
-    set_classified_amount_cache(type)
+    set_classified_amount_cache(code_type, amount_type)
     self.save(validate: false)
   end
   handle_asynchronously :update_classified_amount_cache
@@ -148,11 +148,10 @@ class Activity < ActiveRecord::Base
   #
   # Updates classified amount caches if budget or spend have been changed
   def update_all_classified_amount_caches
-    [PurposeBudgetSplit, LocationBudgetSplit, InputBudgetSplit].each do |type|
-      update_classified_amount_cache(type)
-    end
-    [PurposeSpendSplit, LocationSpendSplit, InputSpendSplit].each do |type|
-      update_classified_amount_cache(type)
+    [Purpose, Location, Input].each do |code_type|
+      [:budget, :spend].each do |amount_type|
+        update_classified_amount_cache(code_type, amount_type)
+      end
     end
   end
 
@@ -249,8 +248,8 @@ class Activity < ActiveRecord::Base
   private
 
     #TODO  it should not be the responsibility of the activity to do this
-    def set_classified_amount_cache(type)
-      coding_tree = CodingTree.new(self, type)
+    def set_classified_amount_cache(code_type, amount_type)
+      coding_tree = CodingTree.new(self, code_type, amount_type)
       coding_tree.set_cached_amounts!
     end
 

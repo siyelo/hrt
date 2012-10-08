@@ -1,30 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe CodeSplit do
-  describe "Validations" do
-    subject { basic_setup_activity; FactoryGirl.create(:code_split, :activity => @activity) }
-    it { should validate_presence_of(:activity_id) }
-    it { should validate_presence_of(:code_id) }
-    it { should ensure_inclusion_of(:percentage).in_range(0..100).with_message("must be between 0 and 100") }
-
-    it "does not validate percentage when it is not present" do
-      subject.percentage = nil
-      subject.valid?.should be_true
-    end
-
-    it "should not allow same code to be assigned twice to an activity" do
-      basic_setup_activity
-      purpose = FactoryGirl.create(:purpose, :name => 'purpose1')
-      PurposeBudgetSplit.update_classifications(@activity, { purpose.id => 5, purpose.id => 6  })
-      purpose.code_splits.first.percentage.should == 6
-    end
-  end
-
-  describe "Associations" do
-    it { should belong_to :activity }
-    it { should belong_to :code }
-  end
-
   describe "Attributes" do
     it { should allow_mass_assignment_of(:activity) }
     it { should allow_mass_assignment_of(:code) }
@@ -33,6 +9,24 @@ describe CodeSplit do
     it { should allow_value("1").for(:percentage) }
     it { should allow_value("0").for(:percentage) }
     it { should_not allow_value("101").for(:percentage) }
+  end
+
+  describe "Validations" do
+    subject { basic_setup_activity; FactoryGirl.create(:code_split, :activity => @activity) }
+
+    it { should validate_presence_of(:activity_id) }
+    it { should validate_presence_of(:code_id) }
+    it { should ensure_inclusion_of(:percentage).in_range(0..100).with_message("must be between 0 and 100") }
+
+    it "does not validate percentage when it is not present" do
+      subject.percentage = nil
+      subject.valid?.should be_true
+    end
+  end
+
+  describe "Associations" do
+    it { should belong_to :activity }
+    it { should belong_to :code }
   end
 
   describe "named scopes" do

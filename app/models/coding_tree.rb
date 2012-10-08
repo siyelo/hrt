@@ -1,9 +1,7 @@
 #  USAGE:
 #
-#  activity    = Activity.find(889)
-#  coding_type = PurposeBudgetSplit
-
-#  ct = CodingTree.new(activity, coding_type)
+#  activity = Activity.find(889)
+#  ct = CodingTree.new(activity, :purpose, :budget)
 #
 #  p ct.roots[0].code.name
 #  p ct.roots[0].ca.cached_amount
@@ -12,10 +10,9 @@
 #  p ct.roots[0].children[0].children[0].children[0].code.name
 
 class CodingTree
-  PURPOSE_SPLIT_CLASSES  = ['PurposeBudgetSplit', 'PurposeSpendSplit']
-  INPUT_SPLIT_CLASSES    = 'InputBudgetSplit', 'InputSpendSplit'
-  LOCATION_SPLIT_CLASSES = ['LocationBudgetSplit', 'LocationSpendSplit']
+  include AmountType
 
+  # TODO: move coding_tree in lib and extract Tree class into separate file
   class Tree
     def initialize(object)
       @object = object
@@ -61,12 +58,15 @@ class CodingTree
     end
   end #### END OF TREE CLASS
 
-  attr_reader :activity, :coding_klass
 
-  def initialize(activity, coding_klass)
-    @activity     = activity
-    @coding_klass = coding_klass
-    @data_request = activity.data_request
+
+  attr_reader :activity, :code_type, :amount_type, :activity_amount
+
+  def initialize(activity, code_type, amount_type)
+    @activity        = activity
+    @code_type       = code_type
+    @amount_type     = amount_type
+    @activity_amount = @activity.send(:"total_#{amount_type}") || 0
   end
 
   def roots
@@ -78,7 +78,6 @@ class CodingTree
   #   - if sum of children is same as activity classification amount
   def valid?
     children_sum    = roots.inject(0){|sum, tree| sum += tree.ca.cached_amount}
-    activity_amount = @activity.classification_amount(@coding_klass.to_s) || 0
 
     variance = activity_amount * (0.5/100)
     (activity_amount.blank? && children_sum == 0) ||
@@ -88,20 +87,19 @@ class CodingTree
   end
 
   def root_codes
-    if PURPOSE_SPLIT_CLASSES.include?(@coding_klass.to_s)
-      Purpose.with_version(@data_request.purposes_version).roots
-    elsif INPUT_SPLIT_CLASSES.include?(@coding_klass.to_s)
-      Input.with_version(@data_request.inputs_version).roots
-    elsif LOCATION_SPLIT_CLASSES.include?(@coding_klass.to_s)
-      Location.with_version(@data_request.locations_version).national_level +
-        Location.with_version(@data_request.locations_version).without_national_level.sorted.all
+    if code_type == :location
+      version = data_request.locations_version
+      Location.with_version(version).national_level +
+        Location.with_version(version).without_national_level.sorted.all
     else
-      raise "Invalid coding_klass #{@coding_klass.to_s}".to_yaml
+      # data_request.purposes_version
+      version = data_request.send(:"#{code_type.to_s.pluralize}_version")
+      code_klass.with_version(version).roots
     end
   end
 
   def set_cached_amounts!
-    codings_sum(root_codes, @activity, @activity.classification_amount(@coding_klass.to_s))
+    codings_sum(root_codes, @activity, activity_amount)
   end
 
   def reload!
@@ -120,20 +118,19 @@ class CodingTree
   protected
     def codings_sum(root_codes, activity, max)
       total         = 0
-      max           = 0 if max.nil?
       cached_amount = 0
       descendants   = false
 
       root_codes.each do |code|
-        ca = @coding_klass.with_activity(activity).with_code(code).first
+        ca = activity.code_splits.with_code_and_type(code, amount_type).first
         children = cached_children(code)
         if ca
           if ca.percentage.present? && ca.percentage > 0
             cached_amount = ca.percentage * max / 100
-            bucket = self.codings_sum(children, activity, max)
+            bucket = codings_sum(children, activity, max)
             sum_of_children = bucket[:amount]
           else #TODO: remove - only percentages are used now
-            bucket = self.codings_sum(children, activity, max)
+            bucket = codings_sum(children, activity, max)
             cached_amount = bucket[:amount]
             sum_of_children = bucket[:amount]
           end
@@ -142,24 +139,21 @@ class CodingTree
                                :sum_of_children => sum_of_children)
           descendants = true # tell parents that it has descendants
         else
-          bucket = self.codings_sum(children, activity, max)
+          bucket = codings_sum(children, activity, max)
           cached_amount = sum_of_children = bucket[:amount]
 
           if bucket[:descendants]
-            @coding_klass.create!(:activity => activity, :code => code,
-                                  :cached_amount => cached_amount,
-                                  :sum_of_children => sum_of_children)
+            CodeSplit.create!(:activity => activity, :code => code,
+                              :is_spend => is_spend?(amount_type),
+                              :cached_amount => cached_amount,
+                              :sum_of_children => sum_of_children)
             descendants = true
           end
         end
         total += cached_amount
       end
 
-      # return total and if there were descendant code assignments
-      #puts "about to return from #{root_codes.map(&:name).join(',')}"
-      #puts "total of #{total}"
-      #puts "descendants of #{descendants}"
-      {:amount => total, :descendants => descendants}
+      { :amount => total, :descendants => descendants }
     end
 
   private
@@ -169,8 +163,9 @@ class CodingTree
     end
 
     def build_tree
-      @code_splits = @coding_klass.with_activity(@activity)
-      @inner_root       = Tree.new({})
+      @code_splits = @activity.code_splits.
+                      send(code_type.to_s.pluralize).send(amount_type)
+      @inner_root = Tree.new({})
 
       build_subtree(@inner_root, root_codes)
 
@@ -183,7 +178,7 @@ class CodingTree
         if code_assignment
           node = Tree.new({:ca => code_assignment, :code => code})
           root.children << node
-          unless LOCATION_SPLIT_CLASSES.include?(@coding_klass.to_s)
+          unless code_type == :location
             build_subtree(node, cached_children(code)) unless code.leaf?
           end
         end
@@ -195,14 +190,14 @@ class CodingTree
     end
 
     def all_codes
-      @all_codes ||= if PURPOSE_SPLIT_CLASSES.include?(@coding_klass.to_s)
-                       Purpose.all
-                     elsif INPUT_SPLIT_CLASSES.include?(@coding_klass.to_s)
-                       Input.all
-                     elsif LOCATION_SPLIT_CLASSES.include?(@coding_klass.to_s)
-                       Location.all
-                     else
-                       raise "Invalid coding_klass #{@coding_klass.to_s}".to_yaml
-                     end
+      @all_codes ||= code_klass.all
+    end
+
+    def code_klass
+      @code_klass ||= code_type.to_s.capitalize.constantize
+    end
+
+    def data_request
+      @data_request ||= activity.data_request
     end
 end
