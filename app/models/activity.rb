@@ -218,77 +218,80 @@ class Activity < ActiveRecord::Base
   end
 
   protected
+  # intercept the classifications and process using the bulk classification update API
+  # FIXME: the CodingBlah class method saves the activity in the middle of this update... Not good.
+  def update_classifications_from_params(params)
+    if params[:classifications].present?
+      code_type_key = params[:classifications].keys.first.to_sym
 
-    # intercept the classifications and process using the bulk classification update API
-    # FIXME: the CodingBlah class method saves the activity in the middle of this update... Not good.
-    def update_classifications_from_params(params)
-      if params[:classifications]
-        params[:classifications].each_pair do |association, values|
-          begin
-            klass = association.camelcase.constantize
-          rescue NameError
-            return false
-          end
-          klass.update_classifications(self, values)
-        end
-        params.delete(:classifications)
+      unless [:purpose, :input, :location].include?(code_type_key)
+        raise "Invalid code type key"
       end
-    end
 
+      classifications = params[:classifications][code_type_key]
+
+      classifier = Classifier.new(self, code_type_key, :budget)
+      classifier.update_classifications(classifications[:budget])
+
+      classifier = Classifier.new(self, code_type_key, :spend)
+      classifier.update_classifications(classifications[:spend])
+
+      params.delete(:classifications)
+    end
+  end
 
   private
+  #TODO  it should not be the responsibility of the activity to do this
+  def set_classified_amount_cache(code_type_key, amount_type)
+    coding_tree = CodingTree.new(self, code_type_key, amount_type)
+    coding_tree.set_cached_amounts!
+  end
 
-    #TODO  it should not be the responsibility of the activity to do this
-    def set_classified_amount_cache(code_type_key, amount_type)
-      coding_tree = CodingTree.new(self, code_type_key, amount_type)
-      coding_tree.set_cached_amounts!
+  def is_activity?
+    self.class.eql?(Activity)
+  end
+
+  def strip_input_fields
+    self.name = self.name.strip if self.name
+    self.description = self.description.strip if self.description
+  end
+
+  def get_valid_attribute_name(type)
+    case type.to_s
+    when 'PurposeBudgetSplit' then :purpose_budget_splits_valid
+    when 'InputBudgetSplit' then :input_budget_splits_valid
+    when 'LocationBudgetSplit' then :location_budget_splits_valid
+    when 'PurposeSpendSplit' then :purpose_spend_splits_valid
+    when 'InputSpendSplit' then :input_spend_splits_valid
+    when 'LocationSpendSplit' then :location_spend_splits_valid
+    else raise "Unknown type #{type}".to_yaml
     end
+  end
 
-    def is_activity?
-      self.class.eql?(Activity)
+  def restart_response_if_all_activities_removed
+    # use .length since .empty? uses counter cache that isnt updated yet.
+    if response && self.response.activities.length == 0
+      response.state = 'started'
+      response.save!
     end
+  end
 
-    def strip_input_fields
-      self.name = self.name.strip if self.name
-      self.description = self.description.strip if self.description
-    end
+  def validate_implementers_uniqueness
+    implementer_orgs = implementer_splits.select do |e|
+      !e.marked_for_destruction?
+    end.map(&:organization_id)
 
-    def get_valid_attribute_name(type)
-      case type.to_s
-      when 'PurposeBudgetSplit' then :purpose_budget_splits_valid
-      when 'InputBudgetSplit' then :input_budget_splits_valid
-      when 'LocationBudgetSplit' then :location_budget_splits_valid
-      when 'PurposeSpendSplit' then :purpose_spend_splits_valid
-      when 'InputSpendSplit' then :input_spend_splits_valid
-      when 'LocationSpendSplit' then :location_spend_splits_valid
-      else raise "Unknown type #{type}".to_yaml
+    if implementer_orgs.length != implementer_orgs.uniq.length
+      # Reject splits where Org Id appears once & find unique ID of duplicates
+      dup_ids = implementer_orgs.reject {|org_id| implementer_orgs.one? { |id| id == org_id } }
+      # Find implmenter splits with an organization that has been duplicated
+      duplicates = implementer_splits.select { |is| dup_ids.include?(is.organization_id) }
+      self.errors.add(:base, "Duplicate Implementers")
+      duplicates.each do |dup|
+        dup.errors.add(:base, "Duplicate Implementer")
       end
     end
-
-    def restart_response_if_all_activities_removed
-      # use .length since .empty? uses counter cache that isnt updated yet.
-      if response && self.response.activities.length == 0
-        response.state = 'started'
-        response.save!
-      end
-    end
-
-    def validate_implementers_uniqueness
-      implementer_orgs = implementer_splits.select do |e|
-        !e.marked_for_destruction?
-      end.map(&:organization_id)
-
-      if implementer_orgs.length != implementer_orgs.uniq.length
-        # Reject splits where Org Id appears once & find unique ID of duplicates
-        dup_ids = implementer_orgs.reject {|org_id| implementer_orgs.one? { |id| id == org_id } }
-        # Find implmenter splits with an organization that has been duplicated
-        duplicates = implementer_splits.select { |is| dup_ids.include?(is.organization_id) }
-        self.errors.add(:base, "Duplicate Implementers")
-        duplicates.each do |dup|
-          dup.errors.add(:base, "Duplicate Implementer")
-        end
-      end
-    end
+  end
 end
 
 

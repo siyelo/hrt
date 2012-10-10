@@ -16,5 +16,6 @@ class Location < ActiveRecord::Base
   scope :national_level, { :conditions => "lower(locations.name) = 'national level'" }
   scope :without_national_level, { :conditions => "lower(locations.name) != 'national level'" }
   scope :sorted, { :order => "locations.name" }
+  scope :roots
 end
 

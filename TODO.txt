@@ -3,3 +3,6 @@
 - when you run 'rspec spec/lib/reports/detailed/classification_split.rb', it fails
 - move CodingTree outside app/models in lib folder
 - use a gem to convert => to :
+- undo activity.update_attributes method override
+  - move update_classification in activities/other_costs controller after outlay is saved
+- manual testing in browser and reports

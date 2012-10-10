@@ -178,8 +178,9 @@ module ApplicationHelper
     klass.to_s.split("::").first
   end
 
-  def codings_total(activity, type)
-    type.with_activity(activity).find(:all, :include => :code).
+  def codings_total(activity, code_type_key, amount_type)
+    code_type = code_type_key.to_s.capitalize
+    activity.code_splits.with_code_type(code_type_key).send(amount_type).includes(:code).
       reject{ |ca| ca.code.respond_to?(:parent_id) && ca.code.parent_id.present? }.
       sum{|rca| rca.percentage.to_f}
   end

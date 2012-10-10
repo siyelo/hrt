@@ -10,16 +10,19 @@ class OutlaysController < BaseController
     %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
   end
 
+  # TODO: refactor
   def prepare_classifications(outlay)
     # if we're viewing classification 'tabs'
     if ['locations', 'purposes', 'inputs'].include? params[:mode]
-      load_klasses :mode
-      @budget_coding_tree = CodingTree.new(outlay, @budget_klass)
-      @spend_coding_tree  = CodingTree.new(outlay, @spend_klass)
-      @budget_assignments = @budget_klass.with_activity(outlay).all.
-                              map_to_hash{ |b| {b.code_id => b} }
-      @spend_assignments  = @spend_klass.with_activity(outlay).all.
-                              map_to_hash{ |b| {b.code_id => b} }
+      mode = params[:mode].singularize.to_sym # :purpose, :input, :location
+      code_type = mode.to_s.capitalize # Purpose, Input, Location
+
+      @budget_coding_tree = CodingTree.new(outlay, mode, :budget)
+      @spend_coding_tree  = CodingTree.new(outlay, mode, :spend)
+      @budget_assignments = outlay.code_splits.with_code_type(code_type).budget.
+                              map_to_hash { |b| { b.code_id => b } }
+      @spend_assignments  = outlay.code_splits.with_code_type(code_type).spend.
+                              map_to_hash { |b| { b.code_id => b } }
 
       # set default to 'all'
       params[:view] = 'all' if params[:view].blank?
