@@ -13,25 +13,26 @@ describe Reports::Detailed::ResponseOverview do
       basic_setup_response
       @response.state = 'accepted'
       @response.save
-      in_flows = [FactoryGirl.build(:funding_flow, :from => @organization,
-                                    :budget => 100)]
-      @project = FactoryGirl.create :project, :data_response => @response,
-        :name => 'project',
-        :in_flows => in_flows
+      in_flows = [FactoryGirl.build(:funding_flow, from: @organization, budget: 100)]
+      @project = FactoryGirl.create :project, data_response: @response,
+        name: 'project', in_flows: in_flows
       @project.save!
       @root_code = FactoryGirl.create :purpose
-      @code1 = FactoryGirl.create :purpose, :official_name => "root"
-      @activity = FactoryGirl.create :activity, :project => @project,
-        :data_response => @response, :description => "desc"
-      @is = FactoryGirl.create :implementer_split, :activity => @activity, :organization => @organization, :budget => 100, :double_count => true
-      @purpose1 = FactoryGirl.create :purpose, :name => "purpose1"
-      @purpose2 = FactoryGirl.create :purpose, :name => "purpose2"
+      @code1 = FactoryGirl.create :purpose
+      @input1 = FactoryGirl.create :input
+      @location1 = FactoryGirl.create :location
+      @activity = FactoryGirl.create :activity, project: @project,
+        data_response: @response, description: "desc"
+      @is = FactoryGirl.create :implementer_split, activity: @activity,
+        organization: @organization, budget: 100, double_count: true
+      @purpose1 = FactoryGirl.create :purpose, name: "purpose1"
+      @purpose2 = FactoryGirl.create :purpose, name: "purpose2"
       @cost_categorization = FactoryGirl.create :input_budget_split,
-        :percentage => 100, :activity => @activity, :code => @code1
-      @budget_purpose = FactoryGirl.create :budget_purpose, :percentage => 100,
-        :activity => @activity, :code => @code1
+        percentage: 100, activity: @activity, code: @input1
+      @budget_purpose = FactoryGirl.create :purpose_budget_split,
+        percentage: 100, activity: @activity, code: @code1
       @location_budget_split = FactoryGirl.create :location_budget_split,
-        :percentage => 100, :activity => @activity, :code => @code1
+        percentage: 100, activity: @activity, code: @location1
 
       #creating dummy tree
       @purpose1.move_to_child_of(@root_code)

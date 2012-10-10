@@ -2,6 +2,12 @@
 require 'spec_helper'
 
 describe Reports::Detailed::DynamicQuery do
+  let(:input) { FactoryGirl.create :input }
+  let(:location) { FactoryGirl.create :location }
+  let(:purpose) { FactoryGirl.create :purpose }
+  let(:mtef) { FactoryGirl.create :purpose, :name => "Human Resources For Health" }
+  let(:nsp) { FactoryGirl.create :purpose, :name => "purpose" }
+  let(:root_code) { FactoryGirl.create :purpose }
 
   describe "budget report" do
     def run_report
@@ -23,25 +29,22 @@ describe Reports::Detailed::DynamicQuery do
           :name => 'project',
           :in_flows => in_flows
         @project.save!
-        @root_code = FactoryGirl.create :purpose
-        @code1 = FactoryGirl.create :purpose, :official_name => "root"
         @activity = FactoryGirl.create :activity, :project => @project,
           :data_response => @response, :description => "desc"
-        @is = FactoryGirl.create :implementer_split, :activity => @activity, :organization => @organization, :budget => 100
-        @mtef = FactoryGirl.create :purpose, :name => "Human Resources For Health"
-        @nsp = FactoryGirl.create :purpose, :name => "purpose"
-        @cost_categorization = FactoryGirl.create :input_budget_split,
-          :percentage => 100, :activity => @activity, :code => @code1
-        @budget_purpose = FactoryGirl.create :budget_purpose, :percentage => 100,
-          :activity => @activity, :code => @code1
+        @is = FactoryGirl.create :implementer_split, :activity => @activity,
+          :organization => @organization, :budget => 100
+        @input_budget_split = FactoryGirl.create :input_budget_split,
+          :percentage => 100, :activity => @activity, :code => input
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 100,
+          :activity => @activity, :code => purpose
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 100, :activity => @activity, :code => @code1
+          :percentage => 100, :activity => @activity, :code => location
 
         #creating dummy tree
-        @mtef.move_to_child_of(@root_code)
-        @nsp.move_to_child_of(@mtef)
-        @code1.move_to_child_of(@nsp)
-        @activity.reload;@activity.save
+        mtef.move_to_child_of(root_code)
+        nsp.move_to_child_of(mtef)
+        purpose.move_to_child_of(nsp)
+        @activity.reload; @activity.save
       end
 
       it "generates and zips correctly" do
@@ -70,7 +73,7 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Targets'].should == nil
         table[0]['Input Split Total %'].should == 100.0
         table[0]['Input Split %'].should == 100.0
-        table[0]['Input'].should == @cost_categorization.code.name
+        table[0]['Input'].should == @input_budget_split.code.name
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 100.0
         table[0]['MTEF Code'].should == "Human Resources For Health"
@@ -95,7 +98,7 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Targets'].should == nil
         table[0]['Input Split Total %'].should == 66.67
         table[0]['Input Split %'].should == 100.0
-        table[0]['Input'].should == @cost_categorization.code.name
+        table[0]['Input'].should == @input_budget_split.code.name
         table[0]['Purpose Split Total %'].should == 66.67
         table[0]['Purpose Split %'].should == 100.0
         table[0]['MTEF Code'].should == "Human Resources For Health"
@@ -113,7 +116,7 @@ describe Reports::Detailed::DynamicQuery do
         table[1]['Targets'].should == nil
         table[1]['Input Split Total %'].should == 33.33
         table[1]['Input Split %'].should == 100.0
-        table[1]['Input'].should == @cost_categorization.code.name
+        table[1]['Input'].should == @input_budget_split.code.name
         table[1]['Purpose Split Total %'].should == 33.33
         table[1]['Purpose Split %'].should == 100.0
         table[1]['MTEF Code'].should == "Human Resources For Health"
@@ -138,7 +141,7 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Targets'].should == nil
         table[0]['Input Split Total %'].should == 100.0
         table[0]['Input Split %'].should == 100.0
-        table[0]['Input'].should == @cost_categorization.code.name
+        table[0]['Input'].should == @input_budget_split.code.name
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 100.0
         table[0]['MTEF Code'].should == "Human Resources For Health"
@@ -156,7 +159,7 @@ describe Reports::Detailed::DynamicQuery do
         table[1]['Targets'].should == nil
         table[1]['Input Split Total %'].should == 100.0
         table[1]['Input Split %'].should == 100.0
-        table[1]['Input'].should == @cost_categorization.code.name
+        table[1]['Input'].should == @input_budget_split.code.name
         table[1]['Purpose Split Total %'].should == 100.0
         table[1]['Purpose Split %'].should == 100.0
         table[1]['MTEF Code'].should == "Human Resources For Health"
@@ -179,29 +182,26 @@ describe Reports::Detailed::DynamicQuery do
         @project = FactoryGirl.create :project, :data_response => @response,
           :name => 'project',
           :in_flows => in_flows
-        @root_code = FactoryGirl.create :purpose
-        @code1 = FactoryGirl.create :purpose, :official_name => "root"
         @activity = FactoryGirl.create :activity, :project => @project,
           :data_response => @response, :description => "desc"
         @is = FactoryGirl.create :implementer_split, :activity => @activity,
           :organization => @organization, :budget => 100
-        @mtef = FactoryGirl.create :purpose, :name => "Human Resources For Health"
 
         #creating dummy tree
-        @mtef.move_to_child_of(@root_code)
-        @code1.move_to_child_of(@mtef)
+        mtef.move_to_child_of(root_code)
+        purpose.move_to_child_of(mtef)
         @activity.reload;@activity.save
       end
 
       it "should adjust the total amounts as per codings (2 cost categorys splits)" do
-        @cost_categorization = FactoryGirl.create :input_budget_split,
-          :percentage => 25, :activity => @activity, :code => @code1
+        @input_budget_split = FactoryGirl.create :input_budget_split,
+          :percentage => 25, :activity => @activity, :code => input
         @cost_categorization1 = FactoryGirl.create :input_budget_split,
-          :percentage => 75, :activity => @activity, :code => @code1
-        @budget_purpose = FactoryGirl.create :budget_purpose, :percentage => 100,
-          :activity => @activity, :code => @code1
+          :percentage => 75, :activity => @activity, :code => input
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 100,
+          :activity => @activity, :code => purpose
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 100, :activity => @activity, :code => @code1
+          :percentage => 100, :activity => @activity, :code => location
         table = run_report
         table[0]['Funding Source'].should == @organization.name
         table[0]['Data Source'].should == @organization.name
@@ -210,7 +210,7 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Targets'].should == nil
         table[0]['Input Split Total %'].should == 100.0
         table[0]['Input Split %'].should == 75.0
-        table[0]['Input'].should == @cost_categorization.code.name
+        table[0]['Input'].should == @input_budget_split.code.name
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 100.0
         table[0]['MTEF Code'].should == "Human Resources For Health"
@@ -228,7 +228,7 @@ describe Reports::Detailed::DynamicQuery do
         table[1]['Targets'].should == nil
         table[1]['Input Split Total %'].should == 100.0
         table[1]['Input Split %'].should == 25.0
-        table[1]['Input'].should == @cost_categorization.code.name
+        table[1]['Input'].should == @input_budget_split.code.name
         table[1]['Purpose Split Total %'].should == 100.0
         table[1]['Purpose Split %'].should == 100.0
         table[1]['MTEF Code'].should == "Human Resources For Health"
@@ -241,14 +241,14 @@ describe Reports::Detailed::DynamicQuery do
       end
 
       it "should adjust the total amounts as per codings (2 coding budget splits)" do
-        @cost_categorization = FactoryGirl.create :input_budget_split,
-          :percentage => 100, :activity => @activity, :code => @code1
-        @budget_purpose = FactoryGirl.create :budget_purpose, :percentage => 80,
-          :activity => @activity, :code => @code1
+        @input_budget_split = FactoryGirl.create :input_budget_split,
+          :percentage => 100, :activity => @activity, :code => input
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 80,
+          :activity => @activity, :code => purpose
         @purpose_budget_split1 = FactoryGirl.create :purpose_budget_split,
-          :percentage => 20, :activity => @activity, :code => @code1
+          :percentage => 20, :activity => @activity, :code => purpose
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 100, :activity => @activity, :code => @code1
+          :percentage => 100, :activity => @activity, :code => location
         table = run_report
         table[0]['Funding Source'].should == @organization.name
         table[0]['Data Source'].should == @organization.name
@@ -257,7 +257,7 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Targets'].should == nil
         table[0]['Input Split Total %'].should == 100.0
         table[0]['Input Split %'].should == 100.0
-        table[0]['Input'].should == @cost_categorization.code.name
+        table[0]['Input'].should == @input_budget_split.code.name
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 80.0
         table[0]['MTEF Code'].should == "Human Resources For Health"
@@ -275,7 +275,7 @@ describe Reports::Detailed::DynamicQuery do
         table[1]['Targets'].should == nil
         table[1]['Input Split Total %'].should == 100.0
         table[1]['Input Split %'].should == 100.0
-        table[1]['Input'].should == @cost_categorization.code.name
+        table[1]['Input'].should == @input_budget_split.code.name
         table[1]['Purpose Split Total %'].should == 100.0
         table[1]['Purpose Split %'].should == 20.0
         table[1]['MTEF Code'].should == "Human Resources For Health"
@@ -288,14 +288,14 @@ describe Reports::Detailed::DynamicQuery do
       end
 
       it "should adjust the total amounts as per codings (2 location budget splits)" do
-        @cost_categorization = FactoryGirl.create :input_budget_split,
-          :percentage => 100, :activity => @activity, :code => @code1
-        @budget_purpose = FactoryGirl.create :budget_purpose, :percentage => 100,
-          :activity => @activity, :code => @code1
+        @input_budget_split = FactoryGirl.create :input_budget_split,
+          :percentage => 100, :activity => @activity, :code => input
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 100,
+          :activity => @activity, :code => purpose
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 70, :activity => @activity, :code => @code1
+          :percentage => 70, :activity => @activity, :code => location
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 30, :activity => @activity, :code => @code1
+          :percentage => 30, :activity => @activity, :code => location
         table = run_report
         table[0]['Funding Source'].should == @organization.name
         table[0]['Data Source'].should == @organization.name
@@ -304,7 +304,7 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Targets'].should == nil
         table[0]['Input Split Total %'].should == 100.0
         table[0]['Input Split %'].should == 100.0
-        table[0]['Input'].should == @cost_categorization.code.name
+        table[0]['Input'].should == @input_budget_split.code.name
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 100.0
         table[0]['MTEF Code'].should == "Human Resources For Health"
@@ -322,7 +322,7 @@ describe Reports::Detailed::DynamicQuery do
         table[1]['Targets'].should == nil
         table[1]['Input Split Total %'].should == 100.0
         table[1]['Input Split %'].should == 100.0
-        table[1]['Input'].should == @cost_categorization.code.name
+        table[1]['Input'].should == @input_budget_split.code.name
         table[1]['Purpose Split Total %'].should == 100.0
         table[1]['Purpose Split %'].should == 100.0
         table[1]['MTEF Code'].should == "Human Resources For Health"
@@ -335,18 +335,18 @@ describe Reports::Detailed::DynamicQuery do
       end
 
       it "should adjust the total amounts as per codings (2 of each budget splits)" do
-        @cost_categorization = FactoryGirl.create :input_budget_split,
-          :percentage => 90, :activity => @activity, :code => @code1
+        @input_budget_split = FactoryGirl.create :input_budget_split,
+          :percentage => 90, :activity => @activity, :code => input
         @cost_categorization1 = FactoryGirl.create :input_budget_split,
-          :percentage => 10, :activity => @activity, :code => @code1
-        @budget_purpose = FactoryGirl.create :budget_purpose, :percentage => 80,
-          :activity => @activity, :code => @code1
-        @budget_purpose = FactoryGirl.create :budget_purpose, :percentage => 20,
-          :activity => @activity, :code => @code1
+          :percentage => 10, :activity => @activity, :code => input
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 80,
+          :activity => @activity, :code => purpose
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 20,
+          :activity => @activity, :code => purpose
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 70, :activity => @activity, :code => @code1
+          :percentage => 70, :activity => @activity, :code => location
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 30, :activity => @activity, :code => @code1
+          :percentage => 30, :activity => @activity, :code => location
 
         table = run_report
         table[0]['Funding Source'].should == @organization.name
@@ -356,7 +356,7 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Targets'].should == nil
         table[0]['Input Split Total %'].should == 100.0
         table[0]['Input Split %'].should == 90.0
-        table[0]['Input'].should == @cost_categorization.code.name
+        table[0]['Input'].should == @input_budget_split.code.name
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 80.0
         table[0]['MTEF Code'].should == "Human Resources For Health"
@@ -374,7 +374,7 @@ describe Reports::Detailed::DynamicQuery do
         table[1]['Targets'].should == nil
         table[1]['Input Split Total %'].should == 100.0
         table[1]['Input Split %'].should == 90.0
-        table[1]['Input'].should == @cost_categorization.code.name
+        table[1]['Input'].should == @input_budget_split.code.name
         table[1]['Purpose Split Total %'].should == 100.0
         table[1]['Purpose Split %'].should == 80.0
         table[1]['MTEF Code'].should == "Human Resources For Health"
@@ -392,7 +392,7 @@ describe Reports::Detailed::DynamicQuery do
         table[2]['Targets'].should == nil
         table[2]['Input Split Total %'].should == 100.0
         table[2]['Input Split %'].should == 90.0
-        table[2]['Input'].should == @cost_categorization.code.name
+        table[2]['Input'].should == @input_budget_split.code.name
         table[2]['Purpose Split Total %'].should == 100.0
         table[2]['Purpose Split %'].should == 20.0
         table[2]['MTEF Code'].should == "Human Resources For Health"
@@ -410,7 +410,7 @@ describe Reports::Detailed::DynamicQuery do
         table[3]['Targets'].should == nil
         table[3]['Input Split Total %'].should == 100.0
         table[3]['Input Split %'].should == 90.0
-        table[3]['Input'].should == @cost_categorization.code.name
+        table[3]['Input'].should == @input_budget_split.code.name
         table[3]['Purpose Split Total %'].should == 100.0
         table[3]['Purpose Split %'].should == 20.0
         table[3]['MTEF Code'].should == "Human Resources For Health"
@@ -428,7 +428,7 @@ describe Reports::Detailed::DynamicQuery do
         table[4]['Targets'].should == nil
         table[4]['Input Split Total %'].should == 100.0
         table[4]['Input Split %'].should == 10.0
-        table[4]['Input'].should == @cost_categorization.code.name
+        table[4]['Input'].should == @input_budget_split.code.name
         table[4]['Purpose Split Total %'].should == 100.0
         table[4]['Purpose Split %'].should == 80.0
         table[4]['MTEF Code'].should == "Human Resources For Health"
@@ -446,7 +446,7 @@ describe Reports::Detailed::DynamicQuery do
         table[5]['Targets'].should == nil
         table[5]['Input Split Total %'].should == 100.0
         table[5]['Input Split %'].should == 10.0
-        table[5]['Input'].should == @cost_categorization.code.name
+        table[5]['Input'].should == @input_budget_split.code.name
         table[5]['Purpose Split Total %'].should == 100.0
         table[5]['Purpose Split %'].should == 80.0
         table[5]['MTEF Code'].should == "Human Resources For Health"
@@ -464,7 +464,7 @@ describe Reports::Detailed::DynamicQuery do
         table[6]['Targets'].should == nil
         table[6]['Input Split Total %'].should == 100.0
         table[6]['Input Split %'].should == 10.0
-        table[6]['Input'].should == @cost_categorization.code.name
+        table[6]['Input'].should == @input_budget_split.code.name
         table[6]['Purpose Split Total %'].should == 100.0
         table[6]['Purpose Split %'].should == 20.0
         table[6]['MTEF Code'].should == "Human Resources For Health"
@@ -482,7 +482,7 @@ describe Reports::Detailed::DynamicQuery do
         table[7]['Targets'].should == nil
         table[7]['Input Split Total %'].should == 100.0
         table[7]['Input Split %'].should == 10.0
-        table[7]['Input'].should == @cost_categorization.code.name
+        table[7]['Input'].should == @input_budget_split.code.name
         table[7]['Purpose Split Total %'].should == 100.0
         table[7]['Purpose Split %'].should == 20.0
         table[7]['MTEF Code'].should == "Human Resources For Health"
@@ -496,18 +496,18 @@ describe Reports::Detailed::DynamicQuery do
 
       it "should adjust the total amounts as per codings (2 of each budget splits and 2 funders)" do
         #total amount is 100 because the amount of the activity is 100 despite being funded 150
-        @cost_categorization = FactoryGirl.create :input_budget_split,
-          :percentage => 90, :activity => @activity, :code => @code1
+        @input_budget_split = FactoryGirl.create :input_budget_split,
+          :percentage => 90, :activity => @activity, :code => input
         @cost_categorization1 = FactoryGirl.create :input_budget_split,
-          :percentage => 10, :activity => @activity, :code => @code1
-        @budget_purpose = FactoryGirl.create :budget_purpose, :percentage => 80,
-          :activity => @activity, :code => @code1
-        @budget_purpose = FactoryGirl.create :budget_purpose, :percentage => 20,
-          :activity => @activity, :code => @code1
+          :percentage => 10, :activity => @activity, :code => input
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 80,
+          :activity => @activity, :code => purpose
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 20,
+          :activity => @activity, :code => purpose
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 70, :activity => @activity, :code => @code1
+          :percentage => 70, :activity => @activity, :code => location
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 30, :activity => @activity, :code => @code1
+          :percentage => 30, :activity => @activity, :code => location
         @funder2 = FactoryGirl.create :organization, :name => "zz_funder2"
         @project.in_flows << [FactoryGirl.build(:funding_flow, :from => @funder2,
           :budget => 50)]
@@ -520,7 +520,7 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Targets'].should == nil
         table[0]['Input Split Total %'].should == 66.67
         table[0]['Input Split %'].should == 90.0
-        table[0]['Input'].should == @cost_categorization.code.name
+        table[0]['Input'].should == @input_budget_split.code.name
         table[0]['Purpose Split Total %'].should == 66.67
         table[0]['Purpose Split %'].should == 80.0
         table[0]['MTEF Code'].should == "Human Resources For Health"
@@ -538,7 +538,7 @@ describe Reports::Detailed::DynamicQuery do
         table[1]['Targets'].should == nil
         table[1]['Input Split Total %'].should == 66.67
         table[1]['Input Split %'].should == 90.0
-        table[1]['Input'].should == @cost_categorization.code.name
+        table[1]['Input'].should == @input_budget_split.code.name
         table[1]['Purpose Split Total %'].should == 66.67
         table[1]['Purpose Split %'].should == 80.0
         table[1]['MTEF Code'].should == "Human Resources For Health"
@@ -556,7 +556,7 @@ describe Reports::Detailed::DynamicQuery do
         table[2]['Targets'].should == nil
         table[2]['Input Split Total %'].should == 66.67
         table[2]['Input Split %'].should == 90.0
-        table[2]['Input'].should == @cost_categorization.code.name
+        table[2]['Input'].should == @input_budget_split.code.name
         table[2]['Purpose Split Total %'].should == 66.67
         table[2]['Purpose Split %'].should == 20.0
         table[2]['MTEF Code'].should == "Human Resources For Health"
@@ -574,7 +574,7 @@ describe Reports::Detailed::DynamicQuery do
         table[3]['Targets'].should == nil
         table[3]['Input Split Total %'].should == 66.67
         table[3]['Input Split %'].should == 90.0
-        table[3]['Input'].should == @cost_categorization.code.name
+        table[3]['Input'].should == @input_budget_split.code.name
         table[3]['Purpose Split Total %'].should == 66.67
         table[3]['Purpose Split %'].should == 20.0
         table[3]['MTEF Code'].should == "Human Resources For Health"
@@ -592,7 +592,7 @@ describe Reports::Detailed::DynamicQuery do
         table[4]['Targets'].should == nil
         table[4]['Input Split Total %'].should == 66.67
         table[4]['Input Split %'].should == 10.0
-        table[4]['Input'].should == @cost_categorization.code.name
+        table[4]['Input'].should == @input_budget_split.code.name
         table[4]['Purpose Split Total %'].should == 66.67
         table[4]['Purpose Split %'].should == 80.0
         table[4]['MTEF Code'].should == "Human Resources For Health"
@@ -610,7 +610,7 @@ describe Reports::Detailed::DynamicQuery do
         table[5]['Targets'].should == nil
         table[5]['Input Split Total %'].should == 66.67
         table[5]['Input Split %'].should == 10.0
-        table[5]['Input'].should == @cost_categorization.code.name
+        table[5]['Input'].should == @input_budget_split.code.name
         table[5]['Purpose Split Total %'].should == 66.67
         table[5]['Purpose Split %'].should == 80.0
         table[5]['MTEF Code'].should == "Human Resources For Health"
@@ -628,7 +628,7 @@ describe Reports::Detailed::DynamicQuery do
         table[6]['Targets'].should == nil
         table[6]['Input Split Total %'].should == 66.67
         table[6]['Input Split %'].should == 10.0
-        table[6]['Input'].should == @cost_categorization.code.name
+        table[6]['Input'].should == @input_budget_split.code.name
         table[6]['Purpose Split Total %'].should == 66.67
         table[6]['Purpose Split %'].should == 20.0
         table[6]['MTEF Code'].should == "Human Resources For Health"
@@ -646,7 +646,7 @@ describe Reports::Detailed::DynamicQuery do
         table[7]['Targets'].should == nil
         table[7]['Input Split Total %'].should == 66.67
         table[7]['Input Split %'].should == 10.0
-        table[7]['Input'].should == @cost_categorization.code.name
+        table[7]['Input'].should == @input_budget_split.code.name
         table[7]['Purpose Split Total %'].should == 66.67
         table[7]['Purpose Split %'].should == 20.0
         table[7]['MTEF Code'].should == "Human Resources For Health"
@@ -664,7 +664,7 @@ describe Reports::Detailed::DynamicQuery do
         table[8]['Targets'].should == nil
         table[8]['Input Split Total %'].should == 33.33
         table[8]['Input Split %'].should == 90.0
-        table[8]['Input'].should == @cost_categorization.code.name
+        table[8]['Input'].should == @input_budget_split.code.name
         table[8]['Purpose Split Total %'].should == 33.33
         table[8]['Purpose Split %'].should == 80.0
         table[8]['MTEF Code'].should == "Human Resources For Health"
@@ -682,7 +682,7 @@ describe Reports::Detailed::DynamicQuery do
         table[9]['Targets'].should == nil
         table[9]['Input Split Total %'].should == 33.33
         table[9]['Input Split %'].should == 90.0
-        table[9]['Input'].should == @cost_categorization.code.name
+        table[9]['Input'].should == @input_budget_split.code.name
         table[9]['Purpose Split Total %'].should == 33.33
         table[9]['Purpose Split %'].should == 80.0
         table[9]['MTEF Code'].should == "Human Resources For Health"
@@ -700,7 +700,7 @@ describe Reports::Detailed::DynamicQuery do
         table[10]['Targets'].should == nil
         table[10]['Input Split Total %'].should == 33.33
         table[10]['Input Split %'].should == 90.0
-        table[10]['Input'].should == @cost_categorization.code.name
+        table[10]['Input'].should == @input_budget_split.code.name
         table[10]['Purpose Split Total %'].should == 33.33
         table[10]['Purpose Split %'].should == 20.0
         table[10]['MTEF Code'].should == "Human Resources For Health"
@@ -718,7 +718,7 @@ describe Reports::Detailed::DynamicQuery do
         table[11]['Targets'].should == nil
         table[11]['Input Split Total %'].should == 33.33
         table[11]['Input Split %'].should == 90.0
-        table[11]['Input'].should == @cost_categorization.code.name
+        table[11]['Input'].should == @input_budget_split.code.name
         table[11]['Purpose Split Total %'].should == 33.33
         table[11]['Purpose Split %'].should == 20.0
         table[11]['MTEF Code'].should == "Human Resources For Health"
@@ -736,7 +736,7 @@ describe Reports::Detailed::DynamicQuery do
         table[12]['Targets'].should == nil
         table[12]['Input Split Total %'].should == 33.33
         table[12]['Input Split %'].should == 10.0
-        table[12]['Input'].should == @cost_categorization.code.name
+        table[12]['Input'].should == @input_budget_split.code.name
         table[12]['Purpose Split Total %'].should == 33.33
         table[12]['Purpose Split %'].should == 80.0
         table[12]['MTEF Code'].should == "Human Resources For Health"
@@ -754,7 +754,7 @@ describe Reports::Detailed::DynamicQuery do
         table[13]['Targets'].should == nil
         table[13]['Input Split Total %'].should == 33.33
         table[13]['Input Split %'].should == 10.0
-        table[13]['Input'].should == @cost_categorization.code.name
+        table[13]['Input'].should == @input_budget_split.code.name
         table[13]['Purpose Split Total %'].should == 33.33
         table[13]['Purpose Split %'].should == 80.0
         table[13]['MTEF Code'].should == "Human Resources For Health"
@@ -772,7 +772,7 @@ describe Reports::Detailed::DynamicQuery do
         table[14]['Targets'].should == nil
         table[14]['Input Split Total %'].should == 33.33
         table[14]['Input Split %'].should == 10.0
-        table[14]['Input'].should == @cost_categorization.code.name
+        table[14]['Input'].should == @input_budget_split.code.name
         table[14]['Purpose Split Total %'].should == 33.33
         table[14]['Purpose Split %'].should == 20.0
         table[14]['MTEF Code'].should == "Human Resources For Health"
@@ -790,7 +790,7 @@ describe Reports::Detailed::DynamicQuery do
         table[15]['Targets'].should == nil
         table[15]['Input Split Total %'].should == 33.33
         table[15]['Input Split %'].should == 10.0
-        table[15]['Input'].should == @cost_categorization.code.name
+        table[15]['Input'].should == @input_budget_split.code.name
         table[15]['Purpose Split Total %'].should == 33.33
         table[15]['Purpose Split %'].should == 20.0
         table[15]['MTEF Code'].should == "Human Resources For Health"
@@ -813,30 +813,27 @@ describe Reports::Detailed::DynamicQuery do
         @project = FactoryGirl.create :project, :data_response => @response,
           :name => 'project',
           :in_flows => in_flows
-        @root_code = FactoryGirl.create :purpose
-        @code1 = FactoryGirl.create :purpose, :official_name => "root"
         @activity = FactoryGirl.create :activity, :project => @project,
           :data_response => @response, :description => "desc"
         @is = FactoryGirl.create :implementer_split, :activity => @activity,
           :organization => @organization, :budget => 100
-        @mtef = FactoryGirl.create :purpose, :name => "Human Resources For Health"
 
         #creating dummy tree
-        @mtef.move_to_child_of(@root_code)
-        @code1.move_to_child_of(@mtef)
+        mtef.move_to_child_of(root_code)
+        purpose.move_to_child_of(mtef)
         @activity.reload;@activity.save
       end
 
       it "cost categorization - should replace incomplete codings with 'not coded' (should not affect calculated amounts)" do
         #total amount is 100 because the amount of the activity is 100 despite being funded 150
-        @budget_purpose = FactoryGirl.create :budget_purpose, :percentage => 80,
-          :activity => @activity, :code => @code1
-        @budget_purpose = FactoryGirl.create :budget_purpose, :percentage => 20,
-          :activity => @activity, :code => @code1
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 80,
+          :activity => @activity, :code => purpose
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 20,
+          :activity => @activity, :code => purpose
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 70, :activity => @activity, :code => @code1
+          :percentage => 70, :activity => @activity, :code => location
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 30, :activity => @activity, :code => @code1
+          :percentage => 30, :activity => @activity, :code => location
         @funder2 = FactoryGirl.create :organization, :name => "zzfunder2"
         @project.in_flows << [FactoryGirl.build(:funding_flow, :from => @funder2,
           :budget => 50)]
@@ -986,15 +983,15 @@ describe Reports::Detailed::DynamicQuery do
         table[7]['Total Amount ($)'].round(2).should == 2.00
         table[7]['Actual Double Count'].should == @is.double_count
 
-        @activity.input_budget_splits.size.should == 0
+        @activity.code_splits.inputs.budget.size.should == 0
       end
 
       it "budget purpose - should replace incomplete codings with 'not coded' (should not affect calculated amounts)" do
         #total amount is 100 because the amount of the activity is 100 despite being funded 150
-        @cost_categorization = FactoryGirl.create :input_budget_split,
-          :percentage => 100, :activity => @activity, :code => @code1
+        @input_budget_split = FactoryGirl.create :input_budget_split,
+          :percentage => 100, :activity => @activity, :code => input
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 100, :activity => @activity, :code => @code1
+          :percentage => 100, :activity => @activity, :code => location
 
         table = run_report
         table[0]['Funding Source'].should == @organization.name
@@ -1004,7 +1001,7 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Targets'].should == nil
         table[0]['Input Split Total %'].should == 100.0
         table[0]['Input Split %'].should == 100.0
-        table[0]['Input'].should == @cost_categorization.code.name
+        table[0]['Input'].should == @input_budget_split.code.name
         table[0]['Purpose Split Total %'].should == 'N/A'
         table[0]['Purpose Split %'].should == 'N/A'
         table[0]['MTEF Code'].should == 'N/A'
@@ -1015,17 +1012,17 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Total Amount ($)'].round(2).should == 100.00
         table[0]['Actual Double Count'].should == @is.double_count
 
-        @activity.purpose_budget_splits.size.should == 0
-        @activity.input_budget_splits.size.should == 1
-        @activity.location_budget_splits.size.should == 1
+        @activity.code_splits.purposes.budget.size.should == 0
+        @activity.code_splits.inputs.budget.size.should == 1
+        @activity.code_splits.locations.budget.size.should == 1
       end
 
       it "budget district - should replace incomplete codings with 'not coded' (should not affect calculated amounts)" do
         #total amount is 100 because the amount of the activity is 100 despite being funded 150
-        @cost_categorization = FactoryGirl.create :input_budget_split,
-          :percentage => 100, :activity => @activity, :code => @code1
-        @budget_purpose = FactoryGirl.create :budget_purpose, :percentage => 100,
-          :activity => @activity, :code => @code1
+        @input_budget_split = FactoryGirl.create :input_budget_split,
+          :percentage => 100, :activity => @activity, :code => input
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 100,
+          :activity => @activity, :code => purpose
 
         table = run_report
         table[0]['Funding Source'].should == @organization.name
@@ -1035,7 +1032,7 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Targets'].should == nil
         table[0]['Input Split Total %'].should == 100.0
         table[0]['Input Split %'].should == 100.0
-        table[0]['Input'].should == @cost_categorization.code.name
+        table[0]['Input'].should == @input_budget_split.code.name
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 100.0
         table[0]['MTEF Code'].should == "Human Resources For Health"
@@ -1046,9 +1043,9 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Total Amount ($)'].round(2).should == 100.00
         table[0]['Actual Double Count'].should == @is.double_count
 
-        @activity.purpose_budget_splits.size.should == 1
-        @activity.input_budget_splits.size.should == 1
-        @activity.location_budget_splits.size.should == 0
+        @activity.code_splits.purposes.budget.size.should == 1
+        @activity.code_splits.inputs.budget.size.should == 1
+        @activity.code_splits.locations.budget.size.should == 0
       end
     end
 
@@ -1057,17 +1054,14 @@ describe Reports::Detailed::DynamicQuery do
         basic_setup_response
         @response.state = 'accepted'
         @response.save
-        @root_code = FactoryGirl.create :purpose
-        @code1 = FactoryGirl.create :purpose, :official_name => "root"
         @activity = FactoryGirl.create :other_cost,
           :data_response => @response, :description => "desc"
         @is = FactoryGirl.create :implementer_split, :activity => @activity,
           :organization => @organization, :budget => 100
-        @mtef = FactoryGirl.create :purpose, :name => "Human Resources For Health"
 
         #creating dummy tree
-        @mtef.move_to_child_of(@root_code)
-        @code1.move_to_child_of(@mtef)
+        mtef.move_to_child_of(root_code)
+        purpose.move_to_child_of(mtef)
         @activity.reload;@activity.save
       end
 
@@ -1079,18 +1073,18 @@ describe Reports::Detailed::DynamicQuery do
 
       it "should adjust the total amounts as per codings (2 of each budget splits and 2 funders)" do
         #total amount is 100 because the amount of the activity is 100 despite being funded 150
-        @cost_categorization = FactoryGirl.create :input_budget_split,
-          :percentage => 90, :activity => @activity, :code => @code1
+        @input_budget_split = FactoryGirl.create :input_budget_split,
+          :percentage => 90, :activity => @activity, :code => input
         @cost_categorization1 = FactoryGirl.create :input_budget_split,
-          :percentage => 10, :activity => @activity, :code => @code1
-        @budget_purpose = FactoryGirl.create :budget_purpose, :percentage => 80,
-          :activity => @activity, :code => @code1
-        @budget_purpose = FactoryGirl.create :budget_purpose, :percentage => 20,
-          :activity => @activity, :code => @code1
+          :percentage => 10, :activity => @activity, :code => input
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 80,
+          :activity => @activity, :code => purpose
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 20,
+          :activity => @activity, :code => purpose
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 70, :activity => @activity, :code => @code1
+          :percentage => 70, :activity => @activity, :code => location
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 30, :activity => @activity, :code => @code1
+          :percentage => 30, :activity => @activity, :code => location
 
         table = run_report
         table[0]['Funding Source'].should == "N/A"
@@ -1102,7 +1096,7 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Targets'].should == nil
         table[0]['Input Split Total %'].should == 100.0
         table[0]['Input Split %'].should == 90.0
-        table[0]['Input'].should == @cost_categorization.code.name
+        table[0]['Input'].should == @input_budget_split.code.name
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 80.0
         table[0]['MTEF Code'].should == "Human Resources For Health"
@@ -1120,7 +1114,7 @@ describe Reports::Detailed::DynamicQuery do
         table[1]['Targets'].should == nil
         table[1]['Input Split Total %'].should == 100.0
         table[1]['Input Split %'].should == 90.0
-        table[1]['Input'].should == @cost_categorization.code.name
+        table[1]['Input'].should == @input_budget_split.code.name
         table[1]['Purpose Split Total %'].should == 100.0
         table[1]['Purpose Split %'].should == 80.0
         table[1]['MTEF Code'].should == "Human Resources For Health"
@@ -1138,7 +1132,7 @@ describe Reports::Detailed::DynamicQuery do
         table[2]['Targets'].should == nil
         table[2]['Input Split Total %'].should == 100.0
         table[2]['Input Split %'].should == 90.0
-        table[2]['Input'].should == @cost_categorization.code.name
+        table[2]['Input'].should == @input_budget_split.code.name
         table[2]['Purpose Split Total %'].should == 100.0
         table[2]['Purpose Split %'].should == 20.0
         table[2]['MTEF Code'].should == "Human Resources For Health"
@@ -1156,7 +1150,7 @@ describe Reports::Detailed::DynamicQuery do
         table[3]['Targets'].should == nil
         table[3]['Input Split Total %'].should == 100.0
         table[3]['Input Split %'].should == 90.0
-        table[3]['Input'].should == @cost_categorization.code.name
+        table[3]['Input'].should == @input_budget_split.code.name
         table[3]['Purpose Split Total %'].should == 100.0
         table[3]['Purpose Split %'].should == 20.0
         table[3]['MTEF Code'].should == "Human Resources For Health"
@@ -1174,7 +1168,7 @@ describe Reports::Detailed::DynamicQuery do
         table[4]['Targets'].should == nil
         table[4]['Input Split Total %'].should == 100.0
         table[4]['Input Split %'].should == 10.0
-        table[4]['Input'].should == @cost_categorization.code.name
+        table[4]['Input'].should == @input_budget_split.code.name
         table[4]['Purpose Split Total %'].should == 100.0
         table[4]['Purpose Split %'].should == 80.0
         table[4]['MTEF Code'].should == "Human Resources For Health"
@@ -1192,7 +1186,7 @@ describe Reports::Detailed::DynamicQuery do
         table[5]['Targets'].should == nil
         table[5]['Input Split Total %'].should == 100.0
         table[5]['Input Split %'].should == 10.0
-        table[5]['Input'].should == @cost_categorization.code.name
+        table[5]['Input'].should == @input_budget_split.code.name
         table[5]['Purpose Split Total %'].should == 100.0
         table[5]['Purpose Split %'].should == 80.0
         table[5]['MTEF Code'].should == "Human Resources For Health"
@@ -1210,7 +1204,7 @@ describe Reports::Detailed::DynamicQuery do
         table[6]['Targets'].should == nil
         table[6]['Input Split Total %'].should == 100.0
         table[6]['Input Split %'].should == 10.0
-        table[6]['Input'].should == @cost_categorization.code.name
+        table[6]['Input'].should == @input_budget_split.code.name
         table[6]['Purpose Split Total %'].should == 100.0
         table[6]['Purpose Split %'].should == 20.0
         table[6]['MTEF Code'].should == "Human Resources For Health"
@@ -1228,7 +1222,7 @@ describe Reports::Detailed::DynamicQuery do
         table[7]['Targets'].should == nil
         table[7]['Input Split Total %'].should == 100.0
         table[7]['Input Split %'].should == 10.0
-        table[7]['Input'].should == @cost_categorization.code.name
+        table[7]['Input'].should == @input_budget_split.code.name
         table[7]['Purpose Split Total %'].should == 100.0
         table[7]['Purpose Split %'].should == 20.0
         table[7]['MTEF Code'].should == "Human Resources For Health"
@@ -1259,15 +1253,11 @@ describe Reports::Detailed::DynamicQuery do
           :name => 'project',
           :in_flows => in_flows,
           :currency => 'RWF'
-        @root_code = FactoryGirl.create :purpose
-        @code1 = FactoryGirl.create :purpose, :official_name => "root"
-        @mtef = FactoryGirl.create :purpose, :name => "Human Resources For Health"
-        @nsp = FactoryGirl.create :purpose, :name => "purpose"
 
         #creating dummy tree
-        @mtef.move_to_child_of(@root_code)
-        @nsp.move_to_child_of(@mtef)
-        @code1.move_to_child_of(@nsp)
+        mtef.move_to_child_of(root_code)
+        nsp.move_to_child_of(mtef)
+        purpose.move_to_child_of(nsp)
       end
 
       it "should convert amounts to USD" do
@@ -1275,12 +1265,12 @@ describe Reports::Detailed::DynamicQuery do
           :data_response => @response, :description => "desc"
         @is = FactoryGirl.create :implementer_split, :activity => @activity,
           :organization => @organization, :budget => 100
-        @cost_categorization = FactoryGirl.create :input_budget_split,
-          :percentage => 100, :activity => @activity, :code => @code1
-        @budget_purpose = FactoryGirl.create :budget_purpose, :percentage => 100,
-          :activity => @activity, :code => @code1
+        @input_budget_split = FactoryGirl.create :input_budget_split,
+          :percentage => 100, :activity => @activity, :code => input
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 100,
+          :activity => @activity, :code => purpose
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 100, :activity => @activity, :code => @code1
+          :percentage => 100, :activity => @activity, :code => location
         @activity.reload;@activity.save
 
         table = run_report
@@ -1291,7 +1281,7 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Targets'].should == nil
         table[0]['Input Split Total %'].should == 100.0
         table[0]['Input Split %'].should == 100.0
-        table[0]['Input'].should == @cost_categorization.code.name
+        table[0]['Input'].should == @input_budget_split.code.name
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 100.0
         table[0]['MTEF Code'].should == "Human Resources For Health"
@@ -1308,12 +1298,12 @@ describe Reports::Detailed::DynamicQuery do
           :data_response => @response, :description => "desc"
         @is = FactoryGirl.create :implementer_split, :activity => @other_cost,
           :organization => @organization, :budget => 100
-        @cost_categorization = FactoryGirl.create :input_budget_split,
-          :percentage => 100, :activity => @other_cost, :code => @code1
-        @budget_purpose = FactoryGirl.create :budget_purpose, :percentage => 100,
-          :activity => @other_cost, :code => @code1
+        @input_budget_split = FactoryGirl.create :input_budget_split,
+          :percentage => 100, :activity => @other_cost, :code => input
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 100,
+          :activity => @other_cost, :code => purpose
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 100, :activity => @other_cost, :code => @code1
+          :percentage => 100, :activity => @other_cost, :code => location
         @other_cost.reload;@other_cost.save
         table = run_report
         table[0]['Funding Source'].should == "N/A"
@@ -1323,7 +1313,7 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Targets'].should == nil
         table[0]['Input Split Total %'].should == 100.0
         table[0]['Input Split %'].should == 100.0
-        table[0]['Input'].should == @cost_categorization.code.name
+        table[0]['Input'].should == @input_budget_split.code.name
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 100.0
         table[0]['MTEF Code'].should == "Human Resources For Health"
@@ -1351,25 +1341,21 @@ describe Reports::Detailed::DynamicQuery do
           :data_response => @response, :description => "desc"
         @is = FactoryGirl.create :implementer_split, :activity => @activity,
           :organization => @organization, :budget => 100
-        @root_code = FactoryGirl.create :purpose
-        @mtef = FactoryGirl.create :purpose, :name => "Human Resources For Health"
-        @code1 = FactoryGirl.create :purpose, :official_name => "root"
-        @nsp = FactoryGirl.create :purpose, :name => "purpose"
 
         #creating dummy tree
-        @mtef.move_to_child_of(@root_code)
-        @nsp.move_to_child_of(@mtef)
-        @code1.move_to_child_of(@nsp)
+        mtef.move_to_child_of(root_code)
+        nsp.move_to_child_of(mtef)
+        purpose.move_to_child_of(nsp)
         @activity.reload;@activity.save
       end
 
       it "should create a purposes row with the outstanding amount (should make 2 rows)" do
-        @cost_categorization = FactoryGirl.create :input_budget_split,
-          :percentage => 100, :activity => @activity, :code => @code1
-        @budget_purpose = FactoryGirl.create :budget_purpose, :percentage => 90,
-          :activity => @activity, :code => @code1
+        @input_budget_split = FactoryGirl.create :input_budget_split,
+          :percentage => 100, :activity => @activity, :code => input
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 90,
+          :activity => @activity, :code => purpose
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 100, :activity => @activity, :code => @code1
+          :percentage => 100, :activity => @activity, :code => location
 
         table = run_report
         table[0]['Funding Source'].should == @organization.name
@@ -1379,7 +1365,7 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Targets'].should == nil
         table[0]['Input Split Total %'].should == 100.0
         table[0]['Input Split %'].should == 100.0
-        table[0]['Input'].should == @cost_categorization.code.name
+        table[0]['Input'].should == @input_budget_split.code.name
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 90.0
         table[0]['MTEF Code'].should == "Human Resources For Health"
@@ -1397,7 +1383,7 @@ describe Reports::Detailed::DynamicQuery do
         table[1]['Targets'].should == nil
         table[1]['Input Split Total %'].should == 100.0
         table[1]['Input Split %'].should == 100.0
-        table[1]['Input'].should == @cost_categorization.code.name
+        table[1]['Input'].should == @input_budget_split.code.name
         table[1]['Purpose Split Total %'].should == 100.0
         table[1]['Purpose Split %'].should == 10.0
         table[1]['MTEF Code'].should == "N/A"
@@ -1410,12 +1396,12 @@ describe Reports::Detailed::DynamicQuery do
       end
 
       it "should create a inputs row with the outstanding amount (should make 2 rows)" do
-        @cost_categorization = FactoryGirl.create :input_budget_split,
-          :percentage => 80, :activity => @activity, :code => @code1
-        @budget_purpose = FactoryGirl.create :budget_purpose, :percentage => 100,
-          :activity => @activity, :code => @code1
+        @input_budget_split = FactoryGirl.create :input_budget_split,
+          :percentage => 80, :activity => @activity, :code => input
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 100,
+          :activity => @activity, :code => purpose
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 100, :activity => @activity, :code => @code1
+          :percentage => 100, :activity => @activity, :code => location
 
         table = run_report
         table[0]['Funding Source'].should == @organization.name
@@ -1425,7 +1411,7 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Targets'].should == nil
         table[0]['Input Split Total %'].should == 100.0
         table[0]['Input Split %'].should == 80.0
-        table[0]['Input'].should == @cost_categorization.code.name
+        table[0]['Input'].should == @input_budget_split.code.name
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 100.0
         table[0]['MTEF Code'].should == "Human Resources For Health"
@@ -1456,12 +1442,12 @@ describe Reports::Detailed::DynamicQuery do
       end
 
       it "should create a districts row with the outstanding amount (should make 2 rows)" do
-        @cost_categorization = FactoryGirl.create :input_budget_split,
-          :percentage => 100, :activity => @activity, :code => @code1
-        @budget_purpose = FactoryGirl.create :budget_purpose, :percentage => 100,
-          :activity => @activity, :code => @code1
+        @input_budget_split = FactoryGirl.create :input_budget_split,
+          :percentage => 100, :activity => @activity, :code => input
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 100,
+          :activity => @activity, :code => purpose
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 85, :activity => @activity, :code => @code1
+          :percentage => 85, :activity => @activity, :code => location
 
         table = run_report
         table[0]['Funding Source'].should == @organization.name
@@ -1471,7 +1457,7 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Targets'].should == nil
         table[0]['Input Split Total %'].should == 100.0
         table[0]['Input Split %'].should == 100.0
-        table[0]['Input'].should == @cost_categorization.code.name
+        table[0]['Input'].should == @input_budget_split.code.name
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 100.0
         table[0]['MTEF Code'].should == "Human Resources For Health"
@@ -1489,7 +1475,7 @@ describe Reports::Detailed::DynamicQuery do
         table[1]['Targets'].should == nil
         table[1]['Input Split Total %'].should == 100.0
         table[1]['Input Split %'].should == 100.0
-        table[1]['Input'].should == @cost_categorization.code.name
+        table[1]['Input'].should == @input_budget_split.code.name
         table[1]['Purpose Split Total %'].should == 100.0
         table[1]['Purpose Split %'].should == 100.0
         table[1]['MTEF Code'].should == "Human Resources For Health"
@@ -1503,12 +1489,12 @@ describe Reports::Detailed::DynamicQuery do
 
       context "within allowed leeway" do
         it "should not create a inputs row with the outstanding amount (should make 1 row)" do
-          @cost_categorization = FactoryGirl.create :input_budget_split,
-            :percentage => 99.5, :activity => @activity, :code => @code1
-          @budget_purpose = FactoryGirl.create :budget_purpose, :percentage => 100,
-            :activity => @activity, :code => @code1
+          @input_budget_split = FactoryGirl.create :input_budget_split,
+            :percentage => 99.5, :activity => @activity, :code => input
+          @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 100,
+            :activity => @activity, :code => purpose
           @location_budget_split = FactoryGirl.create :location_budget_split,
-            :percentage => 100, :activity => @activity, :code => @code1
+            :percentage => 100, :activity => @activity, :code => location
 
           table = run_report
           table[0]['Funding Source'].should == @organization.name
@@ -1518,7 +1504,7 @@ describe Reports::Detailed::DynamicQuery do
           table[0]['Targets'].should == nil
           table[0]['Input Split Total %'].should == 99.5
           table[0]['Input Split %'].should == 99.5
-          table[0]['Input'].should == @cost_categorization.code.name
+          table[0]['Input'].should == @input_budget_split.code.name
           table[0]['Purpose Split Total %'].should == 100.0
           table[0]['Purpose Split %'].should == 100.0
           table[0]['MTEF Code'].should == "Human Resources For Health"
@@ -1544,25 +1530,21 @@ describe Reports::Detailed::DynamicQuery do
         @project = FactoryGirl.create :project, :data_response => @response,
           :name => 'project',
           :in_flows => in_flows
-        @root_code = FactoryGirl.create :purpose
-        @code1 = FactoryGirl.create :purpose, :official_name => "root"
         @activity = FactoryGirl.create :activity, :project => @project,
           :data_response => @response, :description => "desc"
         @is = FactoryGirl.create :implementer_split, :activity => @activity,
           :organization => @organization, :budget => 100
-        @mtef = FactoryGirl.create :purpose, :name => "Human Resources For Health"
-        @nsp = FactoryGirl.create :purpose, :name => "purpose"
-        @cost_categorization = FactoryGirl.create :input_budget_split,
-          :percentage => 100, :activity => @activity, :code => @code1
-        @budget_purpose = FactoryGirl.create :budget_purpose, :percentage => 100,
-          :activity => @activity, :code => @code1
+        @input_budget_split = FactoryGirl.create :input_budget_split,
+          :percentage => 100, :activity => @activity, :code => input
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 100,
+          :activity => @activity, :code => purpose
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 100, :activity => @activity, :code => @code1
+          :percentage => 100, :activity => @activity, :code => location
 
         #creating dummy tree
-        @mtef.move_to_child_of(@root_code)
-        @nsp.move_to_child_of(@mtef)
-        @code1.move_to_child_of(@nsp)
+        mtef.move_to_child_of(root_code)
+        nsp.move_to_child_of(mtef)
+        purpose.move_to_child_of(nsp)
         @activity.reload;@activity.save
       end
 
@@ -1575,7 +1557,7 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Targets'].should == nil
         table[0]['Input Split Total %'].should == 100.0
         table[0]['Input Split %'].should == 100.0
-        table[0]['Input'].should == @cost_categorization.code.name
+        table[0]['Input'].should == @input_budget_split.code.name
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 100.0
         table[0]['MTEF Code'].should == "Human Resources For Health"
@@ -1611,25 +1593,21 @@ describe Reports::Detailed::DynamicQuery do
         @project = FactoryGirl.create :project, :data_response => @response,
           :name => 'project',
           :in_flows => in_flows
-        @root_code = FactoryGirl.create :purpose
-        @code1 = FactoryGirl.create :purpose, :official_name => "root"
         @activity = FactoryGirl.create :activity, :project => @project,
           :data_response => @response, :description => "desc"
         @is = FactoryGirl.create :implementer_split, :activity => @activity,
           :organization => @organization, :spend => 100
-        @mtef = FactoryGirl.create :purpose, :name => "Human Resources For Health"
-        @nsp = FactoryGirl.create :purpose, :name => "purpose"
-        @cost_categorization = FactoryGirl.create :input_spend_split,
-          :percentage => 100, :activity => @activity, :code => @code1
-        @spend_purpose = FactoryGirl.create :spend_purpose, :percentage => 100,
-          :activity => @activity, :code => @code1
+        @input_budget_split = FactoryGirl.create :input_spend_split,
+          :percentage => 100, :activity => @activity, :code => input
+        @purpose_spend_split = FactoryGirl.create :purpose_spend_split, :percentage => 100,
+          :activity => @activity, :code => purpose
         @location_spend_split = FactoryGirl.create :location_spend_split,
-          :percentage => 100, :activity => @activity, :code => @code1
+          :percentage => 100, :activity => @activity, :code => location
 
         #creating dummy tree
-        @mtef.move_to_child_of(@root_code)
-        @nsp.move_to_child_of(@mtef)
-        @code1.move_to_child_of(@nsp)
+        mtef.move_to_child_of(root_code)
+        nsp.move_to_child_of(mtef)
+        purpose.move_to_child_of(nsp)
         @activity.reload;@activity.save
       end
 
@@ -1642,7 +1620,7 @@ describe Reports::Detailed::DynamicQuery do
         table[0]['Targets'].should == nil
         table[0]['Input Split Total %'].should == 100.0
         table[0]['Input Split %'].should == 100.0
-        table[0]['Input'].should == @cost_categorization.code.name
+        table[0]['Input'].should == @input_budget_split.code.name
         table[0]['Purpose Split Total %'].should == 100.0
         table[0]['Purpose Split %'].should == 100.0
         table[0]['MTEF Code'].should == "Human Resources For Health"

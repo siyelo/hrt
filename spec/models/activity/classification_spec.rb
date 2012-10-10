@@ -6,37 +6,40 @@ describe Activity, "Classification" do
     basic_setup_project
   end
 
-  [['purpose_budget_splits_valid?', PurposeBudgetSplit, :budget, :purpose, 'purposes_classified?'],
-   ['purpose_spend_splits_valid?', PurposeSpendSplit, :spend, :purpose, 'purposes_classified?'],
-   ['location_budget_splits_valid?', LocationBudgetSplit, :budget, :location, 'locations_classified?'],
-   ['location_spend_splits_valid?', LocationSpendSplit, :spend,  :location, 'locations_classified?'],
-   ['input_budget_splits_valid?', InputBudgetSplit, :budget, :input, 'inputs_classified?'],
-   ['input_spend_splits_valid?', InputSpendSplit, :spend,  :input, 'inputs_classified?']
-   ].each do |valid_method, klass, amount_field, code_type, all_valid_method|
+   [
+     ['purpose_budget_splits_valid?', :purpose, :budget, 'purposes_classified?'],
+     ['purpose_spend_splits_valid?', :purpose, :spend, 'purposes_classified?'],
+     ['location_budget_splits_valid?', :location, :budget, 'locations_classified?'],
+     ['location_spend_splits_valid?', :location, :spend, 'locations_classified?'],
+     ['input_budget_splits_valid?', :input, :budget, 'inputs_classified?'],
+     ['input_spend_splits_valid?', :input, :spend, 'inputs_classified?']
+   ].each do |valid_method, code_type_key, amount_type, all_valid_method|
     describe "#{valid_method}" do
       before :each do
         @activity = FactoryGirl.create(:activity, :data_response => @response,
                            :project => @project)
         @split = FactoryGirl.create :implementer_split, :activity => @activity,
-          amount_field => 100, :organization => @organization
-        @code     = FactoryGirl.create code_type
+          amount_type => 100, :organization => @organization
+        @code     = FactoryGirl.create code_type_key
         @activity.reload
         @activity.save
       end
 
-      it "is classified when #{amount_field} equals 100 percent" do
+      it "is classified when #{amount_type} equals 100 percent" do
         @activity.send(valid_method).should be_false #sanity
-        params = {@code.id.to_s => 100}
-        klass.update_classifications(@activity, params)
+        classifications = {@code.id.to_s => 100}
+        classifier = Classifier.new(@activity, code_type_key, amount_type)
+        classifier.update_classifications(classifications)
         @activity.reload
         @activity.send(valid_method).should be_true
         @activity.send(all_valid_method).should be_true
       end
 
-      it "is not classified when #{amount_field} does not equal 100%" do
+      it "is not classified when #{amount_type} does not equal 100%" do
         @activity.send(valid_method).should be_false #sanity
-        params = {@code.id.to_s => 99}
-        klass.update_classifications(@activity, params)
+        classifications = {@code.id.to_s => 99}
+        classifier = Classifier.new(@activity, code_type_key, amount_type)
+        classifier.update_classifications(classifications)
         @activity.reload
         @activity.send(valid_method).should be_false
         @activity.send(all_valid_method).should be_false

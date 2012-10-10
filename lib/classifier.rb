@@ -1,18 +1,18 @@
 class Classifier
   include AmountType
 
-  attr_accessor :activity, :code_type, :amount_type
+  attr_accessor :activity, :code_type_key, :amount_type
 
-  def initialize(activity, code_type, amount_type)
+  def initialize(activity, code_type_key, amount_type)
     @activity = activity
-    @code_type = code_type
+    @code_type_key = code_type_key
     @amount_type = amount_type
   end
 
   def update_classifications(classifications)
     present_ids = []
-    assignments = activity.code_splits.with_code_type(code_type).
-      with_amount_type(amount_type)
+    splits = activity.code_splits.with_code_type(code_type).
+               with_amount_type(amount_type)
     codes = code_klass.find(classifications.keys)
 
     classifications.each_pair do |code_id, value|
@@ -21,37 +21,41 @@ class Classifier
       if value.present?
         present_ids << code_id
 
-        ca = find_assignment(assignments, code_id) ||
-             new(activity: activity, code: code)
+        split = detect_assignment(splits, code_id) ||
+             CodeSplit.new(activity: activity, code: code)
 
-        ca.is_spend = is_spend?(amount_type)
-        ca.percentage = value
-        ca.save
+        split.spend = is_spend?(amount_type)
+        split.percentage = value
+        split.save
       end
     end
 
     # SQL deletion, faster than deleting records individually
     if present_ids.present?
-      delete_all(["activity_id = ? AND code_type = ? AND code_id NOT IN (?)",
+      CodeSplit.delete_all(["activity_id = ? AND code_type = ? AND code_id NOT IN (?)",
                    activity.id, code_type, present_ids])
     else
-      delete_all(["activity_id = ? AND code_type = ?",
+      CodeSplit.delete_all(["activity_id = ? AND code_type = ?",
                   activity.id, code_type])
     end
 
-    activity.update_classified_amount_cache(code_type, amount_type)
+    activity.update_classified_amount_cache(code_type_key, amount_type)
   end
 
   private
   def code_klass
-    code_type.to_s.capitalize.constantize
+    @code_klass ||= code_type.constantize
   end
 
-  def find_assignment(assignments, code_id)
-    assignments.detect do |ca|
-      ca.code_id == code_id.to_i &&
-        ca.code_type == code_type &&
-        ca.is_spend == is_spend?(amount_type)
+  def detect_assignment(splits, code_id)
+    splits.detect do |split|
+      split.code_id == code_id.to_i &&
+        split.code_type == code_type &&
+        split.spend == is_spend?(amount_type)
     end
+  end
+
+  def code_type
+    @code_type ||= code_type_key.to_s.capitalize
   end
 end

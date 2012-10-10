@@ -5,12 +5,7 @@ module Reports
     # activity: activity object
     # type:  :spend or :budget
     def splits(activity, type)
-      case type
-      when :spend
-        activity.input_spend_splits.roots
-      when :budget
-        activity.input_budget_splits.roots
-      end
+      activity.code_splits.inputs.send(type).with_codes(Input.roots)
     end
   end
 end

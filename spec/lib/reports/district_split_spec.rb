@@ -46,13 +46,20 @@ describe Reports::DistrictSplit do
     district2     = FactoryGirl.create(:location, :name => 'district2')
 
     classifications1 = { district1.id => 25, district2.id => 75 } #budget
-    LocationBudgetSplit.update_classifications(activity1, classifications1)
+    classifier1 = Classifier.new(activity1, :location, :budget)
+    classifier1.update_classifications(classifications1)
+
     classifications2 = { district1.id => 50, district2.id => 50 } #spend
-    LocationSpendSplit.update_classifications(activity1, classifications2)
+    classifier2 = Classifier.new(activity1, :location, :spend)
+    classifier2.update_classifications(classifications2)
+
     classifications3 = { district1.id => 35, district2.id => 65 } #budget
-    LocationBudgetSplit.update_classifications(activity2, classifications3)
+    classifier3 = Classifier.new(activity2, :location, :budget)
+    classifier3.update_classifications(classifications3)
+
     classifications4 = { district1.id => 40, district2.id => 60 } #spend
-    LocationSpendSplit.update_classifications(activity2, classifications4)
+    classifier4 = Classifier.new(activity2, :location, :spend)
+    classifier4.update_classifications(classifications4)
   end
 
   it "generates report with double counts" do

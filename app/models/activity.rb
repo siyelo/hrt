@@ -27,35 +27,27 @@ class Activity < ActiveRecord::Base
   has_many :implementers, through: :implementer_splits, source: :organization
   has_many :code_splits, dependent: :destroy
   has_many :comments, as: :commentable, dependent: :destroy
-
-  ### TODO: deprecate
-  #
-  has_many :purpose_budget_splits, dependent: :destroy
-  has_many :purpose_spend_splits, dependent: :destroy
-  has_many :input_budget_splits, dependent: :destroy
-  has_many :input_spend_splits, dependent: :destroy
-  has_many :location_budget_splits, dependent: :destroy
-  has_many :location_spend_splits, dependent: :destroy
-  has_many :budget_locations, dependent: :destroy,
-    class_name: 'LocationBudgetSplit'
-  has_many :spend_locations, dependent: :destroy,
-    class_name: 'LocationSpendSplit'
-  ###
-
   has_many :targets, dependent: :destroy
   has_many :outputs, dependent: :destroy
-  has_many :leaf_budget_purposes, dependent: :destroy,
-    class_name: 'PurposeBudgetSplit',
-    conditions: ["code_splits.sum_of_children = 0"]
-  has_many :leaf_spend_purposes, dependent: :destroy,
-    class_name: 'PurposeSpendSplit',
-    conditions: ["code_splits.sum_of_children = 0"]
-  has_many :leaf_budget_inputs, dependent: :destroy,
-    class_name: 'InputBudgetSplit',
-    conditions: ["code_splits.sum_of_children = 0"]
-  has_many :leaf_spend_inputs, dependent: :destroy,
-    class_name: 'InputSpendSplit',
-    conditions: ["code_splits.sum_of_children = 0"]
+
+  has_many :leaf_budget_purposes,
+    class_name: 'CodeSplit', conditions: ["code_splits.code_type = 'Purpose' AND
+      code_splits.spend IS FALSE AND code_splits.sum_of_children = 0"]
+  has_many :leaf_spend_purposes,
+    class_name: 'CodeSplit', conditions: ["code_splits.code_type = 'Purpose' AND
+      code_splits.spend IS TRUE AND code_splits.sum_of_children = 0"]
+  has_many :leaf_budget_inputs,
+    class_name: 'CodeSplit', conditions: ["code_splits.code_type = 'Input' AND
+      code_splits.spend IS FALSE AND code_splits.sum_of_children = 0"]
+  has_many :leaf_spend_inputs,
+    class_name: 'CodeSplit', conditions: ["code_splits.code_type = 'Input' AND
+      code_splits.spend IS TRUE AND code_splits.sum_of_children = 0"]
+  has_many :location_budget_splits,
+    class_name: 'CodeSplit', conditions: ["code_splits.code_type = 'Location' AND
+      code_splits.spend IS FALSE AND code_splits.sum_of_children = 0"]
+  has_many :location_spend_splits,
+    class_name: 'CodeSplit', conditions: ["code_splits.code_type = 'Location' AND
+      code_splits.spend IS TRUE AND code_splits.sum_of_children = 0"]
 
   ### Nested attributes
   accepts_nested_attributes_for :implementer_splits, allow_destroy: true,
@@ -134,11 +126,11 @@ class Activity < ActiveRecord::Base
   end
 
   # asynchronously update classification tree cached amounts
-  def update_classified_amount_cache(code_type, amount_type)
+  def update_classified_amount_cache(code_type_key, amount_type)
     # disable update_all_classified_amount_caches
     # callback to be run again on save !!
     Activity.skip_callback(:update, :before, :update_all_classified_amount_caches)
-    set_classified_amount_cache(code_type, amount_type)
+    set_classified_amount_cache(code_type_key, amount_type)
     self.save(validate: false)
   end
   handle_asynchronously :update_classified_amount_cache
@@ -148,9 +140,9 @@ class Activity < ActiveRecord::Base
   #
   # Updates classified amount caches if budget or spend have been changed
   def update_all_classified_amount_caches
-    [Purpose, Location, Input].each do |code_type|
+    [:purpose, :location, :input].each do |code_type_key|
       [:budget, :spend].each do |amount_type|
-        update_classified_amount_cache(code_type, amount_type)
+        update_classified_amount_cache(code_type_key, amount_type)
       end
     end
   end
@@ -183,8 +175,7 @@ class Activity < ActiveRecord::Base
   end
 
   def locations
-    code_splits.with_types(['LocationBudgetSplit', 'LocationSpendSplit']).
-      find(:all, include: :code).map{|ca| ca.code }.uniq
+    code_splits.locations.includes(:code).map { |ca| ca.code }.uniq
   end
 
   def implementer_splits_total(amount_method)
@@ -203,27 +194,27 @@ class Activity < ActiveRecord::Base
   end
 
   def purpose_spend_splits_valid?
-    CodingTree.new(self, PurposeSpendSplit).valid?
+    CodingTree.new(self, :purpose, :spend).valid?
   end
 
   def purpose_budget_splits_valid?
-    CodingTree.new(self, PurposeBudgetSplit).valid?
+    CodingTree.new(self, :purpose, :budget).valid?
   end
 
   def input_spend_splits_valid?
-    CodingTree.new(self, InputSpendSplit).valid?
+    CodingTree.new(self, :input, :spend).valid?
   end
 
   def input_budget_splits_valid?
-    CodingTree.new(self, InputBudgetSplit).valid?
+    CodingTree.new(self, :input, :budget).valid?
   end
 
   def location_spend_splits_valid?
-    CodingTree.new(self, LocationSpendSplit).valid?
+    CodingTree.new(self, :location, :spend).valid?
   end
 
   def location_budget_splits_valid?
-    CodingTree.new(self, LocationBudgetSplit).valid?
+    CodingTree.new(self, :location, :budget).valid?
   end
 
   protected
@@ -248,8 +239,8 @@ class Activity < ActiveRecord::Base
   private
 
     #TODO  it should not be the responsibility of the activity to do this
-    def set_classified_amount_cache(code_type, amount_type)
-      coding_tree = CodingTree.new(self, code_type, amount_type)
+    def set_classified_amount_cache(code_type_key, amount_type)
+      coding_tree = CodingTree.new(self, code_type_key, amount_type)
       coding_tree.set_cached_amounts!
     end
 

@@ -23,7 +23,7 @@ PurposeSpendSplit.reset_column_information
 
 CodeSplit.find_each do |code_split|
   if code_split.type.to_s =~ /Spend/
-    code_split.is_spend = true
+    code_split.spend = true
     code_split.save!
   end
 end

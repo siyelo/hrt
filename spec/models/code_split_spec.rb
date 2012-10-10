@@ -32,19 +32,24 @@ describe CodeSplit do
   describe "named scopes" do
     it "with_activity" do
       basic_setup_project
-      activity1 = FactoryGirl.create(:activity, :data_response => @response, :project => @project)
-      split1    = FactoryGirl.create(:implementer_split, :activity => activity1,
-                         :budget => 100, :spend => 200, :organization => @organization)
-      activity2 = FactoryGirl.create(:activity, :data_response => @response, :project => @project)
-      split2    = FactoryGirl.create(:implementer_split, :activity => activity2,
-                         :budget => 100, :spend => 200, :organization => @organization)
+      activity1 = FactoryGirl.create(:activity,
+                   :data_response => @response, :project => @project)
+      FactoryGirl.create(:implementer_split, :activity => activity1,
+                  :budget => 100, :spend => 200, :organization => @organization)
+      activity2 = FactoryGirl.create(:activity, :data_response => @response,
+                                     :project => @project)
+      FactoryGirl.create(:implementer_split, :activity => activity2,
+                  :budget => 100, :spend => 200, :organization => @organization)
 
-      purpose   = FactoryGirl.create(:purpose, :name => 'purpose1')
+      purpose = FactoryGirl.create(:purpose, :name => 'purpose1')
 
-      ca1       = FactoryGirl.create(:purpose_budget_split, :activity => activity1, :code => purpose)
-      ca2       = FactoryGirl.create(:purpose_budget_split, :activity => activity2, :code => purpose)
+      split1 = FactoryGirl.create(:purpose_budget_split,
+                                  :activity => activity1, :code => purpose)
+      split2 = FactoryGirl.create(:purpose_budget_split,
+                                  :activity => activity2, :code => purpose)
 
-      CodeSplit.with_activity(activity1.id).should == [ca1]
+      CodeSplit.with_activity(activity1.id).should == [split1]
+      CodeSplit.with_activity(activity2.id).should == [split2]
     end
 
     it "with_activities" do
@@ -67,142 +72,70 @@ describe CodeSplit do
       CodeSplit.with_activities([activity1.id, activity3.id]).should == [ca1, ca3]
     end
 
-    it "with_type" do
-      basic_setup_project
-      activity = FactoryGirl.create(:activity, :data_response => @response, :project => @project)
-      split    = FactoryGirl.create(:implementer_split, :activity => activity,
-                         :budget => 100, :spend => 200, :organization => @organization)
-      purpose  = FactoryGirl.create(:purpose, :name => 'purpose1')
+    describe ".purposes" do
+      it "can filter code splits by purposes" do
+        basic_setup_activity
+        split = FactoryGirl.create(:purpose_budget_split, activity: @activity)
 
-      ca1      = FactoryGirl.create(:purpose_budget_split, :activity => activity, :code => purpose)
-      ca2      = FactoryGirl.create(:purpose_spend_split,  :activity => activity, :code => purpose)
-
-      CodeSplit.with_type('PurposeBudgetSplit').should == [ca1]
-      CodeSplit.with_type('PurposeSpendSplit').should == [ca2]
-    end
-
-    it "automatically calculates the cached amount from the given % (and corresponding sub-activity rollup amount)" do
-      basic_setup_project
-      activity = FactoryGirl.create(:activity, :data_response => @response, :project => @project)
-      split    = FactoryGirl.create(:implementer_split, :activity => activity,
-                         :budget => 100, :spend => 200, :organization => @organization)
-      purpose  = FactoryGirl.create(:purpose, :name => 'purpose1')
-      activity.reload
-      activity.save # get new cached implementer split total
-      # at time of writing you must call one of the 'bulk' update APIs for classifications to have their cached amounts
-      # and sum of children recalculated
-      # i.e. you can't create individuals (below) since there are not yet any callbacks to keep each coding's cached_amount up to date
-      #  ca1      = FactoryGirl.create(:purpose_budget_split, :activity => activity, :code => code, :percentage => '100', :cached_amount => nil)
-      #  ca2      = FactoryGirl.create(:purpose_spend_split,  :activity => activity, :code => code, :percentage => '100', :cached_amount => nil)
-      PurposeBudgetSplit.update_classifications(activity, { purpose.id => 100 })   # 100 means 100%
-      PurposeSpendSplit.update_classifications(activity, { purpose.id => 100 })
-      activity.reload
-      cb1 = activity.purpose_budget_splits.first
-      cb1.cached_amount.to_f.should == 100
-      cs1 = activity.purpose_spend_splits.first
-      cs1.cached_amount.to_f.should == 200
-      CodeSplit.all.should == [cb1, cs1]
-      CodeSplit.sorted.should == [cs1, cb1]
-    end
- end
-
-  describe "updating amounts" do
-    before :each do
-      basic_setup_project
-      activity = FactoryGirl.create(:activity, :data_response => @response, :project => @project)
-      split    = FactoryGirl.create(:implementer_split, :activity => activity,
-                         :budget => 100, :spend => 200, :organization => @organization)
-      @assignment = FactoryGirl.create(:code_split, :activity => activity)
-    end
-  end
-
-  describe "#self.update_classifications" do
-    before :each do
-      @request      = FactoryGirl.create :data_request
-      @organization = FactoryGirl.create :organization
-      user = FactoryGirl.create :user, :organization => @organization
-      @response     = @organization.latest_response
-      @project      = FactoryGirl.create(:project, :data_response => @response)
-      @activity     = FactoryGirl.create(:activity, :data_response => @response, :project => @project)
-    end
-
-    context "when classifications does not exist" do
-      let(:purpose1) { FactoryGirl.create(:purpose) }
-      let(:purpose2) { FactoryGirl.create(:purpose) }
-
-      it "creates code splits" do
-        classifications = { purpose1.id => 100, purpose2.id => 20 }
-        PurposeBudgetSplit.update_classifications(@activity, classifications)
-        PurposeBudgetSplit.count.should == 2
-        assignments = PurposeBudgetSplit.all
-        assignments.detect{|ca| ca.code_id == purpose1.id}.percentage.should == 100
-        assignments.detect{|ca| ca.code_id == purpose2.id}.percentage.should == 20
-      end
-
-      it "does not create anything" do
-        classifications = {}
-        coding_type     = 'PurposeBudgetSplit'
-        PurposeBudgetSplit.update_classifications(@activity, classifications)
-        PurposeBudgetSplit.count.should == 0
-      end
-
-      it "rejects invalid percentage amounts" do
-        classifications = { purpose1.id => 100, purpose2.id => 101 }
-        PurposeBudgetSplit.update_classifications(@activity, classifications)
-
-        PurposeBudgetSplit.count.should == 1
-        assignments = PurposeBudgetSplit.all
-        assignments.detect{|ca| ca.code_id == purpose1.id}.percentage.should == 100
+        CodeSplit.purposes.should == [split]
+        CodeSplit.inputs.should be_empty
+        CodeSplit.locations.should be_empty
       end
     end
 
-    context "when classifications exist" do
-      let(:purpose1) { FactoryGirl.create(:purpose) }
-      let(:purpose2) { FactoryGirl.create(:purpose) }
+    describe ".inputs" do
+      it "can filter code splits by inputs" do
+        basic_setup_activity
+        split = FactoryGirl.create(:input_budget_split, activity: @activity)
 
-      it "creates code splits" do
-        FactoryGirl.create(:purpose_budget_split, :activity => @activity,
-                           :code => purpose1, :percentage => 10)
-        FactoryGirl.create(:purpose_budget_split, :activity => @activity,
-                           :code => purpose2)
-        PurposeBudgetSplit.count.should == 2
+        CodeSplit.inputs.should == [split]
+        CodeSplit.purposes.should be_empty
+        CodeSplit.locations.should be_empty
+      end
+    end
 
-        # when submitting existing classifications, it updates them
-        classifications = { purpose1.id => 11, purpose2.id => 22 }
-        PurposeBudgetSplit.update_classifications(@activity, classifications)
+    describe ".locations" do
+      it "can filter code splits by location" do
+        basic_setup_activity
+        split = FactoryGirl.create(:location_budget_split, activity: @activity)
 
-        PurposeBudgetSplit.count.should == 2
-        assignments = CodeSplit.all
-        assignments.detect{|ca| ca.code_id == purpose1.id}.percentage.should == 11
-        assignments.detect{|ca| ca.code_id == purpose2.id}.percentage.should == 22
+        CodeSplit.locations.should == [split]
+        CodeSplit.purposes.should be_empty
+        CodeSplit.inputs.should be_empty
+      end
+    end
+
+    describe ".budget" do
+      it "can filter code splits by budget" do
+        basic_setup_activity
+        split = FactoryGirl.create(:purpose_budget_split, activity: @activity)
+
+        CodeSplit.budget.should == [split]
+        CodeSplit.spend.should be_empty
+      end
+    end
+
+    describe ".spend" do
+      it "can filter code splits by spend" do
+        basic_setup_activity
+        split = FactoryGirl.create(:purpose_spend_split, activity: @activity)
+
+        CodeSplit.spend.should == [split]
+        CodeSplit.budget.should be_empty
+      end
+    end
+
+    describe ".leaf" do
+      it "can return leaf code splits" do
+        basic_setup_activity
+        split1 = FactoryGirl.create(:purpose_spend_split, activity: @activity,
+                                    sum_of_children: 10)
+        split2 = FactoryGirl.create(:purpose_spend_split, activity: @activity,
+                                    sum_of_children: 0)
+
+        CodeSplit.leaf.should == [split2]
       end
 
-      it "deletes old code splits" do
-        FactoryGirl.create(:purpose_budget_split, :activity => @activity,
-                           :code => purpose1, :percentage => 10)
-
-        PurposeBudgetSplit.update_classifications(@activity, {purpose1.id => 10})
-        PurposeBudgetSplit.count.should == 1
-        PurposeBudgetSplit.first.percentage.should == 10
-
-        FactoryGirl.create(:purpose_budget_split, :activity => @activity,
-                           :code => purpose2, :percentage => 20)
-        PurposeBudgetSplit.update_classifications(@activity, {purpose2.id => 20})
-        PurposeBudgetSplit.count.should == 1
-        PurposeBudgetSplit.first.percentage.should == 20
-      end
-
-      it "rounds percentages off to two decimal places" do
-        cb = FactoryGirl.create(:purpose_budget_split, :activity => @activity,
-                                :code => purpose1, :percentage => 57.344656)
-        cb.percentage.to_f.should == 57.34
-      end
-
-      it "rounds percentages off to two decimal places" do
-        cb = FactoryGirl.create(:purpose_spend_split, :activity => @activity,
-                                :code => purpose1, :percentage => 52.7388)
-        cb.percentage.to_f.should == 52.74
-      end
     end
   end
 end

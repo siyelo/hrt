@@ -7,32 +7,32 @@ FactoryGirl.define do
   end
 
   factory :location_budget_split, :parent => :code_split do |f|
-    f.code            { FactoryGirl.create :location }
-    f.is_spend        { false }
+    f.code         { FactoryGirl.create :location }
+    f.spend        { false }
   end
 
   factory :location_spend_split, :parent => :code_split do |f|
-    f.code            { FactoryGirl.create :location }
-    f.is_spend        { true }
+    f.code         { FactoryGirl.create :location }
+    f.spend        { true }
   end
 
   factory :input_budget_split, :parent => :code_split do |f|
-    f.code            { FactoryGirl.create :input }
-    f.is_spend        { false }
+    f.code         { FactoryGirl.create :input }
+    f.spend        { false }
   end
 
   factory :input_spend_split, :parent => :code_split do |f|
-    f.code            { FactoryGirl.create :input }
-    f.is_spend        { true }
+    f.code         { FactoryGirl.create :input }
+    f.spend        { true }
   end
 
   factory :purpose_budget_split, :parent => :code_split do |f|
-    f.code            { FactoryGirl.create :purpose }
-    f.is_spend        { false }
+    f.code         { FactoryGirl.create :purpose }
+    f.spend        { false }
   end
 
   factory :purpose_spend_split, :parent => :code_split do |f|
-    f.code            { FactoryGirl.create :purpose }
-    f.is_spend        { true }
+    f.code         { FactoryGirl.create :purpose }
+    f.spend        { true }
   end
 end

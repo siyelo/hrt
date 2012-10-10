@@ -173,7 +173,7 @@ class Reports::Detailed::ClassificationSplit
       when :input
         :leaf_budget_inputs
       when :location
-        :budget_locations
+        :location_budget_splits
       else
         raise "Invalid classification type #{classification_type}".to_yaml
       end
@@ -184,7 +184,7 @@ class Reports::Detailed::ClassificationSplit
       when :input
         :leaf_spend_inputs
       when :location
-        :spend_locations
+        :location_spend_splits
       else
         raise "Invalid classification type #{classification_type}".to_yaml
       end

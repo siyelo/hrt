@@ -7,11 +7,7 @@ describe OtherCost do
     it { should have_and_belong_to_many :beneficiaries }
     it { should have_many :implementer_splits }
     it { should have_many :code_splits }
-    it { should have_many :purpose_budget_splits }
-    it { should have_many :input_budget_splits }
     it { should have_many :location_budget_splits }
-    it { should have_many :purpose_spend_splits }
-    it { should have_many :input_spend_splits }
     it { should have_many :location_spend_splits }
   end
 

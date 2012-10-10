@@ -56,7 +56,7 @@ ActiveRecord::Schema.define(:version => 20121008121120) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "code_type"
-    t.boolean  "is_spend",        :default => false
+    t.boolean  "spend",           :default => false
   end
 
   add_index "code_splits", ["code_id", "code_type"], :name => "index_code_splits_on_code_id_and_code_type"

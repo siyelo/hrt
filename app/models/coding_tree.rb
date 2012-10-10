@@ -60,12 +60,12 @@ class CodingTree
 
 
 
-  attr_reader :activity, :code_type, :amount_type, :activity_amount
+  attr_reader :activity, :code_type_key, :amount_type, :activity_amount
 
-  def initialize(activity, code_type, amount_type)
-    @activity        = activity
-    @code_type       = code_type
-    @amount_type     = amount_type
+  def initialize(activity, code_type_key, amount_type)
+    @activity = activity
+    @code_type_key = code_type_key
+    @amount_type = amount_type
     @activity_amount = @activity.send(:"total_#{amount_type}") || 0
   end
 
@@ -87,13 +87,13 @@ class CodingTree
   end
 
   def root_codes
-    if code_type == :location
+    if code_type_key == :location
       version = data_request.locations_version
       Location.with_version(version).national_level +
         Location.with_version(version).without_national_level.sorted.all
     else
       # data_request.purposes_version
-      version = data_request.send(:"#{code_type.to_s.pluralize}_version")
+      version = data_request.send(code_type_version)
       code_klass.with_version(version).roots
     end
   end
@@ -143,10 +143,9 @@ class CodingTree
           cached_amount = sum_of_children = bucket[:amount]
 
           if bucket[:descendants]
-            CodeSplit.create!(:activity => activity, :code => code,
-                              :is_spend => is_spend?(amount_type),
-                              :cached_amount => cached_amount,
-                              :sum_of_children => sum_of_children)
+            CodeSplit.create!({:activity => activity, :code => code,
+              :spend => is_spend?(amount_type), :cached_amount => cached_amount,
+                :sum_of_children => sum_of_children}, without_protection: true)
             descendants = true
           end
         end
@@ -164,7 +163,7 @@ class CodingTree
 
     def build_tree
       @code_splits = @activity.code_splits.
-                      send(code_type.to_s.pluralize).send(amount_type)
+                       send(code_type_association).send(amount_type)
       @inner_root = Tree.new({})
 
       build_subtree(@inner_root, root_codes)
@@ -178,7 +177,7 @@ class CodingTree
         if code_assignment
           node = Tree.new({:ca => code_assignment, :code => code})
           root.children << node
-          unless code_type == :location
+          unless code_type_key == :location
             build_subtree(node, cached_children(code)) unless code.leaf?
           end
         end
@@ -194,10 +193,22 @@ class CodingTree
     end
 
     def code_klass
-      @code_klass ||= code_type.to_s.capitalize.constantize
+      @code_klass ||= code_type.constantize
     end
 
     def data_request
       @data_request ||= activity.data_request
+    end
+
+    def code_type
+      @code_type ||= code_type_key.to_s.capitalize
+    end
+
+    def code_type_version
+      @code_type_version ||= :"#{code_type_association}_version"
+    end
+
+    def code_type_association
+      @code_type_association ||= code_type_key.to_s.pluralize
     end
 end

@@ -88,8 +88,8 @@ class Reports::DistrictSplit < Reports::TopBase
 
   def code_splits
     @code_splits ||= CodeSplit.find :all,
-      :select => 'code_splits.type AS klass,
-                  code_splits.activity_id,
+      :select => 'code_splits.activity_id,
+                  code_splits.spend,
                   code_splits.cached_amount AS amount,
                   locations.name AS district,
                   COALESCE(projects.currency, organizations.currency) AS amount_currency',
@@ -100,8 +100,7 @@ class Reports::DistrictSplit < Reports::TopBase
                  INNER JOIN data_responses ON data_responses.id = activities.data_response_id
                  INNER JOIN organizations ON organizations.id = data_responses.organization_id",
       :conditions => ["data_responses.data_request_id = ? AND
-                  code_splits.type IN
-                  ('LocationBudgetSplit', 'LocationSpendSplit')", request.id]
+                  code_splits.code_type = 'Location'", request.id]
   end
 
   def district_amounts(district)
@@ -117,7 +116,7 @@ class Reports::DistrictSplit < Reports::TopBase
     result = {}
     locations.each { |location| result[location.name] ||= Hash.new(0) }
     collection.each do |e|
-      method_name = method_from_class(e.klass.to_s)
+      method_name = method_from_class(e.spend)
       ratio = include_double_count ? 1.0 : ratios[e.activity_id.to_i][method_name]
       if result[e.district]
         result[e.district][method_name] += ratio *

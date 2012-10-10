@@ -1,29 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Activity do
-  describe "Associations" do
-    it { should belong_to(:data_response) }
-    it { should belong_to(:project) }
-    it { should belong_to(:previous) }
-    it { should have_and_belong_to_many :beneficiaries }
-    it { should have_many(:implementer_splits).dependent(:delete_all) }
-    it { should have_many(:implementers) }
-    it { should have_many(:code_splits).dependent(:destroy) }
-    it { should have_many(:comments).dependent(:destroy) }
-    it { should have_many(:purpose_spend_splits).dependent(:destroy) }
-    it { should have_many(:purpose_budget_splits).dependent(:destroy) }
-    it { should have_many(:input_spend_splits).dependent(:destroy) }
-    it { should have_many(:input_budget_splits).dependent(:destroy) }
-    it { should have_many(:location_spend_splits).dependent(:destroy) }
-    it { should have_many(:location_budget_splits).dependent(:destroy) }
-    it { should have_many(:targets).dependent(:destroy) }
-    it { should have_many(:outputs).dependent(:destroy) }
-    it { should have_many(:leaf_budget_purposes) }
-    it { should have_many(:leaf_spend_purposes) }
-    it { should have_many(:leaf_budget_inputs) }
-    it { should have_many(:leaf_spend_inputs) }
-  end
-
   describe "Attributes" do
     it { should allow_mass_assignment_of(:name) }
     it { should allow_mass_assignment_of(:description) }
@@ -47,6 +24,25 @@ describe Activity do
     it { should validate_presence_of(:project_id) }
     it { should ensure_length_of(:name) }
     it { should validate_presence_of(:description) }
+  end
+
+  describe "Associations" do
+    it { should belong_to(:data_response) }
+    it { should belong_to(:project) }
+    it { should belong_to(:previous) }
+    it { should have_and_belong_to_many :beneficiaries }
+    it { should have_many(:implementer_splits).dependent(:delete_all) }
+    it { should have_many(:implementers) }
+    it { should have_many(:code_splits).dependent(:destroy) }
+    it { should have_many(:comments).dependent(:destroy) }
+    it { should have_many(:targets).dependent(:destroy) }
+    it { should have_many(:outputs).dependent(:destroy) }
+    it { should have_many(:leaf_budget_purposes) }
+    it { should have_many(:leaf_spend_purposes) }
+    it { should have_many(:leaf_budget_inputs) }
+    it { should have_many(:leaf_spend_inputs) }
+    it { should have_many :location_budget_splits }
+    it { should have_many :location_spend_splits }
   end
 
   describe "update attributes" do
@@ -219,17 +215,13 @@ describe Activity do
   end
 
   describe "#locations" do
-    it "returns uniq locations only from district classifications" do
+    it "returns uniq activity locations" do
       basic_setup_activity
       location1 = FactoryGirl.create(:location)
       location2 = FactoryGirl.create(:location)
-      location3 = FactoryGirl.create(:location)
-      location4 = FactoryGirl.create(:location)
       FactoryGirl.create(:location_budget_split, activity: @activity, code: location1)
       FactoryGirl.create(:location_budget_split, activity: @activity, code: location2)
       FactoryGirl.create(:location_spend_split, activity: @activity, code: location2)
-      FactoryGirl.create(:purpose_budget_split, activity: @activity, code: location3)
-      FactoryGirl.create(:purpose_spend_split, activity: @activity, code: location4)
 
       @activity.locations.length.should == 2
       @activity.locations.should include(location1)

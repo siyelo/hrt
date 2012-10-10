@@ -127,8 +127,8 @@ module Reports
     private
     ###
     # Determines whether it is a budget or spend
-    def method_from_class(klass_string)
-      klass_string.match("Spend") ? :spend : :budget
+    def method_from_class(spend)
+      spend ? :spend : :budget
     end
 
     def top_budgeters

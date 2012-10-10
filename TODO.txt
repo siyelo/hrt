@@ -1,0 +1,5 @@
+- remove annotate comments from models/specs
+- rename method_from_class -> amount_type
+- when you run 'rspec spec/lib/reports/detailed/classification_split.rb', it fails
+- move CodingTree outside app/models in lib folder
+- use a gem to convert => to :

@@ -9,16 +9,16 @@ describe Reports::Detailed::ClassificationSplit do
 
   before :each do
     @request       = FactoryGirl.create :data_request
-    @donor1        = FactoryGirl.create(:organization, :name => "donor1")
-    @organization1 = FactoryGirl.create(:organization, :name => "organization1",
-                             :implementer_type => "Implementer")
-    FactoryGirl.create :user, :organization => @organization1
+    @donor1        = FactoryGirl.create(:organization, name: "donor1")
+    @organization1 = FactoryGirl.create(:organization, name: "organization1",
+                             implementer_type: "Implementer")
+    FactoryGirl.create :user, organization: @organization1
     @response1     = @organization1.latest_response
-    in_flows       = [FactoryGirl.build(:funding_flow, :from => @donor1,
-                                    :budget => 50)]
-    @project1      = FactoryGirl.create(:project, :data_response => @response1,
-                             :name => 'project1',
-                             :in_flows => in_flows)
+    in_flows       = [FactoryGirl.build(:funding_flow, from: @donor1,
+                                    budget: 50)]
+    @project1      = FactoryGirl.create(:project, data_response: @response1,
+                             name: 'project1',
+                             in_flows: in_flows)
   end
 
   [:purpose, :input, :location].each do |classification_type|
@@ -29,45 +29,42 @@ describe Reports::Detailed::ClassificationSplit do
         @code1_name            = "#{classification_type}1"
         @code2_name            = "#{classification_type}2"
         code1                  = FactoryGirl.create(classification_type,
-                                         :name => @code1_name)
+                                         name: @code1_name)
         code2                  = FactoryGirl.create(classification_type,
-                                         :name => @code2_name)
+                                         name: @code2_name)
         @classification_name   = classification_type.to_s.capitalize
         # implementer splits
-        organization2 = FactoryGirl.create(:organization, :name => 'organization2')
+        organization2 = FactoryGirl.create(:organization, name: 'organization2')
         impl_splits = []
         impl_splits << FactoryGirl.create(:implementer_split,
-                               :organization => @organization1, :budget => 100)
+                               organization: @organization1, budget: 100)
         impl_splits << FactoryGirl.create(:implementer_split,
-                               :organization => organization2, :budget => 50)
+                               organization: organization2, budget: 50)
         impl_splits2 = [FactoryGirl.create(:implementer_split,
-                               :organization => FactoryGirl.create(:organization, name: 'org3'),
-                               :budget => 100)]
+                               organization: FactoryGirl.create(:organization, name: 'org3'),
+                               budget: 100)]
 
-        @other_cost1 = FactoryGirl.create(:other_cost, :project => @project1,
-                             :name => 'other_cost1',
-                             :description => '@other_cost1 descr',
-                             :data_response => @response1,
-                             :implementer_splits => impl_splits2)
-        @activity1 = FactoryGirl.create(:activity, :project => @project1,
-                             :name => '@activity1',
-                             :description => '@activity1 descr',
-                             :data_response => @response1,
-                             :implementer_splits => impl_splits)
+        @other_cost1 = FactoryGirl.create(:other_cost, project: @project1,
+                             name: 'other_cost1',
+                             description: '@other_cost1 descr',
+                             data_response: @response1,
+                             implementer_splits: impl_splits2)
+        @activity1 = FactoryGirl.create(:activity, project: @project1,
+                             name: '@activity1',
+                             description: '@activity1 descr',
+                             data_response: @response1,
+                             implementer_splits: impl_splits)
 
 
         # Classifications
         classifications = { code1.id => 25, code2.id => 75 }
-        if classification_type == :purpose
-          PurposeBudgetSplit.update_classifications(@activity1,  classifications)
-        elsif classification_type == :input
-          InputBudgetSplit.update_classifications(@activity1,  classifications)
-          InputBudgetSplit.update_classifications(@other_cost1, classifications)
-        elsif classification_type == :location
-          LocationBudgetSplit.update_classifications(@activity1,  classifications)
-          LocationBudgetSplit.update_classifications(@other_cost1,  classifications)
-        else
-          raise "Invalid type #{classification_type}".to_yaml
+
+        classifier1 = Classifier.new(@activity1, classification_type, :budget)
+        classifier1.update_classifications(classifications)
+
+        unless classification_type == :purpose
+          classifier2 = Classifier.new(@other_cost1, classification_type, :budget)
+          classifier2.update_classifications(classifications)
         end
 
         @response1.state = 'accepted'; @response1.save!
