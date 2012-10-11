@@ -40,7 +40,6 @@ group :assets do
 end
 
 group :development do
-  gem 'annotate'
   gem 'heroku'
   gem 'rails-footnotes'
   gem 'taps'

@@ -71,16 +71,3 @@ class DataRequest < ActiveRecord::Base
     index == 0 ? nil : requests[index - 1]
   end
 end
-
-# == Schema Information
-#
-# Table name: data_requests
-#
-#  id              :integer         not null, primary key
-#  organization_id :integer
-#  title           :string(255)
-#  created_at      :datetime
-#  updated_at      :datetime
-#  start_date      :date
-#
-

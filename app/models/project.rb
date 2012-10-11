@@ -138,22 +138,3 @@ class Project < ActiveRecord::Base
       end
     end
 end
-
-
-
-# == Schema Information
-#
-# Table name: projects
-#
-#  id               :integer         not null, primary key
-#  name             :string(255)
-#  description      :text
-#  start_date       :date
-#  end_date         :date
-#  created_at       :datetime
-#  updated_at       :datetime
-#  currency         :string(255)
-#  data_response_id :integer         indexed
-#  budget_type      :string(255)
-#
-

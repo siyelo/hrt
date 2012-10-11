@@ -114,30 +114,4 @@ class User < ActiveRecord::Base
   def only_password_errors?
     errors.size == errors[:password].size + errors[:password_confirmation].size
   end
-
 end
-
-# == Schema Information
-#
-# Table name: users
-#
-#  id                    :integer         not null, primary key
-#  email                 :string(255)
-#  crypted_password      :string(255)
-#  password_salt         :string(255)
-#  persistence_token     :string(255)
-#  created_at            :datetime
-#  updated_at            :datetime
-#  roles_mask            :integer
-#  organization_id       :integer
-#  text_for_organization :text
-#  full_name             :string(255)
-#  perishable_token      :string(255)     default(""), not null
-#  tips_shown            :boolean         default(TRUE)
-#  invite_token          :string(255)
-#  active                :boolean         default(FALSE)
-#  location_id           :integer
-#  current_sign_in_at    :datetime
-#  last_login_at         :datetime
-#
-

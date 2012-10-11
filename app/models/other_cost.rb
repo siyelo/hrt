@@ -52,25 +52,3 @@ class OtherCost < Activity
   end
 end
 
-
-# == Schema Information
-#
-# Table name: activities
-#
-#  id                  :integer         not null, primary key
-#  name                :string(255)
-#  created_at          :datetime
-#  updated_at          :datetime
-#  description         :text
-#  type                :string(255)     indexed
-#  other_beneficiaries :text
-#  data_response_id    :integer         indexed
-#  activity_id         :integer         indexed
-#  project_id          :integer
-#  user_id             :integer
-#  planned_for_gor_q1  :boolean
-#  planned_for_gor_q2  :boolean
-#  planned_for_gor_q3  :boolean
-#  planned_for_gor_q4  :boolean
-#
-

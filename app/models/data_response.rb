@@ -95,17 +95,3 @@ class DataResponse < ActiveRecord::Base
     end
 end
 
-
-# == Schema Information
-#
-# Table name: data_responses
-#
-#  id              :integer         not null, primary key
-#  data_request_id :integer         indexed
-#  created_at      :datetime
-#  updated_at      :datetime
-#  organization_id :integer         indexed
-#  state           :string(255)
-#  projects_count  :integer         default(0)
-#
-

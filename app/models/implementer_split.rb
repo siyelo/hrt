@@ -119,19 +119,3 @@
     end
 end
 
-
-# == Schema Information
-#
-# Table name: implementer_splits
-#
-#  id              :integer         not null, primary key
-#  activity_id     :integer
-#  organization_id :integer
-#  spend           :decimal(, )
-#  budget          :decimal(, )
-#  created_at      :datetime
-#  updated_at      :datetime
-#  double_count    :boolean
-#  currency        :string(255)
-#
-

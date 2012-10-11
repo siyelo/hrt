@@ -35,16 +35,3 @@ class Currency < ActiveRecord::Base
     Money.default_bank.import_rates(:yaml, Currency.currency_rates.to_yaml)
   end
 end
-
-# == Schema Information
-#
-# Table name: currencies
-#
-#  id         :integer         not null, primary key
-#  rate       :float
-#  created_at :datetime
-#  updated_at :datetime
-#  from       :string(255)
-#  to         :string(255)
-#
-

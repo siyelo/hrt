@@ -159,25 +159,3 @@ class Organization < ActiveRecord::Base
     end
   end
 end
-
-# == Schema Information
-#
-# Table name: organizations
-#
-#  id                               :integer         not null, primary key
-#  name                             :string(255)
-#  created_at                       :datetime
-#  updated_at                       :datetime
-#  raw_type                         :string(255)
-#  fosaid                           :string(255)
-#  users_count                      :integer         default(0)
-#  currency                         :string(255)
-#  contact_name                     :string(255)
-#  contact_position                 :string(255)
-#  contact_phone_number             :string(255)
-#  contact_main_office_phone_number :string(255)
-#  contact_office_location          :string(255)
-#  implementer_type                 :string(255)
-#  funder_type                      :string(255)
-#
-

@@ -131,22 +131,3 @@ class FundingFlow < ActiveRecord::Base
   end
 end
 
-
-# == Schema Information
-#
-# Table name: funding_flows
-#
-#  id                   :integer         not null, primary key
-#  organization_id_from :integer
-#  project_id           :integer         indexed
-#  created_at           :datetime
-#  updated_at           :datetime
-#  budget               :decimal(, )
-#  organization_text    :text
-#  self_provider_flag   :integer         default(0), indexed
-#  spend                :decimal(, )
-#  spend_q4_prev        :decimal(, )
-#  budget_q4_prev       :decimal(, )
-#  project_from_id      :integer
-#
-

@@ -35,7 +35,6 @@ GEM
     airbrake (3.1.2)
       activesupport
       builder
-    annotate (2.4.0)
     ar_strip_commas (0.1.0)
     arel (3.0.2)
     awesome_nested_set (2.1.3)
@@ -319,7 +318,6 @@ DEPENDENCIES
   acts_as_tree
   addressable
   airbrake (= 3.1.2)
-  annotate
   ar_strip_commas
   awesome_nested_set
   aws-sdk (~> 1.3.4)
