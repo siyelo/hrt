@@ -81,7 +81,7 @@ class Reports::Detailed::DynamicQuery
     @currency = activity.project_id.nil? ? activity.organization.currency : activity.currency
 
     build_fake_classifications(activity)
-    build_fake_project_and_in_flow(activity)
+    build_fake_project(activity)
 
     in_flows_total = activity.project.in_flows.inject(0) { |sum, e| sum + (e.send(@amount_type) || 0) }
 
@@ -209,13 +209,9 @@ class Reports::Detailed::DynamicQuery
     100 - calculate_total_percent(classifications)
   end
 
-  def build_fake_project_and_in_flow(activity)
+  def build_fake_project(activity)
     if activity.project.blank?
       activity.project = fake_project
-    end
-
-    if activity.project.in_flows.blank?
-      activity.project.in_flows = [fake_inflow(activity.currency)]
     end
   end
 
