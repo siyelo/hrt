@@ -127,7 +127,7 @@ module Reports
     private
     ###
     # Determines whether it is a budget or spend
-    def method_from_class(spend)
+    def amount_type(spend)
       spend ? :spend : :budget
     end
 

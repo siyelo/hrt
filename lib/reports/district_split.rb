@@ -116,7 +116,7 @@ class Reports::DistrictSplit < Reports::TopBase
     result = {}
     locations.each { |location| result[location.name] ||= Hash.new(0) }
     collection.each do |e|
-      method_name = method_from_class(e.spend)
+      method_name = amount_type(e.spend)
       ratio = include_double_count ? 1.0 : ratios[e.activity_id.to_i][method_name]
       if result[e.district]
         result[e.district][method_name] += ratio *

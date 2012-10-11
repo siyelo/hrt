@@ -63,9 +63,9 @@ module Reports
     def map_data(collection)
       collection.inject({}) do |result,e|
         result[e.name] ||= {}
-        result[e.name][method_from_class(e.spend)] ||= 0
+        result[e.name][amount_type(e.spend)] ||= 0
         value = universal_currency_converter((e.cached_amount || 0), e.currency, @resource.currency)
-        result[e.name][method_from_class(e.spend)] += value
+        result[e.name][amount_type(e.spend)] += value
         result
       end
     end
