@@ -5,7 +5,8 @@ class AddIndexes < ActiveRecord::Migration
     add_index "activities", ["provider_id"]
     add_index "activities", ["type"]
 
-    add_index "code_assignments", ["activity_id", "code_id", "type"]
+    add_index "code_assignments", ["activity_id", "code_id", "type"],
+      :name => 'index_on_code_split_act_id_code_id_type'
     add_index "code_assignments", ["code_id"]
 
     add_index "data_responses", ["organization_id_responder"]

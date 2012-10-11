@@ -32,22 +32,22 @@ class Activity < ActiveRecord::Base
 
   has_many :leaf_budget_purposes,
     class_name: 'CodeSplit', conditions: ["code_splits.code_type = 'Purpose' AND
-      code_splits.spend IS FALSE AND code_splits.sum_of_children = 0"]
+      code_splits.spend = ? AND code_splits.sum_of_children = 0", false]
   has_many :leaf_spend_purposes,
     class_name: 'CodeSplit', conditions: ["code_splits.code_type = 'Purpose' AND
-      code_splits.spend IS TRUE AND code_splits.sum_of_children = 0"]
+      code_splits.spend = ? AND code_splits.sum_of_children = 0", true]
   has_many :leaf_budget_inputs,
     class_name: 'CodeSplit', conditions: ["code_splits.code_type = 'Input' AND
-      code_splits.spend IS FALSE AND code_splits.sum_of_children = 0"]
+      code_splits.spend = ? AND code_splits.sum_of_children = 0", false]
   has_many :leaf_spend_inputs,
     class_name: 'CodeSplit', conditions: ["code_splits.code_type = 'Input' AND
-      code_splits.spend IS TRUE AND code_splits.sum_of_children = 0"]
+      code_splits.spend = ? AND code_splits.sum_of_children = 0", true]
   has_many :location_budget_splits,
     class_name: 'CodeSplit', conditions: ["code_splits.code_type = 'Location' AND
-      code_splits.spend IS FALSE AND code_splits.sum_of_children = 0"]
+      code_splits.spend = ? AND code_splits.sum_of_children = 0", false]
   has_many :location_spend_splits,
     class_name: 'CodeSplit', conditions: ["code_splits.code_type = 'Location' AND
-      code_splits.spend IS TRUE AND code_splits.sum_of_children = 0"]
+      code_splits.spend = ? AND code_splits.sum_of_children = 0", true]
 
   ### Nested attributes
   accepts_nested_attributes_for :implementer_splits, allow_destroy: true,
