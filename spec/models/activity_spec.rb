@@ -191,29 +191,6 @@ describe Activity do
     end
   end
 
-  describe "deep cloning" do
-    before :each do
-      basic_setup_activity
-      @original = @activity #for shared examples
-    end
-
-    it "should clone associated code assignments" do
-      @ca = FactoryGirl.create(:code_split, activity: @activity)
-      save_and_deep_clone
-      @clone.code_splits.count.should == 1
-      @clone.code_splits[0].code.should == @ca.code
-      @clone.code_splits[0].activity.should_not == @activity
-      @clone.code_splits[0].activity.should == @clone
-    end
-
-    it "should clone beneficiaries" do
-      @benefs = [FactoryGirl.create(:beneficiary)]
-      @activity.beneficiaries << @benefs
-      save_and_deep_clone
-      @clone.beneficiaries.should == @benefs
-    end
-  end
-
   describe "#locations" do
     it "returns uniq activity locations" do
       basic_setup_activity

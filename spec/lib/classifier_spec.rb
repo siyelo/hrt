@@ -109,23 +109,5 @@ describe Classifier do
         split.percentage.to_f.should == 52.74
       end
     end
-
-    it "automatically calculates the cached amount" do
-      basic_setup_project
-      activity = FactoryGirl.create(:activity, data_response: @response, project: @project)
-      implementer_split = FactoryGirl.create(:implementer_split, activity: activity,
-                         budget: 100, spend: 200, organization: @organization)
-      purpose  = FactoryGirl.create(:purpose, name: 'purpose1')
-      activity.reload
-      activity.save # get new cached implementer split total
-
-      classifier = Classifier.new(activity, :purpose, :budget)
-      classifier.update_classifications({purpose.id => 100})
-
-      activity.reload
-
-      split1 = activity.code_splits.purposes.budget.first
-      split1.cached_amount.to_f.should == 100
-    end
   end
 end

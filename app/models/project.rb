@@ -72,18 +72,6 @@ class Project < ActiveRecord::Base
     data_response
   end
 
-  def deep_clone
-    clone = self.dup
-    # has_many's with deep associations
-    [:normal_activities, :other_costs].each do |assoc|
-      clone.send(assoc) << self.send(assoc).map { |obj| obj.deep_clone }
-    end
-
-    clone.in_flows = self.in_flows.collect { |obj| obj.project_id = nil; obj.dup }
-
-    clone
-  end
-
   # potential candidate for removal if these
   # errors can all be caught on data entry
   def funding_sources_have_organizations_and_amounts?

@@ -39,7 +39,8 @@ class Classifier
                   activity.id, code_type])
     end
 
-    activity.update_classified_amount_cache(code_type_key, amount_type)
+    cache_updater = ClassifiedAmountCacheUpdater.new(activity)
+    cache_updater.update(code_type_key, amount_type)
   end
 
   private

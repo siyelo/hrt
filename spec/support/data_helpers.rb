@@ -81,15 +81,6 @@ def basic_setup_funding_flow
                           from: @donor)
 end
 
-def save_and_deep_clone
-  @original.save!
-  @clone = @original.deep_clone
-  @request2 = FactoryGirl.create(:data_request)
-  @clone.data_response = @original.data_response.organization.latest_response
-  @clone.save!
-  @clone.reload #otherwise seems to cache the old has_many associations
-end
-
 def self_funded(proj, budget = 50, spend = 50)
   proj_funded_by(proj, proj.data_response.organization, budget, spend)
 end

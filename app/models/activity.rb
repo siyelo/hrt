@@ -78,21 +78,20 @@ class Activity < ActiveRecord::Base
   validates_length_of :name, within: 3..MAX_NAME_LENGTH
 
   ### Scopes
-  scope :roots,                { conditions: "activities.type IS NULL" }
-  scope :greatest_first,       { order: "activities.budget DESC" }
-  scope :with_type,         lambda { |type| {conditions:
-                                             ["activities.type = ?", type]} }
-  scope :with_request, lambda {|request| {
-              select: 'DISTINCT activities.*',
-              joins: 'INNER JOIN data_responses ON
-                         data_responses.id = activities.data_response_id',
-              conditions: ['data_responses.data_request_id = ?', request.id]}}
-  scope :without_a_project,    { conditions: "project_id IS NULL" }
-  scope :with_organization,    { joins: "INNER JOIN data_responses
-                                    ON data_responses.id = activities.data_response_id
-                                    INNER JOIN organizations
-                                    ON data_responses.organization_id = organizations.id" }
-  scope :sorted,               { order: "activities.name ASC" }
+  scope :roots, { conditions: "activities.type IS NULL" }
+  scope :greatest_first, { order: "activities.budget DESC" }
+  scope :with_type, lambda { |type| {conditions: ["activities.type = ?", type] }}
+  scope :with_request, lambda { |request|
+    { select: 'DISTINCT activities.*',
+      joins: 'INNER JOIN data_responses ON
+              data_responses.id = activities.data_response_id',
+      conditions: ['data_responses.data_request_id = ?', request.id] } }
+  scope :without_a_project, { conditions: "project_id IS NULL" }
+  scope :with_organization, { joins: "INNER JOIN data_responses
+                                 ON data_responses.id = activities.data_response_id
+                                 INNER JOIN organizations
+                                 ON data_responses.organization_id = organizations.id" }
+  scope :sorted, { order: "activities.name ASC" }
 
   ### Class Methods
 
@@ -125,38 +124,10 @@ class Activity < ActiveRecord::Base
     organization.name
   end
 
-  # asynchronously update classification tree cached amounts
-  def update_classified_amount_cache(code_type_key, amount_type)
-    # disable update_all_classified_amount_caches
-    # callback to be run again on save !!
-    Activity.skip_callback(:update, :before, :update_all_classified_amount_caches)
-    set_classified_amount_cache(code_type_key, amount_type)
-    self.save(validate: false)
-  end
-  handle_asynchronously :update_classified_amount_cache
-
-  #TODO  it should not be the responsibility of the activity to do this
-  #  call it from the update classification API instead.
-  #
   # Updates classified amount caches if budget or spend have been changed
   def update_all_classified_amount_caches
-    [:purpose, :location, :input].each do |code_type_key|
-      [:budget, :spend].each do |amount_type|
-        update_classified_amount_cache(code_type_key, amount_type)
-      end
-    end
-  end
-
-  def deep_clone
-    clone = self.dup
-    %w[beneficiaries].each do |assoc|
-      clone.send("#{assoc}=", self.send(assoc))
-    end
-    # hasmany's
-    %w[code_splits implementer_splits targets].each do |assoc|
-      clone.send("#{assoc}=", self.send(assoc).collect { |obj| obj.dup })
-    end
-    clone
+    updater = ClassifiedAmountCacheUpdater.new(self)
+    updater.update_all
   end
 
   def classification_amount(classification_type)
@@ -168,10 +139,6 @@ class Activity < ActiveRecord::Base
     else
       raise "Invalid coding_klass #{classification_type}".to_yaml
     end
-  end
-
-  def implementer_splits_each_have_defined_districts?(coding_type)
-    !implementer_split_district_code_splits(coding_type).empty?
   end
 
   def locations
@@ -241,12 +208,6 @@ class Activity < ActiveRecord::Base
   end
 
   private
-  #TODO  it should not be the responsibility of the activity to do this
-  def set_classified_amount_cache(code_type_key, amount_type)
-    coding_tree = CodingTree.new(self, code_type_key, amount_type)
-    coding_tree.set_cached_amounts!
-  end
-
   def is_activity?
     self.class.eql?(Activity)
   end

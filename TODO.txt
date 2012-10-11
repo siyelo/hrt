@@ -1,4 +1,3 @@
-- use a gem to convert => to :
 - undo activity.update_attributes method override
   - move update_classification in activities/other_costs controller after outlay is saved
 - manual testing in browser and reports
