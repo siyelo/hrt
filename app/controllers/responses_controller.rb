@@ -2,18 +2,18 @@ class ResponsesController < BaseController
   include FileSender
 
   before_filter :require_user
-  before_filter :require_admin, :only => [:restart]
-  before_filter :require_activity_manager, :only => [:reject, :accept] #includes sysadmin
+  before_filter :require_admin, only: [:restart]
+  before_filter :require_activity_manager, only: [:reject, :accept] #includes sysadmin
   before_filter :load_response_from_id
 
   def review
     ActiveRecord::Associations::Preloader.new(@response,
-      [{:projects => :normal_activities}]).run
+      [{projects: :normal_activities}]).run
     @projects = @response.projects
   end
 
   def submit
-    @projects = @response.projects.find(:all, :include => :normal_activities)
+    @projects = @response.projects.find(:all, include: :normal_activities)
     if @response.ready_to_submit?
       if current_response.organization.users.select{|u| u.activity_manager?}.
         map(&:email).present?

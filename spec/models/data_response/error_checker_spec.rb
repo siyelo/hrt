@@ -5,15 +5,15 @@ describe DataResponse::ErrorChecker do
 
   describe "#projects_have_valid_funding_sources?" do
     it "fails if a project doesn't have an in flow" do
-      p = mock :project, :in_flows => [],
-        :funding_sources_have_organizations_and_amounts? => true
+      p = mock :project, in_flows: [],
+        funding_sources_have_organizations_and_amounts?: true
       response.should_receive(:projects).and_return [p]
       response.projects_have_valid_funding_sources?.should == false
     end
 
     it "fails if an in flow has a 0 budget AND spend" do
-      p = mock :project, :in_flows => [mock(:in_flow)],
-        :funding_sources_have_organizations_and_amounts? => false
+      p = mock :project, in_flows: [mock(:in_flow)],
+        funding_sources_have_organizations_and_amounts?: false
       response.should_receive(:projects).and_return [p]
       response.projects_have_valid_funding_sources?.should == false
     end
@@ -21,7 +21,7 @@ describe DataResponse::ErrorChecker do
 
   describe "#projects_without_budget_type" do
     before :each do
-      p = mock :project, :budget_type => nil
+      p = mock :project, budget_type: nil
       response.should_receive(:projects).once.and_return([p])
     end
 
@@ -47,7 +47,7 @@ describe DataResponse::ErrorChecker do
     end
 
     it "fails if an activity is missing a coding split" do
-      activity1 = mock :activity, :budget_classified? => false
+      activity1 = mock :activity, budget_classified?: false
       response.should_receive(:normal_activities).exactly(3).times.and_return [activity1]
       response.uncoded_activities.should have(1).item
       response.activities_coded?.should be_false

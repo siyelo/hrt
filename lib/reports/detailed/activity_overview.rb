@@ -7,13 +7,13 @@ class Reports::Detailed::ActivityOverview
 
   def initialize(request, filetype)
     @implementer_splits = ImplementerSplit.find :all,
-      :joins => { :activity => :data_response },
-      :order => "implementer_splits.id ASC",
-      :conditions => ['data_responses.data_request_id = ? AND
+      joins: { activity: :data_response },
+      order: "implementer_splits.id ASC",
+      conditions: ['data_responses.data_request_id = ? AND
                        data_responses.state = ?', request.id, 'accepted'],
-      :include => [{ :activity => [{ :project => { :in_flows => :from } },
-                                  { :data_response => :organization } ]},
-                                  { :organization => :data_responses }]
+      include: [{ activity: [{ project: { in_flows: :from } },
+                                  { data_response: :organization } ]},
+                                  { organization: :data_responses }]
     @builder = FileBuilder.new(filetype)
   end
 

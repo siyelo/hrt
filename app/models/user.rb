@@ -15,10 +15,10 @@ class User < ActiveRecord::Base
                   :organization_ids, :location_id, :workplan
 
   ### Associations
-  has_many :comments, :dependent => :destroy
-  has_many :data_responses, :through => :organization
-  belongs_to :organization, :counter_cache => true
-  has_and_belongs_to_many :organizations, :join_table => "organizations_managers" # for activity managers
+  has_many :comments, dependent: :destroy
+  has_many :data_responses, through: :organization
+  belongs_to :organization, counter_cache: true
+  has_and_belongs_to_many :organizations, join_table: "organizations_managers" # for activity managers
   belongs_to :location
 
   ### Validations
@@ -31,8 +31,8 @@ class User < ActiveRecord::Base
     if: ->(m) { !m.new_record? && m.organization_id_changed? }
 
   ### Delegates
-  delegate :responses, :to => :organization # instead of deprecated data_response
-  delegate :latest_response, :to => :organization # find the last response in the org
+  delegate :responses, to: :organization # instead of deprecated data_response
+  delegate :latest_response, to: :organization # find the last response in the org
 
   ### Attachments
   has_attached_file :workplan, path:

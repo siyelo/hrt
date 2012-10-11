@@ -10,8 +10,8 @@ module FileSender
   end
 
   def send_file(data, filename, mimetype)
-    send_data data, :type => mimetype,
-                    :disposition=>"attachment; filename=#{filename}"
+    send_data data, type: mimetype,
+                    disposition:"attachment; filename=#{filename}"
   end
 
 end

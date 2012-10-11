@@ -5,9 +5,9 @@ class ProjectsController < BaseController
   SORTABLE_COLUMNS = ['name']
 
   helper_method :sort_column, :sort_direction
-  before_filter :strip_commas_from_in_flows, :only => [:create, :update]
-  before_filter :prevent_browser_cache, :only => [:index, :edit, :update] # firefox misbehaving
-  before_filter :prevent_activity_manager, :only => [:create, :update, :destroy]
+  before_filter :strip_commas_from_in_flows, only: [:create, :update]
+  before_filter :prevent_browser_cache, only: [:index, :edit, :update] # firefox misbehaving
+  before_filter :prevent_activity_manager, only: [:create, :update, :destroy]
   before_filter :check_response_status, only: [:create, :update, :destroy]
 
   def new
@@ -17,15 +17,15 @@ class ProjectsController < BaseController
   def index
     scope = current_response.projects
     scope = scope.where(["UPPER(name) LIKE UPPER(:q)",
-                                         {:q => "%#{params[:query]}%"}]) if params[:query]
-    @projects = scope.paginate(:page => params[:page], :per_page => 10,
-                               :order => "#{sort_column} #{sort_direction}",
-                               :include => :activities)
+                                         {q: "%#{params[:query]}%"}]) if params[:query]
+    @projects = scope.paginate(page: params[:page], per_page: 10,
+                               order: "#{sort_column} #{sort_direction}",
+                               include: :activities)
     @comment = Comment.new
     @comment.commentable = current_response
     @comments = Comment.on_all([current_response.id]).
                   order('created_at DESC').where('parent_id IS NULL')
-    @project = Project.new(:data_response => current_response)
+    @project = Project.new(data_response: current_response)
     self.load_inline_forms
   end
 
@@ -35,7 +35,7 @@ class ProjectsController < BaseController
   end
 
   def create
-    @project = Project.new(params[:project].merge(:data_response => current_response))
+    @project = Project.new(params[:project].merge(data_response: current_response))
     if @project.save
       respond_to do |format|
         format.html do
@@ -46,7 +46,7 @@ class ProjectsController < BaseController
       end
     else
       respond_to do |format|
-        format.html { render :action => 'new' }
+        format.html { render action: 'new' }
         format.js { render :save_failed }
       end
     end
@@ -65,7 +65,7 @@ class ProjectsController < BaseController
       end
     else
       respond_to do |format|
-        format.html {load_comment_resources(@project); render :action => 'edit'}
+        format.html {load_comment_resources(@project); render action: 'edit'}
         format.js { render :save_failed }
       end
     end

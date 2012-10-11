@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Reports::ActivitiesController do
   context "as a visitor" do
     describe "it should be protected" do
-      before :each do get :show, :id => 1 end
+      before :each do get :show, id: 1 end
       it { should redirect_to(root_url) }
       it { should set_the_flash.to("You must be logged in to access that page") }
     end
@@ -23,7 +23,7 @@ describe Reports::ActivitiesController do
 
     it "should render index" do
       Reports::Activity.should_receive(:new).with(activity).and_return mock(:report)
-      get :show, :id => 1
+      get :show, id: 1
       response.should be_success
       assigns[:report].should_not be_nil
       assigns[:response].should == @reporter.data_responses.first
@@ -31,12 +31,12 @@ describe Reports::ActivitiesController do
 
     it "should initialize a location presenter" do
       Reports::ActivityLocations.should_receive(:new).with(activity).and_return mock(:report)
-      get :locations, :id => 1
+      get :locations, id: 1
     end
 
     it "should initialize an inputs presenter" do
       Reports::ActivityInputs.should_receive(:new).with(activity).and_return mock(:report)
-      get :inputs, :id => 1
+      get :inputs, id: 1
     end
 
     it "allows exporting of implementers report" do

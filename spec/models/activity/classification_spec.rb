@@ -16,10 +16,10 @@ describe Activity, "Classification" do
    ].each do |valid_method, code_type_key, amount_type, all_valid_method|
     describe "#{valid_method}" do
       before :each do
-        @activity = FactoryGirl.create(:activity, :data_response => @response,
-                           :project => @project)
-        @split = FactoryGirl.create :implementer_split, :activity => @activity,
-          amount_type => 100, :organization => @organization
+        @activity = FactoryGirl.create(:activity, data_response: @response,
+                           project: @project)
+        @split = FactoryGirl.create :implementer_split, activity: @activity,
+          amount_type => 100, organization: @organization
         @code     = FactoryGirl.create code_type_key
         @activity.reload
         @activity.save
@@ -50,8 +50,8 @@ describe Activity, "Classification" do
   describe "budget_classified?" do
     before :each do
       basic_setup_activity
-      @split = FactoryGirl.create :implementer_split, :activity => @activity,
-        :spend => 100, :budget => 100, :organization => @organization
+      @split = FactoryGirl.create :implementer_split, activity: @activity,
+        spend: 100, budget: 100, organization: @organization
       @activity.reload
       @activity.save
     end
@@ -97,8 +97,8 @@ describe Activity, "Classification" do
   describe "spend_classified?" do
     before :each do
       basic_setup_activity
-      @split = FactoryGirl.create :implementer_split, :activity => @activity,
-        :spend => 100, :budget => 100, :organization => @organization
+      @split = FactoryGirl.create :implementer_split, activity: @activity,
+        spend: 100, budget: 100, organization: @organization
       @activity.reload
       @activity.save
     end
@@ -143,8 +143,8 @@ describe Activity, "Classification" do
   describe "classified?" do
     before :each do
       basic_setup_activity
-      @split = FactoryGirl.create :implementer_split, :activity => @activity,
-        :spend => 100, :budget => 100, :organization => @organization
+      @split = FactoryGirl.create :implementer_split, activity: @activity,
+        spend: 100, budget: 100, organization: @organization
       @activity.reload
       @activity.save
     end

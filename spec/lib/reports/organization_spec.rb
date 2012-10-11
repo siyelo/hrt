@@ -1,11 +1,11 @@
 require 'spec_helper'
 
 describe Reports::Organization do
-  let(:project) { mock :project, :name => 'proj', :converted_spend => "5", :converted_budget => "10" }
-  let(:project1) { mock :project, :name => 'proj1', :converted_spend => "5", :converted_budget => "10" }
+  let(:project) { mock :project, name: 'proj', converted_spend: "5", converted_budget: "10" }
+  let(:project1) { mock :project, name: 'proj1', converted_spend: "5", converted_budget: "10" }
   let(:projects) { [project, project1] }
-  let(:response) { mock :response, :projects => projects,
-    :total_spend => 10, :total_budget => 20, :name => 'FY14 Exp', :currency => 'USD' }
+  let(:response) { mock :response, projects: projects,
+    total_spend: 10, total_budget: 20, name: 'FY14 Exp', currency: 'USD' }
   let(:report) { Reports::Organization.new(response) }
 
   it "initializes by period" do
@@ -13,8 +13,8 @@ describe Reports::Organization do
   end
 
   it 'returns all projects and non-project other costs for current Org (/response), sorted by name' do
-    othercost = mock :othercost, :name => 'aa_othercost', :converted_spend => "5", :converted_budget => "10"
-    othercost1 = mock :othercost, :name => 'zz_othercost', :converted_spend => "5", :converted_budget => "10"
+    othercost = mock :othercost, name: 'aa_othercost', converted_spend: "5", converted_budget: "10"
+    othercost1 = mock :othercost, name: 'zz_othercost', converted_spend: "5", converted_budget: "10"
     othercosts = [othercost, othercost1]
     response.stub_chain(:other_costs, :without_project).and_return othercosts
     unsorted = projects + othercosts
@@ -24,7 +24,7 @@ describe Reports::Organization do
   end
 
   it 'uses the converted budget and spend' do
-    element = mock :project, :converted_budget => 5, :converted_spend => 10
+    element = mock :project, converted_budget: 5, converted_spend: 10
     report.budget_value_method(element).should == 5
     report.spend_value_method(element).should == 10
   end
@@ -46,14 +46,14 @@ describe Reports::Organization do
   end
 
   it "should have expenditure pie" do
-    Charts::Projects::Spend.stub(:new).and_return(mock(:pie, :google_pie => ""))
+    Charts::Projects::Spend.stub(:new).and_return(mock(:pie, google_pie: ""))
     Charts::Projects::Spend.should_receive(:new).once.with(projects)
     report.should_receive(:collection).once.and_return projects # avoid sorted scope
     pie = report.expenditure_chart
   end
 
   it "should have budget pie" do
-    Charts::Projects::Budget.stub(:new).and_return(mock(:pie, :google_pie => ""))
+    Charts::Projects::Budget.stub(:new).and_return(mock(:pie, google_pie: ""))
     Charts::Projects::Budget.should_receive(:new).once.with(projects)
     report.should_receive(:collection).once.and_return projects # avoid sorted scope
     report.budget_chart

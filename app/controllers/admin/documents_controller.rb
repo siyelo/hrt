@@ -2,12 +2,12 @@ class Admin::DocumentsController < Admin::BaseController
 
   ### Inherited Resources
   inherit_resources
-  defaults :resource_class => Document, :collection_name => 'documents',
-           :instance_name => 'document'
+  defaults resource_class: Document, collection_name: 'documents',
+           instance_name: 'document'
 
   def index
-    @documents = Document.paginate(:page => params[:page], :per_page => 10,
-                                   :order => 'LOWER(title) ASC')
+    @documents = Document.paginate(page: params[:page], per_page: 10,
+                                   order: 'LOWER(title) ASC')
   end
 
   def create

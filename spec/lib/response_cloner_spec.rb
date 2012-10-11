@@ -4,37 +4,37 @@ describe ResponseCloner do
   before :each do
     @current_request = FactoryGirl.create :data_request
     @organization    = FactoryGirl.create :organization
-    user             = FactoryGirl.create :user, :organization => @organization
+    user             = FactoryGirl.create :user, organization: @organization
     @current_response = @organization.latest_response
     other_org        = FactoryGirl.create :organization
     @current_project  = Project.new(
-                          :data_response => @current_response,
-                          :budget_type => "ON",
-                          :name => "Current_Project",
-                          :description => "proj descr",
-                          :start_date => "2010-01-01",
-                          :end_date => "2011-01-01",
-                          :currency => "USD",
-                          :in_flows_attributes => [:organization_id_from => other_org.id,
-                                                   :budget => 10, :spend => 20,
-                                                   :double_count => true])
+                          data_response: @current_response,
+                          budget_type: "ON",
+                          name: "Current_Project",
+                          description: "proj descr",
+                          start_date: "2010-01-01",
+                          end_date: "2011-01-01",
+                          currency: "USD",
+                          in_flows_attributes: [organization_id_from: other_org.id,
+                                                   budget: 10, spend: 20,
+                                                   double_count: true])
     @current_project.save!
-    current_oc_without_project = FactoryGirl.create(:other_cost, :project => nil,
-                                         :data_response => @current_response)
+    current_oc_without_project = FactoryGirl.create(:other_cost, project: nil,
+                                         data_response: @current_response)
     @current_activity   = FactoryGirl.create(:activity,
-                                 :data_response => @current_response,
-                                 :project => @current_project)
+                                 data_response: @current_response,
+                                 project: @current_project)
     current_other_cost = FactoryGirl.create(:other_cost,
-                                 :data_response => @current_response,
-                                 :project => @current_project)
+                                 data_response: @current_response,
+                                 project: @current_project)
     @current_activity.beneficiaries = [FactoryGirl.create(:beneficiary)]
     @current_activity.targets       = [FactoryGirl.create(:target)]
     @current_activity.outputs       = [FactoryGirl.create(:output)]
     @current_split    = FactoryGirl.create :implementer_split,
-                                :activity => @current_activity,
-                                :organization => @organization,
-                                :budget => 100,
-                                :spend => 200
+                                activity: @current_activity,
+                                organization: @organization,
+                                budget: 100,
+                                spend: 200
     @current_activity.save #recalculate implementer split total on activity
   end
 
@@ -94,28 +94,28 @@ describe ResponseCloner do
 
   it "should clone all projects and activities in a request" do
     organization2     = FactoryGirl.create :organization
-    user              = FactoryGirl.create :user, :organization => organization2
+    user              = FactoryGirl.create :user, organization: organization2
     current_response2 = organization2.latest_response
     current_project2  = Project.new(
-                          :data_response => current_response2,
-                          :budget_type => "ON",
-                          :name => "Current_Project",
-                          :description => "proj descr",
-                          :start_date => "2010-01-01",
-                          :end_date => "2011-01-01",
-                          :currency => "USD",
-                          :in_flows_attributes => [:organization_id_from => @organization.id,
-                                                   :budget => 10, :spend => 20])
+                          data_response: current_response2,
+                          budget_type: "ON",
+                          name: "Current_Project",
+                          description: "proj descr",
+                          start_date: "2010-01-01",
+                          end_date: "2011-01-01",
+                          currency: "USD",
+                          in_flows_attributes: [organization_id_from: @organization.id,
+                                                   budget: 10, spend: 20])
     current_project2.save!
     current_activity2 = FactoryGirl.create(:activity,
-                                :data_response => current_response2,
-                                :project => current_project2)
+                                data_response: current_response2,
+                                project: current_project2)
     current_activity2.beneficiaries = [FactoryGirl.create(:beneficiary)]
     current_activity2.targets       = [FactoryGirl.create(:target)]
     current_activity2.outputs       = [FactoryGirl.create(:output)]
     current_split2    = FactoryGirl.create :implementer_split,
-                                :activity => current_activity2,
-                                :organization => organization2
+                                activity: current_activity2,
+                                organization: organization2
     current_activity2.save #recalculate implementer split total on activity
     @new_request      = FactoryGirl.create :data_request
 

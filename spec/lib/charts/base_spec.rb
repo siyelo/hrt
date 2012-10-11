@@ -4,9 +4,9 @@ require 'json'
 require File.join(APP_ROOT, 'lib/charts/base')
 
 describe Charts::Base do
-  let(:entity){ mock :object, :name => "E2", :amount => 10}
-  let(:entity2){ mock :object, :name => "E1", :amount => 30}
-  let(:entity3){ mock :object, :name => "E3", :amount => 20}
+  let(:entity){ mock :object, name: "E2", amount: 10}
+  let(:entity2){ mock :object, name: "E1", amount: 30}
+  let(:entity3){ mock :object, name: "E3", amount: 20}
   let(:entities) { [entity, entity2, entity3] }
   let(:chart) { Charts::Base.new(entities) }
 
@@ -19,7 +19,7 @@ describe Charts::Base do
   end
 
   it "defaults name to 'no name' if its nil" do
-    e = mock :object, :name => nil, :amount => 10
+    e = mock :object, name: nil, amount: 10
     Charts::Base.new([e]).data["No name"].should == 10
   end
 
@@ -32,7 +32,7 @@ describe Charts::Base do
   end
 
   it "doesnt include zero elements" do
-    e = mock :object, :name => "E1", :amount => 0
+    e = mock :object, name: "E1", amount: 0
     Charts::Base.new([e]).data.should == {}
   end
 

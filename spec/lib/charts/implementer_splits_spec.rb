@@ -4,8 +4,8 @@ require 'json'
 require File.join(APP_ROOT, 'lib/charts/implementer_splits')
 
 describe Charts::ImplementerSplits do
-  let(:implementer_split1) { mock :implementer_split, :name => 'Imp1', :total_spend => 20, :total_budget => 10 }
-  let(:implementer_split2) { mock :implementer_split, :name => 'Imp2', :total_spend => 10, :total_budget => 5 }
+  let(:implementer_split1) { mock :implementer_split, name: 'Imp1', total_spend: 20, total_budget: 10 }
+  let(:implementer_split2) { mock :implementer_split, name: 'Imp2', total_spend: 10, total_budget: 5 }
   let(:implementer_splits) { [implementer_split1, implementer_split2] }
 
   describe Charts::ImplementerSplits::Spend do

@@ -32,8 +32,8 @@ describe Input do
 
   describe "Nested set (Tree)" do
     it "can return root inputs" do
-      input1 = FactoryGirl.create(:input, :name => "input1")
-      input2 = FactoryGirl.create(:input, :name => "input2")
+      input1 = FactoryGirl.create(:input, name: "input1")
+      input2 = FactoryGirl.create(:input, name: "input2")
       input2.move_to_child_of(input1)
 
       roots = Input.roots

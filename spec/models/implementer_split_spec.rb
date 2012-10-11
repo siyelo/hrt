@@ -24,8 +24,8 @@ describe ImplementerSplit do
 
     it "should validate presence of organization_mask" do
       basic_setup_activity
-      @split = ImplementerSplit.new(:spend => 1, :budget => 1,
-                                    :activity => @activity)
+      @split = ImplementerSplit.new(spend: 1, budget: 1,
+                                    activity: @activity)
       @split.valid?.should be_false
       @split.errors[:organization_mask].should include("can't be blank")
 
@@ -39,19 +39,19 @@ describe ImplementerSplit do
 
     it "should validate spend/budget greater than 0" do
       basic_setup_activity
-      @split = ImplementerSplit.new(:activity => @activity, :organization => @organization,
-                                    :spend => 0, :budget => 0)
+      @split = ImplementerSplit.new(activity: @activity, organization: @organization,
+                                    spend: 0, budget: 0)
       @split.save.should == false
       @split.errors[:spend].should include("must be greater than 0")
       @split.errors[:budget].should include("must be greater than 0")
 
-      @split = ImplementerSplit.new(:activity => @activity, :organization => @organization,
-                                    :spend => 0, :budget => "")
+      @split = ImplementerSplit.new(activity: @activity, organization: @organization,
+                                    spend: 0, budget: "")
       @split.save.should == false
       @split.errors[:spend].should include("must be greater than 0")
 
-      @split = ImplementerSplit.new(:activity => @activity, :organization => @organization,
-                                    :spend => 1, :budget => 0)
+      @split = ImplementerSplit.new(activity: @activity, organization: @organization,
+                                    spend: 1, budget: 0)
       @split.save.should == true
       @split.errors[:budget].should be_empty
     end
@@ -81,8 +81,8 @@ describe ImplementerSplit do
 
       it "should enforce uniqueness via ImplementerSplit api" do
         basic_setup_implementer_split
-        @split1 = FactoryGirl.create(:implementer_split, :activity => @activity,
-                          :organization => @organization)
+        @split1 = FactoryGirl.create(:implementer_split, activity: @activity,
+                          organization: @organization)
         @split1.should_not be_valid
         @split1.errors[:organization_id].should include("must be unique")
       end
@@ -95,15 +95,15 @@ describe ImplementerSplit do
     end
 
     it "should validate Expenditure and/or Budget is present if nil" do
-      @split = ImplementerSplit.new(:activity => @activity,
-                                    :budget => nil, :spend => nil)
+      @split = ImplementerSplit.new(activity: @activity,
+                                    budget: nil, spend: nil)
       @split.save.should == false
       @split.errors[:spend].should include(' and/or Budget must be present')
     end
 
     it "should validate Expenditure and/or Budget is present if blank" do
-      @split = ImplementerSplit.new(:activity => @activity,
-                                    :budget => "", :spend => "")
+      @split = ImplementerSplit.new(activity: @activity,
+                                    budget: "", spend: "")
       @split.save.should == false
       @split.errors[:spend].should include(' and/or Budget must be present')
     end
@@ -144,8 +144,8 @@ describe ImplementerSplit do
     end
 
     it "should validate one OR the other" do
-      @split = ImplementerSplit.new(:activity => @activity,
-                                    :budget => nil, :spend => "123.00", :organization => @organization)
+      @split = ImplementerSplit.new(activity: @activity,
+                                    budget: nil, spend: "123.00", organization: @organization)
       @split.save.should == true
     end
   end
@@ -181,7 +181,7 @@ describe ImplementerSplit do
 
   it "should return organization_mask as the org id" do
     org = FactoryGirl.build :organization
-    split = FactoryGirl.build :implementer_split, :organization => org
+    split = FactoryGirl.build :implementer_split, organization: org
     split.organization_mask.should == org.name
   end
 
@@ -191,7 +191,7 @@ describe ImplementerSplit do
 
   it "recognizes self-implemented" do
     o = mock :org
-    a = mock :activity, :organization => o
+    a = mock :activity, organization: o
     s = ImplementerSplit.new
     s.should_receive(:activity).once.and_return a
     s.should_receive(:organization).once.and_return o
@@ -200,20 +200,20 @@ describe ImplementerSplit do
 
   describe "#possible_double_count?" do
     before :each do
-      @donor        = FactoryGirl.create(:organization, :name => "donor")
-      @organization = FactoryGirl.create(:organization, :name => "self-implementer")
-      user = FactoryGirl.create :user, :organization => @organization
-      @request      = FactoryGirl.create(:data_request, :organization => @organization)
+      @donor        = FactoryGirl.create(:organization, name: "donor")
+      @organization = FactoryGirl.create(:organization, name: "self-implementer")
+      user = FactoryGirl.create :user, organization: @organization
+      @request      = FactoryGirl.create(:data_request, organization: @organization)
       @response     = @organization.latest_response
-      @project      = FactoryGirl.create(:project, :data_response => @response)
-      @activity     = FactoryGirl.create(:activity, :project => @project,
-                              :data_response => @response)
+      @project      = FactoryGirl.create(:project, data_response: @response)
+      @activity     = FactoryGirl.create(:activity, project: @project,
+                              data_response: @response)
     end
 
     context "self implementer" do
       it "does not mark double count" do
-        implementer_split = FactoryGirl.create(:implementer_split, :activity => @activity,
-                                    :organization => @organization)
+        implementer_split = FactoryGirl.create(:implementer_split, activity: @activity,
+                                    organization: @organization)
 
         implementer_split.possible_double_count?.should be_false
       end
@@ -221,9 +221,9 @@ describe ImplementerSplit do
 
     context "non-hrt implementer" do
       it "does not mark double count" do
-        organization2 = FactoryGirl.create(:organization, :raw_type => 'Non-Reporting')
-        implementer_split = FactoryGirl.create(:implementer_split, :activity => @activity,
-                                    :organization => organization2)
+        organization2 = FactoryGirl.create(:organization, raw_type: 'Non-Reporting')
+        implementer_split = FactoryGirl.create(:implementer_split, activity: @activity,
+                                    organization: organization2)
 
         implementer_split.possible_double_count?.should be_false
       end
@@ -231,17 +231,17 @@ describe ImplementerSplit do
 
     context "another hrt implementer" do
       before :each do
-        organization2 = FactoryGirl.create(:organization, :name => "other-hrt-implementer")
-        u = FactoryGirl.create :user, :organization => organization2
+        organization2 = FactoryGirl.create(:organization, name: "other-hrt-implementer")
+        u = FactoryGirl.create :user, organization: organization2
         @response2     = organization2.latest_response
-        project2      = FactoryGirl.create(:project, :data_response => @response2)
-        activity2     = FactoryGirl.create(:activity, :data_response => @response2,
-                                :project => project2)
+        project2      = FactoryGirl.create(:project, data_response: @response2)
+        activity2     = FactoryGirl.create(:activity, data_response: @response2,
+                                project: project2)
         @implementer_split = FactoryGirl.create(:implementer_split,
-                                     :activity => @activity,
-                                     :organization => organization2)
-        FactoryGirl.create(:implementer_split, :activity => activity2,
-                :organization => organization2)
+                                     activity: @activity,
+                                     organization: organization2)
+        FactoryGirl.create(:implementer_split, activity: activity2,
+                organization: organization2)
       end
       it "marks double counting if other implementer has submitted response" do
         @response2.state = 'accepted';
@@ -259,19 +259,19 @@ describe ImplementerSplit do
 
   describe "#mark_double_counting" do
     before :each do
-      donor    = FactoryGirl.create(:organization, :name => 'donor')
-      u = FactoryGirl.create :user, :organization => donor
-      @request  = FactoryGirl.create(:data_request, :organization => donor)
+      donor    = FactoryGirl.create(:organization, name: 'donor')
+      u = FactoryGirl.create :user, organization: donor
+      @request  = FactoryGirl.create(:data_request, organization: donor)
       response = donor.latest_response
-      org1     = FactoryGirl.create(:organization, :name => "organization1")
-      org2     = FactoryGirl.create(:organization, :name => "organization2")
-      project  = FactoryGirl.create(:project, :data_response => response)
-      activity = FactoryGirl.create(:activity, :id => 1, :data_response => response,
-                         :project => project)
-      @split1 = FactoryGirl.create(:implementer_split, :id => 1,
-                       :activity => activity, :organization => org1, :double_count => false)
-      @split2 = FactoryGirl.create(:implementer_split, :id => 2,
-                       :activity => activity, :organization => org2, :double_count => false)
+      org1     = FactoryGirl.create(:organization, name: "organization1")
+      org2     = FactoryGirl.create(:organization, name: "organization2")
+      project  = FactoryGirl.create(:project, data_response: response)
+      activity = FactoryGirl.create(:activity, id: 1, data_response: response,
+                         project: project)
+      @split1 = FactoryGirl.create(:implementer_split, id: 1,
+                       activity: activity, organization: org1, double_count: false)
+      @split2 = FactoryGirl.create(:implementer_split, id: 2,
+                       activity: activity, organization: org2, double_count: false)
 
     end
 

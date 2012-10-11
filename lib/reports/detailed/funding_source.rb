@@ -7,9 +7,9 @@ class Reports::Detailed::FundingSource
 
   def initialize(request, filetype)
    @in_flows = FundingFlow.find :all,
-     :joins => { :project => :data_response },
-     :order => 'funding_flows.id ASC',
-     :conditions => ['data_responses.data_request_id = ? AND
+     joins: { project: :data_response },
+     order: 'funding_flows.id ASC',
+     conditions: ['data_responses.data_request_id = ? AND
                      data_responses.state = ?', request.id, 'accepted']
     @builder = FileBuilder.new(filetype)
   end

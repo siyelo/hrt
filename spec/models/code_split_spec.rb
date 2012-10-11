@@ -12,7 +12,7 @@ describe CodeSplit do
   end
 
   describe "Validations" do
-    subject { basic_setup_activity; FactoryGirl.create(:code_split, :activity => @activity) }
+    subject { basic_setup_activity; FactoryGirl.create(:code_split, activity: @activity) }
 
     it { should validate_presence_of(:activity_id) }
     it { should validate_presence_of(:code_id) }
@@ -33,20 +33,20 @@ describe CodeSplit do
     it "with_activity" do
       basic_setup_project
       activity1 = FactoryGirl.create(:activity,
-                   :data_response => @response, :project => @project)
-      FactoryGirl.create(:implementer_split, :activity => activity1,
-                  :budget => 100, :spend => 200, :organization => @organization)
-      activity2 = FactoryGirl.create(:activity, :data_response => @response,
-                                     :project => @project)
-      FactoryGirl.create(:implementer_split, :activity => activity2,
-                  :budget => 100, :spend => 200, :organization => @organization)
+                   data_response: @response, project: @project)
+      FactoryGirl.create(:implementer_split, activity: activity1,
+                  budget: 100, spend: 200, organization: @organization)
+      activity2 = FactoryGirl.create(:activity, data_response: @response,
+                                     project: @project)
+      FactoryGirl.create(:implementer_split, activity: activity2,
+                  budget: 100, spend: 200, organization: @organization)
 
-      purpose = FactoryGirl.create(:purpose, :name => 'purpose1')
+      purpose = FactoryGirl.create(:purpose, name: 'purpose1')
 
       split1 = FactoryGirl.create(:purpose_budget_split,
-                                  :activity => activity1, :code => purpose)
+                                  activity: activity1, code: purpose)
       split2 = FactoryGirl.create(:purpose_budget_split,
-                                  :activity => activity2, :code => purpose)
+                                  activity: activity2, code: purpose)
 
       CodeSplit.with_activity(activity1.id).should == [split1]
       CodeSplit.with_activity(activity2.id).should == [split2]
@@ -54,20 +54,20 @@ describe CodeSplit do
 
     it "with_activities" do
       basic_setup_project
-      activity1 = FactoryGirl.create(:activity, :data_response => @response, :project => @project)
-      split1    = FactoryGirl.create(:implementer_split, :activity => activity1,
-                         :budget => 100, :spend => 200, :organization => @organization)
-      activity2 = FactoryGirl.create(:activity, :data_response => @response, :project => @project)
-      split2    = FactoryGirl.create(:implementer_split, :activity => activity2,
-                         :budget => 100, :spend => 200, :organization => @organization)
-      activity3 = FactoryGirl.create(:activity, :data_response => @response, :project => @project)
-      split3    = FactoryGirl.create(:implementer_split, :activity => activity3,
-                         :budget => 100, :spend => 200, :organization => @organization)
-      purpose   = FactoryGirl.create(:purpose, :name => 'purpose1')
+      activity1 = FactoryGirl.create(:activity, data_response: @response, project: @project)
+      split1    = FactoryGirl.create(:implementer_split, activity: activity1,
+                         budget: 100, spend: 200, organization: @organization)
+      activity2 = FactoryGirl.create(:activity, data_response: @response, project: @project)
+      split2    = FactoryGirl.create(:implementer_split, activity: activity2,
+                         budget: 100, spend: 200, organization: @organization)
+      activity3 = FactoryGirl.create(:activity, data_response: @response, project: @project)
+      split3    = FactoryGirl.create(:implementer_split, activity: activity3,
+                         budget: 100, spend: 200, organization: @organization)
+      purpose   = FactoryGirl.create(:purpose, name: 'purpose1')
 
-      ca1       = FactoryGirl.create(:purpose_budget_split, :activity => activity1, :code => purpose)
-      ca2       = FactoryGirl.create(:purpose_budget_split, :activity => activity2, :code => purpose)
-      ca3       = FactoryGirl.create(:purpose_budget_split, :activity => activity3, :code => purpose)
+      ca1       = FactoryGirl.create(:purpose_budget_split, activity: activity1, code: purpose)
+      ca2       = FactoryGirl.create(:purpose_budget_split, activity: activity2, code: purpose)
+      ca3       = FactoryGirl.create(:purpose_budget_split, activity: activity3, code: purpose)
 
       CodeSplit.with_activities([activity1.id, activity3.id]).should == [ca1, ca3]
     end

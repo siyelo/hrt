@@ -10,7 +10,7 @@ class Reports::DistrictSplit < Reports::TopBase
 
   def initialize(request, include_double_count = false)
     @request = request
-    @locations = Location.find(:all, :order => 'name ASC')
+    @locations = Location.find(:all, order: 'name ASC')
     @include_double_count = include_double_count
   end
 
@@ -19,8 +19,8 @@ class Reports::DistrictSplit < Reports::TopBase
   end
 
   def resource_link(element)
-    district_workplan_admin_reports_path(:district => element.name,
-                                         :double_count => include_double_count)
+    district_workplan_admin_reports_path(district: element.name,
+                                         double_count: include_double_count)
   end
 
   def expenditure_chart
@@ -88,18 +88,18 @@ class Reports::DistrictSplit < Reports::TopBase
 
   def code_splits
     @code_splits ||= CodeSplit.find :all,
-      :select => 'code_splits.activity_id,
+      select: 'code_splits.activity_id,
                   code_splits.spend,
                   code_splits.cached_amount AS amount,
                   locations.name AS district,
                   COALESCE(projects.currency, organizations.currency) AS amount_currency',
-      :joins => "INNER JOIN locations ON locations.id = code_splits.code_id
+      joins: "INNER JOIN locations ON locations.id = code_splits.code_id
                    AND code_splits.code_type = 'Location'
                  INNER JOIN activities ON activities.id = code_splits.activity_id
                  LEFT OUTER JOIN projects ON projects.id = activities.project_id
                  INNER JOIN data_responses ON data_responses.id = activities.data_response_id
                  INNER JOIN organizations ON organizations.id = data_responses.organization_id",
-      :conditions => ["data_responses.data_request_id = ? AND
+      conditions: ["data_responses.data_request_id = ? AND
                   code_splits.code_type = 'Location'", request.id]
   end
 
@@ -136,7 +136,7 @@ class Reports::DistrictSplit < Reports::TopBase
       @ratios[activity_id.to_i] = Hash.new(1)
     end
 
-    implementer_splits = ImplementerSplit.joins(:activity => :data_response).
+    implementer_splits = ImplementerSplit.joins(activity: :data_response).
       select('implementer_splits.activity_id, implementer_splits.double_count,
              SUM(implementer_splits.budget) AS budget,
              SUM(implementer_splits.spend) AS spend').

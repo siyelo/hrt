@@ -39,7 +39,7 @@ module ApplicationHelper
           current_controller_with_nesting?('admin', 'beneficiaries')
       end
     end
-    content_tag(:li, :class => ('active' if active)) do
+    content_tag(:li, class: ('active' if active)) do
       link_to tab.humanize, path
     end
   end
@@ -68,7 +68,7 @@ module ApplicationHelper
       end
     end
     return "n/a" if name.blank?
-    return truncate(name.titleize, :length => truncate_length)
+    return truncate(name.titleize, length: truncate_length)
   end
 
   # appends a .active class
@@ -82,7 +82,7 @@ module ApplicationHelper
     else
       active = true if action_name == current
     end
-    { :class => ('active' if active) }
+    { class: ('active' if active) }
   end
 
 
@@ -92,15 +92,15 @@ module ApplicationHelper
     css_class = column == sort_column ? "current #{sort_direction}" : nil
     direction = column == sort_column && sort_direction == "asc" ? "desc" : "asc"
     direction = "desc" if column != sort_column && reverse_sort
-    link_to title, {:sort => column, :direction => direction, :query => params[:query],
-      :filter => params[:filter]}, {:class => css_class}
+    link_to title, {sort: column, direction: direction, query: params[:query],
+      filter: params[:filter]}, {class: css_class}
   end
 
   # Helper for adding remove link to nested form models
   def link_to_remove_fields(name, f, options = {})
     class_name = options[:class] || 'remove_nested'
     callback = options[:callback] || 'null'
-    (f.hidden_field(:_destroy) + link_to_function(name, "remove_fields(this)", :class => class_name)).html_safe
+    (f.hidden_field(:_destroy) + link_to_function(name, "remove_fields(this)", class: class_name)).html_safe
   end
 
   # Helper for adding new nested form models
@@ -109,10 +109,10 @@ module ApplicationHelper
   def link_to_add_fields(name, f, association, subfolder, options = {})
     class_name = options[:class] || 'add_nested'
     new_object = f.object.class.reflect_on_association(association).klass.new
-    fields = f.fields_for(association, new_object, :child_index => "new_#{association}") do |builder|
-      render(subfolder + association.to_s.singularize + "_fields", :f => builder)
+    fields = f.fields_for(association, new_object, child_index: "new_#{association}") do |builder|
+      render(subfolder + association.to_s.singularize + "_fields", f: builder)
     end
-    link_to_function(name, h(raw("add_fields(this, \"#{association}\", \"#{escape_javascript(fields)}\")")), :class => class_name)
+    link_to_function(name, h(raw("add_fields(this, \"#{association}\", \"#{escape_javascript(fields)}\")")), class: class_name)
   end
 
 
@@ -131,7 +131,7 @@ module ApplicationHelper
   end
 
   def funding_organizations_select
-    orgs = Organization.find(:all, :order => 'lower(name)').
+    orgs = Organization.find(:all, order: 'lower(name)').
       map{ |o| [o.display_name(100), o.id] }
   end
 
@@ -201,7 +201,7 @@ module ApplicationHelper
     else
       mode = nil
     end
-    edit_activity_or_ocost_path(activity, :mode => mode)
+    edit_activity_or_ocost_path(activity, mode: mode)
   end
 
   def sort_splits(splits)
@@ -279,7 +279,7 @@ module ApplicationHelper
      onclick = "#{"#{html_options[:onclick]}; " if html_options[:onclick]}#{function}; return false;"
      href = html_options[:href] || '#'
 
-     content_tag(:a, name, html_options.merge(:href => href, :onclick => onclick))
+     content_tag(:a, name, html_options.merge(href: href, onclick: onclick))
   end
 
 end

@@ -15,14 +15,14 @@ class CodeSplit < ActiveRecord::Base
 
   ### Validations
   validates_presence_of :activity_id, :code_id
-  validates_inclusion_of :percentage, :in => 0..100,
-    :if => Proc.new { |model| model.percentage.present? },
-    :message => "must be between 0 and 100"
+  validates_inclusion_of :percentage, in: 0..100,
+    if: Proc.new { |model| model.percentage.present? },
+    message: "must be between 0 and 100"
 
   ### Delegates
-  delegate :data_response, :to => :activity
-  delegate :currency, :to => :activity, :allow_nil => true
-  delegate :name, :to => :code, :allow_nil => true
+  delegate :data_response, to: :activity
+  delegate :currency, to: :activity, allow_nil: true
+  delegate :name, to: :code, allow_nil: true
 
   # TODO: rewrite scopes as methods and extract it into separate module
   # TODO: remove unused scopes
@@ -43,7 +43,7 @@ class CodeSplit < ActiveRecord::Base
   scope :sorted, order("code_splits.cached_amount DESC")
   scope :with_request,
               lambda { |request_id| {
-                :joins =>
+                joins:
                   "INNER JOIN activities ON
                     activities.id = code_splits.activity_id
                   INNER JOIN data_responses

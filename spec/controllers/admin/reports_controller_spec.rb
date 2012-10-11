@@ -29,14 +29,14 @@ describe Admin::ReportsController do
     [:reporters, :funders, :locations].each do |report_type|
       describe "#{report_type}" do
         it "should render #{report_type} report with double counts" do
-          get report_type, :double_count => 'false'
+          get report_type, double_count: 'false'
           response.should be_success
           assigns[:report].include_double_count.should be_false
           assigns[:report].should_not be_nil
         end
 
         it "should render #{report_type} report without double counts" do
-          get report_type, :double_count => 'true'
+          get report_type, double_count: 'true'
           response.should be_success
           assigns[:report].include_double_count.should be_true
           assigns[:report].should_not be_nil
@@ -67,7 +67,7 @@ describe Admin::ReportsController do
         location = mock_model(Location)
         location.stub(:name).and_return('district1')
         Location.stub(:find_by_name).and_return(location)
-        get :district_workplan, :id => 1
+        get :district_workplan, id: 1
         response.should be_success
         response.header["Content-Type"].should == "application/vnd.ms-excel"
         response.header["Content-Disposition"].should ==
@@ -76,7 +76,7 @@ describe Admin::ReportsController do
 
       it "downloads xls district report" do
         Location.stub(:find).and_return(nil)
-        get :district_workplan, :id => 1
+        get :district_workplan, id: 1
         response.should redirect_to(locations_admin_reports_path)
       end
     end

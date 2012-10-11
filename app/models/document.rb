@@ -15,16 +15,16 @@ class Document < ActiveRecord::Base
   validates_presence_of :title
   validates_uniqueness_of :title
   validates_attachment_presence :document
-  validates_attachment_size :document, :less_than => 50.megabytes,
-                            :message => "must be less than 50MB"
-  validates_inclusion_of :visibility, :in => VISIBILITY_OPTIONS
+  validates_attachment_size :document, less_than: 50.megabytes,
+                            message: "must be less than 50MB"
+  validates_inclusion_of :visibility, in: VISIBILITY_OPTIONS
 
   ### Named Scopes
-  scope :latest_first, {:order => "created_at DESC" }
-  scope :limited, {:limit => 5}
-  scope :visible_to_reporters, :conditions => ["visibility = ? OR visibility = ?",
+  scope :latest_first, {order: "created_at DESC" }
+  scope :limited, {limit: 5}
+  scope :visible_to_reporters, conditions: ["visibility = ? OR visibility = ?",
                                                      'public', 'reporters']
-  scope :visible_to_public, :conditions => ["visibility = ?", 'public']
+  scope :visible_to_public, conditions: ["visibility = ?", 'public']
 
   def private_document_url
     if private_url?

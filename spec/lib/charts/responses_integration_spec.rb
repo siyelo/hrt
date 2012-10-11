@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 describe Charts::Responses::State do
-  let(:request) { mock :request, :id => 1 }
-  let(:responses) { [mock(:row, :state => 'Started', :count => 10),
-    mock(:row, :state => 'Accepted', :count => 20),
-    mock(:row, :state => 'Unstarted', :count => 30) ]}
+  let(:request) { mock :request, id: 1 }
+  let(:responses) { [mock(:row, state: 'Started', count: 10),
+    mock(:row, state: 'Accepted', count: 20),
+    mock(:row, state: 'Unstarted', count: 30) ]}
 
   before :each do
     DataResponse.should_receive(:find).once.and_return responses

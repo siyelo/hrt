@@ -5,8 +5,8 @@ class Reports::Detailed::Users
 
   def initialize(filetype)
     @users = User.find :all,
-      :include => [:organization],
-      :order => 'UPPER(users.full_name) ASC'
+      include: [:organization],
+      order: 'UPPER(users.full_name) ASC'
     @builder = FileBuilder.new(filetype)
   end
 

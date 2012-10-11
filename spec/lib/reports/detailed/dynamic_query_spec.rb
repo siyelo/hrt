@@ -5,8 +5,8 @@ describe Reports::Detailed::DynamicQuery do
   let(:input) { FactoryGirl.create :input }
   let(:location) { FactoryGirl.create :location }
   let(:purpose) { FactoryGirl.create :purpose }
-  let(:mtef) { FactoryGirl.create :purpose, :name => "Human Resources For Health" }
-  let(:nsp) { FactoryGirl.create :purpose, :name => "purpose" }
+  let(:mtef) { FactoryGirl.create :purpose, name: "Human Resources For Health" }
+  let(:nsp) { FactoryGirl.create :purpose, name: "purpose" }
   let(:root_code) { FactoryGirl.create :purpose }
 
   describe "budget report" do
@@ -23,22 +23,22 @@ describe Reports::Detailed::DynamicQuery do
         @organization.save
         @response.state = 'accepted'
         @response.save
-        in_flows = [FactoryGirl.build(:funding_flow, :from => @organization,
-          :budget => 100)]
-        @project = FactoryGirl.create :project, :data_response => @response,
-          :name => 'project',
-          :in_flows => in_flows
+        in_flows = [FactoryGirl.build(:funding_flow, from: @organization,
+          budget: 100)]
+        @project = FactoryGirl.create :project, data_response: @response,
+          name: 'project',
+          in_flows: in_flows
         @project.save!
-        @activity = FactoryGirl.create :activity, :project => @project,
-          :data_response => @response, :description => "desc"
-        @is = FactoryGirl.create :implementer_split, :activity => @activity,
-          :organization => @organization, :budget => 100
+        @activity = FactoryGirl.create :activity, project: @project,
+          data_response: @response, description: "desc"
+        @is = FactoryGirl.create :implementer_split, activity: @activity,
+          organization: @organization, budget: 100
         @input_budget_split = FactoryGirl.create :input_budget_split,
-          :percentage => 100, :activity => @activity, :code => input
-        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 100,
-          :activity => @activity, :code => purpose
+          percentage: 100, activity: @activity, code: input
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, percentage: 100,
+          activity: @activity, code: purpose
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 100, :activity => @activity, :code => location
+          percentage: 100, activity: @activity, code: location
 
         #creating dummy tree
         mtef.move_to_child_of(root_code)
@@ -86,9 +86,9 @@ describe Reports::Detailed::DynamicQuery do
       end
 
       it "should adjust total amount if there are 2 funders" do
-        @funder2 = FactoryGirl.create :organization, :name => "zz_funder"
-        @project.in_flows << [FactoryGirl.build(:funding_flow, :from => @funder2,
-          :budget => 50)]
+        @funder2 = FactoryGirl.create :organization, name: "zz_funder"
+        @project.in_flows << [FactoryGirl.build(:funding_flow, from: @funder2,
+          budget: 50)]
 
         table = run_report
         table[0]['Funding Source'].should == @organization.name
@@ -130,8 +130,8 @@ describe Reports::Detailed::DynamicQuery do
 
       it "should adjusted total amount if there is 2 organizations and 2 implementers splits" do
         @funder2 = FactoryGirl.create :organization
-        @is2 = FactoryGirl.create :implementer_split, :activity => @activity,
-          :organization => @funder2, :budget => 100
+        @is2 = FactoryGirl.create :implementer_split, activity: @activity,
+          organization: @funder2, budget: 100
 
         table = run_report
         table[0]['Funding Source'].should == @organization.name
@@ -177,15 +177,15 @@ describe Reports::Detailed::DynamicQuery do
         basic_setup_response
         @response.state = 'accepted'
         @response.save
-        in_flows = [FactoryGirl.build(:funding_flow, :from => @organization,
-          :budget => 100)]
-        @project = FactoryGirl.create :project, :data_response => @response,
-          :name => 'project',
-          :in_flows => in_flows
-        @activity = FactoryGirl.create :activity, :project => @project,
-          :data_response => @response, :description => "desc"
-        @is = FactoryGirl.create :implementer_split, :activity => @activity,
-          :organization => @organization, :budget => 100
+        in_flows = [FactoryGirl.build(:funding_flow, from: @organization,
+          budget: 100)]
+        @project = FactoryGirl.create :project, data_response: @response,
+          name: 'project',
+          in_flows: in_flows
+        @activity = FactoryGirl.create :activity, project: @project,
+          data_response: @response, description: "desc"
+        @is = FactoryGirl.create :implementer_split, activity: @activity,
+          organization: @organization, budget: 100
 
         #creating dummy tree
         mtef.move_to_child_of(root_code)
@@ -195,13 +195,13 @@ describe Reports::Detailed::DynamicQuery do
 
       it "should adjust the total amounts as per codings (2 cost categorys splits)" do
         @input_budget_split = FactoryGirl.create :input_budget_split,
-          :percentage => 25, :activity => @activity, :code => input
+          percentage: 25, activity: @activity, code: input
         @cost_categorization1 = FactoryGirl.create :input_budget_split,
-          :percentage => 75, :activity => @activity, :code => input
-        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 100,
-          :activity => @activity, :code => purpose
+          percentage: 75, activity: @activity, code: input
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, percentage: 100,
+          activity: @activity, code: purpose
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 100, :activity => @activity, :code => location
+          percentage: 100, activity: @activity, code: location
         table = run_report
         table[0]['Funding Source'].should == @organization.name
         table[0]['Data Source'].should == @organization.name
@@ -242,13 +242,13 @@ describe Reports::Detailed::DynamicQuery do
 
       it "should adjust the total amounts as per codings (2 coding budget splits)" do
         @input_budget_split = FactoryGirl.create :input_budget_split,
-          :percentage => 100, :activity => @activity, :code => input
-        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 80,
-          :activity => @activity, :code => purpose
+          percentage: 100, activity: @activity, code: input
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, percentage: 80,
+          activity: @activity, code: purpose
         @purpose_budget_split1 = FactoryGirl.create :purpose_budget_split,
-          :percentage => 20, :activity => @activity, :code => purpose
+          percentage: 20, activity: @activity, code: purpose
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 100, :activity => @activity, :code => location
+          percentage: 100, activity: @activity, code: location
         table = run_report
         table[0]['Funding Source'].should == @organization.name
         table[0]['Data Source'].should == @organization.name
@@ -289,13 +289,13 @@ describe Reports::Detailed::DynamicQuery do
 
       it "should adjust the total amounts as per codings (2 location budget splits)" do
         @input_budget_split = FactoryGirl.create :input_budget_split,
-          :percentage => 100, :activity => @activity, :code => input
-        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 100,
-          :activity => @activity, :code => purpose
+          percentage: 100, activity: @activity, code: input
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, percentage: 100,
+          activity: @activity, code: purpose
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 70, :activity => @activity, :code => location
+          percentage: 70, activity: @activity, code: location
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 30, :activity => @activity, :code => location
+          percentage: 30, activity: @activity, code: location
         table = run_report
         table[0]['Funding Source'].should == @organization.name
         table[0]['Data Source'].should == @organization.name
@@ -336,17 +336,17 @@ describe Reports::Detailed::DynamicQuery do
 
       it "should adjust the total amounts as per codings (2 of each budget splits)" do
         @input_budget_split = FactoryGirl.create :input_budget_split,
-          :percentage => 90, :activity => @activity, :code => input
+          percentage: 90, activity: @activity, code: input
         @cost_categorization1 = FactoryGirl.create :input_budget_split,
-          :percentage => 10, :activity => @activity, :code => input
-        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 80,
-          :activity => @activity, :code => purpose
-        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 20,
-          :activity => @activity, :code => purpose
+          percentage: 10, activity: @activity, code: input
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, percentage: 80,
+          activity: @activity, code: purpose
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, percentage: 20,
+          activity: @activity, code: purpose
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 70, :activity => @activity, :code => location
+          percentage: 70, activity: @activity, code: location
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 30, :activity => @activity, :code => location
+          percentage: 30, activity: @activity, code: location
 
         table = run_report
         table[0]['Funding Source'].should == @organization.name
@@ -497,20 +497,20 @@ describe Reports::Detailed::DynamicQuery do
       it "should adjust the total amounts as per codings (2 of each budget splits and 2 funders)" do
         #total amount is 100 because the amount of the activity is 100 despite being funded 150
         @input_budget_split = FactoryGirl.create :input_budget_split,
-          :percentage => 90, :activity => @activity, :code => input
+          percentage: 90, activity: @activity, code: input
         @cost_categorization1 = FactoryGirl.create :input_budget_split,
-          :percentage => 10, :activity => @activity, :code => input
-        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 80,
-          :activity => @activity, :code => purpose
-        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 20,
-          :activity => @activity, :code => purpose
+          percentage: 10, activity: @activity, code: input
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, percentage: 80,
+          activity: @activity, code: purpose
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, percentage: 20,
+          activity: @activity, code: purpose
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 70, :activity => @activity, :code => location
+          percentage: 70, activity: @activity, code: location
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 30, :activity => @activity, :code => location
-        @funder2 = FactoryGirl.create :organization, :name => "zz_funder2"
-        @project.in_flows << [FactoryGirl.build(:funding_flow, :from => @funder2,
-          :budget => 50)]
+          percentage: 30, activity: @activity, code: location
+        @funder2 = FactoryGirl.create :organization, name: "zz_funder2"
+        @project.in_flows << [FactoryGirl.build(:funding_flow, from: @funder2,
+          budget: 50)]
 
         table = run_report
         table[0]['Funding Source'].should == @organization.name
@@ -808,15 +808,15 @@ describe Reports::Detailed::DynamicQuery do
         basic_setup_response
         @response.state = 'accepted'
         @response.save
-        in_flows = [FactoryGirl.build(:funding_flow, :from => @organization,
-          :budget => 100)]
-        @project = FactoryGirl.create :project, :data_response => @response,
-          :name => 'project',
-          :in_flows => in_flows
-        @activity = FactoryGirl.create :activity, :project => @project,
-          :data_response => @response, :description => "desc"
-        @is = FactoryGirl.create :implementer_split, :activity => @activity,
-          :organization => @organization, :budget => 100
+        in_flows = [FactoryGirl.build(:funding_flow, from: @organization,
+          budget: 100)]
+        @project = FactoryGirl.create :project, data_response: @response,
+          name: 'project',
+          in_flows: in_flows
+        @activity = FactoryGirl.create :activity, project: @project,
+          data_response: @response, description: "desc"
+        @is = FactoryGirl.create :implementer_split, activity: @activity,
+          organization: @organization, budget: 100
 
         #creating dummy tree
         mtef.move_to_child_of(root_code)
@@ -826,17 +826,17 @@ describe Reports::Detailed::DynamicQuery do
 
       it "cost categorization - should replace incomplete codings with 'not coded' (should not affect calculated amounts)" do
         #total amount is 100 because the amount of the activity is 100 despite being funded 150
-        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 80,
-          :activity => @activity, :code => purpose
-        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 20,
-          :activity => @activity, :code => purpose
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, percentage: 80,
+          activity: @activity, code: purpose
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, percentage: 20,
+          activity: @activity, code: purpose
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 70, :activity => @activity, :code => location
+          percentage: 70, activity: @activity, code: location
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 30, :activity => @activity, :code => location
-        @funder2 = FactoryGirl.create :organization, :name => "zzfunder2"
-        @project.in_flows << [FactoryGirl.build(:funding_flow, :from => @funder2,
-          :budget => 50)]
+          percentage: 30, activity: @activity, code: location
+        @funder2 = FactoryGirl.create :organization, name: "zzfunder2"
+        @project.in_flows << [FactoryGirl.build(:funding_flow, from: @funder2,
+          budget: 50)]
 
         table = run_report
         table[0]['Funding Source'].should == @organization.name
@@ -989,9 +989,9 @@ describe Reports::Detailed::DynamicQuery do
       it "budget purpose - should replace incomplete codings with 'not coded' (should not affect calculated amounts)" do
         #total amount is 100 because the amount of the activity is 100 despite being funded 150
         @input_budget_split = FactoryGirl.create :input_budget_split,
-          :percentage => 100, :activity => @activity, :code => input
+          percentage: 100, activity: @activity, code: input
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 100, :activity => @activity, :code => location
+          percentage: 100, activity: @activity, code: location
 
         table = run_report
         table[0]['Funding Source'].should == @organization.name
@@ -1020,9 +1020,9 @@ describe Reports::Detailed::DynamicQuery do
       it "budget district - should replace incomplete codings with 'not coded' (should not affect calculated amounts)" do
         #total amount is 100 because the amount of the activity is 100 despite being funded 150
         @input_budget_split = FactoryGirl.create :input_budget_split,
-          :percentage => 100, :activity => @activity, :code => input
-        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 100,
-          :activity => @activity, :code => purpose
+          percentage: 100, activity: @activity, code: input
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, percentage: 100,
+          activity: @activity, code: purpose
 
         table = run_report
         table[0]['Funding Source'].should == @organization.name
@@ -1055,9 +1055,9 @@ describe Reports::Detailed::DynamicQuery do
         @response.state = 'accepted'
         @response.save
         @activity = FactoryGirl.create :other_cost,
-          :data_response => @response, :description => "desc"
-        @is = FactoryGirl.create :implementer_split, :activity => @activity,
-          :organization => @organization, :budget => 100
+          data_response: @response, description: "desc"
+        @is = FactoryGirl.create :implementer_split, activity: @activity,
+          organization: @organization, budget: 100
 
         #creating dummy tree
         mtef.move_to_child_of(root_code)
@@ -1074,17 +1074,17 @@ describe Reports::Detailed::DynamicQuery do
       it "should adjust the total amounts as per codings (2 of each budget splits and 2 funders)" do
         #total amount is 100 because the amount of the activity is 100 despite being funded 150
         @input_budget_split = FactoryGirl.create :input_budget_split,
-          :percentage => 90, :activity => @activity, :code => input
+          percentage: 90, activity: @activity, code: input
         @cost_categorization1 = FactoryGirl.create :input_budget_split,
-          :percentage => 10, :activity => @activity, :code => input
-        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 80,
-          :activity => @activity, :code => purpose
-        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 20,
-          :activity => @activity, :code => purpose
+          percentage: 10, activity: @activity, code: input
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, percentage: 80,
+          activity: @activity, code: purpose
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, percentage: 20,
+          activity: @activity, code: purpose
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 70, :activity => @activity, :code => location
+          percentage: 70, activity: @activity, code: location
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 30, :activity => @activity, :code => location
+          percentage: 30, activity: @activity, code: location
 
         table = run_report
         table[0]['Funding Source'].should == "N/A"
@@ -1242,17 +1242,17 @@ describe Reports::Detailed::DynamicQuery do
     context "currency conversion" do
       before :each do
         basic_setup_response
-        @currency = FactoryGirl.create(:currency, :from => 'RWF', :to => 'USD', :rate => 0.5)
+        @currency = FactoryGirl.create(:currency, from: 'RWF', to: 'USD', rate: 0.5)
         @organization.currency = 'RWF'
         @organization.save!
         @response.state = 'accepted'
         @response.save
-        in_flows = [FactoryGirl.build(:funding_flow, :from => @organization,
-          :budget => 100)]
-        @project = FactoryGirl.create :project, :data_response => @response,
-          :name => 'project',
-          :in_flows => in_flows,
-          :currency => 'RWF'
+        in_flows = [FactoryGirl.build(:funding_flow, from: @organization,
+          budget: 100)]
+        @project = FactoryGirl.create :project, data_response: @response,
+          name: 'project',
+          in_flows: in_flows,
+          currency: 'RWF'
 
         #creating dummy tree
         mtef.move_to_child_of(root_code)
@@ -1261,16 +1261,16 @@ describe Reports::Detailed::DynamicQuery do
       end
 
       it "should convert amounts to USD" do
-        @activity = FactoryGirl.create :activity, :project => @project,
-          :data_response => @response, :description => "desc"
-        @is = FactoryGirl.create :implementer_split, :activity => @activity,
-          :organization => @organization, :budget => 100
+        @activity = FactoryGirl.create :activity, project: @project,
+          data_response: @response, description: "desc"
+        @is = FactoryGirl.create :implementer_split, activity: @activity,
+          organization: @organization, budget: 100
         @input_budget_split = FactoryGirl.create :input_budget_split,
-          :percentage => 100, :activity => @activity, :code => input
-        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 100,
-          :activity => @activity, :code => purpose
+          percentage: 100, activity: @activity, code: input
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, percentage: 100,
+          activity: @activity, code: purpose
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 100, :activity => @activity, :code => location
+          percentage: 100, activity: @activity, code: location
         @activity.reload;@activity.save
 
         table = run_report
@@ -1295,15 +1295,15 @@ describe Reports::Detailed::DynamicQuery do
 
       it "should correctly create the currency for a fake project for an activity/othercost" do
         @other_cost = FactoryGirl.create :other_cost,
-          :data_response => @response, :description => "desc"
-        @is = FactoryGirl.create :implementer_split, :activity => @other_cost,
-          :organization => @organization, :budget => 100
+          data_response: @response, description: "desc"
+        @is = FactoryGirl.create :implementer_split, activity: @other_cost,
+          organization: @organization, budget: 100
         @input_budget_split = FactoryGirl.create :input_budget_split,
-          :percentage => 100, :activity => @other_cost, :code => input
-        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 100,
-          :activity => @other_cost, :code => purpose
+          percentage: 100, activity: @other_cost, code: input
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, percentage: 100,
+          activity: @other_cost, code: purpose
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 100, :activity => @other_cost, :code => location
+          percentage: 100, activity: @other_cost, code: location
         @other_cost.reload;@other_cost.save
         table = run_report
         table[0]['Funding Source'].should == "N/A"
@@ -1332,15 +1332,15 @@ describe Reports::Detailed::DynamicQuery do
         basic_setup_response
         @response.state = 'accepted'
         @response.save
-        in_flows = [FactoryGirl.build(:funding_flow, :from => @organization,
-          :budget => 100)]
-        @project = FactoryGirl.create :project, :data_response => @response,
-          :name => 'project',
-          :in_flows => in_flows
-        @activity = FactoryGirl.create :activity, :project => @project,
-          :data_response => @response, :description => "desc"
-        @is = FactoryGirl.create :implementer_split, :activity => @activity,
-          :organization => @organization, :budget => 100
+        in_flows = [FactoryGirl.build(:funding_flow, from: @organization,
+          budget: 100)]
+        @project = FactoryGirl.create :project, data_response: @response,
+          name: 'project',
+          in_flows: in_flows
+        @activity = FactoryGirl.create :activity, project: @project,
+          data_response: @response, description: "desc"
+        @is = FactoryGirl.create :implementer_split, activity: @activity,
+          organization: @organization, budget: 100
 
         #creating dummy tree
         mtef.move_to_child_of(root_code)
@@ -1351,11 +1351,11 @@ describe Reports::Detailed::DynamicQuery do
 
       it "should create a purposes row with the outstanding amount (should make 2 rows)" do
         @input_budget_split = FactoryGirl.create :input_budget_split,
-          :percentage => 100, :activity => @activity, :code => input
-        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 90,
-          :activity => @activity, :code => purpose
+          percentage: 100, activity: @activity, code: input
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, percentage: 90,
+          activity: @activity, code: purpose
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 100, :activity => @activity, :code => location
+          percentage: 100, activity: @activity, code: location
 
         table = run_report
         table[0]['Funding Source'].should == @organization.name
@@ -1397,11 +1397,11 @@ describe Reports::Detailed::DynamicQuery do
 
       it "should create a inputs row with the outstanding amount (should make 2 rows)" do
         @input_budget_split = FactoryGirl.create :input_budget_split,
-          :percentage => 80, :activity => @activity, :code => input
-        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 100,
-          :activity => @activity, :code => purpose
+          percentage: 80, activity: @activity, code: input
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, percentage: 100,
+          activity: @activity, code: purpose
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 100, :activity => @activity, :code => location
+          percentage: 100, activity: @activity, code: location
 
         table = run_report
         table[0]['Funding Source'].should == @organization.name
@@ -1443,11 +1443,11 @@ describe Reports::Detailed::DynamicQuery do
 
       it "should create a districts row with the outstanding amount (should make 2 rows)" do
         @input_budget_split = FactoryGirl.create :input_budget_split,
-          :percentage => 100, :activity => @activity, :code => input
-        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 100,
-          :activity => @activity, :code => purpose
+          percentage: 100, activity: @activity, code: input
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, percentage: 100,
+          activity: @activity, code: purpose
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 85, :activity => @activity, :code => location
+          percentage: 85, activity: @activity, code: location
 
         table = run_report
         table[0]['Funding Source'].should == @organization.name
@@ -1490,11 +1490,11 @@ describe Reports::Detailed::DynamicQuery do
       context "within allowed leeway" do
         it "should not create a inputs row with the outstanding amount (should make 1 row)" do
           @input_budget_split = FactoryGirl.create :input_budget_split,
-            :percentage => 99.5, :activity => @activity, :code => input
-          @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 100,
-            :activity => @activity, :code => purpose
+            percentage: 99.5, activity: @activity, code: input
+          @purpose_budget_split = FactoryGirl.create :purpose_budget_split, percentage: 100,
+            activity: @activity, code: purpose
           @location_budget_split = FactoryGirl.create :location_budget_split,
-            :percentage => 100, :activity => @activity, :code => location
+            percentage: 100, activity: @activity, code: location
 
           table = run_report
           table[0]['Funding Source'].should == @organization.name
@@ -1525,21 +1525,21 @@ describe Reports::Detailed::DynamicQuery do
         basic_setup_response
         @response.state = 'accepted'
         @response.save
-        in_flows = [FactoryGirl.build(:funding_flow, :from => @organization,
-                    :budget => 0)]
-        @project = FactoryGirl.create :project, :data_response => @response,
-          :name => 'project',
-          :in_flows => in_flows
-        @activity = FactoryGirl.create :activity, :project => @project,
-          :data_response => @response, :description => "desc"
-        @is = FactoryGirl.create :implementer_split, :activity => @activity,
-          :organization => @organization, :budget => 100
+        in_flows = [FactoryGirl.build(:funding_flow, from: @organization,
+                    budget: 0)]
+        @project = FactoryGirl.create :project, data_response: @response,
+          name: 'project',
+          in_flows: in_flows
+        @activity = FactoryGirl.create :activity, project: @project,
+          data_response: @response, description: "desc"
+        @is = FactoryGirl.create :implementer_split, activity: @activity,
+          organization: @organization, budget: 100
         @input_budget_split = FactoryGirl.create :input_budget_split,
-          :percentage => 100, :activity => @activity, :code => input
-        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, :percentage => 100,
-          :activity => @activity, :code => purpose
+          percentage: 100, activity: @activity, code: input
+        @purpose_budget_split = FactoryGirl.create :purpose_budget_split, percentage: 100,
+          activity: @activity, code: purpose
         @location_budget_split = FactoryGirl.create :location_budget_split,
-          :percentage => 100, :activity => @activity, :code => location
+          percentage: 100, activity: @activity, code: location
 
         #creating dummy tree
         mtef.move_to_child_of(root_code)
@@ -1588,21 +1588,21 @@ describe Reports::Detailed::DynamicQuery do
         basic_setup_response
         @response.state = 'accepted'
         @response.save
-        in_flows = [FactoryGirl.build(:funding_flow, :from => @organization,
-          :spend => 100)]
-        @project = FactoryGirl.create :project, :data_response => @response,
-          :name => 'project',
-          :in_flows => in_flows
-        @activity = FactoryGirl.create :activity, :project => @project,
-          :data_response => @response, :description => "desc"
-        @is = FactoryGirl.create :implementer_split, :activity => @activity,
-          :organization => @organization, :spend => 100
+        in_flows = [FactoryGirl.build(:funding_flow, from: @organization,
+          spend: 100)]
+        @project = FactoryGirl.create :project, data_response: @response,
+          name: 'project',
+          in_flows: in_flows
+        @activity = FactoryGirl.create :activity, project: @project,
+          data_response: @response, description: "desc"
+        @is = FactoryGirl.create :implementer_split, activity: @activity,
+          organization: @organization, spend: 100
         @input_budget_split = FactoryGirl.create :input_spend_split,
-          :percentage => 100, :activity => @activity, :code => input
-        @purpose_spend_split = FactoryGirl.create :purpose_spend_split, :percentage => 100,
-          :activity => @activity, :code => purpose
+          percentage: 100, activity: @activity, code: input
+        @purpose_spend_split = FactoryGirl.create :purpose_spend_split, percentage: 100,
+          activity: @activity, code: purpose
         @location_spend_split = FactoryGirl.create :location_spend_split,
-          :percentage => 100, :activity => @activity, :code => location
+          percentage: 100, activity: @activity, code: location
 
         #creating dummy tree
         mtef.move_to_child_of(root_code)

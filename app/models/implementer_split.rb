@@ -3,7 +3,7 @@
 
   belongs_to :activity
   belongs_to :organization # the implementer
-  belongs_to :previous, :class_name => 'ImplementerSplit'
+  belongs_to :previous, class_name: 'ImplementerSplit'
 
   attr_accessible :activity, :activity_id, :organization_id, :budget, :spend,
     :organization_mask, :organization, :organization_temp_name
@@ -12,25 +12,25 @@
 
   ### Validations
   # this seems to be bypassed on activity update if you pass two of the same orgs
-  validates_uniqueness_of :organization_id, :scope => :activity_id,
-    :message => "must be unique", :unless => Proc.new { |m| m.new_record? }
-  validates_numericality_of :spend, :greater_than => 0,
-    :if => Proc.new { |is| is.spend.present? && (!is.budget.present? ||
+  validates_uniqueness_of :organization_id, scope: :activity_id,
+    message: "must be unique", unless: Proc.new { |m| m.new_record? }
+  validates_numericality_of :spend, greater_than: 0,
+    if: Proc.new { |is| is.spend.present? && (!is.budget.present? ||
                                                  is.budget == 0) }
-  validates_numericality_of :budget, :greater_than => 0,
-    :if => Proc.new { |is| is.budget.present? && (!is.spend.present? ||
+  validates_numericality_of :budget, greater_than: 0,
+    if: Proc.new { |is| is.budget.present? && (!is.spend.present? ||
                                                   is.spend == 0) }
-  validates_presence_of :spend, :message => " and/or Budget must be present",
-    :if => lambda { |is| (!((is.budget || 0) > 0)) && (!((is.spend || 0) > 0)) }
+  validates_presence_of :spend, message: " and/or Budget must be present",
+    if: lambda { |is| (!((is.budget || 0) > 0)) && (!((is.spend || 0) > 0)) }
   validate :validate_organization_presence
 
   ### Delegates
-  delegate :name, :to => :organization, :prefix => true, :allow_nil => true # organization_name
+  delegate :name, to: :organization, prefix: true, allow_nil: true # organization_name
 
   ### Named Scopes
-  scope :sorted, { :joins => "LEFT OUTER JOIN organizations ON
+  scope :sorted, { joins: "LEFT OUTER JOIN organizations ON
     organizations.id = implementer_splits.organization_id",
-    :order => "LOWER(organizations.name) ASC, implementer_splits.id ASC"}
+    order: "LOWER(organizations.name) ASC, implementer_splits.id ASC"}
 
   ### Instance methods
 
@@ -103,7 +103,7 @@
         hash[row['Implementer Split ID'].to_s] = double_count
       end
 
-      ImplementerSplit.find(:all, :conditions => ["id IN (?)", hash.keys]).each do |split|
+      ImplementerSplit.find(:all, conditions: ["id IN (?)", hash.keys]).each do |split|
         split.double_count = hash[split.id.to_s]
         split.save(validate: false)
       end

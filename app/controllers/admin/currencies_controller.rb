@@ -8,11 +8,11 @@ class Admin::CurrenciesController < Admin::BaseController
       @currencies = Currency.sorted.
         where(['UPPER("currencies"."from") LIKE UPPER(:q) OR
                 UPPER("currencies"."to") LIKE UPPER(:q)',
-                {:q => "%#{params[:query]}%"}]).
-        paginate(:page => params[:page], :per_page => 100)
+                {q: "%#{params[:query]}%"}]).
+        paginate(page: params[:page], per_page: 100)
     else
       @currencies = Currency.sorted.
-        paginate(:page => params[:page], :per_page => 100)
+        paginate(page: params[:page], per_page: 100)
     end
   end
 
@@ -35,6 +35,6 @@ class Admin::CurrenciesController < Admin::BaseController
   end
 
   def destroy
-    destroy!(:notice => "Currency was successfully destroyed") { admin_currencies_url }
+    destroy!(notice: "Currency was successfully destroyed") { admin_currencies_url }
   end
 end

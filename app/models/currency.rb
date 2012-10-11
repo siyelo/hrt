@@ -4,8 +4,8 @@ class Currency < ActiveRecord::Base
   attr_accessible :to, :from, :rate
 
   ### Validations
-  validates_uniqueness_of :to, :scope => :from
-  validates_uniqueness_of :from, :scope => :to
+  validates_uniqueness_of :to, scope: :from
+  validates_uniqueness_of :from, scope: :to
   validates_presence_of :from
   validates_presence_of :to
   validates_numericality_of :rate
@@ -14,7 +14,7 @@ class Currency < ActiveRecord::Base
   after_save :reload_currencies
 
   ### Named scopes
-  scope :sorted, {:order => 'updated_at DESC'}
+  scope :sorted, {order: 'updated_at DESC'}
 
   def conversion
     "#{from}_TO_#{to}"

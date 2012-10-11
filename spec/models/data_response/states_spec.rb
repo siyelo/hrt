@@ -53,7 +53,7 @@ describe DataResponse::States do
     before :each do
       request      = FactoryGirl.create :data_request
       organization = FactoryGirl.create(:organization)
-      @user = FactoryGirl.create :user, :organization => organization
+      @user = FactoryGirl.create :user, organization: organization
       @response    = organization.latest_response
     end
 
@@ -68,7 +68,7 @@ describe DataResponse::States do
     before :each do
       request      = FactoryGirl.create :data_request
       organization = FactoryGirl.create(:organization)
-      FactoryGirl.create :user, :organization => organization
+      FactoryGirl.create :user, organization: organization
       @response    = organization.latest_response
     end
 
@@ -79,13 +79,13 @@ describe DataResponse::States do
     context "first project is created" do
       it "transitions from unstarted to started when first project is created" do
         @response.state.should == 'unstarted'
-        project = FactoryGirl.create(:project, :data_response => @response)
+        project = FactoryGirl.create(:project, data_response: @response)
         @response.state.should == 'started'
       end
 
       it "does not transitions back to in progress if it's in rejected state" do
         @response.state = 'rejected'
-        FactoryGirl.create(:project, :data_response => @response)
+        FactoryGirl.create(:project, data_response: @response)
         @response.state.should == 'rejected'
       end
     end
@@ -93,16 +93,16 @@ describe DataResponse::States do
     context "first other cost without is created" do
       it "transitions from unstarted to started when first project is created" do
         @response.state.should == 'unstarted'
-        split = FactoryGirl.create(:implementer_split, :organization => FactoryGirl.create(:organization))
+        split = FactoryGirl.create(:implementer_split, organization: FactoryGirl.create(:organization))
         other_cost = FactoryGirl.create(:other_cost,
-                             :data_response => @response,
-                             :implementer_splits => [split])
+                             data_response: @response,
+                             implementer_splits: [split])
         @response.reload.state.should == 'started'
       end
 
       it "does not transitions back to in progress if it's in rejected state" do
         @response.state = 'rejected'
-        FactoryGirl.create(:other_cost, :data_response => @response)
+        FactoryGirl.create(:other_cost, data_response: @response)
         @response.state.should == 'rejected'
       end
     end
@@ -111,7 +111,7 @@ describe DataResponse::States do
       context "all projects are destroyed" do
         it "moves the response into unstarted state" do
           @response.state.should == 'unstarted'
-          project = FactoryGirl.create(:project, :data_response => @response)
+          project = FactoryGirl.create(:project, data_response: @response)
           @response.state.should == 'started'
           project.destroy
           @response.reload.state.should == 'unstarted'
@@ -122,8 +122,8 @@ describe DataResponse::States do
     context "other costs without project present" do
       it "moves the response into unstarted state" do
         @response.state.should == 'unstarted'
-        project = FactoryGirl.create(:project, :data_response => @response)
-        other_cost = FactoryGirl.create(:other_cost, :data_response => @response)
+        project = FactoryGirl.create(:project, data_response: @response)
+        other_cost = FactoryGirl.create(:other_cost, data_response: @response)
         @response.state.should == 'started'
         project.destroy
         @response.reload.state.should == 'started'
@@ -135,12 +135,12 @@ describe DataResponse::States do
     context "response is submitted and activity is deleted" do
       it "moves the response into started state" do
         @response.state.should == 'unstarted'
-        project = FactoryGirl.create(:project, :data_response => @response)
+        project = FactoryGirl.create(:project, data_response: @response)
         @response.state.should == 'started'
-        activity1 = FactoryGirl.create(:activity, :data_response => @response,
-                            :project => project)
-        activity2 = FactoryGirl.create(:activity, :data_response => @response,
-                            :project => project)
+        activity1 = FactoryGirl.create(:activity, data_response: @response,
+                            project: project)
+        activity2 = FactoryGirl.create(:activity, data_response: @response,
+                            project: project)
         @response.state = 'submitted'
         @response.save!
         @response.state.should == 'submitted'

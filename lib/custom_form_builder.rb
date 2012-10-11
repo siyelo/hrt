@@ -17,7 +17,7 @@ class CustomFormBuilder < ActionView::Helpers::FormBuilder
       define_method(method_name) do |field_name, *args|
         arguements = args.select{ |a| a.class == Hash }.inject({}){ |h, e| h.merge(e) }
         if arguements.present? && arguements[:hint]
-          hint = @template.content_tag(:p, arguements[:hint], :class => 'input-hints')
+          hint = @template.content_tag(:p, arguements[:hint], class: 'input-hints')
         else
           hint = ""
         end
@@ -34,7 +34,7 @@ class CustomFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def submit(*args)
-    @template.content_tag(:li, super, :class => 'commit')
+    @template.content_tag(:li, super, class: 'commit')
   end
 
   def error_messages(*args)
@@ -47,7 +47,7 @@ class CustomFormBuilder < ActionView::Helpers::FormBuilder
     if object.errors[field_name].present?
       @template.content_tag(:span,
                             [object.errors[field_name].flatten.first.sub(/^\^/, ''),
-                            :class => 'error_message'])
+                            class: 'error_message'])
     else
       ''
     end

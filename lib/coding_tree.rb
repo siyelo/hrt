@@ -87,24 +87,24 @@ class CodingTree
             sum_of_children = bucket[:amount]
           end
 
-          ca.update_attributes(:cached_amount => cached_amount,
-                               :sum_of_children => sum_of_children)
+          ca.update_attributes(cached_amount: cached_amount,
+                               sum_of_children: sum_of_children)
           descendants = true # tell parents that it has descendants
         else
           bucket = codings_sum(children, activity, max)
           cached_amount = sum_of_children = bucket[:amount]
 
           if bucket[:descendants]
-            CodeSplit.create!({:activity => activity, :code => code,
-              :spend => is_spend?(amount_type), :cached_amount => cached_amount,
-                :sum_of_children => sum_of_children}, without_protection: true)
+            CodeSplit.create!({activity: activity, code: code,
+              spend: is_spend?(amount_type), cached_amount: cached_amount,
+                sum_of_children: sum_of_children}, without_protection: true)
             descendants = true
           end
         end
         total += cached_amount
       end
 
-      { :amount => total, :descendants => descendants }
+      { amount: total, descendants: descendants }
     end
 
   private
@@ -127,7 +127,7 @@ class CodingTree
       codes.each do |code|
         code_assignment = @code_splits.detect{|ca| ca.code_id == code.id}
         if code_assignment
-          node = Tree.new({:ca => code_assignment, :code => code})
+          node = Tree.new({ca: code_assignment, code: code})
           root.children << node
           unless code_type_key == :location
             build_subtree(node, cached_children(code)) unless code.leaf?

@@ -16,14 +16,14 @@ class ExcelXML
 
   class ExcelXMLBuilder
     def build(target = "")
-      @xml = Builder::XmlMarkup.new(:indent => 2, :target => target)
+      @xml = Builder::XmlMarkup.new(indent: 2, target: target)
 
       # The default implementation turns non-ASCII characters into entities, which does not work for Excel XML.
       def @xml._escape(text)
         CGI.escapeHTML(text)
       end
 
-      @xml.instruct! :xml, :version => "1.0", :encoding => "UTF-8"
+      @xml.instruct! :xml, version: "1.0", encoding: "UTF-8"
       @xml.Workbook({
         'xmlns'      => "urn:schemas-microsoft-com:office:spreadsheet",
         'xmlns:o'    => "urn:schemas-microsoft-com:office:office",

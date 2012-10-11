@@ -32,18 +32,18 @@ describe User do
     end
 
     context "existing record in db" do
-      subject { FactoryGirl.create(:reporter, :organization => FactoryGirl.create(:organization) ) }
+      subject { FactoryGirl.create(:reporter, organization: FactoryGirl.create(:organization) ) }
       it { should validate_uniqueness_of(:email).case_insensitive }
     end
 
     it "cannot assign blank role" do
-      user = FactoryGirl.build(:reporter, :roles => [])
+      user = FactoryGirl.build(:reporter, roles: [])
       user.save
       user.errors[:roles].should include('is not included in the list')
     end
 
     it "cannot assign unexisting role" do
-      user = FactoryGirl.build(:reporter, :roles => ['admin123'])
+      user = FactoryGirl.build(:reporter, roles: ['admin123'])
       user.save
       user.errors[:roles].should include('is not included in the list')
     end
@@ -100,7 +100,7 @@ describe User do
 
     end
     it "does not send an invite if the user is not valid" do
-      @user = FactoryGirl.build(:reporter, :email => nil, :full_name => nil, :organization => nil)
+      @user = FactoryGirl.build(:reporter, email: nil, full_name: nil, organization: nil)
       @user.save_and_invite(@sysadmin).should be_nil
       User.all.count.should == 1
     end
@@ -114,9 +114,9 @@ describe User do
 
   describe "password validations" do
     before :each do
-      @user = User.new(:email => 'blah@blah.com', :full_name => 'blah',
-                       :password => "", :password_confirmation => "", :organization => FactoryGirl.create(:organization),
-                       :roles => ['reporter'])
+      @user = User.new(email: 'blah@blah.com', full_name: 'blah',
+                       password: "", password_confirmation: "", organization: FactoryGirl.create(:organization),
+                       roles: ['reporter'])
     end
 
     it "should reject empty password on registration" do
@@ -160,9 +160,9 @@ describe User do
 
   describe "passwords using save & invite API" do
     before :each do
-      @user = User.new(:email => 'blah@blah.com', :full_name => 'blah',
-                       :password => "", :password_confirmation => "", :organization => FactoryGirl.create(:organization),
-                       :roles => ['reporter'])
+      @user = User.new(email: 'blah@blah.com', full_name: 'blah',
+                       password: "", password_confirmation: "", organization: FactoryGirl.create(:organization),
+                       roles: ['reporter'])
       @user.save_and_invite(FactoryGirl.create :admin)
     end
 
@@ -193,58 +193,58 @@ describe User do
 
   describe "roles" do
     it "is sysadmin when has admin role" do
-      user = FactoryGirl.create(:user, :roles => ['admin'])
+      user = FactoryGirl.create(:user, roles: ['admin'])
       user.sysadmin?.should be_true
     end
 
     it "is reporter when has reporter role" do
-      user = FactoryGirl.create(:user, :roles => ['reporter'])
+      user = FactoryGirl.create(:user, roles: ['reporter'])
       user.reporter?.should be_true
     end
 
     it "is activity_manager when has activity_manager role" do
-      user = FactoryGirl.create(:user, :roles => ['activity_manager'])
+      user = FactoryGirl.create(:user, roles: ['activity_manager'])
       user.activity_manager?.should be_true
     end
 
     it "is admin when roles_mask = 1" do
-      user = FactoryGirl.create(:user, :roles => ['admin'])
+      user = FactoryGirl.create(:user, roles: ['admin'])
       user.roles.should == ['admin']
       user.roles_mask.should == 1
     end
 
     it "is reporter when roles_mask = 2" do
-      user = FactoryGirl.create(:user, :roles => ['reporter'])
+      user = FactoryGirl.create(:user, roles: ['reporter'])
       user.roles.should == ['reporter']
       user.roles_mask.should == 2
     end
 
     it "is admin and reporter when roles_mask = 3" do
-      user = FactoryGirl.create(:user, :roles => ['admin', 'reporter'])
+      user = FactoryGirl.create(:user, roles: ['admin', 'reporter'])
       user.roles.should == ['admin', 'reporter']
       user.roles_mask.should == 3
     end
 
     it "is activity_manager when roles_mask = 4" do
-      user = FactoryGirl.create(:user, :roles => ['activity_manager'])
+      user = FactoryGirl.create(:user, roles: ['activity_manager'])
       user.roles.should == ['activity_manager']
       user.roles_mask.should == 4
     end
 
     it "is admin and activity_manager when roles_mask = 5" do
-      user = FactoryGirl.create(:user, :roles => ['admin', 'activity_manager'])
+      user = FactoryGirl.create(:user, roles: ['admin', 'activity_manager'])
       user.roles.should == ['admin', 'activity_manager']
       user.roles_mask.should == 5
     end
 
     it "is reporter and activity_manager when roles_mask = 6" do
-      user = FactoryGirl.create(:user, :roles => ['reporter', 'activity_manager'])
+      user = FactoryGirl.create(:user, roles: ['reporter', 'activity_manager'])
       user.roles.should == ['reporter', 'activity_manager']
       user.roles_mask.should == 6
     end
 
     it "is admin, reporter and activity_manager when roles_mask = 7" do
-      user = FactoryGirl.create(:user, :roles => ['admin', 'reporter', 'activity_manager'])
+      user = FactoryGirl.create(:user, roles: ['admin', 'reporter', 'activity_manager'])
       user.roles.should == ['admin', 'reporter', 'activity_manager']
       user.roles_mask.should == 7
     end
@@ -270,7 +270,7 @@ describe User do
     it "removed organizations when role is changed from activity_manager to else" do
       org1 = FactoryGirl.create(:organization)
       org2 = FactoryGirl.create(:organization)
-      user = FactoryGirl.create(:activity_manager, :organizations => [org1, org2])
+      user = FactoryGirl.create(:activity_manager, organizations: [org1, org2])
       user.roles = ['reporter']
       user.save
       user.organizations.should be_empty

@@ -14,11 +14,11 @@ describe DashboardController do
       describe "#index" do
         it "renders doshboard" do
           organization = FactoryGirl.create(:organization)
-          FactoryGirl.create(:data_request, :organization => organization)
-          user = FactoryGirl.create(role, :organization => organization)
+          FactoryGirl.create(:data_request, organization: organization)
+          user = FactoryGirl.create(role, organization: organization)
           login(user)
 
-          dashboard = stub('dashboard', :template => role)
+          dashboard = stub('dashboard', template: role)
           Dashboard.stub(:new).and_return(dashboard)
 
           get :index

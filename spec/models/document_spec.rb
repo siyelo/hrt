@@ -26,9 +26,9 @@ describe Document do
 
   describe "Named Scopes" do
     before :each do
-      @public_document = FactoryGirl.create :document, :visibility => 'public'
-      @reporter_document = FactoryGirl.create :document, :visibility => 'reporters'
-      @sysadmin_document = FactoryGirl.create :document, :visibility => 'sysadmins'
+      @public_document = FactoryGirl.create :document, visibility: 'public'
+      @reporter_document = FactoryGirl.create :document, visibility: 'reporters'
+      @sysadmin_document = FactoryGirl.create :document, visibility: 'sysadmins'
     end
 
     it 'returns public and reporter visible documents for reporter scope' do

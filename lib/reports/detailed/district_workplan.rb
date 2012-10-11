@@ -8,15 +8,15 @@ class Reports::Detailed::DistrictWorkplan
     @district   = district
     @include_double_count = include_double_count
     @activities = ::Activity.find :all,
-      :select => 'DISTINCT activities.*, organizations.name AS org_name',
-      :include => [{:data_response => [:data_request, :organization]}, :project,
+      select: 'DISTINCT activities.*, organizations.name AS org_name',
+      include: [{data_response: [:data_request, :organization]}, :project,
                    :implementer_splits, :location_budget_splits,
                    :location_spend_splits],
-      :joins => [{:data_response => :organization}, :code_splits],
-      :conditions => ['code_splits.code_id = ?
+      joins: [{data_response: :organization}, :code_splits],
+      conditions: ['code_splits.code_id = ?
                       AND data_responses.data_request_id = ?',
                       district.id, request.id],
-      :order => 'organizations.name ASC'
+      order: 'organizations.name ASC'
     @builder = FileBuilder.new(filetype)
     @data_responses = @activities.map{ |a| a.data_response }
   end

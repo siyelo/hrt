@@ -7,10 +7,10 @@ class StaticPageController < ApplicationController
       redirect_to dashboard_path
     else
       @documents = Document.visible_to_public.latest_first.
-                            paginate :per_page => 5, :page => params[:page]
+                            paginate per_page: 5, page: params[:page]
 
       if request.xhr?
-        render :partial => 'static_page/documents'
+        render partial: 'static_page/documents'
       else
         render :index
       end

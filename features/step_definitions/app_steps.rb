@@ -20,18 +20,18 @@ end
 
 Given /^a reporter "([^"]*)" with email "([^"]*)" and password "([^"]*)"$/ do | name, email, password|
 @user = FactoryGirl.create(:reporter,
-                :full_name             => name,
-                :email                 => email,
-                :password              => password,
-                :password_confirmation => password)
+                full_name:             name,
+                email:                 email,
+                password:              password,
+                password_confirmation: password)
 end
 
 Given /^an activity manager "([^"]*)" with email "([^"]*)" and password "([^"]*)"$/ do | name, email, password|
 @user = FactoryGirl.create(:activity_manager,
-                :full_name             => name,
-                :email                 => email,
-                :password              => password,
-                :password_confirmation => password)
+                full_name:             name,
+                email:                 email,
+                password:              password,
+                password_confirmation: password)
 end
 
 Given /^I am signed in as "([^"]*)"$/ do |email|
@@ -71,31 +71,31 @@ Given /^I am signed in as a sysadmin$/ do
 end
 
 Given /^a reporter "([^"]*)" in organization "([^"]*)"$/ do |email, org_name|
-  @organization = FactoryGirl.create(:organization, :name => org_name)
+  @organization = FactoryGirl.create(:organization, name: org_name)
   @user = FactoryGirl.create(:reporter,
-                  :email => email || 'reporter@hrtapp.com',
-                  :password => 'password',
-                  :password_confirmation => 'password',
-                  :organization => @organization)
+                  email: email || 'reporter@hrtapp.com',
+                  password: 'password',
+                  password_confirmation: 'password',
+                  organization: @organization)
 end
 
 Given /^an activity manager "([^"]*)" in organization "([^"]*)"$/ do |email, org_name|
-  @organization = FactoryGirl.create(:organization, :name => org_name)
+  @organization = FactoryGirl.create(:organization, name: org_name)
   @user = FactoryGirl.create(:activity_manager,
-                  :email                 => email || 'activity_manager@hrtapp.com',
-                  :password              => 'password',
-                  :password_confirmation => 'password',
-                  :organization          => @organization)
+                  email:                 email || 'activity_manager@hrtapp.com',
+                  password:              'password',
+                  password_confirmation: 'password',
+                  organization:          @organization)
 
 end
 
 Given /^a sysadmin "([^"]*)" in organization "([^"]*)"$/ do |email, org_name|
-  @organization = FactoryGirl.create(:organization, :name => org_name)
+  @organization = FactoryGirl.create(:organization, name: org_name)
   @user = FactoryGirl.create(:admin,
-                  :email                 => email || 'sysadmin@hrtapp.com',
-                  :password              => 'password',
-                  :password_confirmation => 'password',
-                  :organization          => @organization)
+                  email:                 email || 'sysadmin@hrtapp.com',
+                  password:              'password',
+                  password_confirmation: 'password',
+                  organization:          @organization)
 
 end
 
@@ -155,8 +155,8 @@ end
 # band aid fix
 Given /^a data response to "([^"]*)" by "([^"]*)"$/ do |request, org|
   @response = FactoryGirl.create(:data_response,
-                      :data_request => DataRequest.find_by_title(request),
-                      :organization => Organization.find_by_name(org))
+                      data_request: DataRequest.find_by_title(request),
+                      organization: Organization.find_by_name(org))
 end
 
 Then /^wait a few moments$/ do
@@ -168,7 +168,7 @@ Then /^wait a moment$/ do
 end
 
 When /^I wait until "([^"]*)" is visible$/ do |selector|
-  page.has_css?("#{selector}", :visible => true)
+  page.has_css?("#{selector}", visible: true)
 end
 
 
@@ -398,14 +398,14 @@ Given /^#{capture_model} state is: "([^"]*)"$/ do |name, state|
 end
 
 When /^a 100% location split exists with activity: "([^"]*)", location: "([^"]*)", spend_percentage: (\d+), budget_percentage: (\d+)$/ do |act_name, loc_name, spend_pc, budget_pc|
-   loc = FactoryGirl.create :location, :name => loc_name
+   loc = FactoryGirl.create :location, name: loc_name
    activity = Activity.find_by_name act_name
-   FactoryGirl.create :location_spend_split, :code => loc,
-     :activity => activity, :percentage => spend_pc,
-     :cached_amount => activity.total_spend * (spend_pc.to_f/100)
-   FactoryGirl.create :location_budget_split, :code => loc,
-     :activity => activity, :percentage => budget_pc,
-     :cached_amount => activity.total_budget * (budget_pc.to_f/100)
+   FactoryGirl.create :location_spend_split, code: loc,
+     activity: activity, percentage: spend_pc,
+     cached_amount: activity.total_spend * (spend_pc.to_f/100)
+   FactoryGirl.create :location_budget_split, code: loc,
+     activity: activity, percentage: budget_pc,
+     cached_amount: activity.total_budget * (budget_pc.to_f/100)
 end
 
 Then /^I should see the title text "([^"]*)"$/ do |title|
@@ -413,14 +413,14 @@ Then /^I should see the title text "([^"]*)"$/ do |title|
 end
 
 When /^a 100% input split exists with activity: "([^"]*)", input: "([^"]*)", spend_percentage: (\d+), budget_percentage: (\d+)$/ do |act_name, input_name, spend_pc, budget_pc|
-   input = FactoryGirl.create :input, :name => input_name
+   input = FactoryGirl.create :input, name: input_name
    activity = Activity.find_by_name act_name
-   FactoryGirl.create :input_spend_split, :code => input,
-     :activity => activity, :percentage => spend_pc,
-     :cached_amount => activity.total_spend * (spend_pc.to_f/100)
-   FactoryGirl.create :input_budget_split, :code => input,
-     :activity => activity, :percentage => budget_pc,
-     :cached_amount => activity.total_budget * (budget_pc.to_f/100)
+   FactoryGirl.create :input_spend_split, code: input,
+     activity: activity, percentage: spend_pc,
+     cached_amount: activity.total_spend * (spend_pc.to_f/100)
+   FactoryGirl.create :input_budget_split, code: input,
+     activity: activity, percentage: budget_pc,
+     cached_amount: activity.total_budget * (budget_pc.to_f/100)
 end
 
 Then /^I should see the visitors header$/ do

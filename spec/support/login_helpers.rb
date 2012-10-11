@@ -13,7 +13,7 @@ def login_as_admin
   # User.any_instance.stubs(:current_response_is_latest?).returns(true)
   @data_request = FactoryGirl.create :data_request
   @admin_org = FactoryGirl.create :organization
-  @admin = FactoryGirl.create(:admin, :organization => @admin_org)
+  @admin = FactoryGirl.create(:admin, organization: @admin_org)
   sign_in @admin
 end
 

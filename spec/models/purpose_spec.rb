@@ -40,8 +40,8 @@ describe Purpose do
 
   describe "Nested set (Tree)" do
     it "can return root inputs" do
-      purpose1 = FactoryGirl.create(:purpose, :name => "purpose1")
-      purpose2 = FactoryGirl.create(:purpose, :name => "purpose2")
+      purpose1 = FactoryGirl.create(:purpose, name: "purpose1")
+      purpose2 = FactoryGirl.create(:purpose, name: "purpose2")
       purpose2.move_to_child_of(purpose1)
 
       roots = Purpose.roots
@@ -53,14 +53,14 @@ describe Purpose do
   describe "#deepest_nesting" do
     it "returns deepest nesting for 3 level" do
       # first level
-      purpose1 = FactoryGirl.create(:purpose, :name => 'purpose1')
+      purpose1 = FactoryGirl.create(:purpose, name: 'purpose1')
 
       # second level
-      purpose11 = FactoryGirl.create(:purpose, :name => 'purpose11')
+      purpose11 = FactoryGirl.create(:purpose, name: 'purpose11')
       purpose11.move_to_child_of(purpose1)
 
       # third level
-      purpose111 = FactoryGirl.create(:purpose, :name => 'purpose111')
+      purpose111 = FactoryGirl.create(:purpose, name: 'purpose111')
       purpose111.move_to_child_of(purpose11)
 
       Purpose.deepest_nesting.should == 3
@@ -70,10 +70,10 @@ describe Purpose do
   describe "#roots_with_level" do
     it "returns roots with level" do
       # first level
-      purpose1 = FactoryGirl.create(:purpose, :name => 'purpose1')
+      purpose1 = FactoryGirl.create(:purpose, name: 'purpose1')
 
       # second level
-      purpose11 = FactoryGirl.create(:purpose, :name => 'purpose11')
+      purpose11 = FactoryGirl.create(:purpose, name: 'purpose11')
       purpose11.move_to_child_of(purpose1)
 
       Purpose.roots_with_level.should == [[0, purpose1.id], [1, purpose11.id]]

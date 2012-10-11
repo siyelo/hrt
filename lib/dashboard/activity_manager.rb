@@ -13,7 +13,7 @@ class Dashboard::ActivityManager
 
   def all_count
     Activity.with_organization.count(:all,
-      :conditions =>  ["organization_id in (?) AND
+      conditions:  ["organization_id in (?) AND
                         data_responses.data_request_id = ?",
                         organization_ids, current_request])
   end
@@ -24,9 +24,9 @@ class Dashboard::ActivityManager
 
   def recent_responses
     current_request.data_responses.find(:all,
-      :conditions => ["state = ? AND organization_id in (?)",
+      conditions: ["state = ? AND organization_id in (?)",
                       'submitted', organization_ids],
-      :order => 'updated_at DESC', :limit => 3)
+      order: 'updated_at DESC', limit: 3)
   end
 
   def organizations

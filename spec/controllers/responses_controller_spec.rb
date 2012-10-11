@@ -31,7 +31,7 @@ describe ResponsesController do
 
       Notifier.should_not_receive(:response_submitted_notification)
 
-      put :submit, :id => 1
+      put :submit, id: 1
 
       response.should redirect_to(review_response_url(@data_response))
       flash[:notice].should == 'Successfully submitted. We will review your data and get back to you with any questions. Thank you.'
@@ -49,7 +49,7 @@ describe ResponsesController do
       Notifier.should_receive(:response_submitted_notification).
         with(@data_response).and_return(double("mailer", deliver: true))
 
-      put :submit, :id => 1
+      put :submit, id: 1
 
       response.should redirect_to(review_response_url(@data_response))
       flash[:notice].should == 'Successfully submitted. We will review your data and get back to you with any questions. Thank you.'

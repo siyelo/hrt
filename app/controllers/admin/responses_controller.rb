@@ -13,12 +13,12 @@ class Admin::ResponsesController < Admin::BaseController
     scope = scope_responses(params[:filter]).includes(:response_state_logs, :data_request)
     scope = scope.joins(:organization).
                   where(["UPPER(organizations.name) LIKE UPPER(:q)",
-                        {:q => "%#{params[:query]}%"}]) if params[:query]
+                        {q: "%#{params[:query]}%"}]) if params[:query]
 
-    @responses = scope.paginate(:page => params[:page], :per_page => 100,
-                                :joins => :organization,
-                                :include => :organization,
-                                :order => "UPPER(organizations.name), data_responses.id ASC")
+    @responses = scope.paginate(page: params[:page], per_page: 100,
+                                joins: :organization,
+                                include: :organization,
+                                order: "UPPER(organizations.name), data_responses.id ASC")
   end
 
   def new
@@ -32,7 +32,7 @@ class Admin::ResponsesController < Admin::BaseController
       redirect_to admin_responses_path
     else
       flash.now[:error] = "Sorry, we were unable to save that response"
-      render :action => 'new'
+      render action: 'new'
     end
   end
 

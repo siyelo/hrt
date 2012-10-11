@@ -7,7 +7,7 @@ describe CommentsController do
       @organization = FactoryGirl.create(:organization, name: "Org")
       @data_request = FactoryGirl.create(:data_request,
                                          organization: @organization)
-      @user = FactoryGirl.create(:reporter, :organization => @organization)
+      @user = FactoryGirl.create(:reporter, organization: @organization)
     end
 
     it "requires logged in user" do
@@ -25,7 +25,7 @@ describe CommentsController do
     end
 
     it "allows sysadmin to edit the comment" do
-      sysadmin = FactoryGirl.create(:sysadmin, :organization => @organization)
+      sysadmin = FactoryGirl.create(:sysadmin, organization: @organization)
       comment = FactoryGirl.create(:comment,
                    commentable: @organization.data_responses.first)
       login(sysadmin)
@@ -40,7 +40,7 @@ describe CommentsController do
       @organization = FactoryGirl.create(:organization, name: "Org")
       @data_request = FactoryGirl.create(:data_request,
                                          organization: @organization)
-      @user = FactoryGirl.create(:reporter, :organization => @organization)
+      @user = FactoryGirl.create(:reporter, organization: @organization)
     end
 
     it "prevents commenter from update the comment" do
@@ -55,7 +55,7 @@ describe CommentsController do
     end
 
     it "allows sysadmin to update the comment" do
-      sysadmin = FactoryGirl.create(:sysadmin, :organization => @organization)
+      sysadmin = FactoryGirl.create(:sysadmin, organization: @organization)
       comment = FactoryGirl.create(:comment,
                    commentable: @organization.data_responses.first)
       login(sysadmin)
@@ -72,7 +72,7 @@ describe CommentsController do
       @organization = FactoryGirl.create(:organization, name: "Org")
       @data_request = FactoryGirl.create(:data_request,
                                          organization: @organization)
-      @user = FactoryGirl.create(:reporter, :organization => @organization)
+      @user = FactoryGirl.create(:reporter, organization: @organization)
     end
 
     it "prevents commenter from deleting the comment" do
@@ -86,7 +86,7 @@ describe CommentsController do
     end
 
     it "allows sysadmin to update the comment" do
-      sysadmin = FactoryGirl.create(:sysadmin, :organization => @organization)
+      sysadmin = FactoryGirl.create(:sysadmin, organization: @organization)
       comment = FactoryGirl.create(:comment,
                    commentable: @organization.data_responses.first)
       login(sysadmin)

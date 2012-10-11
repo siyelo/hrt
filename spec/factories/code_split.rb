@@ -1,37 +1,37 @@
 FactoryGirl.define do
-  factory :code_split, :class => CodeSplit do |f|
+  factory :code_split, class: CodeSplit do |f|
     f.code                 { FactoryGirl.create :purpose }
     f.cached_amount        { 1000 }
     f.percentage           { 100 }
     f.sum_of_children      { 0 } # db default value - used in specs
   end
 
-  factory :location_budget_split, :parent => :code_split do |f|
+  factory :location_budget_split, parent: :code_split do |f|
     f.code         { FactoryGirl.create :location }
     f.spend        { false }
   end
 
-  factory :location_spend_split, :parent => :code_split do |f|
+  factory :location_spend_split, parent: :code_split do |f|
     f.code         { FactoryGirl.create :location }
     f.spend        { true }
   end
 
-  factory :input_budget_split, :parent => :code_split do |f|
+  factory :input_budget_split, parent: :code_split do |f|
     f.code         { FactoryGirl.create :input }
     f.spend        { false }
   end
 
-  factory :input_spend_split, :parent => :code_split do |f|
+  factory :input_spend_split, parent: :code_split do |f|
     f.code         { FactoryGirl.create :input }
     f.spend        { true }
   end
 
-  factory :purpose_budget_split, :parent => :code_split do |f|
+  factory :purpose_budget_split, parent: :code_split do |f|
     f.code         { FactoryGirl.create :purpose }
     f.spend        { false }
   end
 
-  factory :purpose_spend_split, :parent => :code_split do |f|
+  factory :purpose_spend_split, parent: :code_split do |f|
     f.code         { FactoryGirl.create :purpose }
     f.spend        { true }
   end

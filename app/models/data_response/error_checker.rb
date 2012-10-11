@@ -61,8 +61,8 @@ class DataResponse < ActiveRecord::Base
 
     def projects_have_activities?
       @projects_have_activities ||= activities.find(:first,
-                      :select => 'COUNT(DISTINCT(activities.project_id)) as total',
-                      :conditions => {:type => nil, :project_id => projects}
+                      select: 'COUNT(DISTINCT(activities.project_id)) as total',
+                      conditions: {type: nil, project_id: projects}
                      ).total.to_i == projects.length
     end
 
@@ -73,8 +73,8 @@ class DataResponse < ActiveRecord::Base
     def projects_have_other_costs?
       return @projects_have_other_costs if @projects_have_other_costs
       other_costs = activities.find(:first,
-                                    :select => 'COUNT(DISTINCT(activities.project_id)) as total',
-                                    :conditions => {:type => 'OtherCost', :project_id => projects}
+                                    select: 'COUNT(DISTINCT(activities.project_id)) as total',
+                                    conditions: {type: 'OtherCost', project_id: projects}
                                    ).total.to_i
       @projects_have_other_costs = other_costs > 0 && other_costs == projects.length
     end

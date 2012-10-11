@@ -5,12 +5,12 @@ describe Reports::Detailed::ProjectsExport do
     it "returns xls with blank cells for repeated project & activity" do
       basic_setup_implementer_split
       split = @split
-      split2 = FactoryGirl.create(:implementer_split, :activity => @activity,
-                       :organization => @organization)
-      other_cost = FactoryGirl.create(:other_cost, :name => 'other cost',
-                           :project => nil, :data_response => @response)
-      split3 = FactoryGirl.create(:implementer_split, :activity => other_cost,
-                       :organization => @organization)
+      split2 = FactoryGirl.create(:implementer_split, activity: @activity,
+                       organization: @organization)
+      other_cost = FactoryGirl.create(:other_cost, name: 'other cost',
+                           project: nil, data_response: @response)
+      split3 = FactoryGirl.create(:implementer_split, activity: other_cost,
+                       organization: @organization)
 
       @activity.save!
       @project.budget_type = "on"

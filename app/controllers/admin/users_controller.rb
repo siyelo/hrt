@@ -17,10 +17,10 @@ class Admin::UsersController < Admin::BaseController
       scope  = scope.where(["UPPER(email) LIKE UPPER(:q) OR
         UPPER(full_name) LIKE UPPER(:q) OR
         UPPER(organizations.name) LIKE UPPER(:q)",
-        {:q => "%#{params[:query]}%"}])
+        {q: "%#{params[:query]}%"}])
     end
-    @users = scope.paginate(:page => params[:page], :per_page => 100,
-      :order => "#{sort_column} #{sort_direction}")
+    @users = scope.paginate(page: params[:page], per_page: 100,
+      order: "#{sort_column} #{sort_direction}")
   end
 
   def create
@@ -30,7 +30,7 @@ class Admin::UsersController < Admin::BaseController
       redirect_to admin_users_path
     else
       flash.now[:error] = "Sorry, we were unable to save that user"
-      render :action => 'new'
+      render action: 'new'
     end
   end
 
@@ -45,7 +45,7 @@ class Admin::UsersController < Admin::BaseController
       end
       failure.html do
         flash[:error] = "Oops, we couldn't save your changes"
-        render :action => 'edit'
+        render action: 'edit'
       end
     end
   end
@@ -58,7 +58,7 @@ class Admin::UsersController < Admin::BaseController
   def create_from_file
     begin
       if params[:file].present?
-        doc = FileParser.parse(params[:file].open.read, 'csv', {:headers => true})
+        doc = FileParser.parse(params[:file].open.read, 'csv', {headers: true})
         if doc.headers.to_set == User::FILE_UPLOAD_COLUMNS.to_set
           saved, errors = User.create_from_file(doc)
           flash[:notice] = "Created #{saved} of #{saved + errors} users successfully"

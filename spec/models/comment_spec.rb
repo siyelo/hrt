@@ -26,8 +26,8 @@ describe Comment do
       request       = FactoryGirl.create :data_request
       organization1 = FactoryGirl.create :organization
       organization2 = FactoryGirl.create :organization
-      FactoryGirl.create :user, :organization => organization1
-      FactoryGirl.create :user, :organization => organization2
+      FactoryGirl.create :user, organization: organization1
+      FactoryGirl.create :user, organization: organization2
       response1     = organization1.latest_response
       response2     = organization2.latest_response
 

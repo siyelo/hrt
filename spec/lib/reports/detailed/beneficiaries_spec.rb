@@ -9,35 +9,35 @@ describe Reports::Detailed::Beneficiaries do
   [:budget, :spend].each do |amount_type|
     context "#{amount_type}" do
       before :each do
-        @donor1        = FactoryGirl.create(:organization, :name => "donor1")
-        @donor2        = FactoryGirl.create(:organization, :name => "donor2")
-        @organization1 = FactoryGirl.create(:organization, :name => "organization1",
-                                 :implementer_type => "Implementer")
-        @request       = FactoryGirl.create(:data_request, :organization => @organization1)
-        FactoryGirl.create :user, :organization => @organization1
+        @donor1        = FactoryGirl.create(:organization, name: "donor1")
+        @donor2        = FactoryGirl.create(:organization, name: "donor2")
+        @organization1 = FactoryGirl.create(:organization, name: "organization1",
+                                 implementer_type: "Implementer")
+        @request       = FactoryGirl.create(:data_request, organization: @organization1)
+        FactoryGirl.create :user, organization: @organization1
         @response1     = @organization1.latest_response
-        in_flow1       = FactoryGirl.build(:funding_flow, :from => @donor1,
+        in_flow1       = FactoryGirl.build(:funding_flow, from: @donor1,
                                        amount_type => 60)
-        in_flow2       = FactoryGirl.build(:funding_flow, :from => @donor2,
+        in_flow2       = FactoryGirl.build(:funding_flow, from: @donor2,
                                        amount_type => 40)
         in_flows       = [in_flow1, in_flow2]
-        @project1      = FactoryGirl.create(:project, :data_response => @response1,
-                                 :name => 'project1', :budget_type => 'on',
-                                 :in_flows => in_flows)
+        @project1      = FactoryGirl.create(:project, data_response: @response1,
+                                 name: 'project1', budget_type: 'on',
+                                 in_flows: in_flows)
         impl_splits   = []
-        organization2 = FactoryGirl.create(:organization, :name => 'organization2')
+        organization2 = FactoryGirl.create(:organization, name: 'organization2')
         impl_splits << FactoryGirl.create(:implementer_split,
-                               :organization => @organization1, amount_type => 50)
+                               organization: @organization1, amount_type => 50)
         impl_splits << FactoryGirl.create(:implementer_split,
-                               :organization => organization2, amount_type => 50)
+                               organization: organization2, amount_type => 50)
 
-        @activity1 = FactoryGirl.create(:activity, :project => @project1,
-                             :name => 'activity1',
-                             :data_response => @response1,
-                             :implementer_splits => impl_splits)
+        @activity1 = FactoryGirl.create(:activity, project: @project1,
+                             name: 'activity1',
+                             data_response: @response1,
+                             implementer_splits: impl_splits)
 
-        beneficiary1 = FactoryGirl.create(:beneficiary, :name => 'beneficiary1')
-        beneficiary2 = FactoryGirl.create(:beneficiary, :name => 'beneficiary2')
+        beneficiary1 = FactoryGirl.create(:beneficiary, name: 'beneficiary1')
+        beneficiary2 = FactoryGirl.create(:beneficiary, name: 'beneficiary2')
         @activity1.beneficiaries << [beneficiary1, beneficiary2]
         @response1.state = 'accepted'; @response1.save!
       end

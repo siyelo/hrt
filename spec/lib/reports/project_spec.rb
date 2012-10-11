@@ -1,16 +1,16 @@
 require 'spec_helper'
 
 describe Reports::Project do
-  let(:activity) { mock :activity, :name => 'activity', :total_spend => 5, :total_budget => 10 }
-  let(:activity1) { mock :activity, :name => 'activity1', :total_spend => 10, :total_budget => 5 }
+  let(:activity) { mock :activity, name: 'activity', total_spend: 5, total_budget: 10 }
+  let(:activity1) { mock :activity, name: 'activity1', total_spend: 10, total_budget: 5 }
   let(:activities) { [activity, activity1] }
-  let(:project) { mock :project, :activities => activities,
-    :total_spend => 10, :total_budget => 20, :name => 'Project1', :currency => 'USD' }
+  let(:project) { mock :project, activities: activities,
+    total_spend: 10, total_budget: 20, name: 'Project1', currency: 'USD' }
   let(:report) { Reports::Project.new(project) }
 
   it 'returns all activities and other costs for current Project sorted by name' do
-    othercost = mock :othercost, :name => 'aa_othercost', :total_spend => 5, :total_budget => 10
-    othercost1 = mock :othercost, :name => 'zz_othercost', :total_spend => 5, :total_budget => 10
+    othercost = mock :othercost, name: 'aa_othercost', total_spend: 5, total_budget: 10
+    othercost1 = mock :othercost, name: 'zz_othercost', total_spend: 5, total_budget: 10
     othercosts = [othercost, othercost1]
     project.stub_chain(:activities, :sorted).and_return othercosts
     report.collection.should == othercosts
@@ -43,14 +43,14 @@ describe Reports::Project do
   end
 
   it "numbers duplicates" do
-    activity2 = mock :activity, :name => 'activity', :total_spend => 6, :total_budget => 10
+    activity2 = mock :activity, name: 'activity', total_spend: 6, total_budget: 10
     activities2 = [activity, activity1, activity2]
     project.stub_chain(:activities, :sorted).and_return activities2
     report.collection.map(&:name).should == ["activity", "activity 2", "activity1"]
   end
 
   it "does not combines activities with the same name" do
-    activity2 = mock :activity, :name => 'activity', :total_spend => 6, :total_budget => 10
+    activity2 = mock :activity, name: 'activity', total_spend: 6, total_budget: 10
     activities2 = [activity, activity1, activity2]
     project.stub_chain(:activities, :sorted).and_return activities2
     JSON.parse(report.budget_colours).should ==

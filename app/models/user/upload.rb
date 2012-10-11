@@ -13,7 +13,7 @@ module User::Upload
       doc.each do |row|
         attributes = row.to_hash
         organization = Organization.find_by_name(attributes.delete('organization_name'))
-        attributes.merge!(:organization_id => organization.id) if organization
+        attributes.merge!(organization_id: organization.id) if organization
         user = User.new(attributes)
         user.save ? (saved += 1) : (errors += 1)
       end

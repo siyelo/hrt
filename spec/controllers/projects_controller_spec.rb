@@ -5,9 +5,9 @@ include ControllerStubs
 describe ProjectsController do
   describe "as a reporter" do
     before :each do
-      @organization = FactoryGirl.create :organization, :name => "Reporter Org"
-      @data_request = FactoryGirl.create :data_request, :organization => @organization
-      @user = FactoryGirl.create(:reporter, :organization => @organization)
+      @organization = FactoryGirl.create :organization, name: "Reporter Org"
+      @data_request = FactoryGirl.create :data_request, organization: @organization
+      @user = FactoryGirl.create(:reporter, organization: @organization)
       login @user
     end
 
@@ -16,63 +16,63 @@ describe ProjectsController do
       controller.stub(:current_response).and_return(mock :response, state: "submitted")
       controller.should_not_receive(:create)
       post :create,
-        :project => {:name => "new project", :description => "new description",
-                     :start_date => "2010-01-01", :end_date => "2010-12-31",
-                     :budget_type => "on", :currency => "USD",
-                     :in_flows_attributes => { "0" =>
-                                               {:organization_id_from => @organization.id,
-                                                :budget => 10, :spend => 20}}}
+        project: {name: "new project", description: "new description",
+                     start_date: "2010-01-01", end_date: "2010-12-31",
+                     budget_type: "on", currency: "USD",
+                     in_flows_attributes: { "0" =>
+                                               {organization_id_from: @organization.id,
+                                                budget: 10, spend: 20}}}
       flash[:error].should == "Your entry has already been submitted. If you wish to further edit your entry, please contact a System Administrator"
       response.should redirect_to(request.env['HTTP_REFERER'])
     end
 
     it "update a project when the data_response is accepted" do
       request.env['HTTP_REFERER'] = projects_url
-      @project = FactoryGirl.create(:project, :data_response => @organization.latest_response)
+      @project = FactoryGirl.create(:project, data_response: @organization.latest_response)
       controller.stub(:current_response).and_return(mock :response, state: "accepted")
       controller.should_not_receive(:update)
-      put :update, :id => @project.id
+      put :update, id: @project.id
       flash[:error].should == "Your entry has already been submitted. If you wish to further edit your entry, please contact a System Administrator"
       response.should redirect_to(request.env['HTTP_REFERER'])
     end
 
     it "destroy a project when the data_response is accepted" do
       request.env['HTTP_REFERER'] = projects_url
-      @project = FactoryGirl.create(:project, :data_response => @organization.latest_response)
+      @project = FactoryGirl.create(:project, data_response: @organization.latest_response)
       controller.stub(:current_response).and_return(mock :response, state: "submitted")
       controller.should_not_receive(:destroy)
-      delete :destroy, :id => @project.id
+      delete :destroy, id: @project.id
       flash[:error].should == "Your entry has already been submitted. If you wish to further edit your entry, please contact a System Administrator"
       response.should redirect_to(request.env['HTTP_REFERER'])
     end
 
     it "redirects to the projects index after create" do
-      request        = FactoryGirl.create(:data_request, :organization => @organization)
+      request        = FactoryGirl.create(:data_request, organization: @organization)
       @data_request  = request
       @data_response = @organization.latest_response
       post :create,
-        :project => {:name => "new project", :description => "new description",
-                     :start_date => "2010-01-01", :end_date => "2010-12-31", :budget_type => "on",
-                     :currency => "USD",
-                     :in_flows_attributes => { "0" => {:organization_id_from => @organization.id,
-                                                       :budget => 10, :spend => 20}}}
+        project: {name: "new project", description: "new description",
+                     start_date: "2010-01-01", end_date: "2010-12-31", budget_type: "on",
+                     currency: "USD",
+                     in_flows_attributes: { "0" => {organization_id_from: @organization.id,
+                                                       budget: 10, spend: 20}}}
       response.should redirect_to projects_path
     end
 
     describe "nested funder management" do
       before :each do
-        request      = FactoryGirl.create(:data_request, :organization => @organization)
+        request      = FactoryGirl.create(:data_request, organization: @organization)
         @data_request = request
         @data_response     = @organization.latest_response
       end
 
       it "should create a new in-flow (eg. self implementer)" do
         post :create,
-          :project => {:name => "new project", :description => "new description",
-                       :start_date => "2010-01-01", :end_date => "2010-12-31", :budget_type => "on",
-                       :currency => "USD",
-                       :in_flows_attributes => { "0" => {:organization_id_from => @organization.id,
-                                                         :budget => 10, :spend => 20}}}
+          project: {name: "new project", description: "new description",
+                       start_date: "2010-01-01", end_date: "2010-12-31", budget_type: "on",
+                       currency: "USD",
+                       in_flows_attributes: { "0" => {organization_id_from: @organization.id,
+                                                         budget: 10, spend: 20}}}
         project = Project.find_by_name('new project')
         project.should_not be_nil
         project.in_flows.should have(1).funder
@@ -81,11 +81,11 @@ describe ProjectsController do
 
       it "should create a new from-org when new name given in in-flows" do
         post :create,
-          :project => {:name => "new project", :description => "new description",
-                       :start_date => "2010-01-01", :end_date => "2010-12-31", :budget_type => "on",
-                       :currency => "USD",
-                       :in_flows_attributes => { "0" => {:organization_id_from => "a new org plox k thx",
-                                                         :budget => 10, :spend => 20}}}
+          project: {name: "new project", description: "new description",
+                       start_date: "2010-01-01", end_date: "2010-12-31", budget_type: "on",
+                       currency: "USD",
+                       in_flows_attributes: { "0" => {organization_id_from: "a new org plox k thx",
+                                                         budget: 10, spend: 20}}}
         project = Project.find_by_name('new project')
         project.should_not be_nil
         project.in_flows.should have(1).funder
@@ -113,11 +113,11 @@ describe ProjectsController do
 
   describe "as a activity_manager" do
     before :each do
-      @organization = FactoryGirl.create :organization, :name => "Reporter Org"
-      @user = FactoryGirl.create(:reporter, :organization => @organization)
+      @organization = FactoryGirl.create :organization, name: "Reporter Org"
+      @user = FactoryGirl.create(:reporter, organization: @organization)
       @organization = @user.organization
       login @user
-      @data_request = FactoryGirl.create(:data_request, :organization => @organization)
+      @data_request = FactoryGirl.create(:data_request, organization: @organization)
       @data_response = @organization.latest_response
     end
 
@@ -134,10 +134,10 @@ describe ProjectsController do
     context "Activity Manager" do
       before :each do
         @organization = FactoryGirl.create :organization
-        @data_request = FactoryGirl.create :data_request, :organization => @organization
-        @user = FactoryGirl.create :activity_manager, :organization => @organization
+        @data_request = FactoryGirl.create :data_request, organization: @organization
+        @user = FactoryGirl.create :activity_manager, organization: @organization
         @data_response = @organization.latest_response
-        @project = FactoryGirl.create(:project, :data_response => @data_response)
+        @project = FactoryGirl.create(:project, data_response: @data_response)
         login @user
         request.env['HTTP_REFERER'] = projects_url
       end
@@ -151,14 +151,14 @@ describe ProjectsController do
 
       it "disallows an activity manager to update an project" do
         controller.should_not_receive(:update)
-        put :update, :id => @project.id
+        put :update, id: @project.id
         flash[:error].should == "You do not have permission to edit this resource"
         response.should redirect_to(request.env['HTTP_REFERER'])
       end
 
       it "allows an activity manager to destroy an project" do
         controller.should_not_receive(:destroy)
-        delete :destroy, :id => @project.id
+        delete :destroy, id: @project.id
         flash[:error].should == "You do not have permission to edit this resource"
         response.should redirect_to(request.env['HTTP_REFERER'])
       end
@@ -168,10 +168,10 @@ describe ProjectsController do
       before :each do
         @data_request = FactoryGirl.create :data_request
         @organization = FactoryGirl.create :organization
-        @user = FactoryGirl.create :user, :roles => ['reporter', 'activity_manager'],
-          :organization => @organization
+        @user = FactoryGirl.create :user, roles: ['reporter', 'activity_manager'],
+          organization: @organization
         @data_response = @organization.latest_response
-        @project = FactoryGirl.create(:project, :data_response => @data_response)
+        @project = FactoryGirl.create(:project, data_response: @data_response)
       end
 
 
@@ -179,8 +179,8 @@ describe ProjectsController do
         login @user
 
         session[:return_to] = edit_project_path(@project)
-        put :update, :id => @project.id,
-          :project => { :description => "thedesc" }
+        put :update, id: @project.id,
+          project: { description: "thedesc" }
 
         flash[:error].should_not == "You do not have permission to edit this project"
         flash[:notice].should == "Project successfully updated"
@@ -196,7 +196,7 @@ describe ProjectsController do
         login @user
         session[:return_to] = edit_project_url(@project)
         controller.should_not_receive(:update)
-        put :update, :id => @project.id, :response_id => @data_response.id
+        put :update, id: @project.id, response_id: @data_response.id
         response.should redirect_to(request.env['HTTP_REFERER'])
       end
     end
@@ -204,20 +204,20 @@ describe ProjectsController do
     context "who are sysadmins and activity managers" do
       before :each do
         @organization = FactoryGirl.create :organization
-        @data_request = FactoryGirl.create :data_request, :organization => @organization
-        @user = FactoryGirl.create :user, :roles => ['admin', 'activity_manager'],
-          :organization => @organization
+        @data_request = FactoryGirl.create :data_request, organization: @organization
+        @user = FactoryGirl.create :user, roles: ['admin', 'activity_manager'],
+          organization: @organization
         @data_response = @organization.latest_response
-        @project = FactoryGirl.create(:project, :data_response => @data_response)
+        @project = FactoryGirl.create(:project, data_response: @data_response)
         login @user
       end
 
       it "allows user to create project" do
         session[:return_to] = new_project_url
         post :create,
-          :project => { :name => "new project", :budget_type => "on",
-                        :description => "description", :start_date => "09-12-2012",
-                        :end_date => "09-12-2013", :currency => "USD",
+          project: { name: "new project", budget_type: "on",
+                        description: "description", start_date: "09-12-2012",
+                        end_date: "09-12-2013", currency: "USD",
                         "in_flows_attributes"=>{"0"=>{
                           "organization_id_from"=>"#{@organization.id}",
                           "spend"=>"120.0", "budget"=>"130.0"}}
@@ -229,8 +229,8 @@ describe ProjectsController do
 
       it "allows user to edit the project" do
         session[:return_to] = edit_project_url(@project)
-        put :update, :id => @project.id,
-          :project => {:description => "thedesc"}
+        put :update, id: @project.id,
+          project: {description: "thedesc"}
 
         flash[:error].should_not == "You do not have permission to edit this project"
         flash[:notice].should == "Project successfully updated"

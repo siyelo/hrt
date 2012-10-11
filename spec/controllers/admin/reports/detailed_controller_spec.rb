@@ -11,7 +11,7 @@ describe Admin::Reports::DetailedController do
   describe "#mark_double_counts" do
     context "file is blank" do
       it "sets flash error" do
-        put :mark_double_counts, :file => nil
+        put :mark_double_counts, file: nil
         flash[:error].should == "Please select a file to upload"
       end
     end
@@ -62,11 +62,11 @@ describe Admin::Reports::DetailedController do
 
   describe "#generate" do
     it "generates report without delay" do
-      report = FactoryGirl.create(:report, :key => 'activity_overview',
-                                  :data_request => @data_request)
+      report = FactoryGirl.create(:report, key: 'activity_overview',
+                                  data_request: @data_request)
       Report.stub(:find_or_initialize_by_key_and_data_request_id).and_return(report)
 
-      get :generate, :id => 'activity_overview'
+      get :generate, id: 'activity_overview'
       response.should be_redirect
       flash[:notice].should == "We are generating your report and will send you an email (at #{@admin.email}) when it is ready."
 

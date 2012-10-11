@@ -10,7 +10,7 @@ describe Admin::OrganizationsController do
       # login as admin creates 1 NR and 1 Reporting org
       request1 = FactoryGirl.create(:data_request) # +1 NR
       organization = FactoryGirl.create(:organization)
-      FactoryGirl.create :user, :organization => organization #+1 R
+      FactoryGirl.create :user, organization: organization #+1 R
       FactoryGirl.create :organization # +1 NR
     end
 
@@ -20,17 +20,17 @@ describe Admin::OrganizationsController do
     end
 
     it "ignores bad filters " do
-      get :index, :filter => 'blargh'
+      get :index, filter: 'blargh'
       assigns(:organizations).size.should == 2
     end
 
     it "filters by non-reporting" do
-      get :index, :filter => "Non-Reporting"
+      get :index, filter: "Non-Reporting"
       assigns(:organizations).size.should == 3
     end
 
     it "filters by all" do
-      get :index, :filter => "All"
+      get :index, filter: "All"
       assigns(:organizations).size.should == 5
     end
   end
@@ -38,7 +38,7 @@ describe Admin::OrganizationsController do
   it "#show(s)" do
     organization = FactoryGirl.create(:organization)
     organization2 = FactoryGirl.create(:organization)
-    get :show, :id => organization.id, :duplicate_id => organization2.id
+    get :show, id: organization.id, duplicate_id: organization2.id
     assigns(:target).should == organization
     assigns(:duplicate).should == organization2
   end
@@ -51,16 +51,16 @@ describe Admin::OrganizationsController do
 
     it "sets flash notice" do
       @organization.should_receive(:destroy).and_return(true)
-      delete :destroy, :id => @organization.id
+      delete :destroy, id: @organization.id
       flash[:notice].should == "Organization was successfully destroyed."
       response.should redirect_to(admin_organizations_url)
     end
 
     it "sets flash errror" do
       @organization.should_receive(:destroy).and_return(false)
-      delete :destroy, :id => @organization.id
-      flash[:error].should == "You cannot delete an organization with users or external reference data (i.e. funders/implementers)."
-      response.should redirect_to(edit_admin_organization_url(@organization))
+      delete :destroy, id: @organization.id
+      flash[:error].should == "You cannot delete an organization that has (external) data referencing it."
+      response.should redirect_to(admin_organizations_url)
     end
   end
 
@@ -95,7 +95,7 @@ describe Admin::OrganizationsController do
 
     context "ids are the same " do
       it "redirects to the duplicate_admin_organizations_path" do
-        put :remove_duplicate, :duplicate_organization_id => 1, :target_organization_id => 1
+        put :remove_duplicate, duplicate_organization_id: 1, target_organization_id: 1
         response.should redirect_to(duplicate_admin_organizations_path)
         flash[:error].should == "Same organizations for duplicate and target selected."
       end
@@ -124,15 +124,15 @@ describe Admin::OrganizationsController do
       end
 
       it "redirects to the duplicate_admin_organizations_path" do
-        put :remove_duplicate, :duplicate_organization_id => dupe.id,
-          :target_organization_id => target.id
+        put :remove_duplicate, duplicate_organization_id: dupe.id,
+          target_organization_id: target.id
         response.should redirect_to(duplicate_admin_organizations_path)
         flash[:notice].should == "Organizations successfully merged."
       end
 
       it "responds OK (js)" do
-        put :remove_duplicate, :format => 'js', :duplicate_organization_id => dupe.id,
-          :target_organization_id => target.id
+        put :remove_duplicate, format: 'js', duplicate_organization_id: dupe.id,
+          target_organization_id: target.id
         response.should render_template('remove_duplicate_notice')
         response.should_not be_redirect
         response.status.should == 200

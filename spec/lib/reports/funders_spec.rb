@@ -1,23 +1,23 @@
 require 'spec_helper'
 
 describe Reports::Funders do
-  let(:organization1) { FactoryGirl.create(:organization, :name => 'organization1') }
-  let(:organization2) { FactoryGirl.create(:organization, :name => 'organization2') }
+  let(:organization1) { FactoryGirl.create(:organization, name: 'organization1') }
+  let(:organization2) { FactoryGirl.create(:organization, name: 'organization2') }
 
   before :each do
-    reporter     = FactoryGirl.create(:reporter, :organization => organization1)
-    @data_request  = FactoryGirl.create(:data_request, :organization => organization1)
+    reporter     = FactoryGirl.create(:reporter, organization: organization1)
+    @data_request  = FactoryGirl.create(:data_request, organization: organization1)
     @data_response = organization1.latest_response
-    @in_flow1     = FactoryGirl.build(:funding_flow, :from => organization1,
-                      :budget => 200, :spend => 400)
-    @in_flow2     = FactoryGirl.build(:funding_flow, :from => organization2,
-                      :budget => 100, :spend => 200)
-    @project1     = FactoryGirl.create(:project, :name => 'project1',
-                            :data_response => @data_response,
-                            :in_flows => [@in_flow1])
-    @project2     = FactoryGirl.create(:project, :name => 'project2', #:currency => 'USD',
-                            :data_response => @data_response,
-                            :in_flows => [@in_flow2])
+    @in_flow1     = FactoryGirl.build(:funding_flow, from: organization1,
+                      budget: 200, spend: 400)
+    @in_flow2     = FactoryGirl.build(:funding_flow, from: organization2,
+                      budget: 100, spend: 200)
+    @project1     = FactoryGirl.create(:project, name: 'project1',
+                            data_response: @data_response,
+                            in_flows: [@in_flow1])
+    @project2     = FactoryGirl.create(:project, name: 'project2', #:currency => 'USD',
+                            data_response: @data_response,
+                            in_flows: [@in_flow2])
   end
 
   it "ignores double counts" do

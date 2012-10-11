@@ -38,8 +38,8 @@ class Report < ActiveRecord::Base
 
   ### Validations
   validates_presence_of :key, :data_request_id
-  validates_uniqueness_of :key, :scope => :data_request_id
-  validates_inclusion_of :key, :in => REPORTS
+  validates_uniqueness_of :key, scope: :data_request_id
+  validates_inclusion_of :key, in: REPORTS
 
   def private_url
     if private_url?

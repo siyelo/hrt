@@ -73,7 +73,7 @@ class ApplicationController < ActionController::Base
     def paginate_splits(outlay)
       @split_errors = outlay.implementer_splits.select{|is| !is.errors.empty?} unless outlay.errors.empty?
       unless @split_errors
-        @splits = outlay.implementer_splits.sorted.paginate(:per_page => 50, :page => params[:page]) || outlay.implementer_splits
+        @splits = outlay.implementer_splits.sorted.paginate(per_page: 50, page: params[:page]) || outlay.implementer_splits
       end
     end
 

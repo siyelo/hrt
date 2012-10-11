@@ -1,14 +1,14 @@
 require 'spec_helper'
 
 describe Reports::Activity do
-  let(:activity) { mock :activity, :name => 'activity',
-                   :total_spend => 10, :total_budget => 20, :currency => "USD" }
+  let(:activity) { mock :activity, name: 'activity',
+                   total_spend: 10, total_budget: 20, currency: "USD" }
   let(:implementer_split) { mock :implementer_split,
-                            :organization_name => 'aa_implementer',
-                            :spend => 5, :budget => 10 }
+                            organization_name: 'aa_implementer',
+                            spend: 5, budget: 10 }
   let(:implementer_split2) { mock :implementer_split,
-                            :organization_name => 'zz_implementer',
-                            :spend => 5, :budget => 10 }
+                            organization_name: 'zz_implementer',
+                            spend: 5, budget: 10 }
   let(:implementer_splits) { [implementer_split, implementer_split2] }
   let(:report) { Reports::Activity.new(activity) }
 
@@ -36,14 +36,14 @@ describe Reports::Activity do
   end
 
   it "should have expenditure pie" do
-    Charts::ImplementerSplits::Spend.stub(:new).and_return(mock(:pie, :google_pie => ""))
+    Charts::ImplementerSplits::Spend.stub(:new).and_return(mock(:pie, google_pie: ""))
     Charts::ImplementerSplits::Spend.should_receive(:new).once.with(implementer_splits)
     report.should_receive(:collection).once.and_return implementer_splits
     report.expenditure_chart
   end
 
   it "should have budget pie" do
-    Charts::ImplementerSplits::Budget.stub(:new).and_return(mock(:pie, :google_pie => ""))
+    Charts::ImplementerSplits::Budget.stub(:new).and_return(mock(:pie, google_pie: ""))
     Charts::ImplementerSplits::Budget.should_receive(:new).once.with(implementer_splits)
     report.should_receive(:collection).once.and_return implementer_splits
     report.budget_chart

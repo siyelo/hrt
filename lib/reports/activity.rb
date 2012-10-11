@@ -5,7 +5,7 @@ module Reports
   class Activity < Reports::Base
     def collection
       @collection ||= mark_duplicates(@resource.implementer_splits.sorted.
-                                      find(:all, :include => :organization))
+                                      find(:all, include: :organization))
     end
 
     def expenditure_chart

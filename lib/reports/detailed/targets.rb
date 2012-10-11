@@ -9,13 +9,13 @@ class Reports::Detailed::Targets
     @is_budget          = is_budget?(amount_type)
     @amount_type        = amount_type
     @implementer_splits = ImplementerSplit.find :all,
-      :joins => { :activity => :data_response },
-      :order => "implementer_splits.id ASC",
-      :conditions => ['data_responses.data_request_id = ? AND
+      joins: { activity: :data_response },
+      order: "implementer_splits.id ASC",
+      conditions: ['data_responses.data_request_id = ? AND
                        data_responses.state = ?', request.id, 'accepted'],
-      :include => [{ :activity => [{ :project => { :in_flows => :from } },
-        { :data_response => :organization }, :targets, :implementer_splits ]},
-        { :organization => :data_responses }]
+      include: [{ activity: [{ project: { in_flows: :from } },
+        { data_response: :organization }, :targets, :implementer_splits ]},
+        { organization: :data_responses }]
     @builder = FileBuilder.new(filetype)
   end
 
@@ -79,7 +79,7 @@ class Reports::Detailed::Targets
     base_row << implementer_split.organization.try(:implementer_type)
 
     # fake target if none
-    targets = activity.targets.presence || [Target.new(:description => 'n/a')]
+    targets = activity.targets.presence || [Target.new(description: 'n/a')]
     targets.each do |target|
       row = base_row.dup
       amount_by_ratio = split_amount * (1.0 / targets.length)

@@ -11,12 +11,12 @@ describe Reports::Detailed::FundingSource do
       @request = FactoryGirl.create :data_request
       @donor = FactoryGirl.create(:organization)
       @organization = FactoryGirl.create(:organization)
-      FactoryGirl.create :user, :organization => @organization
+      FactoryGirl.create :user, organization: @organization
       @response     = @organization.latest_response
       @project      = FactoryGirl.create(:project,
-                              :data_response => @response)
-      @project.in_flows = [FactoryGirl.create(:funding_flow, :project => @project,
-                                   :from => @donor)]
+                              data_response: @response)
+      @project.in_flows = [FactoryGirl.create(:funding_flow, project: @project,
+                                   from: @donor)]
       @response.state = 'accepted'; @response.save
     end
 
@@ -36,18 +36,18 @@ describe Reports::Detailed::FundingSource do
 
     context "multiflow reports" do
       before :each do
-        @donor1 = FactoryGirl.create(:organization, :name => "dony")
-        @organization1 = FactoryGirl.create(:organization, :name => "orgy")
-        FactoryGirl.create :user, :organization => @organization1
+        @donor1 = FactoryGirl.create(:organization, name: "dony")
+        @organization1 = FactoryGirl.create(:organization, name: "orgy")
+        FactoryGirl.create :user, organization: @organization1
         @response1     = @organization1.latest_response
         @response1.state = 'accepted'; @response1.save
-        @project1      = FactoryGirl.create(:project, :data_response => @response1, :name => "CoolProject")
-        @project1.in_flows = [FactoryGirl.create(:funding_flow, :project => @project1,
-                                      :from => @donor1, :spend => 99, :budget => 98)]
+        @project1      = FactoryGirl.create(:project, data_response: @response1, name: "CoolProject")
+        @project1.in_flows = [FactoryGirl.create(:funding_flow, project: @project1,
+                                      from: @donor1, spend: 99, budget: 98)]
       end
 
       it "should properly convert currencies" do
-        @currency = FactoryGirl.create(:currency, :from => 'RWF', :to => 'USD', :rate => 0.5)
+        @currency = FactoryGirl.create(:currency, from: 'RWF', to: 'USD', rate: 0.5)
         @project1.currency = "RWF"; @project1.save
 
         table = run_report

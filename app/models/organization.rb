@@ -21,21 +21,21 @@ class Organization < ActiveRecord::Base
 
   ### Associations
   has_many :users # people in this organization
-  has_and_belongs_to_many :managers, :join_table => "organizations_managers",
-    :class_name => "User", :order => 'users.full_name ASC' # activity managers
+  has_and_belongs_to_many :managers, join_table: "organizations_managers",
+    class_name: "User", order: 'users.full_name ASC' # activity managers
   has_many :data_requests # never cascade destroy this!
-  has_many :data_responses, :dependent => :destroy
-  has_many :dr_activities, :through => :data_responses, :source => :activities
+  has_many :data_responses, dependent: :destroy
+  has_many :dr_activities, through: :data_responses, source: :activities
 
-  has_many :out_flows, :class_name => "FundingFlow",
-    :foreign_key => "organization_id_from"
-  has_many :donor_for, :through => :out_flows, :source => :project
+  has_many :out_flows, class_name: "FundingFlow",
+    foreign_key: "organization_id_from"
+  has_many :donor_for, through: :out_flows, source: :project
 
   has_many :implementer_splits # this is NOT project.activity.implementer_splits
 
   # convenience
-  has_many :projects, :through => :data_responses
-  has_many :activities, :through => :data_responses
+  has_many :projects, through: :data_responses
+  has_many :activities, through: :data_responses
 
   ### Validations
   validates_presence_of :name, :raw_type, :currency
@@ -49,18 +49,18 @@ class Organization < ActiveRecord::Base
   before_destroy :check_no_users
 
   ### Named scopes
-  scope :ordered, :order => 'lower(name) ASC, created_at DESC'
-  scope :with_type, lambda { |type| {:conditions => ["organizations.raw_type = ?", type]} }
-  scope :sorted, { :order => "LOWER(organizations.name) ASC" }
-  scope :reporting, :conditions => ['users_count > 0']
-  scope :nonreporting, :conditions => ['users_count = 0']
+  scope :ordered, order: 'lower(name) ASC, created_at DESC'
+  scope :with_type, lambda { |type| {conditions: ["organizations.raw_type = ?", type]} }
+  scope :sorted, { order: "LOWER(organizations.name) ASC" }
+  scope :reporting, conditions: ['users_count > 0']
+  scope :nonreporting, conditions: ['users_count = 0']
   scope :active, where(["decomissioned = ?", false])
 
   ### Class Methods
 
   class << self
     def with_users
-      find(:all, :joins => :users, :order => 'organizations.name ASC').uniq
+      find(:all, joins: :users, order: 'organizations.name ASC').uniq
     end
 
     def create_from_file(doc)
@@ -88,7 +88,7 @@ class Organization < ActiveRecord::Base
 
   # TODO -move to presenter
   def user_emails(limit = 3)
-    self.users.find(:all, :limit => limit).map{|u| u.email}
+    self.users.find(:all, limit: limit).map{|u| u.email}
   end
 
   # TODO -move to presenter

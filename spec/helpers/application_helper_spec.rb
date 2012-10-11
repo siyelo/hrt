@@ -19,7 +19,7 @@ describe ApplicationHelper do
     it "should link to the locations if locations is uncoded" do
       @activity.stub(:location_spend_splits_valid?) { false }
       @activity.stub(:location_budget_splits_valid?) { false }
-      helper.link_to_unclassified(@activity).should == edit_activity_path(@activity, :mode => 'locations')
+      helper.link_to_unclassified(@activity).should == edit_activity_path(@activity, mode: 'locations')
     end
 
     it "should link to the locations if locations and purposes are uncoded" do
@@ -27,7 +27,7 @@ describe ApplicationHelper do
       @activity.stub(:location_budget_splits_valid?) { false }
       @activity.stub(:purpose_spend_splits_valid?) { false }
       @activity.stub(:location_spend_splits_valid?) { false }
-      helper.link_to_unclassified(@activity).should == edit_activity_path(@activity, :mode => 'locations')
+      helper.link_to_unclassified(@activity).should == edit_activity_path(@activity, mode: 'locations')
     end
   end
 

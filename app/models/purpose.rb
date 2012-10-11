@@ -8,8 +8,8 @@ class Purpose < ActiveRecord::Base
     :nha_code, :nsp_code
 
   ### Validations
-  validates :name, :presence => true
-  validates :version, :presence => true
+  validates :name, presence: true
+  validates :version, presence: true
 
   ### Associations
   has_many :code_splits, as: :code, dependent: :destroy

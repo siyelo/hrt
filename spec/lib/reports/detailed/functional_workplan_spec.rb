@@ -3,49 +3,49 @@ require 'spec_helper'
 describe Reports::Detailed::FunctionalWorkplan do
   describe "export projects and activities to xls" do
     it "should return xls with blank cells for repeated project & activity" do
-      @organization  = FactoryGirl.create(:organization, :name => 'org1')
+      @organization  = FactoryGirl.create(:organization, name: 'org1')
       @user          = FactoryGirl.create(:activity_manager,
-                                      :organization => @organization)
-      @organization2 = FactoryGirl.create(:organization, :name => 'org2')
-      FactoryGirl.create :user, :organization => @organization2
-      @organization3 = FactoryGirl.create(:organization, :name => 'org3')
-      FactoryGirl.create :user, :organization => @organization3
+                                      organization: @organization)
+      @organization2 = FactoryGirl.create(:organization, name: 'org2')
+      FactoryGirl.create :user, organization: @organization2
+      @organization3 = FactoryGirl.create(:organization, name: 'org3')
+      FactoryGirl.create :user, organization: @organization3
       #Org without users or responses
-      @organization4 = FactoryGirl.create(:organization, :name => 'org4')
+      @organization4 = FactoryGirl.create(:organization, name: 'org4')
 
       @request       = FactoryGirl.create(:data_request,
-                                          :organization => @organization)
+                                          organization: @organization)
       @response      = @organization.latest_response
       @response2     = @organization2.latest_response
       @user.organizations << @organization2
       @user.organizations << @organization3
 
-      @project       = FactoryGirl.create(:project, :data_response => @response2,
-                               :in_flows => [FactoryGirl.create(
-                                 :funding_flow, :from => @organization3)])
+      @project       = FactoryGirl.create(:project, data_response: @response2,
+                               in_flows: [FactoryGirl.create(
+                                 :funding_flow, from: @organization3)])
       @activity      = FactoryGirl.create(:activity,
-                                          :data_response => @response2,
-                                          :project => @project)
+                                          data_response: @response2,
+                                          project: @project)
       split          = FactoryGirl.create(:implementer_split,
-                                          :activity => @activity,
-                               :budget => 100, :spend => 200,
-                               :organization => @organization)
+                                          activity: @activity,
+                               budget: 100, spend: 200,
+                               organization: @organization)
       @ocost_no_project = FactoryGirl.create(:other_cost,
-                                             :data_response => @response2)
+                                             data_response: @response2)
       @activity.reload
       @activity.save!
 
       @activity2     = FactoryGirl.create(:activity,
-                                          :data_response => @response2,
-                               :project => @project)
+                                          data_response: @response2,
+                               project: @project)
       split2         = FactoryGirl.create(:implementer_split,
-                                          :activity => @activity2,
-                               :budget => 200, :spend => 200,
-                               :organization => @organization)
+                                          activity: @activity2,
+                               budget: 200, spend: 200,
+                               organization: @organization)
       split3         = FactoryGirl.create(:implementer_split,
-                                          :activity => @activity2,
-                               :budget => 200, :spend => 200,
-                               :organization => @organization2)
+                                          activity: @activity2,
+                               budget: 200, spend: 200,
+                               organization: @organization2)
       @activity2.reload
       @activity2.save!
 

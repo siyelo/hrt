@@ -1,15 +1,15 @@
 class OrganizationsController < BaseController
 
-  before_filter :load_organization_details, :only => [:edit, :update]
+  before_filter :load_organization_details, only: [:edit, :update]
 
   def index
     organizations = Organization.active.find(:all,
-      :order => 'UPPER(name)', :limit => 100,
-      :conditions => ["UPPER(organizations.name) LIKE UPPER(?)",
+      order: 'UPPER(name)', limit: 100,
+      conditions: ["UPPER(organizations.name) LIKE UPPER(?)",
                       "%#{params[:term]}%"])
 
     respond_to do |format|
-      format.json { render :json => organizations.map(&:name) }
+      format.json { render json: organizations.map(&:name) }
     end
   end
 
@@ -23,7 +23,7 @@ class OrganizationsController < BaseController
       redirect_to edit_organization_path(:current)
     else
       flash.now[:error] = "Oops, we couldn't save your changes."
-      render :action => :edit
+      render action: :edit
     end
   end
 

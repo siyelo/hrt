@@ -8,13 +8,13 @@ class Reports::Detailed::FundingSourceSplit
   def initialize(request, amount_type, filetype)
     @amount_type        = amount_type
     @implementer_splits = ImplementerSplit.find :all,
-      :joins => { :activity => :data_response },
-      :order => "implementer_splits.id ASC",
-      :conditions => ['data_responses.data_request_id = ? AND
+      joins: { activity: :data_response },
+      order: "implementer_splits.id ASC",
+      conditions: ['data_responses.data_request_id = ? AND
                        data_responses.state = ?', request.id, 'accepted'],
-      :include => [{ :activity => [{ :project => [ { :activities => [:implementer_splits, :project] } , { :in_flows => :from }] },
-        { :data_response => :organization }, :implementer_splits ]},
-        { :organization => :data_responses }]
+      include: [{ activity: [{ project: [ { activities: [:implementer_splits, :project] } , { in_flows: :from }] },
+        { data_response: :organization }, :implementer_splits ]},
+        { organization: :data_responses }]
     @builder = FileBuilder.new(filetype)
   end
 
@@ -121,7 +121,7 @@ class Reports::Detailed::FundingSourceSplit
     end
 
     def fake_project(activity)
-      Project.new(:name => 'N/A', :data_response => activity.data_response)
+      Project.new(name: 'N/A', data_response: activity.data_response)
     end
 
     def fake_in_flows(activity, project)
@@ -142,7 +142,7 @@ class Reports::Detailed::FundingSourceSplit
       amount_diff = splits_total - in_flows_total
 
       if amount_diff > 0 || in_flows.blank?
-        in_flow = FundingFlow.new(:from => fake_org)
+        in_flow = FundingFlow.new(from: fake_org)
         in_flow.send(:"#{@amount_type}=", amount_diff)
         in_flows << in_flow
       end
@@ -151,6 +151,6 @@ class Reports::Detailed::FundingSourceSplit
     end
 
     def fake_org
-      @fake_org ||= Organization.new(:name => 'N/A (Undefined)')
+      @fake_org ||= Organization.new(name: 'N/A (Undefined)')
     end
 end

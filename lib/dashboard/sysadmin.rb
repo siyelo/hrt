@@ -14,8 +14,8 @@ class Dashboard::Sysadmin
 
   def submitted_responses
     @submitted_responses ||= current_request.data_responses.submitted.
-      find(:all, :include => :organization,
-           :order => 'updated_at DESC', :limit => 4)
+      find(:all, include: :organization,
+           order: 'updated_at DESC', limit: 4)
   end
 
   def accepted_count
@@ -77,7 +77,7 @@ class Dashboard::Sysadmin
   private
 
   def calculate_percent(number)
-    number_to_percentage(number * 100 / all_count.to_f, :precision => 0)
+    number_to_percentage(number * 100 / all_count.to_f, precision: 0)
   end
 
   def all_count

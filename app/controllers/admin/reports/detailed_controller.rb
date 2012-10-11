@@ -2,7 +2,7 @@ class Admin::Reports::DetailedController < Admin::BaseController
   include ReportsControllerHelpers
 
   ### Filters
-  before_filter :find_report, :only => [:show, :edit, :update]
+  before_filter :find_report, only: [:show, :edit, :update]
 
   def index
     @request    = current_request

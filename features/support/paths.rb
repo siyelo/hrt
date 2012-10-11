@@ -36,19 +36,19 @@ module NavigationHelpers
 
     when /the purpose split page for "(.+)"/
       activity = Activity.find_by_name($1)
-      edit_activity_or_ocost_path(activity, :mode => 'purposes')
+      edit_activity_or_ocost_path(activity, mode: 'purposes')
 
     when /the location split page for "(.+)"/
       activity = Activity.find_by_name($1)
-      edit_activity_or_ocost_path(activity, :mode => 'locations')
+      edit_activity_or_ocost_path(activity, mode: 'locations')
 
     when /the input split page for "(.+)"/
       activity = Activity.find_by_name($1)
-      edit_activity_or_ocost_path(activity, :mode => 'inputs')
+      edit_activity_or_ocost_path(activity, mode: 'inputs')
 
     when /the output edit page for "(.+)"/
       activity = Activity.find_by_name($1)
-      edit_activity_or_ocost_path(activity, :mode => 'outputs')
+      edit_activity_or_ocost_path(activity, mode: 'outputs')
 
    when /the edit project page for related activity "(.+)"/
       activity = Activity.find_by_name($1)

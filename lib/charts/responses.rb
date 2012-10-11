@@ -43,9 +43,9 @@ module Charts
       # grouped by count
       def responses_for_request(request_id)
         DataResponse.find :all,
-          :select => 'data_responses.state, COUNT(*) AS count',
-          :conditions => ["data_responses.data_request_id = ?", request_id],
-          :group => "data_responses.state"
+          select: 'data_responses.state, COUNT(*) AS count',
+          conditions: ["data_responses.data_request_id = ?", request_id],
+          group: "data_responses.state"
       end
 
       def bar_legend

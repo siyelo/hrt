@@ -53,7 +53,7 @@ Spork.prefork do
     config.include(EmailSpec::Matchers)
 
     # Devise test helpers
-    config.include Devise::TestHelpers, :type => :controller
+    config.include Devise::TestHelpers, type: :controller
 
     # Database Cleaner
     config.before(:suite) do
@@ -77,7 +77,7 @@ Spork.prefork do
       Timecop.return
     end
 
-    config.after(:each, :type => :request) do |example|
+    config.after(:each, type: :request) do |example|
       if ENV.include?('SHOW_ME_THE_PAGE')
         save_and_open_page if example.failed?
       end

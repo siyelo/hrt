@@ -16,7 +16,7 @@ class Importer
     @other_costs    = []
     @new_splits     = []
     @all_projects   = response.projects
-    @all_activities = response.activities.find(:all, :include => :implementer_splits)
+    @all_activities = response.activities.find(:all, include: :implementer_splits)
     @all_splits     = @all_activities.map(&:implementer_splits).flatten
 
     import
@@ -100,13 +100,13 @@ class Importer
   end
 
   def create_self_funder(project)
-    FundingFlow.new(:organization_id_from => project.organization.id,
-                    :spend => 1, :budget => 1)
+    FundingFlow.new(organization_id_from: project.organization.id,
+                    spend: 1, budget: 1)
   end
 
   def create_new_implementer_split(activity, implementer_name)
     # dont use activity.implementer_splits.new, it loads a new association obj
-    split = ImplementerSplit.new(:organization_temp_name => implementer_name)
+    split = ImplementerSplit.new(organization_temp_name: implementer_name)
     split.activity = activity
     new_splits << split
     split
@@ -125,7 +125,7 @@ class Importer
       rows = create_hash_from_header(worksheet)
     rescue Ole::Storage::FormatError
       # try import the file as a csv if it is not an spreadsheet
-      rows = CSV.open(filename, {:headers => true, :skip_blanks => true})
+      rows = CSV.open(filename, {headers: true, skip_blanks: true})
     end
 
     rows
@@ -177,12 +177,12 @@ class Importer
   end
 
   def find_implementer_by_full_name(implementer_name = '')
-    Organization.find(:first, :conditions => [ "LOWER(name) LIKE ?",
+    Organization.find(:first, conditions: [ "LOWER(name) LIKE ?",
         "%#{implementer_name.downcase}%"])
   end
 
   def find_implementer_by_first_word(implementer_name = '')
-    Organization.find(:first, :conditions => [ "LOWER(name) LIKE ?",
+    Organization.find(:first, conditions: [ "LOWER(name) LIKE ?",
         "#{implementer_name.split(' ')[0].downcase}%"])
   end
 
@@ -198,14 +198,14 @@ class Importer
     project = find_cached_project(split_id)
     project ||= projects.detect { |p| p.name == project_name }
     project ||= all_projects.detect { |p| p.name == project_name }
-    project ||= response.projects.new(:budget_type => "on",
-                 :currency => response.organization.currency)
+    project ||= response.projects.new(budget_type: "on",
+                 currency: response.organization.currency)
 
-    project.attributes = { :data_response_id => response.id,
-     :name => project_name, :budget_type => project_budget_type,
-     :description => project_description,
-     :start_date => date_for(project_start_date, project.start_date),
-     :end_date => date_for(project_end_date, project.end_date)}
+    project.attributes = { data_response_id: response.id,
+     name: project_name, budget_type: project_budget_type,
+     description: project_description,
+     start_date: date_for(project_start_date, project.start_date),
+     end_date: date_for(project_end_date, project.end_date)}
     project.in_flows << create_self_funder(project) if project.in_flows.empty?
     project
   end
@@ -222,9 +222,9 @@ class Importer
     end
     activity ||= all_activities.detect { |a| a.name == activity_name }
     activity ||= klass.new
-    activity.attributes = { :data_response_id => response.id,
-      :project_id => project.try(:id), :name => activity_name,
-      :description => activity_description }
+    activity.attributes = { data_response_id: response.id,
+      project_id: project.try(:id), name: activity_name,
+      description: activity_description }
     activity.project = project
     activity
   end
@@ -237,10 +237,10 @@ class Importer
                     #:conditions => { :organization_id => implementer.id}) if implementer
     split ||= create_new_implementer_split(activity, implementer_name)
     split = activity.implementer_splits.detect{ |is| is.id == split.id } || split # TODO: refactor
-    split.attributes = { :organization => implementer,
-                         :organization_temp_name => implementer_name,
-                         :spend => params.fetch(:spend),
-                         :budget => params.fetch(:budget) }
+    split.attributes = { organization: implementer,
+                         organization_temp_name: implementer_name,
+                         spend: params.fetch(:spend),
+                         budget: params.fetch(:budget) }
     split.organization_id_will_change!
     split
   end

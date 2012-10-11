@@ -5,10 +5,10 @@ describe Classifier do
     before :each do
       @request      = FactoryGirl.create :data_request
       @organization = FactoryGirl.create :organization
-      user = FactoryGirl.create :user, :organization => @organization
+      user = FactoryGirl.create :user, organization: @organization
       @response     = @organization.latest_response
-      @project      = FactoryGirl.create(:project, :data_response => @response)
-      @activity     = FactoryGirl.create(:activity, :data_response => @response, :project => @project)
+      @project      = FactoryGirl.create(:project, data_response: @response)
+      @activity     = FactoryGirl.create(:activity, data_response: @response, project: @project)
     end
 
     context "when classifications does not exist" do
@@ -59,10 +59,10 @@ describe Classifier do
       let(:purpose2) { FactoryGirl.create(:purpose) }
 
       it "updates existing classifications" do
-        FactoryGirl.create(:purpose_budget_split, :activity => @activity,
-                           :code => purpose1, :percentage => 10)
-        FactoryGirl.create(:purpose_budget_split, :activity => @activity,
-                           :code => purpose2)
+        FactoryGirl.create(:purpose_budget_split, activity: @activity,
+                           code: purpose1, percentage: 10)
+        FactoryGirl.create(:purpose_budget_split, activity: @activity,
+                           code: purpose2)
         CodeSplit.purposes.budget.count.should == 2
 
         # when submitting existing classifications, it updates them
@@ -77,8 +77,8 @@ describe Classifier do
       end
 
       it "deletes old code splits" do
-        FactoryGirl.create(:purpose_budget_split, :activity => @activity,
-                           :code => purpose1, :percentage => 10)
+        FactoryGirl.create(:purpose_budget_split, activity: @activity,
+                           code: purpose1, percentage: 10)
 
         classifier = Classifier.new(@activity, :purpose, :budget)
         classifier.update_classifications({purpose1.id => 10})
@@ -86,8 +86,8 @@ describe Classifier do
         splits.length.should == 1
         splits.first.percentage.should == 10
 
-        FactoryGirl.create(:purpose_budget_split, :activity => @activity,
-                           :code => purpose2, :percentage => 20)
+        FactoryGirl.create(:purpose_budget_split, activity: @activity,
+                           code: purpose2, percentage: 20)
 
         classifier = Classifier.new(@activity, :purpose, :budget)
         classifier.update_classifications({purpose2.id => 20})
@@ -99,23 +99,23 @@ describe Classifier do
 
       it "rounds percentages off to two decimal places" do
         split = FactoryGirl.create(:purpose_budget_split,
-          :activity => @activity, :code => purpose1, :percentage => 57.344656)
+          activity: @activity, code: purpose1, percentage: 57.344656)
         split.percentage.to_f.should == 57.34
       end
 
       it "rounds percentages off to two decimal places" do
         split = FactoryGirl.create(:purpose_spend_split,
-          :activity => @activity, :code => purpose1, :percentage => 52.7388)
+          activity: @activity, code: purpose1, percentage: 52.7388)
         split.percentage.to_f.should == 52.74
       end
     end
 
     it "automatically calculates the cached amount" do
       basic_setup_project
-      activity = FactoryGirl.create(:activity, :data_response => @response, :project => @project)
-      implementer_split = FactoryGirl.create(:implementer_split, :activity => activity,
-                         :budget => 100, :spend => 200, :organization => @organization)
-      purpose  = FactoryGirl.create(:purpose, :name => 'purpose1')
+      activity = FactoryGirl.create(:activity, data_response: @response, project: @project)
+      implementer_split = FactoryGirl.create(:implementer_split, activity: activity,
+                         budget: 100, spend: 200, organization: @organization)
+      purpose  = FactoryGirl.create(:purpose, name: 'purpose1')
       activity.reload
       activity.save # get new cached implementer split total
 

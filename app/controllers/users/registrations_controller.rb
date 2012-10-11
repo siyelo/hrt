@@ -19,7 +19,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       end
     else
       flash.now[:error] = "Oops, we couldn't save your changes."
-      render :action => 'edit'
+      render action: 'edit'
     end
   end
 

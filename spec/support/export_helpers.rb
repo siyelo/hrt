@@ -25,7 +25,7 @@ end
 
 def write_temp_csv(csv_string)
   filename =  File.join(Rails.root, 'tmp', 'temporary_spec.csv')
-  CSV.open(filename, "w", :force_quotes => true) do |file|
+  CSV.open(filename, "w", force_quotes: true) do |file|
     CSV.parse(csv_string).each do |line|
       file << line
     end

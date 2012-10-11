@@ -1,15 +1,15 @@
 class Admin::RequestsController < Admin::BaseController
   ### Inherited Resources
   inherit_resources
-  defaults :resource_class => DataRequest,
-           :collection_name => 'requests',
-           :instance_name => 'request'
+  defaults resource_class: DataRequest,
+           collection_name: 'requests',
+           instance_name: 'request'
 
   respond_to :html
 
   def index
-    @requests = DataRequest.paginate :per_page => 10, :page => params[:page],
-                                          :order => 'created_at DESC'
+    @requests = DataRequest.paginate per_page: 10, page: params[:page],
+                                          order: 'created_at DESC'
   end
 
   def create
@@ -18,7 +18,7 @@ class Admin::RequestsController < Admin::BaseController
       flash[:notice] = "Please wait a few moments for the request and the associated responses to be created."
       redirect_to admin_requests_url
     else
-      render :action => :new
+      render action: :new
     end
   end
 
@@ -28,7 +28,7 @@ class Admin::RequestsController < Admin::BaseController
       flash[:notice] = "Request was successfully updated"
       redirect_to admin_requests_url
     else
-      render :action => :edit
+      render action: :edit
     end
   end
 

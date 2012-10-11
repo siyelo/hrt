@@ -42,7 +42,7 @@ class DataResponse < ActiveRecord::Base
     conditions: ["state = ?", state] } }
 
   ### Delegates
-  delegate :name, :to => :organization
+  delegate :name, to: :organization
   delegate :currency, :contact_name, :contact_position, :contact_phone_number,
     :contact_main_office_phone_number, :contact_office_location,
     to: :organization

@@ -12,9 +12,9 @@ describe Importer do
 
   describe 'API' do
     before :each do
-      @implementer2  = FactoryGirl.create(:organization, :name => "implementer2")
-      @split2    = FactoryGirl.create(:implementer_split, :activity => @activity,
-                   :organization => @implementer2)
+      @implementer2  = FactoryGirl.create(:organization, name: "implementer2")
+      @split2    = FactoryGirl.create(:implementer_split, activity: @activity,
+                   organization: @implementer2)
       @csv_string = <<-EOS
 project1,on,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,2,4
 ,,,,,,#{@split2.id},selfimplementer2,3,6
@@ -40,9 +40,9 @@ EOS
 
   describe 'importing excel files' do
     before :each do
-      @implementer2  = FactoryGirl.create(:organization, :name => "implementer2")
-      @split2    = FactoryGirl.create(:implementer_split, :activity => @activity,
-                   :organization => @implementer2)
+      @implementer2  = FactoryGirl.create(:organization, name: "implementer2")
+      @split2    = FactoryGirl.create(:implementer_split, activity: @activity,
+                   organization: @implementer2)
       rows = []
       rows << ['project1','on', 'project description','01/01/2010','31/12/2010','activity1','activity1 description',"#{@split.id}",'selfimplementer1','2','4']
       rows << ['','', '','','','','',"#{@split2.id}",'selfimplementer2','3','6']
@@ -273,9 +273,9 @@ EOS
 
     context "when multiple existing implementers" do
       before :each do
-        @implementer2  = FactoryGirl.create(:organization, :name => "implementer2")
-        @split2 = FactoryGirl.create :implementer_split, :activity => @activity,
-          :organization => @implementer2
+        @implementer2  = FactoryGirl.create(:organization, name: "implementer2")
+        @split2 = FactoryGirl.create :implementer_split, activity: @activity,
+          organization: @implementer2
       end
 
       it "should find a previously imported project with a stripped & truncated name" do
@@ -342,7 +342,7 @@ EOS
       end
 
       it "should update existing activity overwriting its multiple implementers" do
-        @implementer3  = FactoryGirl.create(:organization, :name => "implementer3")
+        @implementer3  = FactoryGirl.create(:organization, name: "implementer3")
         csv_string = <<-EOS
 project1,on,project description,01/01/2010,31/12/2010,activity1,activity1 description,,implementer3,2.0,4.0
 EOS
@@ -378,10 +378,10 @@ EOS
     end
 
     it "should update multiple activities and their implementers" do
-      @activity2 = FactoryGirl.create(:activity, :data_response => @response, :project => @project)
-      @implementer2  = FactoryGirl.create(:organization, :name => "implementer2")
-      @split2 = FactoryGirl.create :implementer_split, :activity => @activity2,
-        :organization => @implementer2
+      @activity2 = FactoryGirl.create(:activity, data_response: @response, project: @project)
+      @implementer2  = FactoryGirl.create(:organization, name: "implementer2")
+      @split2 = FactoryGirl.create :implementer_split, activity: @activity2,
+        organization: @implementer2
       csv_string = <<-EOS
 project1,on,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,2.0,4.0
 project1,on,project description,01/01/2010,31/12/2010,activity2,activity2 description,#{@split2.id},implementer2,3.0,6.0
@@ -396,12 +396,12 @@ EOS
     end
 
     it "should update multiple implementers" do
-      @split2 = FactoryGirl.create :implementer_split, :activity => @activity,
-        :organization => FactoryGirl.create(:organization, :name => "implementer2")
-      @split3 = FactoryGirl.create :implementer_split, :activity => @activity,
-        :organization => FactoryGirl.create(:organization, :name => "implementer3")
-      @split4 = FactoryGirl.create :implementer_split, :activity => @activity,
-        :organization => FactoryGirl.create(:organization, :name => "implementer4")
+      @split2 = FactoryGirl.create :implementer_split, activity: @activity,
+        organization: FactoryGirl.create(:organization, name: "implementer2")
+      @split3 = FactoryGirl.create :implementer_split, activity: @activity,
+        organization: FactoryGirl.create(:organization, name: "implementer3")
+      @split4 = FactoryGirl.create :implementer_split, activity: @activity,
+        organization: FactoryGirl.create(:organization, name: "implementer4")
       csv_string = <<-EOS
 project1,on,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,2.0,4.0
 ,,,,,,,#{@split2.id},implementer2,3.0,6.0
@@ -425,15 +425,15 @@ EOS
 
     context "when changing multiple activities" do
       before :each do
-        @activity2 = FactoryGirl.create(:activity, :data_response => @response, :project => @project)
-        @activity3 = FactoryGirl.create(:activity, :data_response => @response, :project => @project)
-        @activity4 = FactoryGirl.create(:activity, :data_response => @response, :project => @project)
-        @split2    = FactoryGirl.create(:implementer_split, :activity => @activity2,
-                      :organization => FactoryGirl.create(:organization, :name => "implementer2"))
-        @split3    = FactoryGirl.create(:implementer_split, :activity => @activity3,
-                      :organization => FactoryGirl.create(:organization, :name => "implementer3"))
-        @split4 = FactoryGirl.create(:implementer_split, :activity => @activity4,
-                      :organization => FactoryGirl.create(:organization, :name => "implementer4"))
+        @activity2 = FactoryGirl.create(:activity, data_response: @response, project: @project)
+        @activity3 = FactoryGirl.create(:activity, data_response: @response, project: @project)
+        @activity4 = FactoryGirl.create(:activity, data_response: @response, project: @project)
+        @split2    = FactoryGirl.create(:implementer_split, activity: @activity2,
+                      organization: FactoryGirl.create(:organization, name: "implementer2"))
+        @split3    = FactoryGirl.create(:implementer_split, activity: @activity3,
+                      organization: FactoryGirl.create(:organization, name: "implementer3"))
+        @split4 = FactoryGirl.create(:implementer_split, activity: @activity4,
+                      organization: FactoryGirl.create(:organization, name: "implementer4"))
       end
 
       it "should update 2 existing activities" do
@@ -486,10 +486,10 @@ EOS
 
       context "when multiple projects" do
         before :each do
-          @project2      = FactoryGirl.create(:project, :data_response => @response)
-          @activity21    = FactoryGirl.create(:activity, :data_response => @response, :project => @project2)
-          @split21    = FactoryGirl.create(:implementer_split, :activity => @activity21,
-                       :organization => @organization)
+          @project2      = FactoryGirl.create(:project, data_response: @response)
+          @activity21    = FactoryGirl.create(:activity, data_response: @response, project: @project2)
+          @split21    = FactoryGirl.create(:implementer_split, activity: @activity21,
+                       organization: @organization)
         end
 
         it "should update existing activities across multiple projects" do
@@ -610,7 +610,7 @@ EOS
 project1,on,project description,01/01/2010,31/12/2010,activity1,activity1 description,,selfimplementer1,aaaa,
 ,,,,,,,organization2,3,6
 EOS
-    @organization2 = FactoryGirl.create(:organization, :name => 'organization2')
+    @organization2 = FactoryGirl.create(:organization, name: 'organization2')
     i = Importer.new(@response, write_csv_with_header(csv_string))
     i.activities[0].implementer_splits.size.should == 2
     i.activities[0].implementer_splits.first.organization_name.should == 'selfimplementer1'
@@ -620,7 +620,7 @@ EOS
   end
 
   it "should allow an invalid activity with valid implementers and a valid project can be corrected and saved" do
-    organization2 = FactoryGirl.create(:organization, :name => 'selfimplementer2')
+    organization2 = FactoryGirl.create(:organization, name: 'selfimplementer2')
     csv_string = <<-EOS
 project1,on,project description,01/01/2010,31/12/2010,ac,activity1 description,,selfimplementer1,2,4
 ,,,,,,,,selfimplementer2,3,6
@@ -682,7 +682,7 @@ EOS
       csv_string = <<-EOS
 project1,on,project description,01/01/2010,31/12/2010,activity2,activity2 description,,Shyira HD District Hospital,3,6
 EOS
-      @implementer2   = FactoryGirl.create(:organization, :name => "Shyira HD District Hospital | Nyabihu")
+      @implementer2   = FactoryGirl.create(:organization, name: "Shyira HD District Hospital | Nyabihu")
       @i = Importer.new(@response, write_csv_with_header(csv_string))
     end
 
@@ -700,9 +700,9 @@ EOS
 
   describe "other costs without a project" do
     before :each do
-      @implementer = FactoryGirl.create(:organization, :name => "implementer2")
-      @split       = FactoryGirl.create(:implementer_split, :activity => @activity,
-                             :organization => @implementer)
+      @implementer = FactoryGirl.create(:organization, name: "implementer2")
+      @split       = FactoryGirl.create(:implementer_split, activity: @activity,
+                             organization: @implementer)
     end
 
     it "should return initialize new other cost" do
@@ -718,8 +718,8 @@ EOS
     end
 
     it "should return existing other cost" do
-      FactoryGirl.create(:other_cost, :name => "other cost",
-              :project => nil, :data_response => @response)
+      FactoryGirl.create(:other_cost, name: "other cost",
+              project: nil, data_response: @response)
       @csv_string = <<-EOS
 N/A,N/A,N/A,N/A,N/A,other cost,other cost description,implementer2,4,8
 EOS

@@ -1,21 +1,21 @@
 module Shared::OutlaysHelper
   ACTIVITY_TABS = {
-    :implementers => 'Implementers',
-    :locations => 'Locations',
-    :purposes => 'Purposes',
-    :inputs => 'Inputs',
-    :outputs => 'Outputs, Targets & Beneficiaries'
+    implementers: 'Implementers',
+    locations: 'Locations',
+    purposes: 'Purposes',
+    inputs: 'Inputs',
+    outputs: 'Outputs, Targets & Beneficiaries'
   }
 
   INDIRECT_COST_TABS = {
-    :implementers => 'Implementers',
-    :locations => 'Locations',
-    :inputs => 'Inputs'
+    implementers: 'Implementers',
+    locations: 'Locations',
+    inputs: 'Inputs'
   }
 
   def sorted_project_select(response, klass, length = 60)
     list = response.projects.sort_by{ |p| p.name }.collect do |u|
-      [ truncate(u.name, :length => length), u.id ]
+      [ truncate(u.name, length: length), u.id ]
     end
     blank_name = klass == "OtherCost" ? "Not project-specific" :  ""
     list.insert(0,[blank_name, nil])

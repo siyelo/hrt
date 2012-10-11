@@ -4,7 +4,7 @@ class Organization < ActiveRecord::Base
   def self.merge_organizations!(target, duplicate)
     duplicate.responses.each do |response|
       target_response = target.responses.find(:first,
-        :conditions => ["data_request_id = ?", response.data_request_id])
+        conditions: ["data_request_id = ?", response.data_request_id])
       target_response.state = DataResponse::States.
         merged_response_state(response.state, target_response.state)
       target_response.save(validate: false)

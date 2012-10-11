@@ -2,7 +2,7 @@ class OtherCost < Activity
   include ResponseStateCallbacks
 
   ### Named Scopes
-  scope :without_project, { :conditions => "activities.project_id IS NULL" }
+  scope :without_project, { conditions: "activities.project_id IS NULL" }
 
   ### Callbacks
   # also check lib/response_state_callbacks

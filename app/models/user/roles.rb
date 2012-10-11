@@ -11,7 +11,7 @@ module User::Roles
       validate :validate_inclusion_of_roles
 
       ### Callbacks
-      before_save :unassign_organizations, :if => Proc.new{|m| m.roles.exclude?('activity_manager') }
+      before_save :unassign_organizations, if: Proc.new{|m| m.roles.exclude?('activity_manager') }
     end
   end
 

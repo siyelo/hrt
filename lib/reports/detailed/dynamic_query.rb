@@ -9,21 +9,21 @@ class Reports::Detailed::DynamicQuery
     @deepest_nesting = Purpose.with_version(request.purposes_version).deepest_nesting
     @amount_type = amount_type
     @implementer_splits = ImplementerSplit.find :all,
-      :joins => { :activity => :data_response },
-      :order => "implementer_splits.id ASC",
-      :conditions => ['data_responses.data_request_id = ? AND
+      joins: { activity: :data_response },
+      order: "implementer_splits.id ASC",
+      conditions: ['data_responses.data_request_id = ? AND
                        data_responses.state = ?', request.id, 'accepted'],
-      :include => [
-        { :activity => [
+      include: [
+        { activity: [
           :targets,
           { "leaf_#{@amount_type}_purposes".to_sym => :code },
           { "leaf_#{@amount_type}_inputs".to_sym => :code },
           { "location_#{@amount_type}_splits".to_sym => :code },
-          { :project => { :in_flows => :from } },
-          { :data_response => :organization },
+          { project: { in_flows: :from } },
+          { data_response: :organization },
           :implementer_splits, #eager load for activity.total_*
         ]},
-        { :organization => :data_responses } ]
+        { organization: :data_responses } ]
     @builder = FileBuilder.new(filetype)
     @show_double_count = true
   end
@@ -169,15 +169,15 @@ class Reports::Detailed::DynamicQuery
     ["location_#{@amount_type}_splits", "leaf_#{@amount_type}_purposes",
      "leaf_#{@amount_type}_inputs"].each do |method|
        if activity.send(method).length == 0
-         activity.send(method).build(:percentage => 100, :code => fake_code)
+         activity.send(method).build(percentage: 100, code: fake_code)
        end
      end
   end
 
   def build_incomplete_classificiation(activity, method)
     classifications = activity.send(method)
-    classifications.build(:percentage => incomplete_percentage(classifications),
-                          :code => fake_code("Not Classified")) unless fully_classified?(classifications)
+    classifications.build(percentage: incomplete_percentage(classifications),
+                          code: fake_code("Not Classified")) unless fully_classified?(classifications)
   end
 
   def incomplete_percentage(classifications)
@@ -191,21 +191,21 @@ class Reports::Detailed::DynamicQuery
   end
 
   def fake_inflow(currency)
-    @fake_inflow || FundingFlow.new(:from => fake_org(currency),
-                                    :spend => 1, :budget => 1)
+    @fake_inflow || FundingFlow.new(from: fake_org(currency),
+                                    spend: 1, budget: 1)
   end
 
   def fake_project
-    @fake_project ||= Project.new(:name => 'N/A', :description => 'N/A', :currency => "USD")
+    @fake_project ||= Project.new(name: 'N/A', description: 'N/A', currency: "USD")
   end
 
   def fake_org(currency)
-    @fake_org ||= Organization.new(:name => 'N/A', :currency => currency)
+    @fake_org ||= Organization.new(name: 'N/A', currency: currency)
   end
 
   def fake_code(value = "N/A")
-    @fake_code ||= Purpose.new(:name => value, :hssp2_stratprog_val => value,
-                            :hssp2_stratobj_val => value)
+    @fake_code ||= Purpose.new(name: value, hssp2_stratprog_val: value,
+                            hssp2_stratobj_val: value)
   end
 
   def get_ratio(amount, total)

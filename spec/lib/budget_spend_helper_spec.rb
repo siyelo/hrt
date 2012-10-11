@@ -2,7 +2,7 @@ require 'budget_spend_helper'
 
 describe BudgetSpendHelper do
   let(:activity) { mock("Activity").extend(BudgetSpendHelper) }
-  let(:split) { mock "ImplementerSplit", :spend => 10, :budget => 10 }
+  let(:split) { mock "ImplementerSplit", spend: 10, budget: 10 }
   let(:splits) { [split, split] }
 
   [:total_spend, :total_budget].each do |method|

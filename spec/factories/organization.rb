@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :organization, :class => Organization do |f|
+  factory :organization, class: Organization do |f|
     f.sequence(:name)                  { |i| "organization_name_#{i}" }
     f.raw_type                         { "Local NGO" }
     f.currency                         { "USD" }
@@ -11,7 +11,7 @@ FactoryGirl.define do
     f.fy_start_month                   { 1 }
   end
 
-  factory :nonreporting_organization, :class => Organization, :parent => :organization do |f|
+  factory :nonreporting_organization, class: Organization, parent: :organization do |f|
     f.users { nil }
   end
 end

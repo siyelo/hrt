@@ -4,8 +4,8 @@ class DataRequest < ActiveRecord::Base
 
   ### Associations
   belongs_to :organization
-  has_many :data_responses, :dependent => :destroy
-  has_many :reports, :dependent => :destroy
+  has_many :data_responses, dependent: :destroy
+  has_many :reports, dependent: :destroy
 
   ### Validations
   validates :organization_id, presence: true
@@ -18,7 +18,7 @@ class DataRequest < ActiveRecord::Base
   after_create :create_data_responses
 
   ### Named scopes
-  scope :sorted, { :order => "data_requests.start_date DESC" }
+  scope :sorted, { order: "data_requests.start_date DESC" }
 
   alias_attribute :name, :title
 
@@ -66,7 +66,7 @@ class DataRequest < ActiveRecord::Base
 
   def find_request(direction)
     order = direction == :previous ? 'ASC' : 'DESC'
-    requests = DataRequest.find(:all, :order => "start_date #{order}")
+    requests = DataRequest.find(:all, order: "start_date #{order}")
     index = requests.index(self)
     index == 0 ? nil : requests[index - 1]
   end

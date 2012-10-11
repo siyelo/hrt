@@ -25,7 +25,7 @@ class Reports::Detailed::FunctionalWorkplan
     builder.add_row(header)
     @organizations.each do |organization|
       org_response = organization.responses.find(:first,
-                      :conditions => "data_request_id = #{@response.request.id}")
+                      conditions: "data_request_id = #{@response.request.id}")
       if org_response
         row = []
         row << organization.name

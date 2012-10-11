@@ -6,8 +6,8 @@ class Input < ActiveRecord::Base
   attr_accessible :name, :description
 
   ### Validations
-  validates :name, :presence => true
-  validates :version, :presence => true
+  validates :name, presence: true
+  validates :version, presence: true
 
   # Associations
   has_many :code_splits, as: :code, dependent: :destroy

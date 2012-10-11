@@ -62,7 +62,7 @@ module Reports
     def expenditure_colours
       colours = {}
       top_spenders[0..14].each_with_index do |ts, index|
-        colours[index] = { :color => get_colour(ts.name) }
+        colours[index] = { color: get_colour(ts.name) }
       end
 
       colours.to_json
@@ -71,7 +71,7 @@ module Reports
     def budget_colours
       colours = {}
       top_budgeters[0..14].each_with_index do |ts, index|
-        colours[index] = { :color => get_colour(ts.name) }
+        colours[index] = { color: get_colour(ts.name) }
       end
 
       colours.to_json

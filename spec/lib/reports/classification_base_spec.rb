@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Reports::ClassificationBase do
   let(:response) { mock :response,
-                        :total_spend => 45.0, :total_budget => 15.0}
+                        total_spend: 45.0, total_budget: 15.0}
   let(:report) { Reports::OrganizationLocations.new(response) }
   let(:rows) { [ Reports::Row.new("L1", 20.0, 5.0),
     Reports::Row.new("L2", 25.0, 10.0) ] }
@@ -53,13 +53,13 @@ describe Reports::ClassificationBase do
   # pie data
   it "should have expenditure pie" do
     report.stub(:collection).and_return(rows)
-    Charts::Spend.should_receive(:new).once.with(rows).and_return(mock(:pie, :google_pie => ""))
+    Charts::Spend.should_receive(:new).once.with(rows).and_return(mock(:pie, google_pie: ""))
     report.expenditure_chart
   end
 
   it "should have budget pie" do
     report.stub(:collection).and_return(rows)
-    Charts::Budget.should_receive(:new).once.with(rows).and_return(mock(:pie, :google_pie => ""))
+    Charts::Budget.should_receive(:new).once.with(rows).and_return(mock(:pie, google_pie: ""))
     report.budget_chart
   end
 end

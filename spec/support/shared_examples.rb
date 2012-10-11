@@ -11,7 +11,7 @@ end
 def it_should_require_sysadmin_for(*actions)
   actions.each do |action|
     it "#{action} action should require sysadmin role" do
-      get action, :id => 1 # so routes work for those requiring id
+      get action, id: 1 # so routes work for those requiring id
       response.should redirect_to(root_url)
       # controller.should_not_receive(:index)
       # get action

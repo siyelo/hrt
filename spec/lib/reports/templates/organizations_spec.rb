@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Reports::Templates::Organizations do
   before :each do
-    @organization = FactoryGirl.create(:organization, :name => 'blarorg', :raw_type => 'NGO', :fosaid => "13")
+    @organization = FactoryGirl.create(:organization, name: 'blarorg', raw_type: 'NGO', fosaid: "13")
   end
 
   it "will return just the headers if no organizations are passed" do

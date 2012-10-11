@@ -27,14 +27,14 @@ describe OtherCost do
   describe "classified?" do
     before :each do
       @organization = FactoryGirl.create(:organization)
-      user = FactoryGirl.create :user, :organization => @organization
-      @request      = FactoryGirl.create(:data_request, :organization => @organization)
+      user = FactoryGirl.create :user, organization: @organization
+      @request      = FactoryGirl.create(:data_request, organization: @organization)
       @response     = @organization.latest_response
-      @project      = FactoryGirl.create(:project, :data_response => @response)
+      @project      = FactoryGirl.create(:project, data_response: @response)
       @activity     = FactoryGirl.create(:other_cost_fully_coded,
-                              :data_response => @response, :project => @project)
-      @split1 = FactoryGirl.create(:implementer_split, :activity => @activity,
-                        :organization => @organization, :budget => 50, :spend => 40)
+                              data_response: @response, project: @project)
+      @split1 = FactoryGirl.create(:implementer_split, activity: @activity,
+                        organization: @organization, budget: 50, spend: 40)
 
       @activity.stub(:location_budget_splits_valid?) { true }
       @activity.stub(:location_spend_splits_valid?) { true }
@@ -65,20 +65,20 @@ describe OtherCost do
     describe "currency" do
       it "returns data response currency if other cost without a project" do
         request      = FactoryGirl.create :data_request
-        organization = FactoryGirl.create(:organization, :currency => 'EUR')
-        FactoryGirl.create :user, :organization => organization
+        organization = FactoryGirl.create(:organization, currency: 'EUR')
+        FactoryGirl.create :user, organization: organization
         response     = organization.latest_response
-        oc = FactoryGirl.create(:other_cost, :project => nil, :data_response => response)
+        oc = FactoryGirl.create(:other_cost, project: nil, data_response: response)
         oc.currency.should.eql? 'EUR'
       end
 
       it "returns project currency if other cost has a project" do
         request      = FactoryGirl.create :data_request
         organization = FactoryGirl.create(:organization)
-        FactoryGirl.create :user, :organization => organization
+        FactoryGirl.create :user, organization: organization
         response     = organization.latest_response
-        project      = FactoryGirl.create(:project, :data_response => response, :currency => 'USD')
-        oc = FactoryGirl.create(:other_cost, :data_response => response, :project => project)
+        project      = FactoryGirl.create(:project, data_response: response, currency: 'USD')
+        oc = FactoryGirl.create(:other_cost, data_response: response, project: project)
 
         oc.currency.should.eql? 'USD'
       end
@@ -87,8 +87,8 @@ describe OtherCost do
 
   describe "<=>" do
     it "sorts by name" do
-      oc = OtherCost.new(:name => "arojjy")
-      oc1 = OtherCost.new(:name => "projjy")
+      oc = OtherCost.new(name: "arojjy")
+      oc1 = OtherCost.new(name: "projjy")
 
       [oc1, oc].sort.should == [oc, oc1]
     end

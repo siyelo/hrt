@@ -43,8 +43,8 @@ module Charts
     def google_pie
       return empty_google_pie if @data.empty?
       {
-        :names => pie_legend,
-        :values => pie_sort
+        names: pie_legend,
+        values: pie_sort
       }.to_json
     end
 
@@ -81,7 +81,7 @@ module Charts
     end
 
     def empty_google_pie
-      { :names => {}, :values => [] }.to_json
+      { names: {}, values: [] }.to_json
     end
 
     def empty_google_column
@@ -93,7 +93,7 @@ module Charts
     end
 
     def pie_legend
-      {:column1 => 'Name', :column2 => 'Amount'}
+      {column1: 'Name', column2: 'Amount'}
     end
 
     def bar_legend

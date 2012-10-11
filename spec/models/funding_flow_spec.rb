@@ -31,39 +31,39 @@ describe FundingFlow do
     before :each do
       @donor        = FactoryGirl.create(:organization)
       @organization = FactoryGirl.create(:organization)
-      FactoryGirl.create :user, :organization => @organization
-      @request      = FactoryGirl.create(:data_request, :organization => @organization)
+      FactoryGirl.create :user, organization: @organization
+      @request      = FactoryGirl.create(:data_request, organization: @organization)
       @response     = @organization.latest_response
-      @project      = FactoryGirl.create(:project, :data_response => @response)
+      @project      = FactoryGirl.create(:project, data_response: @response)
     end
 
     it "should validate Expenditure and/or Budget is present if nil" do
-      @funding_flow = FactoryGirl.build(:funding_flow, :project => @project,
-                              :from => @donor, :budget => nil, :spend => nil)
+      @funding_flow = FactoryGirl.build(:funding_flow, project: @project,
+                              from: @donor, budget: nil, spend: nil)
       @funding_flow.save.should == false
       @funding_flow.errors[:spend].should include(' and/or Planned must be present')
     end
 
     it "should validate Expenditure and/or Budget is present if blank" do
-      @funding_flow = FactoryGirl.build(:funding_flow, :project => @project,
-                              :from => @donor, :budget => "", :spend => "")
+      @funding_flow = FactoryGirl.build(:funding_flow, project: @project,
+                              from: @donor, budget: "", spend: "")
       @funding_flow.save.should == false
       @funding_flow.errors[:spend].should include(' and/or Planned must be present')
     end
 
     it "should validate spend or budget greater than 0" do
-      @funding_flow = FactoryGirl.build(:funding_flow, :project => @project,
-                              :from => @donor, :budget => "0.00", :spend => "0.00")
+      @funding_flow = FactoryGirl.build(:funding_flow, project: @project,
+                              from: @donor, budget: "0.00", spend: "0.00")
       @funding_flow.save.should == false
       @funding_flow.errors[:spend].should include('must be greater than 0')
       @funding_flow.errors[:budget].should include('must be greater than 0')
 
-      @funding_flow = FactoryGirl.build(:funding_flow, :project => @project,
-                              :from => @donor, :budget => "0.00", :spend => "222")
+      @funding_flow = FactoryGirl.build(:funding_flow, project: @project,
+                              from: @donor, budget: "0.00", spend: "222")
       @funding_flow.save.should == true
 
-      @funding_flow = FactoryGirl.build(:funding_flow, :project => @project,
-                              :from => @donor, :budget => "", :spend => "0.00")
+      @funding_flow = FactoryGirl.build(:funding_flow, project: @project,
+                              from: @donor, budget: "", spend: "0.00")
       @funding_flow.save.should == false
       @funding_flow.errors[:spend].should include('must be greater than 0')
     end
@@ -74,11 +74,11 @@ describe FundingFlow do
       context "new in flows" do
         it "cannot create project with duplicate funders" do
           basic_setup_response
-          in_flow1 = FactoryGirl.build(:funding_flow, :from => @organization)
-          in_flow2 = FactoryGirl.build(:funding_flow, :from => @organization)
+          in_flow1 = FactoryGirl.build(:funding_flow, from: @organization)
+          in_flow2 = FactoryGirl.build(:funding_flow, from: @organization)
 
-          project = FactoryGirl.build(:project, :data_response => @response,
-                                  :in_flows => [in_flow1, in_flow2])
+          project = FactoryGirl.build(:project, data_response: @response,
+                                  in_flows: [in_flow1, in_flow2])
 
           project.valid?.should be_false
           project.errors[:base].should include('Duplicate Project Funding Sources')
@@ -88,14 +88,14 @@ describe FundingFlow do
       context "existing in flows" do
         it "cannot create project with duplicate funders" do
           basic_setup_response
-          in_flow1 = FactoryGirl.build(:funding_flow, :from => @organization)
+          in_flow1 = FactoryGirl.build(:funding_flow, from: @organization)
 
-          project = FactoryGirl.build(:project, :data_response => @response,
-                                  :in_flows => [in_flow1])
+          project = FactoryGirl.build(:project, data_response: @response,
+                                  in_flows: [in_flow1])
 
           project.save.should be_true
 
-          in_flow2 = FactoryGirl.build(:funding_flow, :from => @organization)
+          in_flow2 = FactoryGirl.build(:funding_flow, from: @organization)
           project.in_flows = [in_flow1, in_flow2]
           project.valid?.should be_false
           project.errors[:base].should include('Duplicate Project Funding Sources')
@@ -111,10 +111,10 @@ describe FundingFlow do
 
     it "should validate Spend and/or Budget is present if nil" do
       @funding_flow = FactoryGirl.build(:funding_flow,
-                                    :spend => nil,
-                                    :budget => nil,
-                                    :project => @project,
-                                    :from => @organization)
+                                    spend: nil,
+                                    budget: nil,
+                                    project: @project,
+                                    from: @organization)
 
       @funding_flow.valid?.should be_false
       @funding_flow.errors[:spend].should include(' and/or Planned must be present')
@@ -122,10 +122,10 @@ describe FundingFlow do
 
     it "should validate Spend and/or Budget is present if blank" do
       @funding_flow = FactoryGirl.build(:funding_flow,
-                                    :spend => '',
-                                    :budget => '',
-                                    :project => @project,
-                                    :from => @organization)
+                                    spend: '',
+                                    budget: '',
+                                    project: @project,
+                                    from: @organization)
 
       @funding_flow.valid?.should be_false
       @funding_flow.errors[:spend].should include(' and/or Planned must be present')
@@ -133,10 +133,10 @@ describe FundingFlow do
 
     it "should validate one or the other" do
       @funding_flow = FactoryGirl.build(:funding_flow,
-                                    :spend => nil,
-                                    :budget => 1,
-                                    :project => @project,
-                                    :from => @organization)
+                                    spend: nil,
+                                    budget: 1,
+                                    project: @project,
+                                    from: @organization)
       @funding_flow.valid?.should be_true
 
       @funding_flow.spend = 1
@@ -151,8 +151,8 @@ describe FundingFlow do
       @project.currency = "RWF"
       @project.save
       funding_flow = FactoryGirl.build(:funding_flow,
-                                    :project => @project,
-                                    :from => @organization)
+                                    project: @project,
+                                    from: @organization)
       funding_flow.currency.should == "RWF"
     end
   end
@@ -160,14 +160,14 @@ describe FundingFlow do
   describe "#name" do
     it "returns from and to organizations in the name" do
       @request      = FactoryGirl.create :data_request
-      @organization = FactoryGirl.create(:organization, :name => 'Organization 2')
-      FactoryGirl.create :user, :organization => @organization
-      @other_org    = FactoryGirl.create(:organization, :name => 'ORG2')
+      @organization = FactoryGirl.create(:organization, name: 'Organization 2')
+      FactoryGirl.create :user, organization: @organization
+      @other_org    = FactoryGirl.create(:organization, name: 'ORG2')
       @response     = @organization.latest_response
-      @project      = FactoryGirl.create(:project, :data_response => @response)
+      @project      = FactoryGirl.create(:project, data_response: @response)
 
-      from = FactoryGirl.create(:organization, :name => 'Organization 1')
-      funding_flow = FactoryGirl.create(:funding_flow, :project => @project, :from => from)
+      from = FactoryGirl.create(:organization, name: 'Organization 1')
+      funding_flow = FactoryGirl.create(:funding_flow, project: @project, from: from)
       funding_flow.name.should == "Project: #{@project.name}; From: #{from.name}; To: #{@organization}"
     end
   end
@@ -175,9 +175,9 @@ describe FundingFlow do
   describe "deprecated Response api" do
     it "should return (deprecated) response (but will do so via associated project)" do
       basic_setup_project
-      from = FactoryGirl.create(:organization, :name => 'Organization 1')
-      to   = FactoryGirl.create(:organization, :name => 'Organization 2')
-      funding_flow = FactoryGirl.create(:funding_flow, :project => @project, :from => from)
+      from = FactoryGirl.create(:organization, name: 'Organization 1')
+      to   = FactoryGirl.create(:organization, name: 'Organization 2')
+      funding_flow = FactoryGirl.create(:funding_flow, project: @project, from: from)
       funding_flow.response.should == @response
       funding_flow.data_response.should == @response
     end
@@ -186,7 +186,7 @@ describe FundingFlow do
   describe "possible double count" do
     before :each do
       basic_setup_project
-      @from = FactoryGirl.create(:organization, :name => 'Organization 1')
+      @from = FactoryGirl.create(:organization, name: 'Organization 1')
       @to   = @project.organization
     end
 
@@ -194,7 +194,7 @@ describe FundingFlow do
         has accepted response" do
       from_user = FactoryGirl.create(:user, organization: @from)
       funding_flow = FactoryGirl.create(:funding_flow,
-                                        :project => @project, :from => @from)
+                                        project: @project, from: @from)
       @from.data_responses.last.accept!(User.last)
       @from.reload
 
@@ -205,15 +205,15 @@ describe FundingFlow do
 
     it "should return false if funder isn't reporting" do
       funding_flow = FactoryGirl.create(:funding_flow,
-                                        :project => @project, :from => @from)
+                                        project: @project, from: @from)
       @from.reporting?.should be_false
       funding_flow.possible_double_count?.should be_false
     end
 
     it "should return false if funding org's response isn't accepted" do
       from_user = FactoryGirl.create(:user, organization: @from)
-      funding_flow = FactoryGirl.create(:funding_flow, :project => @project,
-                                        :from => @from)
+      funding_flow = FactoryGirl.create(:funding_flow, project: @project,
+                                        from: @from)
 
       @from.data_responses.last.accepted?.should be_false
       funding_flow.possible_double_count?.should be_false
@@ -221,8 +221,8 @@ describe FundingFlow do
 
     it "should return false if funding flow is self-funded" do
       to_user = FactoryGirl.create(:user, organization: @to)
-      funding_flow = FactoryGirl.create(:funding_flow, :project => @project,
-                                        :from => @to)
+      funding_flow = FactoryGirl.create(:funding_flow, project: @project,
+                                        from: @to)
       @to.data_responses.last.accept!(User.last)
       @to.reload
 

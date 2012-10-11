@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :project, :class => Project do |f|
+  factory :project, class: Project do |f|
     f.sequence(:name)     { |i| "project_name_#{i}" }
     f.description         { 'project_description' }
     f.budget_type         { "on" }
@@ -8,6 +8,6 @@ FactoryGirl.define do
     f.currency            { "USD" }
     f.in_flows            { |funder|
       [ funder.association(:in_flow,
-                           :from => funder.data_response.organization)]}
+                           from: funder.data_response.organization)]}
   end
 end

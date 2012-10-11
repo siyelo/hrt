@@ -7,8 +7,8 @@ class Admin::OrganizationsController < Admin::BaseController
   inherit_resources
 
   helper_method :sort_column, :sort_direction
-  before_filter :load_organization, :only => [:edit, :update]
-  before_filter :load_users, :only => [:edit, :update]
+  before_filter :load_organization, only: [:edit, :update]
+  before_filter :load_users, only: [:edit, :update]
 
   def index
     scope = scope_organizations(params[:filter])
@@ -16,19 +16,19 @@ class Admin::OrganizationsController < Admin::BaseController
       scope = scope.where(["UPPER(organizations.name) LIKE UPPER(:q) OR
                             UPPER(organizations.raw_type) LIKE UPPER(:q) OR
                             UPPER(organizations.fosaid) LIKE UPPER(:q)",
-                            {:q => "%#{params[:query]}%"}])
+                            {q: "%#{params[:query]}%"}])
     end
-    @organizations = scope.paginate(:page => params[:page], :per_page => 100,
-                    :include => :users,
-                    :order => "#{sort_column_query} #{sort_direction}, id ASC")
+    @organizations = scope.paginate(page: params[:page], per_page: 100,
+                    include: :users,
+                    order: "#{sort_column_query} #{sort_direction}, id ASC")
   end
 
   def show
-    @target = Organization.find(params[:id], :include => [:projects,
+    @target = Organization.find(params[:id], include: [:projects,
       :activities, :users])
-    @duplicate = Organization.find(params[:duplicate_id], :include => [:projects,
+    @duplicate = Organization.find(params[:duplicate_id], include: [:projects,
       :activities, :users])
-    render :partial => 'organization_info'
+    render partial: 'organization_info'
   end
 
   def create
@@ -95,7 +95,7 @@ class Admin::OrganizationsController < Admin::BaseController
   def create_from_file
     begin
       if params[:file].present?
-        doc = FileParser.parse(params[:file].open.read, 'csv', {:headers => true})
+        doc = FileParser.parse(params[:file].open.read, 'csv', {headers: true})
         if doc.headers.to_set == Organization::FILE_UPLOAD_COLUMNS.to_set
           saved, errors = Organization.create_from_file(doc)
           flash[:notice] = "Created #{saved} of #{saved + errors} organizations successfully"
@@ -145,7 +145,7 @@ class Admin::OrganizationsController < Admin::BaseController
           redirect_to path
         end
         format.js do
-          render :remove_duplicate_error, :locals => { message: message }
+          render :remove_duplicate_error, locals: { message: message }
         end
       end
     end
@@ -157,7 +157,7 @@ class Admin::OrganizationsController < Admin::BaseController
           redirect_to path
         end
         format.js do
-          render :remove_duplicate_notice, :locals => { message: message }
+          render :remove_duplicate_notice, locals: { message: message }
         end
       end
     end
