@@ -106,11 +106,6 @@ class Activity < ActiveRecord::Base
     self.data_response
   end
 
-  def update_attributes(params)
-    update_classifications_from_params(params)
-    super(params)
-  end
-
   def to_s
     name
   end
@@ -128,17 +123,6 @@ class Activity < ActiveRecord::Base
   def update_all_classified_amount_caches
     updater = ClassifiedAmountCacheUpdater.new(self)
     updater.update_all
-  end
-
-  def classification_amount(classification_type)
-    case classification_type.to_s
-    when 'PurposeBudgetSplit', 'LocationBudgetSplit', 'InputBudgetSplit'
-      total_budget
-    when 'PurposeSpendSplit', 'LocationSpendSplit', 'InputSpendSplit'
-      total_spend
-    else
-      raise "Invalid coding_klass #{classification_type}".to_yaml
-    end
   end
 
   def locations
@@ -182,29 +166,6 @@ class Activity < ActiveRecord::Base
 
   def location_budget_splits_valid?
     CodingTree.new(self, :location, :budget).valid?
-  end
-
-  protected
-  # intercept the classifications and process using the bulk classification update API
-  # FIXME: the CodingBlah class method saves the activity in the middle of this update... Not good.
-  def update_classifications_from_params(params)
-    if params[:classifications].present?
-      code_type_key = params[:classifications].keys.first.to_sym
-
-      unless [:purpose, :input, :location].include?(code_type_key)
-        raise "Invalid code type key"
-      end
-
-      classifications = params[:classifications][code_type_key]
-
-      classifier = Classifier.new(self, code_type_key, :budget)
-      classifier.update_classifications(classifications[:budget])
-
-      classifier = Classifier.new(self, code_type_key, :spend)
-      classifier.update_classifications(classifications[:spend])
-
-      params.delete(:classifications)
-    end
   end
 
   private

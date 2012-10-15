@@ -61,9 +61,13 @@ class OutlaysController < BaseController
   def update_outlay(outlay)
     attr = outlay.class.eql?(Activity) ? params[:activity] : params[:other_cost]
 
-    if outlay.update_attributes(attr)
-      success_flash("updated")
-      html_redirect(outlay)
+    classifications = attr[:classifications]
+    attr.delete :classifications
+
+    if outlay.update_attributes(attr) &&
+      update_classifications(outlay, classifications)
+        success_flash("updated")
+        html_redirect(outlay)
     else
       prepare_edit(outlay)
       render action: 'edit'
@@ -84,4 +88,30 @@ class OutlaysController < BaseController
 
     return redirect_to edit_activity_or_ocost_path(outlay, mode: mode)
   end
+
+  private
+  def update_classifications(outlay, classifications_params)
+    return true if classifications_params.blank?
+
+    code_type_key = classifications_params.keys.first.to_sym
+
+    unless allowed_code_type_keys(outlay).include?(code_type_key)
+      raise "Invalid code type key"
+    end
+
+    classifications = classifications_params[code_type_key]
+    [:budget, :spend].each do |amount_type|
+      classifier = Classifier.new(outlay, code_type_key, amount_type)
+      classifier.update_classifications(classifications[amount_type])
+    end
+  end
+
+  def allowed_code_type_keys(outlay)
+    if outlay.is_a? Activity
+      [:purpose, :input, :location]
+    else
+      [:input, :locations]
+    end
+  end
+
 end

@@ -23,7 +23,7 @@ class ActivitiesController < OutlaysController
 
   def update
     @activity = @response.activities.find(params[:id])
-    update_outlay(@activity)
+    update_outlay @activity
   end
 
   def destroy
