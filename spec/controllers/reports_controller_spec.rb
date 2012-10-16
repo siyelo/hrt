@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe ReportsController do
-  let(:current_response) { mock :response }
+  let(:current_response) { mock :response, id: 1}
 
   before :each do
     controller.stub(:current_response).and_return current_response

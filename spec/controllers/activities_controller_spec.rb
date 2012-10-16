@@ -173,7 +173,7 @@ describe ActivitiesController do
       it "fails on create" do
         request.env['HTTP_REFERER'] = projects_url #index
         controller.stub(:current_response).and_return(
-          mock :response, state: "accepted")
+          mock :response, id: 1, state: "accepted")
         controller.should_not_receive(:create)
         post :create,
           activity: {project_id: '-1', name: "new activity",
@@ -193,7 +193,7 @@ describe ActivitiesController do
         @activity = FactoryGirl.create(:activity, project: @project,
                             data_response: @data_response)
         controller.stub(:current_response).and_return(
-          mock :response, state: "submitted")
+          mock :response, id: 1, state: "submitted")
         controller.should_not_receive(:update)
         put :update, id: @activity.id
         flash[:error].should == "Your entry has already been submitted. If you wish to further edit your entry, please contact a System Administrator"
@@ -206,7 +206,7 @@ describe ActivitiesController do
         @activity = FactoryGirl.create(:activity, project: @project,
                             data_response: @data_response)
         controller.stub(:current_response).and_return(
-          mock :response, state: "accepted")
+          mock :response, id: 1, state: "accepted")
         controller.should_not_receive(:destroy)
         delete :destroy, id: @activity.id
         flash[:error].should == "Your entry has already been submitted. If you wish to further edit your entry, please contact a System Administrator"

@@ -122,7 +122,7 @@ describe ResponsesController do
     before :each do
       @req = FactoryGirl.create :data_request
       @reporter = FactoryGirl.create :reporter
-      @data_response = mock :data_response
+      @data_response = mock :data_response, id: 1
       @report = mock :response_overview
       login @reporter
       controller.stub(:find_response).with("999").and_return @data_response
@@ -158,7 +158,7 @@ describe ResponsesController do
       @data_response.should_receive('expenditure_overview_file_name').
         and_return('yes')
       @data_response.should_receive('private_expenditure_overview_url').
-        and_return(root_url)
+        and_return("#{root_url}?response_id=1")
       get :download_overview, id: 999, type: 'spend'
       response.should redirect_to root_url
     end

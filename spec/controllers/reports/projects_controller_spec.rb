@@ -13,7 +13,7 @@ describe Reports::ProjectsController do
     let(:project) { mock :project }
     let(:projects) { mock :assoc, :find => project }
     let(:report) { mock :report, to_xls: [], name: 'speccin' }
-    let(:current_response) { mock :response, :projects => projects }
+    let(:current_response) { mock :response, id: 1, projects: projects }
 
     before :each do
       controller.stub(:current_response).and_return current_response

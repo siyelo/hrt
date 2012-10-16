@@ -13,7 +13,8 @@ describe ProjectsController do
 
     it "create a project when the data_response is accepted" do
       request.env['HTTP_REFERER'] = projects_url
-      controller.stub(:current_response).and_return(mock :response, state: "submitted")
+      controller.stub(:current_response).and_return(
+        mock :response, id: 1, state: "submitted")
       controller.should_not_receive(:create)
       post :create,
         :project => {:name => "new project", :description => "new description",
@@ -29,7 +30,8 @@ describe ProjectsController do
     it "update a project when the data_response is accepted" do
       request.env['HTTP_REFERER'] = projects_url
       @project = FactoryGirl.create(:project, :data_response => @organization.latest_response)
-      controller.stub(:current_response).and_return(mock :response, state: "accepted")
+      controller.stub(:current_response).and_return(
+        mock :response, id: 1, state: "accepted")
       controller.should_not_receive(:update)
       put :update, :id => @project.id
       flash[:error].should == "Your entry has already been submitted. If you wish to further edit your entry, please contact a System Administrator"
@@ -39,7 +41,8 @@ describe ProjectsController do
     it "destroy a project when the data_response is accepted" do
       request.env['HTTP_REFERER'] = projects_url
       @project = FactoryGirl.create(:project, :data_response => @organization.latest_response)
-      controller.stub(:current_response).and_return(mock :response, state: "submitted")
+      controller.stub(:current_response).and_return(
+        mock :response, id: 1, state: "submitted")
       controller.should_not_receive(:destroy)
       delete :destroy, :id => @project.id
       flash[:error].should == "Your entry has already been submitted. If you wish to further edit your entry, please contact a System Administrator"
