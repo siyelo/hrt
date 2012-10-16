@@ -41,9 +41,7 @@ module ResponseSession
       end
 
       def set_url_options
-        if current_user && current_response &&
-            (current_user.sysadmin? || current_user.activity_manager?) &&
-            !(params[:controller].include?('admin') || params[:controller] == 'dashboard')
+        if current_response
           @url_options = { response_id: current_response.id }
         end
       end
@@ -59,7 +57,6 @@ module ResponseSession
         resp_id = params[:response_id].presence || session[:response_id].presence
         resp = find_response(resp_id) if resp_id.present?
         resp ||= last_response
-        resp = last_response if switch_to_last_response?(resp, last_response)
 
         resp
       end
@@ -79,14 +76,6 @@ module ResponseSession
         else
           current_user.data_responses.find_by_id(response_id)
         end
-      end
-
-      # TODO: add other report controllers
-      def switch_to_last_response?(current_response, last_response)
-        current_user.role?('reporter') &&
-          !current_user.activity_manager? &&
-          current_response != last_response &&
-          !['reports', 'reports/projects', 'reports/activities'].include?(params[:controller])
       end
 
       def response_for_request(request)

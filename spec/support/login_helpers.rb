@@ -14,3 +14,10 @@ def login_as_admin
   @admin = FactoryGirl.create(:admin, :organization => @admin_org)
   sign_in @admin
 end
+
+def login_as(user)
+  visit root_path
+  fill_in "Email", with: user.email
+  fill_in "Password", with: 'password'
+  click_button "Sign in"
+end

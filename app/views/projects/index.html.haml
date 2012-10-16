@@ -9,10 +9,7 @@
   %h1.main_heading
     Projects & Activities
     .request_nav.right
-      - if current_user.sysadmin?
-        = render '/shared/request_nav'
-      - else
-        = current_request.name
+      = render '/shared/request_nav'
 
   %hr.heading
   = render 'getting_started'
