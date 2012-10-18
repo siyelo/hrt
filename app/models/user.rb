@@ -25,7 +25,10 @@ class User < ActiveRecord::Base
   validates_presence_of :full_name, :organization_id
 
   ### Callbacks
-  after_create :create_organization_responses
+  after_save :create_organization_responses,
+    if: ->(m) { m.organization_id_changed? }
+  before_save :update_organization_users_counter_cache,
+    if: ->(m) { !m.new_record? && m.organization_id_changed? }
 
   ### Delegates
   delegate :responses, :to => :organization # instead of deprecated data_response
@@ -56,11 +59,6 @@ class User < ActiveRecord::Base
 
   def name
     full_name.present? ? full_name : email
-  end
-
-  # assign organization association so that counter cache is updated
-  def organization_id=(organization_id)
-    self.organization = Organization.find_by_id(organization_id) if organization_id.present?
   end
 
   def generate_token
@@ -106,6 +104,11 @@ class User < ActiveRecord::Base
 
   def create_organization_responses
     organization.create_data_responses!
+  end
+
+  def update_organization_users_counter_cache
+    Organization.decrement_counter(:users_count, self.organization_id_was)
+    Organization.increment_counter(:users_count, self.organization_id)
   end
 
   def only_password_errors?

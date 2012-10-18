@@ -125,8 +125,7 @@ class Organization < ActiveRecord::Base
   # and on new Request creation
   def create_data_responses!
     DataRequest.all.each do |data_request|
-      dr = self.responses.find(:first,
-                               :conditions => {:data_request_id => data_request.id})
+      dr = self.responses.where({:data_request_id => data_request.id}).first
       unless dr
         dr = self.responses.new
         dr.data_request = data_request

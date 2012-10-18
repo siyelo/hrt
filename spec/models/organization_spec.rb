@@ -292,6 +292,8 @@ describe Organization do
       o1       = FactoryGirl.create(:organization)
       o2       = FactoryGirl.create(:organization)
       reporter = FactoryGirl.create(:reporter, organization: o1)
+      reporter.reload # reload to get real organization association
+
       reporter.organization.should == o1
       o1.reload.users_count.should == 1
       o2.reload.users_count.should == 0

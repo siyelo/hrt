@@ -49,11 +49,49 @@ describe User do
     end
   end
 
-  it "notifies organization it needs to create responses" do
-    u = FactoryGirl.build :reporter
-    org = u.organization
-    u.should_receive(:create_organization_responses).once
-    u.save
+  describe "Callbacks" do
+    it "creates responses when user is created" do
+      u = FactoryGirl.build :reporter
+      u.should_receive(:create_organization_responses).once
+      u.save!
+    end
+
+    it "does not create responses when user organization_id is not changed" do
+      u = FactoryGirl.create :reporter
+
+      u.full_name = 'another name'
+      u.should_not_receive(:create_organization_responses)
+      u.save!
+    end
+
+    it "created responses when user organization_id is changed" do
+      u = FactoryGirl.create :reporter
+      u.reload
+
+      org2 = FactoryGirl.create(:organization)
+      u.organization_id = org2.id
+      u.should_receive(:create_organization_responses).once
+      u.save!
+    end
+  end
+
+  describe "Counter caches" do
+    it "updates organization users count" do
+      org1 = FactoryGirl.create(:organization)
+      org2 = FactoryGirl.create(:organization)
+      user1 = FactoryGirl.create(:reporter, organization: org1)
+      user2 = FactoryGirl.create(:reporter, organization: org2)
+
+      org1.reload; org2.reload; user1.reload; user2.reload
+      org1.users_count.should == 1
+
+      user2.organization_id = org1.id
+      user2.save!
+
+      org1.reload; org2.reload
+      org1.users_count.should == 2
+      org2.users_count.should == 0
+    end
   end
 
   describe "save and invite" do
