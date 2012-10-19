@@ -92,7 +92,7 @@ class DataResponse < ActiveRecord::Base
     end
 
     def uncoded_other_costs
-      reject_uncoded_locations(other_costs)
+      reject_uncoded_other_costs(other_costs)
     end
 
     def activities_coded?
@@ -113,9 +113,8 @@ class DataResponse < ActiveRecord::Base
       activities.select{ |a| !a.budget_classified? || !a.spend_classified? }
     end
 
-    def reject_uncoded_locations(other_costs)
-      other_costs.select{ |oc| !oc.location_budget_splits_valid? ||
-        !oc.location_spend_splits_valid? }
+    def reject_uncoded_other_costs(other_costs)
+      other_costs.select{ |oc| !oc.locations_classified? || !oc.inputs_classified? }
     end
   end
 end

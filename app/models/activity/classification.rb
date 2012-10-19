@@ -26,6 +26,7 @@ module Activity::Classification
     # check if the purposes add up to 100%, regardless of what
     # activity.spend or budget is
     def purposes_classified?
+      return true if is_a?(OtherCost)
       @purpose_classified ||= purpose_spend_splits_valid? ||
                               purpose_budget_splits_valid?
     end

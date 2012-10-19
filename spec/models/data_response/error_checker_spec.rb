@@ -67,7 +67,7 @@ describe DataResponse::ErrorChecker do
     end
 
     it "fails if an ocost is missing a location split" do
-      oc = mock :othercost, :location_budget_splits_valid? => false
+      oc = mock :othercost, :locations_classified? => false, :inputs_classified? => false
       response.should_receive(:other_costs).exactly(3).times.and_return [oc]
       response.uncoded_other_costs.should have(1).item
       response.other_costs_coded?.should be_false
