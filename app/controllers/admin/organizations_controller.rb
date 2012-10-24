@@ -55,11 +55,11 @@ class Admin::OrganizationsController < Admin::BaseController
 
     if @organization.destroy
       flash[:notice] = "Organization was successfully destroyed."
+      redirect_to admin_organizations_url
     else
-      flash[:error] = "You cannot delete an organization that has (external) data referencing it."
+      flash[:error] = "You cannot delete an organization with users or external reference data (i.e. funders/implementers)."
+      redirect_to edit_admin_organization_url(@organization)
     end
-
-    redirect_to admin_organizations_url
   end
 
   def duplicate

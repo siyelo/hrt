@@ -46,6 +46,7 @@ class Organization < ActiveRecord::Base
   ### Callbacks
   before_destroy :check_no_funder_references
   before_destroy :check_no_implementer_references
+  before_destroy :check_no_users
 
   ### Named scopes
   scope :ordered, :order => 'lower(name) ASC, created_at DESC'
@@ -147,6 +148,13 @@ class Organization < ActiveRecord::Base
   def check_no_implementer_references
     unless implementer_splits.reject{ |s| s.self_implemented? }.empty?
       errors.add(:base, "Cannot delete organization with (external) Implementer references")
+      return false
+    end
+  end
+
+  def check_no_users
+    unless users.empty?
+      errors.add(:base, "Cannot delete organization with users")
       return false
     end
   end

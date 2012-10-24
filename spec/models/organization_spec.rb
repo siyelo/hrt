@@ -481,5 +481,13 @@ describe Organization do
         @organization.errors[:base].should include("Cannot delete organization with (external) Implementer references")
       end
     end
+
+    it "does not allow deletion when there are users present" do
+      organization = FactoryGirl.create(:organization)
+      user = FactoryGirl.create(:user, organization: organization)
+      organization.reload
+      organization.destroy.should be_false
+      organization.errors[:base].should include("Cannot delete organization with users")
+    end
   end
 end
