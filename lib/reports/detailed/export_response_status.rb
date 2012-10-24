@@ -3,7 +3,7 @@ class Reports::Detailed::ExportResponseStatus
   attr_accessor :builder
 
   def initialize(filetype)
-    @responses = DataResponse.all
+    @responses = DataResponse.all.sort
     @builder = FileBuilder.new(filetype)
   end
 

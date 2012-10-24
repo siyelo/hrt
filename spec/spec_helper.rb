@@ -36,7 +36,7 @@ Spork.prefork do
     # If you're not using ActiveRecord, or you'd prefer not to run each of your
     # examples within a transaction, remove the following line or assign false
     # instead of true.
-    config.use_transactional_fixtures = true
+    config.use_transactional_fixtures = false
 
     # If true, the base class of anonymous controllers will be inferred
     # automatically. This will be the default behavior in future versions of
@@ -55,13 +55,25 @@ Spork.prefork do
     # Devise test helpers
     config.include Devise::TestHelpers, :type => :controller
 
+    # Database Cleaner
     config.before(:suite) do
+      DatabaseCleaner.clean_with(:truncation)
+    end
+
+    config.before(:each) do
+      DatabaseCleaner.strategy = :transaction
+    end
+
+    config.before(:each, :js => true) do
       DatabaseCleaner.strategy = :truncation
     end
-    config.before :each do
-      DatabaseCleaner.clean
+
+    config.before(:each) do
+      DatabaseCleaner.start
     end
-    config.after :each do
+
+    config.after(:each) do
+      DatabaseCleaner.clean
       Timecop.return
     end
   end

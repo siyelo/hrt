@@ -12,7 +12,7 @@ describe Reports::Detailed::ExportResponseStatus do
 
   it "generates the report" do
     table = run_report
-    table[0]['Response ID'].should == 1
+    table[0]['Response ID'].should == @response.id
     table[0]['Response Name'].should == @response.title
     table[0]['Organization Name'].should == @organization.name
     table[0]['State'].should == 'unstarted'
