@@ -7,5 +7,6 @@ branches:
 before_script:
   - psql -c 'create database hrt_test;' -U postgres
   - "cp config/database.yml.travis config/database.yml"
+  - "rake db:migrate"
 # uncomment this line if your project needs to run something other than `rake`:
 # script: bundle exec rspec spec
