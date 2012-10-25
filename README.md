@@ -1,3 +1,5 @@
+![Travis status](https://travis-ci.org/siyelo/hrt.png)
+
 # Health Resource Tracker
 
 This app tracks resource flows in the health sector from their many sources to the ultimate health function they serve. Information about health spending, both planned and realized, are essential for evidence-based budgeting, planning and policy-making.
