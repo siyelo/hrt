@@ -27,11 +27,13 @@ Feature: Reporter can see comments
       When I follow "Responses"
         And I follow "organization2: data_request1"
       Then I should see "response_comment"
-      When I follow "Edit" within ".comments_list"
+      When I make ".comment_item .comment-actions" visible
+        And I follow "Edit" within ".comments_list"
         And I fill in "comment[comment]" with "edited_response_comment" within "#edit_comment_999"
         And I press "Save" within ".comments_list"
       Then I should see "edited_response_comment"
-      When I follow "Remove" within ".comments_list"
+      When I make ".comment_item .comment-actions" visible
+        And I follow "Remove" within ".comments_list"
       Then I should see "This comment has been removed by sysadmin."
         And I should not see "edited_response_comment"
 
@@ -43,10 +45,12 @@ Feature: Reporter can see comments
         And I follow "Projects"
         And I follow "project1"
       Then I should see "project_comment"
+        And I make ".comment_item .comment-actions" visible
       When I follow "Edit" within ".comments_list"
         And I fill in "comment[comment]" with "edited_project_comment" within "#edit_comment_999"
         And I press "Save" within ".comments_list"
       Then I should see "edited_project_comment"
+        And I make ".comment_item .comment-actions" visible
       When I follow "Remove" within ".comments_list"
       Then I should see "This comment has been removed by sysadmin."
         And I should not see "edited_project_comment"
@@ -59,10 +63,12 @@ Feature: Reporter can see comments
         And I follow "Projects"
         And I follow "activity1"
       Then I should see "activity_comment"
+        And I make ".comment_item .comment-actions" visible
       When I follow "Edit" within ".comments_list"
         And I fill in "comment[comment]" with "edited_activity_comment" within "#edit_comment_999"
         And I press "Save" within ".comments_list"
       Then I should see "edited_activity_comment"
+        And I make ".comment_item .comment-actions" visible
       When I follow "Remove" within ".comments_list"
       Then I should see "This comment has been removed by sysadmin."
         And I should not see "edited_activity_comment"

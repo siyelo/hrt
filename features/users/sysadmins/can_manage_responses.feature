@@ -42,6 +42,7 @@ Feature: Admin can manage data responses
         And I follow "Submitted"
         And I follow "UNDP: FY2010-11 Expenditures"
       Then I should see "Status: Submitted" within "#state"
+      When I follow "Status: Submitted"
       When I follow "Reject" within "#state"
         And I fill in "comment[comment]" with "Rejection reason" within ".simple_overlay"
         And I press "Reject"

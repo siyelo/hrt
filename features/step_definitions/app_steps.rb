@@ -358,6 +358,10 @@ When /^I hover over "([^"]*)"?$/ do |element|
   page.execute_script("$('#{element}').mouseover();")
 end
 
+When /^I make "([^"]*)" visible?$/ do |element|
+  page.execute_script("$('#{element}').show();")
+end
+
 Given /^now is "([^"]*)"$/ do |time|
   Timecop.freeze Time.parse(time)
 end
