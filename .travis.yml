@@ -4,6 +4,11 @@ rvm:
 branches:
   only:
     - travis
+env:
+  global:
+    - secure: "jfVZGDZffFqB6t8OGyWFU1jPm8Pps6Pzl00jKpwmtfRVoJ2ww+tse19LlW0L\nz2sc1H1G88YMZua84TYF4vLK/q+Yg1Wc02anqUD66gQyL1r20ug6HAbnku0t\nUEzXzkWGBECusmbvFvLB0+uW1zLwV225SsZZMzEAxn1RAwSW7JA="
+notifications:
+  campfire: siyelo:$CAMPFIRE_TOKEN@289236
 before_script:
   # Use Google's name servers. The default name servers cannot
   # resolve capybara1.elabs.se for unknown reasons.
