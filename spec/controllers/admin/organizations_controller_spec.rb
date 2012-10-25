@@ -101,6 +101,20 @@ describe Admin::OrganizationsController do
       end
     end
 
+    context "duplicate has responses but target doesn't" do
+      it "redirects to the duplicate_admin_organizations_path" do
+        target = FactoryGirl.create(:organization)
+        duplicate = FactoryGirl.create(:organization)
+        FactoryGirl.create(:user, organization: duplicate)
+        duplicate.reload
+
+        put :remove_duplicate, :duplicate_organization_id => duplicate.id,
+          :target_organization_id => target.id
+        response.should redirect_to(duplicate_admin_organizations_path)
+        flash[:error].should == "An organization with responses cannot be merged into an organization without responses.  Try swap the duplicate and target organizations"
+      end
+    end
+
     context "merge ok" do
       let(:dupe) { FactoryGirl.create(:organization) }
       let(:target) { FactoryGirl.create(:organization) }

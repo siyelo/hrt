@@ -67,18 +67,22 @@ class Admin::OrganizationsController < Admin::BaseController
   end
 
   def remove_duplicate
-    if params[:duplicate_organization_id].blank? && params[:target_organization_id].blank?
-      render_error("Duplicate or target organizations not selected.", duplicate_admin_organizations_path)
-    elsif params[:duplicate_organization_id] == params[:target_organization_id]
-      render_error("Same organizations for duplicate and target selected.", duplicate_admin_organizations_path)
-    else
+    if both_organizations_present?
       duplicate = Organization.find(params[:duplicate_organization_id])
       target = Organization.find(params[:target_organization_id])
 
-      if Organization.merge_organizations!(target, duplicate)
-        render_notice("Organizations successfully merged.", duplicate_admin_organizations_path)
+      if target.responses.blank? && duplicate.responses.present?
+        render_error('An organization with responses cannot be merged into an organization without responses.  Try swap the duplicate and target organizations',
+                     duplicate_admin_organizations_path)
       else
-        render_error("Organizations could not be merged. Did you remove all references to the duplicate first?", duplicate_admin_organizations_path)
+        if Organization.merge_organizations!(target, duplicate)
+          render_notice("Organizations successfully merged.",
+                        duplicate_admin_organizations_path)
+        else
+          render_error("Organizations could not be merged.
+                       Did you remove all references to the duplicate first?",
+                       duplicate_admin_organizations_path)
+        end
       end
     end
   end
@@ -117,6 +121,21 @@ class Admin::OrganizationsController < Admin::BaseController
 
     def load_users
       @users = @organization.users
+    end
+
+    def both_organizations_present?
+      present = false
+      if params[:duplicate_organization_id].blank? && params[:target_organization_id].blank?
+        render_error("Duplicate or target organizations not selected.",
+                     duplicate_admin_organizations_path)
+      elsif params[:duplicate_organization_id] == params[:target_organization_id]
+        render_error("Same organizations for duplicate and target selected.",
+                     duplicate_admin_organizations_path)
+      else
+        present = true
+      end
+
+      return present
     end
 
     def render_error(message, path)
