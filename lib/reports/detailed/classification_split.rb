@@ -148,7 +148,7 @@ class Reports::Detailed::ClassificationSplit
   # Get the related Purpose/Location/Input classification splits for
   # the given Activity or Other Cost
   def activity_or_ocost_classification(activity)
-    classifications = activity.send(@classification_association)
+    classifications = activity.send(@classification_association).order("code_splits.id ASC")
 
     total_percentage = classifications.inject(0) do |sum, split|
       sum + (split.percentage || 0)

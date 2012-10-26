@@ -21,7 +21,9 @@ Spork.prefork do
   # steps to use the XPath syntax.
   Capybara.default_selector = :css
 
-  Capybara.javascript_driver = :webkit
+  # Capybara.javascript_driver = :webkit
+  require 'capybara/poltergeist'
+  Capybara.javascript_driver = :poltergeist
 
   # So that Pickle's AR adapter properly picks up the application's models.
   Dir["#{Rails.root}/app/models/*.rb"].each { |f| load f }

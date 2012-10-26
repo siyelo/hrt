@@ -14,17 +14,20 @@
 - unless params[:mode] == 'locations'
   - heading_hint += " Enter the most detailed level first, and we'll roll it up for you automatically."
 - if @budget_coding_tree.root_codes.present?
-  %p#expl
-    %span.spend
-      %span Past Expenditure %
-      = link_to image_tag("tooltip.png"), "#", title: heading_hint, class: 'tooltip'
-      - alt_txt = "Copy across Expenditure classifications to Budget classifications"
-      = link_to image_tag("icon_s2b.png", alt: alt_txt, title: alt_txt, class: "click"), '#', id: 'js_spend_to_budget'
-    %span.budget
-      - alt_txt = "Copy across Budget classifications to Expenditure classifications"
-      = link_to image_tag("icon_b2s.png", alt: alt_txt, title: alt_txt, class: "click"), '#', id: 'js_budget_to_spend'
-      %span Current Budget %
-      = link_to image_tag("tooltip.png"), "#", title: heading_hint, class: 'tooltip right'
+  .copy_budget
+    - alt_txt = "Copy across Budget"
+    = link_to '#', id: 'js_budget_to_spend', alt: alt_txt, title: alt_txt do
+      &nbsp; <!-- fix for poltergeist javascript driver -->
+      = image_tag("icon_b2s.png", class: "click")
+    %span Current Budget %
+    = link_to image_tag("tooltip.png"), "#", title: heading_hint, class: 'tooltip right'
+  .copy_spend
+    %span Past Expenditure %
+    = link_to image_tag("tooltip.png"), "#", title: heading_hint, class: 'tooltip'
+    - alt_txt = "Copy across Expenditure classifications to Budget classifications"
+    = link_to '#', id: 'js_spend_to_budget', alt: alt_txt, title: alt_txt do
+      &nbsp; <!-- fix for poltergeist javascript driver -->
+      = image_tag("icon_s2b.png", class: "click")
 
   %ul.activity_tree{activity_budget: outlay.total_budget, activity_spend: outlay.total_spend, activity_currency: outlay.currency}
     - @budget_coding_tree.root_codes.each do |code|

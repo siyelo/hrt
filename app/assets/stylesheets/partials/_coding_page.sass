@@ -34,31 +34,26 @@
 .edit_activity
   position: relative
 
-#expl
+.copy_budget
+  text-align: right
+  width: 163px
+  span
+    padding-left: 3px
+  img
+    float: left
+
+.copy_spend
+  width: 153px
+  span, a.tooltip
+    float: left
+  img
+    float: right
+
+.copy_budget, .copy_spend
+  margin-bottom: 5px
+  font-size: 11px
   color: $mid-blue
   float: right
-  margin-top: -30px
-
-  span
-    font-size: 11px
-    &.budget
-      display: inline-block
-      float: right
-      text-align: right
-      width: 163px
-      span
-        padding-left: 3px
-      img
-        float: left
-
-    &.spend
-      float: left
-      width: 153px
-      span, a.tooltip
-        float: left
-      img
-        float: right
-
   .click
     background: $primary_lighter
     border: 1px solid $primary_light

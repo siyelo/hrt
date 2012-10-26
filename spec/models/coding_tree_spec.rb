@@ -531,10 +531,10 @@ describe CodingTree do
   describe "cached_children" do
     it "returns cached children" do
       ct = CodingTree.new(@activity, PurposeBudgetSplit)
-      ct.cached_children(@code1).should == [@code11, @code12]
-      ct.cached_children(@code2).should == [@code21, @code22]
-      ct.cached_children(@code11).should == [@code111, @code112]
-      ct.cached_children(@code12).should == [@code121, @code122]
+      ct.cached_children(@code1).sort.should == [@code11, @code12]
+      ct.cached_children(@code2).sort.should == [@code21, @code22]
+      ct.cached_children(@code11).sort.should == [@code111, @code112]
+      ct.cached_children(@code12).sort.should == [@code121, @code122]
     end
   end
 end
