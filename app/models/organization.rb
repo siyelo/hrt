@@ -1,6 +1,5 @@
 class Organization < ActiveRecord::Base
   include ActsAsDateChecker
-  include Organization::Merger
 
   ### Constants
   ORGANIZATION_TYPES = ['Bilateral', 'Central Govt Revenue',

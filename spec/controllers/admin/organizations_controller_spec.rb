@@ -95,7 +95,9 @@ describe Admin::OrganizationsController do
 
     context "ids are the same " do
       it "redirects to the duplicate_admin_organizations_path" do
-        put :remove_duplicate, :duplicate_organization_id => 1, :target_organization_id => 1
+        organization = FactoryGirl.create(:organization)
+        put :remove_duplicate, :duplicate_organization_id => organization.id,
+          :target_organization_id => organization.id
         response.should redirect_to(duplicate_admin_organizations_path)
         flash[:error].should == "Same organizations for duplicate and target selected."
       end
@@ -120,7 +122,7 @@ describe Admin::OrganizationsController do
       let(:target) { FactoryGirl.create(:organization) }
 
       before :each do
-        Organization.should_receive(:merge_organizations!).with(target, dupe).and_return true
+        OrganizationMerger.should_receive(:new).and_return(stub merge: true)
       end
 
       it "redirects to the duplicate_admin_organizations_path" do
