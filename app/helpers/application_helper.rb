@@ -130,11 +130,6 @@ module ApplicationHelper
     "f#{object.object_id}"
   end
 
-  def funding_organizations_select
-    orgs = Organization.find(:all, order: 'lower(name)').
-      map{ |o| [o.display_name(100), o.id] }
-  end
-
   # simply returns the year of the given date
   # intended for 'fuzzy' FY's (e.g. "2010/2011")
   def rough_fiscal_year(date, i = 0)

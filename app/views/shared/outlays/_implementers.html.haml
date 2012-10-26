@@ -3,9 +3,6 @@
 - # Can't paginate form if there are errors therefore only
 - # show splits with errors if there are more than 50 errors
 
-:javascript
-  var selectOptions = "#{escape_javascript(options_for_select(funding_organizations_select))}"
-
 .wrapped.last
   - unless bulk_review || outlay.new_record? || @split_errors
     = will_paginate @splits

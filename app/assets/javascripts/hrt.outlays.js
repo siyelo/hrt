@@ -50,13 +50,6 @@ HrtOutlays.init = function () {
     $(document).find('.js_add_nested').trigger('click');
   }
 
-  $('.ui-autocomplete-input').live('focusin', function () {
-    var element = $(this).siblings('select');
-    if(element.children('option').length < 2) { // because there is already one in to show default
-      element.append(selectOptions);
-    }
-  });
-
   HrtForm.numericInputField(".js_implementer_spend, .js_implementer_budget");
   HrtComments.init();
   Hrt.dynamicUpdateTotalsInit();

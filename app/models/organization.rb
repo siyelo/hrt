@@ -86,15 +86,8 @@ class Organization < ActiveRecord::Base
     name
   end
 
-  # TODO -move to presenter
-  def user_emails(limit = 3)
-    self.users.find(:all, limit: limit).map{|u| u.email}
-  end
-
-  # TODO -move to presenter
-  def display_name(length = 100)
-    n = self.name || "Unnamed organization"
-    n.first(length)
+  def email_contacts(limit = 3)
+    users.limit(limit).pluck(:email)
   end
 
   # returns the last response that was created.

@@ -364,13 +364,15 @@ describe Organization do
     end
   end
 
-  describe "#user_emails" do
+  describe "#email_contacts" do
     it "should return email addresses of users in the organization, up to the limit" do
-      @req = FactoryGirl.create :request
-      @org = FactoryGirl.create :organization
-      @reporter = FactoryGirl.create :reporter, email: 'reporter@org.com', organization: @org
-      @reporter2 = FactoryGirl.create :reporter, email: 'reporter2@org.com', organization: @org
-      @org.user_emails(1).should == ['reporter@org.com']
+      request = FactoryGirl.create :request
+      organization = FactoryGirl.create :organization
+      reporter = FactoryGirl.create(:reporter, email: 'reporter@org.com',
+                                    organization: organization)
+      reporter2 = FactoryGirl.create(:reporter, email: 'reporter2@org.com',
+                                     organization: organization)
+      organization.email_contacts(1).should == ['reporter@org.com']
     end
   end
 

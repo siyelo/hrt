@@ -29,8 +29,8 @@
                     %li.hidden
                       = organization.contact_phone_number.presence || organization.contact_main_office_phone_number || 'No contact number'
                       %br
-                      - organization.user_emails(2).each do |email|
-                        =mail_to email
+                      - organization.email_contacts(2).each do |email|
+                        = mail_to email
                         %br
                 %td.wrap-8
                   %ul.horizontal
