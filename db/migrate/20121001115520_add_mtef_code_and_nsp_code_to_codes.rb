@@ -1,3 +1,7 @@
+Object.send(:remove_const, "Purpose") if defined?(Purpose)
+Object.send(:remove_const, "Input") if defined?(Input)
+Object.send(:remove_const, "Location") if defined?(Location)
+
 class Code < ActiveRecord::Base
   extend CodeVersion
   extend TreeHelpers

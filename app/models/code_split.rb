@@ -24,8 +24,6 @@ class CodeSplit < ActiveRecord::Base
   delegate :currency, to: :activity, allow_nil: true
   delegate :name, to: :code, allow_nil: true
 
-  # TODO: rewrite scopes as methods and extract it into separate module
-  # TODO: remove unused scopes
   ### Named scopes
   scope :purposes, where(code_type: Purpose.to_s)
   scope :inputs, where(code_type: Input.to_s)
@@ -33,12 +31,6 @@ class CodeSplit < ActiveRecord::Base
   scope :budget, where(spend: false)
   scope :spend, where(spend: true)
   scope :leaf, where(sum_of_children: 0)
-
-  scope :with_activity,
-    lambda { |activity_id| where(["code_splits.activity_id = ?", activity_id]) }
-  scope :with_activities,
-    lambda { |activity_ids|
-      where(["code_splits.activity_id in (?)", activity_ids]) }
   scope :with_codes, lambda { |codes| where(code_id: codes.map(&:id)) }
   scope :sorted, order("code_splits.cached_amount DESC")
   scope :with_request,
@@ -55,7 +47,6 @@ class CodeSplit < ActiveRecord::Base
 
 
   ### Class Methods
-
   def self.with_code_and_type(code, amount_type)
     where(code_id: code.id, code_type: code.class,
           spend: is_spend?(amount_type))

@@ -110,7 +110,6 @@ class Activity < ActiveRecord::Base
     name
   end
 
-  # TODO move to presenter
   def human_name
     "Activity"
   end

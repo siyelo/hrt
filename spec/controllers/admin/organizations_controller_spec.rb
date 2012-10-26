@@ -59,7 +59,7 @@ describe Admin::OrganizationsController do
     it "sets flash errror" do
       @organization.should_receive(:destroy).and_return(false)
       delete :destroy, id: @organization.id
-      flash[:error].should == "You cannot delete an organization that has (external) data referencing it."
+      flash[:error].should == "You cannot delete an organization with users or external reference data (i.e. funders/implementers)."
       response.should redirect_to(admin_organizations_url)
     end
   end

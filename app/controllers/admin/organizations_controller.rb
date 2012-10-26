@@ -58,7 +58,7 @@ class Admin::OrganizationsController < Admin::BaseController
       redirect_to admin_organizations_url
     else
       flash[:error] = "You cannot delete an organization with users or external reference data (i.e. funders/implementers)."
-      redirect_to edit_admin_organization_url(@organization)
+      redirect_to admin_organizations_url
     end
   end
 
