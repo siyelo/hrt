@@ -172,6 +172,22 @@ describe FundingFlow do
     end
   end
 
+  describe "#budget" do
+    it "can remove comma from budget value" do
+      funding_flow = FactoryGirl.build(:funding_flow, project: @project,
+                                       from: @donor, budget: "10,30")
+      funding_flow.budget.should == 1030
+    end
+  end
+
+  describe "#spend" do
+    it "can remove comma from budget value" do
+      funding_flow = FactoryGirl.build(:funding_flow, project: @project,
+                                       from: @donor, spend: "10,40")
+      funding_flow.spend.should == 1040
+    end
+  end
+
   describe "deprecated Response api" do
     it "should return (deprecated) response (but will do so via associated project)" do
       basic_setup_project

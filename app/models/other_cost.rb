@@ -30,25 +30,21 @@ class OtherCost < Activity
     total_spend
   end
 
-  # An OCost can be considered classified if the locations are classified
   def classified?
-    budget_classified? && spend_classified?
+    @classified ||= budget_classified? && spend_classified?
   end
 
-  #TODO: remove
   def budget_classified?
-    location_budget_splits_valid? &&
-    input_budget_splits_valid?
+    @budget_classified ||= location_budget_splits_valid? &&
+                           input_budget_splits_valid?
   end
 
-  #TODO: remove
   def spend_classified?
-    location_spend_splits_valid? &&
-    input_spend_splits_valid?
+    @spend_classified ||= location_spend_splits_valid? &&
+                          input_spend_splits_valid?
   end
 
   def <=>(e)
     self.name <=> e.name
   end
 end
-

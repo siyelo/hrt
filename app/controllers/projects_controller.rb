@@ -5,7 +5,6 @@ class ProjectsController < BaseController
   SORTABLE_COLUMNS = ['name']
 
   helper_method :sort_column, :sort_direction
-  before_filter :strip_commas_from_in_flows, only: [:create, :update]
   before_filter :prevent_browser_cache, only: [:index, :edit, :update] # firefox misbehaving
   before_filter :prevent_activity_manager, only: [:create, :update, :destroy]
   before_filter :check_response_status, only: [:create, :update, :destroy]
@@ -26,7 +25,8 @@ class ProjectsController < BaseController
     @comments = Comment.on_all([current_response.id]).
                   order('created_at DESC').where('parent_id IS NULL')
     @project = Project.new(data_response: current_response)
-    self.load_inline_forms
+
+    load_inline_forms
   end
 
   def edit
@@ -119,50 +119,20 @@ class ProjectsController < BaseController
   end
 
   protected
+  def sort_column
+    SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "name"
+  end
 
+  def sort_direction
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
+  end
 
-    def sort_column
-      SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "name"
-    end
+  def begin_of_association_chain
+    current_response
+  end
 
-    def sort_direction
-      %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
-    end
-
-    def begin_of_association_chain
-      current_response
-    end
-
-    #TODO: this should be handled in in model instead
-    def strip_commas_from_in_flows
-      if params[:project].present? && params[:project][:in_flows_attributes].present?
-        in_flows = params[:project][:in_flows_attributes]
-        in_flows.each_pair do |id, in_flow|
-          [:budget, :spend].each do |field|
-            in_flows[id][field] = convert_number_column_value(in_flows[id][field])
-          end
-        end
-      end
-    end
-
-    def convert_number_column_value(value)
-      if value == false
-        0
-      elsif value == true
-        1
-      elsif value.is_a?(String)
-        if (value.blank?)
-          nil
-        else
-          value.gsub(",", "")
-        end
-      else
-        value
-      end
-    end
-
-    def load_inline_forms
-      self.load_activity_new
-      self.load_other_cost_new
-    end
+  def load_inline_forms
+    load_activity_new
+    load_other_cost_new
+  end
 end

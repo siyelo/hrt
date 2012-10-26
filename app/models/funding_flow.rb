@@ -94,6 +94,14 @@ class FundingFlow < ActiveRecord::Base
       from_response && from_response.accepted?
   end
 
+  def budget=(number)
+    self[:budget] = sanitize_value(number)
+  end
+
+  def spend=(number)
+    self[:spend] = sanitize_value(number)
+  end
+
   class << self
     def mark_double_counting(content)
       hash = {}
@@ -128,6 +136,15 @@ class FundingFlow < ActiveRecord::Base
   # errors can all be caught on data entry
   def has_organization_and_amounts?
     organization_id_from && (spend || 0) + (budget || 0) > 0
+  end
+
+  private
+  def sanitize_value(value)
+    if value.is_a?(String)
+      value.blank? ? nil : value.gsub(",", "")
+    else
+      value
+    end
   end
 end
 
