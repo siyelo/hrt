@@ -15,7 +15,7 @@
   - heading_hint += " Enter the most detailed level first, and we'll roll it up for you automatically."
 - if @budget_coding_tree.root_codes.present?
   .copy_budget
-    - alt_txt = "Copy across Budget"
+    - alt_txt = "Copy across Budget classifications to Expenditure classifications"
     = link_to '#', id: 'js_budget_to_spend', alt: alt_txt, title: alt_txt do
       &nbsp; <!-- fix for poltergeist javascript driver -->
       = image_tag("icon_b2s.png", class: "click")

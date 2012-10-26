@@ -175,7 +175,7 @@ Feature: Reporter can enter a code breakdown for each activity
       And I follow "activity1"
       And I follow "Purposes" within ".section_nav"
       And I fill in "activity[classifications][purpose_budget_split][1]" with "100"
-      And I follow "Copy across Budget"
+      And I follow "Copy across Budget classifications to Expenditure classifications"
       And I press "Save"
       And the "activity[classifications][purpose_budget_split][1]" field should contain "100"
       And the "activity[classifications][purpose_spend_split][1]" field should contain "100"
