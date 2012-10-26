@@ -3,7 +3,7 @@ rvm:
   - "1.9.3"
 branches:
   only:
-    - travis
+    - master
 notifications:
   campfire:
     - secure: "AvKwTOMlzRs2NHBvagomI9R4pU+c4q28d35X08NyE7J4wHEXPqNbLqz6mHks\nL0sVF2o43eHvYtcH8jcUCXUft8tRroY0SLpW1H130B8WUZiVk3SZmIGrXA69\nU+6vxL2mjUsA/n3WopJSTEborPxNrHBXpYfYtzpF6QTgGv9yG38="
