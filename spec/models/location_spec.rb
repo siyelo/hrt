@@ -43,14 +43,4 @@ describe Location do
       locations.last.should  == location1
     end
   end
-
-  describe "#with_last_version" do
-    it "can return last version codes" do
-      location1 = FactoryGirl.create(:location, version: 1)
-      Location.with_last_version.should == [location1]
-
-      location2 = FactoryGirl.create(:location, version: 2)
-      Location.with_last_version.should == [location2]
-    end
-  end
 end

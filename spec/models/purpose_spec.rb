@@ -28,16 +28,6 @@ describe Purpose do
     it { should have_many(:code_splits).dependent(:destroy) }
   end
 
-  describe "#with_last_version" do
-    it "can return last version codes" do
-      purpose1 = FactoryGirl.create(:purpose, version: 1)
-      Purpose.with_last_version.should == [purpose1]
-
-      purpose2 = FactoryGirl.create(:purpose, version: 2)
-      Purpose.with_last_version.should == [purpose2]
-    end
-  end
-
   describe "Nested set (Tree)" do
     it "can return root inputs" do
       purpose1 = FactoryGirl.create(:purpose, name: "purpose1")

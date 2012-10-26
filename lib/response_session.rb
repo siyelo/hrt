@@ -81,7 +81,6 @@ module ResponseSession
         end
       end
 
-      # TODO: add other report controllers
       def switch_to_last_response?(current_response, last_response)
         current_user.role?('reporter') &&
           !current_user.activity_manager? &&

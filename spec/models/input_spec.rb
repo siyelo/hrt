@@ -20,16 +20,6 @@ describe Input do
     it { should have_many(:code_splits).dependent(:destroy) }
   end
 
-  describe "#with_last_version" do
-    it "can return last version codes" do
-      input1 = FactoryGirl.create(:input, version: 1)
-      Input.with_last_version.should == [input1]
-
-      input2 = FactoryGirl.create(:input, version: 2)
-      Input.with_last_version.should == [input2]
-    end
-  end
-
   describe "Nested set (Tree)" do
     it "can return root inputs" do
       input1 = FactoryGirl.create(:input, name: "input1")

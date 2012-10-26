@@ -110,7 +110,6 @@ class Reports::Detailed::ClassificationSplit
       base_row << activity.name
       base_row << activity.description
       base_row << activity_amount
-      # TODO: remove try after implementer_splits without implementer are fixed
       base_row << implementer_split.organization.try(:name)
       base_row << implementer_split.organization.try(:implementer_type)
       base_row << split_amount

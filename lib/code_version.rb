@@ -8,7 +8,6 @@ module CodeVersion
     where(version: last_version)
   end
 
-  # TODO: spec
   def with_version(version)
     where(version: version)
   end
