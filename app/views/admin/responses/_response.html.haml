@@ -5,7 +5,7 @@
   %td.title= link_to response.title, projects_path(:response_id => response.id) if response
   %td= link_to organization.name, edit_admin_organization_path(organization)
   %td= response.status
-  %td= last_change.user.name if last_change
+  %td= last_change.user.name if last_change && last_change.user
   %td= last_change.created_at.strftime("%d-%m-%Y") if last_change
   %td
     %ul.manage_bar
