@@ -12,7 +12,7 @@ class Reports::Detailed::DynamicQuery
       :joins => { :activity => :data_response },
       :order => "implementer_splits.id ASC",
       :conditions => ['data_responses.data_request_id = ? AND
-                       data_responses.state = ? OR data_response.state = ?',
+                       data_responses.state = ? OR data_responses.state = ?',
                        request.id, 'started', 'submitted'],
       :include => [
         { :activity => [
