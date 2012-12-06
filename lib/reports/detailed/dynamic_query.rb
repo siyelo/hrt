@@ -12,7 +12,8 @@ class Reports::Detailed::DynamicQuery
       :joins => { :activity => :data_response },
       :order => "implementer_splits.id ASC",
       :conditions => ['data_responses.data_request_id = ? AND
-                       data_responses.state = ?', request.id, 'accepted'],
+                       data_responses.state IN (?)',
+                       request.id, ['started', 'submitted']],
       :include => [
         { :activity => [
           :targets,
@@ -57,6 +58,7 @@ class Reports::Detailed::DynamicQuery
     row << 'Description of Project'
     row << 'Activity'
     row << 'Description of Activity'
+    row << 'Activity type'
     row << 'Targets'
     row << 'Input Split Total %'
     row << 'Input Split %'
@@ -113,6 +115,7 @@ class Reports::Detailed::DynamicQuery
     base_row << activity.project.try(:description)
     base_row << activity.try(:name)
     base_row << activity.try(:description)
+    base_row << (activity.is_a?(OtherCost) ? 'Indirect Cost' : 'Activity')
     base_row << activity.targets.map(&:description).join(' | ')
 
     fake_input = is_fake?(activity.send("leaf_#{@amount_type}_inputs").first.code)
