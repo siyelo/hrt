@@ -44,7 +44,7 @@
 
     = render :partial => 'actions'
 
-    - if @response.response_state_logs.last
+    - if @response.response_state_logs.last && @response.response_state_logs.last.user
       %li
         %div.last_action= "by #{truncate(@response.response_state_logs.last.user.name, length: 16)} on #{@response.response_state_logs.last.created_at.strftime("%d %b '%y")}"
 
