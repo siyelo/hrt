@@ -72,8 +72,10 @@ describe OrganizationMerger do
     it "should move users" do
       merger = OrganizationMerger.new(@target_org.id, @duplicate_org.id)
       merger.merge
-      @target_org.users.should == [@target_org_user, @duplicate_org_user]
-      @target_org.reload.users.should == [@target_org_user, @duplicate_org_user]
+      @target_org.users.should include(@target_org_user)
+      @target_org.users.should include(@duplicate_org_user)
+      @target_org.reload.users.should include(@target_org_user)
+      @target_org.reload.users.should include(@duplicate_org_user)
       @target_org.users_count.should == @target_org.users.size
     end
 
