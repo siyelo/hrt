@@ -5,7 +5,7 @@ describe Reports::Detailed::DynamicQuery do
 
   describe "budget report" do
     def run_report
-      content = Reports::Detailed::DynamicQuery.new(@request, :budget, 'xls').data
+      content = Reports::Detailed::DynamicQuery.new(@request, :budget, 'xls', 'accepted').data
       FileParser.parse(content, 'xls')
     end
     context "simple reports" do
@@ -47,7 +47,7 @@ describe Reports::Detailed::DynamicQuery do
       it "generates and zips correctly" do
         @project.name = "projéct"
         @project.save!
-        @report = Report.find_or_create_by_key_and_data_request_id('budget_dynamic_query', @request.id)
+        @report = Report.find_or_create_by_key_and_data_request_id('budget_accepted_dynamic_query', @request.id)
         @report.generate_report
       end
 

@@ -1,0 +1,19 @@
+- budget_rep = @report_map[budget_key]
+- spend_rep = @report_map[spend_key]
+
+%tr
+  %td= "#{title} (Only accepted statuses)"
+  %td
+    - if spend_rep
+      = link_to "Export", admin_reports_detailed_path(spend_rep), :class => "tooltip-S sml_btn"
+      .regenerate= link_to image_tag("icon_regenerate.png"), generate_admin_reports_detailed_path(spend_key), :title => 'Regenerate report'
+      .hint= "(updated #{distance_of_time_in_words_to_now(spend_rep.attachment_updated_at)} ago)" if spend_rep.attachment_updated_at
+    -else
+      = link_to "Generate", generate_admin_reports_detailed_path(spend_key)
+  %td
+    - if budget_rep
+      = link_to "Export", admin_reports_detailed_path(budget_rep), :class => "tooltip-S sml_btn"
+      .regenerate= link_to image_tag("icon_regenerate.png"), generate_admin_reports_detailed_path(budget_key), :title => 'Regenerate report'
+      .hint= "(updated #{distance_of_time_in_words_to_now(budget_rep.attachment_updated_at)} ago)" if budget_rep.attachment_updated_at
+    -else
+      = link_to "Generate", generate_admin_reports_detailed_path(budget_key)

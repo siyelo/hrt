@@ -5,14 +5,12 @@ class Reports::Detailed::DynamicQuery
 
   attr_accessor :builder
 
-  def initialize(request, amount_type, filetype)
+  def initialize(request, amount_type, filetype, status = nil)
     @deepest_nesting = Code.purposes.with_version(request.purposes_version).deepest_nesting
     @amount_type = amount_type
-    @implementer_splits = ImplementerSplit.find :all,
+    data = {
       :joins => { :activity => :data_response },
       :order => "implementer_splits.id ASC",
-      :conditions => ['data_responses.data_request_id = ? AND
-                       data_responses.state = ?', request.id, 'accepted'],
       :include => [
         { :activity => [
           :targets,
@@ -23,7 +21,14 @@ class Reports::Detailed::DynamicQuery
           { :data_response => :organization },
           :implementer_splits, #eager load for activity.total_*
         ]},
-        { :organization => :data_responses } ]
+        { :organization => :data_responses } ] }
+    if status == 'all'
+      data[:conditions] = ['data_responses.data_request_id = ?', request.id]
+    elsif status == 'active'
+      data[:conditions] = ['data_responses.data_request_id = ? AND
+                       data_responses.state = ?', request.id, 'active']
+    end
+    @implementer_splits = ImplementerSplit.find :all, data
     @builder = FileBuilder.new(filetype)
     @show_double_count = true
   end
