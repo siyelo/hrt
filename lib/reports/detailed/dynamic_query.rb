@@ -119,8 +119,8 @@ class Reports::Detailed::DynamicQuery
     base_row << activity.project.try(:description)
     base_row << activity.try(:name)
     base_row << activity.try(:description)
-    base_row << activity.targets.map(&:description).join(' | ')
     base_row << activity.data_response.state
+    base_row << activity.targets.map(&:description).join(' | ')
 
     fake_input = is_fake?(activity.send("leaf_#{@amount_type}_inputs").first.code)
     build_incomplete_classificiation(activity, "leaf_#{@amount_type}_inputs")
