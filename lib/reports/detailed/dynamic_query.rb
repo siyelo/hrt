@@ -5,7 +5,7 @@ class Reports::Detailed::DynamicQuery
 
   attr_accessor :builder
 
-  def initialize(request, amount_type, filetype, status = nil)
+  def initialize(request, amount_type, filetype, state)
     @deepest_nesting = Code.purposes.with_version(request.purposes_version).deepest_nesting
     @amount_type = amount_type
     data = {
@@ -22,12 +22,18 @@ class Reports::Detailed::DynamicQuery
           :implementer_splits, #eager load for activity.total_*
         ]},
         { :organization => :data_responses } ] }
-    if status == 'all'
+
+    if state == 'all'
       data[:conditions] = ['data_responses.data_request_id = ?', request.id]
-    elsif status == 'active'
-      data[:conditions] = ['data_responses.data_request_id = ? AND
-                       data_responses.state = ?', request.id, 'active']
+    else
+      if DataResponse::STATES.include? state
+        data[:conditions] = ['data_responses.data_request_id = ? AND
+                       data_responses.state = ?', request.id, state]
+      else
+        raise "Invalid response state".to_yaml
+      end
     end
+
     @implementer_splits = ImplementerSplit.find :all, data
     @builder = FileBuilder.new(filetype)
     @show_double_count = true

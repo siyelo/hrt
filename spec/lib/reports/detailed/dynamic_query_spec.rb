@@ -44,6 +44,12 @@ describe Reports::Detailed::DynamicQuery do
         @activity.reload;@activity.save
       end
 
+      it "raises an error if no state is provided" do
+        expect { Reports::Detailed::DynamicQuery.new(@request, :budget, 'xls') }.to raise_error
+        expect { Reports::Detailed::DynamicQuery.new(@request, :budget, 'xls', 'blah') }.to raise_error
+        expect { Reports::Detailed::DynamicQuery.new(@request, :budget, 'xls', 'accepted') }.not_to raise_error
+      end
+
       it "generates and zips correctly" do
         @project.name = "projéct"
         @project.save!
@@ -1660,7 +1666,8 @@ describe Reports::Detailed::DynamicQuery do
 
   describe "spend report" do
     def run_report
-      content = Reports::Detailed::DynamicQuery.new(@request, :spend, 'xls').data
+      content = Reports::Detailed::DynamicQuery.new(@request, :spend, 'xls',
+                                                    'accepted').data
       FileParser.parse(content, 'xls')
     end
 
