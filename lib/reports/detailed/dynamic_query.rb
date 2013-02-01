@@ -97,7 +97,7 @@ class Reports::Detailed::DynamicQuery
 
     in_flows_total = activity.project.in_flows.inject(0) { |sum, e| sum + (e.send(@amount_type) || 0) }
 
-    in_flows = in_flows_total == 0 ? loop_act = [fake_inflow(@currency)] : activity.project.in_flows
+    in_flows = in_flows_total == 0 ? [fake_inflow(@currency)] : activity.project.in_flows
 
     in_flows = in_flows.sorted if in_flows.count > 1
 

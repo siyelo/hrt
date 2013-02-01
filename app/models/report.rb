@@ -23,10 +23,16 @@ class Report < ActiveRecord::Base
     'spend_implementer_output',
     'budget_implementer_beneficiary',
     'spend_implementer_beneficiary',
-    'budget_all_dynamic_query',
-    'spend_all_dynamic_query',
     'budget_accepted_dynamic_query',
     'spend_accepted_dynamic_query',
+    'budget_submitted_dynamic_query',
+    'spend_submitted_dynamic_query',
+    'budget_started_dynamic_query',
+    'spend_started_dynamic_query',
+    'budget_rejected_dynamic_query',
+    'spend_rejected_dynamic_query',
+    'budget_all_dynamic_query',
+    'spend_all_dynamic_query',
     'funding_source_query',
     'export_response_status'
   ]
@@ -95,14 +101,26 @@ class Report < ActiveRecord::Base
       Reports::Detailed::Beneficiaries.new(data_request, :budget, 'xls')
     when 'spend_implementer_beneficiary'
       Reports::Detailed::Beneficiaries.new(data_request, :spend, 'xls')
-    when 'budget_all_dynamic_query'
-      Reports::Detailed::DynamicQuery.new(data_request, :budget, 'xml', 'all')
-    when 'spend_all_dynamic_query'
-      Reports::Detailed::DynamicQuery.new(data_request, :spend, 'xml', 'all')
+    when 'budget_started_dynamic_query'
+      Reports::Detailed::DynamicQuery.new(data_request, :budget, 'xml', 'started')
+    when 'spend_started_dynamic_query'
+      Reports::Detailed::DynamicQuery.new(data_request, :spend,  'xml', 'started')
+    when 'budget_submitted_dynamic_query'
+      Reports::Detailed::DynamicQuery.new(data_request, :budget, 'xml', 'submitted')
+    when 'spend_submitted_dynamic_query'
+      Reports::Detailed::DynamicQuery.new(data_request, :spend,  'xml', 'submitted')
     when 'budget_accepted_dynamic_query'
       Reports::Detailed::DynamicQuery.new(data_request, :budget, 'xml', 'accepted')
     when 'spend_accepted_dynamic_query'
-      Reports::Detailed::DynamicQuery.new(data_request, :spend, 'xml', 'accepted')
+      Reports::Detailed::DynamicQuery.new(data_request, :spend,  'xml', 'accepted')
+    when 'budget_rejected_dynamic_query'
+      Reports::Detailed::DynamicQuery.new(data_request, :budget, 'xml', 'rejected')
+    when 'spend_rejected_dynamic_query'
+      Reports::Detailed::DynamicQuery.new(data_request, :spend,  'xml', 'rejected')
+    when 'budget_all_dynamic_query'
+      Reports::Detailed::DynamicQuery.new(data_request, :budget, 'csv', 'all')
+    when 'spend_all_dynamic_query'
+      Reports::Detailed::DynamicQuery.new(data_request, :spend,  'csv', 'all')
     when 'funding_source_query'
       Reports::Detailed::FundingSource.new(data_request, 'xls')
     when 'export_response_status'
